@@ -41,7 +41,6 @@
     <ClCompile Include="MyGame.cpp" />
     <ClCompile Include="engine\scenebase\SceneFactory.cpp" />
     <ClCompile Include="engine\scenebase\SceneManager.cpp" />
-    <ClCompile Include="engine\scene\TitleScene.cpp" />
     <ClCompile Include="engine\3d\Particle.cpp" />
     <ClCompile Include="engine\3d\WorldTransform.cpp" />
     <ClCompile Include="engine\3d\PointLight.cpp" />
@@ -50,8 +49,6 @@
     <ClCompile Include="engine\3d\Shape.cpp" />
     <ClCompile Include="engine\collision\Collider.cpp" />
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
-    <ClCompile Include="application\appCollider\AppCollisionManager.cpp" />
-    <ClCompile Include="application\appCollider\AppCollider.cpp" />
     <ClCompile Include="application\objects\GameObject\GameObject.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
     <ClCompile Include="application\objects\Player\Player.cpp" />
@@ -70,9 +67,6 @@
       <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\scene\BaseScene.cpp">
-      <Filter>engine\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\ClearScene.cpp">
       <Filter>engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\collision\Collider.cpp">
@@ -96,7 +90,6 @@
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GamePlayScene.cpp" />
     <ClCompile Include="application\enemy\BaseEnemy.cpp" />
     <ClCompile Include="application\enemy\EnemyManager.cpp" />
     <ClCompile Include="application\enemy\TackleEnemy.cpp" />
@@ -117,13 +110,7 @@
       <Filter>gimmick</Filter>
     </ClCompile>
     <ClCompile Include="application\objects\Skydome\Skydome.cpp" />
-    <ClCompile Include="engine\scene\StageSelectScene.cpp" />
-    <ClCompile Include="engine\scene\GameOverScene.cpp" />
     <ClCompile Include="application\objects\Field\StageSelectObject.cpp" />
-    <ClCompile Include="engine\scene\GamePlayScene2.cpp" />
-    <ClCompile Include="engine\scene\GamePlayScene3.cpp" />
-    <ClCompile Include="engine\scene\GamePlayScene4.cpp" />
-    <ClCompile Include="engine\scene\GamePlayScene5.cpp" />
     <ClCompile Include="engine\scene\ParticleCreatorScene.cpp" />
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
@@ -162,7 +149,6 @@
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
-    <ClInclude Include="engine\scene\TitleScene.h" />
     <ClInclude Include="engine\3d\Particle.h" />
     <ClInclude Include="engine\3d\WorldTransform.h" />
     <ClInclude Include="engine\3d\PointLight.h" />
@@ -183,9 +169,6 @@
       <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\BaseScene.h">
-      <Filter>engine\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\ClearScene.h">
       <Filter>engine\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\Collider.h">
@@ -224,10 +207,6 @@
     <ClInclude Include="engine\collision\Collider.h" />
     <ClInclude Include="engine\collision\CollisionConfig.h" />
     <ClInclude Include="engine\collision\CollisionManager.h" />
-    <ClInclude Include="engine\scene\GamePlayScene.h" />
-    <ClInclude Include="application\appCollider\AppShape.h" />
-    <ClInclude Include="application\appCollider\AppCollisionManager.h" />
-    <ClInclude Include="application\appCollider\AppCollider.h" />
     <ClInclude Include="application\objects\GameObject\GameObject.h" />
     <ClInclude Include="application\objects\Player\Player.h" />
     <ClInclude Include="application\objects\Field\Field.h" />
@@ -246,15 +225,10 @@
       <Filter>gimmick</Filter>
     </ClInclude>
     <ClInclude Include="application\objects\Skydome\Skydome.h" />
-    <ClInclude Include="engine\scene\StageSelectScene.h" />
-    <ClInclude Include="engine\scene\GameOverScene.h" />
     <ClInclude Include="application\objects\Field\StageSelectObject.h" />
-    <ClInclude Include="engine\scene\GamePlayScene2.h" />
-    <ClInclude Include="engine\scene\GamePlayScene3.h" />
-    <ClInclude Include="engine\scene\GamePlayScene4.h" />
-    <ClInclude Include="engine\scene\GamePlayScene5.h" />
     <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
+    <ClInclude Include="application\objects\Gimmick\IceFloor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />
