@@ -49,11 +49,7 @@
     <ClCompile Include="engine\3d\Shape.cpp" />
     <ClCompile Include="engine\collision\Collider.cpp" />
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
-    <ClCompile Include="application\objects\GameObject\GameObject.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
-    <ClCompile Include="application\objects\Player\Player.cpp" />
-    <ClCompile Include="application\objects\Field\Field.cpp" />
-    <ClCompile Include="application\objects\Player\SpawnPos\SpawnPos.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp">
       <Filter>engine\scenebase</Filter>
     </ClCompile>
@@ -90,27 +86,9 @@
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="application\enemy\BaseEnemy.cpp" />
-    <ClCompile Include="application\enemy\EnemyManager.cpp" />
-    <ClCompile Include="application\enemy\TackleEnemy.cpp" />
-    <ClCompile Include="application\enemy\FanEnemy.cpp" />
-    <ClCompile Include="application\enemy\Wind.cpp" />
     <ClCompile Include="engine\scenebase\SceneTransitionAnimation.cpp" />
     <ClCompile Include="engine\2d\TextWriteManager.cpp" />
     <ClCompile Include="engine\2d\TextWrite.cpp" />
-    <ClCompile Include="application\enemy\FreezeEnemy.cpp" />
-    <ClCompile Include="application\enemy\IceMist.cpp" />
-    <ClCompile Include="application\objects\Gimmick\Obstacle.cpp">
-      <Filter>gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="application\objects\Gimmick\Bumper.cpp">
-      <Filter>gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="application\objects\Gimmick\IceFloor.cpp">
-      <Filter>gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="application\objects\Skydome\Skydome.cpp" />
-    <ClCompile Include="application\objects\Field\StageSelectObject.cpp" />
     <ClCompile Include="engine\scene\ParticleCreatorScene.cpp" />
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
@@ -201,34 +179,14 @@
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="application\enemy\BaseEnemy.h" />
-    <ClInclude Include="application\enemy\EnemyManager.h" />
-    <ClInclude Include="application\enemy\TackleEnemy.h" />
     <ClInclude Include="engine\collision\Collider.h" />
     <ClInclude Include="engine\collision\CollisionConfig.h" />
     <ClInclude Include="engine\collision\CollisionManager.h" />
-    <ClInclude Include="application\objects\GameObject\GameObject.h" />
-    <ClInclude Include="application\objects\Player\Player.h" />
-    <ClInclude Include="application\objects\Field\Field.h" />
-    <ClInclude Include="application\objects\Player\SpawnPos\SpawnPos.h" />
-    <ClInclude Include="application\enemy\FanEnemy.h" />
-    <ClInclude Include="application\enemy\Wind.h" />
     <ClInclude Include="engine\scenebase\SceneTransitionAnimation.h" />
     <ClInclude Include="engine\2d\TextWriteManager.h" />
     <ClInclude Include="engine\2d\TextWrite.h" />
-    <ClInclude Include="application\enemy\FreezeEnemy.h" />
-    <ClInclude Include="application\enemy\IceMist.h" />
-    <ClInclude Include="application\objects\Gimmick\Obstacle.h">
-      <Filter>gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="application\objects\Gimmick\Bumper.h">
-      <Filter>gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="application\objects\Skydome\Skydome.h" />
-    <ClInclude Include="application\objects\Field\StageSelectObject.h" />
     <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
-    <ClInclude Include="application\objects\Gimmick\IceFloor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />
