@@ -41,5 +41,4 @@ void BaseScene::ShowFPS() {
 	ImGui::Text("Current FPS: %.0f", fps_);
 	ImGui::End();
 #endif // _DEBUG
-
 }

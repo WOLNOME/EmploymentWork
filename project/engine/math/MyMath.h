@@ -7,13 +7,16 @@
 #include "Quaternion.h"
 #include <vector>
 #include <cstdint>
+#include <numbers>
 
 ///------------------------------------///
-///              列挙体
+///              よく使う変数
 ///------------------------------------///
 
 //δタイム
 const float kDeltaTime = 1.0f / 60.0f;
+//π
+inline constexpr float pi = std::numbers::pi_v<float>;
 
 ///------------------------------------///
 ///              列挙体

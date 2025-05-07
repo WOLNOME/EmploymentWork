@@ -134,6 +134,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\LineDrawer.cpp" />
     <ClCompile Include="engine\3d\LineDrawerCommon.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
+    <ClCompile Include="engine\scene\GamePlayScene.cpp" />
+    <ClCompile Include="application\object\Ground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
@@ -161,6 +163,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\2d\TextWriteManager.cpp" />
     <ClCompile Include="engine\scene\ParticleCreatorScene.cpp" />
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
+    <ClCompile Include="application\object\Skydome.cpp" />
+    <ClCompile Include="application\object\player\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\collision\Collider.h" />
@@ -208,6 +212,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\LineDrawerCommon.h" />
     <ClInclude Include="engine\base\MainRender.h" />
     <ClInclude Include="engine\3d\ModelFormat.h" />
+    <ClInclude Include="engine\scene\GamePlayScene.h" />
+    <ClInclude Include="application\object\Ground.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
@@ -223,6 +229,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\2d\TextWriteManager.h" />
     <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
+    <ClInclude Include="application\object\Skydome.h" />
+    <ClInclude Include="application\object\player\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
