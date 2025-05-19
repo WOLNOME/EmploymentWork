@@ -22,9 +22,9 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Player::Draw(BaseCamera& _camera, SceneLight* _light) {
+void Player::Draw(SceneLight* _light) {
 	//オブジェクトの描画
-	object3d_->Draw(worldTransform_, _camera, _light);
+	object3d_->Draw(worldTransform_, *camera_, _light);
 }
 
 void Player::DebugWithImGui() {

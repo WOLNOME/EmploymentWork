@@ -21,12 +21,17 @@ void GamePlayScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
 	player_ = std::make_unique<Player>();
+	enemy_ = std::make_unique<Enemy>();
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
 	player_->Initialize();
+	enemy_->Initialize();
 	//カメラのセット
 	player_->SetCamera(camera_.get());
+	enemy_->SetCamera(camera_.get());
+	//その他インスタンスのセット
+	enemy_->SetPlayer(player_.get());
 
 
 }
@@ -45,6 +50,7 @@ void GamePlayScene::Update() {
 	skydome_->Update();
 	ground_->Update();
 	player_->Update();
+	enemy_->Update();
 
 	//ImGui
 #ifdef _DEBUG
@@ -68,7 +74,8 @@ void GamePlayScene::Draw() {
 
 	skydome_->Draw(*camera_.get());
 	ground_->Draw(*camera_.get());
-	player_->Draw(*camera_.get(),sceneLight_.get());
+	player_->Draw(sceneLight_.get());
+	enemy_->Draw(sceneLight_.get());
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑

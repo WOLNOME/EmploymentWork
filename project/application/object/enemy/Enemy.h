@@ -1,13 +1,14 @@
 #pragma once
 #include "BaseCamera.h"
 #include "SceneLight.h"
-#include "Input.h"
 #include "WorldTransform.h"
 #include "Object3d.h"
 #include "MyMath.h"
 #include <memory>
 
-class Player {
+#include "application/object/player/Player.h"
+
+class Enemy {
 public:
 	/// <summary>
 	/// 初期化
@@ -27,24 +28,19 @@ public:
 	/// </summary>
 	void DebugWithImGui();
 
-public: //getter
-	//ワールドトランスフォームの取得
-	const WorldTransform& GetWorldTransform() { return worldTransform_; }
-	
-public: //setter
+public://setter
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	void SetPlayer(Player* _player) { player_ = _player; }
 
 private://非公開関数
 	//移動
 	void Move();
-	//カメラ処理
-	void CameraAlgorithm();
-
 private:
-	//インプット
-	Input* input_ = nullptr;
 	//カメラ
 	BaseCamera* camera_ = nullptr;
+	//プレイヤー
+	Player* player_ = nullptr;
+
 private:
 	//オブジェクト
 	WorldTransform worldTransform_;
@@ -53,7 +49,7 @@ private:
 private:
 	//変数
 	Vector3 velocity_ = {};							//速度
-	const float speed_ = 1.0f;						//移動スピード
+	const float speed_ = 0.5f;						//移動スピード
 	const float rotateSpeed_ = 1.0f / 2.0f * pi;	//回転スピード
 	const float floorRigist_ = 50.0f;				//床の抵抗値(摩擦量)
 

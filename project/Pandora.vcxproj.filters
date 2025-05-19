@@ -96,6 +96,7 @@
     <ClCompile Include="application\object\Skydome.cpp" />
     <ClCompile Include="application\object\Ground.cpp" />
     <ClCompile Include="application\object\player\Player.cpp" />
+    <ClCompile Include="application\object\enemy\Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="application\object\Skydome.h" />
     <ClInclude Include="application\object\Ground.h" />
     <ClInclude Include="application\object\player\Player.h" />
+    <ClInclude Include="application\object\enemy\Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />
