@@ -5,9 +5,7 @@
 #include <wrl.h>
 #pragma comment(lib,"dxcompiler.lib")
 
-
-D3DResourceLeakChecker::~D3DResourceLeakChecker()
-{
+D3DResourceLeakChecker::~D3DResourceLeakChecker() {
 	//リソースチェック
 	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
 	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {

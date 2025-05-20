@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseCamera.h"
 #include "SceneLight.h"
-#include "WorldTransform.h"
 #include "Object3d.h"
 #include "MyMath.h"
 #include <memory>
@@ -21,7 +20,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(SceneLight* _light);
+	void Draw();
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
@@ -30,6 +29,7 @@ public:
 
 public://setter
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 	void SetPlayer(Player* _player) { player_ = _player; }
 
 private://非公開関数
@@ -38,12 +38,13 @@ private://非公開関数
 private:
 	//カメラ
 	BaseCamera* camera_ = nullptr;
+	//シーンライト
+	SceneLight* light_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 
 private:
 	//オブジェクト
-	WorldTransform worldTransform_;
 	std::unique_ptr<Object3d> object3d_ = nullptr;
 
 private:

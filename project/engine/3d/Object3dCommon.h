@@ -7,9 +7,12 @@
 class Object3dCommon
 {
 public:
-	enum NameGPS {
-		None,
-		Animation
+	enum class NameGPS {
+		None,			//通常
+		Animation,		//アニメーション
+		SkyBox,			//スカイボックス
+
+		kMaxNumNameGPS,	//最大数
 	};
 
 private://シングルトン
@@ -27,22 +30,30 @@ public://メンバ関数
 	//終了
 	void Finalize();
 	//共通描画設定
-	void SettingCommonDrawing(NameGPS index = None);
+	void SettingCommonDrawing(NameGPS index = NameGPS::None);
+	//アニメーション専用コンピュートシェーダー前設定
+	void SettingAnimationCS();
+
 private://非公開メンバ関数
 	//グラフィックスパイプライン
 	void GenerateGraphicsPipeline();
-
-public://ゲッター
-public://セッター
+	//通常のPSO設定
+	void NormalPSOOption();
+	//アニメーション用のPSO設定
+	void AnimationPSOOption();
+	//スカイボックス用のPSO設定
+	void SkyBoxPSOOption();
 
 private://メンバ変数
-	static const int kNumGraphicsPipeline = 2;
-
 	//ルートシグネチャ
-	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, kNumGraphicsPipeline> rootSignature;
+	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)NameGPS::kMaxNumNameGPS> rootSignature;
 	//グラフィックスパイプライン
-	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, kNumGraphicsPipeline> graphicsPipelineState;
+	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)NameGPS::kMaxNumNameGPS> graphicsPipelineState;
 
+	//コンピュートルートシグネチャ
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> computeRootSignature = nullptr;
+	//コンピュートパイプライン
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> computePipelineState = nullptr;
 
 };
 

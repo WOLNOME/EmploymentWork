@@ -5,10 +5,10 @@ void Player::Initialize() {
 	//インプットの初期化
 	input_ = Input::GetInstance();
 	//インスタンスの生成と初期化
-	worldTransform_.Initialize();
-	worldTransform_.translate_.y += 2.7f;
+	
+	object3d_->worldTransform.translate.y += 2.7f;
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->InitializeModel("snowplow");
+	object3d_->Initialize(ModelTag{}, "snowplow");
 
 }
 
@@ -23,16 +23,16 @@ void Player::Update() {
 	//カメラ処理
 	CameraAlgorithm();
 
-	//ワールドトランスフォームの更新
-	worldTransform_.UpdateMatrix();
+	//オブジェクトの更新
+	object3d_->Update();
 }
 
-void Player::Draw(SceneLight* _light) {
+void Player::Draw() {
 	//オブジェクトの描画
-	object3d_->Draw(worldTransform_, *camera_, _light);
+	object3d_->Draw(camera_);
 	//弾の描画
 	for (auto& bullet : bullets_) {
-		bullet->Draw(camera_, _light);
+		bullet->Draw();
 	}
 
 }
@@ -40,7 +40,7 @@ void Player::Draw(SceneLight* _light) {
 void Player::DebugWithImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("player");
-	ImGui::DragFloat3("translate", &worldTransform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 	//弾のデバッグ
@@ -54,9 +54,9 @@ void Player::DebugWithImGui() {
 void Player::Move() {
 	//現在の向き
 	Vector3 currentDir = {
-		std::sinf(worldTransform_.rotate_.y),
+		std::sinf(object3d_->worldTransform.rotate.y),
 		0.0f,
-		std::cosf(worldTransform_.rotate_.y)
+		std::cosf(object3d_->worldTransform.rotate.y)
 	};
 	currentDir.Normalize();
 	//WSキー入力で前後移動
@@ -68,10 +68,10 @@ void Player::Move() {
 	}
 	//ADキー入力で回転
 	if (input_->PushKey(DIK_A)) {
-		worldTransform_.rotate_.y += -rotateSpeed_ * kDeltaTime;
+		object3d_->worldTransform.rotate.y += -rotateSpeed_ * kDeltaTime;
 	}
 	if (input_->PushKey(DIK_D)) {
-		worldTransform_.rotate_.y += rotateSpeed_ * kDeltaTime;
+		object3d_->worldTransform.rotate.y += rotateSpeed_ * kDeltaTime;
 	}
 
 	//床の抵抗値を加算
@@ -86,7 +86,7 @@ void Player::Move() {
 	}
 
 	//速度を加算
-	worldTransform_.translate_ += velocity_ * kDeltaTime;
+	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 }
 
@@ -96,15 +96,18 @@ void Player::Attack() {
 		//弾のインスタンスを生成
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
+		//セット
+		bullet->SetCamera(camera_);
+		bullet->SetSceneLight(light_);
 		//初期位置と初速度をセット
 		Vector3 currentDir = {
-			std::sinf(worldTransform_.rotate_.y),
+			std::sinf(object3d_->worldTransform.rotate.y),
 			0.5f,		//←角度
-			std::cosf(worldTransform_.rotate_.y)
+			std::cosf(object3d_->worldTransform.rotate.y)
 		};
 		currentDir.Normalize();
 		Vector3 bulletVelocity = currentDir * 100.0f;
-		bullet->SetInitParam(worldTransform_.translate_, bulletVelocity);
+		bullet->SetInitParam(object3d_->worldTransform.translate, bulletVelocity);
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
 	}
@@ -114,7 +117,7 @@ void Player::Attack() {
 void Player::UpdateBullets() {
 	//弾の削除
 	for (auto it = bullets_.begin(); it != bullets_.end();) {
-		if ((*it)->GetWorldTransform().translate_.y < -10.0f) {
+		if ((*it)->GetWorldTransform().translate.y < -10.0f) {
 			it = bullets_.erase(it);
 		}
 		else {
@@ -130,17 +133,17 @@ void Player::UpdateBullets() {
 void Player::CameraAlgorithm() {
 	//現在の向き
 	Vector3 currentDir = Vector3{
-		std::sinf(worldTransform_.rotate_.y),
+		std::sinf(object3d_->worldTransform.rotate.y),
 		0.0f,
-		std::cosf(worldTransform_.rotate_.y)
+		std::cosf(object3d_->worldTransform.rotate.y)
 	}.Normalize();
 	//カメラの座標を設定
 	Vector3 cameraTranslate = {};
-	cameraTranslate = worldTransform_.translate_ + (-currentDir) * 120.0f;
+	cameraTranslate = object3d_->worldTransform.translate + (-currentDir) * 120.0f;
 	cameraTranslate.y += 30.0f;
 	camera_->SetTranslate(cameraTranslate);
 	//カメラの回転を設定
-	Vector3 direction = worldTransform_.translate_ - camera_->GetTranslate();
+	Vector3 direction = object3d_->worldTransform.translate - camera_->GetTranslate();
 	direction.Normalize();
 	float yaw = std::atan2f(direction.x, direction.z);
 	float pitch = std::asinf(-direction.y);

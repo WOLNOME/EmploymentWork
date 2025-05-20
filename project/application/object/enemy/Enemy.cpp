@@ -3,31 +3,32 @@
 
 void Enemy::Initialize() {
 	//インスタンスの生成と初期化
-	worldTransform_.Initialize();
-	worldTransform_.translate_.z += 200.0f;
-	worldTransform_.translate_.y += 2.7f;
+	object3d_->worldTransform.translate.z += 200.0f;
+	object3d_->worldTransform.translate.y += 2.7f;
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->InitializeModel("snowplow");
-
+	object3d_->Initialize(ModelTag{}, "snowplow");
+	if (light_) {
+		object3d_->SetSceneLight(light_);
+	}
 }
 
 void Enemy::Update() {
 	//移動処理
 	Move();
 
-	//ワールドトランスフォームの更新
-	worldTransform_.UpdateMatrix();
+	//オブジェクトの更新
+	object3d_->Update();
 }
 
-void Enemy::Draw(SceneLight* _light) {
+void Enemy::Draw() {
 	//オブジェクトの描画
-	object3d_->Draw(worldTransform_, *camera_, _light);
+	object3d_->Draw(camera_);
 }
 
 void Enemy::DebugWithImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("player");
-	ImGui::DragFloat3("translate", &worldTransform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 #endif // _DEBUG
@@ -35,11 +36,11 @@ void Enemy::DebugWithImGui() {
 
 void Enemy::Move() {
 	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
-	if (player_->GetWorldTransform().translate_.Distance(worldTransform_.translate_) > searchPlayerDistance_) {
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistance_) {
 		return;
 	}
 	//プレイヤーへの方向を求める
-	Vector3 dirToPlayer = player_->GetWorldTransform().translate_ - worldTransform_.translate_;
+	Vector3 dirToPlayer = player_->GetWorldTransform().translate - object3d_->worldTransform.translate;
 	//y座標は考慮しない
 	dirToPlayer.y = 0.0f;
 	//正規化
@@ -59,13 +60,13 @@ void Enemy::Move() {
 	}
 
 	//速度を加算
-	worldTransform_.translate_ += velocity_ * kDeltaTime;
+	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 	//移動方向に向かって回転->現在の向きを求める
 	Vector3 currentDir = {
-		std::sinf(worldTransform_.rotate_.y),
+		std::sinf(object3d_->worldTransform.rotate.y),
 		0.0f,
-		std::cosf(worldTransform_.rotate_.y)
+		std::cosf(object3d_->worldTransform.rotate.y)
 	};
 	currentDir.Normalize();
 	//目標の向きを求める
@@ -90,13 +91,13 @@ void Enemy::Move() {
 		usingRotateSpeed = (angle > 0) ? rotateSpeed_ * kDeltaTime : -rotateSpeed_ * kDeltaTime;
 	}
 	//ワールドトランスフォームの回転を加算
-	worldTransform_.rotate_.y += usingRotateSpeed;
+	object3d_->worldTransform.rotate.y += usingRotateSpeed;
 	//回転の範囲を-PI~PIに収める
-	if (worldTransform_.rotate_.y > pi) {
-		worldTransform_.rotate_.y -= 2 * pi;
+	if (object3d_->worldTransform.rotate.y > pi) {
+		object3d_->worldTransform.rotate.y -= 2 * pi;
 	}
-	else if (worldTransform_.rotate_.y < -pi) {
-		worldTransform_.rotate_.y += 2 * pi;
+	else if (object3d_->worldTransform.rotate.y < -pi) {
+		object3d_->worldTransform.rotate.y += 2 * pi;
 	}
 
 

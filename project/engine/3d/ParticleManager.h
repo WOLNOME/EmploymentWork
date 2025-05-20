@@ -2,24 +2,13 @@
 #include "BaseCamera.h"
 #include "Particle.h"
 #include "MyMath.h"
+#include "BlendMode.h"
 #include <d3d12.h>
 #include <string>
 #include <array>
 #include <list>
 #include <unordered_map>
 #include <wrl.h>
-
-enum class BlendMode {
-	None,				//ブレンドなし
-	Normal,				//通常
-	Add,				//加算
-	Subtract,			//減算
-	Multiply,			//乗算
-	Screen,				//スクリーン
-	Execlution,			//除外
-
-	kMaxBlendModeNum,	//ブレンドモードの最大数
-};
 
 class ParticleManager {
 public:
@@ -60,9 +49,9 @@ public://パーティクルコンテナの操作
 private://パーティクル全体の操作
 	//グラフィックスパイプライン
 	void GenerateGraphicsPipeline();
-private://エフェクトの操作
-	//エフェクトの生成
-	std::list<Particle::EffectData> GenerateEffect(Particle* particle, int genNum);
+private://粒の操作
+	//粒の生成
+	std::list<Particle::GrainData> GenerateGrain(Particle* particle, int genNum);
 
 public://ゲッター
 public://セッター

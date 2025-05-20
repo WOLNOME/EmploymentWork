@@ -31,9 +31,11 @@ void GamePlayScene::Initialize() {
 	ground_->Initialize();
 	player_->Initialize();
 	enemy_->Initialize();
-	//カメラのセット
+	//カメラ、ライトのセット
 	player_->SetCamera(camera_.get());
 	enemy_->SetCamera(camera_.get());
+	player_->SetSceneLight(sceneLight_.get());
+	enemy_->SetSceneLight(sceneLight_.get());
 	//その他インスタンスのセット
 	enemy_->SetPlayer(player_.get());
 
@@ -83,8 +85,8 @@ void GamePlayScene::Draw() {
 
 	skydome_->Draw(*camera_.get());
 	ground_->Draw(*camera_.get());
-	player_->Draw(sceneLight_.get());
-	enemy_->Draw(sceneLight_.get());
+	player_->Draw();
+	enemy_->Draw();
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑

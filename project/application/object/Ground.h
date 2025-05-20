@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseCamera.h"
-#include "WorldTransform.h"
 #include "Object3d.h"
 #include <memory>
 
@@ -19,7 +18,6 @@ public:
 	/// </summary>
 	void Draw(BaseCamera& camera_);
 private:
-	WorldTransform worldTransform_;
 	int32_t textureHandle_ = EOF;
 	std::unique_ptr<Object3d> object3d_ = nullptr;
 

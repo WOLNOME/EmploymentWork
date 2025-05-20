@@ -19,39 +19,39 @@ void CollisionManager::CheckCollision() {
 			if (colliderA->GetCollisionAttribute() == colliderB->GetCollisionAttribute()) {
 				continue;
 			}
-			// 自機と自弾&必殺弾
-			if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayer) {
-				if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
-					continue;
-				}
-			}
-			if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayer) {
-				if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
-					continue;
-				}
-			}
-			// 敵と敵弾
-			if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemy) {
-				if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
-					continue;
-				}
-			}
-			if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemy) {
-				if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
-					continue;
-				}
-			}
-			// 虚無オブジェクトは当たり判定を取らない
-			if (colliderA->GetCollisionAttribute() == kCollisionAttributeNothingness) {
-				if (colliderB->GetCollisionAttribute() > 0) {
-					continue;
-				}
-			}
-			if (colliderB->GetCollisionAttribute() == kCollisionAttributeNothingness) {
-				if (colliderA->GetCollisionAttribute() > 0) {
-					continue;
-				}
-			}
+			//// 自機と自弾&必殺弾
+			//if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayer) {
+			//	if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
+			//		continue;
+			//	}
+			//}
+			//if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayer) {
+			//	if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
+			//		continue;
+			//	}
+			//}
+			//// 敵と敵弾
+			//if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemy) {
+			//	if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
+			//		continue;
+			//	}
+			//}
+			//if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemy) {
+			//	if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
+			//		continue;
+			//	}
+			//}
+			//// 虚無オブジェクトは当たり判定を取らない
+			//if (colliderA->GetCollisionAttribute() == kCollisionAttributeNothingness) {
+			//	if (colliderB->GetCollisionAttribute() > 0) {
+			//		continue;
+			//	}
+			//}
+			//if (colliderB->GetCollisionAttribute() == kCollisionAttributeNothingness) {
+			//	if (colliderA->GetCollisionAttribute() > 0) {
+			//		continue;
+			//	}
+			//}
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);

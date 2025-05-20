@@ -2,7 +2,6 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Input.h"
-#include "WorldTransform.h"
 #include "Object3d.h"
 #include "MyMath.h"
 #include <list>
@@ -24,7 +23,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(SceneLight* _light);
+	void Draw();
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
@@ -33,10 +32,11 @@ public:
 
 public: //getter
 	//ワールドトランスフォームの取得
-	const WorldTransform& GetWorldTransform() { return worldTransform_; }
-	
+	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
+
 public: //setter
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 
 private://非公開関数
 	//移動
@@ -54,10 +54,11 @@ private:
 	Input* input_ = nullptr;
 	//カメラ
 	BaseCamera* camera_ = nullptr;
+	//シーンライト
+	SceneLight* light_ = nullptr;
 
 private:
 	//オブジェクト
-	WorldTransform worldTransform_;
 	std::unique_ptr<Object3d> object3d_ = nullptr;
 
 	//弾

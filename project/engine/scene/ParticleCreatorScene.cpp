@@ -23,13 +23,11 @@ void ParticleCreatorScene::Initialize() {
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 
 	//天球と地面の生成と初期化
-	wtSkydome_.Initialize();
 	skydome_ = std::make_unique<Object3d>();
-	skydome_->InitializeModel("skydome");
-	wtGround_.Initialize();
+	skydome_->Initialize(ModelTag{}, "skydome");
 	textureHandleGround_ = TextureManager::GetInstance()->LoadTexture("grid.png");
 	ground_ = std::make_unique<Object3d>();
-	ground_->InitializeModel("ground");
+	ground_->Initialize(ModelTag{}, "ground");
 
 	//エミッター可視化ラインの生成初期化
 	lineEmitter_ = std::make_unique<LineDrawer>();
@@ -45,9 +43,9 @@ void ParticleCreatorScene::Update() {
 	BaseScene::Update();
 	//カメラの更新
 	camera_->Update();
-	//モデルの更新
-	wtSkydome_.UpdateMatrix();
-	wtGround_.UpdateMatrix();
+	//オブジェクトの更新
+	skydome_->Update();
+	ground_->Update();
 
 	//リセットコマンド
 	if (!checkContinue_ && !checkSameName_ && !checkEditName_) {
@@ -83,9 +81,9 @@ void ParticleCreatorScene::Draw() {
 	///------------------------------///
 
 	//天球の描画
-	skydome_->Draw(wtSkydome_, *camera_.get(), nullptr);
+	skydome_->Draw(camera_.get());
 	//地面の描画
-	ground_->Draw(wtGround_, *camera_.get(), nullptr, textureHandleGround_);
+	ground_->Draw(camera_.get(), textureHandleGround_);
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
@@ -400,16 +398,33 @@ void ParticleCreatorScene::Editor() {
 		ImGui::ColorEdit4("EndColorMax", &endColorMax.x);
 		ImGui::ColorEdit4("EndColorMin", &endColorMin.x);
 	}
+	//トランスフォームを写す
+	Vector3 rotateMax = { editParam_["GrainTransform"]["Rotate"]["Max"]["x"],editParam_["GrainTransform"]["Rotate"]["Max"]["y"] ,editParam_["GrainTransform"]["Rotate"]["Max"]["z"] };
+	Vector3 rotateMin = { editParam_["GrainTransform"]["Rotate"]["Min"]["x"],editParam_["GrainTransform"]["Rotate"]["Min"]["y"] ,editParam_["GrainTransform"]["Rotate"]["Min"]["z"] };
+	Vector3 scaleMax = { editParam_["GrainTransform"]["Scale"]["Max"]["x"],editParam_["GrainTransform"]["Scale"]["Max"]["y"],editParam_["GrainTransform"]["Scale"]["Max"]["z"] };
+	Vector3 scaleMin = { editParam_["GrainTransform"]["Scale"]["Min"]["x"],editParam_["GrainTransform"]["Scale"]["Min"]["y"],editParam_["GrainTransform"]["Scale"]["Min"]["z"] };
+	if (ImGui::CollapsingHeader("トランスフォームの設定")) {
+		if (ImGui::TreeNode("Rotate")) {
+			ImGui::DragFloat3("RotateMax", &rotateMax.x, 0.1f);
+			ImGui::DragFloat3("RotateMin", &rotateMin.x, 0.1f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Scale")) {
+			ImGui::DragFloat3("ScaleMax", &scaleMax.x, 0.1f, 0.0f, 10.0f);
+			ImGui::DragFloat3("ScaleMin", &scaleMin.x, 0.1f, 0.0f, 10.0f);
+			ImGui::TreePop();
+		}
+	}
 	//サイズを写す
 	float startSizeMax = editParam_["StartSize"]["Max"];
 	float startSizeMin = editParam_["StartSize"]["Min"];
 	float endSizeMax = editParam_["EndSize"]["Max"];
 	float endSizeMin = editParam_["EndSize"]["Min"];
 	if (ImGui::CollapsingHeader("サイズの設定")) {
-		ImGui::SliderFloat("StartSizeMax", &startSizeMax, startSizeMin, 10.0f);
-		ImGui::SliderFloat("StartSizeMin", &startSizeMin, 0.0f, startSizeMax);
-		ImGui::SliderFloat("EndSizeMax", &endSizeMax, endSizeMin, 10.0f);
-		ImGui::SliderFloat("EndSizeMin", &endSizeMin, 0.0f, endSizeMax);
+		ImGui::DragFloat("StartSizeMax", &startSizeMax, 0.1f, startSizeMin, 10.0f);
+		ImGui::DragFloat("StartSizeMin", &startSizeMin, 0.1f, 0.0f, startSizeMax);
+		ImGui::DragFloat("EndSizeMax", &endSizeMax, 0.1f, endSizeMin, 10.0f);
+		ImGui::DragFloat("EndSizeMin", &endSizeMin, 0.1f, 0.0f, endSizeMax);
 	}
 	//速度を写す
 	Vector3 velocityMax = { editParam_["Velocity"]["Max"]["x"],editParam_["Velocity"]["Max"]["y"],editParam_["Velocity"]["Max"]["z"] };
@@ -422,31 +437,52 @@ void ParticleCreatorScene::Editor() {
 	float lifeTimeMax = editParam_["LifeTime"]["Max"];
 	float lifeTimeMin = editParam_["LifeTime"]["Min"];
 	if (ImGui::CollapsingHeader("寿命の設定")) {
-		ImGui::SliderFloat("LifeTimeMax", &lifeTimeMax, lifeTimeMin, 30.0f);
-		ImGui::SliderFloat("LifeTimeMin", &lifeTimeMin, 0.0f, lifeTimeMax);
+		ImGui::DragFloat("LifeTimeMax", &lifeTimeMax, 0.1f, lifeTimeMin, 30.0f);
+		ImGui::DragFloat("LifeTimeMin", &lifeTimeMin, 0.1f, 0.0f, lifeTimeMax);
 	}
-	//エフェクトの最大数を写す
-	int maxEffects = editParam_["MaxEffects"];
-	if (ImGui::CollapsingHeader("エフェクトの最大数")) {
+	//粒の最大数を写す
+	int maxGrains = editParam_["MaxGrains"];
+	if (ImGui::CollapsingHeader("粒の最大数")) {
 		//推奨値の計算
-		int RecommendValue = lifeTimeMax * editParam_["EmitRate"];
-		ImGui::Text("推奨値 : %d　(最低限の数で回せる値)", RecommendValue);
-		if (ImGui::Button("推奨値を適用")) {
-			maxEffects = RecommendValue;
+		int RecommendValue;
+		switch (particle_->emitter_.generateMethod) {
+		case Particle::GenerateMethod::kRandom:
+			RecommendValue = int(lifeTimeMax * editParam_["EmitRate"]);
+			break;
+		case Particle::GenerateMethod::kClump:
+			RecommendValue = int(lifeTimeMax * editParam_["EmitRate"] * particle_->emitter_.clumpNum);
+			break;
+		default:
+			break;
 		}
-		ImGui::SliderInt("MaxEffects", &maxEffects, 1, 1000);
+		ImGui::Text("推奨値 : %d (最低限の数で回せる値)", RecommendValue);
+		if (ImGui::Button("推奨値を適用")) {
+			maxGrains = RecommendValue;
+		}
+		ImGui::SliderInt("MaxGrains", &maxGrains, 1, 1000);
 	}
-	//1秒あたりのエフェクトの生成量を写す
+	//1秒あたりの粒の生成量を写す
 	int emitRate = editParam_["EmitRate"];
-	if (ImGui::CollapsingHeader("1秒あたりのエフェクトの生成量")) {
+	if (ImGui::CollapsingHeader("1秒あたりの粒の生成量")) {
 		ImGui::SliderInt("EmitRate", &emitRate, 1, 100);
 	}
 	//ブレンドモードを写す
 	int blendMode = editParam_["BlendMode"];
 	const char* blendModeList[] = { "None","Normal","Add","Subtract","Multiply","Screen","Exclusion" };
 	if (ImGui::CollapsingHeader("ブレンドモード")) {
-		ImGui::Combo("Blend Mode", &blendMode, blendModeList, (int)BlendMode::kMaxBlendModeNum);
+		ImGui::Combo("BlendMode", &blendMode, blendModeList, (int)BlendMode::kMaxBlendModeNum);
 	}
+	//プリミティブを写す
+	int primitive = editParam_["Primitive"];
+	bool isShapeChange = false;
+	const char* primitiveList[] = { "Shere","Cube","SkyBox","Plane","Ring","Tube" };
+	if (ImGui::CollapsingHeader("形状")) {
+		if (ImGui::Combo("Primitive", &primitive, primitiveList, (int)Shape::ShapeKind::kMaxShapeKindNum)) {
+			//形状の変更通知
+			isShapeChange = true;
+		}
+	}
+
 	//editParamに変更を反映
 	editParam_["Texture"] = selectedTexture;
 	editParam_["StartColor"]["Max"]["x"] = startColorMax.x;
@@ -465,6 +501,18 @@ void ParticleCreatorScene::Editor() {
 	editParam_["EndColor"]["Min"]["y"] = endColorMin.y;
 	editParam_["EndColor"]["Min"]["z"] = endColorMin.z;
 	editParam_["EndColor"]["Min"]["w"] = endColorMin.w;
+	editParam_["GrainTransform"]["Rotate"]["Max"]["x"] = rotateMax.x;
+	editParam_["GrainTransform"]["Rotate"]["Max"]["y"] = rotateMax.y;
+	editParam_["GrainTransform"]["Rotate"]["Max"]["z"] = rotateMax.z;
+	editParam_["GrainTransform"]["Rotate"]["Min"]["x"] = rotateMin.x;
+	editParam_["GrainTransform"]["Rotate"]["Min"]["y"] = rotateMin.y;
+	editParam_["GrainTransform"]["Rotate"]["Min"]["z"] = rotateMin.z;
+	editParam_["GrainTransform"]["Scale"]["Max"]["x"] = scaleMax.x;
+	editParam_["GrainTransform"]["Scale"]["Max"]["y"] = scaleMax.y;
+	editParam_["GrainTransform"]["Scale"]["Max"]["z"] = scaleMax.z;
+	editParam_["GrainTransform"]["Scale"]["Min"]["x"] = scaleMin.x;
+	editParam_["GrainTransform"]["Scale"]["Min"]["y"] = scaleMin.y;
+	editParam_["GrainTransform"]["Scale"]["Min"]["z"] = scaleMin.z;
 	editParam_["StartSize"]["Max"] = startSizeMax;
 	editParam_["StartSize"]["Min"] = startSizeMin;
 	editParam_["EndSize"]["Max"] = endSizeMax;
@@ -477,11 +525,17 @@ void ParticleCreatorScene::Editor() {
 	editParam_["Velocity"]["Min"]["z"] = velocityMin.z;
 	editParam_["LifeTime"]["Max"] = lifeTimeMax;
 	editParam_["LifeTime"]["Min"] = lifeTimeMin;
-	editParam_["MaxEffects"] = maxEffects;
+	editParam_["MaxGrains"] = maxGrains;
 	editParam_["EmitRate"] = emitRate;
 	editParam_["BlendMode"] = blendMode;
+	editParam_["Primitive"] = primitive;
 	//パーティクルに反映
 	particle_->SetParam(editParam_);
+	//形状の変更通知を受け取ったら
+	if (isShapeChange) {
+		//パーティクルの形状を変更
+		particle_->ShapeChange();
+	}
 
 	//セーブボタン
 	if (ImGui::Button("セーブ")) {
@@ -565,20 +619,55 @@ void ParticleCreatorScene::Editor() {
 		ImGui::DragFloat3("平行移動", &particle_->emitter_.transform.translate.x, 0.1f);
 		ImGui::DragFloat3("拡縮", &particle_->emitter_.transform.scale.x, 0.1f);
 	}
+	//生成アルゴリズム
+	if (ImGui::CollapsingHeader("生成アルゴリズム")) {
+		ImGui::Checkbox("生成するか(isPlay)", &particle_->emitter_.isPlay);
+		if (ImGui::TreeNode("生成方法")) {
+			//現在の生成方法を表示
+			const char* methods[] = { "Random","Clump" };
+			const char* currentMethod = "";
+			switch (particle_->emitter_.generateMethod) {
+			case Particle::GenerateMethod::kRandom:
+				currentMethod = methods[0];
+				break;
+			case Particle::GenerateMethod::kClump:
+				currentMethod = methods[1];
+				break;
+			default:
+				break;
+			}
+			ImGui::Text("現在の生成方法 : %s", currentMethod);
+			//生成方法の選択
+			ImGui::Combo("生成方法(generateMethod)", (int*)&particle_->emitter_.generateMethod, methods, IM_ARRAYSIZE(methods));
+			//生成方法ごとの設定
+			switch (particle_->emitter_.generateMethod) {
+			case Particle::GenerateMethod::kRandom:
+				break;
+			case Particle::GenerateMethod::kClump:
+				ImGui::DragInt("一塊の粒の数(clumpNum)", &particle_->emitter_.clumpNum, 1, 1, 20);
+
+				break;
+			default:
+				break;
+			}
+
+			ImGui::TreePop();
+		}
+	}
 	//重力関係
 	if (ImGui::CollapsingHeader("重力")) {
-		ImGui::Checkbox("重力の処理をするか", &particle_->emitter_.isGravity);
+		ImGui::Checkbox("重力の処理をするか(isGravity)", &particle_->emitter_.isGravity);
 		ImGui::DragFloat("重力値", &particle_->emitter_.gravity, 0.1f);
 	}
 	//床関係
 	if (ImGui::CollapsingHeader("床")) {
-		ImGui::Checkbox("床の処理をするか", &particle_->emitter_.isBound);
+		ImGui::Checkbox("床の処理をするか(isBound)", &particle_->emitter_.isBound);
 		ImGui::DragFloat("床の反発値", &particle_->emitter_.repulsion, 0.1f);
 		ImGui::DragFloat("床の高さ", &particle_->emitter_.floorHeight, 0.1f);
 	}
 	//ビルボードを適用するか
 	if (ImGui::CollapsingHeader("ビルボード")) {
-		ImGui::Checkbox("ビルボードの処理をするか", &particle_->emitter_.isBillboard);
+		ImGui::Checkbox("ビルボードの処理をするか(isBillboard)", &particle_->emitter_.isBillboard);
 	}
 	ImGui::End();
 #endif // _DEBUG

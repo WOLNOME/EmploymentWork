@@ -5,9 +5,9 @@
 void PlayerBullet::Initialize() {
 	//インスタンスの生成と初期化
 	TextureManager::GetInstance()->LoadTexture("black.png");
-	worldTransform_.Initialize();
+	object3d_->worldTransform.Initialize();
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->InitializeShape(Shape::kSphere);
+	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 }
 
 void PlayerBullet::Update() {
@@ -15,19 +15,19 @@ void PlayerBullet::Update() {
 	Move();
 
 	//ワールドトランスフォームの更新
-	worldTransform_.UpdateMatrix();
+	object3d_->worldTransform.UpdateMatrix();
 }
 
-void PlayerBullet::Draw(BaseCamera* _camera, SceneLight* _light) {
+void PlayerBullet::Draw() {
 	//オブジェクトの描画
-	object3d_->Draw(worldTransform_, *_camera, _light, textureHandle_);
+	object3d_->Draw(camera_,textureHandle_);
 }
 
 void PlayerBullet::DebugWithImGui() {
 #ifdef _DEBUG
 
 	ImGui::Begin("playerBullet");
-	ImGui::DragFloat3("translate", &worldTransform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 #endif // _DEBUG
@@ -46,5 +46,5 @@ void PlayerBullet::Move() {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed_;
 	}
-	worldTransform_.translate_ += velocity_ * kDeltaTime;
+	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 }

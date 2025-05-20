@@ -6,13 +6,22 @@
 #include <list>
 #include <memory>
 #include "json.hpp"
-#include "Model.h"
+#include "Shape.h"
 #include "MyMath.h"
 
 using json = nlohmann::json;
 
 //パーティクル
 class Particle {
+	//パーティクルマネージャーに公開
+	friend class ParticleManager;
+	//パーティクルクリエイターシーンに公開
+	friend class ParticleCreatorScene;
+public:
+	enum class GenerateMethod {
+		kRandom,		//ランダム
+		kClump,			//塊	
+	};
 public:
 	//座標変換行列データ
 	struct ParticleForGPU {
@@ -25,28 +34,31 @@ public:
 		ParticleForGPU* instancingData;
 		uint32_t srvIndex;
 	};
-	//エフェクト構造体
-	struct EffectData {
-		TransformEuler transform;	//エフェクトのトランスフォーム
-		Vector4 startColor;			//最初の色
-		Vector4 endColor;			//最後の色
-		Vector3 velocity;			//速度
-		float startSize;			//最初のサイズ
-		float endSize;				//最後のサイズ
-		float lifeTime;				//寿命
-		float currentTime;			//現在の時間
+	//粒の構造体
+	struct GrainData {
+		TransformEuler transform;		//粒のトランスフォーム
+		TransformEuler basicTransform;	//最初のトランスフォーム
+		Vector4 startColor;				//最初の色
+		Vector4 endColor;				//最後の色
+		Vector3 velocity;				//速度
+		float startSize;				//最初のサイズ
+		float endSize;					//最後のサイズ
+		float lifeTime;					//寿命
+		float currentTime;				//現在の時間
 	};
 	//エミッター
 	struct Emitter {
-		TransformEuler transform;	//エミッターのトランスフォーム
-		float gravity;				//重力値
-		float repulsion;			//床の反発値
-		float floorHeight;			//床の高さ
-		bool isAffectedField;		//フィールドに影響を受けるか
-		bool isBillboard;			//ビルボードを適用するか
-		bool isGravity;				//重力を適用するか
-		bool isBound;				//バウンドを適用するか
-		bool isPlay;				//パーティクルを生成するか
+		TransformEuler transform;			//エミッターのトランスフォーム
+		GenerateMethod generateMethod;		//生成方法
+		float gravity;						//重力値
+		float repulsion;					//床の反発値
+		float floorHeight;					//床の高さ
+		int clumpNum;						//塊の数(clumpMethodの時のみ使用)
+		bool isAffectedField;				//フィールドに影響を受けるか
+		bool isBillboard;					//ビルボードを適用するか
+		bool isGravity;						//重力を適用するか
+		bool isBound;						//バウンドを適用するか
+		bool isPlay;						//パーティクルを生成するか
 	};
 public://メンバ関数
 	~Particle();
@@ -55,7 +67,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="name">インスタンスの名前</param>
 	/// <param name="fileName">使用するパーティクルの名前(.jsonは省略)</param>
-	void Initialize(const std::string& name,const std::string& fileName);
+	void Initialize(const std::string& name, const std::string& fileName);
 private://メンバ関数(非公開)
 	//パーティクルリソース作成関数
 	ParticleResource MakeParticleResource();
@@ -68,19 +80,25 @@ public: //getter
 public: //setter
 	//パラメーター
 	void SetParam(const json& param) { param_ = param; }
-public: //マネージャー共有用変数
-	//モデル(見た目)
-	Model* model_;
+private: //マネージャーにのみ公開するパラメーター
+	//形状(見た目)
+	std::unique_ptr<Shape> shape_;
 	//パーティクル用リソース
 	ParticleResource particleResource_;
-	//各インスタンシング（エフェクト）用書き換え情報
-	std::list<EffectData> effects_;
-public://エミッター
+	//各インスタンシング（粒）用書き換え情報
+	std::list<GrainData> grains_;
+private: //クリエイターシーンにのみ公開するパラメーター
+	//形状の変更
+	void ShapeChange();
+
+public://通常のクラスに見せて良いパラメーター
 	Emitter emitter_;
 private: //メンバ変数
 	//インスタンスの名前
 	std::string name_;
-	//各エフェクトのパラメーター
+	//各粒のパラメーター
 	json param_;
+	//テクスチャハンドル
+	int32_t textureHandle_;
 
 };

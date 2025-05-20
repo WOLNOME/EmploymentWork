@@ -1,22 +1,23 @@
 #include "MainRender.h"
 #include "WinApp.h"
 #include "DirectXCommon.h"
+#include "GPUDescriptorManager.h"
+#include "RTVManager.h"
+#include "Logger.h"
 #include <cassert>
 
 MainRender* MainRender::instance = nullptr;
 
 using namespace Microsoft::WRL;
 
-MainRender* MainRender::GetInstance()
-{
+MainRender* MainRender::GetInstance() {
 	if (instance == nullptr) {
 		instance = new MainRender;
 	}
 	return instance;
 }
 
-void MainRender::Initialize()
-{
+void MainRender::Initialize() {
 	//コマンド関連の初期化
 	InitCommand();
 	//スワップチェーンの生成
@@ -35,49 +36,51 @@ void MainRender::Initialize()
 	InitScissorRect();
 }
 
-void MainRender::Finalize()
-{
+void MainRender::Finalize() {
 	delete instance;
 	instance = nullptr;
 }
 
-void MainRender::PreDraw()
-{
+void MainRender::PreObjectDraw() {
+	//ビューポートとシザー矩形を設定する
+	commandList->RSSetViewports(1, &viewport);
+	commandList->RSSetScissorRects(1, &scissorRect);
+
+}
+
+void MainRender::PreImGuiDraw() {
+	///--------------------------------------------///
+	/// SwapChainに対する設定
+	///--------------------------------------------///
+
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 
-	//今回のバリアはTransition
+	//バリアの設定
+	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	//Noneにしておく
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	//バリアを張る対象のリソース。現在のバックバッファに対して行う
-	barrier.Transition.pResource = swapChainResources[backBufferIndex].Get();
-	//遷移前（現在）のResourceState
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	//背に後のResourceState
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	//TransitionBarrierを張る
+	barrier.Transition.pResource = swapChainResources[backBufferIndex].Get();	//スワップチェインのバックバッファに対して行う
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;				//遷移前の状態
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;			//遷移後の状態
 	commandList->ResourceBarrier(1, &barrier);
 
-
-	//描画先のRTVとDSVを設定する
-	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = DirectXCommon::GetCPUDescriptorHandle(dsvDescriptorHeap.Get(), descriptorSizeDSV, 0);
-	commandList->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, &dsvHandle);
+	//描画先のRTVを設定する(深度バッファは送らない)
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = RTVManager::GetInstance()->GetCPUDescriptorHandle(rtvHandles[backBufferIndex]);
+	commandList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色。RGBAの順
-	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
-	//指定した深度で画面全体をクリアする
-	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	float clearColor[] = { 0,1,0,0 };//青っぽい色。RGBAの順
+	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	//※深度バッファはクリアしない
 
 	//コマンドを積む
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 }
 
-void MainRender::PostDraw()
-{
+void MainRender::PostDraw() {
 	HRESULT hr;
-	//!>本来ここにバリア遷移があるけど、D2Dの描画終了時に同じことをしているので省略
+	//!>本来ここにスワップチェーンリソースバリア遷移があるけど、D2Dの描画終了時に同じことをしているので省略
 
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	hr = commandList->Close();
@@ -93,8 +96,7 @@ void MainRender::ExchangeScreen() {
 	swapChain->Present(1, 0);
 }
 
-void MainRender::ReadyNextCommand()
-{
+void MainRender::ReadyNextCommand() {
 	//次のフレーム用のコマンドリストを準備
 	HRESULT hr = commandAllocator->Reset();
 	assert(SUCCEEDED(hr));
@@ -102,8 +104,7 @@ void MainRender::ReadyNextCommand()
 	assert(SUCCEEDED(hr));
 }
 
-void MainRender::InitCommand()
-{
+void MainRender::InitCommand() {
 	HRESULT hr;
 	//コマンドアロケーターを生成する
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
@@ -116,8 +117,7 @@ void MainRender::InitCommand()
 	assert(SUCCEEDED(hr));
 }
 
-void MainRender::GenerateSwapChain()
-{
+void MainRender::GenerateSwapChain() {
 	HRESULT hr;
 	//スワップチェーンを生成設定
 	swapChainDesc.Width = WinApp::kClientWidth;	//画面の幅。ウィンドウのクライアント領域を同じものにしておく
@@ -132,8 +132,7 @@ void MainRender::GenerateSwapChain()
 	assert(SUCCEEDED(hr));
 }
 
-void MainRender::GenerateDepthBuffer()
-{
+void MainRender::GenerateDepthBuffer() {
 	//生成するResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = WinApp::kClientWidth;
@@ -170,20 +169,15 @@ void MainRender::GenerateDepthBuffer()
 	depthStencilResource = resource;
 }
 
-void MainRender::GenerateDescriptorHeap()
-{
+void MainRender::GenerateDescriptorHeap() {
 	//サイズ
-	descriptorSizeRTV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	descriptorSizeDSV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
-	//RTV用のヒープディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
-	rtvDescriptorHeap = DirectXCommon::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触るものなのではないので、ShaderVisbleはfalse
 	dsvDescriptorHeap = DirectXCommon::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 }
 
-void MainRender::InitRenderTargetView()
-{
+void MainRender::InitRenderTargetView() {
 	HRESULT hr;
 	//SwapChainからResourceを引っ張ってくる
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
@@ -192,22 +186,15 @@ void MainRender::InitRenderTargetView()
 	hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&swapChainResources[1]));
 	assert(SUCCEEDED(hr));
 
-	//RTVの設定
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dのテクスチャとして書き込む
-	//ディスクリプタの先頭を取得する
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvStartHandle = DirectXCommon::GetCPUDescriptorHandle(rtvDescriptorHeap.Get(), descriptorSizeRTV, 0);
-	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
-	rtvHandles[0] = rtvStartHandle;
-	DirectXCommon::GetInstance()->GetDevice()->CreateRenderTargetView(swapChainResources[0].Get(), &rtvDesc, rtvHandles[0]);
-	//2つ目のディスクリプタハンドルを得る(自力で)
-	rtvHandles[1].ptr = rtvHandles[0].ptr + DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	//2つ目を作る
-	DirectXCommon::GetInstance()->GetDevice()->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
+	//スワップチェーン用のRTVを作成する
+	rtvHandles[0] = RTVManager::GetInstance()->Allocate();
+	rtvHandles[1] = RTVManager::GetInstance()->Allocate();
+	RTVManager::GetInstance()->CreateRTVDescriptor(rtvHandles[0], swapChainResources[0].Get());
+	RTVManager::GetInstance()->CreateRTVDescriptor(rtvHandles[1], swapChainResources[1].Get());
+
 }
 
-void MainRender::InitDepthStencilView()
-{
+void MainRender::InitDepthStencilView() {
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -216,8 +203,7 @@ void MainRender::InitDepthStencilView()
 	DirectXCommon::GetInstance()->GetDevice()->CreateDepthStencilView(depthStencilResource.Get(), &dsvDesc, DirectXCommon::GetCPUDescriptorHandle(dsvDescriptorHeap.Get(), descriptorSizeDSV, 0));
 }
 
-void MainRender::InitViewPort()
-{
+void MainRender::InitViewPort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport.Width = WinApp::kClientWidth;
 	viewport.Height = WinApp::kClientHeight;
@@ -227,8 +213,7 @@ void MainRender::InitViewPort()
 	viewport.MaxDepth = 1.0f;
 }
 
-void MainRender::InitScissorRect()
-{
+void MainRender::InitScissorRect() {
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
 	scissorRect.right = WinApp::kClientWidth;
@@ -236,22 +221,10 @@ void MainRender::InitScissorRect()
 	scissorRect.bottom = WinApp::kClientHeight;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE MainRender::GetRTVCPUDescriptorHandle(uint32_t index)
-{
-	return DirectXCommon::GetCPUDescriptorHandle(rtvDescriptorHeap, descriptorSizeRTV, index);
-}
-
-D3D12_GPU_DESCRIPTOR_HANDLE MainRender::GetRTVGPUDescriptorHandle(uint32_t index)
-{
-	return DirectXCommon::GetGPUDescriptorHandle(rtvDescriptorHeap, descriptorSizeRTV, index);
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE MainRender::GetDSVCPUDescriptorHandle(uint32_t index)
-{
+D3D12_CPU_DESCRIPTOR_HANDLE MainRender::GetDSVCPUDescriptorHandle(uint32_t index) {
 	return DirectXCommon::GetCPUDescriptorHandle(dsvDescriptorHeap, descriptorSizeDSV, index);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE MainRender::GetDSVGPUDescriptorHandle(uint32_t index)
-{
+D3D12_GPU_DESCRIPTOR_HANDLE MainRender::GetDSVGPUDescriptorHandle(uint32_t index) {
 	return DirectXCommon::GetGPUDescriptorHandle(dsvDescriptorHeap, descriptorSizeDSV, index);
 }

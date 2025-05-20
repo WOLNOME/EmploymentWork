@@ -2,11 +2,9 @@
 #include "BaseScene.h"
 #include "Vector2.h"
 #include "MyMath.h"
-#include "WorldTransform.h"
 #include "DevelopCamera.h"
 
-class DevelopScene : public BaseScene
-{
+class DevelopScene : public BaseScene {
 public:
 	/// <summary>
 	/// 初期化
@@ -54,28 +52,28 @@ private://メンバ変数
 	uint32_t textureHandleSprite2_ = 0u;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
 	Vector2 sprite2Position;
-	//3Dオブジェクト
-	WorldTransform wtAxis_;
-	std::unique_ptr<Object3d> axis_ = nullptr;
+	//スカイボックス
+	uint32_t textureHandleSkyBox_ = 0u;
+	std::unique_ptr<Object3d> skyBox_ = nullptr;
 
-	WorldTransform wtTerrain_;
+	//3Dオブジェクト
+	std::unique_ptr<Object3d> teapot_ = nullptr;
+
 	std::unique_ptr<Object3d> terrain_ = nullptr;
 
-	WorldTransform wtAnimatedCube_;
 	std::unique_ptr<Object3d> animatedCube_ = nullptr;
 
-	WorldTransform wtSneakWalk_;
 	std::unique_ptr<Object3d> sneakWalk_ = nullptr;
 
-	WorldTransform wtWalk_;
 	std::unique_ptr<Object3d> walk_ = nullptr;
 
-	WorldTransform wtSimpleSkin_;
+	std::unique_ptr<Object3d> composite_ = nullptr;
+
 	std::unique_ptr<Object3d> simpleSkin_ = nullptr;
 
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
-	
+
 	//線
 	std::unique_ptr<LineDrawer> line_ = nullptr;
 

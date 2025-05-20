@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector4.h"
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <dxcapi.h>
@@ -58,11 +59,15 @@ public://公開メンバ関数
 		const wchar_t* profile
 	);
 	//デスクリプタヒープ作成
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 	//リソース生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	//UAV用リソース作成
+	ID3D12Resource* CreateUAVBufferResource(size_t sizeInBytes);
 	//テクスチャリソースの生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
+	ID3D12Resource* CreateTextureResource(const DirectX::TexMetadata& metadata);
+	//レンダーテクスチャリソースの生成
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(uint32_t width,uint32_t height,DXGI_FORMAT format,const Vector4& clearColor);
 	
 	
 public://公開メンバ変数
@@ -75,6 +80,8 @@ public://ゲッター
 	//コマンドキュー
 	ID3D12CommandQueue* GetCommandQueue() const { return commandQueue.Get(); }
 	ID3D12CommandQueue** GetAddressOfCommandQueue() { return commandQueue.GetAddressOf(); }
+	//クリアバリュー
+	D3D12_CLEAR_VALUE GetClearValue() const { return clearValue; }
 
 private://インスタンス
 
@@ -97,6 +104,9 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler = nullptr;
 	//インクルードハンドラ
 	Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler = nullptr;
-	
+
+	//レンダーテクスチャ用クリアバリュー
+	D3D12_CLEAR_VALUE clearValue{};
+
 };
 
