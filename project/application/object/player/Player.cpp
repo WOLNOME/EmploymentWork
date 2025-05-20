@@ -5,10 +5,9 @@ void Player::Initialize() {
 	//インプットの初期化
 	input_ = Input::GetInstance();
 	//インスタンスの生成と初期化
-	
-	object3d_->worldTransform.translate.y += 2.7f;
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
+	object3d_->worldTransform.translate.y += 2.7f;
 
 }
 

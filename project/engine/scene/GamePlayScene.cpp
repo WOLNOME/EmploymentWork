@@ -62,6 +62,7 @@ void GamePlayScene::Update() {
 	player_->Update();
 	enemy_->Update();
 
+
 	//ImGui
 #ifdef _DEBUG
 	//カメラのImGui
@@ -72,7 +73,6 @@ void GamePlayScene::Update() {
 
 
 #endif // _DEBUG
-
 }
 
 void GamePlayScene::Draw() {

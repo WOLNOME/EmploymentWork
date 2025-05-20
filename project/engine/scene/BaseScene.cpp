@@ -29,6 +29,7 @@ void BaseScene::TextDraw() {
 }
 
 void BaseScene::ShowFPS() {
+#ifdef _DEBUG
 	//現在時間の取得
 	auto now = std::chrono::steady_clock::now();
 	// 経過時間を計算
@@ -39,7 +40,6 @@ void BaseScene::ShowFPS() {
 	fps_ = 1.0f / deltaTime.count();
 
 	// ImGuiで表示
-#ifdef _DEBUG
 	ImGui::Begin("FPS Display");
 	ImGui::Text("Current FPS: %.0f", fps_);
 	ImGui::End();

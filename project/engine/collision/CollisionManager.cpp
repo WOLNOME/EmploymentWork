@@ -2,6 +2,23 @@
 #include "CollisionConfig.h"
 #include "MyMath.h"
 
+CollisionManager* CollisionManager::instance = nullptr;
+
+CollisionManager* CollisionManager::GetInstance() {
+	if (instance == nullptr) {
+		instance = new CollisionManager;
+	}
+	return instance;
+}
+
+void CollisionManager::Initialize() {
+}
+
+void CollisionManager::Finalize() {
+	delete instance;
+	instance = nullptr;
+}
+
 void CollisionManager::CheckCollision() {
 	// リスト内のペアを総当たり
 	std::list<Collider*>::iterator itrA = colliders_.begin();
@@ -19,39 +36,32 @@ void CollisionManager::CheckCollision() {
 			if (colliderA->GetCollisionAttribute() == colliderB->GetCollisionAttribute()) {
 				continue;
 			}
-			//// 自機と自弾&必殺弾
-			//if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayer) {
-			//	if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
-			//		continue;
-			//	}
-			//}
-			//if (colliderB->GetCollisionAttribute() == kCollisionAttributePlayer) {
-			//	if (colliderA->GetCollisionAttribute() == kCollisionAttributePlayerBullet) {
-			//		continue;
-			//	}
-			//}
-			//// 敵と敵弾
-			//if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemy) {
-			//	if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
-			//		continue;
-			//	}
-			//}
-			//if (colliderB->GetCollisionAttribute() == kCollisionAttributeEnemy) {
-			//	if (colliderA->GetCollisionAttribute() == kCollisionAttributeEnemyBullet) {
-			//		continue;
-			//	}
-			//}
-			//// 虚無オブジェクトは当たり判定を取らない
-			//if (colliderA->GetCollisionAttribute() == kCollisionAttributeNothingness) {
-			//	if (colliderB->GetCollisionAttribute() > 0) {
-			//		continue;
-			//	}
-			//}
-			//if (colliderB->GetCollisionAttribute() == kCollisionAttributeNothingness) {
-			//	if (colliderA->GetCollisionAttribute() > 0) {
-			//		continue;
-			//	}
-			//}
+			// 自機と自弾&必殺弾
+			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Player) {
+				if (colliderB->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
+					continue;
+				}
+			}
+			if (colliderB->GetCollisionAttribute() == CollisionAttribute::Player) {
+				if (colliderA->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
+					continue;
+				}
+			}
+			// 敵と敵弾
+			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Enemy) {
+				if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
+					continue;
+				}
+			}
+			if (colliderB->GetCollisionAttribute() == CollisionAttribute::Enemy) {
+				if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
+					continue;
+				}
+			}
+			// 虚無オブジェクトは当たり判定を取らない
+			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Nothingness || colliderB->GetCollisionAttribute() == CollisionAttribute::Nothingness) {
+				continue;
+			}
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);
@@ -74,7 +84,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 	// 球と球の交差判定
 	if (length < addRad) {
 		// 衝突時コールバックを呼び出す
-		colliderA->OnCollision();
-		colliderB->OnCollision();
+		colliderA->OnCollision(colliderB->GetCollisionAttribute());
+		colliderB->OnCollision(colliderA->GetCollisionAttribute());
 	}
 }

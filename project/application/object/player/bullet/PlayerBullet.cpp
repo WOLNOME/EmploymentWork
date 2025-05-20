@@ -5,7 +5,6 @@
 void PlayerBullet::Initialize() {
 	//インスタンスの生成と初期化
 	TextureManager::GetInstance()->LoadTexture("black.png");
-	object3d_->worldTransform.Initialize();
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 }

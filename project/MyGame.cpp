@@ -82,7 +82,7 @@ void MyGame::Draw() {
 	//シーンの文字描画
 	SceneManager::GetInstance()->TextDraw();
 	//シーン遷移アニメーションの描画(一番上に描画)
-	//SceneManager::GetInstance()->CurtainDraw();
+	SceneManager::GetInstance()->CurtainDraw();
 
 	//D2Dの描画後処理
 	D2DRender::GetInstance()->PostDraw();

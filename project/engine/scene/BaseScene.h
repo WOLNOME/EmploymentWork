@@ -54,10 +54,9 @@ public:
 	/// </summary>
 	virtual void TextDraw();
 	
-
 	//FPS表示
 	void ShowFPS();
-	
+
 protected:
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;

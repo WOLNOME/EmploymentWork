@@ -3,13 +3,13 @@
 
 void Enemy::Initialize() {
 	//インスタンスの生成と初期化
-	object3d_->worldTransform.translate.z += 200.0f;
-	object3d_->worldTransform.translate.y += 2.7f;
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
 	if (light_) {
 		object3d_->SetSceneLight(light_);
 	}
+	object3d_->worldTransform.translate.z += 200.0f;
+	object3d_->worldTransform.translate.y += 2.7f;
 }
 
 void Enemy::Update() {
