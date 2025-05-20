@@ -30,7 +30,10 @@ public:
 	/// </summary>
 	void TextDraw() override;
 
-private://カメラ
+private:
+	//インプット
+	Input* input_ = nullptr;
+	//カメラ
 	std::unique_ptr<DevelopCamera> camera_ = nullptr;
 private://ライト
 	//平行光源

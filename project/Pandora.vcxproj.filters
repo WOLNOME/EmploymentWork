@@ -97,6 +97,8 @@
     <ClCompile Include="application\object\Ground.cpp" />
     <ClCompile Include="application\object\player\Player.cpp" />
     <ClCompile Include="application\object\enemy\Enemy.cpp" />
+    <ClCompile Include="application\object\player\bullet\PlayerBullet.cpp" />
+    <ClCompile Include="application\object\baseCharacter\BaseCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -197,6 +199,8 @@
     <ClInclude Include="application\object\Ground.h" />
     <ClInclude Include="application\object\player\Player.h" />
     <ClInclude Include="application\object\enemy\Enemy.h" />
+    <ClInclude Include="application\object\player\bullet\PlayerBullet.h" />
+    <ClInclude Include="application\object\baseCharacter\BaseCharacter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

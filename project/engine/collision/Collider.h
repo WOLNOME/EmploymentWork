@@ -1,18 +1,18 @@
 #pragma once
 #include "Vector3.h"
-#include <cstdint>
+#include "CollisionConfig.h"
 class Collider {
 
 public:
 	virtual ~Collider() = default;
 	float GetRadius() { return radius_; }
-	virtual void OnCollision();
+	virtual void OnCollision() = 0;
 	virtual Vector3 GetWorldPosition() = 0;
-	uint32_t GetCollisionAttribute() { return collisionAttribute_; }
-	void SetCollisionAttribute(const uint32_t collisionAttribute) { collisionAttribute_ = collisionAttribute; }
+	CollisionAttribute GetCollisionAttribute() { return collisionAttribute_; }
+	void SetCollisionAttribute(const CollisionAttribute collisionAttribute) { collisionAttribute_ = collisionAttribute; }
 
 private:
-	uint32_t collisionAttribute_ = 0xffffffff;
+	CollisionAttribute collisionAttribute_ = CollisionAttribute::Nothingness;
 
 protected:
 	float radius_;

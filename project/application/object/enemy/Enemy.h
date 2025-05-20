@@ -49,9 +49,11 @@ private:
 private:
 	//変数
 	Vector3 velocity_ = {};							//速度
-	const float speed_ = 0.5f;						//移動スピード
-	const float rotateSpeed_ = 1.0f / 2.0f * pi;	//回転スピード
-	const float floorRigist_ = 50.0f;				//床の抵抗値(摩擦量)
+	const float speed_ = 2.5f;						//移動スピード
+	const float maxSpeed_ = 20.0f;					//最大移動スピード
+	const float rotateSpeed_ = 1.0f / 3.0f * pi;	//回転スピード
+	const float floorRegist_ = 50.0f;				//床の摩擦力
+	const float searchPlayerDistance_ = 250.0f;		//プレイヤー探索距離
 
 };
 

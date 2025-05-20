@@ -1,8 +1,12 @@
 #include "GamePlayScene.h"
+#include "SceneManager.h"
 
 void GamePlayScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
+
+	//インプットの初期化
+	input_ = Input::GetInstance();
 
 	//カメラの生成・初期化
 	camera_ = std::make_unique<DevelopCamera>();
@@ -33,7 +37,6 @@ void GamePlayScene::Initialize() {
 	//その他インスタンスのセット
 	enemy_->SetPlayer(player_.get());
 
-
 }
 
 void GamePlayScene::Finalize() {
@@ -42,6 +45,11 @@ void GamePlayScene::Finalize() {
 void GamePlayScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
+
+	//シーンリセット
+	if (input_->TriggerKey(DIK_R)) {
+		sceneManager_->SetNextScene("GamePlay");
+	}
 
 	//カメラの更新
 	camera_->Update();
@@ -54,10 +62,11 @@ void GamePlayScene::Update() {
 
 	//ImGui
 #ifdef _DEBUG
-	//FPS表示
-	//BaseScene::ShowFPS();
 	//カメラのImGui
 	camera_->DebugWithImGui();
+
+	//プレイヤーのImGui
+	player_->DebugWithImGui();
 
 
 #endif // _DEBUG
@@ -80,7 +89,6 @@ void GamePlayScene::Draw() {
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
 	///------------------------------///
-
 
 	//線描画共通描画設定
 	LineDrawerCommon::GetInstance()->SettingCommonDrawing();
