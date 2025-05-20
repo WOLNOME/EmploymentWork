@@ -2,6 +2,8 @@
 #include "ImGuiManager.h"
 
 void Enemy::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
@@ -10,9 +12,16 @@ void Enemy::Initialize() {
 	}
 	object3d_->worldTransform.translate.z += 200.0f;
 	object3d_->worldTransform.translate.y += 2.7f;
+
+	//当たり判定の半径を設定
+	radius_ = 3.5f;
+
 }
 
 void Enemy::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
+
 	//移動処理
 	Move();
 
@@ -25,6 +34,11 @@ void Enemy::Draw() {
 	object3d_->Draw(camera_);
 }
 
+void Enemy::DrawLine() {
+	//ベースキャラクターのライン描画
+	BaseCharacter::DrawLine();
+}
+
 void Enemy::DebugWithImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("player");
@@ -32,6 +46,9 @@ void Enemy::DebugWithImGui() {
 	ImGui::End();
 
 #endif // _DEBUG
+}
+
+void Enemy::OnCollision(CollisionAttribute attribute) {
 }
 
 void Enemy::Move() {
@@ -50,7 +67,7 @@ void Enemy::Move() {
 	velocity_ += dirToPlayer * speed_;
 	//摩擦力をかける
 	Vector3 frictionDir = -velocity_.Normalized();
-	Vector3 frictionAccel = frictionDir * floorRegist_;
+	Vector3 frictionAccel = frictionDir * floorFriction_;
 	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限

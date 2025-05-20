@@ -1,30 +1,36 @@
 #pragma once
+#include "application/object/baseCharacter/BaseCharacter.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
 
-class PlayerBullet {
+class PlayerBullet : public BaseCharacter {
 public:
+	//デストラクタ
+	~PlayerBullet() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() override;
+	/// <summary>
+	/// ライン描画
+	/// </summary>
+	void DrawLine() override;
 
 	//ImGuiデバッグ
-	void DebugWithImGui();
+	void DebugWithImGui() override;
 
-public://getter
-	//ワールドトランスフォームの取得
-	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
-	
+	//当たり判定処理
+	void OnCollision(CollisionAttribute attribute) override;
+
 public://setter
 	/// <summary>
 	/// 最初にセットするパラメーター
@@ -35,32 +41,11 @@ public://setter
 		object3d_->worldTransform.translate = _initPos;
 		velocity_ = _initVelocity;
 	}
-	//カメラのセット
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
-	//シーンライトのセット
-	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
-
 private:
-	/// <summary>
-	/// 移動処理
-	/// </summary>
+	//移動処理
 	void Move();
 private:
-	//カメラ
-	BaseCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* light_ = nullptr;
-
-private:
-	//オブジェクト
-	int32_t textureHandle_ = EOF;
-	std::unique_ptr<Object3d> object3d_ = nullptr;
-
-private:
 	//変数
-	Vector3 velocity_ = {};							//速度
 	const float maxSpeed_ = 200.0f;					//最大移動スピード
-	const float gravity_ = 98.0f;					//重力
-	const float airResistance_ = 0.1f;				//空気抵抗
 };
 

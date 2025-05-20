@@ -1,11 +1,17 @@
 #pragma once
+#include "BaseCamera.h"
 #include "Vector3.h"
 #include "CollisionConfig.h"
+#include "LineDrawer.h"
 class Collider {
-
 public:
 	//デストラクタ
 	virtual ~Collider() = default;
+	//デバッグライン初期化
+	void InitDebugLine();
+	//当たり判定可視化用ラインの描画
+	void DrawCollisionLine(BaseCamera* _camera);
+
 	//当たり判定時の処理
 	virtual void OnCollision(CollisionAttribute attribute) = 0;
 
@@ -23,7 +29,8 @@ public://setter
 
 private:
 	CollisionAttribute collisionAttribute_ = CollisionAttribute::Nothingness;
-
+	//デバッグ用ライン
+	std::unique_ptr<LineDrawer> lineDrawer_ = nullptr;
 protected:
 	float radius_;
 };

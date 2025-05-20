@@ -186,7 +186,7 @@ void DevelopScene::Update() {
 		Sphere sphere;
 		sphere.center = { 0.0f,-3.0f,0.0f };
 		sphere.radius = 2.0f;
-		MyMath::DrawSphere(sphere, { 1.0f,0.0f,0.0f,1.0f }, line_.get());
+		MyMath::CreateLineSphere(sphere, { 1.0f,0.0f,0.0f,1.0f }, line_.get());
 	}
 
 	ImGui::End();
@@ -211,7 +211,7 @@ void DevelopScene::Update() {
 		Sphere plMarkSphere;
 		plMarkSphere.center = pointLight2->position_;
 		plMarkSphere.radius = 0.1f;
-		MyMath::DrawSphere(plMarkSphere, { 1.0f,0.5f,0.0f,1.0f }, plMark2.get());
+		MyMath::CreateLineSphere(plMarkSphere, { 1.0f,0.5f,0.0f,1.0f }, plMark2.get());
 
 	}
 	ImGui::End();
@@ -229,7 +229,7 @@ void DevelopScene::Update() {
 		Sphere plMarkSphere;
 		plMarkSphere.center = pointLight->position_;
 		plMarkSphere.radius = 0.1f;
-		MyMath::DrawSphere(plMarkSphere, { 1.0f,0.5f,0.0f,1.0f }, plMark.get());
+		MyMath::CreateLineSphere(plMarkSphere, { 1.0f,0.5f,0.0f,1.0f }, plMark.get());
 	}
 	ImGui::End();
 
@@ -253,8 +253,8 @@ void DevelopScene::Update() {
 		slMarkSphere2.center = spotLight->position_ + (spotLight->direction_.Normalized() * 0.15f);
 		slMarkSphere2.radius = 0.05f;
 
-		MyMath::DrawSphere(slMarkSphere, { 1.0f,0.25f,0.0f,1.0f }, slMark.get());
-		MyMath::DrawSphere(slMarkSphere2, { 0.0f,1.0f,0.0f,1.0f }, slMark.get());
+		MyMath::CreateLineSphere(slMarkSphere, { 1.0f,0.25f,0.0f,1.0f }, slMark.get());
+		MyMath::CreateLineSphere(slMarkSphere2, { 0.0f,1.0f,0.0f,1.0f }, slMark.get());
 	}
 
 	ImGui::Begin("複合アニメーション");

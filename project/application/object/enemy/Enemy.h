@@ -1,4 +1,5 @@
 #pragma once
+#include "application/object/baseCharacter/BaseCharacter.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
@@ -7,53 +8,50 @@
 
 #include "application/object/player/Player.h"
 
-class Enemy {
+class Enemy : public BaseCharacter {
 public:
+	//デストラクタ
+	~Enemy() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() override;
+	/// <summary>
+	/// ライン描画
+	/// </summary>
+	void DrawLine() override;
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
-	void DebugWithImGui();
+	void DebugWithImGui() override;
+
+	//当たり判定処理
+	void OnCollision(CollisionAttribute attribute) override;
 
 public://setter
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
-	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 	void SetPlayer(Player* _player) { player_ = _player; }
 
 private://非公開関数
 	//移動
 	void Move();
 private:
-	//カメラ
-	BaseCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* light_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 
 private:
-	//オブジェクト
-	std::unique_ptr<Object3d> object3d_ = nullptr;
-
-private:
 	//変数
-	Vector3 velocity_ = {};							//速度
 	const float speed_ = 2.5f;						//移動スピード
 	const float maxSpeed_ = 20.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 3.0f * pi;	//回転スピード
-	const float floorRegist_ = 50.0f;				//床の摩擦力
 	const float searchPlayerDistance_ = 250.0f;		//プレイヤー探索距離
 
 };

@@ -3,23 +3,35 @@
 #include "ImGuiManager.h"
 
 void PlayerBullet::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
+
 	//インスタンスの生成と初期化
-	TextureManager::GetInstance()->LoadTexture("black.png");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
+
+	//当たり判定の半径を設定
+	radius_ = 1.5f;
+
 }
 
 void PlayerBullet::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
+
 	//移動処理
 	Move();
-
-	//ワールドトランスフォームの更新
-	object3d_->worldTransform.UpdateMatrix();
 }
 
 void PlayerBullet::Draw() {
 	//オブジェクトの描画
-	object3d_->Draw(camera_,textureHandle_);
+	object3d_->Draw(camera_, textureHandle_);
+}
+
+void PlayerBullet::DrawLine() {
+	//ベースキャラクターのライン描画
+	BaseCharacter::DrawLine();
 }
 
 void PlayerBullet::DebugWithImGui() {
@@ -31,6 +43,9 @@ void PlayerBullet::DebugWithImGui() {
 
 #endif // _DEBUG
 
+}
+
+void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 }
 
 void PlayerBullet::Move() {

@@ -1,4 +1,5 @@
 #pragma once
+#include "application/object/baseCharacter/BaseCharacter.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Input.h"
@@ -10,33 +11,34 @@
 //アプリケーション
 #include "application/object/player/bullet/PlayerBullet.h"
 
-class Player {
+class Player : public BaseCharacter {
 public:
+	//デストラクタ
+	~Player() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() override;
+	/// <summary>
+	/// ライン描画
+	/// </summary>
+	void DrawLine() override;
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
-	void DebugWithImGui();
+	void DebugWithImGui() override;
 
-public: //getter
-	//ワールドトランスフォームの取得
-	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
-
-public: //setter
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
-	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
+	//当たり判定処理
+	void OnCollision(CollisionAttribute attribute) override;
 
 private://非公開関数
 	//移動
@@ -52,25 +54,16 @@ private://非公開関数
 private:
 	//インプット
 	Input* input_ = nullptr;
-	//カメラ
-	BaseCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* light_ = nullptr;
 
 private:
-	//オブジェクト
-	std::unique_ptr<Object3d> object3d_ = nullptr;
-
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 private:
 	//変数
-	Vector3 velocity_ = {};							//速度
 	const float speed_ = 3.0f;						//移動スピード
 	const float maxSpeed_ = 50.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 2.0f * pi;	//回転スピード
-	const float floorRegist_ = 50.0f;				//床の摩擦力
 
 };
 

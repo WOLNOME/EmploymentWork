@@ -2,16 +2,24 @@
 #include "ImGuiManager.h"
 
 void Player::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
+
 	//インプットの初期化
 	input_ = Input::GetInstance();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
 	object3d_->worldTransform.translate.y += 2.7f;
+	//当たり判定の半径を設定
+	radius_ = 3.5f;
 
 }
 
 void Player::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
+
 	//移動処理
 	Move();
 	//攻撃処理
@@ -21,9 +29,6 @@ void Player::Update() {
 
 	//カメラ処理
 	CameraAlgorithm();
-
-	//オブジェクトの更新
-	object3d_->Update();
 }
 
 void Player::Draw() {
@@ -34,6 +39,15 @@ void Player::Draw() {
 		bullet->Draw();
 	}
 
+}
+
+void Player::DrawLine() {
+	//ベースキャラクターのライン描画
+	BaseCharacter::DrawLine();
+	//弾のライン描画
+	for (auto& bullet : bullets_) {
+		bullet->DrawLine();
+	}
 }
 
 void Player::DebugWithImGui() {
@@ -48,6 +62,9 @@ void Player::DebugWithImGui() {
 	}
 
 #endif // _DEBUG
+}
+
+void Player::OnCollision(CollisionAttribute attribute) {
 }
 
 void Player::Move() {
@@ -75,7 +92,7 @@ void Player::Move() {
 
 	//床の抵抗値を加算
 	Vector3 frictionDir = -velocity_.Normalized();
-	Vector3 frictionAccel = frictionDir * floorRegist_;
+	Vector3 frictionAccel = frictionDir * floorFriction_;
 	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限
