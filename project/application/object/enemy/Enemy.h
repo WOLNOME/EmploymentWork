@@ -4,6 +4,7 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "MyMath.h"
+#include "Particle.h"
 #include <memory>
 
 #include "application/object/player/Player.h"
@@ -46,7 +47,6 @@ private://非公開関数
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
-
 private:
 	//変数
 	const float speed_ = 2.5f;						//移動スピード

@@ -3,6 +3,8 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
+#include "Particle.h"
+#include <memory>
 
 class PlayerBullet : public BaseCharacter {
 public:
@@ -42,10 +44,14 @@ public://setter
 		velocity_ = _initVelocity;
 	}
 private:
+	//パーティクル
+	std::unique_ptr<Particle> particle_ = nullptr;
+
+private:
 	//移動処理
 	void Move();
 private:
 	//変数
-	const float maxSpeed_ = 200.0f;					//最大移動スピード
+	const float maxSpeed_ = 300.0f;					//最大移動スピード
 };
 

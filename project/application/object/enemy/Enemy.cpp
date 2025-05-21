@@ -14,7 +14,7 @@ void Enemy::Initialize() {
 	object3d_->worldTransform.translate.y += 2.7f;
 
 	//当たり判定の半径を設定
-	radius_ = 3.5f;
+	radius_ = 3.8f;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 	

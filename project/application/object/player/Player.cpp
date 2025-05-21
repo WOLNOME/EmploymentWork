@@ -13,7 +13,7 @@ void Player::Initialize() {
 	object3d_->worldTransform.translate.y += 2.7f;
 
 	//当たり判定の半径を設定
-	radius_ = 3.5f;
+	radius_ = 2.5f;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
@@ -135,14 +135,19 @@ void Player::Attack() {
 		//初期位置と初速度をセット
 		Vector3 currentDir = {
 			std::sinf(object3d_->worldTransform.rotate.y),
-			0.5f,		//←角度
+			0.033f,		//←角度
 			std::cosf(object3d_->worldTransform.rotate.y)
 		};
 		currentDir.Normalize();
-		Vector3 bulletVelocity = currentDir * 100.0f;
-		bullet->SetInitParam(object3d_->worldTransform.translate, bulletVelocity);
+		Vector3 bulletPos = object3d_->worldTransform.translate;
+		bulletPos.y += 3.7f;	//←高さ
+		Vector3 bulletVelocity = currentDir * 300.0f;
+		bullet->SetInitParam(bulletPos, bulletVelocity);
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
+		//カメラシェイクを入れる
+		camera_->RegistShake(0.2f, 0.15f);
+
 	}
 
 }
@@ -150,7 +155,7 @@ void Player::Attack() {
 void Player::UpdateBullets() {
 	//弾の削除
 	for (auto it = bullets_.begin(); it != bullets_.end();) {
-		if ((*it)->GetWorldTransform().translate.y < -10.0f) {
+		if ((*it)->GetIsDead()) {
 			it = bullets_.erase(it);
 		}
 		else {
@@ -172,11 +177,11 @@ void Player::CameraAlgorithm() {
 	}.Normalize();
 	//カメラの座標を設定
 	Vector3 cameraTranslate = {};
-	cameraTranslate = object3d_->worldTransform.translate + (-currentDir) * 120.0f;
-	cameraTranslate.y += 30.0f;
+	cameraTranslate = object3d_->worldTransform.translate;
+	cameraTranslate.y += 2.0f;
 	camera_->SetTranslate(cameraTranslate);
 	//カメラの回転を設定
-	Vector3 direction = object3d_->worldTransform.translate - camera_->GetTranslate();
+	Vector3 direction = currentDir;
 	direction.Normalize();
 	float yaw = std::atan2f(direction.x, direction.z);
 	float pitch = std::asinf(-direction.y);

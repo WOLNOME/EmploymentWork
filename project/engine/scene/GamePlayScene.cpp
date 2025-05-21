@@ -32,6 +32,7 @@ void GamePlayScene::Initialize() {
 	player_->Initialize();
 	enemy_->Initialize();
 	//カメラ、ライトのセット
+	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
 	enemy_->SetCamera(camera_.get());
 	player_->SetSceneLight(sceneLight_.get());

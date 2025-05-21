@@ -21,17 +21,24 @@ public:
 	// デバッグ用パラメーター調整
 	virtual void DebugWithImGui() = 0;
 
-public:
+public://getter
 	// ワールドトランスフォームの取得
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
 	// コライダー用のワールド座標を取得
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	// 死亡フラグの取得
+	bool GetIsDead() const { return isDead_; }
+	// 死亡タイマーの取得
+	float GetDeadTimer() const { return deadTimer_; }
 
 public://setter
 	// カメラのセット
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 	// シーンライトのセット
 	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
+	//死亡予約関数
+	void SetDeadTimer(float remainingSeconds);
+
 
 protected://インスタンス
 	// カメラ
@@ -51,10 +58,13 @@ protected://キャラ共有のメンバ変数
 	bool isDead_ = false;
 
 	//重力値
-	float gravity_ = 98.0f;
+	float gravity_ = 33.0f;
 	//空気抵抗値
 	float airResistance_ = 1.0f;
 	//床の摩擦値
 	float floorFriction_ = 40.0f;
+
+private://死亡予約用変数
+	float deadTimer_ = 0.0f;	//死亡までの時間
 };
 
