@@ -11,8 +11,11 @@ void Player::Initialize() {
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
 	object3d_->worldTransform.translate.y += 2.7f;
+
 	//当たり判定の半径を設定
 	radius_ = 3.5f;
+	//当たり判定の属性を設定
+	SetCollisionAttribute(CollisionAttribute::Player);
 
 }
 
@@ -61,10 +64,24 @@ void Player::DebugWithImGui() {
 		bullet->DebugWithImGui();
 	}
 
+	//当たり判定可視化用ラインの色を変更
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
 #endif // _DEBUG
 }
 
 void Player::OnCollision(CollisionAttribute attribute) {
+	//当たり判定時の処理
+	switch (attribute) {
+	case CollisionAttribute::Enemy:
+		//敵に当たった場合
+		break;
+	case CollisionAttribute::EnemyBullet:
+		//敵弾に当たった場合
+		break;
+	default:
+		break;
+	}
 }
 
 void Player::Move() {

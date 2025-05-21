@@ -70,6 +70,8 @@ void GamePlayScene::Update() {
 
 	//プレイヤーのImGui
 	player_->DebugWithImGui();
+	//敵のImGui
+	enemy_->DebugWithImGui();
 
 
 #endif // _DEBUG

@@ -47,6 +47,8 @@ protected://オブジェクト
 protected://キャラ共有のメンバ変数
 	// 速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
+	//死亡フラグ
+	bool isDead_ = false;
 
 	//重力値
 	float gravity_ = 98.0f;

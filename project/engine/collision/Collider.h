@@ -1,19 +1,22 @@
 #pragma once
 #include "BaseCamera.h"
 #include "Vector3.h"
+#include "Vector4.h"
 #include "CollisionConfig.h"
 #include "LineDrawer.h"
 class Collider {
 public:
 	//デストラクタ
 	virtual ~Collider() = default;
+	
+	//当たり判定時の処理
+	virtual void OnCollision(CollisionAttribute attribute) = 0;
+
+public://当たり判定可視化用ラインに関する関数群
 	//デバッグライン初期化
 	void InitDebugLine();
 	//当たり判定可視化用ラインの描画
 	void DrawCollisionLine(BaseCamera* _camera);
-
-	//当たり判定時の処理
-	virtual void OnCollision(CollisionAttribute attribute) = 0;
 
 public://getter
 	//半径を取得
@@ -33,4 +36,5 @@ private:
 	std::unique_ptr<LineDrawer> lineDrawer_ = nullptr;
 protected:
 	float radius_;
+	Vector4 debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 };

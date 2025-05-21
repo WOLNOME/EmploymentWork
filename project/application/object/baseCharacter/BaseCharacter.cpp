@@ -1,4 +1,5 @@
 #include "BaseCharacter.h"
+#include "CollisionManager.h"
 #include <cassert>
 
 void BaseCharacter::Initialize() {
@@ -12,6 +13,9 @@ void BaseCharacter::Update() {
 
 	//オブジェクトの更新
 	object3d_->Update();
+
+	//当たり判定を登録
+	CollisionManager::GetInstance()->SetColliders(this);
 
 }
 

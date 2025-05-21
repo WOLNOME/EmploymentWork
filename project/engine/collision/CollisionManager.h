@@ -21,8 +21,8 @@ public:
 public:
 	// 当たり判定チェック
 	void CheckCollision();
-	// コライダーリスト登録関数
-	void SetColliders(std::list<Collider*> colliders) { colliders_ = colliders; }
+	// コライダー登録関数
+	void SetColliders(Collider* colliders);
 	// コライダーリストクリア関数
 	void ClearColliders() { colliders_.clear(); }
 

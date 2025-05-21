@@ -69,6 +69,11 @@ void CollisionManager::CheckCollision() {
 	}
 }
 
+void CollisionManager::SetColliders(Collider* colliders) {
+	// コライダーリストに追加
+	colliders_.push_back(colliders);
+}
+
 void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
 	Vector3 posA, posB;
 	// Aの座標

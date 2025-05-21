@@ -15,7 +15,7 @@ void Collider::DrawCollisionLine(BaseCamera* _camera) {
 		GetWorldPosition(),
 		radius_
 	);
-	MyMath::CreateLineSphere(sphere, { 1,1,1,1 }, lineDrawer_.get());
+	MyMath::CreateLineSphere(sphere, debugLineColor_, lineDrawer_.get());
 	//描画
 	lineDrawer_->Draw(*_camera);
 

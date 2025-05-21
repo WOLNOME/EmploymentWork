@@ -13,6 +13,8 @@ void PlayerBullet::Initialize() {
 
 	//当たり判定の半径を設定
 	radius_ = 1.5f;
+	//当たり判定の属性を設定
+	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 
 }
 
@@ -41,11 +43,26 @@ void PlayerBullet::DebugWithImGui() {
 	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
+	//デバッグ用ラインのカラー
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
 #endif // _DEBUG
 
 }
 
 void PlayerBullet::OnCollision(CollisionAttribute attribute) {
+	//当たり判定時の処理
+	switch (attribute) {
+	case CollisionAttribute::Enemy:
+		//敵に当たった場合
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		break;
+	case CollisionAttribute::EnemyBullet:
+		//敵弾に当たった場合
+		break;
+	default:
+		break;
+	}
 }
 
 void PlayerBullet::Move() {

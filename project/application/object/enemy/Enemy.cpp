@@ -15,6 +15,9 @@ void Enemy::Initialize() {
 
 	//当たり判定の半径を設定
 	radius_ = 3.5f;
+	//当たり判定の属性を設定
+	SetCollisionAttribute(CollisionAttribute::Enemy);
+	
 
 }
 
@@ -41,14 +44,29 @@ void Enemy::DrawLine() {
 
 void Enemy::DebugWithImGui() {
 #ifdef _DEBUG
-	ImGui::Begin("player");
+	ImGui::Begin("enemy");
 	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
+
+	//デバッグ用ラインのカラー
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
 }
 
 void Enemy::OnCollision(CollisionAttribute attribute) {
+	//当たり判定時の処理
+	switch (attribute) {
+	case CollisionAttribute::Player:
+		//プレイヤーに当たった場合
+		break;
+	case CollisionAttribute::PlayerBullet:
+		//プレイヤー弾に当たった場合
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy::Move() {
