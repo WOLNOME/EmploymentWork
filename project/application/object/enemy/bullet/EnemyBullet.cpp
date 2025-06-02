@@ -1,19 +1,19 @@
-#include "PlayerBullet.h"
+#include "EnemyBullet.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
-void PlayerBullet::Initialize() {
+void EnemyBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
 	//インスタンスの生成と初期化
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("enemyBulletHit"), "hit");
 	particle_->emitter_.isPlay = false;
 	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
@@ -23,11 +23,10 @@ void PlayerBullet::Initialize() {
 	//当たり判定の半径を設定
 	radius_ = 1.0f;
 	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
-
+	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 }
 
-void PlayerBullet::Update() {
+void EnemyBullet::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
@@ -39,7 +38,7 @@ void PlayerBullet::Update() {
 	Move();
 }
 
-void PlayerBullet::Draw() {
+void EnemyBullet::Draw() {
 	//弾が死亡していたら描画しない
 	if (GetDeadTimer() > 0.0f && GetIsDead()) {
 		return;
@@ -48,15 +47,15 @@ void PlayerBullet::Draw() {
 	object3d_->Draw(camera_, textureHandle_);
 }
 
-void PlayerBullet::DrawLine() {
+void EnemyBullet::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
 }
 
-void PlayerBullet::DebugWithImGui() {
+void EnemyBullet::DebugWithImGui() {
 #ifdef _DEBUG
 
-	ImGui::Begin("プレイヤー弾");
+	ImGui::Begin("敵弾");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
@@ -67,11 +66,11 @@ void PlayerBullet::DebugWithImGui() {
 
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute) {
+void EnemyBullet::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Enemy:
-		//敵に当たった場合
+	case CollisionAttribute::Player:
+		//プレイヤーに当たった場合
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
 		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
@@ -82,26 +81,34 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 
 		break;
-	case CollisionAttribute::EnemyBullet:
-		//敵弾に当たった場合
+	case CollisionAttribute::PlayerBullet:
+		//プレイヤー弾に当たった場合
 		break;
 	default:
 		break;
 	}
 }
 
-void PlayerBullet::Move() {
+void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
+	//初期位置を保存
+	object3d_->worldTransform.translate = _initPos;
+
+	//向きベクトルを算出
+	Vector3 targetVec = _targetPos - _initPos;
+	//XZ方向の速度を算出
+	velocity_.x = targetVec.x / hitTime_;
+	velocity_.z = targetVec.z / hitTime_;
+	
+	//最大高度から重力を求める
+	gravity_ = 2.0f * (maxHeight_ - _targetPos.y) / std::powf((hitTime_ / 2.0f), 2);
+	//y方向の上昇速度を算出
+	velocity_.y = gravity_ * (hitTime_ / 2.0f);
+}
+
+void EnemyBullet::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
-	//空気抵抗をかける
-	Vector3 airResistanceDir = -velocity_.Normalized();
-	Vector3 airResistanceAccel = airResistanceDir * airResistance_ * velocity_.Length();
-	velocity_ += airResistanceAccel * kDeltaTime;
-	//移動量の大きさを制限
-	if (velocity_.Length() > maxSpeed_) {
-		velocity_.Normalize();
-		velocity_ *= maxSpeed_;
-	}
+
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
@@ -114,6 +121,5 @@ void PlayerBullet::Move() {
 			SetCollisionAttribute(CollisionAttribute::Nothingness);
 		}
 	}
-
 
 }

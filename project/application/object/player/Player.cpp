@@ -117,6 +117,10 @@ void Player::Move() {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed_;
 	}
+	//移動量の小ささを制限
+	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {
+		velocity_ = { 0.0f,0.0f,0.0f };
+	}
 
 	//速度を加算
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;

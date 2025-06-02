@@ -116,6 +116,7 @@
     <ClCompile Include="engine\base\RTVManager.cpp" />
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
     <ClCompile Include="engine\util\StringUtility.cpp" />
+    <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="engine\util\JsonUtil.h" />
     <ClInclude Include="engine\util\RandomStringUtil.h" />
     <ClInclude Include="engine\util\StringUtility.h" />
+    <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

@@ -62,7 +62,7 @@ private:
 private:
 	//変数
 	const float speed_ = 3.0f;						//移動スピード
-	const float maxSpeed_ = 50.0f;					//最大移動スピード
+	const float maxSpeed_ = 60.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 4.0f * pi;	//回転スピード
 
 };
