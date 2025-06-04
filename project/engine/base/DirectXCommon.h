@@ -69,9 +69,6 @@ public://公開メンバ関数
 	//レンダーテクスチャリソースの生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(uint32_t width,uint32_t height,DXGI_FORMAT format,const Vector4& clearColor);
 	
-	
-public://公開メンバ変数
-	
 public://ゲッター
 	//デバイス
 	ID3D12Device* GetDevice() const { return device.Get(); }
@@ -82,8 +79,6 @@ public://ゲッター
 	ID3D12CommandQueue** GetAddressOfCommandQueue() { return commandQueue.GetAddressOf(); }
 	//クリアバリュー
 	D3D12_CLEAR_VALUE GetClearValue() const { return clearValue; }
-
-private://インスタンス
 
 private://メンバ変数
 	//DirectX12デバイス

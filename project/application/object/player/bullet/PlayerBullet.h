@@ -39,9 +39,9 @@ public://setter
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_initVelocity">初速度</param>
-	void SetInitParam(const Vector3& _initPos, const Vector3& _initVelocity) {
+	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
 		object3d_->worldTransform.translate = _initPos;
-		velocity_ = _initVelocity;
+		velocity_ = _initDirection * speed_;
 	}
 private:
 	//パーティクル
@@ -52,6 +52,7 @@ private:
 	void Move();
 private:
 	//変数
-	const float maxSpeed_ = 300.0f;					//最大移動スピード
+	const float maxSpeed_ = 700.0f;					//最大移動スピード
+	const float speed_ = 300.0f;
 };
 

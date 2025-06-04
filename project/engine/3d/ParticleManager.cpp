@@ -110,7 +110,7 @@ void ParticleManager::Update() {
 			(*grainIterator).transform.scale = (*grainIterator).basicTransform.scale * currentSize;
 			//座標情報からワールド行列を作成(ビルボード行列の計算もここで)
 			Matrix4x4 backToFrontMatrix = MyMath::MakeRotateZMatrix((*grainIterator).transform.rotate.z);
-			Matrix4x4 billboardMatrix = MyMath::Multiply(backToFrontMatrix, camera_->GetWorldMatrix());
+			Matrix4x4 billboardMatrix = MyMath::Multiply(backToFrontMatrix, camera_->worldTransform.matWorld);
 			billboardMatrix.m[3][0] = 0.0f;
 			billboardMatrix.m[3][1] = 0.0f;
 			billboardMatrix.m[3][2] = 0.0f;

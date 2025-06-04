@@ -12,6 +12,7 @@ void DevelopCamera::Initialize() {
 }
 
 void DevelopCamera::Update() {
+
 	////開発用カメラのマウス操作処理
 	//スクロールで前進後退
 	standardPosition += GetForwardDirection() * (input_->GetMouseScrollCount() * 1.3f);
@@ -22,8 +23,8 @@ void DevelopCamera::Update() {
 		//デッドゾーン
 		float deadZone = 2.0f;
 		if (moveValue.Length() > deadZone) {
-			transform.rotate.x += moveValue.y * 0.001f;
-			transform.rotate.y += moveValue.x * 0.001f;
+			worldTransform.rotate.x += moveValue.y * 0.001f;
+			worldTransform.rotate.y += moveValue.x * 0.001f;
 		}
 
 		//WASDでカメラ移動
@@ -43,10 +44,11 @@ void DevelopCamera::Update() {
 	}
 	//カメラの回転制限
 	const float maxPitch = (std::numbers::pi_v<float> / 2.0f) - 0.01f;
-	transform.rotate.x = std::clamp(transform.rotate.x, -maxPitch, maxPitch);
+	worldTransform.rotate.x = std::clamp(worldTransform.rotate.x, -maxPitch, maxPitch);
 
-	//行列の更新
-	BaseCamera::UpdateMatrix();
+	//ベースの更新
+	BaseCamera::Update();
+
 }
 
 void DevelopCamera::DebugWithImGui() {
@@ -54,7 +56,7 @@ void DevelopCamera::DebugWithImGui() {
 
 	ImGui::Begin("DevelopCamera");
 	ImGui::DragFloat3("Translate", &standardPosition.x, 0.01f);
-	ImGui::DragFloat3("Rotate", &transform.rotate.x, 0.01f);
+	ImGui::DragFloat3("Rotate", &worldTransform.rotate.x, 0.01f);
 	ImGui::End();
 
 	ImGui::Begin("mouse");
@@ -68,7 +70,6 @@ void DevelopCamera::DebugWithImGui() {
 		ImGui::Text("RIGHT");
 	}
 	ImGui::Text("ScrollValue : %f", input_->GetMouseScrollCount());
-	ImGui::Text("Delta : { %f,%f }", input_->GetMouseDelta().x, input_->GetMouseDelta().y);
 	ImGui::End();
 
 #endif // _DEBUG

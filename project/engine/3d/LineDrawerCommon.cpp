@@ -5,28 +5,24 @@
 
 LineDrawerCommon* LineDrawerCommon::instance = nullptr;
 
-LineDrawerCommon* LineDrawerCommon::GetInstance()
-{
+LineDrawerCommon* LineDrawerCommon::GetInstance() {
 	if (instance == nullptr) {
 		instance = new LineDrawerCommon;
 	}
 	return instance;
 }
 
-void LineDrawerCommon::Initialize()
-{
+void LineDrawerCommon::Initialize() {
 	//グラフィックスパイプラインの生成
 	GenerateGraphicsPipeline();
 }
 
-void LineDrawerCommon::Finalize()
-{
+void LineDrawerCommon::Finalize() {
 	delete instance;
 	instance = nullptr;
 }
 
-void LineDrawerCommon::SettingCommonDrawing()
-{
+void LineDrawerCommon::SettingCommonDrawing() {
 	//ルートシグネチャをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 	//グラフィックスパイプラインステートをセットするコマンド
@@ -35,8 +31,7 @@ void LineDrawerCommon::SettingCommonDrawing()
 	MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
-void LineDrawerCommon::GenerateGraphicsPipeline()
-{
+void LineDrawerCommon::GenerateGraphicsPipeline() {
 	HRESULT hr;
 
 	//RootSignature作成

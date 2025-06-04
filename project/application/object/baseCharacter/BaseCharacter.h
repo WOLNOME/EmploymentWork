@@ -25,7 +25,7 @@ public://getter
 	// ワールドトランスフォームの取得
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
 	// コライダー用のワールド座標を取得
-	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldPosition; }
 	// 死亡フラグの取得
 	bool GetIsDead() const { return isDead_; }
 	// 死亡タイマーの取得

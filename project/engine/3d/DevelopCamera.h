@@ -12,7 +12,7 @@ public:
 	//初期化
 	void Initialize() override;
 	//更新
-	void Update();
+	void Update() override;
 
 	//ImGui操作
 	void DebugWithImGui();

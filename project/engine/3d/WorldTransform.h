@@ -23,7 +23,7 @@ public:
 	// ローカルの座標
 	Vector3 translate = { 0, 0, 0 };
 	//ワールド座標
-	Vector3 worldTranslate = { 0, 0, 0 };
+	Vector3 worldPosition = { 0, 0, 0 };
 	// ローカル → ワールド変換行列
 	Matrix4x4 matWorld;
 	// 親となるワールド変換へのポインタ

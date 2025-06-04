@@ -51,7 +51,6 @@ public://公開メンバ関数
 	uint32_t GetDSVDescriptorSize()const { return descriptorSizeDSV; }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDSVCPUDescriptorHandle(uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetDSVGPUDescriptorHandle(uint32_t index);
-public://公開メンバ変数
 
 public://ゲッター
 	//コマンドアロケーター
@@ -64,7 +63,6 @@ public://ゲッター
 	IDXGISwapChain4* GetSwapChain()const { return swapChain.Get(); }
 	//スワップチェーンのリソース
 	ID3D12Resource* GetSwapChainResource(uint32_t index)const { return swapChainResources[index].Get(); }
-	//RTV
 
 private://メンバ変数
 	//コマンドアロケーター

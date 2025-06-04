@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "ImGuiManager.h"
+#include <algorithm>
 
 void Player::Initialize() {
 	//ベースキャラクターの初期化
@@ -7,6 +8,8 @@ void Player::Initialize() {
 
 	//インプットの初期化
 	input_ = Input::GetInstance();
+	input_->SetIsMouseDisplay(false);
+	input_->SetIsMouseFixed(true);
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
@@ -25,6 +28,8 @@ void Player::Update() {
 
 	//移動処理
 	Move();
+	//回転処理
+	Rotate();
 	//攻撃処理
 	Attack();
 	//弾の更新
@@ -55,8 +60,9 @@ void Player::DrawLine() {
 
 void Player::DebugWithImGui() {
 #ifdef _DEBUG
-	ImGui::Begin("player");
-	ImGui::DragFloat3("translate", &object3d_->worldTransform.translate.x, 0.01f);
+	ImGui::Begin("プレイヤー");
+	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
+	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);
 	ImGui::End();
 
 	//弾のデバッグ
@@ -68,6 +74,10 @@ void Player::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
+}
+
+void Player::ParentForCamera() {
+	camera_->worldTransform.parent = &object3d_->worldTransform;
 }
 
 void Player::OnCollision(CollisionAttribute attribute) {
@@ -85,7 +95,7 @@ void Player::OnCollision(CollisionAttribute attribute) {
 }
 
 void Player::Move() {
-	//現在の向き
+	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
 		std::sinf(object3d_->worldTransform.rotate.y),
 		0.0f,
@@ -98,13 +108,6 @@ void Player::Move() {
 	}
 	if (input_->PushKey(DIK_S)) {
 		velocity_ += -currentDir * speed_;
-	}
-	//ADキー入力で回転
-	if (input_->PushKey(DIK_A)) {
-		object3d_->worldTransform.rotate.y += -rotateSpeed_ * kDeltaTime;
-	}
-	if (input_->PushKey(DIK_D)) {
-		object3d_->worldTransform.rotate.y += rotateSpeed_ * kDeltaTime;
 	}
 
 	//床の抵抗値を加算
@@ -127,6 +130,21 @@ void Player::Move() {
 
 }
 
+void Player::Rotate() {
+	//カメラの操作にオブジェクトの回転を合わせる
+	Vector2 moveValue = input_->GetMousePosition();
+	//デッドゾーン
+	float deadZone = 4.8f;
+	if (moveValue.Length() > deadZone) {
+		object3d_->worldTransform.rotate.x += moveValue.y * 0.0005f;
+		object3d_->worldTransform.rotate.y += moveValue.x * 0.0005f;
+	}
+	//回転制限
+	const float maxPitch = (pi / 128.0f);
+	const float minPitch = -(pi / 20.0f);
+	object3d_->worldTransform.rotate.x = std::clamp(object3d_->worldTransform.rotate.x, minPitch, maxPitch);
+}
+
 void Player::Attack() {
 	//スペースキーで弾を発射
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -137,16 +155,20 @@ void Player::Attack() {
 		bullet->SetCamera(camera_);
 		bullet->SetSceneLight(light_);
 		//初期位置と初速度をセット
+		float orx = object3d_->worldTransform.rotate.x;
+		float ory = object3d_->worldTransform.rotate.y;
 		Vector3 currentDir = {
-			std::sinf(object3d_->worldTransform.rotate.y),
-			0.033f,		//←角度
-			std::cosf(object3d_->worldTransform.rotate.y)
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
 		Vector3 bulletPos = object3d_->worldTransform.translate;
-		bulletPos.y += 3.7f;	//←高さ
-		Vector3 bulletVelocity = currentDir * 300.0f;
-		bullet->SetInitParam(bulletPos, bulletVelocity);
+		bulletPos.x += currentDir.x * 10.0f;
+		bulletPos.z += currentDir.z * 10.0f;
+		bulletPos.y += currentDir.y * 2.0f;	//←高さ
+		Vector3 bulletDirection = currentDir;
+		bullet->SetInitParam(bulletPos, bulletDirection);
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
 		//カメラシェイクを入れる
@@ -173,24 +195,6 @@ void Player::UpdateBullets() {
 }
 
 void Player::CameraAlgorithm() {
-	//現在の向き
-	Vector3 currentDir = Vector3{
-		std::sinf(object3d_->worldTransform.rotate.y),
-		0.0f,
-		std::cosf(object3d_->worldTransform.rotate.y)
-	}.Normalize();
-	//カメラの座標を設定
-	Vector3 cameraTranslate = {};
-	cameraTranslate = object3d_->worldTransform.translate;
-	cameraTranslate.y += 2.0f;
-	camera_->SetTranslate(cameraTranslate);
-	//カメラの回転を設定
-	Vector3 direction = currentDir;
-	direction.Normalize();
-	float yaw = std::atan2f(direction.x, direction.z);
-	float pitch = std::asinf(-direction.y);
-	float roll = 0.0f;
-	Vector3 euler = { pitch,yaw,roll };
-	camera_->SetRotate(euler);
-
+	//カメラの座標を決める
+	camera_->worldTransform.translate = { 0.0f,2.3f,0.0f };
 }

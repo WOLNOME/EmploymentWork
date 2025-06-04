@@ -8,6 +8,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
+#include "WorldTransform.h"
 
 // 定数バッファ用データ構造体
 struct ViewProjectionTransformationMatrixForVS {
@@ -26,19 +27,19 @@ public:
 
 	// 初期化
 	virtual void Initialize();
+	// 更新
+	virtual void Update();
+
 	// 更新（行列の計算）
-	virtual void UpdateMatrix();
+	void UpdateMatrix();
 
 	//ImGui操作
 	void DebugWithImGui();
 
 	// ゲッター
-	const Matrix4x4& GetWorldMatrix() const { return worldMatrix; }
 	const Matrix4x4& GetViewMatrix() const { return viewMatrix; }
 	const Matrix4x4& GetProjectionMatrix() const { return projectionMatrix; }
 	const Matrix4x4& GetViewProjectionMatrix() const { return viewProjectionMatrix; }
-	const Vector3& GetRotate() const { return transform.rotate; }
-	const Vector3& GetTranslate() const { return standardPosition; }
 	float GetFovY() { return fovY; }
 	float GetAspectRatio() { return aspectRatio; }
 	float GetNearClip() { return nearClip; }
@@ -51,8 +52,6 @@ public:
 	const Vector3 GetBackDirection();
 
 	// セッター
-	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
-	void SetTranslate(const Vector3& translate) { standardPosition = translate; }
 	void SetFovY(float fovY) { this->fovY = fovY; }
 	void SetAspectRatio(float aspectRatio) { this->aspectRatio = aspectRatio; }
 	void SetNearClip(float nearClip) { this->nearClip = nearClip; }
@@ -64,6 +63,10 @@ public:
 private:
 	//カメラの揺れの更新
 	void UpdateShake();
+
+public:
+	//ワールドトランスフォーム
+	WorldTransform worldTransform;
 
 protected:
 	// 定数バッファ(座標変換リソース)
@@ -77,8 +80,6 @@ protected:
 	WorldPositionForPS* cameraPositionData_ = nullptr;
 
 
-	TransformEuler transform;
-	Matrix4x4 worldMatrix;
 	Matrix4x4 viewMatrix;
 	Matrix4x4 projectionMatrix;
 	Matrix4x4 viewProjectionMatrix;

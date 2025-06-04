@@ -2,8 +2,7 @@
 #include "D3DResourceLeakChecker.h"
 #include <memory>
 
-class Framework
-{
+class Framework {
 public:
 	/// <summary>
 	/// デストラクタ
@@ -36,6 +35,6 @@ public:
 protected://基盤インスタンス
 	D3DResourceLeakChecker leakChecker;
 	bool isOver = false;
-	
+
 };
 

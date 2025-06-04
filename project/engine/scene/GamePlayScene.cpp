@@ -9,11 +9,11 @@ void GamePlayScene::Initialize() {
 	input_ = Input::GetInstance();
 
 	//カメラの生成・初期化
-	camera_ = std::make_unique<DevelopCamera>();
+	camera_ = std::make_unique<BaseCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(500.0f);
-	camera_->SetRotate({ 0.15f,0.0f,0.0f });
-	camera_->SetTranslate({ 0.0f,20.0f,-80.0f });
+	camera_->worldTransform.rotate={ 0.15f,0.0f,0.0f };
+	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
 
 	//ライトの生成・初期化＆登録
 	dirLight_ = std::make_unique<DirectionalLight>();
@@ -40,6 +40,9 @@ void GamePlayScene::Initialize() {
 	//その他インスタンスのセット
 	enemy_->SetPlayer(player_.get());
 
+	//カメラのペアレントをプレイヤーのオブジェクトと結びつける
+	player_->ParentForCamera();
+
 }
 
 void GamePlayScene::Finalize() {
@@ -53,16 +56,16 @@ void GamePlayScene::Update() {
 	if (input_->TriggerKey(DIK_R)) {
 		sceneManager_->SetNextScene("GamePlay");
 	}
-
-	//カメラの更新
-	camera_->Update();
-
 	//インスタンスの更新
 	skydome_->Update();
 	ground_->Update();
 	player_->Update();
 	enemy_->Update();
 
+
+
+	//カメラの更新(オブジェクト更新の後)
+	camera_->Update();
 
 	//ImGui
 #ifdef _DEBUG

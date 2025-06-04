@@ -37,12 +37,17 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
+	//プレイヤーをカメラのペアレントとする設定
+	void ParentForCamera();
+
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute) override;
 
 private://非公開関数
 	//移動
 	void Move();
+	//回転
+	void Rotate();
 	//攻撃
 	void Attack();
 	//弾の更新

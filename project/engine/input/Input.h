@@ -66,18 +66,16 @@ private://非公開メンバ関数
 public://固有の処理
 	bool PushMouseButton(MouseButton button);
 	bool TriggerMouseButton(MouseButton button);
-	void SetExclusiveMode(bool isExclusive);
 	bool PushKey(BYTE keyNumber);
 	bool TriggerKey(BYTE keyNumber);
 	bool PushPadButton(GamepadButton button);
 	bool TriggerPadButton(GamepadButton button);
 	Vector2 GetMousePosition();
-	Vector2 GetMouseDelta();
 	float GetMouseScrollCount();
 	Vector2 GetLeftStickDir();
 	Vector2 GetRightStickDir();
-private://インスタンス
-
+	void SetIsMouseDisplay(bool _isDisplay);
+	void SetIsMouseFixed(bool _isMiddle);
 private://メンバ変数
 	//DiretInput
 	ComPtr<IDirectInput8> directInput;
@@ -96,5 +94,5 @@ private://メンバ変数
 	ComPtr<IDirectInputDevice8> gamepad;
 	DIJOYSTATE padData;
 	DIJOYSTATE prePadData;
-
+	
 };

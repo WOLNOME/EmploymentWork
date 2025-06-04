@@ -333,10 +333,6 @@ Vector2 Input::GetMousePosition() {
 	return Vector2(static_cast<float>(mouseData.lX), static_cast<float>(mouseData.lY));
 }
 
-Vector2 Input::GetMouseDelta() {
-	return Vector2(static_cast<float>(mouseData.lX - preMouseData.lX), static_cast<float>(mouseData.lY - preMouseData.lY));
-}
-
 float Input::GetMouseScrollCount() {
 	// 1回のスクロールは120単位
 	const float scrollPerUnit = 120.0f;
@@ -371,4 +367,32 @@ Vector2 Input::GetRightStickDir() {
 	// 正規化してベクトルを返す
 	Vector2 dir(static_cast<float>(x) / 1000.0f, static_cast<float>(y) / 1000.0f);
 	return dir.Normalize();
+}
+
+void Input::SetIsMouseDisplay(bool _isDisplay) {
+	if (_isDisplay) {
+		while (ShowCursor(TRUE) < 0);
+	}
+	else {
+		while (ShowCursor(FALSE) >= 0);
+	}
+}
+
+void Input::SetIsMouseFixed(bool _isMiddle) {
+	if (_isMiddle) {
+		RECT rect;
+		GetClientRect(WinApp::GetInstance()->GetHwnd(), &rect);
+		POINT ul = { rect.left, rect.top };
+		POINT lr = { rect.right, rect.bottom };
+
+		// クライアント座標をスクリーン座標に変換
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &ul);
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &lr);
+
+		RECT clipRect = { ul.x, ul.y, lr.x, lr.y };
+		ClipCursor(&clipRect);
+	}
+	else {
+		ClipCursor(NULL);
+	}
 }

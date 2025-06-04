@@ -33,8 +33,9 @@ public:
 private:
 	//インプット
 	Input* input_ = nullptr;
-	//カメラ
-	std::unique_ptr<DevelopCamera> camera_ = nullptr;
+
+	//ゲーム用カメラ
+	std::unique_ptr<BaseCamera> camera_ = nullptr;
 private://ライト
 	//平行光源
 	std::unique_ptr<DirectionalLight> dirLight_;

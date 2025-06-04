@@ -39,6 +39,14 @@ void MyGame::Update() {
 
 	//ImGuiの内部コマンドを生成する
 	ImGuiManager::GetInstance()->End();
+
+#ifdef _DEBUG
+	//エスケープキーで強制終了
+	if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+		isOver = true;
+	}
+
+#endif // _DEBUG
 }
 
 void MyGame::Draw() {

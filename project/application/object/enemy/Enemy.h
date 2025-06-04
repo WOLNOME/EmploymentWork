@@ -37,6 +37,7 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
+private:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute) override;
 

@@ -22,9 +22,9 @@ void WorldTransform::UpdateMatrix(const Matrix4x4& local) {
 	}
 
 	//ワールド座標を更新
-	worldTranslate.x = matWorld.m[3][0];
-	worldTranslate.y = matWorld.m[3][1];
-	worldTranslate.z = matWorld.m[3][2];
+	worldPosition.x = matWorld.m[3][0];
+	worldPosition.y = matWorld.m[3][1];
+	worldPosition.z = matWorld.m[3][2];
 
 	// 定数バッファに転送する
 	data_->matWorld = matWorld;

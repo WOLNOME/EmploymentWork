@@ -117,6 +117,8 @@
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
     <ClCompile Include="engine\util\StringUtility.cpp" />
     <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
+    <ClCompile Include="engine\scene\NothingScene.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -229,6 +231,8 @@
     <ClInclude Include="engine\util\RandomStringUtil.h" />
     <ClInclude Include="engine\util\StringUtility.h" />
     <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
+    <ClInclude Include="engine\scene\NothingScene.h" />
+    <ClInclude Include="EnemyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />
