@@ -1,6 +1,5 @@
 #include "DevelopCamera.h"
 #include "ImGuiManager.h"
-#include "Input.h"
 #include <algorithm>
 #include <numbers>
 
@@ -48,7 +47,6 @@ void DevelopCamera::Update() {
 
 	//行列の更新
 	BaseCamera::UpdateMatrix();
-
 }
 
 void DevelopCamera::DebugWithImGui() {
