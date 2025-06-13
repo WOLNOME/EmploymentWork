@@ -8,7 +8,7 @@ class Collider {
 public:
 	//デストラクタ
 	virtual ~Collider() = default;
-	
+
 	//当たり判定時の処理
 	virtual void OnCollision(CollisionAttribute attribute) = 0;
 
@@ -35,6 +35,6 @@ private:
 	//デバッグ用ライン
 	std::unique_ptr<LineDrawer> lineDrawer_ = nullptr;
 protected:
-	float radius_;
+	float radius_ = 1.0f;
 	Vector4 debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 };

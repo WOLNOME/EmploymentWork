@@ -4,7 +4,7 @@
 #include "application/object/Skydome.h"
 #include "application/object/Ground.h"
 #include "application/object/player/Player.h"
-#include "application/object/enemy/Enemy.h"
+#include "application/EnemyManager.h"
 
 
 class GamePlayScene : public BaseScene {
@@ -47,8 +47,8 @@ private://オブジェクト
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
-	//敵
-	std::unique_ptr<Enemy> enemy_ = nullptr;
+	//敵管理マネージャー
+	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
 
 };
 

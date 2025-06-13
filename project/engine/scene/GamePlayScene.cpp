@@ -25,20 +25,20 @@ void GamePlayScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
 	player_ = std::make_unique<Player>();
-	enemy_ = std::make_unique<Enemy>();
+	enemyManager_ = std::make_unique<EnemyManager>();
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
 	player_->Initialize();
-	enemy_->Initialize();
+	enemyManager_->Initialize();
 	//カメラ、ライトのセット
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
-	enemy_->SetCamera(camera_.get());
+	enemyManager_->SetCamera(camera_.get());
 	player_->SetSceneLight(sceneLight_.get());
-	enemy_->SetSceneLight(sceneLight_.get());
+	enemyManager_->SetLight(sceneLight_.get());
 	//その他インスタンスのセット
-	enemy_->SetPlayer(player_.get());
+	enemyManager_->SetPlayer(player_.get());
 
 	//カメラのペアレントをプレイヤーのオブジェクトと結びつける
 	player_->ParentForCamera();
@@ -60,7 +60,7 @@ void GamePlayScene::Update() {
 	skydome_->Update();
 	ground_->Update();
 	player_->Update();
-	enemy_->Update();
+	enemyManager_->Update();
 
 
 
@@ -75,7 +75,7 @@ void GamePlayScene::Update() {
 	//プレイヤーのImGui
 	player_->DebugWithImGui();
 	//敵のImGui
-	enemy_->DebugWithImGui();
+	enemyManager_->DebugWithImGui();
 
 
 #endif // _DEBUG
@@ -92,7 +92,7 @@ void GamePlayScene::Draw() {
 	skydome_->Draw(*camera_.get());
 	ground_->Draw(*camera_.get());
 	player_->Draw();
-	enemy_->Draw();
+	enemyManager_->Draw();
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
@@ -108,7 +108,7 @@ void GamePlayScene::Draw() {
 	//プレイヤーのライン描画
 	player_->DrawLine();
 	//敵のライン描画
-	enemy_->DrawLine();
+	enemyManager_->DrawLine();
 
 
 	///------------------------------///
@@ -122,7 +122,7 @@ void GamePlayScene::Draw() {
 	///↓↓↓↓スプライト描画開始↓↓↓↓
 	///------------------------------///
 
-
+	player_->DrawSprite();
 
 	///------------------------------///
 	///↑↑↑↑スプライト描画終了↑↑↑↑

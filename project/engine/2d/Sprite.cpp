@@ -5,8 +5,7 @@
 #include "TextureManager.h"
 #include "SpriteCommon.h"
 
-void Sprite::Initialize(uint32_t textureHandle)
-{
+void Sprite::Initialize(uint32_t textureHandle) {
 	//リソースを作る
 	vertexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * 4);
 	indexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * 6);
@@ -60,8 +59,7 @@ void Sprite::Initialize(uint32_t textureHandle)
 	AdjustTextureSize();
 }
 
-void Sprite::Update()
-{
+void Sprite::Update() {
 	//トランスフォームの情報を作る
 	TransformEuler transform;
 	transform.translate = { position.x,position.y,0.0f };
@@ -117,8 +115,7 @@ void Sprite::Update()
 
 }
 
-void Sprite::Draw()
-{
+void Sprite::Draw() {
 
 	//頂点バッファービューを設定
 	MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
@@ -138,8 +135,7 @@ void Sprite::Draw()
 
 }
 
-void Sprite::AdjustTextureSize()
-{
+void Sprite::AdjustTextureSize() {
 	//テクスチャメタデータを取得
 	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureHandle_);
 

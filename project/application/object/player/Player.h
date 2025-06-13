@@ -4,6 +4,7 @@
 #include "SceneLight.h"
 #include "Input.h"
 #include "Object3d.h"
+#include "Sprite.h"
 #include "MyMath.h"
 #include <list>
 #include <memory>
@@ -31,6 +32,8 @@ public:
 	/// ライン描画
 	/// </summary>
 	void DrawLine() override;
+	//スプライト描画
+	void DrawSprite();
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
@@ -63,6 +66,9 @@ private:
 private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	//2dレティクル
+	uint32_t textureHandle_ = 0;
+	std::unique_ptr<Sprite> reticle_ = nullptr;
 
 private:
 	//変数

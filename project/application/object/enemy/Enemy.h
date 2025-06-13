@@ -43,6 +43,7 @@ private:
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
+	void SetPosition(const Vector3& _pos);
 
 private://非公開関数
 	//移動

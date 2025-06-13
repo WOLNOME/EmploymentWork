@@ -1,5 +1,7 @@
 #include "Player.h"
+#include "WinApp.h"
 #include "ImGuiManager.h"
+#include "TextureManager.h"
 #include <algorithm>
 
 void Player::Initialize() {
@@ -14,6 +16,11 @@ void Player::Initialize() {
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, "snowplow");
 	object3d_->worldTransform.translate.y += 2.7f;
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
+	reticle_ = std::make_unique<Sprite>();
+	reticle_->Initialize(textureHandle_);
+	reticle_->SetAnchorPoint({ 0.5f,0.5f });
+	reticle_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 160.0f });
 
 	//当たり判定の半径を設定
 	radius_ = 2.5f;
@@ -42,6 +49,7 @@ void Player::Update() {
 void Player::Draw() {
 	//オブジェクトの描画
 	object3d_->Draw(camera_);
+	reticle_->Update();
 	//弾の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
@@ -56,6 +64,10 @@ void Player::DrawLine() {
 	for (auto& bullet : bullets_) {
 		bullet->DrawLine();
 	}
+}
+
+void Player::DrawSprite() {
+	reticle_->Draw();
 }
 
 void Player::DebugWithImGui() {
@@ -134,7 +146,7 @@ void Player::Rotate() {
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue = input_->GetMousePosition();
 	//デッドゾーン
-	float deadZone = 4.8f;
+	float deadZone = 4.0f;
 	if (moveValue.Length() > deadZone) {
 		object3d_->worldTransform.rotate.x += moveValue.y * 0.0005f;
 		object3d_->worldTransform.rotate.y += moveValue.x * 0.0005f;
