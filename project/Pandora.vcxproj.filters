@@ -119,6 +119,8 @@
     <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
     <ClCompile Include="engine\scene\NothingScene.cpp" />
     <ClCompile Include="application\EnemyManager.cpp" />
+    <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -233,6 +235,8 @@
     <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
     <ClInclude Include="engine\scene\NothingScene.h" />
     <ClInclude Include="application\EnemyManager.h" />
+    <ClInclude Include="application\object\player\ui\PlayerUI.h" />
+    <ClInclude Include="GameCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

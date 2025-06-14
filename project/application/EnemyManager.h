@@ -1,11 +1,13 @@
 #pragma once
-#include "BaseCamera.h"
+#include "GameCamera.h"
 #include "SceneLight.h"
 #include <list>
 #include <memory>
 
+//アプリケーション
 #include "application/object/enemy/Enemy.h"
-#include "application/object/player/Player.h"
+
+class Player;
 class EnemyManager {
 public:
 	//初期化
@@ -22,7 +24,7 @@ public:
 
 public://setter
 	//カメラセット
-	void SetCamera(BaseCamera* _camera);
+	void SetCamera(GameCamera* _camera);
 	//ライトセット
 	void SetLight(SceneLight* _light);
 	//プレイヤーセット
@@ -30,7 +32,7 @@ public://setter
 
 private:
 	//カメラ
-	BaseCamera* camera_ = nullptr;
+	GameCamera* camera_ = nullptr;
 	//シーンライト
 	SceneLight* sceneLight_ = nullptr;
 	//プレイヤー

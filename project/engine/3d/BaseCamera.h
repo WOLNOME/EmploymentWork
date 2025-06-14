@@ -30,9 +30,6 @@ public:
 	// 更新
 	virtual void Update();
 
-	// 更新（行列の計算）
-	void UpdateMatrix();
-
 	//ImGui操作
 	void DebugWithImGui();
 
@@ -46,10 +43,6 @@ public:
 	float GetFarClip() { return farClip; }
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetViewProjectionConstBuffer() const { return viewProjectionResource_; }
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetCameraPositionConstBuffer() const { return cameraPositionResource_; }
-	const Vector3 GetForwardDirection();
-	const Vector3 GetRightDirection();
-	const Vector3 GetLeftDirection();
-	const Vector3 GetBackDirection();
 
 	// セッター
 	void SetFovY(float fovY) { this->fovY = fovY; }
@@ -57,12 +50,9 @@ public:
 	void SetNearClip(float nearClip) { this->nearClip = nearClip; }
 	void SetFarClip(float farClip) { this->farClip = farClip; }
 
-	//カメラ演出系の関数
-	void RegistShake(float time, float power = 0.5f);
-
 private:
-	//カメラの揺れの更新
-	void UpdateShake();
+	// 行列の計算
+	void UpdateMatrix();
 
 public:
 	//ワールドトランスフォーム
@@ -79,7 +69,6 @@ protected:
 	// マッピング済みアドレス
 	WorldPositionForPS* cameraPositionData_ = nullptr;
 
-
 	Matrix4x4 viewMatrix;
 	Matrix4x4 projectionMatrix;
 	Matrix4x4 viewProjectionMatrix;
@@ -89,18 +78,4 @@ protected:
 	float nearClip;           // ニアクリップ距離
 	float farClip;            // ファークリップ距離
 
-	//カメラの(オフセットを考慮しない)座標
-	Vector3 standardPosition;   // カメラの位置
-
-private:
-	// カメラの揺れを管理する構造体
-	struct ShakeData {
-		float maxTime;		// 揺れの最大時間
-		float time;			// 揺れの時間
-		float maxPower;		// 揺れの最大強さ
-		float power;		// 揺れの強さ
-	};
-	// カメラの揺れを管理する変数
-	std::list<ShakeData> shakeList_;
-	Vector3 shakeOffset_;
 };

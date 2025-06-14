@@ -1,9 +1,10 @@
 #pragma once
 #include "BaseScene.h"
-#include "DevelopCamera.h"
+#include "GameCamera.h"
 #include "application/object/Skydome.h"
 #include "application/object/Ground.h"
 #include "application/object/player/Player.h"
+#include "application/object/player/ui/PlayerUI.h"
 #include "application/EnemyManager.h"
 
 
@@ -35,7 +36,7 @@ private:
 	Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	std::unique_ptr<BaseCamera> camera_ = nullptr;
+	std::unique_ptr<GameCamera> camera_ = nullptr;
 private://ライト
 	//平行光源
 	std::unique_ptr<DirectionalLight> dirLight_;
@@ -49,6 +50,10 @@ private://オブジェクト
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵管理マネージャー
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
+
+private://UI
+	//プレイヤーUI
+	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 
 };
 

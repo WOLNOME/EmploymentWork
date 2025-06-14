@@ -17,10 +17,6 @@ void Player::Initialize() {
 	object3d_->Initialize(ModelTag{}, "snowplow");
 	object3d_->worldTransform.translate.y += 2.7f;
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
-	reticle_ = std::make_unique<Sprite>();
-	reticle_->Initialize(textureHandle_);
-	reticle_->SetAnchorPoint({ 0.5f,0.5f });
-	reticle_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 160.0f });
 
 	//当たり判定の半径を設定
 	radius_ = 2.5f;
@@ -33,10 +29,10 @@ void Player::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//移動処理
-	Move();
 	//回転処理
 	Rotate();
+	//移動処理
+	Move();
 	//攻撃処理
 	Attack();
 	//弾の更新
@@ -49,7 +45,6 @@ void Player::Update() {
 void Player::Draw() {
 	//オブジェクトの描画
 	object3d_->Draw(camera_);
-	reticle_->Update();
 	//弾の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
@@ -64,10 +59,6 @@ void Player::DrawLine() {
 	for (auto& bullet : bullets_) {
 		bullet->DrawLine();
 	}
-}
-
-void Player::DrawSprite() {
-	reticle_->Draw();
 }
 
 void Player::DebugWithImGui() {
@@ -88,10 +79,6 @@ void Player::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Player::ParentForCamera() {
-	camera_->worldTransform.parent = &object3d_->worldTransform;
-}
-
 void Player::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
@@ -104,6 +91,41 @@ void Player::OnCollision(CollisionAttribute attribute) {
 	default:
 		break;
 	}
+}
+
+void Player::Rotate() {
+	auto ShortestAngleDiff = [=](float from, float to) -> float {
+		float diff = to - from;
+		while (diff > pi)  diff -= 2 * pi;
+		while (diff < -pi) diff += 2 * pi;
+		return diff;
+		};
+
+	float cameraRotateY = camera_->worldTransform.rotate.y;
+	float vehicleRotateY = object3d_->worldTransform.rotate.y;
+
+	//最短角度差を求める
+	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
+
+	//回転速度の上限
+	float addRotation = rotateSpeed_ * kDeltaTime;
+
+	//回転すべき角度が小さい場合は目標角度を代入
+	if (std::abs(angleDiff) <= addRotation) {
+		vehicleRotateY = cameraRotateY;
+	}
+	else {
+		//回転方向に応じて加算または減算
+		vehicleRotateY += (angleDiff > 0 ? 1 : -1) * addRotation;
+
+		//-π ～ π に整える
+		if (vehicleRotateY > pi)  vehicleRotateY -= 2 * pi;
+		if (vehicleRotateY < -pi) vehicleRotateY += 2 * pi;
+	}
+
+	//オブジェクトの水平回転量に代入
+	object3d_->worldTransform.rotate.y = vehicleRotateY;
+
 }
 
 void Player::Move() {
@@ -142,21 +164,6 @@ void Player::Move() {
 
 }
 
-void Player::Rotate() {
-	//カメラの操作にオブジェクトの回転を合わせる
-	Vector2 moveValue = input_->GetMousePosition();
-	//デッドゾーン
-	float deadZone = 4.0f;
-	if (moveValue.Length() > deadZone) {
-		object3d_->worldTransform.rotate.x += moveValue.y * 0.0005f;
-		object3d_->worldTransform.rotate.y += moveValue.x * 0.0005f;
-	}
-	//回転制限
-	const float maxPitch = (pi / 128.0f);
-	const float minPitch = -(pi / 20.0f);
-	object3d_->worldTransform.rotate.x = std::clamp(object3d_->worldTransform.rotate.x, minPitch, maxPitch);
-}
-
 void Player::Attack() {
 	//スペースキーで弾を発射
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -167,8 +174,8 @@ void Player::Attack() {
 		bullet->SetCamera(camera_);
 		bullet->SetSceneLight(light_);
 		//初期位置と初速度をセット
-		float orx = object3d_->worldTransform.rotate.x;
-		float ory = object3d_->worldTransform.rotate.y;
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
@@ -176,16 +183,13 @@ void Player::Attack() {
 		};
 		currentDir.Normalize();
 		Vector3 bulletPos = object3d_->worldTransform.translate;
-		bulletPos.x += currentDir.x * 10.0f;
-		bulletPos.z += currentDir.z * 10.0f;
-		bulletPos.y += currentDir.y * 2.0f;	//←高さ
+		bulletPos.y += 3.5f;
 		Vector3 bulletDirection = currentDir;
 		bullet->SetInitParam(bulletPos, bulletDirection);
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.15f);
-
 	}
 
 }
@@ -207,6 +211,25 @@ void Player::UpdateBullets() {
 }
 
 void Player::CameraAlgorithm() {
+	//カメラの操作にオブジェクトの回転を合わせる
+	Vector2 moveValue = input_->GetMousePosition();
+	//デッドゾーン
+	float deadZone = 4.0f;
+	if (moveValue.Length() > deadZone) {
+		camera_->worldTransform.rotate.x += moveValue.y * 0.0005f;
+		camera_->worldTransform.rotate.y += moveValue.x * 0.0005f;
+	}
+	//回転制限
+	const float maxPitch = (pi / 120.0f);
+	const float minPitch = -(pi / 15.0f);
+	camera_->worldTransform.rotate.x = std::clamp(camera_->worldTransform.rotate.x, minPitch, maxPitch);
+	//水平回転をπ~-πの間に収める
+	if (camera_->worldTransform.rotate.y > pi)
+		camera_->worldTransform.rotate.y -= pi * 2.0f;
+	else if (camera_->worldTransform.rotate.y < -pi)
+		camera_->worldTransform.rotate.y += pi * 2.0f;
+
 	//カメラの座標を決める
-	camera_->worldTransform.translate = { 0.0f,2.3f,0.0f };
+	camera_->worldTransform.translate = object3d_->worldTransform.translate;
+	camera_->worldTransform.translate.y += 2.3f;
 }

@@ -101,7 +101,6 @@ void Sprite::Update() {
 	vertexData[3].texcoord = { tex_right,tex_top };
 
 
-
 	//レンダリングパイプライン
 	Matrix4x4 worldMatrix = MyMath::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MyMath::MakeIdentity4x4();
@@ -109,10 +108,6 @@ void Sprite::Update() {
 	Matrix4x4 worldViewProjectionMatrix = MyMath::Multiply(worldMatrix, MyMath::Multiply(viewMatrix, projectionMatrix));
 	transformationMatrixData->WVP = worldViewProjectionMatrix;
 	transformationMatrixData->World = worldMatrix;
-
-
-
-
 }
 
 void Sprite::Draw() {

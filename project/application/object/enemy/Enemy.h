@@ -1,6 +1,6 @@
 #pragma once
 #include "application/object/baseCharacter/BaseCharacter.h"
-#include "BaseCamera.h"
+#include "GameCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "MyMath.h"
@@ -8,9 +8,10 @@
 #include <list>
 #include <memory>
 
-#include "application/object/player/Player.h"
+//アプリケーション
 #include "application/object/enemy/bullet/EnemyBullet.h"
 
+class Player;
 class Enemy : public BaseCharacter {
 public:
 	//デストラクタ

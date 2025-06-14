@@ -1,6 +1,6 @@
 #pragma once
 #include "application/object/baseCharacter/BaseCharacter.h"
-#include "BaseCamera.h"
+#include "GameCamera.h"
 #include "SceneLight.h"
 #include "Input.h"
 #include "Object3d.h"
@@ -32,25 +32,20 @@ public:
 	/// ライン描画
 	/// </summary>
 	void DrawLine() override;
-	//スプライト描画
-	void DrawSprite();
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
 
-	//プレイヤーをカメラのペアレントとする設定
-	void ParentForCamera();
-
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute) override;
 
 private://非公開関数
-	//移動
-	void Move();
 	//回転
 	void Rotate();
+	//移動
+	void Move();
 	//攻撃
 	void Attack();
 	//弾の更新
@@ -66,15 +61,13 @@ private:
 private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	//2dレティクル
-	uint32_t textureHandle_ = 0;
-	std::unique_ptr<Sprite> reticle_ = nullptr;
 
 private:
 	//変数
 	const float speed_ = 3.0f;						//移動スピード
 	const float maxSpeed_ = 60.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 4.0f * pi;	//回転スピード
+
 
 };
 

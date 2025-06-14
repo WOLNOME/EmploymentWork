@@ -1,6 +1,6 @@
 #pragma once
 #include "Collider.h"
-#include "BaseCamera.h"
+#include "GameCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
 
@@ -33,7 +33,7 @@ public://getter
 
 public://setter
 	// カメラのセット
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
 	// シーンライトのセット
 	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 	//死亡予約関数
@@ -42,7 +42,7 @@ public://setter
 
 protected://インスタンス
 	// カメラ
-	BaseCamera* camera_ = nullptr;
+	GameCamera* camera_ = nullptr;
 	// シーンライト
 	SceneLight* light_ = nullptr;
 protected://オブジェクト

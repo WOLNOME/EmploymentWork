@@ -1,6 +1,9 @@
 #include "Enemy.h"
 #include "ImGuiManager.h"
 
+//アプリケーション
+#include "application/object/player/Player.h"
+
 void Enemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
@@ -16,7 +19,6 @@ void Enemy::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 	
-
 }
 
 void Enemy::Update() {

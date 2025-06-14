@@ -3,15 +3,12 @@
 #include "DirectXCommon.h"
 #include "ImGuiManager.h"
 #include <vector>
-#include <random>
 
 BaseCamera::BaseCamera()
 	: fovY(0.45f)
 	, aspectRatio(float(WinApp::kClientWidth) / float(WinApp::kClientHeight))
 	, nearClip(0.1f)
-	, farClip(100.0f)
-	, standardPosition({ 0.0f, 0.0f, 0.0f })
-	, shakeOffset_({ 0.0f, 0.0f, 0.0f }) {
+	, farClip(100.0f){
 	worldTransform.Initialize();
 	viewMatrix = MyMath::Inverse(worldTransform.matWorld);
 	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
@@ -36,12 +33,8 @@ void BaseCamera::Update() {
 }
 
 void BaseCamera::UpdateMatrix() {
-	//揺れ幅の更新
-	UpdateShake();
 	//ワールドトランスフォームの更新
 	worldTransform.UpdateMatrix();
-	//座標を求める
-	worldTransform.translate = standardPosition + shakeOffset_;
 
 	viewMatrix = MyMath::Inverse(worldTransform.matWorld);
 	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
@@ -57,95 +50,9 @@ void BaseCamera::DebugWithImGui() {
 #ifdef _DEBUG
 
 	ImGui::Begin("Camera");
-	ImGui::DragFloat3("Translate", &standardPosition.x, 0.01f);
+	ImGui::DragFloat3("Translate", &worldTransform.translate.x, 0.01f);
 	ImGui::DragFloat3("Rotate", &worldTransform.rotate.x, 0.01f);
 	ImGui::End();
 
 #endif // _DEBUG
-}
-
-const Vector3 BaseCamera::GetForwardDirection() {
-	// オイラー角から回転行列を計算（X軸、Y軸、Z軸回転を順番に適用）
-	Matrix4x4 rotationMatrix = MyMath::CreateRotationFromEulerAngles(worldTransform.rotate.x, worldTransform.rotate.y, worldTransform.rotate.z);
-
-	// 回転行列を使って前方向ベクトルを計算（Z軸方向が前方向）
-	Vector3 forward = rotationMatrix * Vector3(0, 0, 1);  // Z軸方向を前方向として扱う
-
-	return forward;
-}
-
-const Vector3 BaseCamera::GetRightDirection() {
-	// オイラー角から回転行列を計算（X軸、Y軸、Z軸回転を順番に適用）
-	Matrix4x4 rotationMatrix = MyMath::CreateRotationFromEulerAngles(worldTransform.rotate.x, worldTransform.rotate.y, worldTransform.rotate.z);
-
-	// 回転行列を使って前方向ベクトルを計算（Z軸方向が前方向）
-	Vector3 forward = rotationMatrix * Vector3(1, 0, 0);  // Z軸方向を前方向として扱う
-
-	return forward;
-}
-
-const Vector3 BaseCamera::GetLeftDirection() {
-	// オイラー角から回転行列を計算（X軸、Y軸、Z軸回転を順番に適用）
-	Matrix4x4 rotationMatrix = MyMath::CreateRotationFromEulerAngles(worldTransform.rotate.x, worldTransform.rotate.y, worldTransform.rotate.z);
-
-	// 回転行列を使って前方向ベクトルを計算（Z軸方向が前方向）
-	Vector3 forward = rotationMatrix * Vector3(-1, 0, 0);  // Z軸方向を前方向として扱う
-
-	return forward;
-}
-
-const Vector3 BaseCamera::GetBackDirection() {
-	// オイラー角から回転行列を計算（X軸、Y軸、Z軸回転を順番に適用）
-	Matrix4x4 rotationMatrix = MyMath::CreateRotationFromEulerAngles(worldTransform.rotate.x, worldTransform.rotate.y, worldTransform.rotate.z);
-
-	// 回転行列を使って前方向ベクトルを計算（Z軸方向が前方向）
-	Vector3 forward = rotationMatrix * Vector3(0, 0, -1);  // Z軸方向を前方向として扱う
-
-	return forward;
-}
-
-void BaseCamera::RegistShake(float time, float power) {
-	//揺れのデータをとる
-	ShakeData shakeData;
-	shakeData.maxTime = time;
-	shakeData.time = time;
-	shakeData.maxPower = power;
-	shakeData.power = power;
-	//リストに登録
-	shakeList_.push_back(shakeData);
-}
-
-void BaseCamera::UpdateShake() {
-	//オフセットを0で更新
-	shakeOffset_ = { 0.0f, 0.0f, 0.0f };
-	//リストに何もなければ終了
-	if (shakeList_.empty()) return;
-	//ローカル変数
-	float usePower = 0.0f;
-	//全てのリストを更新
-	for (auto it = shakeList_.begin(); it != shakeList_.end();) {
-		//揺れの大きさを線形補完で決める
-		it->power = MyMath::Lerp(it->maxPower, 0.0f, 1.0f - (it->time / it->maxTime));
-		//時間を減らす
-		it->time -= kDeltaTime;
-		//時間が0未満になったら削除
-		if (it->time < 0.0f) {
-			it = shakeList_.erase(it);
-			//次の要素へ
-			continue;
-		}
-		//揺れの大きさが大きいほうを使う
-		if (usePower < it->power) {
-			usePower = it->power;
-		}
-		//次の要素へ
-		it++;
-	}
-	//最終的に決まった揺れの大きさを使ってオフセットを決める
-	std::random_device seed_gen;
-	std::mt19937 engine(seed_gen());
-	std::uniform_real_distribution<float> dist(-usePower, usePower);
-	shakeOffset_.x = dist(engine);
-	shakeOffset_.y = dist(engine);
-	shakeOffset_.z = dist(engine);
 }

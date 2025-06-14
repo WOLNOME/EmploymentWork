@@ -9,7 +9,7 @@ void GamePlayScene::Initialize() {
 	input_ = Input::GetInstance();
 
 	//カメラの生成・初期化
-	camera_ = std::make_unique<BaseCamera>();
+	camera_ = std::make_unique<GameCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(500.0f);
 	camera_->worldTransform.rotate={ 0.15f,0.0f,0.0f };
@@ -26,22 +26,23 @@ void GamePlayScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	player_ = std::make_unique<Player>();
 	enemyManager_ = std::make_unique<EnemyManager>();
+	playerUI_ = std::make_unique<PlayerUI>();
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
 	player_->Initialize();
 	enemyManager_->Initialize();
+	playerUI_->Initialize();
 	//カメラ、ライトのセット
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
 	enemyManager_->SetCamera(camera_.get());
 	player_->SetSceneLight(sceneLight_.get());
 	enemyManager_->SetLight(sceneLight_.get());
+	playerUI_->SetCamera(camera_.get());
 	//その他インスタンスのセット
 	enemyManager_->SetPlayer(player_.get());
-
-	//カメラのペアレントをプレイヤーのオブジェクトと結びつける
-	player_->ParentForCamera();
+	playerUI_->SetPlayer(player_.get());
 
 }
 
@@ -56,16 +57,15 @@ void GamePlayScene::Update() {
 	if (input_->TriggerKey(DIK_R)) {
 		sceneManager_->SetNextScene("GamePlay");
 	}
+	//カメラの更新
+	camera_->Update();
+
 	//インスタンスの更新
 	skydome_->Update();
 	ground_->Update();
 	player_->Update();
 	enemyManager_->Update();
-
-
-
-	//カメラの更新(オブジェクト更新の後)
-	camera_->Update();
+	playerUI_-> Update();
 
 	//ImGui
 #ifdef _DEBUG
@@ -82,6 +82,19 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Draw() {
+	//バックスプライト共通描画設定
+	SpriteCommon::GetInstance()->SettingCommonDrawing();
+
+	///------------------------------///
+	///↓↓↓↓バックスプライト描画開始↓↓↓↓
+	///------------------------------///
+
+	playerUI_->DrawBackSprite();
+
+	///------------------------------///
+	///↑↑↑↑バックスプライト描画終了↑↑↑↑
+	///------------------------------///
+
 	//3Dモデルの共通描画設定
 	Object3dCommon::GetInstance()->SettingCommonDrawing();
 
@@ -115,17 +128,17 @@ void GamePlayScene::Draw() {
 	///↑↑↑↑線描画終了↑↑↑↑
 	///------------------------------///
 
-	//スプライトの共通描画設定
+	//フロントスプライト共通描画設定
 	SpriteCommon::GetInstance()->SettingCommonDrawing();
 
 	///------------------------------///
-	///↓↓↓↓スプライト描画開始↓↓↓↓
+	///↓↓↓↓フロントスプライト描画開始↓↓↓↓
 	///------------------------------///
 
-	player_->DrawSprite();
+	playerUI_->DrawFrontSprite();
 
 	///------------------------------///
-	///↑↑↑↑スプライト描画終了↑↑↑↑
+	///↑↑↑↑フロントスプライト描画終了↑↑↑↑
 	///------------------------------///
 }
 

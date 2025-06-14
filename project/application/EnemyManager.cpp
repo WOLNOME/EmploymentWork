@@ -1,6 +1,9 @@
 #include "application/EnemyManager.h"
 #include <random>
 
+//アプリケーション
+#include "application/object/player/Player.h"
+
 void EnemyManager::Initialize() {
 	//敵を規定数沸かせる(ここら辺の処理は後々jsonから読み込めるようにする)
 	std::random_device rd;
@@ -41,7 +44,7 @@ void EnemyManager::DebugWithImGui() {
 	}
 }
 
-void EnemyManager::SetCamera(BaseCamera* _camera) {
+void EnemyManager::SetCamera(GameCamera* _camera) {
 	camera_ = _camera;
 	for (const auto& enemy : enemies_) {
 		enemy->SetCamera(camera_);
