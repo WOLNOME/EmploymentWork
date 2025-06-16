@@ -213,14 +213,14 @@ void Player::CameraAlgorithm() {
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue = input_->GetMousePosition();
 	//デッドゾーン
-	float deadZone = 4.0f;
+	float deadZone = 3.0f;
 	if (moveValue.Length() > deadZone) {
 		camera_->worldTransform.rotate.x += moveValue.y * 0.0005f;
 		camera_->worldTransform.rotate.y += moveValue.x * 0.0005f;
 	}
 	//回転制限
-	const float maxPitch = (pi / 120.0f);
-	const float minPitch = -(pi / 15.0f);
+	const float maxPitch = (pi / 30.0f);		//下向き制限
+	const float minPitch = -(pi / 15.0f);		//上向き制限
 	camera_->worldTransform.rotate.x = std::clamp(camera_->worldTransform.rotate.x, minPitch, maxPitch);
 	//水平回転をπ~-πの間に収める
 	if (camera_->worldTransform.rotate.y > pi)

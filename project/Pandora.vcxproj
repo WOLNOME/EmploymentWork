@@ -181,7 +181,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\Skydome.cpp" />
     <ClCompile Include="application\object\player\Player.cpp" />
     <ClCompile Include="application\object\player\bullet\PlayerBullet.cpp" />
-    <ClCompile Include="engine\scene\NothingScene.cpp" />
     <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +263,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\Skydome.h" />
     <ClInclude Include="application\object\player\Player.h" />
     <ClInclude Include="application\object\player\bullet\PlayerBullet.h" />
-    <ClInclude Include="engine\scene\NothingScene.h" />
     <ClInclude Include="application\object\player\ui\PlayerUI.h" />
   </ItemGroup>
   <ItemGroup>

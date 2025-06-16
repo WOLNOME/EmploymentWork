@@ -9,7 +9,7 @@ void Enemy::Initialize() {
 	BaseCharacter::Initialize();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, "snowplow");
+	object3d_->Initialize(ModelTag{}, "enemy");
 	if (light_) {
 		object3d_->SetSceneLight(light_);
 	}
@@ -18,7 +18,7 @@ void Enemy::Initialize() {
 	radius_ = 3.8f;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
-	
+
 }
 
 void Enemy::Update() {
@@ -193,6 +193,13 @@ void Enemy::Attack() {
 	}
 	//未攻撃状態なら攻撃処理
 	if (!isEnemyAttacked_) {
+		//車体の向きを求める
+		Vector3 currentDir = {
+			std::sinf(object3d_->worldTransform.rotate.y),
+			0.0f,
+			std::cosf(object3d_->worldTransform.rotate.y)
+		};
+		currentDir.Normalize();
 		//弾のインスタンスを生成
 		std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 		bullet->Initialize();
@@ -202,12 +209,11 @@ void Enemy::Attack() {
 		//初期位置と目標位置をセット
 		Vector3 bulletPos = object3d_->worldTransform.translate;
 		bulletPos.y += 2.0f;	//←高さ
-		bulletPos.z += -2.5f;
+		bulletPos.x += currentDir.x * 10.0f;
+		bulletPos.z += currentDir.z * 10.0f;
 		bullet->SetInitParam(bulletPos, player_->GetWorldPosition());
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
-		//カメラシェイクを入れる
-		//camera_->RegistShake(0.2f, 0.15f);
 		isEnemyAttacked_ = true;
 	}
 

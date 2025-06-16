@@ -117,7 +117,6 @@
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
     <ClCompile Include="engine\util\StringUtility.cpp" />
     <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
-    <ClCompile Include="engine\scene\NothingScene.cpp" />
     <ClCompile Include="application\EnemyManager.cpp" />
     <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="engine\util\RandomStringUtil.h" />
     <ClInclude Include="engine\util\StringUtility.h" />
     <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
-    <ClInclude Include="engine\scene\NothingScene.h" />
     <ClInclude Include="application\EnemyManager.h" />
     <ClInclude Include="application\object\player\ui\PlayerUI.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
