@@ -14,9 +14,8 @@ void Player::Initialize() {
 	input_->SetIsMouseFixed(true);
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, "snowplow");
+	object3d_->Initialize(ModelTag{}, "player");
 	object3d_->worldTransform.translate.y += 2.7f;
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
 
 	//当たり判定の半径を設定
 	radius_ = 2.5f;
@@ -183,7 +182,7 @@ void Player::Attack() {
 		};
 		currentDir.Normalize();
 		Vector3 bulletPos = object3d_->worldTransform.translate;
-		bulletPos.y += 3.5f;
+		bulletPos.y += 1.7f;
 		Vector3 bulletDirection = currentDir;
 		bullet->SetInitParam(bulletPos, bulletDirection);
 		//リストに追加
@@ -231,5 +230,5 @@ void Player::CameraAlgorithm() {
 
 	//カメラの座標を決める
 	camera_->worldTransform.translate = object3d_->worldTransform.translate;
-	camera_->worldTransform.translate.y += 2.3f;
+	camera_->worldTransform.translate.y += 0.5f;
 }

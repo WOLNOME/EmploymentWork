@@ -86,12 +86,12 @@ void Framework::Finalize() {
 }
 
 void Framework::Update() {
+	//インプット更新
+	Input::GetInstance()->Update();
 	//メッセージ処理
 	if (WinApp::GetInstance()->ProcessMessage()) {
 		isOver = true;
 	}
-	//インプット更新
-	Input::GetInstance()->Update();
 	//当たり判定のクリア
 	CollisionManager::GetInstance()->ClearColliders();
 	//シーンマネージャー更新
