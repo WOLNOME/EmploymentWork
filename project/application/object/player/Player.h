@@ -41,6 +41,12 @@ public:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute) override;
 
+public://getter
+	//MaxHP
+	int GetMaxHP() const { return maxHP_; }
+	//HP
+	int GetHP() const { return hp_; }
+
 private://非公開関数
 	//回転
 	void Rotate();
@@ -68,6 +74,7 @@ private:
 	const float maxSpeed_ = 60.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 4.0f * pi;	//回転スピード
 
-
+	const int maxHP_ = 100;							//最大HP
+	int hp_ = maxHP_;								//現在のHP
 };
 

@@ -5,6 +5,8 @@
 #include "TextureManager.h"
 #include "TextTextureManager.h"
 #include "SpriteCommon.h"
+#include "ImGuiManager.h"
+#include "RandomStringUtil.h"
 
 void Sprite::Initialize() {
 	//リソースを作る
@@ -53,6 +55,7 @@ void Sprite::Initialize() {
 	transformationMatrixData->WVP = MyMath::MakeIdentity4x4();
 	transformationMatrixData->World = MyMath::MakeIdentity4x4();
 
+	name = RandomStringUtil::GenerateRandomString(3);
 }
 
 void Sprite::Draw(uint32_t _textureHandle) {
@@ -205,4 +208,30 @@ void Sprite::AdjustTextureSize(Handle _textTextureHandle) {
 	textureSize.y = static_cast<float>(TextTextureManager::GetInstance()->GetTextureHeight(_textTextureHandle));
 	//画像サイズをテクスチャサイズに合わせる
 	size = textureSize;
+}
+
+void Sprite::DebugWithImGui() {
+#ifdef _DEBUG
+	ImGui::Begin(name.c_str());
+	//位置
+	ImGui::DragFloat2("位置", &position.x, 0.1f);
+	//回転
+	ImGui::DragFloat("回転", &rotation, 0.01f);
+	//サイズ
+	ImGui::DragFloat2("サイズ", &size.x, 0.1f);
+	//色
+	ImGui::ColorEdit4("色", &materialData->color.x);
+	//アンカーポイント
+	ImGui::DragFloat2("アンカーポイント", &anchorPoint.x, 0.01f);
+	//左右反転
+	ImGui::Checkbox("左右反転", &isFlipX_);
+	//上下反転
+	ImGui::Checkbox("上下反転", &isFlipY_);
+	//テクスチャ左上
+	ImGui::DragFloat2("テクスチャ左上", &textureLeftTop.x, 0.1f);
+	//テクスチャサイズ
+	ImGui::DragFloat2("テクスチャサイズ", &textureSize.x, 0.1f);
+	ImGui::End();
+#endif // _DEBUG
+
 }

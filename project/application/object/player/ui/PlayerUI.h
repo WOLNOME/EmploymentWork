@@ -1,6 +1,7 @@
 #pragma once
 #include "GameCamera.h"
 #include "Sprite.h"
+#include <array>
 #include <cstdint>
 
 class Player;
@@ -8,10 +9,15 @@ class PlayerUI {
 public:
 	//初期化
 	void Initialize();
+	//更新
+	void Update();
 	//バックスプライト描画
 	void DrawBackSprite();
 	//フロントスプライト描画
 	void DrawFrontSprite();
+
+	//デバッグ用ImGui
+	void DebugWithImGui();
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
@@ -28,6 +34,11 @@ private:
 	//FPSUI
 	uint32_t thFPSUI_;
 	std::unique_ptr<Sprite> spriteFPSUI_ = nullptr;
+	//HPバー
+	std::array<uint32_t, 2> thHPBar_;
+	std::array<std::unique_ptr<Sprite>, 2> spriteHPBar_;
+	float hpBarWidth_;
+
 
 private://データ駆動設計用パラメータ
 	int shakePower_ = 8;

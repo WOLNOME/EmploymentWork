@@ -75,6 +75,8 @@ void GamePlayScene::Update() {
 	player_->DebugWithImGui();
 	//敵のImGui
 	enemyManager_->DebugWithImGui();
+	//プレイヤーUIのImGui
+	playerUI_->DebugWithImGui();
 
 
 #endif // _DEBUG

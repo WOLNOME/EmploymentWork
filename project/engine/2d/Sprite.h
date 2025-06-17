@@ -40,6 +40,9 @@ public://メンバ関数
 	void AdjustTextureSize(uint32_t _textureHandle);
 	void AdjustTextureSize(Handle _textTextureHandle);
 
+	//デバッグ用ImGui
+	void DebugWithImGui();
+
 public://ゲッター
 	const Vector2& GetPosition()const { return position; }
 	float GetRotation()const { return rotation; }
@@ -100,5 +103,7 @@ private://メンバ変数値書き換え用
 	Vector2 textureLeftTop = { 0.0f,0.0f };
 	//テクスチャ切り出しサイズ
 	Vector2 textureSize = { 100.0f,100.0f };
+
+	std::string name;
 };
 
