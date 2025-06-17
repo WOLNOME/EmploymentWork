@@ -29,7 +29,6 @@ void AudioCommon::Finalize() {
 	ShutdownContainer();
 	//XAudio2の解放
 	xAudio2_.Reset();
-	//インスタンスの削除
 	delete instance;
 	instance = nullptr;
 }

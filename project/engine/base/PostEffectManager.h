@@ -3,6 +3,9 @@
 #include <wrl.h>
 #include <cstdint>
 #include <array>
+#include <vector>
+#include "Vector3.h"
+#include "Vector4.h"
 
 //ポストエフェクトの種類
 enum class PostEffectKind {
@@ -13,6 +16,9 @@ enum class PostEffectKind {
 	GaussianFilter,			// ガウシアンフィルター
 	LuminanceBaseOutline,	// 輝度ベースのアウトライン
 	RadialBlur,				// ラジアルブラー
+	Dissolve,				// ディゾルブ
+	Random,					// ランダム
+	HSVFilter,				// HSVフィルター
 
 	kMaxNumPostEffectKind,	// ポストエフェクトの最大数
 };
@@ -20,8 +26,46 @@ enum class PostEffectKind {
 //ルートシグネチャを追加したい場合は別途設定必須
 //グラフィックスパイプラインではPSを増やす
 //ImGuiにも追加しておく
+//描画の個別設定も別途必要
 
 class PostEffectManager {
+private://構造体
+	//ディゾルブ系
+	struct DissolveData {
+		float threshold;	//閾値
+
+		//追加予定項目
+		//全体の色、エッジの色、エッジの大きさ
+	};
+	struct DissolveResource {
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		DissolveData* data;
+		uint32_t textureHandle;		//ディゾルブに使用するテクスチャ
+	};
+	//ランダム系
+	struct RandomData {
+		float seed;	//シード値
+	};
+	struct RandomResource {
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		RandomData* data;
+	};
+	//HSVフィルター系
+	struct HSVFilterData {
+		Vector3 hsvColor;	//HSVの色
+	};
+	struct HSVFilterResource {
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		HSVFilterData* data;
+	};
+	
+	//全ポストエフェクトのリソース管理用構造体
+	struct PostEffectResource {
+		DissolveResource dissolveResource;
+		RandomResource randomResource;
+		HSVFilterResource hsvResource;
+	};
+
 private://コンストラクタ等の隠蔽
 	static PostEffectManager* instance;
 
@@ -53,6 +97,8 @@ private://生成系メンバ関数
 	void InitOffScreenRenderingOption();
 	//オフスクのグラフィックスパイプラインの生成
 	void GenerateRenderTextureGraphicsPipeline();
+	//固有リソースの初期化
+	void InitUniqueResources();
 
 private:
 	//レンダーテクスチャのリソース
@@ -65,8 +111,13 @@ private:
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)PostEffectKind::kMaxNumPostEffectKind> graphicsPipelineState;
 	//RTVのディスクリプタハンドル
 	uint32_t rtvIndex = 0;
+	//レンダーテクスチャのクリアカラー
+	const Vector4 kRenderTragetClearValue = Vector4(0, 0, 1, 1);
 
 	//現在適用しているポストエフェクトの種類
 	PostEffectKind currentPostEffectKind = PostEffectKind::None;
+
+	//ポストエフェクトのリソース
+	PostEffectResource postEffectResource;
 };
 

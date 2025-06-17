@@ -19,12 +19,13 @@ void BaseCamera::Initialize() {
 	//座標変換用リソース
 	viewProjectionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
 	viewProjectionResource_->Map(0, nullptr, reinterpret_cast<void**>(&viewProjectionData_));
+	viewProjectionData_->matWorld = worldTransform.matWorld;
 	viewProjectionData_->matView = viewMatrix;
 	viewProjectionData_->matProjection = projectionMatrix;
 	//カメラ座標リソース
 	cameraPositionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
 	cameraPositionResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPositionData_));
-	cameraPositionData_->worldPosition = worldTransform.worldPosition;
+	cameraPositionData_->worldPosition = worldTransform.worldTranslate;
 }
 
 void BaseCamera::Update() {
@@ -40,10 +41,11 @@ void BaseCamera::UpdateMatrix() {
 	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
 	viewProjectionMatrix = MyMath::Multiply(viewMatrix, projectionMatrix);
 
+	viewProjectionData_->matWorld = worldTransform.matWorld;
 	viewProjectionData_->matView = viewMatrix;
 	viewProjectionData_->matProjection = projectionMatrix;
 
-	cameraPositionData_->worldPosition = worldTransform.worldPosition;
+	cameraPositionData_->worldPosition = worldTransform.worldTranslate;
 }
 
 void BaseCamera::DebugWithImGui() {

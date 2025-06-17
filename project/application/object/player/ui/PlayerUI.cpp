@@ -2,47 +2,47 @@
 #include "WinApp.h"
 #include "TextureManager.h"
 #include <random>
+#include <cassert>
+
+//アプリケーション
+#include "application/object/player/Player.h"
 
 void PlayerUI::Initialize() {
 	//メンバ変数の生成と初期化
 	th2dReticle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
 	sprite2dReticle_ = std::make_unique<Sprite>();
-	sprite2dReticle_->Initialize(th2dReticle_);
+	sprite2dReticle_->Initialize();
 	sprite2dReticle_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite2dReticle_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
+	sprite2dReticle_->AdjustTextureSize(th2dReticle_);
 
 	thFPSUI_ = TextureManager::GetInstance()->LoadTexture("FPSUI.png");
 	spriteFPSUI_ = std::make_unique<Sprite>();
-	spriteFPSUI_->Initialize(thFPSUI_);
+	spriteFPSUI_->Initialize();
 	spriteFPSUI_->SetAnchorPoint({ 0.5f,0.5f });
 	spriteFPSUI_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
-	
+	spriteFPSUI_->AdjustTextureSize(thFPSUI_);
+
+	//HPバーの初期化
+	thHPBar_[0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
+	thHPBar_[1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
+	for (int i = 0; i < thHPBar_.size(); i++) {
+		spriteHPBar_[i] = std::make_unique<Sprite>();
+		spriteHPBar_[i]->Initialize();
+		spriteHPBar_[i]->SetPosition({ 320.0f,35.0f });
+		spriteHPBar_[i]->AdjustTextureSize(thHPBar_[i]);
+	}
+	hpBarWidth_ = spriteHPBar_[0]->GetSize().x;
+
 }
 
 void PlayerUI::Update() {
-	//スプライトの更新
-	sprite2dReticle_->Update();
-	//もしカメラが揺れてたらUIも一部揺らす(オフセットはそろえる)
-	if (camera_->GetIsShake()) {
-		std::random_device seed_gen;
-		std::mt19937 engine(seed_gen());
-		std::uniform_int_distribution<int> dist(- shakePower_, shakePower_);
-		//オフセット
-		Vector2 offset = {(float)dist(engine),(float)dist(engine)};
-		
-		//スプライトのポジションをオフセット分ずらす
-		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() + offset);
+	//playerが読み込まれていなかったらassert
+	assert(player_ != nullptr && "プレイヤーUIにプレイヤーインスタンスを渡してください");
 
-		//スプライトを更新する
-		spriteFPSUI_->Update();
-
-		//更新が終わったのでずらした分元に戻す
-		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() - offset);
-	}
-	//揺れていないので普通に更新する
-	else {
-		spriteFPSUI_->Update();
-	}
+	//HPバーのサイズをプレイヤーのHPに合わせる
+	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
+	spriteHPBar_[1]->SetSize({ hpBarWidth_ * hpRate,spriteHPBar_[1]->GetSize().y });
 
 }
 
@@ -50,8 +50,43 @@ void PlayerUI::DrawBackSprite() {
 }
 
 void PlayerUI::DrawFrontSprite() {
-	//2dレティクルの描画
-	sprite2dReticle_->Draw();
-	//FPSUIの描画
-	spriteFPSUI_->Draw();
+	//スプライトの描画
+	sprite2dReticle_->Draw(th2dReticle_);
+	//もしカメラが揺れてたらUIも一部揺らす(オフセットはそろえる)
+	if (camera_->GetIsShake()) {
+		std::random_device seed_gen;
+		std::mt19937 engine(seed_gen());
+		std::uniform_int_distribution<int> dist(-shakePower_, shakePower_);
+		//オフセット
+		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
+
+		//スプライトのポジションをオフセット分ずらす
+		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() + offset);
+
+		//スプライトを描画する
+		spriteFPSUI_->Draw(thFPSUI_);
+		for (int i = 0; i < 2; i++) {
+			//スプライトを描画する
+			spriteHPBar_[i]->Draw(thHPBar_[i]);
+		}
+
+		//描画が終わったのでずらした分元に戻す
+		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() - offset);
+	}
+	//揺れていないので普通に描画する
+	else {
+		spriteFPSUI_->Draw(thFPSUI_);
+		for (int i = 0; i < 2; i++) {
+			spriteHPBar_[i]->Draw(thHPBar_[i]);
+		}
+	}
+
+}
+
+void PlayerUI::DebugWithImGui() {
+#ifdef _DEBUG
+	for (int i = 0; i < 2; i++) {
+		spriteHPBar_[i]->DebugWithImGui();
+	}
+#endif // _DEBUG
 }

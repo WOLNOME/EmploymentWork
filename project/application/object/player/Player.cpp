@@ -65,6 +65,9 @@ void Player::DebugWithImGui() {
 	ImGui::Begin("プレイヤー");
 	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);
+	//HP
+	ImGui::DragInt("HP", &hp_, 1, 0, maxHP_);
+
 	ImGui::End();
 
 	//弾のデバッグ
@@ -75,17 +78,30 @@ void Player::DebugWithImGui() {
 	//当たり判定可視化用ラインの色を変更
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
+	//F1キーでマウスカーソルの表示する
+	if (input_->TriggerKey(DIK_F1)) {
+		input_->SetIsMouseDisplay(true);
+		input_->SetIsMouseFixed(false);
+	}
+
 #endif // _DEBUG
 }
 
 void Player::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Enemy:
 		//敵に当たった場合
+	case CollisionAttribute::Enemy:
 		break;
-	case CollisionAttribute::EnemyBullet:
 		//敵弾に当たった場合
+	case CollisionAttribute::EnemyBullet:
+		//HPを減らす
+		hp_ -= 10;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP_);
+		//カメラシェイクを入れる
+		camera_->RegistShake(0.4f, 0.5f);
+
 		break;
 	default:
 		break;

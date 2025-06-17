@@ -3,8 +3,6 @@
   <ItemGroup>
     <FxCompile Include="Resources\shaders\LineDrawer.PS.hlsl" />
     <FxCompile Include="Resources\shaders\LineDrawer.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\Particle.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Object3d.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Object3d.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
@@ -20,6 +18,16 @@
     <FxCompile Include="Resources\shaders\postEffects\LuminanceBasedOutline.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\RadialBlur.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\Vignette.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\TextTexture.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\TextTexture.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\particle\EmitParticle.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\particle\InitParticle.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\particle\Particle.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\particle\Particle.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\particle\UpdateParticle.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\postEffects\Dissolve.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\postEffects\HSVFilter.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\postEffects\Random.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -95,8 +103,6 @@
       <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\scenebase\SceneTransitionAnimation.cpp" />
-    <ClCompile Include="engine\2d\TextWriteManager.cpp" />
-    <ClCompile Include="engine\2d\TextWrite.cpp" />
     <ClCompile Include="engine\scene\ParticleCreatorScene.cpp" />
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
@@ -108,8 +114,6 @@
     <ClCompile Include="application\object\player\bullet\PlayerBullet.cpp" />
     <ClCompile Include="application\object\baseCharacter\BaseCharacter.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
-    <ClCompile Include="engine\3d\Skybox.cpp" />
-    <ClCompile Include="engine\3d\SkyboxCommon.cpp" />
     <ClCompile Include="engine\base\D2DRender.cpp" />
     <ClCompile Include="engine\base\GPUDescriptorManager.cpp" />
     <ClCompile Include="engine\base\PostEffectManager.cpp" />
@@ -120,6 +124,11 @@
     <ClCompile Include="application\EnemyManager.cpp" />
     <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
+    <ClCompile Include="engine\3d\CombinedParticle.cpp" />
+    <ClCompile Include="engine\3d\LevelObject.cpp" />
+    <ClCompile Include="engine\base\DSVManager.cpp" />
+    <ClCompile Include="engine\base\TextTextureManager.cpp" />
+    <ClCompile Include="engine\base\TextTextureRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -209,8 +218,6 @@
     <ClInclude Include="engine\collision\CollisionConfig.h" />
     <ClInclude Include="engine\collision\CollisionManager.h" />
     <ClInclude Include="engine\scenebase\SceneTransitionAnimation.h" />
-    <ClInclude Include="engine\2d\TextWriteManager.h" />
-    <ClInclude Include="engine\2d\TextWrite.h" />
     <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
     <ClInclude Include="engine\scene\GamePlayScene.h" />
@@ -221,8 +228,6 @@
     <ClInclude Include="application\object\player\bullet\PlayerBullet.h" />
     <ClInclude Include="application\object\baseCharacter\BaseCharacter.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />
-    <ClInclude Include="engine\3d\Skybox.h" />
-    <ClInclude Include="engine\3d\SkyboxCommon.h" />
     <ClInclude Include="engine\base\D2DRender.h" />
     <ClInclude Include="engine\base\GPUDescriptorManager.h" />
     <ClInclude Include="engine\base\PostEffectManager.h" />
@@ -235,14 +240,22 @@
     <ClInclude Include="application\EnemyManager.h" />
     <ClInclude Include="application\object\player\ui\PlayerUI.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
+    <ClInclude Include="engine\3d\CombinedParticle.h" />
+    <ClInclude Include="engine\3d\LevelObject.h" />
+    <ClInclude Include="engine\base\DSVManager.h" />
+    <ClInclude Include="engine\base\TextTextureManager.h" />
+    <ClInclude Include="engine\base\TextTextureRender.h" />
+    <ClInclude Include="engine\util\Handle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />
-    <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Object3d.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
     <None Include="Resources\shaders\Skybox.hlsli" />
     <None Include="Resources\shaders\postEffects\CopyImage.hlsli" />
+    <None Include="Resources\shaders\TextTexture.hlsli" />
+    <None Include="Resources\shaders\particle\ParticleCommon.hlsli" />
+    <None Include="Resources\shaders\util\RandomUtility.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

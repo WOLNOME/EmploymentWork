@@ -13,20 +13,20 @@ enum MouseButton {
 
 ///ゲームパッドのコマンド
 enum GamepadButton {
-	ButtonA,     // Aボタン
-	ButtonB,     // Bボタン
-	ButtonX,     // Xボタン
-	ButtonY,     // Yボタン
-	LeftShoulder, // LBボタン
-	RightShoulder, // RBボタン
-	Back,        // BACKボタン
-	Start,       // STARTボタン
-	LeftThumb,   // 左スティック押し込み
-	RightThumb,  // 右スティック押し込み
-	DPadUp,     // 十字キー 上
-	DPadDown,   // 十字キー 下
-	DPadLeft,   // 十字キー 左
-	DPadRight   // 十字キー 右
+	ButtonA,		// Aボタン
+	ButtonB,		// Bボタン
+	ButtonX,		// Xボタン
+	ButtonY,		// Yボタン
+	LeftShoulder,	// LBボタン
+	RightShoulder,	// RBボタン
+	Back,			// BACKボタン
+	Start,			// STARTボタン
+	LeftThumb,		// 左スティック押し込み
+	RightThumb,		// 右スティック押し込み
+	DPadUp,			// 十字キー 上
+	DPadDown,		// 十字キー 下
+	DPadLeft,		// 十字キー 左
+	DPadRight		// 十字キー 右
 };
 
 //入力
