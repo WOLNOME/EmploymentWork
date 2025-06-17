@@ -8,8 +8,6 @@ class PlayerUI {
 public:
 	//初期化
 	void Initialize();
-	//更新
-	void Update();
 	//バックスプライト描画
 	void DrawBackSprite();
 	//フロントスプライト描画

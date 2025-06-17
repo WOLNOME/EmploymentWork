@@ -12,6 +12,7 @@
 
 // 定数バッファ用データ構造体
 struct ViewProjectionTransformationMatrixForVS {
+	Matrix4x4 matWorld;
 	Matrix4x4 matView;         // ワールド → ビュー変換行列
 	Matrix4x4 matProjection;   // ビュー → プロジェクション変換行列
 };

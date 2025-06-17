@@ -5,8 +5,7 @@
 #include <cstdint>
 #include <array>
 
-class MainRender
-{
+class MainRender {
 private://コンストラクタ等の隠蔽
 	static MainRender* instance;
 
@@ -34,35 +33,32 @@ public:
 
 	//コマンドの準備
 	void ReadyNextCommand();
+
+	//リソースの状態遷移用関数
+	void TransitionResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
+
 private://生成系メンバ関数
 	void InitCommand();
 	void GenerateSwapChain();
 	void GenerateDepthBuffer();
-	void GenerateDescriptorHeap();
 	void InitRenderTargetView();
 	void InitDepthStencilView();
 	void InitViewPort();
 	void InitScissorRect();
 
-public://公開メンバ関数
-	//DSVデスクリプタヒープの取得
-	ID3D12DescriptorHeap* GetDSVDescriptorHeap()const { return dsvDescriptorHeap.Get(); }
-	//DSVデスクリプタのサイズ取得
-	uint32_t GetDSVDescriptorSize()const { return descriptorSizeDSV; }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDSVCPUDescriptorHandle(uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetDSVGPUDescriptorHandle(uint32_t index);
-
-public://ゲッター
+public://getter
 	//コマンドアロケーター
 	ID3D12CommandAllocator* GetCommandAllocator() const { return commandAllocator.Get(); }
 	//コマンドリスト
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }
-	//バックバッファの数を取得
-	size_t GetBackBufferCount()const { return swapChainDesc.BufferCount; }
+	//スワップチェーンのバッファ数を取得
+	size_t GetSwapChainBufferCount()const { DXGI_SWAP_CHAIN_DESC1 desc{}; swapChain->GetDesc1(&desc); return desc.BufferCount; }
 	//スワップチェーン
 	IDXGISwapChain4* GetSwapChain()const { return swapChain.Get(); }
 	//スワップチェーンのリソース
 	ID3D12Resource* GetSwapChainResource(uint32_t index)const { return swapChainResources[index].Get(); }
+	//DSVインデックス(オフスクで使うため)
+	uint32_t GetDSVIndex()const { return dsvIndex; }
 
 private://メンバ変数
 	//コマンドアロケーター
@@ -71,18 +67,14 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList = nullptr;
 	//スワップチェーン
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain = nullptr;
-	//スワップチェーンデスク
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	//DepthStencilResource
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource = nullptr;
-	//デスクリプターヒープ
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap = nullptr;
-	//デスクリプターサイズ
-	uint32_t descriptorSizeDSV = 0;
 	//スワップチェーンから引っ張て来たリソース
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources;
+	//深度描画用のリソース
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource = nullptr;
 	//RTVインデックス
-	std::array<uint32_t, 2> rtvHandles;
+	std::array<uint32_t, 2> rtvIndices;
+	//DSVインデックス
+	uint32_t dsvIndex = 0;
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//シザー矩形

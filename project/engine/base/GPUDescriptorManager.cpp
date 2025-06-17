@@ -22,16 +22,16 @@ void GPUDescriptorManager::Finalize() {
 	instance = nullptr;
 }
 
-void GPUDescriptorManager::PreDraw(ID3D12GraphicsCommandList* pCommandList) {
+void GPUDescriptorManager::SetDescriptorHeap(ID3D12GraphicsCommandList* pCommandList) {
 	ID3D12DescriptorHeap* descriptorHeaps[] = { descriptorHeap.Get() };
 	pCommandList->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 uint32_t GPUDescriptorManager::Allocate() {
 	// 空きインデックスがあれば再利用
-	if (!freeIndices.empty()) {
-		uint32_t index = freeIndices.front();
-		freeIndices.pop();
+	if (!enableIndices.empty()) {
+		uint32_t index = enableIndices.front();
+		enableIndices.pop();
 		return index;
 	}
 
@@ -48,25 +48,34 @@ uint32_t GPUDescriptorManager::Allocate() {
 void GPUDescriptorManager::Free(uint32_t index) {
 	// インデックスが範囲内であることを確認
 	if (index < kMaxHeapSize) {
-		freeIndices.push(index);
+		unenableIndices.push(index);
 	}
 }
 
 bool GPUDescriptorManager::CheckCanSecured() {
-	return (useIndex < kMaxHeapSize || !freeIndices.empty());
+	return (useIndex < kMaxHeapSize || !enableIndices.empty());
 }
 
-void GPUDescriptorManager::CreateSRVforTexture2D(uint32_t index, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels) {
+void GPUDescriptorManager::TransferEnable() {
+	while (!unenableIndices.empty()) {
+		// フレームフリーキューの先頭から1つ取り出して
+		uint32_t index = unenableIndices.front();
+		unenableIndices.pop();
+		// フリーキューに追加
+		enableIndices.push(index);
+	}
+}
+
+void GPUDescriptorManager::CreateSRVforRenderTexture(uint32_t index, ID3D12Resource* pResource) {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = Format;
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = MipLevels;
-
+	srvDesc.Texture2D.MipLevels = 1;
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(index));
 }
 
-void GPUDescriptorManager::CreateSRVforStructuredBufferCS(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
+void GPUDescriptorManager::CreateSRVforStructuredBuffer(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -78,7 +87,7 @@ void GPUDescriptorManager::CreateSRVforStructuredBufferCS(uint32_t index, ID3D12
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(index));
 }
 
-void GPUDescriptorManager::CreateUAVforStructuredBufferCS(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
+void GPUDescriptorManager::CreateUAVforRWStructuredBuffer(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;

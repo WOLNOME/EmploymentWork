@@ -22,10 +22,6 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw() override;
-	/// <summary>
-	///	テキスト描画
-	/// </summary>
-	void TextDraw() override;
 
 private://メンバ変数
 	Input* input_ = nullptr;
@@ -71,6 +67,9 @@ private://メンバ変数
 
 	std::unique_ptr<Object3d> simpleSkin_ = nullptr;
 
+	//レベルオブジェクト
+	std::unique_ptr<LevelObject> levelObject_ = nullptr;
+
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
 
@@ -83,7 +82,9 @@ private://メンバ変数
 	float volume = 0.5f;
 
 	//テキスト
-	int timer_ = 0;
-	std::unique_ptr<TextWrite> text_;
+	float time_ = 0.0f;
+	Handle textHandle_;
+	std::unique_ptr<Sprite> text_ = nullptr;
+
 };
 

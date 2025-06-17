@@ -2,7 +2,8 @@
 #include "DirectXCommon.h"
 #include "MyMath.h"
 
-void WorldTransform::Initialize() {
+void WorldTransform::Initialize()
+{
 	//リソースの作成
 	resource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(WorldTransformationMatrixForVS));
 	//リソースをマッピング
@@ -12,9 +13,11 @@ void WorldTransform::Initialize() {
 	data_->matWorldInverseTranspose = MyMath::MakeIdentity4x4();
 }
 
-void WorldTransform::UpdateMatrix(const Matrix4x4& local) {
+void WorldTransform::UpdateMatrix(const Matrix4x4& local)
+{
 	// スケール、回転、平行移動を合成して行列を計算する
 	matWorld = local * MyMath::MakeAffineMatrix(scale, rotate, translate);
+	
 
 	// 親があれば親のワールド行列を掛ける
 	if (parent) {
@@ -22,9 +25,9 @@ void WorldTransform::UpdateMatrix(const Matrix4x4& local) {
 	}
 
 	//ワールド座標を更新
-	worldPosition.x = matWorld.m[3][0];
-	worldPosition.y = matWorld.m[3][1];
-	worldPosition.z = matWorld.m[3][2];
+	worldTranslate.x = matWorld.m[3][0];
+	worldTranslate.y = matWorld.m[3][1];
+	worldTranslate.z = matWorld.m[3][2];
 
 	// 定数バッファに転送する
 	data_->matWorld = matWorld;

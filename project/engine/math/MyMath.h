@@ -10,13 +10,13 @@
 #include <numbers>
 
 ///------------------------------------///
-///              よく使う変数
+///              列挙体
 ///------------------------------------///
 
 //δタイム
 const float kDeltaTime = 1.0f / 60.0f;
 //π
-inline constexpr float pi = std::numbers::pi_v<float>;
+const float pi = std::numbers::pi_v<float>;
 
 ///------------------------------------///
 ///              列挙体
