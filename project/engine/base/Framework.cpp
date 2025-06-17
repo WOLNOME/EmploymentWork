@@ -117,6 +117,7 @@ void Framework::Finalize() {
 void Framework::Update() {
 	//インプット更新
 	Input::GetInstance()->Update();
+	
 	//メッセージ処理
 	if (WinApp::GetInstance()->ProcessMessage()) {
 		isOver = true;
@@ -133,14 +134,19 @@ void Framework::Run() {
 	//ゲームの初期化
 	Initialize();
 	while (true) {
-		//毎フレーム更新
-		Update();
+		//エスケープキーで強制終了
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+			isOver = true;
+		}
 		//終了リクエストが来たら抜ける
 		if (GetOver()) {
 			break;
 		}
+		//毎フレーム更新
+		Update();
 		//描画
 		Draw();
+
 	}
 	//ゲームの終了
 	Finalize();

@@ -5,16 +5,14 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 WinApp* WinApp::instance = nullptr;
 
-WinApp* WinApp::GetInstance()
-{
+WinApp* WinApp::GetInstance() {
 	if (instance == nullptr) {
 		instance = new WinApp;
 	}
 	return instance;
 }
 
-LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
+LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	//マウスの操作をできるようImGuiに伝達
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
@@ -33,11 +31,10 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-void WinApp::Initialize()
-{
+void WinApp::Initialize() {
 	//COMの初期化
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-	
+
 	//ウィンドウプロシージャ
 	wc.lpfnWndProc = WindowProc;
 	//ウィンドウクラス名(何でもいい)
@@ -74,16 +71,14 @@ void WinApp::Initialize()
 
 }
 
-void WinApp::Finalize()
-{
+void WinApp::Finalize() {
 	CloseWindow(hwnd);
 	CoUninitialize();
 	delete instance;
 	instance = nullptr;
 }
 
-bool  WinApp::ProcessMessage()
-{
+bool  WinApp::ProcessMessage() {
 	MSG msg{};
 	//Winodwにメッセージが来てたら最優先で処理させる
 	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

@@ -41,7 +41,7 @@ void PlayerUI::Update() {
 	assert(player_ != nullptr && "プレイヤーUIにプレイヤーインスタンスを渡してください");
 
 	//HPバーのサイズをプレイヤーのHPに合わせる
-	float hpRate = player_->GetHP() / player_->GetMaxHP();
+	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
 	spriteHPBar_[1]->SetSize({ hpBarWidth_ * hpRate,spriteHPBar_[1]->GetSize().y });
 
 }

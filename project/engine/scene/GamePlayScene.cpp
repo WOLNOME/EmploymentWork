@@ -65,6 +65,7 @@ void GamePlayScene::Update() {
 	ground_->Update();
 	player_->Update();
 	enemyManager_->Update();
+	playerUI_->Update();
 
 	//ImGui
 #ifdef _DEBUG

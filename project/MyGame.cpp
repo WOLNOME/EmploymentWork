@@ -41,6 +41,8 @@ void MyGame::Update() {
 
 	//ImGuiの内部コマンドを生成する
 	ImGuiManager::GetInstance()->End();
+
+
 }
 
 void MyGame::Draw() {

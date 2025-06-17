@@ -59,8 +59,8 @@ void TextTextureRender::PostDraw() {
 	assert(SUCCEEDED(hr));
 
 	//GPUにコマンドリストの実行を行わせる
-	Microsoft::WRL::ComPtr<ID3D12CommandList> commandLists[] = { commandList.Get() };
-	DirectXCommon::GetInstance()->GetCommandQueue()->ExecuteCommandLists(1, commandLists->GetAddressOf());
+	ID3D12CommandList* commandLists[] = { commandList.Get() };
+	DirectXCommon::GetInstance()->GetCommandQueue()->ExecuteCommandLists(1, commandLists);
 }
 
 void TextTextureRender::ReadyNextCommand() {
