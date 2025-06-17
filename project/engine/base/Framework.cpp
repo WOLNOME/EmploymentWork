@@ -134,10 +134,6 @@ void Framework::Run() {
 	//ゲームの初期化
 	Initialize();
 	while (true) {
-		//エスケープキーで強制終了
-		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
-			isOver = true;
-		}
 		//終了リクエストが来たら抜ける
 		if (GetOver()) {
 			break;
