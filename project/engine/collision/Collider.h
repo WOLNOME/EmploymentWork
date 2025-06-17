@@ -8,7 +8,7 @@ class Collider {
 public:
 	//デストラクタ
 	virtual ~Collider() = default;
-
+	
 	//当たり判定時の処理
 	virtual void OnCollision(CollisionAttribute attribute) = 0;
 

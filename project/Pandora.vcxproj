@@ -114,6 +114,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\enemy\Enemy.cpp" />
     <ClCompile Include="application\object\baseCharacter\BaseCharacter.cpp" />
     <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
     <ClCompile Include="engine\3d\Skybox.cpp" />
     <ClCompile Include="engine\3d\SkyboxCommon.cpp" />
@@ -187,6 +188,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\enemy\Enemy.h" />
     <ClInclude Include="application\object\baseCharacter\BaseCharacter.h" />
     <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />
     <ClInclude Include="engine\3d\Skybox.h" />
     <ClInclude Include="engine\3d\SkyboxCommon.h" />

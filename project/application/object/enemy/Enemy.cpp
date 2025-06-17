@@ -10,6 +10,8 @@ void Enemy::Initialize() {
 	if (light_) {
 		object3d_->SetSceneLight(light_);
 	}
+	object3d_->worldTransform.translate.z += 200.0f;
+	object3d_->worldTransform.translate.y += 2.7f;
 
 	//当たり判定の半径を設定
 	radius_ = 3.8f;

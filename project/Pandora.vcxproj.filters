@@ -119,6 +119,7 @@
     <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
     <ClCompile Include="engine\scene\NothingScene.cpp" />
     <ClCompile Include="application\EnemyManager.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
