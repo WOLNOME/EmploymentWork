@@ -113,7 +113,8 @@ void Boss::SetPosition(const Vector3& _pos) {
 
 void Boss::Move() {
 	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceMove"]) {
+	float searchPlayerDistanceMove = param_["searchPlayerDistanceMove"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceMove) {
 		return;
 	}
 	//攻撃中は処理を行わない
@@ -153,7 +154,8 @@ void Boss::Move() {
 
 void Boss::Rotate() {
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceRotate"]) {
+	float searchPlayerDistanceRotate = param_["searchPlayerDistanceRotate"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceRotate) {
 		return;
 	}
 	//移動方向に向かって回転->現在の向きを求める
@@ -202,13 +204,15 @@ void Boss::Attack() {
 	//クールタイム処理
 	if (isEnemyAttacked_) {
 		attackCoolTimer_ += kDeltaTime;
-		if (attackCoolTimer_ >= param_["attackCoolTime"]) {
+		float attackCoolTime = param_["attackCoolTime"];
+		if (attackCoolTimer_ >= attackCoolTime) {
 			isEnemyAttacked_ = false;
 			attackCoolTimer_ = 0.0f;
 		}
 	}
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceAttack"]) {
+	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceAttack) {
 		return;
 	}
 	//未攻撃状態なら攻撃処理
@@ -231,7 +235,8 @@ void Boss::Attack() {
 		bulletPos.y += 2.0f;	//←高さ
 		bulletPos.x += currentDir.x * 10.0f;
 		bulletPos.z += currentDir.z * 10.0f;
-		bullet->SetInitParam(bulletPos, player_->GetWorldPosition());
+		Vector3 targetPos = player_->GetWorldTransform().translate;
+		bullet->SetInitParam(bulletPos, targetPos);
 		//リストに追加
 		bullets_.push_back(std::move(bullet));
 		isEnemyAttacked_ = true;

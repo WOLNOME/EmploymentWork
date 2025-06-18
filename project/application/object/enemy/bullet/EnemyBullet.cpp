@@ -102,13 +102,23 @@ void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	float hitTime = param_["hitTime"];
 	velocity_.x = targetVec.x / hitTime;
 	velocity_.z = targetVec.z / hitTime;
-	
+
 	//最大高度から重力を求める
 	float maxHeight = param_["maxHeight"];
-	
+	//もしinitPosのy座標がmaxHeightより大きい場合
+	if (_initPos.y > maxHeight) {
+		//最大高度をinitPosのy座標にする
+		maxHeight = _initPos.y;
+		gravity_ = 2.0f * (_initPos.y - _targetPos.y) / std::powf(hitTime, 2);
+		//y方向の上昇速度は0
+		velocity_.y = 0.0f;
+		return;
+	}
+
 	gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
 	//y方向の上昇速度を算出
-	velocity_.y = gravity_ * (hitTime / 2.0f);
+	velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
+
 }
 
 void EnemyBullet::Move() {

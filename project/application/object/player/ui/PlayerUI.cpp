@@ -62,16 +62,21 @@ void PlayerUI::DrawFrontSprite() {
 
 		//スプライトのポジションをオフセット分ずらす
 		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() + offset);
+		for (int i = 0; i < 2; i++) {
+			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() + offset);
+		}
 
 		//スプライトを描画する
 		spriteFPSUI_->Draw(thFPSUI_);
 		for (int i = 0; i < 2; i++) {
-			//スプライトを描画する
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
 		}
 
 		//描画が終わったのでずらした分元に戻す
 		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() - offset);
+		for (int i = 0; i < 2; i++) {
+			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() - offset);
+		}
 	}
 	//揺れていないので普通に描画する
 	else {

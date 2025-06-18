@@ -108,7 +108,8 @@ void Enemy::SetPosition(const Vector3& _pos) {
 
 void Enemy::Move() {
 	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceMove"]) {
+	float searchPlayerDistanceMove = param_["searchPlayerDistanceMove"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceMove) {
 		return;
 	}
 	//攻撃中は処理を行わない
@@ -148,7 +149,8 @@ void Enemy::Move() {
 
 void Enemy::Rotate() {
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceRotate"]) {
+	float searchPlayerDistanceRotate = param_["searchPlayerDistanceRotate"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceRotate) {
 		return;
 	}
 	//移動方向に向かって回転->現在の向きを求める
@@ -197,13 +199,15 @@ void Enemy::Attack() {
 	//クールタイム処理
 	if (isEnemyAttacked_) {
 		attackCoolTimer_ += kDeltaTime;
-		if (attackCoolTimer_ >= param_["attackCoolTime"]) {
+		float attackCoolTime = param_["attackCoolTime"];
+		if (attackCoolTimer_ >= attackCoolTime) {
 			isEnemyAttacked_ = false;
 			attackCoolTimer_ = 0.0f;
 		}
 	}
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceAttack"]) {
+	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceAttack) {
 		return;
 	}
 	//未攻撃状態なら攻撃処理

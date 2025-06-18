@@ -86,13 +86,14 @@ void Player::DebugWithImGui() {
 	//当たり判定可視化用ラインの色を変更
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
+	
+
+#endif // _DEBUG
 	//F1キーでマウスカーソルの表示する
 	if (input_->TriggerKey(DIK_F1)) {
 		input_->SetIsMouseDisplay(true);
 		input_->SetIsMouseFixed(false);
 	}
-
-#endif // _DEBUG
 }
 
 void Player::OnCollision(CollisionAttribute attribute) {
