@@ -18,6 +18,14 @@ void EnemyManager::Initialize() {
 		//登録
 		enemies_.push_back(std::move(enemy));
 	}
+	//ボスの生成処理
+	{
+		boss_ = std::make_unique<Boss>();
+		boss_->Initialize();
+		Vector3 initPos = { 00.0f, 0.0f, 400.0f };
+		boss_->SetPosition(initPos);
+	}
+
 }
 
 void EnemyManager::Update() {
@@ -30,10 +38,20 @@ void EnemyManager::Update() {
 			++it;
 		}
 	}
+	//ボスの死亡時処理
+	if (boss_) {
+		if (boss_->GetIsDead()) {
+			boss_.reset(); //ボスのインスタンスを解放
+			boss_ = nullptr; //ボスが死亡したらnullptrにする
+		}
+	}
 	for (const auto& enemy : enemies_) {
 		//全エネミーの更新
 		enemy->Update();
 	}
+	//ボスの更新
+	if (boss_)
+		boss_->Update();
 }
 
 void EnemyManager::Draw() {
@@ -41,18 +59,25 @@ void EnemyManager::Draw() {
 		//全エネミーの描画
 		enemy->Draw();
 	}
+	//ボスの描画
+	if (boss_)
+		boss_->Draw();
 }
 
 void EnemyManager::DrawLine() {
 	for (const auto& enemy : enemies_) {
 		enemy->DrawLine();
 	}
+	if (boss_)
+		boss_->DrawLine();
 }
 
 void EnemyManager::DebugWithImGui() {
 	for (const auto& enemy : enemies_) {
 		enemy->DebugWithImGui();
 	}
+	if (boss_)
+		boss_->DebugWithImGui();
 }
 
 void EnemyManager::SetCamera(GameCamera* _camera) {
@@ -60,6 +85,8 @@ void EnemyManager::SetCamera(GameCamera* _camera) {
 	for (const auto& enemy : enemies_) {
 		enemy->SetCamera(camera_);
 	}
+	if (boss_)
+		boss_->SetCamera(camera_);
 }
 
 void EnemyManager::SetLight(SceneLight* _light) {
@@ -67,6 +94,8 @@ void EnemyManager::SetLight(SceneLight* _light) {
 	for (const auto& enemy : enemies_) {
 		enemy->SetSceneLight(sceneLight_);
 	}
+	if (boss_)
+		boss_->SetSceneLight(sceneLight_);
 }
 
 void EnemyManager::SetPlayer(Player* _player) {
@@ -74,4 +103,6 @@ void EnemyManager::SetPlayer(Player* _player) {
 	for (const auto& enemy : enemies_) {
 		enemy->SetPlayer(player_);
 	}
+	if (boss_)
+		boss_->SetPlayer(player_);
 }

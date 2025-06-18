@@ -6,6 +6,7 @@
 
 //アプリケーション
 #include "application/object/enemy/Enemy.h"
+#include "application/object/enemy/Boss.h"
 
 class Player;
 class EnemyManager {
@@ -42,6 +43,7 @@ private:
 	//敵のコンテナ
 	std::list<std::unique_ptr<Enemy>> enemies_;
 	int numEnemies_ = 4;
+	std::unique_ptr<Boss> boss_ = nullptr;
 
 };
 
