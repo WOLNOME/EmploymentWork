@@ -178,6 +178,8 @@ void PostEffectManager::GenerateRenderTextureGraphicsPipeline() {
 		//RootSignature作成
 		D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 		descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+
 		//RootParameter格納用変数
 		std::vector<D3D12_ROOT_PARAMETER> rootParameters;
 		switch (i) {
