@@ -36,6 +36,8 @@ void Player::Update() {
 	Attack();
 	//弾の更新
 	UpdateBullets();
+	//死亡処理
+	DeadProcess();
 
 	//カメラ処理
 	CameraAlgorithm();
@@ -222,6 +224,14 @@ void Player::UpdateBullets() {
 	//弾の更新
 	for (auto& bullet : bullets_) {
 		bullet->Update();
+	}
+}
+
+void Player::DeadProcess() {
+	//HPが0になったら死亡
+	if (hp_ <= 0) {
+		//死亡予約
+		SetDeadTimer(0.1f);
 	}
 }
 

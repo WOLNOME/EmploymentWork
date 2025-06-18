@@ -55,6 +55,8 @@ private://非公開関数
 	void Attack();
 	//弾の更新処理
 	void UpdateBullets();
+	//死亡処理
+	void DeadProcess();
 
 private:
 	//プレイヤー
@@ -73,10 +75,15 @@ private://メンバ変数
 	const float rotateSpeed_ = 1.0f / 3.0f * pi;	//回転スピード
 
 	//攻撃
-	const float searchPDistanceAttack_ = 100.0f;		//プレイヤー探索距離
+	const float searchPDistanceAttack_ = 100.0f;	//プレイヤー探索距離
 	const float attackCoolTime_ = 1.5f;				//攻撃のクールタイム
 	float attackCoolTimer_ = 0.0f;					//計測用タイマー
 	bool isEnemyAttacked_ = false;
+
+	//HP
+	const int maxHP_ = 30;		//最大HP
+	int hp_ = maxHP_;			//現在のHP
+
 
 };
 

@@ -129,6 +129,7 @@
     <ClCompile Include="engine\base\DSVManager.cpp" />
     <ClCompile Include="engine\base\TextTextureManager.cpp" />
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
+    <ClCompile Include="engine\scene\GameOverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="engine\base\TextTextureManager.h" />
     <ClInclude Include="engine\base\TextTextureRender.h" />
     <ClInclude Include="engine\util\Handle.h" />
+    <ClInclude Include="engine\scene\GameOverScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

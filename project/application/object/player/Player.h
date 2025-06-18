@@ -56,6 +56,8 @@ private://非公開関数
 	void Attack();
 	//弾の更新
 	void UpdateBullets();
+	//死亡処理
+	void DeadProcess();
 
 	//カメラ処理
 	void CameraAlgorithm();
@@ -74,7 +76,7 @@ private:
 	const float maxSpeed_ = 60.0f;					//最大移動スピード
 	const float rotateSpeed_ = 1.0f / 4.0f * pi;	//回転スピード
 
-	const int maxHP_ = 100;							//最大HP
-	int hp_ = maxHP_;								//現在のHP
+	const int maxHP_ = 100;			//最大HP
+	int hp_ = maxHP_;				//現在のHP
 };
 

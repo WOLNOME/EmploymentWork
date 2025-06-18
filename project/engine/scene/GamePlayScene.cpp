@@ -57,6 +57,11 @@ void GamePlayScene::Update() {
 	if (input_->TriggerKey(DIK_R)) {
 		sceneManager_->SetNextScene("GamePlay");
 	}
+	//プレイヤーが死亡したら
+	if (player_->GetIsDead()) {
+		sceneManager_->SetNextScene("GameOver");
+	}
+
 	//カメラの更新
 	camera_->Update();
 
@@ -66,6 +71,7 @@ void GamePlayScene::Update() {
 	player_->Update();
 	enemyManager_->Update();
 	playerUI_->Update();
+
 
 	//ImGui
 #ifdef _DEBUG

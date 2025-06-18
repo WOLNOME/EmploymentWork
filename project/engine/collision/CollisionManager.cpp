@@ -88,8 +88,11 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 	float length = AtoB.Length();
 	// 球と球の交差判定
 	if (length < addRad) {
+		//あらかじめ衝突属性を取得しておく(OnCollision内で衝突属性を変えても問題ないように)
+		CollisionAttribute attrA = colliderA->GetCollisionAttribute();
+		CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 		// 衝突時コールバックを呼び出す
-		colliderA->OnCollision(colliderB->GetCollisionAttribute());
-		colliderB->OnCollision(colliderA->GetCollisionAttribute());
+		colliderA->OnCollision(attrB);
+		colliderB->OnCollision(attrA);
 	}
 }

@@ -21,13 +21,24 @@ void EnemyManager::Initialize() {
 }
 
 void EnemyManager::Update() {
+	//全エネミーの死亡時処理
+	for (auto it = enemies_.begin(); it != enemies_.end();) {
+		if ((*it)->GetIsDead()) {
+			it = enemies_.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 	for (const auto& enemy : enemies_) {
+		//全エネミーの更新
 		enemy->Update();
 	}
 }
 
 void EnemyManager::Draw() {
 	for (const auto& enemy : enemies_) {
+		//全エネミーの描画
 		enemy->Draw();
 	}
 }

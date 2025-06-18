@@ -31,9 +31,9 @@ void Enemy::Update() {
 	Rotate();
 	//攻撃
 	Attack();
+	//死亡処理
+	DeadProcess();
 
-	//オブジェクトの更新
-	object3d_->Update();
 	//弾の更新処理
 	UpdateBullets();
 
@@ -77,12 +77,18 @@ void Enemy::DebugWithImGui() {
 void Enemy::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Player:
 		//プレイヤーに当たった場合
+	case CollisionAttribute::Player:
 		break;
-	case CollisionAttribute::PlayerBullet:
 		//プレイヤー弾に当たった場合
+	case CollisionAttribute::PlayerBullet:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//HPを減らす
+		hp_ -= 10;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP_);
+
+
 		break;
 	default:
 		break;
@@ -232,5 +238,13 @@ void Enemy::UpdateBullets() {
 	//弾の更新
 	for (auto& bullet : bullets_) {
 		bullet->Update();
+	}
+}
+
+void Enemy::DeadProcess() {
+	//もしHPが0になったら
+	if (hp_ <= 0) {
+		//死亡タイマーをセット
+		SetDeadTimer(0.1f);
 	}
 }

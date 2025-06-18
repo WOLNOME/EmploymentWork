@@ -52,7 +52,6 @@ public:
 	/// </summary>
 	virtual void Draw();
 	
-
 	//FPS表示
 	void ShowFPS();
 	
