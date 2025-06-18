@@ -22,6 +22,12 @@ void Player::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+	//パラメータのセット
+	maxHP_ = param_["maxHP"];
+	hp_ = maxHP_;
+
 }
 
 void Player::Update() {
@@ -125,7 +131,8 @@ void Player::Rotate() {
 	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
 
 	//回転速度の上限
-	float addRotation = rotateSpeed_ * kDeltaTime;
+	float rotateSpeed = param_["rotateSpeed"];
+	float addRotation = rotateSpeed * kDeltaTime;
 
 	//回転すべき角度が小さい場合は目標角度を代入
 	if (std::abs(angleDiff) <= addRotation) {
@@ -154,11 +161,12 @@ void Player::Move() {
 	};
 	currentDir.Normalize();
 	//WSキー入力で前後移動
+	float speed = param_["speed"];
 	if (input_->PushKey(DIK_W)) {
-		velocity_ += currentDir * speed_;
+		velocity_ += currentDir * speed;
 	}
 	if (input_->PushKey(DIK_S)) {
-		velocity_ += -currentDir * speed_;
+		velocity_ += -currentDir * speed;
 	}
 
 	//床の抵抗値を加算
@@ -167,9 +175,10 @@ void Player::Move() {
 	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限
-	if (velocity_.Length() > maxSpeed_) {
+	float maxSpeed = param_["maxSpeed"];
+	if (velocity_.Length() > maxSpeed) {
 		velocity_.Normalize();
-		velocity_ *= maxSpeed_;
+		velocity_ *= maxSpeed;
 	}
 	//移動量の小ささを制限
 	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {

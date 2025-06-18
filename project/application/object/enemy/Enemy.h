@@ -5,6 +5,7 @@
 #include "Object3d.h"
 #include "MyMath.h"
 #include "Particle.h"
+#include "jsonUtil.h"
 #include <list>
 #include <memory>
 
@@ -65,24 +66,16 @@ private:
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
 private://メンバ変数
-	//移動
-	const float searchPDistanceMove_ = 250.0f;		//プレイヤー探索距離
-	const float speed_ = 2.5f;						//移動スピード
-	const float maxSpeed_ = 20.0f;					//最大移動スピード
-
-	//回転
-	const float searchPDistanceRotate_ = 250.0f;	//プレイヤー探索距離
-	const float rotateSpeed_ = 1.0f / 3.0f * pi;	//回転スピード
+	//パラメータ
+	json param_;
 
 	//攻撃
-	const float searchPDistanceAttack_ = 100.0f;	//プレイヤー探索距離
-	const float attackCoolTime_ = 1.5f;				//攻撃のクールタイム
-	float attackCoolTimer_ = 0.0f;					//計測用タイマー
+	float attackCoolTimer_ = 0.0f;		//計測用タイマー
 	bool isEnemyAttacked_ = false;
 
 	//HP
-	const int maxHP_ = 30;		//最大HP
-	int hp_ = maxHP_;			//現在のHP
+	int maxHP_;			//最大HP
+	int hp_ = maxHP_;	//現在のHP
 
 
 };

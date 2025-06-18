@@ -1,0 +1,10 @@
+{
+    "searchPlayerDistancemove":250.0,
+    "speed": 2.5,
+    "maxSpeed":20.0,
+    "searchPlayerDistanceRotate":250.0,
+    "rotateSpeed": 1.047,
+    "searchPlayerDistanceAttack":100.0,
+    "attackCoolTime":1.5,
+    "maxHP":30
+}

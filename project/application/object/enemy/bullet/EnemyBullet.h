@@ -4,7 +4,9 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "Particle.h"
+#include "JsonUtil.h"
 #include <memory>
+
 
 class EnemyBullet : public BaseCharacter {
 public:
@@ -47,8 +49,8 @@ private:
 	//移動処理
 	void Move();
 private:
-	const float maxHeight_ = 3.5f;		//最大高度
-	const float hitTime_ = 0.9f;		//着弾秒数
+	//パラメータ
+	json param_;
 
 
 

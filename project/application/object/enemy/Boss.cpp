@@ -24,6 +24,12 @@ void Boss::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
+	//パラメータの反映
+	maxHP_ = param_["maxHP"];
+	hp_ = maxHP_;
+
 }
 
 void Boss::Update() {
@@ -107,7 +113,7 @@ void Boss::SetPosition(const Vector3& _pos) {
 
 void Boss::Move() {
 	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPDistanceMove_) {
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceMove"]) {
 		return;
 	}
 	//攻撃中は処理を行わない
@@ -123,16 +129,18 @@ void Boss::Move() {
 	dirToPlayer.Normalize();
 
 	//移動量を求める
-	velocity_ += dirToPlayer * speed_;
+	float speed = param_["speed"];
+	velocity_ += dirToPlayer * speed;
 	//摩擦力をかける
 	Vector3 frictionDir = -velocity_.Normalized();
 	Vector3 frictionAccel = frictionDir * floorFriction_;
 	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限
-	if (velocity_.Length() > maxSpeed_) {
+	float maxSpeed = param_["maxSpeed"];
+	if (velocity_.Length() > maxSpeed) {
 		velocity_.Normalize();
-		velocity_ *= maxSpeed_;
+		velocity_ *= maxSpeed;
 	}
 	//移動量の小ささを制限
 	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {
@@ -145,7 +153,7 @@ void Boss::Move() {
 
 void Boss::Rotate() {
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPDistanceRotate_) {
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceRotate"]) {
 		return;
 	}
 	//移動方向に向かって回転->現在の向きを求める
@@ -171,12 +179,13 @@ void Boss::Rotate() {
 	}
 	//もし、この角度の絶対値が回転スピードより小さい場合は、この角度をそのまま回転スピードとする
 	float usingRotateSpeed;
-	if (std::abs(angle) < rotateSpeed_ * kDeltaTime) {
+	float rotateSpeed = param_["rotateSpeed"];
+	if (std::abs(angle) < rotateSpeed * kDeltaTime) {
 		usingRotateSpeed = angle;
 	}
 	else {
 		//回転スピードを使う場合、符号を揃える
-		usingRotateSpeed = (angle > 0) ? rotateSpeed_ * kDeltaTime : -rotateSpeed_ * kDeltaTime;
+		usingRotateSpeed = (angle > 0) ? rotateSpeed * kDeltaTime : -rotateSpeed * kDeltaTime;
 	}
 	//ワールドトランスフォームの回転を加算
 	object3d_->worldTransform.rotate.y += usingRotateSpeed;
@@ -193,13 +202,13 @@ void Boss::Attack() {
 	//クールタイム処理
 	if (isEnemyAttacked_) {
 		attackCoolTimer_ += kDeltaTime;
-		if (attackCoolTimer_ >= attackCoolTime_) {
+		if (attackCoolTimer_ >= param_["attackCoolTime"]) {
 			isEnemyAttacked_ = false;
 			attackCoolTimer_ = 0.0f;
 		}
 	}
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPDistanceAttack_) {
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > param_["searchPlayerDistanceAttack"]) {
 		return;
 	}
 	//未攻撃状態なら攻撃処理

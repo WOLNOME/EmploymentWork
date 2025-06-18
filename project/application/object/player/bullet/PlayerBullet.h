@@ -4,6 +4,7 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "Particle.h"
+#include "JsonUtil.h"
 #include <memory>
 
 class PlayerBullet : public BaseCharacter {
@@ -41,7 +42,8 @@ public://setter
 	/// <param name="_initVelocity">初速度</param>
 	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
 		object3d_->worldTransform.translate = _initPos;
-		velocity_ = _initDirection * speed_;
+		float speed = param_["speed"];
+		velocity_ = _initDirection * speed;
 	}
 private:
 	//パーティクル
@@ -51,8 +53,8 @@ private:
 	//移動処理
 	void Move();
 private:
-	//変数
-	const float maxSpeed_ = 700.0f;					//最大移動スピード
-	const float speed_ = 300.0f;
+	//パラメータ
+	json param_;
+
 };
 

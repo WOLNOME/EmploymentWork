@@ -6,6 +6,7 @@
 #include "Object3d.h"
 #include "Sprite.h"
 #include "MyMath.h"
+#include "JsonUtil.h"
 #include <list>
 #include <memory>
 
@@ -71,12 +72,11 @@ private:
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 private:
-	//変数
-	const float speed_ = 3.0f;						//移動スピード
-	const float maxSpeed_ = 60.0f;					//最大移動スピード
-	const float rotateSpeed_ = 1.0f / 4.0f * pi;	//回転スピード
+	//パラメータ
+	json param_;
 
-	const int maxHP_ = 100;			//最大HP
-	int hp_ = maxHP_;				//現在のHP
+	//変数
+	int maxHP_;	//最大HP
+	int hp_;	//現在のHP
 };
 

@@ -24,6 +24,9 @@ void EnemyBullet::Initialize() {
 	radius_ = 1.0f;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
 }
 
 void EnemyBullet::Update() {
@@ -96,13 +99,16 @@ void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	//向きベクトルを算出
 	Vector3 targetVec = _targetPos - _initPos;
 	//XZ方向の速度を算出
-	velocity_.x = targetVec.x / hitTime_;
-	velocity_.z = targetVec.z / hitTime_;
+	float hitTime = param_["hitTime"];
+	velocity_.x = targetVec.x / hitTime;
+	velocity_.z = targetVec.z / hitTime;
 	
 	//最大高度から重力を求める
-	gravity_ = 2.0f * (maxHeight_ - _targetPos.y) / std::powf((hitTime_ / 2.0f), 2);
+	float maxHeight = param_["maxHeight"];
+	
+	gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
 	//y方向の上昇速度を算出
-	velocity_.y = gravity_ * (hitTime_ / 2.0f);
+	velocity_.y = gravity_ * (hitTime / 2.0f);
 }
 
 void EnemyBullet::Move() {

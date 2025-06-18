@@ -25,6 +25,9 @@ void PlayerBullet::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
+
 }
 
 void PlayerBullet::Update() {
@@ -98,9 +101,10 @@ void PlayerBullet::Move() {
 	Vector3 airResistanceAccel = airResistanceDir * airResistance_ * velocity_.Length();
 	velocity_ += airResistanceAccel * kDeltaTime;
 	//移動量の大きさを制限
-	if (velocity_.Length() > maxSpeed_) {
+	float maxSpeed = param_["maxSpeed"];
+	if (velocity_.Length() > maxSpeed) {
 		velocity_.Normalize();
-		velocity_ *= maxSpeed_;
+		velocity_ *= maxSpeed;
 	}
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
