@@ -16,6 +16,8 @@ public:
 	void RegistShake(float time, float power = 0.5f);
 	//シェイク中か
 	bool GetIsShake();
+	//現在のシェイクパワー
+	float GetShakePower() const;
 
 private:
 	//カメラの揺れの更新

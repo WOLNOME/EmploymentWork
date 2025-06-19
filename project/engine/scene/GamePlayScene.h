@@ -6,6 +6,7 @@
 #include "application/object/player/Player.h"
 #include "application/object/player/ui/PlayerUI.h"
 #include "application/EnemyManager.h"
+#include "application/object/enemy/ui/EnemyUI.h"
 
 
 class GamePlayScene : public BaseScene {
@@ -50,6 +51,8 @@ private://オブジェクト
 private://UI
 	//プレイヤーUI
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
+	//敵UI
+	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
 
 };
 

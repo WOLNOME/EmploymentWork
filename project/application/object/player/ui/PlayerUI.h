@@ -41,6 +41,6 @@ private:
 
 
 private://データ駆動設計用パラメータ
-	int shakePower_ = 8;
+	const int shakePower = 40;
 };
 

@@ -29,7 +29,7 @@ void PlayerUI::Initialize() {
 	for (int i = 0; i < thHPBar_.size(); i++) {
 		spriteHPBar_[i] = std::make_unique<Sprite>();
 		spriteHPBar_[i]->Initialize();
-		spriteHPBar_[i]->SetPosition({ 320.0f,35.0f });
+		spriteHPBar_[i]->SetPosition({ 320.0f,20.0f });
 		spriteHPBar_[i]->AdjustTextureSize(thHPBar_[i]);
 	}
 	hpBarWidth_ = spriteHPBar_[0]->GetSize().x;
@@ -38,7 +38,7 @@ void PlayerUI::Initialize() {
 
 void PlayerUI::Update() {
 	//playerが読み込まれていなかったらassert
-	assert(player_ != nullptr && "プレイヤーUIにプレイヤーインスタンスを渡してください");
+	assert(player_ != nullptr && "PlayerUIにPlayerインスタンスを渡してください");
 
 	//HPバーのサイズをプレイヤーのHPに合わせる
 	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
@@ -56,7 +56,7 @@ void PlayerUI::DrawFrontSprite() {
 	if (camera_->GetIsShake()) {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
-		std::uniform_int_distribution<int> dist(-shakePower_, shakePower_);
+		std::uniform_int_distribution<int> dist(-shakePower*camera_->GetShakePower(), shakePower * camera_->GetShakePower());
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 
@@ -85,7 +85,6 @@ void PlayerUI::DrawFrontSprite() {
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
 		}
 	}
-
 }
 
 void PlayerUI::DebugWithImGui() {

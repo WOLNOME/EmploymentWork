@@ -131,6 +131,7 @@
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
     <ClCompile Include="engine\scene\GameOverScene.cpp" />
     <ClCompile Include="application\object\enemy\Boss.cpp" />
+    <ClCompile Include="application\object\enemy\ui\EnemyUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="engine\util\Handle.h" />
     <ClInclude Include="engine\scene\GameOverScene.h" />
     <ClInclude Include="application\object\enemy\Boss.h" />
+    <ClInclude Include="application\object\enemy\ui\EnemyUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

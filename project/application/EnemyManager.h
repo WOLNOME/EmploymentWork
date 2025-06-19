@@ -23,6 +23,12 @@ public:
 	//デバッグ用パラメーター調整
 	void DebugWithImGui();
 
+public://getter
+	//敵のコンテナ
+	const std::list<std::unique_ptr<Enemy>>& GetEnemies() const { return enemies_; }
+	//ボスのポインタ
+	Boss* GetBoss() const { return boss_.get(); }
+
 public://setter
 	//カメラセット
 	void SetCamera(GameCamera* _camera);

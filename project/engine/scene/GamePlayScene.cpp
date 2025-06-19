@@ -27,12 +27,14 @@ void GamePlayScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	enemyManager_ = std::make_unique<EnemyManager>();
 	playerUI_ = std::make_unique<PlayerUI>();
+	enemyUI_ = std::make_unique<EnemyUI>();
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
 	player_->Initialize();
 	enemyManager_->Initialize();
 	playerUI_->Initialize();
+	enemyUI_->Initialize();
 	//カメラ、ライトのセット
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
@@ -40,9 +42,11 @@ void GamePlayScene::Initialize() {
 	player_->SetSceneLight(sceneLight_.get());
 	enemyManager_->SetLight(sceneLight_.get());
 	playerUI_->SetCamera(camera_.get());
+	enemyUI_->SetCamera(camera_.get());
 	//その他インスタンスのセット
 	enemyManager_->SetPlayer(player_.get());
 	playerUI_->SetPlayer(player_.get());
+	enemyUI_->SetEnemyManager(enemyManager_.get());
 
 }
 
@@ -71,6 +75,7 @@ void GamePlayScene::Update() {
 	player_->Update();
 	enemyManager_->Update();
 	playerUI_->Update();
+	enemyUI_->Update();
 
 
 	//ImGui
@@ -84,6 +89,7 @@ void GamePlayScene::Update() {
 	enemyManager_->DebugWithImGui();
 	//プレイヤーUIのImGui
 	playerUI_->DebugWithImGui();
+	//敵UIのImGui
 
 
 #endif // _DEBUG
@@ -98,6 +104,7 @@ void GamePlayScene::Draw() {
 	///------------------------------///
 
 	playerUI_->DrawBackSprite();
+	enemyUI_->DrawBackSprite();
 
 	///------------------------------///
 	///↑↑↑↑バックスプライト描画終了↑↑↑↑
@@ -144,6 +151,7 @@ void GamePlayScene::Draw() {
 	///------------------------------///
 
 	playerUI_->DrawFrontSprite();
+	enemyUI_->DrawFrontSprite();
 
 	///------------------------------///
 	///↑↑↑↑フロントスプライト描画終了↑↑↑↑

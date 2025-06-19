@@ -43,6 +43,10 @@ private:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute) override;
 
+public://getter
+	int GetHP() const { return hp_; }
+	int GetMaxHP() const { return maxHP_; }
+
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
 	void SetPosition(const Vector3& _pos);

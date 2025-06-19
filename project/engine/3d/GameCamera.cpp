@@ -1,5 +1,8 @@
 #include "GameCamera.h"
 #include <random>
+#undef min;
+#undef max;
+#include <algorithm>
 
 void GameCamera::Initialize() {
 	//基盤の初期化
@@ -39,6 +42,15 @@ bool GameCamera::GetIsShake() {
 	return false;
 }
 
+float GameCamera::GetShakePower() const {
+	float result = 0.0f;
+	for (const auto& shake : shakeList_) {
+		//揺れの強さを比較して最大値を求める
+		result = std::max(result, shake.power);
+	}
+	return result;
+}
+
 void GameCamera::UpdateShake() {
 	//オフセットを0で更新
 	shakeOffset_ = { 0.0f, 0.0f, 0.0f };
@@ -59,9 +71,7 @@ void GameCamera::UpdateShake() {
 			continue;
 		}
 		//揺れの大きさが大きいほうを使う
-		if (usePower < it->power) {
-			usePower = it->power;
-		}
+		usePower = std::max(usePower, it->power);
 		//次の要素へ
 		it++;
 	}
