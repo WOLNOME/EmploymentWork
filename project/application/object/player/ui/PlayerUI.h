@@ -1,6 +1,7 @@
 #pragma once
 #include "GameCamera.h"
 #include "Sprite.h"
+#include "JsonUtil.h"
 #include <array>
 #include <cstdint>
 
@@ -41,6 +42,7 @@ private:
 
 
 private://データ駆動設計用パラメータ
-	const int shakePower = 40;
+	json param_;
+
 };
 

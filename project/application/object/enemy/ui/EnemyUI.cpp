@@ -7,6 +7,10 @@
 #include "application/EnemyManager.h"
 
 void EnemyUI::Initialize() {
+	//パラメータ読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyUI");
+	float hpBarSizeRatio = param_["hpBarSizeRatio"];
+
 	for (int i = 0; i < kNumHPBar; i++) {
 		thHPBars_[i][0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
 		thHPBars_[i][1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
@@ -26,6 +30,10 @@ void EnemyUI::Initialize() {
 
 void EnemyUI::Update() {
 	assert(enemyManager_ != nullptr && "EnamyUIにEnemyManagerインスタンスを渡してください");
+
+	//パラメータのローカル変数
+	float normalEnemyHPBarHeight = param_["normalEnemyHPBarHeight"];
+	float bossEnemyHPBarHeight = param_["bossEnemyHPBarHeight"];
 
 	int hpBarIndex = 0;
 	for (int i = 0; i < kNumHPBar; i++) isHPBarVisible_[i] = false;

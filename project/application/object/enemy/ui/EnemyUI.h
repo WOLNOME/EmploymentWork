@@ -1,6 +1,7 @@
 #pragma once
 #include "GameCamera.h"
 #include "Sprite.h"
+#include "JsonUtil.h"
 #include <array>
 #include <cstdint>
 
@@ -29,7 +30,7 @@ private:
 	GameCamera* camera_ = nullptr;
 private:
 	//HPバー
-	static const int kNumHPBar = 10; //表示可能なHPバーの数
+	static const int kNumHPBar = 10; //一度に表示可能なHPバーの数
 	std::array<std::array<uint32_t, 2>, kNumHPBar> thHPBars_;
 	std::array<std::array<std::unique_ptr<Sprite>, 2>, kNumHPBar> spriteHPBar_;
 	std::array<bool, kNumHPBar> isHPBarVisible_; //各HPバーの表示状態 
@@ -37,9 +38,7 @@ private:
 	float hpBarHeight_;
 
 private://データ駆動設計用パラメータ
-	const float hpBarSizeRatio = 1.0f / 9.0f;
-	const float normalEnemyHPBarHeight = 3.0f;
-	const float bossEnemyHPBarHeight = 4.0f;
+	json param_;
 
 };
 

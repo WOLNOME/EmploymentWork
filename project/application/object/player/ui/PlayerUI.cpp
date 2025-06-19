@@ -8,6 +8,9 @@
 #include "application/object/player/Player.h"
 
 void PlayerUI::Initialize() {
+	//パラメータ読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
+
 	//メンバ変数の生成と初期化
 	th2dReticle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
 	sprite2dReticle_ = std::make_unique<Sprite>();
@@ -56,6 +59,7 @@ void PlayerUI::DrawFrontSprite() {
 	if (camera_->GetIsShake()) {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
+		int shakePower = param_["shakePower"];
 		std::uniform_int_distribution<int> dist(-shakePower*camera_->GetShakePower(), shakePower * camera_->GetShakePower());
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
