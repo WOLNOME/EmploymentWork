@@ -31,6 +31,9 @@ void BaseCharacter::Update() {
 }
 
 void BaseCharacter::DrawLine() {
+	//当たり判定がNothingnessなら描画しない
+	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) return;
+
 	//コライダーのライン描画
 	DrawCollisionLine(camera_);
 

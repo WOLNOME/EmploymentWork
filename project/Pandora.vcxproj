@@ -184,8 +184,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="application\object\Skydome.cpp" />
     <ClCompile Include="application\object\player\Player.cpp" />
-    <ClCompile Include="application\object\player\bullet\PlayerBullet.cpp" />
+    <ClCompile Include="application\object\player\weapon\PlayerBullet.cpp" />
     <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
+    <ClCompile Include="application\object\player\weapon\PlayerCannon.cpp" />
+    <ClCompile Include="application\PlayerWeaponManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\EnemyManager.h" />
@@ -271,8 +273,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\ParticleManager.h" />
     <ClInclude Include="application\object\Skydome.h" />
     <ClInclude Include="application\object\player\Player.h" />
-    <ClInclude Include="application\object\player\bullet\PlayerBullet.h" />
+    <ClInclude Include="application\object\player\weapon\PlayerBullet.h" />
     <ClInclude Include="application\object\player\ui\PlayerUI.h" />
+    <ClInclude Include="application\object\player\weapon\PlayerCannon.h" />
+    <ClInclude Include="application\PlayerWeaponManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

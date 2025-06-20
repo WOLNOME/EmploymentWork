@@ -7,11 +7,8 @@
 #include "Sprite.h"
 #include "MyMath.h"
 #include "JsonUtil.h"
-#include <list>
+#include <vector>
 #include <memory>
-
-//アプリケーション
-#include "application/object/player/bullet/PlayerBullet.h"
 
 class Player : public BaseCharacter {
 public:
@@ -48,9 +45,11 @@ public://getter
 	//HP
 	int GetHP() const { return hp_; }
 	//砲弾クールタイム
-	float GetCannonBallCoolTime() const { return cannonBallCoolTime_; }
+	float GetCannonCoolTime() const { return cannonCoolTime_; }
 	//砲弾クールタイムタイマー
-	float GetCannonBallCoolTimer() const { return cannonBallCoolTimer_; }
+	float GetCannonCoolTimer() const { return cannonCoolTimer_; }
+	//砲弾を発射したかどうか
+	bool GetIsCannonFire() const { return isCannonFire_; }
 
 private://非公開関数
 	//回転
@@ -59,8 +58,6 @@ private://非公開関数
 	void Move();
 	//攻撃
 	void Attack();
-	//弾の更新
-	void UpdateBullets();
 	//死亡処理
 	void DeadProcess();
 
@@ -72,10 +69,6 @@ private:
 	Input* input_ = nullptr;
 
 private:
-	//砲弾リスト
-	std::list<std::unique_ptr<PlayerBullet>> cannonBalls_;
-
-private:
 	//パラメータ
 	json param_;
 
@@ -83,8 +76,8 @@ private:
 	int maxHP_;	//最大HP
 	int hp_;	//現在のHP
 
-	float cannonBallCoolTime_;		//砲弾クールタイム(秒)
-	float cannonBallCoolTimer_;		//砲弾クールタイム計測用タイマー
-
+	float cannonCoolTime_;		//砲弾クールタイム(秒)
+	float cannonCoolTimer_;		//砲弾クールタイム計測用タイマー
+	bool isCannonFire_ = false;	//砲弾を発射したかどうか
 };
 

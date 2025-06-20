@@ -3,5 +3,5 @@
     "maxSpeed":60.0,
     "rotateSpeed":0.785,
     "maxHP":1000,
-    "cannonBallCoolTime":2.0
+    "cannonCoolTime":2.0
 }

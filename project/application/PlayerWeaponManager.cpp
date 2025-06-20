@@ -1,0 +1,120 @@
+#include "PlayerWeaponManager.h"
+
+//アプリケーション
+#include "application/object/player/Player.h"
+
+void PlayerWeaponManager::Initialize() {
+	//パラメーターの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerWeaponManager");
+
+	//砲弾の生成と初期化
+	int cannonNum = param_["maxCannonNum"];
+	for (int i = 0; i < cannonNum; i++) {
+		cannons_.emplace_back(std::make_unique<PlayerCannon>());
+		cannons_[i]->Initialize();
+	}
+
+	//銃弾の生成と初期化
+	int bulletNum = param_["maxBulletNum"];
+	for (int i = 0; i < bulletNum; i++) {
+		bullets_.emplace_back(std::make_unique<PlayerBullet>());
+		bullets_[i]->Initialize();
+	}
+
+}
+
+void PlayerWeaponManager::Update() {
+	//砲弾の生成
+	CreateCannon();
+
+	//砲弾の更新
+	for (auto& cannon : cannons_) {
+		cannon->Update();
+	}
+	//銃弾の更新
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+}
+
+void PlayerWeaponManager::Draw() {
+	//砲弾の描画
+	for (const auto& cannon : cannons_) {
+		cannon->Draw();
+	}
+	//銃弾の描画
+	for (const auto& bullet : bullets_) {
+		bullet->Draw();
+	}
+}
+
+void PlayerWeaponManager::DrawLine() {
+	//砲弾のライン描画
+	for (const auto& cannon : cannons_) {
+		cannon->DrawLine();
+	}
+	//銃弾のライン描画
+	for (const auto& bullet : bullets_) {
+		bullet->DrawLine();
+	}
+}
+
+void PlayerWeaponManager::DebugWithImGui() {
+#ifdef _DEBUG
+	//砲弾のデバッグ
+	for (const auto& cannon : cannons_) {
+		cannon->DebugWithImGui();
+	}
+	//銃弾のデバッグ
+	for (const auto& bullet : bullets_) {
+		bullet->DebugWithImGui();
+	}
+#endif // _DEBUG
+}
+
+void PlayerWeaponManager::SetCamera(GameCamera* _camera) {
+	camera_ = _camera;
+	for (auto& cannon : cannons_) {
+		cannon->SetCamera(_camera);
+	}
+	for (auto& bullet : bullets_) {
+		bullet->SetCamera(_camera);
+	}
+}
+
+void PlayerWeaponManager::SetLight(SceneLight* _light) {
+	sceneLight_ = _light;
+	for (auto& cannon : cannons_) {
+		cannon->SetSceneLight(_light);
+	}
+	for (auto& bullet : bullets_) {
+		bullet->SetSceneLight(_light);
+	}
+}
+
+void PlayerWeaponManager::CreateCannon() {
+	//プレイヤーから発射フラグを取得
+	if (!player_->GetIsCannonFire()) return;
+	//砲弾の追加位置を探す
+	for (auto& cannon : cannons_) {
+		//砲弾が生きていたら次へ
+		if (!cannon->GetIsDead()) continue;
+		//砲弾の初期位置と初速度をセット
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 cannonPos = player_->GetWorldTransform().translate;
+		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
+		Vector3 cannonDirection = currentDir;
+		cannon->SetInitParam(cannonPos, cannonDirection);
+		//カメラシェイクを入れる
+		camera_->RegistShake(0.2f, 0.15f);
+		break;
+	}
+	
+}

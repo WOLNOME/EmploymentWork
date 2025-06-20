@@ -43,16 +43,16 @@ void PlayerUI::Initialize() {
 	}
 	{
 		//砲弾UIの初期化
-		thCannonBall_[0] = TextureManager::GetInstance()->LoadTexture("cannonBallUI.png");
-		thCannonBall_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
-		for (int i = 0; i < thCannonBall_.size(); i++) {
-			spriteCannonBall_[i] = std::make_unique<Sprite>();
-			spriteCannonBall_[i]->Initialize();
-			spriteCannonBall_[i]->SetPosition({ 330.0f,565.0f });
-			spriteCannonBall_[i]->AdjustTextureSize(thCannonBall_[i]);
+		thCannon_[0] = TextureManager::GetInstance()->LoadTexture("cannonUI.png");
+		thCannon_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
+		for (int i = 0; i < thCannon_.size(); i++) {
+			spriteCannon_[i] = std::make_unique<Sprite>();
+			spriteCannon_[i]->Initialize();
+			spriteCannon_[i]->SetPosition({ 330.0f,565.0f });
+			spriteCannon_[i]->AdjustTextureSize(thCannon_[i]);
 		}
-		spriteCannonBall_[1]->SetSize({spriteCannonBall_[0]->GetSize()});
-		spriteCannonBall_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
+		spriteCannon_[1]->SetSize({spriteCannon_[0]->GetSize()});
+		spriteCannon_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
 	}
 
 
@@ -67,8 +67,8 @@ void PlayerUI::Update() {
 	spriteHPBar_[1]->SetSize({ spriteHPBar_[0]->GetSize().x * hpRate,spriteHPBar_[0]->GetSize().y });
 
 	//砲弾UIのマスクを砲弾クールタイムと同期させる
-	float cannonBallCoolRate = player_->GetCannonBallCoolTimer() / player_->GetCannonBallCoolTime();
-	spriteCannonBall_[1]->SetSize({ spriteCannonBall_[0]->GetSize().x, spriteCannonBall_[0]->GetSize().y *cannonBallCoolRate });
+	float cannonBallCoolRate = player_->GetCannonCoolTimer() / player_->GetCannonCoolTime();
+	spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize().x, spriteCannon_[0]->GetSize().y *cannonBallCoolRate });
 
 }
 
@@ -91,21 +91,21 @@ void PlayerUI::DrawFrontSprite() {
 		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() + offset);
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() + offset);
-			spriteCannonBall_[i]->SetPosition(spriteCannonBall_[i]->GetPosition() + offset);
+			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() + offset);
 		}
 
 		//スプライトを描画する
 		spriteFPSUI_->Draw(thFPSUI_);
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
-			spriteCannonBall_[i]->Draw(thCannonBall_[i]);
+			spriteCannon_[i]->Draw(thCannon_[i]);
 		}
 
 		//描画が終わったのでずらした分元に戻す
 		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() - offset);
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() - offset);
-			spriteCannonBall_[i]->SetPosition(spriteCannonBall_[i]->GetPosition() - offset);
+			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() - offset);
 		}
 	}
 	//揺れていないので普通に描画する
@@ -113,7 +113,7 @@ void PlayerUI::DrawFrontSprite() {
 		spriteFPSUI_->Draw(thFPSUI_);
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
-			spriteCannonBall_[i]->Draw(thCannonBall_[i]);
+			spriteCannon_[i]->Draw(thCannon_[i]);
 		}
 	}
 }
@@ -121,7 +121,7 @@ void PlayerUI::DrawFrontSprite() {
 void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
 	for (int i = 0; i < 2; i++) {
-		spriteCannonBall_[i]->DebugWithImGui();
+		spriteCannon_[i]->DebugWithImGui();
 	}
 #endif // _DEBUG
 }

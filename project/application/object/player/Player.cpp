@@ -27,8 +27,8 @@ void Player::Initialize() {
 	//パラメータのセット
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
-	cannonBallCoolTime_ = param_["cannonBallCoolTime"];
-	cannonBallCoolTimer_ = 0.0f;
+	cannonCoolTime_ = param_["cannonCoolTime"];
+	cannonCoolTimer_ = 0.0f;
 
 }
 
@@ -42,8 +42,6 @@ void Player::Update() {
 	Move();
 	//攻撃処理
 	Attack();
-	//弾の更新
-	UpdateBullets();
 	//死亡処理
 	DeadProcess();
 
@@ -54,20 +52,11 @@ void Player::Update() {
 void Player::Draw() {
 	//オブジェクトの描画
 	object3d_->Draw(camera_);
-	//弾の描画
-	for (auto& bullet : cannonBalls_) {
-		bullet->Draw();
-	}
-
 }
 
 void Player::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
-	//弾のライン描画
-	for (auto& bullet : cannonBalls_) {
-		bullet->DrawLine();
-	}
 }
 
 void Player::DebugWithImGui() {
@@ -79,11 +68,6 @@ void Player::DebugWithImGui() {
 	ImGui::DragInt("HP", &hp_, 1, 0, maxHP_);
 
 	ImGui::End();
-
-	//弾のデバッグ
-	for (auto& bullet : cannonBalls_) {
-		bullet->DebugWithImGui();
-	}
 
 	//当たり判定可視化用ラインの色を変更
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -195,59 +179,24 @@ void Player::Move() {
 
 void Player::Attack() {
 	//クールタイムの計算
-	if (cannonBallCoolTimer_ > 0.0f) {
-		cannonBallCoolTimer_ -= kDeltaTime;
+	if (cannonCoolTimer_ > 0.0f) {
+		cannonCoolTimer_ -= kDeltaTime;
 		//クールタイムがマイナスになったら0にする
-		if (cannonBallCoolTimer_ < 0.0f) {
-			cannonBallCoolTimer_ = 0.0f;
+		if (cannonCoolTimer_ < 0.0f) {
+			cannonCoolTimer_ = 0.0f;
 		}
+		//砲弾を発射したフラグをオフ
+		isCannonFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
 
-	//スペースキーで弾を発射
+	//スペースキーで砲弾を発射
 	if (input_->TriggerKey(DIK_SPACE)) {
-		//弾のインスタンスを生成
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();
-		//セット
-		bullet->SetCamera(camera_);
-		bullet->SetSceneLight(light_);
-		//初期位置と初速度をセット
-		float orx = camera_->worldTransform.rotate.x;
-		float ory = camera_->worldTransform.rotate.y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 bulletPos = object3d_->worldTransform.translate;
-		bulletPos.y += 1.7f;
-		Vector3 bulletDirection = currentDir;
-		bullet->SetInitParam(bulletPos, bulletDirection);
-		//リストに追加
-		cannonBalls_.push_back(std::move(bullet));
-		//カメラシェイクを入れる
-		camera_->RegistShake(0.2f, 0.15f);
+		//砲弾を発射したフラグをオン
+		isCannonFire_ = true;
 		//クールタイムをセット
-		cannonBallCoolTimer_ = cannonBallCoolTime_;
-	}
-}
-
-void Player::UpdateBullets() {
-	//弾の削除
-	for (auto it = cannonBalls_.begin(); it != cannonBalls_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = cannonBalls_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//弾の更新
-	for (auto& bullet : cannonBalls_) {
-		bullet->Update();
+		cannonCoolTimer_ = cannonCoolTime_;
 	}
 }
 

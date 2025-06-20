@@ -1,9 +1,9 @@
-#include "PlayerBullet.h"
+#include "PlayerCannon.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
-void PlayerBullet::Initialize() {
+void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
@@ -22,17 +22,16 @@ void PlayerBullet::Initialize() {
 
 	//当たり判定の半径を設定
 	radius_ = 1.0f;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
+
+	//初期化時点では死亡状態
+	isDead_ = true;
 
 }
 
-void PlayerBullet::Update() {
-	//ベースキャラクターの更新
-	BaseCharacter::Update();
+void PlayerCannon::Update() {
 	//弾が死亡していたら更新しない
 	if (GetDeadTimer() > 0.0f && GetIsDead()) {
 		return;
@@ -40,26 +39,27 @@ void PlayerBullet::Update() {
 
 	//移動処理
 	Move();
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
 }
 
-void PlayerBullet::Draw() {
+void PlayerCannon::Draw() {
 	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f && GetIsDead()) {
-		return;
-	}
+	if (GetDeadTimer() > 0.0f && GetIsDead())return;
+
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
 }
 
-void PlayerBullet::DrawLine() {
+void PlayerCannon::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
 }
 
-void PlayerBullet::DebugWithImGui() {
+void PlayerCannon::DebugWithImGui() {
 #ifdef _DEBUG
 
-	ImGui::Begin("プレイヤー弾");
+	ImGui::Begin("プレイヤーキャノン");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
@@ -70,7 +70,7 @@ void PlayerBullet::DebugWithImGui() {
 
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute) {
+void PlayerCannon::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Enemy:
@@ -93,7 +93,7 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 	}
 }
 
-void PlayerBullet::Move() {
+void PlayerCannon::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
 	//空気抵抗をかける
@@ -118,6 +118,5 @@ void PlayerBullet::Move() {
 			SetCollisionAttribute(CollisionAttribute::Nothingness);
 		}
 	}
-
 
 }
