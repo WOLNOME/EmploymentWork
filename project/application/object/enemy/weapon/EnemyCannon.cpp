@@ -1,9 +1,9 @@
-#include "EnemyBullet.h"
+#include "EnemyCannon.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
-void EnemyBullet::Initialize() {
+void EnemyCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
@@ -13,7 +13,7 @@ void EnemyBullet::Initialize() {
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("enemyBulletHit"), "hit");
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "hit");
 	particle_->emitter_.isPlay = false;
 	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
@@ -22,18 +22,19 @@ void EnemyBullet::Initialize() {
 
 	//当たり判定の半径を設定
 	radius_ = 1.0f;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
+	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
+
+	//初期化時点では死亡状態
+	isDead_ = true;
 }
 
-void EnemyBullet::Update() {
+void EnemyCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f && GetIsDead()) {
+	if (GetDeadTimer() > 0.0f || GetIsDead()) {
 		return;
 	}
 
@@ -41,24 +42,24 @@ void EnemyBullet::Update() {
 	Move();
 }
 
-void EnemyBullet::Draw() {
+void EnemyCannon::Draw() {
 	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f && GetIsDead()) {
+	if (GetDeadTimer() > 0.0f || GetIsDead()) {
 		return;
 	}
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
 }
 
-void EnemyBullet::DrawLine() {
+void EnemyCannon::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
 }
 
-void EnemyBullet::DebugWithImGui() {
+void EnemyCannon::DebugWithImGui() {
 #ifdef _DEBUG
 
-	ImGui::Begin("敵弾");
+	ImGui::Begin("敵キャノン");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
@@ -69,7 +70,7 @@ void EnemyBullet::DebugWithImGui() {
 
 }
 
-void EnemyBullet::OnCollision(CollisionAttribute attribute) {
+void EnemyCannon::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Player:
@@ -92,7 +93,7 @@ void EnemyBullet::OnCollision(CollisionAttribute attribute) {
 	}
 }
 
-void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
 
@@ -112,6 +113,10 @@ void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 		gravity_ = 2.0f * (_initPos.y - _targetPos.y) / std::powf(hitTime, 2);
 		//y方向の上昇速度は0
 		velocity_.y = 0.0f;
+		//当たり判定属性をセット
+		SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+		//死亡状態を解除
+		isDead_ = false;
 		return;
 	}
 
@@ -119,9 +124,13 @@ void EnemyBullet::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	//y方向の上昇速度を算出
 	velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
 
+	//当たり判定属性をセット
+	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+	//死亡状態を解除
+	isDead_ = false;
 }
 
-void EnemyBullet::Move() {
+void EnemyCannon::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
 

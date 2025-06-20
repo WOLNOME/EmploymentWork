@@ -120,7 +120,7 @@
     <ClCompile Include="engine\base\RTVManager.cpp" />
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
     <ClCompile Include="engine\util\StringUtility.cpp" />
-    <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
+    <ClCompile Include="application\object\enemy\weapon\EnemyCannon.cpp" />
     <ClCompile Include="application\EnemyManager.cpp" />
     <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
@@ -134,6 +134,7 @@
     <ClCompile Include="application\object\enemy\ui\EnemyUI.cpp" />
     <ClCompile Include="application\object\player\weapon\PlayerCannon.cpp" />
     <ClCompile Include="application\PlayerWeaponManager.cpp" />
+    <ClCompile Include="application\EnemyWeaponManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -241,7 +242,7 @@
     <ClInclude Include="engine\util\JsonUtil.h" />
     <ClInclude Include="engine\util\RandomStringUtil.h" />
     <ClInclude Include="engine\util\StringUtility.h" />
-    <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
+    <ClInclude Include="application\object\enemy\weapon\EnemyCannon.h" />
     <ClInclude Include="application\EnemyManager.h" />
     <ClInclude Include="application\object\player\ui\PlayerUI.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="application\object\enemy\ui\EnemyUI.h" />
     <ClInclude Include="application\object\player\weapon\PlayerCannon.h" />
     <ClInclude Include="application\PlayerWeaponManager.h" />
+    <ClInclude Include="application\EnemyWeaponManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

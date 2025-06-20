@@ -29,6 +29,8 @@ void Boss::Initialize() {
 	//パラメータの反映
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
+	cannonCoolTime_ = param_["cannonCoolTime"];
+	cannonCoolTimer_ = 0.0f;
 
 }
 
@@ -44,28 +46,16 @@ void Boss::Update() {
 	Attack();
 	//死亡処理
 	DeadProcess();
-
-	//弾の更新処理
-	UpdateBullets();
-
 }
 
 void Boss::Draw() {
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
-	//弾の描画
-	for (auto& bullet : bullets_) {
-		bullet->Draw();
-	}
 }
 
 void Boss::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
-	//弾のライン描画
-	for (auto& bullet : bullets_) {
-		bullet->DrawLine();
-	}
 }
 
 void Boss::DebugWithImGui() {
@@ -73,11 +63,6 @@ void Boss::DebugWithImGui() {
 	ImGui::Begin("敵");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
-
-	//弾のデバッグ
-	for (auto& bullet : bullets_) {
-		bullet->DebugWithImGui();
-	}
 
 	//デバッグ用ラインのカラー
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -112,13 +97,14 @@ void Boss::SetPosition(const Vector3& _pos) {
 }
 
 void Boss::Move() {
-	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
+	//プレイヤーが索敵範囲内にいないなら処理を行わない
 	float searchPlayerDistanceMove = param_["searchPlayerDistanceMove"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceMove) {
 		return;
 	}
-	//攻撃中は処理を行わない
-	if (isEnemyAttacked_) {
+	//攻撃範囲内にいたら処理を行わない
+	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
+	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) < searchPlayerDistanceAttack) {
 		return;
 	}
 
@@ -202,61 +188,29 @@ void Boss::Rotate() {
 
 void Boss::Attack() {
 	//クールタイム処理
-	if (isEnemyAttacked_) {
-		attackCoolTimer_ += kDeltaTime;
-		float attackCoolTime = param_["attackCoolTime"];
-		if (attackCoolTimer_ >= attackCoolTime) {
-			isEnemyAttacked_ = false;
-			attackCoolTimer_ = 0.0f;
+	if (cannonCoolTimer_ > 0.0f) {
+		cannonCoolTimer_ -= kDeltaTime;
+		//クールタイムがマイナスになったら0にする
+		if (cannonCoolTimer_ < 0.0f) {
+			cannonCoolTimer_ = 0.0f;
 		}
+		//砲弾を発射したフラグをオフ
+		isCannonFire_ = false;
+		//計算後はこの関数を抜ける
+		return;
 	}
+
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
 	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceAttack) {
 		return;
 	}
 	//未攻撃状態なら攻撃処理
-	if (!isEnemyAttacked_) {
-		//車体の向きを求める
-		Vector3 currentDir = {
-			std::sinf(object3d_->worldTransform.rotate.y),
-			0.0f,
-			std::cosf(object3d_->worldTransform.rotate.y)
-		};
-		currentDir.Normalize();
-		//弾のインスタンスを生成
-		std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
-		bullet->Initialize();
-		//セット
-		bullet->SetCamera(camera_);
-		bullet->SetSceneLight(light_);
-		//初期位置と目標位置をセット
-		Vector3 bulletPos = object3d_->worldTransform.translate;
-		bulletPos.y += 2.0f;	//←高さ
-		bulletPos.x += currentDir.x * 10.0f;
-		bulletPos.z += currentDir.z * 10.0f;
-		Vector3 targetPos = player_->GetWorldTransform().translate;
-		bullet->SetInitParam(bulletPos, targetPos);
-		//リストに追加
-		bullets_.push_back(std::move(bullet));
-		isEnemyAttacked_ = true;
-	}
-
-}
-
-void Boss::UpdateBullets() {
-	//弾の削除
-	for (auto it = bullets_.begin(); it != bullets_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = bullets_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//弾の更新
-	for (auto& bullet : bullets_) {
-		bullet->Update();
+	if (!isCannonFire_) {
+		//砲弾を発射したフラグをオン
+		isCannonFire_ = true;
+		//クールタイムをセット
+		cannonCoolTimer_ = cannonCoolTime_;
 	}
 }
 

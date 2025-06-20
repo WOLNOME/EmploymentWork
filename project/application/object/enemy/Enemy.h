@@ -6,11 +6,7 @@
 #include "MyMath.h"
 #include "Particle.h"
 #include "jsonUtil.h"
-#include <list>
 #include <memory>
-
-//アプリケーション
-#include "application/object/enemy/bullet/EnemyBullet.h"
 
 class Player;
 class Enemy : public BaseCharacter {
@@ -46,6 +42,7 @@ private:
 public://getter
 	int GetHP() const { return hp_; }
 	int GetMaxHP() const { return maxHP_; }
+	bool GetIsCannonFire() const { return isCannonFire_; }
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
@@ -58,24 +55,20 @@ private://非公開関数
 	void Rotate();
 	//攻撃
 	void Attack();
-	//弾の更新処理
-	void UpdateBullets();
 	//死亡処理
 	void DeadProcess();
 
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
-	//弾
-	std::list<std::unique_ptr<EnemyBullet>> bullets_;
-
 private://メンバ変数
 	//パラメータ
 	json param_;
 
-	//攻撃
-	float attackCoolTimer_ = 0.0f;		//計測用タイマー
-	bool isEnemyAttacked_ = false;
+	//砲弾攻撃
+	float cannonCoolTime_;
+	float cannonCoolTimer_;
+	bool isCannonFire_ = false;
 
 	//HP
 	int maxHP_;			//最大HP

@@ -5,6 +5,6 @@
     "searchPlayerDistanceRotate":250.0,
     "rotateSpeed": 1.047,
     "searchPlayerDistanceAttack":100.0,
-    "attackCoolTime":1.5,
+    "cannonCoolTime":1.5,
     "maxHP":30
 }

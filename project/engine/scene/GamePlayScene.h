@@ -7,6 +7,7 @@
 #include "application/PlayerWeaponManager.h"
 #include "application/object/player/ui/PlayerUI.h"
 #include "application/EnemyManager.h"
+#include "application/EnemyWeaponManager.h"
 #include "application/object/enemy/ui/EnemyUI.h"
 
 
@@ -50,6 +51,8 @@ private://オブジェクト
 	std::unique_ptr<PlayerWeaponManager> playerWeaponManager_ = nullptr;
 	//敵管理マネージャー
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
+	//敵武器マネージャー
+	std::unique_ptr<EnemyWeaponManager> enemyWeaponManager_ = nullptr;
 
 private://UI
 	//プレイヤーUI

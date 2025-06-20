@@ -27,6 +27,7 @@ void GamePlayScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	playerWeaponManager_ = std::make_unique<PlayerWeaponManager>();
 	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyWeaponManager_ = std::make_unique<EnemyWeaponManager>();
 	playerUI_ = std::make_unique<PlayerUI>();
 	enemyUI_ = std::make_unique<EnemyUI>();
 	//インスタンスの初期化
@@ -35,6 +36,7 @@ void GamePlayScene::Initialize() {
 	player_->Initialize();
 	playerWeaponManager_->Initialize();
 	enemyManager_->Initialize();
+	enemyWeaponManager_->Initialize();
 	playerUI_->Initialize();
 	enemyUI_->Initialize();
 	//カメラ、ライトのセット
@@ -42,14 +44,18 @@ void GamePlayScene::Initialize() {
 	player_->SetCamera(camera_.get());
 	playerWeaponManager_->SetCamera(camera_.get());
 	enemyManager_->SetCamera(camera_.get());
+	enemyWeaponManager_->SetCamera(camera_.get());
 	player_->SetSceneLight(sceneLight_.get());
 	playerWeaponManager_->SetLight(sceneLight_.get());
 	enemyManager_->SetLight(sceneLight_.get());
+	enemyWeaponManager_->SetLight(sceneLight_.get());
 	playerUI_->SetCamera(camera_.get());
 	enemyUI_->SetCamera(camera_.get());
 	//その他インスタンスのセット
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyManager_->SetPlayer(player_.get());
+	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
+	enemyWeaponManager_->SetPlayer(player_.get());
 	playerUI_->SetPlayer(player_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
@@ -80,6 +86,7 @@ void GamePlayScene::Update() {
 	player_->Update();
 	playerWeaponManager_->Update();
 	enemyManager_->Update();
+	enemyWeaponManager_->Update();
 	playerUI_->Update();
 	enemyUI_->Update();
 
@@ -95,6 +102,8 @@ void GamePlayScene::Update() {
 	playerWeaponManager_->DebugWithImGui();
 	//敵のImGui
 	enemyManager_->DebugWithImGui();
+	//敵武器マネージャーのImGui
+	enemyWeaponManager_->DebugWithImGui();
 	//プレイヤーUIのImGui
 	playerUI_->DebugWithImGui();
 	//敵UIのImGui
@@ -130,6 +139,7 @@ void GamePlayScene::Draw() {
 	player_->Draw();
 	playerWeaponManager_->Draw();
 	enemyManager_->Draw();
+	enemyWeaponManager_->Draw();
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
@@ -148,6 +158,8 @@ void GamePlayScene::Draw() {
 	playerWeaponManager_->DrawLine();
 	//敵のライン描画
 	enemyManager_->DrawLine();
+	//敵武器マネージャーのライン描画
+	enemyWeaponManager_->DrawLine();
 
 
 	///------------------------------///

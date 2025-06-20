@@ -8,10 +8,10 @@
 #include <memory>
 
 
-class EnemyBullet : public BaseCharacter {
+class EnemyCannon : public BaseCharacter {
 public:
 	//デストラクタ
-	~EnemyBullet() override {};
+	~EnemyCannon() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>

@@ -113,9 +113,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="application\object\enemy\Enemy.cpp" />
     <ClCompile Include="application\object\baseCharacter\BaseCharacter.cpp" />
-    <ClCompile Include="application\object\enemy\bullet\EnemyBullet.cpp" />
+    <ClCompile Include="application\object\enemy\weapon\EnemyCannon.cpp" />
     <ClCompile Include="application\object\enemy\Boss.cpp" />
     <ClCompile Include="application\object\enemy\ui\EnemyUI.cpp" />
+    <ClCompile Include="application\EnemyWeaponManager.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
     <ClCompile Include="engine\3d\CombinedParticle.cpp" />
     <ClCompile Include="engine\3d\LevelObject.cpp" />
@@ -193,9 +194,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\EnemyManager.h" />
     <ClInclude Include="application\object\enemy\Enemy.h" />
     <ClInclude Include="application\object\baseCharacter\BaseCharacter.h" />
-    <ClInclude Include="application\object\enemy\bullet\EnemyBullet.h" />
+    <ClInclude Include="application\object\enemy\weapon\EnemyCannon.h" />
     <ClInclude Include="application\object\enemy\Boss.h" />
     <ClInclude Include="application\object\enemy\ui\EnemyUI.h" />
+    <ClInclude Include="application\EnemyWeaponManager.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />
     <ClInclude Include="engine\3d\CombinedParticle.h" />
     <ClInclude Include="engine\3d\LevelObject.h" />

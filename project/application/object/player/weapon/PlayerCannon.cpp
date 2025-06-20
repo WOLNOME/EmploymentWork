@@ -13,7 +13,7 @@ void PlayerCannon::Initialize() {
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerCannonHit"), "hit");
 	particle_->emitter_.isPlay = false;
 	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
@@ -32,20 +32,20 @@ void PlayerCannon::Initialize() {
 }
 
 void PlayerCannon::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f && GetIsDead()) {
+	if (GetDeadTimer() > 0.0f || GetIsDead()) {
 		return;
 	}
 
 	//移動処理
 	Move();
-	//ベースキャラクターの更新
-	BaseCharacter::Update();
 }
 
 void PlayerCannon::Draw() {
 	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f && GetIsDead())return;
+	if (GetDeadTimer() > 0.0f || GetIsDead())return;
 
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
