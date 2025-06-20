@@ -27,6 +27,8 @@ void Player::Initialize() {
 	//パラメータのセット
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
+	cannonBallCoolTime_ = param_["cannonBallCoolTime"];
+	cannonBallCoolTimer_ = 0.0f;
 
 }
 
@@ -53,7 +55,7 @@ void Player::Draw() {
 	//オブジェクトの描画
 	object3d_->Draw(camera_);
 	//弾の描画
-	for (auto& bullet : bullets_) {
+	for (auto& bullet : cannonBalls_) {
 		bullet->Draw();
 	}
 
@@ -63,7 +65,7 @@ void Player::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
 	//弾のライン描画
-	for (auto& bullet : bullets_) {
+	for (auto& bullet : cannonBalls_) {
 		bullet->DrawLine();
 	}
 }
@@ -79,14 +81,14 @@ void Player::DebugWithImGui() {
 	ImGui::End();
 
 	//弾のデバッグ
-	for (auto& bullet : bullets_) {
+	for (auto& bullet : cannonBalls_) {
 		bullet->DebugWithImGui();
 	}
 
 	//当たり判定可視化用ラインの色を変更
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	
+
 
 #endif // _DEBUG
 	//F1キーでマウスカーソルの表示する
@@ -192,6 +194,17 @@ void Player::Move() {
 }
 
 void Player::Attack() {
+	//クールタイムの計算
+	if (cannonBallCoolTimer_ > 0.0f) {
+		cannonBallCoolTimer_ -= kDeltaTime;
+		//クールタイムがマイナスになったら0にする
+		if (cannonBallCoolTimer_ < 0.0f) {
+			cannonBallCoolTimer_ = 0.0f;
+		}
+		//計算後はこの関数を抜ける
+		return;
+	}
+
 	//スペースキーで弾を発射
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//弾のインスタンスを生成
@@ -214,25 +227,26 @@ void Player::Attack() {
 		Vector3 bulletDirection = currentDir;
 		bullet->SetInitParam(bulletPos, bulletDirection);
 		//リストに追加
-		bullets_.push_back(std::move(bullet));
+		cannonBalls_.push_back(std::move(bullet));
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.15f);
+		//クールタイムをセット
+		cannonBallCoolTimer_ = cannonBallCoolTime_;
 	}
-
 }
 
 void Player::UpdateBullets() {
 	//弾の削除
-	for (auto it = bullets_.begin(); it != bullets_.end();) {
+	for (auto it = cannonBalls_.begin(); it != cannonBalls_.end();) {
 		if ((*it)->GetIsDead()) {
-			it = bullets_.erase(it);
+			it = cannonBalls_.erase(it);
 		}
 		else {
 			++it;
 		}
 	}
 	//弾の更新
-	for (auto& bullet : bullets_) {
+	for (auto& bullet : cannonBalls_) {
 		bullet->Update();
 	}
 }

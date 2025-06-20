@@ -38,7 +38,9 @@ private:
 	//HPバー
 	std::array<uint32_t, 2> thHPBar_;
 	std::array<std::unique_ptr<Sprite>, 2> spriteHPBar_;
-	float hpBarWidth_;
+	//砲弾UI
+	std::array<uint32_t, 2> thCannonBall_;
+	std::array<std::unique_ptr<Sprite>, 2> spriteCannonBall_;
 
 
 private://データ駆動設計用パラメータ
