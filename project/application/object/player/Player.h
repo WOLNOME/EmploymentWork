@@ -44,20 +44,28 @@ public://getter
 	int GetMaxHP() const { return maxHP_; }
 	//HP
 	int GetHP() const { return hp_; }
-	//砲弾クールタイム
-	float GetCannonCoolTime() const { return cannonCoolTime_; }
-	//砲弾クールタイムタイマー
-	float GetCannonCoolTimer() const { return cannonCoolTimer_; }
+	//砲弾リロードタイム
+	float GetCannonReloadTime() const { return cannonReloadTime_; }
+	//砲弾リロードタイムタイマー
+	float GetCannonReloadTimer() const { return cannonReloadTimer_; }
 	//砲弾を発射したかどうか
 	bool GetIsCannonFire() const { return isCannonFire_; }
+	//銃弾リロードタイム
+	float GetBulletReloadTime() const { return bulletReloadTime_; }
+	//銃弾リロードタイムタイマー
+	float GetBulletReloadTimer() const { return bulletReloadTimer_; }
+	//銃弾を発射したかどうか
+	bool GetIsBulletFire() const { return isBulletFire_; }
 
 private://非公開関数
 	//回転
 	void Rotate();
 	//移動
 	void Move();
-	//攻撃
-	void Attack();
+	//キャノン攻撃
+	void CannonAttack();
+	//銃弾攻撃
+	void BulletAttack();
 	//死亡処理
 	void DeadProcess();
 
@@ -76,8 +84,12 @@ private:
 	int maxHP_;	//最大HP
 	int hp_;	//現在のHP
 
-	float cannonCoolTime_;		//砲弾クールタイム(秒)
-	float cannonCoolTimer_;		//砲弾クールタイム計測用タイマー
-	bool isCannonFire_ = false;	//砲弾を発射したかどうか
+	float cannonReloadTime_;		//砲弾リロードタイム(秒)
+	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
+	bool isCannonFire_ = false;		//砲弾を発射したかどうか
+
+	float bulletReloadTime_;		//銃弾リロードタイム(秒)
+	float bulletReloadTimer_;		//銃弾リロードタイム計測用タイマー
+	bool isBulletFire_ = false;		//銃弾を発射したかどうか
 };
 

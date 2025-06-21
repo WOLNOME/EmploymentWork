@@ -11,7 +11,7 @@ void GamePlayScene::Initialize() {
 	//カメラの生成・初期化
 	camera_ = std::make_unique<GameCamera>();
 	camera_->Initialize();
-	camera_->SetFarClip(500.0f);
+	camera_->SetFarClip(2000.0f);
 	camera_->worldTransform.rotate={ 0.15f,0.0f,0.0f };
 	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
 

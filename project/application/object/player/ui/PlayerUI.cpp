@@ -67,7 +67,7 @@ void PlayerUI::Update() {
 	spriteHPBar_[1]->SetSize({ spriteHPBar_[0]->GetSize().x * hpRate,spriteHPBar_[0]->GetSize().y });
 
 	//砲弾UIのマスクを砲弾クールタイムと同期させる
-	float cannonBallCoolRate = player_->GetCannonCoolTimer() / player_->GetCannonCoolTime();
+	float cannonBallCoolRate = player_->GetCannonReloadTimer() / player_->GetCannonReloadTime();
 	spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize().x, spriteCannon_[0]->GetSize().y *cannonBallCoolRate });
 
 }

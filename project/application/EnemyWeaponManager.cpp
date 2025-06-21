@@ -68,7 +68,7 @@ void EnemyWeaponManager::CreateCannon() {
 	//全てのエネミーを回す
 	for (auto& enemy : enemyManager_->GetEnemies()) {
 		//エネミーから発射フラグを取得
-		if (!enemy->GetIsCannonFire()) continue; 
+		if (!enemy->GetIsCannonFire()) continue;
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
 			//砲弾が生きていたら次へ
@@ -82,8 +82,9 @@ void EnemyWeaponManager::CreateCannon() {
 			break;
 		}
 	}
-	
+
 	//ボスから発射フラグを取得
+	if (!enemyManager_->GetBoss()) return;
 	if (!enemyManager_->GetBoss()->GetIsCannonFire()) return;
 	//砲弾の追加位置を探す
 	for (auto& cannon : cannons_) {

@@ -11,6 +11,7 @@ void PlayerBullet::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
+	object3d_->worldTransform.scale = { 0.1f,0.1f,0.1f };
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
@@ -21,12 +22,12 @@ void PlayerBullet::Initialize() {
 	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
 
 	//当たり判定の半径を設定
-	radius_ = 1.0f;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+	radius_ = 0.1f;
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
+	lifeTime_ = param_["lifeTime"];
+	lifeTimer_ = 0.0f;
 
 	//初期化時点では死亡状態
 	isDead_ = true;
@@ -34,20 +35,18 @@ void PlayerBullet::Initialize() {
 }
 
 void PlayerBullet::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f && GetIsDead()) {
-		return;
-	}
+	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 
 	//移動処理
 	Move();
-	//ベースキャラクターの更新
-	BaseCharacter::Update();
 }
 
 void PlayerBullet::Draw() {
 	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f && GetIsDead())return;
+	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
@@ -111,7 +110,7 @@ void PlayerBullet::Move() {
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
-	if (GetDeadTimer() == 0.0f) {
+	if (GetDeadTimer() == 0.0f && !isDead_) {
 		if (object3d_->worldTransform.translate.y < 0.0f) {
 			object3d_->worldTransform.translate.y = 0.0f;
 			//死亡予約処理
@@ -121,5 +120,18 @@ void PlayerBullet::Move() {
 		}
 	}
 
+	//弾が寿命を迎えたら死亡
+	lifeTimer_ += kDeltaTime;
+	if (lifeTimer_ >= lifeTime_) {
+		if (GetDeadTimer() == 0.0f && !isDead_) {
+			//死亡予約処理
+			SetDeadTimer(0.1f);
+			//当たり判定属性をなしに
+			SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+			lifeTimer_ = 0.0f;	//寿命タイマーをリセット
+		}
+	}
+	
 
 }

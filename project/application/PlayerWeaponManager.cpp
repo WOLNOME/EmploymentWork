@@ -26,6 +26,8 @@ void PlayerWeaponManager::Initialize() {
 void PlayerWeaponManager::Update() {
 	//砲弾の生成
 	CreateCannon();
+	//銃弾の生成
+	CreateBullet();
 
 	//砲弾の更新
 	for (auto& cannon : cannons_) {
@@ -117,4 +119,27 @@ void PlayerWeaponManager::CreateCannon() {
 		break;
 	}
 	
+}
+
+void PlayerWeaponManager::CreateBullet() {
+	//プレイヤーから発射フラグを取得
+	if (!player_->GetIsBulletFire()) return;
+	//銃弾の追加位置を探す
+	for (auto& bullet : bullets_) {
+		//銃弾が生きていたら次へ
+		if (!bullet->GetIsDead()) continue;
+		//銃弾の初期位置と初速度をセット
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 bulletPos = camera_->worldTransform.translate;
+		bulletPos += currentDir * 1.0f;	//銃弾の初期位置を調整
+		bullet->SetInitParam(bulletPos, currentDir);
+		break;
+	}
 }

@@ -27,8 +27,10 @@ void Player::Initialize() {
 	//パラメータのセット
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
-	cannonCoolTime_ = param_["cannonCoolTime"];
-	cannonCoolTimer_ = 0.0f;
+	cannonReloadTime_ = param_["cannonReloadTime"];
+	cannonReloadTimer_ = 0.0f;
+	bulletReloadTime_ = param_["bulletReloadTime"];
+	bulletReloadTimer_ = 0.0f;
 
 }
 
@@ -41,7 +43,8 @@ void Player::Update() {
 	//移動処理
 	Move();
 	//攻撃処理
-	Attack();
+	CannonAttack();
+	BulletAttack();
 	//死亡処理
 	DeadProcess();
 
@@ -177,13 +180,13 @@ void Player::Move() {
 
 }
 
-void Player::Attack() {
-	//クールタイムの計算
-	if (cannonCoolTimer_ > 0.0f) {
-		cannonCoolTimer_ -= kDeltaTime;
-		//クールタイムがマイナスになったら0にする
-		if (cannonCoolTimer_ < 0.0f) {
-			cannonCoolTimer_ = 0.0f;
+void Player::CannonAttack() {
+	//リロードタイムの計算
+	if (cannonReloadTimer_ > 0.0f) {
+		cannonReloadTimer_ -= kDeltaTime;
+		//リロードタイムがマイナスになったら0にする
+		if (cannonReloadTimer_ < 0.0f) {
+			cannonReloadTimer_ = 0.0f;
 		}
 		//砲弾を発射したフラグをオフ
 		isCannonFire_ = false;
@@ -195,8 +198,30 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//砲弾を発射したフラグをオン
 		isCannonFire_ = true;
-		//クールタイムをセット
-		cannonCoolTimer_ = cannonCoolTime_;
+		//リロードタイムをセット
+		cannonReloadTimer_ = cannonReloadTime_;
+	}
+}
+
+void Player::BulletAttack() {
+	//リロードタイムの計算
+	if (bulletReloadTimer_ > 0.0f) {
+		bulletReloadTimer_ -= kDeltaTime;
+		//リロードタイムがマイナスになったら0にする
+		if (bulletReloadTimer_ < 0.0f) {
+			bulletReloadTimer_ = 0.0f;
+		}
+		//銃弾を発射したフラグをオフ
+		isBulletFire_ = false;
+		//計算後はこの関数を抜ける
+		return;
+	}
+	//左クリックで銃弾を発射
+	if (input_->PushMouseButton(MouseButton::LeftButton)) {
+		//銃弾を発射したフラグをオン
+		isBulletFire_ = true;
+		//リロードタイムをセット
+		bulletReloadTimer_ = bulletReloadTime_;
 	}
 }
 

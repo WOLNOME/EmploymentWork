@@ -3,5 +3,6 @@
     "maxSpeed":60.0,
     "rotateSpeed":0.785,
     "maxHP":1000,
-    "cannonCoolTime":2.0
+    "cannonReloadTime":2.0,
+    "bulletReloadTime":0.2
 }

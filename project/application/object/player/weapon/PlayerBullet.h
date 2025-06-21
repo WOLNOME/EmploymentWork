@@ -44,6 +44,9 @@ public://setter
 		object3d_->worldTransform.translate = _initPos;
 		float speed = param_["speed"];
 		velocity_ = _initDirection * speed;
+		gravity_ = 0.0f;
+		SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+		isDead_ = false;
 	}
 private:
 	//パーティクル
@@ -55,6 +58,9 @@ private:
 private:
 	//パラメータ
 	json param_;
+
+	float lifeTime_;		//寿命
+	float lifeTimer_;		//寿命タイマー
 
 };
 

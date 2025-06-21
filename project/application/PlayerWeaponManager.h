@@ -41,6 +41,8 @@ public://setter
 private:
 	//砲弾の生成
 	void CreateCannon();
+	//銃弾の生成
+	void CreateBullet();
 
 private:
 	//カメラ

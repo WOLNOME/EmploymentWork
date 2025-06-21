@@ -35,9 +35,8 @@ void PlayerCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) {
-		return;
-	}
+	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
+	
 
 	//移動処理
 	Move();
@@ -45,7 +44,7 @@ void PlayerCannon::Update() {
 
 void PlayerCannon::Draw() {
 	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f || GetIsDead())return;
+	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 
 	//オブジェクトの描画
 	object3d_->Draw(camera_, textureHandle_);
