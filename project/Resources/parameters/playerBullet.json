@@ -1,5 +1,5 @@
 {
-    "maxSpeed": 700.0,
-    "speed":300.0,
-    "lifeTime":2.0
+    "maxSpeed": 500.0,
+    "speed":500.0,
+    "lifeTime":0.3
 }

@@ -31,6 +31,10 @@ void Player::Initialize() {
 	cannonReloadTimer_ = 0.0f;
 	bulletReloadTime_ = param_["bulletReloadTime"];
 	bulletReloadTimer_ = 0.0f;
+	bulletMaxNum_ = param_["bulletMagazine"];
+	bulletNum_ = bulletMaxNum_;
+	bulletFireIntervalTime_ = param_["bulletFireIntervalTime"];
+	bulletFireIntervalTimer_ = 0.0f;
 
 }
 
@@ -69,13 +73,16 @@ void Player::DebugWithImGui() {
 	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);
 	//HP
 	ImGui::DragInt("HP", &hp_, 1, 0, maxHP_);
+	//機関銃
+	ImGui::Text("機関銃");
+	ImGui::Text("リロードタイム: %.2f", bulletReloadTimer_);
+	ImGui::Text("発射間隔タイマー: %.2f", bulletFireIntervalTimer_);
+	ImGui::Text("現在の弾数: %d", bulletNum_);
 
 	ImGui::End();
 
 	//当たり判定可視化用ラインの色を変更
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
-
 
 #endif // _DEBUG
 	//F1キーでマウスカーソルの表示する
@@ -204,24 +211,50 @@ void Player::CannonAttack() {
 }
 
 void Player::BulletAttack() {
+	//発射間隔の計算
+	bool isInterval = false;
+	if (bulletFireIntervalTimer_ > 0.0f) {
+		isInterval = true;
+		bulletFireIntervalTimer_ -= kDeltaTime;
+		//発射間隔がマイナスになったら0にする
+		if (bulletFireIntervalTimer_ < 0.0f) {
+			bulletFireIntervalTimer_ = 0.0f;
+		}
+	}
+
 	//リロードタイムの計算
+	bool isReload = false;
 	if (bulletReloadTimer_ > 0.0f) {
+		isReload = true;
 		bulletReloadTimer_ -= kDeltaTime;
 		//リロードタイムがマイナスになったら0にする
 		if (bulletReloadTimer_ < 0.0f) {
 			bulletReloadTimer_ = 0.0f;
+			//銃弾数をリロード
+			bulletNum_ = bulletMaxNum_;
 		}
+	}
+
+	//インターバルおよびリロード中は発射しない
+	if (isInterval || isReload) {
 		//銃弾を発射したフラグをオフ
 		isBulletFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
+
 	//左クリックで銃弾を発射
 	if (input_->PushMouseButton(MouseButton::LeftButton)) {
 		//銃弾を発射したフラグをオン
 		isBulletFire_ = true;
-		//リロードタイムをセット
-		bulletReloadTimer_ = bulletReloadTime_;
+		//間隔計測用タイマーをセット
+		bulletFireIntervalTimer_ = bulletFireIntervalTime_;
+		//現在の銃弾数を減らす
+		bulletNum_--;
+		//銃弾数が0になったらリロードタイマーをセット
+		if (bulletNum_ <= 0) {
+			bulletReloadTimer_ = bulletReloadTime_;
+		}
 	}
 }
 

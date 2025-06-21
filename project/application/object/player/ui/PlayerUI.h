@@ -41,6 +41,9 @@ private:
 	//砲弾UI
 	std::array<uint32_t, 2> thCannon_;
 	std::array<std::unique_ptr<Sprite>, 2> spriteCannon_;
+	//銃弾UI
+	std::array<uint32_t, 2> thBullet_;
+	std::array<std::unique_ptr<Sprite>, 2> spriteBullet_;
 
 
 private://データ駆動設計用パラメータ

@@ -4,5 +4,7 @@
     "rotateSpeed":0.785,
     "maxHP":1000,
     "cannonReloadTime":2.0,
-    "bulletReloadTime":0.2
+    "bulletReloadTime":2.0,
+    "bulletMagazine":50,
+    "bulletFireIntervalTime":0.05
 }

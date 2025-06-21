@@ -11,7 +11,7 @@ void PlayerBullet::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
-	object3d_->worldTransform.scale = { 0.1f,0.1f,0.1f };
+	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
@@ -22,7 +22,7 @@ void PlayerBullet::Initialize() {
 	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
 
 	//当たり判定の半径を設定
-	radius_ = 0.1f;
+	radius_ = 0.01f;
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
@@ -95,12 +95,6 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 }
 
 void PlayerBullet::Move() {
-	//重力をかける
-	velocity_.y -= gravity_ * kDeltaTime;
-	//空気抵抗をかける
-	Vector3 airResistanceDir = -velocity_.Normalized();
-	Vector3 airResistanceAccel = airResistanceDir * airResistance_ * velocity_.Length();
-	velocity_ += airResistanceAccel * kDeltaTime;
 	//移動量の大きさを制限
 	float maxSpeed = param_["maxSpeed"];
 	if (velocity_.Length() > maxSpeed) {

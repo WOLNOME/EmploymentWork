@@ -51,8 +51,21 @@ void PlayerUI::Initialize() {
 			spriteCannon_[i]->SetPosition({ 330.0f,565.0f });
 			spriteCannon_[i]->AdjustTextureSize(thCannon_[i]);
 		}
-		spriteCannon_[1]->SetSize({spriteCannon_[0]->GetSize()});
+		spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize() });
 		spriteCannon_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
+	}
+	{
+		//銃弾UIの初期化
+		thBullet_[0] = TextureManager::GetInstance()->LoadTexture("bulletUI.png");
+		thBullet_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
+		for (int i = 0; i < thBullet_.size(); i++) {
+			spriteBullet_[i] = std::make_unique<Sprite>();
+			spriteBullet_[i]->Initialize();
+			spriteBullet_[i]->SetPosition({ 830.0f,565.0f });
+			spriteBullet_[i]->AdjustTextureSize(thBullet_[i]);
+		}
+		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize() });
+		spriteBullet_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
 	}
 
 
@@ -68,7 +81,19 @@ void PlayerUI::Update() {
 
 	//砲弾UIのマスクを砲弾クールタイムと同期させる
 	float cannonBallCoolRate = player_->GetCannonReloadTimer() / player_->GetCannonReloadTime();
-	spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize().x, spriteCannon_[0]->GetSize().y *cannonBallCoolRate });
+	spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize().x, spriteCannon_[0]->GetSize().y * cannonBallCoolRate });
+
+	//銃弾UIのマスクの処理
+	if (player_->GetBulletReloadTimer() > 0.0f) {
+		//銃弾リロードタイムと同期させる
+		float bulletReloadRate = player_->GetBulletReloadTimer() / player_->GetBulletReloadTime();
+		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize().x, spriteBullet_[0]->GetSize().y * bulletReloadRate });
+	}
+	else {
+		//残弾数に合わせる
+		float bulletNumRate = (float)player_->GetBulletNum() / (float)player_->GetBulletMaxNum();
+		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize().x, spriteBullet_[0]->GetSize().y * (1.0f - bulletNumRate) });
+	}
 
 }
 
@@ -83,7 +108,7 @@ void PlayerUI::DrawFrontSprite() {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
 		int shakePower = param_["shakePower"];
-		std::uniform_int_distribution<int> dist(-shakePower*camera_->GetShakePower(), shakePower * camera_->GetShakePower());
+		std::uniform_int_distribution<int> dist(-shakePower * camera_->GetShakePower(), shakePower * camera_->GetShakePower());
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 
@@ -92,13 +117,16 @@ void PlayerUI::DrawFrontSprite() {
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() + offset);
 			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() + offset);
+			spriteBullet_[i]->SetPosition(spriteBullet_[i]->GetPosition() + offset);
 		}
+
 
 		//スプライトを描画する
 		spriteFPSUI_->Draw(thFPSUI_);
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
 			spriteCannon_[i]->Draw(thCannon_[i]);
+			spriteBullet_[i]->Draw(thBullet_[i]);
 		}
 
 		//描画が終わったのでずらした分元に戻す
@@ -106,6 +134,7 @@ void PlayerUI::DrawFrontSprite() {
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() - offset);
 			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() - offset);
+			spriteBullet_[i]->SetPosition(spriteBullet_[i]->GetPosition() - offset);
 		}
 	}
 	//揺れていないので普通に描画する
@@ -114,6 +143,7 @@ void PlayerUI::DrawFrontSprite() {
 		for (int i = 0; i < 2; i++) {
 			spriteHPBar_[i]->Draw(thHPBar_[i]);
 			spriteCannon_[i]->Draw(thCannon_[i]);
+			spriteBullet_[i]->Draw(thBullet_[i]);
 		}
 	}
 }
@@ -121,7 +151,7 @@ void PlayerUI::DrawFrontSprite() {
 void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
 	for (int i = 0; i < 2; i++) {
-		spriteCannon_[i]->DebugWithImGui();
+		spriteBullet_[i]->DebugWithImGui();
 	}
 #endif // _DEBUG
 }

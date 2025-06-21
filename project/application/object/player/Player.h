@@ -54,6 +54,14 @@ public://getter
 	float GetBulletReloadTime() const { return bulletReloadTime_; }
 	//銃弾リロードタイムタイマー
 	float GetBulletReloadTimer() const { return bulletReloadTimer_; }
+	//銃弾の最大数
+	int GetBulletMaxNum() const { return bulletMaxNum_; }
+	//現在の銃弾の数
+	int GetBulletNum() const { return bulletNum_; }
+	//銃弾の発射間隔タイム
+	float GetBulletFireIntervalTime() const { return bulletFireIntervalTime_; }
+	//銃弾の発射間隔タイマー
+	float GetBulletFireIntervalTimer() const { return bulletFireIntervalTimer_; }
 	//銃弾を発射したかどうか
 	bool GetIsBulletFire() const { return isBulletFire_; }
 
@@ -90,6 +98,10 @@ private:
 
 	float bulletReloadTime_;		//銃弾リロードタイム(秒)
 	float bulletReloadTimer_;		//銃弾リロードタイム計測用タイマー
+	int bulletMaxNum_;				//銃弾の最大数
+	int bulletNum_;					//現在の銃弾の数
+	float bulletFireIntervalTime_;	//銃弾の速度
+	float bulletFireIntervalTimer_;	//銃弾の発射間隔タイマー
 	bool isBulletFire_ = false;		//銃弾を発射したかどうか
 };
 
