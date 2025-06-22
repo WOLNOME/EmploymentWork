@@ -138,7 +138,7 @@ void PlayerWeaponManager::CreateBullet() {
 		};
 		currentDir.Normalize();
 		Vector3 bulletPos = camera_->worldTransform.translate;
-		bulletPos += currentDir * 5.0f;	//銃弾の初期位置を調整
+		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
 		bullet->SetInitParam(bulletPos, currentDir);
 		break;
 	}

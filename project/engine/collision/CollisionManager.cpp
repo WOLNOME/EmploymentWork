@@ -36,25 +36,37 @@ void CollisionManager::CheckCollision() {
 			if (colliderA->GetCollisionAttribute() == colliderB->GetCollisionAttribute()) {
 				continue;
 			}
-			// 自機と自弾&必殺弾
+			// 自機と自弾
 			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Player) {
-				if (colliderB->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
+				if (colliderB->GetCollisionAttribute() == CollisionAttribute::PlayerCannon) {
+					continue;
+				}
+				else if (colliderB->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
 					continue;
 				}
 			}
 			if (colliderB->GetCollisionAttribute() == CollisionAttribute::Player) {
-				if (colliderA->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
+				if (colliderA->GetCollisionAttribute() == CollisionAttribute::PlayerCannon) {
+					continue;
+				}
+				else if (colliderA->GetCollisionAttribute() == CollisionAttribute::PlayerBullet) {
 					continue;
 				}
 			}
 			// 敵と敵弾
 			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Enemy) {
-				if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
+				if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyCannon) {
+					continue;
+				}
+				else if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
 					continue;
 				}
 			}
 			if (colliderB->GetCollisionAttribute() == CollisionAttribute::Enemy) {
-				if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
+				if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyCannon) {
+					continue;
+				}
+				else if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
 					continue;
 				}
 			}

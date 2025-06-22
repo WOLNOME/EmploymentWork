@@ -13,13 +13,21 @@ void PlayerBullet::Initialize() {
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	//パーティクルの生成と初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
-	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
-	particle_->emitter_.clumpNum = 10;
-	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+	hit_ = std::make_unique<Particle>();
+	hit_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
+	hit_->emitter_.isPlay = false;
+	hit_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	hit_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
+	hit_->emitter_.clumpNum = 10;
+	hit_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+
+	trail_ = std::make_unique<Particle>();
+	trail_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletTrail"), "trail");
+	trail_->emitter_.isPlay = false;
+	trail_->emitter_.transform.scale = { 0.01f,0.01f,0.01f };
+	trail_->emitter_.generateMethod = Particle::GenerateMethod::Random;
+	trail_->emitter_.effectStyle = Particle::EffectStyle::Loop;
+
 
 	//当たり判定の半径を設定
 	radius_ = 0.01f;
@@ -42,6 +50,8 @@ void PlayerBullet::Update() {
 
 	//移動処理
 	Move();
+	//パーティクルの更新
+	UpdateParticle();
 }
 
 void PlayerBullet::Draw() {
@@ -77,13 +87,11 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 	case CollisionAttribute::Enemy:
 		//敵に当たった場合
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//パーティクルの制御
+		hit_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		hit_->emitter_.isPlay = true;
+		//死亡処理
+		DeadProcess();
 
 		break;
 	case CollisionAttribute::EnemyBullet:
@@ -107,10 +115,8 @@ void PlayerBullet::Move() {
 	if (GetDeadTimer() == 0.0f && !isDead_) {
 		if (object3d_->worldTransform.translate.y < 0.0f) {
 			object3d_->worldTransform.translate.y = 0.0f;
-			//死亡予約処理
-			SetDeadTimer(0.1f);
-			//当たり判定属性をなしに
-			SetCollisionAttribute(CollisionAttribute::Nothingness);
+			//死亡処理
+			DeadProcess();
 		}
 	}
 
@@ -118,14 +124,27 @@ void PlayerBullet::Move() {
 	lifeTimer_ += kDeltaTime;
 	if (lifeTimer_ >= lifeTime_) {
 		if (GetDeadTimer() == 0.0f && !isDead_) {
-			//死亡予約処理
-			SetDeadTimer(0.1f);
-			//当たり判定属性をなしに
-			SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-			lifeTimer_ = 0.0f;	//寿命タイマーをリセット
+			//死亡処理
+			DeadProcess();
 		}
 	}
 	
 
+}
+
+void PlayerBullet::UpdateParticle() {
+	//トレイルパーティクルの座標更新
+	trail_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+}
+
+void PlayerBullet::DeadProcess() {
+	//死亡予約処理
+	SetDeadTimer(0.1f);
+	//当たり判定属性をなしに
+	SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+	//パーティクルの制御
+	trail_->emitter_.isPlay = false;	//トレイルパーティクルを停止
+
+	lifeTimer_ = 0.0f;	//寿命タイマーをリセット
 }

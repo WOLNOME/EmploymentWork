@@ -44,7 +44,7 @@ public://setter
 		object3d_->worldTransform.translate = _initPos;
 		float speed = param_["speed"];
 		velocity_ = _initDirection * speed;
-		SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+		SetCollisionAttribute(CollisionAttribute::PlayerCannon);
 		isDead_ = false;
 	}
 private:

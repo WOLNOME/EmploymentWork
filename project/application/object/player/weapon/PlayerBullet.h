@@ -35,11 +35,7 @@ public:
 	void OnCollision(CollisionAttribute attribute) override;
 
 public://setter
-	/// <summary>
 	/// 最初にセットするパラメーター
-	/// </summary>
-	/// <param name="_initPos">初期位置</param>
-	/// <param name="_initVelocity">初速度</param>
 	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
 		object3d_->worldTransform.translate = _initPos;
 		float speed = param_["speed"];
@@ -47,14 +43,21 @@ public://setter
 		gravity_ = 0.0f;
 		SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 		isDead_ = false;
+		trail_->emitter_.isPlay = true;	//トレイルパーティクルを開始
 	}
 private:
 	//パーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
+	std::unique_ptr<Particle> hit_ = nullptr;		//ヒットパーティクル
+	std::unique_ptr<Particle> trail_ = nullptr;		//トレイルパーティクル
 
 private:
 	//移動処理
 	void Move();
+	//パーティクル
+	void UpdateParticle();
+
+	//死亡処理
+	void DeadProcess();
 private:
 	//パラメータ
 	json param_;

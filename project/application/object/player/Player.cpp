@@ -98,14 +98,24 @@ void Player::OnCollision(CollisionAttribute attribute) {
 		//敵に当たった場合
 	case CollisionAttribute::Enemy:
 		break;
-		//敵弾に当たった場合
-	case CollisionAttribute::EnemyBullet:
+		//敵キャノンに当たった場合
+	case CollisionAttribute::EnemyCannon:
 		//HPを減らす
 		hp_ -= 10;
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.4f, 0.5f);
+
+		break;
+		//敵弾に当たった場合
+	case CollisionAttribute::EnemyBullet:
+		//HPを減らす
+		hp_ -= 1;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP_);
+		//カメラシェイクを入れる
+		camera_->RegistShake(0.2f, 0.15f);
 
 		break;
 	default:
