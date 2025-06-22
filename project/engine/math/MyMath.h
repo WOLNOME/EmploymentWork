@@ -300,7 +300,7 @@ public://静的メンバ関数
 
 
 	///------------------------------------///
-	///      イージングチートシート
+	///				イージング
 	///------------------------------------///
 
 	static float EaseInSine(float ratio);
@@ -371,42 +371,57 @@ public://静的メンバ関数
 	static bool IsCollision(const Sphere& s1, const Sphere& s2);
 	//平面と球の当たり判定
 	static bool IsCollision(const Plane& plane, const Sphere& sphere);
+	static bool IsCollision(const Sphere& sphere, const Plane& plane);
 	//直線と平面の当たり判定
 	static bool IsCollision(const Line& line, const Plane& plane);
+	static bool IsCollision(const Plane& plane, const Line& line);
 	//半直線と平面の当たり判定
 	static bool IsCollision(const Ray& ray, const Plane& plane);
+	static bool IsCollision(const Plane& plane, const Ray& ray);
 	//線分と平面の当たり判定
 	static bool IsCollision(const Segment& segment, const Plane& plane);
+	static bool IsCollision(const Plane& plane, const Segment& segment);
 	//線分と三角形の当たり判定
 	static bool IsCollision(const Segment& segment, const Triangle& triangle);
+	static bool IsCollision(const Triangle& triangle, const Segment& segment);
 	//AABB同士の当たり判定
 	static bool IsCollision(const AABB& a, const AABB& b);
 	//AABBと点の当たり判定
 	static bool IsCollision(const AABB& aabb, const Vector3& point);
+	static bool IsCollision(const Vector3& point, const AABB& aabb);
 	//AABBと球の当たり判定
 	static bool IsCollision(const AABB& aabb, const Sphere& sphere);
+	static bool IsCollision(const Sphere& sphere, const AABB& aabb);
 	//AABBと直線の当たり判定
 	static bool IsCollision(const AABB& aabb, const Line& line);
+	static bool IsCollision(const Line& line, const AABB& aabb);
 	//AABBと半直線の当たり判定
 	static bool IsCollision(const AABB& aabb, const Ray& ray);
+	static bool IsCollision(const Ray& ray, const AABB& aabb);
 	//AABBと線分の当たり判定
 	static bool IsCollision(const AABB& aabb, const Segment& segment);
+	static bool IsCollision(const Segment& segment, const AABB& aabb);
 	//OBB同士の当たり判定
 	static bool IsCollision(const OBB& obb1, const OBB& obb2);
 	//OBBと球の当たり判定
 	static bool IsCollision(const OBB& obb, const Sphere& sphere);
+	static bool IsCollision(const Sphere& sphere, const OBB& obb);
 	//OBBと直線の当たり判定
 	static bool IsCollision(const OBB& obb, const Line& line);
+	static bool IsCollision(const Line& line, const OBB& obb);
 	//OBBと半直線の当たり判定
 	static bool IsCollision(const OBB& obb, const Ray& ray);
+	static bool IsCollision(const Ray& ray, const OBB& obb);
 	//OBBと線分の当たり判定
 	static bool IsCollision(const OBB& obb, const Segment& segment);
+	static bool IsCollision(const Segment& segment, const OBB& obb);
 
 	///------------------------------------///
 	///              図形の線描画
 	///------------------------------------///
 
 	static void CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* lineDrawer, uint32_t subdivision = 15);
+	static void CreateLineAABB(const AABB& aabb, Vector4 color, LineDrawer* lineDrawer);
 
 };
 

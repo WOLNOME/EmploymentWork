@@ -28,9 +28,10 @@ void PlayerBullet::Initialize() {
 	trail_->emitter_.generateMethod = Particle::GenerateMethod::Random;
 	trail_->emitter_.effectStyle = Particle::EffectStyle::Loop;
 
-
+	//当たり判定の形状を設定
+	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
-	radius_ = 0.01f;
+	collisionRadius_ = 0.01f;
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
@@ -81,7 +82,7 @@ void PlayerBullet::DebugWithImGui() {
 
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute) {
+void PlayerBullet::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Enemy:

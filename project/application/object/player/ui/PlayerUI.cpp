@@ -150,8 +150,6 @@ void PlayerUI::DrawFrontSprite() {
 
 void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
-	for (int i = 0; i < 2; i++) {
-		spriteBullet_[i]->DebugWithImGui();
-	}
+	
 #endif // _DEBUG
 }

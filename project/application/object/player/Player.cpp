@@ -17,8 +17,13 @@ void Player::Initialize() {
 	object3d_->Initialize(ModelTag{}, "player");
 	object3d_->worldTransform.translate.y += 2.7f;
 
-	//当たり判定の半径を設定
-	radius_ = 2.5f;
+	//当たり判定の形状を設定
+	collisionShapeKind_ = Collider::CollisionShapeKind::AABB;
+	//当たり判定の大きさを設定
+	collisionLocalAABB_ = {
+		.min = { -4.0f, -2.3f, -4.0f },	//最小座標
+		.max = { 4.0f, 1.7f, 4.0f }		//最大座標
+	};
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
@@ -92,7 +97,7 @@ void Player::DebugWithImGui() {
 	}
 }
 
-void Player::OnCollision(CollisionAttribute attribute) {
+void Player::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//敵に当たった場合

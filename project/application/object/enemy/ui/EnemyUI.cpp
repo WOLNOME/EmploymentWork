@@ -87,13 +87,11 @@ void EnemyUI::DrawBackSprite() {
 }
 
 void EnemyUI::DrawFrontSprite() {
-	//将来的に使うならここに追加
+	
 }
 
 void EnemyUI::DebugWithImGui() {
 #ifdef _DEBUG
-	for (int i = 0; i < kNumHPBar; i++)
-		for (int j = 0; j < 2; j++)
-			spriteHPBar_[i][j]->DebugWithImGui();
+	
 #endif
 }

@@ -37,7 +37,7 @@ public:
 	void DebugWithImGui() override;
 
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute) override;
+	void OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) override;
 
 public://getter
 	//MaxHP

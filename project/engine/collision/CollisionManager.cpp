@@ -87,24 +87,91 @@ void CollisionManager::SetColliders(Collider* colliders) {
 }
 
 void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
-	Vector3 posA, posB;
-	// Aの座標
-	posA = colliderA->GetWorldPosition();
-	// Bの座標
-	posB = colliderB->GetWorldPosition();
-	// ABの差
-	Vector3 AtoB = posA - posB;
-	// 半径の和
-	float addRad = colliderA->GetRadius() + colliderB->GetRadius();
-	// 座標AとBの距離を求める
-	float length = AtoB.Length();
-	// 球と球の交差判定
-	if (length < addRad) {
-		//あらかじめ衝突属性を取得しておく(OnCollision内で衝突属性を変えても問題ないように)
-		CollisionAttribute attrA = colliderA->GetCollisionAttribute();
-		CollisionAttribute attrB = colliderB->GetCollisionAttribute();
-		// 衝突時コールバックを呼び出す
-		colliderA->OnCollision(attrB);
-		colliderB->OnCollision(attrA);
+	//衝突コールバック
+	auto HandleCollisionIf = [&](bool isHit) {
+		if (isHit) {
+			// あらかじめ衝突属性を取得しておく(OnCollision内で変化したときのため)
+			CollisionAttribute attrA = colliderA->GetCollisionAttribute();
+			CollisionAttribute attrB = colliderB->GetCollisionAttribute();
+			Vector3 subjectWorldPosA = colliderA->GetWorldPosition();
+			Vector3 subjectWorldPosB = colliderB->GetWorldPosition();
+
+			// 衝突時コールバックを呼び出す
+			colliderA->OnCollision(attrB, subjectWorldPosB);
+			colliderB->OnCollision(attrA, subjectWorldPosA);
+		}
+		};
+
+
+	switch (colliderA->GetCollisionShapeKind()) {
+	case Collider::CollisionShapeKind::Sphere: {
+		//球体を作る
+		Sphere sphereA = {
+			.center = colliderA->GetWorldPosition(),
+			.radius = colliderA->GetRadius()
+		};
+		//Bの形状によって分岐
+		switch (colliderB->GetCollisionShapeKind()) {
+		case Collider::CollisionShapeKind::Sphere: {
+			//球体を作る
+			Sphere sphereB = {
+				.center = colliderB->GetWorldPosition(),
+				.radius = colliderB->GetRadius()
+			};
+			//球体同士の衝突判定
+			HandleCollisionIf(MyMath::IsCollision(sphereA, sphereB));
+			break;
+		}
+		case Collider::CollisionShapeKind::AABB: {
+			//AABBを作る
+			AABB aabbB = {
+				.min = colliderB->GetAABB().min + colliderB->GetWorldPosition(),
+				.max = colliderB->GetAABB().max + colliderB->GetWorldPosition()
+			};
+			//球体とAABBの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(sphereA, aabbB));
+			break;
+		}
+
+		default:
+			break;
+		}
+		break;
+	}
+	case Collider::CollisionShapeKind::AABB: {
+		//AABBを作る
+		AABB aabbA = {
+			.min = colliderA->GetAABB().min + colliderA->GetWorldPosition(),
+			.max = colliderA->GetAABB().max + colliderA->GetWorldPosition()
+		};
+		//Bの形状によって分岐
+		switch (colliderB->GetCollisionShapeKind()) {
+		case Collider::CollisionShapeKind::Sphere: {
+			//球体を作る
+			Sphere sphereB = {
+				.center = colliderB->GetWorldPosition(),
+				.radius = colliderB->GetRadius()
+			};
+			//AABBと球体の衝突判定
+			HandleCollisionIf(MyMath::IsCollision(aabbA, sphereB));
+			break;
+		}
+		case Collider::CollisionShapeKind::AABB: {
+			//AABBを作る
+			AABB aabbB = {
+				.min = colliderB->GetAABB().min + colliderB->GetWorldPosition(),
+				.max = colliderB->GetAABB().max + colliderB->GetWorldPosition()
+			};
+			//AABB同士の衝突判定
+			HandleCollisionIf(MyMath::IsCollision(aabbA, aabbB));
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	default:
+		break;
 	}
 }

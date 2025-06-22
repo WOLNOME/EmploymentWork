@@ -20,8 +20,10 @@ void PlayerCannon::Initialize() {
 	particle_->emitter_.clumpNum = 10;
 	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
 
+	//当たり判定の形状を設定
+	collisionShapeKind_ = Collider::CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
-	radius_ = 1.0f;
+	collisionRadius_ = 1.0f;
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
@@ -69,7 +71,7 @@ void PlayerCannon::DebugWithImGui() {
 
 }
 
-void PlayerCannon::OnCollision(CollisionAttribute attribute) {
+void PlayerCannon::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Enemy:

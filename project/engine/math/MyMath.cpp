@@ -1111,6 +1111,10 @@ bool MyMath::IsCollision(const Plane& plane, const Sphere& sphere) {
 	}
 }
 
+bool MyMath::IsCollision(const Sphere& sphere, const Plane& plane) {
+	return IsCollision(plane, sphere);
+}
+
 bool MyMath::IsCollision(const Line& line, const Plane& plane) {
 	//垂直判定を求める
 	float dot = Dot(plane.normal, line.diff);
@@ -1127,6 +1131,10 @@ bool MyMath::IsCollision(const Line& line, const Plane& plane) {
 	else {
 		return false;
 	}
+}
+
+bool MyMath::IsCollision(const Plane& plane, const Line& line) {
+	return IsCollision(line, plane);
 }
 
 bool MyMath::IsCollision(const Ray& ray, const Plane& plane) {
@@ -1147,6 +1155,10 @@ bool MyMath::IsCollision(const Ray& ray, const Plane& plane) {
 	}
 }
 
+bool MyMath::IsCollision(const Plane& plane, const Ray& ray) {
+	return IsCollision(ray, plane);
+}
+
 bool MyMath::IsCollision(const Segment& segment, const Plane& plane) {
 	//平行判定
 	float dot = Dot(segment.diff, plane.normal);
@@ -1164,6 +1176,10 @@ bool MyMath::IsCollision(const Segment& segment, const Plane& plane) {
 	else {
 		return false;
 	}
+}
+
+bool MyMath::IsCollision(const Plane& plane, const Segment& segment) {
+	return IsCollision(segment, plane);
 }
 
 bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
@@ -1214,6 +1230,10 @@ bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
 	}
 }
 
+bool MyMath::IsCollision(const Triangle& triangle, const Segment& segment) {
+	return IsCollision(segment, triangle);
+}
+
 bool MyMath::IsCollision(const AABB& a, const AABB& b) {
 	if ((a.min.x <= b.max.x && a.max.x >= b.min.x) &&
 		(a.min.y <= b.max.y && a.max.y >= b.min.y) &&
@@ -1236,6 +1256,10 @@ bool MyMath::IsCollision(const AABB& aabb, const Vector3& point) {
 	return false;
 }
 
+bool MyMath::IsCollision(const Vector3& point, const AABB& aabb) {
+	return IsCollision(aabb, point);
+}
+
 bool MyMath::IsCollision(const AABB& aabb, const Sphere& sphere) {
 	//球の中心とAABBとの最近接点を求める
 	Vector3 closestPoint = ClosestPoint(aabb, sphere);
@@ -1248,6 +1272,10 @@ bool MyMath::IsCollision(const AABB& aabb, const Sphere& sphere) {
 	else {
 		return false;
 	}
+}
+
+bool MyMath::IsCollision(const Sphere& sphere, const AABB& aabb) {
+	return IsCollision(aabb, sphere);
 }
 
 bool MyMath::IsCollision(const AABB& aabb, const Line& line) {
@@ -1342,6 +1370,10 @@ bool MyMath::IsCollision(const AABB& aabb, const Line& line) {
 	return false;
 }
 
+bool MyMath::IsCollision(const Line& line, const AABB& aabb) {
+	return IsCollision(aabb, line);
+}
+
 bool MyMath::IsCollision(const AABB& aabb, const Ray& ray) {
 	//segmentの成分が全て0(点)の場合エラー
 	if (ray.diff.x == 0 && ray.diff.y == 0 && ray.diff.z == 0) {
@@ -1432,6 +1464,10 @@ bool MyMath::IsCollision(const AABB& aabb, const Ray& ray) {
 	}
 	//これ以上衝突条件は無い
 	return false;
+}
+
+bool MyMath::IsCollision(const Ray& ray, const AABB& aabb) {
+	return IsCollision(aabb, ray);
 }
 
 bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
@@ -1539,6 +1575,10 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 	return false;
 }
 
+bool MyMath::IsCollision(const Segment& segment, const AABB& aabb) {
+	return IsCollision(aabb, segment);
+}
+
 bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 	// 各OBBの頂点をローカル座標で定義
 	Vector3 obb1Vertex[8] = {
@@ -1636,6 +1676,10 @@ bool MyMath::IsCollision(const OBB& obb, const Sphere& sphere) {
 	return IsCollision(aabbOBBLocal, sphereOBBLocal);
 }
 
+bool MyMath::IsCollision(const Sphere& sphere, const OBB& obb) {
+	return IsCollision(obb, sphere);
+}
+
 bool MyMath::IsCollision(const OBB& obb, const Line& line) {
 	// ワールド行列
 	Matrix4x4 obbWorldMatrix = {
@@ -1654,6 +1698,10 @@ bool MyMath::IsCollision(const OBB& obb, const Line& line) {
 
 	// ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, lineOBBLocal);
+}
+
+bool MyMath::IsCollision(const Line& line, const OBB& obb) {
+	return IsCollision(obb, line);
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
@@ -1676,6 +1724,10 @@ bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
 	return IsCollision(aabbOBBLocal, rayOBBLocal);
 }
 
+bool MyMath::IsCollision(const Ray& ray, const OBB& obb) {
+	return IsCollision(obb, ray);
+}
+
 bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 	// ワールド行列
 	Matrix4x4 obbWorldMatrix = {
@@ -1696,8 +1748,11 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 	return IsCollision(aabbOBBLocal, segmentOBBLocal);
 }
 
+bool MyMath::IsCollision(const Segment& segment, const OBB& obb) {
+	return IsCollision(obb, segment);
+}
+
 void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* lineDrawer, uint32_t subdivision) {
-	float pi = std::numbers::pi_v<float>;
 	const uint32_t kSubdivision = subdivision;//分割数
 	const float kLonEvery = 2.0f * pi / kSubdivision;//経度分割1つ分の角度
 	const float kLatEvery = pi / kSubdivision;//緯度分割1つ分の角度
@@ -1728,6 +1783,33 @@ void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* l
 			lineDrawer->CreateLine(a, b, color);
 			lineDrawer->CreateLine(a, c, color);
 		}
+	}
+}
+
+void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color, LineDrawer* lineDrawer) {
+	// 8頂点を計算
+	Vector3 v[8] = {
+		{ aabb.min.x, aabb.min.y, aabb.min.z }, // 0
+		{ aabb.max.x, aabb.min.y, aabb.min.z }, // 1
+		{ aabb.max.x, aabb.max.y, aabb.min.z }, // 2
+		{ aabb.min.x, aabb.max.y, aabb.min.z }, // 3
+		{ aabb.min.x, aabb.min.y, aabb.max.z }, // 4
+		{ aabb.max.x, aabb.min.y, aabb.max.z }, // 5
+		{ aabb.max.x, aabb.max.y, aabb.max.z }, // 6
+		{ aabb.min.x, aabb.max.y, aabb.max.z }  // 7
+	};
+
+	// 12本の辺を描画（線で結ぶ）
+	const uint32_t edgeIndices[12][2] = {
+		{0, 1}, {1, 2}, {2, 3}, {3, 0}, // 底面
+		{4, 5}, {5, 6}, {6, 7}, {7, 4}, // 上面
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}  // 側面
+	};
+
+	for (uint32_t i = 0; i < 12; ++i) {
+		const Vector3& from = v[edgeIndices[i][0]];
+		const Vector3& to = v[edgeIndices[i][1]];
+		lineDrawer->CreateLine(from, to, color);
 	}
 }
 

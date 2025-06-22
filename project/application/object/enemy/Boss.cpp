@@ -19,8 +19,13 @@ void Boss::Initialize() {
 		object3d_->SetSceneLight(light_);
 	}
 
+	//当たり判定の形状を設定
+	collisionShapeKind_ = CollisionShapeKind::AABB;
 	//当たり判定の半径を設定
-	radius_ = 5.7f;
+	collisionLocalAABB_ = {
+		.min = { -6.0f, -4.5f, -6.0f },	//最小座標
+		.max = { 6.0f, 2.5f, 6.0f }		//最大座標
+	};
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 
@@ -70,7 +75,7 @@ void Boss::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Boss::OnCollision(CollisionAttribute attribute) {
+void Boss::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合

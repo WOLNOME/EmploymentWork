@@ -14,8 +14,13 @@ void Enemy::Initialize() {
 		object3d_->SetSceneLight(light_);
 	}
 
-	//当たり判定の半径を設定
-	radius_ = 3.8f;
+	//当たり判定の形状を設定
+	collisionShapeKind_ = CollisionShapeKind::AABB;
+	//当たり判定のサイズを設定
+	collisionLocalAABB_ = {
+		.min = { -4.0f, -2.3f, -4.0f },	//最小座標
+		.max = { 4.0f, 1.7f, 4.0f }		//最大座標
+	};
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 
@@ -64,7 +69,7 @@ void Enemy::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Enemy::OnCollision(CollisionAttribute attribute) {
+void Enemy::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
