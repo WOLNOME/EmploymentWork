@@ -47,6 +47,22 @@ void Player::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
+	//F1キーでマウスカーソルの表示する
+	if (input_->TriggerKey(DIK_F1)) {
+		if (isDebug_) {
+			//デバッグモードを終了
+			isDebug_ = false;
+			input_->SetIsMouseDisplay(false);
+			input_->SetIsMouseFixed(true);
+		}
+		else {
+			//デバッグモードを開始
+			isDebug_ = true;
+			input_->SetIsMouseDisplay(true);
+			input_->SetIsMouseFixed(false);
+		}
+	}
+
 	//回転処理
 	Rotate();
 	//移動処理
@@ -90,14 +106,10 @@ void Player::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
-	//F1キーでマウスカーソルの表示する
-	if (input_->TriggerKey(DIK_F1)) {
-		input_->SetIsMouseDisplay(true);
-		input_->SetIsMouseFixed(false);
-	}
+	
 }
 
-void Player::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
+void Player::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//敵に当たった場合

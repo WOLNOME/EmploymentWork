@@ -93,12 +93,10 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			// あらかじめ衝突属性を取得しておく(OnCollision内で変化したときのため)
 			CollisionAttribute attrA = colliderA->GetCollisionAttribute();
 			CollisionAttribute attrB = colliderB->GetCollisionAttribute();
-			Vector3 subjectWorldPosA = colliderA->GetWorldPosition();
-			Vector3 subjectWorldPosB = colliderB->GetWorldPosition();
 
 			// 衝突時コールバックを呼び出す
-			colliderA->OnCollision(attrB, subjectWorldPosB);
-			colliderB->OnCollision(attrA, subjectWorldPosA);
+			colliderA->OnCollision(attrB);
+			colliderB->OnCollision(attrA);
 		}
 		};
 

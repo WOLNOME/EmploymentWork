@@ -39,8 +39,7 @@ struct TransformEuler {
 	Vector3 rotate;
 	Vector3 translate;
 };
-struct TransformQuaternion
-{
+struct TransformQuaternion {
 	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
@@ -133,8 +132,7 @@ struct Capsule {
 };
 
 class LineDrawer;
-class MyMath
-{
+class MyMath {
 public://静的メンバ関数
 	///------------------------------------///
 	///               Vector2
@@ -150,7 +148,7 @@ public://静的メンバ関数
 	static float Cross(const Vector2& a, const Vector2& b);
 	//線形補完
 	static Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);
-	
+
 	///------------------------------------///
 	///               Vector3
 	///------------------------------------///
@@ -179,8 +177,8 @@ public://静的メンバ関数
 	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 	//平面の法線から矩形を構成する4頂点をもとめる関数
 	static Vector3 Perpendicular(const Vector3& vector);
-	//AABBと球の中心の最近接点
-	static Vector3 ClosestPoint(const AABB& aabb, const Sphere& sphere);
+	//点とAABBの最近接点
+	static Vector3 ClosestPoint(const Vector3& point, const AABB& aabb);
 	//平面と直線の衝突点
 	static Vector3 CollisionPoint(const Line& l, const Plane& p);
 	//平面と半直線の衝突点
@@ -372,6 +370,9 @@ public://静的メンバ関数
 	//平面と球の当たり判定
 	static bool IsCollision(const Plane& plane, const Sphere& sphere);
 	static bool IsCollision(const Sphere& sphere, const Plane& plane);
+	//カプセルと球の当たり判定
+	static bool IsCollision(const Capsule& capsule, const Sphere& sphere);
+	static bool IsCollision(const Sphere& sphere, const Capsule& capsule);
 	//直線と平面の当たり判定
 	static bool IsCollision(const Line& line, const Plane& plane);
 	static bool IsCollision(const Plane& plane, const Line& line);
@@ -381,6 +382,9 @@ public://静的メンバ関数
 	//線分と平面の当たり判定
 	static bool IsCollision(const Segment& segment, const Plane& plane);
 	static bool IsCollision(const Plane& plane, const Segment& segment);
+	//カプセルと平面の当たり判定
+	static bool IsCollision(const Capsule& capsule, const Plane& plane);
+	static bool IsCollision(const Plane& plane, const Capsule& capsule);
 	//線分と三角形の当たり判定
 	static bool IsCollision(const Segment& segment, const Triangle& triangle);
 	static bool IsCollision(const Triangle& triangle, const Segment& segment);
@@ -401,6 +405,9 @@ public://静的メンバ関数
 	//AABBと線分の当たり判定
 	static bool IsCollision(const AABB& aabb, const Segment& segment);
 	static bool IsCollision(const Segment& segment, const AABB& aabb);
+	//AABBとカプセルの当たり判定
+	static bool IsCollision(const AABB& aabb, const Capsule& capsule);
+	static bool IsCollision(const Capsule& capsule, const AABB& aabb);
 	//OBB同士の当たり判定
 	static bool IsCollision(const OBB& obb1, const OBB& obb2);
 	//OBBと球の当たり判定

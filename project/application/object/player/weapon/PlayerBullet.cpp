@@ -82,7 +82,7 @@ void PlayerBullet::DebugWithImGui() {
 
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
+void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Enemy:

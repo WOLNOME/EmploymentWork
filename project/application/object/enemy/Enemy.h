@@ -37,7 +37,7 @@ public:
 
 private:
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) override;
+	void OnCollision(CollisionAttribute attribute) override;
 
 public://getter
 	int GetHP() const { return hp_; }

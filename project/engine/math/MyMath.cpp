@@ -196,11 +196,11 @@ Vector3 MyMath::Perpendicular(const Vector3& vector) {
 	return{ 0.0f,-vector.z,vector.y };
 }
 
-Vector3 MyMath::ClosestPoint(const AABB& aabb, const Sphere& sphere) {
+Vector3 MyMath::ClosestPoint(const Vector3& point, const AABB& aabb) {
 	Vector3 closestPoint{
-		std::clamp(sphere.center.x,aabb.min.x,aabb.max.x),
-		std::clamp(sphere.center.y,aabb.min.y,aabb.max.y),
-		std::clamp(sphere.center.z,aabb.min.z,aabb.max.z)
+		std::clamp(point.x,aabb.min.x,aabb.max.x),
+		std::clamp(point.y,aabb.min.y,aabb.max.y),
+		std::clamp(point.z,aabb.min.z,aabb.max.z)
 	};
 	return closestPoint;
 }
@@ -1115,6 +1115,25 @@ bool MyMath::IsCollision(const Sphere& sphere, const Plane& plane) {
 	return IsCollision(plane, sphere);
 }
 
+bool MyMath::IsCollision(const Capsule& capsule, const Sphere& sphere) {
+	//球の中心とカプセル内線分の最近接点を求める
+	Vector3 closestPoint;
+	closestPoint = ClosestPoint(sphere.center, capsule.segment);
+	//最近接点と球の中心との距離を求める
+	float distance = Vector3(sphere.center - closestPoint).Length();
+	//半径の合計よりも短ければ衝突
+	if (distance <= sphere.radius + capsule.radius) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool MyMath::IsCollision(const Sphere& sphere, const Capsule& capsule) {
+	return IsCollision(capsule, sphere);
+}
+
 bool MyMath::IsCollision(const Line& line, const Plane& plane) {
 	//垂直判定を求める
 	float dot = Dot(plane.normal, line.diff);
@@ -1182,6 +1201,14 @@ bool MyMath::IsCollision(const Plane& plane, const Segment& segment) {
 	return IsCollision(segment, plane);
 }
 
+bool MyMath::IsCollision(const Capsule& capsule, const Plane& plane) {
+	return false;
+}
+
+bool MyMath::IsCollision(const Plane& plane, const Capsule& capsule) {
+	return IsCollision(capsule, plane);
+}
+
 bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
 	//三角形のある面を作る
 	Plane plane;
@@ -1190,7 +1217,7 @@ bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
 	vv1 = Subtract(triangle.vertices[1], triangle.vertices[0]);
 	vv2 = Subtract(triangle.vertices[2], triangle.vertices[1]);
 	n = Normalize(Cross(vv1, vv2));
-	//ディスタンスを求める
+	//距離を求める
 	float d = Dot(triangle.vertices[0], n);
 	//面に変換
 	plane.normal = n;
@@ -1262,7 +1289,7 @@ bool MyMath::IsCollision(const Vector3& point, const AABB& aabb) {
 
 bool MyMath::IsCollision(const AABB& aabb, const Sphere& sphere) {
 	//球の中心とAABBとの最近接点を求める
-	Vector3 closestPoint = ClosestPoint(aabb, sphere);
+	Vector3 closestPoint = ClosestPoint(sphere.center, aabb);
 	//最近接点と球の中心の距離を求める
 	float distance = Length(Subtract(closestPoint, sphere.center));
 	//距離が平均よりも小さければ衝突
@@ -1471,112 +1498,118 @@ bool MyMath::IsCollision(const Ray& ray, const AABB& aabb) {
 }
 
 bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
-	//segmentの成分が全て0(点)の場合エラー
+	// segmentが点の場合
 	if (segment.diff.x == 0 && segment.diff.y == 0 && segment.diff.z == 0) {
-		assert("線の成分が全て0");
+		// 点がAABB内にあるかチェック
+		if (IsCollision(aabb, segment.origin)) {
+			return true;
+		}
+		return false;
 	}
 
-	//6つの平面を構造体に入れる
-	Plane pxmin;
-	Plane pxmax;
-	Plane pymin;
-	Plane pymax;
-	Plane pzmin;
-	Plane pzmax;
-	//法線の値を入力
-	pxmin.normal = { 1,0,0 };
-	pxmax.normal = { 1,0,0 };
-	pymin.normal = { 0,1,0 };
-	pymax.normal = { 0,1,0 };
-	pzmin.normal = { 0,0,1 };
-	pzmax.normal = { 0,0,1 };
-	//距離の値を入力
-	pxmin.distance = Dot(aabb.min, pxmin.normal);
-	pymin.distance = Dot(aabb.min, pymin.normal);
-	pzmin.distance = Dot(aabb.min, pzmin.normal);
-	pxmax.distance = Dot(aabb.max, pxmax.normal);
-	pymax.distance = Dot(aabb.max, pymax.normal);
-	pzmax.distance = Dot(aabb.max, pzmax.normal);
-	//それぞれの平面と線分の衝突点を求める
-	if (IsCollision(segment, pxmin)) {
-		Vector3 cp = CollisionPoint(segment, pxmin);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
+	// AABBの6つの平面を作成
+	Plane planes[6];
+
+	// 法線のセット
+	planes[0].normal = { 1, 0, 0 };
+	planes[1].normal = { 1, 0, 0 };
+	planes[2].normal = { 0, 1, 0 };
+	planes[3].normal = { 0, 1, 0 };
+	planes[4].normal = { 0, 0, 1 };
+	planes[5].normal = { 0, 0, 1 };
+
+	// 平面の距離をセット
+	planes[0].distance = Dot(aabb.min, planes[0].normal);
+	planes[1].distance = Dot(aabb.max, planes[1].normal);
+	planes[2].distance = Dot(aabb.min, planes[2].normal);
+	planes[3].distance = Dot(aabb.max, planes[3].normal);
+	planes[4].distance = Dot(aabb.min, planes[4].normal);
+	planes[5].distance = Dot(aabb.max, planes[5].normal);
+
+	// 各平面との衝突判定
+	for (int i = 0; i < 6; ++i) {
+		if (IsCollision(segment, planes[i])) {
+			Vector3 cp = CollisionPoint(segment, planes[i]);
+			// 衝突点がAABBの範囲内にあるかチェック
+			if (cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
+				cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
+				cp.z >= aabb.min.z && cp.z <= aabb.max.z) {
+				return true;
+			}
 		}
 	}
-	if (IsCollision(segment, pxmax)) {
-		Vector3 cp = CollisionPoint(segment, pxmax);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
-		}
-	}
-	if (IsCollision(segment, pymin)) {
-		Vector3 cp = CollisionPoint(segment, pymin);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
-		}
-	}
-	if (IsCollision(segment, pymax)) {
-		Vector3 cp = CollisionPoint(segment, pymax);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
-		}
-	}
-	if (IsCollision(segment, pzmin)) {
-		Vector3 cp = CollisionPoint(segment, pzmin);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
-		}
-	}
-	if (IsCollision(segment, pzmax)) {
-		Vector3 cp = CollisionPoint(segment, pzmax);
-		if (
-			cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
-			cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
-			cp.z >= aabb.min.z && cp.z <= aabb.max.z
-			) {
-			return true;
-		}
-	}
-	//線分がaabb内にある場合→始点と終点がそれぞれmin max内
-	Vector3 ep = Add(segment.origin, segment.diff);
-	if (
+
+	// 線分の両端点がAABB内にある場合も衝突と判定
+	Vector3 endPoint = segment.origin + segment.diff;
+	bool originInside =
 		segment.origin.x >= aabb.min.x && segment.origin.x <= aabb.max.x &&
 		segment.origin.y >= aabb.min.y && segment.origin.y <= aabb.max.y &&
-		segment.origin.z >= aabb.min.z && segment.origin.z <= aabb.max.z &&
-		ep.x >= aabb.min.x && ep.x <= aabb.max.x &&
-		ep.y >= aabb.min.y && ep.y <= aabb.max.y &&
-		ep.z >= aabb.min.z && ep.z <= aabb.max.z
-		) {
+		segment.origin.z >= aabb.min.z && segment.origin.z <= aabb.max.z;
+
+	bool endPointInside =
+		endPoint.x >= aabb.min.x && endPoint.x <= aabb.max.x &&
+		endPoint.y >= aabb.min.y && endPoint.y <= aabb.max.y &&
+		endPoint.z >= aabb.min.z && endPoint.z <= aabb.max.z;
+
+	if (originInside && endPointInside) {
 		return true;
 	}
 
-	//これ以上衝突条件は無い
+	// 衝突なし
 	return false;
 }
 
+
 bool MyMath::IsCollision(const Segment& segment, const AABB& aabb) {
 	return IsCollision(aabb, segment);
+}
+
+bool MyMath::IsCollision(const AABB& aabb, const Capsule& capsule) {
+	// AABBを半径分膨張
+	AABB expandedAABB;
+	expandedAABB.min = aabb.min - Vector3{ capsule.radius, capsule.radius, capsule.radius };
+	expandedAABB.max = aabb.max + Vector3{ capsule.radius, capsule.radius, capsule.radius };
+
+	// 膨張AABBと中心線分の粗判定
+	if (!IsCollision(expandedAABB, capsule.segment)) {
+		return false;
+	}
+
+	// AABBの8頂点
+	Vector3 corners[8] = {
+		{ aabb.min.x, aabb.min.y, aabb.min.z },
+		{ aabb.min.x, aabb.min.y, aabb.max.z },
+		{ aabb.min.x, aabb.max.y, aabb.min.z },
+		{ aabb.min.x, aabb.max.y, aabb.max.z },
+		{ aabb.max.x, aabb.min.y, aabb.min.z },
+		{ aabb.max.x, aabb.min.y, aabb.max.z },
+		{ aabb.max.x, aabb.max.y, aabb.min.z },
+		{ aabb.max.x, aabb.max.y, aabb.max.z }
+	};
+
+	for (int i = 0; i < 8; ++i) {
+		const Vector3& corner = corners[i];
+
+		Vector3 closest = ClosestPoint(corner, capsule.segment);
+
+		bool isClosestInside =
+			((corner.x == aabb.min.x && closest.x < corner.x) || (corner.x == aabb.max.x && closest.x > corner.x)) ||
+			((corner.y == aabb.min.y && closest.y < corner.y) || (corner.y == aabb.max.y && closest.y > corner.y)) ||
+			((corner.z == aabb.min.z && closest.z < corner.z) || (corner.z == aabb.max.z && closest.z > corner.z));
+
+		if (!isClosestInside) {
+			float dist = (corner - closest).Length();
+			if (dist <= capsule.radius * capsule.radius) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool MyMath::IsCollision(const Capsule& capsule, const AABB& aabb) {
+	return IsCollision(aabb, capsule);
 }
 
 bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {

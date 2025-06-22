@@ -108,7 +108,7 @@ void PlayerUI::DrawFrontSprite() {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
 		int shakePower = param_["shakePower"];
-		std::uniform_int_distribution<int> dist(-shakePower * camera_->GetShakePower(), shakePower * camera_->GetShakePower());
+		std::uniform_int_distribution<int> dist(-shakePower * (int)camera_->GetShakePower(), shakePower * (int)camera_->GetShakePower());
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 

@@ -37,7 +37,7 @@ public:
 	void DebugWithImGui() override;
 
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) override;
+	void OnCollision(CollisionAttribute attribute) override;
 
 public://getter
 	//MaxHP
@@ -87,6 +87,9 @@ private:
 private:
 	//パラメータ
 	json param_;
+
+	//デバッグ用
+	bool isDebug_ = false;
 
 	//変数
 	int maxHP_;	//最大HP

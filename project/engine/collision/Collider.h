@@ -5,6 +5,7 @@
 #include "Vector4.h"
 #include "CollisionConfig.h"
 #include "LineDrawer.h"
+#include "WorldTransform.h"
 
 class Collider {
 public:
@@ -20,7 +21,7 @@ public:
 	virtual ~Collider() = default;
 
 	//当たり判定時の処理
-	virtual void OnCollision(CollisionAttribute attribute,Vector3 subjectWorldPos) = 0;
+	virtual void OnCollision(CollisionAttribute attribute) = 0;
 
 public://当たり判定可視化用ラインに関する関数群
 	//デバッグライン初期化

@@ -72,7 +72,7 @@ void EnemyCannon::DebugWithImGui() {
 
 }
 
-void EnemyCannon::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
+void EnemyCannon::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 	case CollisionAttribute::Player:

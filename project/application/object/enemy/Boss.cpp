@@ -75,7 +75,7 @@ void Boss::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Boss::OnCollision(CollisionAttribute attribute, Vector3 subjectWorldPos) {
+void Boss::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
