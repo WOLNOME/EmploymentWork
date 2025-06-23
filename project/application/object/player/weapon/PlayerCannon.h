@@ -35,18 +35,8 @@ public:
 	void OnCollision(CollisionAttribute attribute) override;
 
 public://setter
-	/// <summary>
 	/// 最初にセットするパラメーター
-	/// </summary>
-	/// <param name="_initPos">初期位置</param>
-	/// <param name="_initVelocity">初速度</param>
-	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
-		object3d_->worldTransform.translate = _initPos;
-		float speed = param_["speed"];
-		velocity_ = _initDirection * speed;
-		SetCollisionAttribute(CollisionAttribute::PlayerCannon);
-		isDead_ = false;
-	}
+	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection);
 private:
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;

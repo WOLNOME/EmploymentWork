@@ -103,21 +103,21 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 
 	switch (colliderA->GetCollisionShapeKind()) {
 	case Collider::CollisionShapeKind::Sphere: {
-		//球体を作る
-		Sphere sphereA = {
-			.center = colliderA->GetWorldPosition(),
-			.radius = colliderA->GetRadius()
-		};
+		//カプセルを作る
+		Capsule capsuleA;
+		capsuleA.radius = colliderA->GetRadius();
+		capsuleA.segment.origin = colliderA->GetPrePosition();
+		capsuleA.segment.diff = colliderA->GetWorldPosition() - colliderA->GetPrePosition();
 		//Bの形状によって分岐
 		switch (colliderB->GetCollisionShapeKind()) {
 		case Collider::CollisionShapeKind::Sphere: {
-			//球体を作る
-			Sphere sphereB = {
-				.center = colliderB->GetWorldPosition(),
-				.radius = colliderB->GetRadius()
-			};
-			//球体同士の衝突判定
-			HandleCollisionIf(MyMath::IsCollision(sphereA, sphereB));
+			//カプセルを作る
+			Capsule capsuleB;
+			capsuleB.radius = colliderB->GetRadius();
+			capsuleB.segment.origin = colliderB->GetPrePosition();
+			capsuleB.segment.diff = colliderB->GetWorldPosition() - colliderB->GetPrePosition();
+			//カプセル同士の衝突判定
+			HandleCollisionIf(MyMath::IsCollision(capsuleA, capsuleB));
 			break;
 		}
 		case Collider::CollisionShapeKind::AABB: {
@@ -126,8 +126,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 				.min = colliderB->GetAABB().min + colliderB->GetWorldPosition(),
 				.max = colliderB->GetAABB().max + colliderB->GetWorldPosition()
 			};
-			//球体とAABBの衝突判定
-			HandleCollisionIf(MyMath::IsCollision(sphereA, aabbB));
+			//カプセルとAABBの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(capsuleA, aabbB));
 			break;
 		}
 
@@ -145,13 +145,13 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		//Bの形状によって分岐
 		switch (colliderB->GetCollisionShapeKind()) {
 		case Collider::CollisionShapeKind::Sphere: {
-			//球体を作る
-			Sphere sphereB = {
-				.center = colliderB->GetWorldPosition(),
-				.radius = colliderB->GetRadius()
-			};
-			//AABBと球体の衝突判定
-			HandleCollisionIf(MyMath::IsCollision(aabbA, sphereB));
+			//カプセルを作る
+			Capsule capsuleB;
+			capsuleB.radius = colliderB->GetRadius();
+			capsuleB.segment.origin = colliderB->GetPrePosition();
+			capsuleB.segment.diff = colliderB->GetWorldPosition() - colliderB->GetPrePosition();
+			//AABBとカプセルの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(aabbA, capsuleB));
 			break;
 		}
 		case Collider::CollisionShapeKind::AABB: {

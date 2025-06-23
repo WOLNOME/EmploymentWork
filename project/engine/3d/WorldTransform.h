@@ -39,7 +39,7 @@ public:
 	/// <summary>
 	/// データの更新
 	/// </summary>
-	void UpdateMatrix(const Matrix4x4& local = MyMath::MakeIdentity4x4());
+	void UpdateMatrix();
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>

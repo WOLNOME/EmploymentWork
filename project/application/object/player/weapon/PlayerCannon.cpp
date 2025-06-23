@@ -74,8 +74,8 @@ void PlayerCannon::DebugWithImGui() {
 void PlayerCannon::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Enemy:
 		//敵に当たった場合
+	case CollisionAttribute::Enemy:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
 		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
@@ -86,12 +86,42 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute) {
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 
 		break;
-	case CollisionAttribute::EnemyBullet:
 		//敵弾に当たった場合
+	case CollisionAttribute::EnemyBullet:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		particle_->emitter_.isPlay = true;
+		//死亡予約処理
+		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+		break;
+		//敵キャノンに当たった場合
+	case CollisionAttribute::EnemyCannon:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		particle_->emitter_.isPlay = true;
+		//死亡予約処理
+		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 		break;
 	default:
 		break;
 	}
+}
+
+void PlayerCannon::SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
+	object3d_->worldTransform.translate = _initPos;
+	float speed = param_["speed"];
+	velocity_ = _initDirection * speed;
+	SetCollisionAttribute(CollisionAttribute::PlayerCannon);
+	isDead_ = false;
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 
 void PlayerCannon::Move() {

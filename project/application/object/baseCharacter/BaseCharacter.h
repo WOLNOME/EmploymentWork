@@ -26,6 +26,9 @@ public://getter
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
 	// コライダー用のワールド座標を取得
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	// コライダー用前フレーム座標を取得
+	Vector3 GetPrePosition() override { return prePosition_; }
+
 	// 死亡フラグの取得
 	bool GetIsDead() const { return isDead_; }
 	// 死亡タイマーの取得
@@ -50,6 +53,8 @@ protected://オブジェクト
 	int32_t textureHandle_ = EOF;
 	// オブジェクト3D
 	std::unique_ptr<Object3d> object3d_ = nullptr;
+	// 前フレームの座標
+	Vector3 prePosition_ = {};
 
 protected://キャラ共有のメンバ変数
 	// 速度

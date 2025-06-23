@@ -36,10 +36,7 @@ public:
 	void OnCollision(CollisionAttribute attribute) override;
 
 public://setter
-	/// <summary>
 	/// 最初にセットするパラメーター
-	/// </summary>
-	/// <param name="_initPos">初期位置</param>
 	void SetInitParam(const Vector3& _initPos, const Vector3& _targetPos);
 private:
 	//パーティクル

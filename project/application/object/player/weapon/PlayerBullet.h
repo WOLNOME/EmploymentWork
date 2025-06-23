@@ -36,18 +36,10 @@ public:
 
 public://setter
 	/// 最初にセットするパラメーター
-	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
-		object3d_->worldTransform.translate = _initPos;
-		float speed = param_["speed"];
-		velocity_ = _initDirection * speed;
-		gravity_ = 0.0f;
-		SetCollisionAttribute(CollisionAttribute::PlayerBullet);
-		isDead_ = false;
-		trail_->emitter_.isPlay = true;	//トレイルパーティクルを開始
-	}
+	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection);
+
 private:
 	//パーティクル
-	std::unique_ptr<Particle> hit_ = nullptr;		//ヒットパーティクル
 	std::unique_ptr<Particle> trail_ = nullptr;		//トレイルパーティクル
 
 private:

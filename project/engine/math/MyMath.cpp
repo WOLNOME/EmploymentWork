@@ -176,6 +176,12 @@ Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
 
 Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 cp;
+	//もし線分のdiffが0ベクトルならoriginをreturn
+	if (segment.diff.x == 0.0f && segment.diff.y == 0.0f && segment.diff.z == 0.0f) {
+		cp = segment.origin;
+		return cp;
+	}
+
 	Vector3 a;
 	Vector3 proj;
 	a = Subtract(point, segment.origin);
@@ -1570,42 +1576,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Capsule& capsule) {
 	expandedAABB.min = aabb.min - Vector3{ capsule.radius, capsule.radius, capsule.radius };
 	expandedAABB.max = aabb.max + Vector3{ capsule.radius, capsule.radius, capsule.radius };
 
-	// 膨張AABBと中心線分の粗判定
-	if (!IsCollision(expandedAABB, capsule.segment)) {
-		return false;
-	}
-
-	// AABBの8頂点
-	Vector3 corners[8] = {
-		{ aabb.min.x, aabb.min.y, aabb.min.z },
-		{ aabb.min.x, aabb.min.y, aabb.max.z },
-		{ aabb.min.x, aabb.max.y, aabb.min.z },
-		{ aabb.min.x, aabb.max.y, aabb.max.z },
-		{ aabb.max.x, aabb.min.y, aabb.min.z },
-		{ aabb.max.x, aabb.min.y, aabb.max.z },
-		{ aabb.max.x, aabb.max.y, aabb.min.z },
-		{ aabb.max.x, aabb.max.y, aabb.max.z }
-	};
-
-	for (int i = 0; i < 8; ++i) {
-		const Vector3& corner = corners[i];
-
-		Vector3 closest = ClosestPoint(corner, capsule.segment);
-
-		bool isClosestInside =
-			((corner.x == aabb.min.x && closest.x < corner.x) || (corner.x == aabb.max.x && closest.x > corner.x)) ||
-			((corner.y == aabb.min.y && closest.y < corner.y) || (corner.y == aabb.max.y && closest.y > corner.y)) ||
-			((corner.z == aabb.min.z && closest.z < corner.z) || (corner.z == aabb.max.z && closest.z > corner.z));
-
-		if (!isClosestInside) {
-			float dist = (corner - closest).Length();
-			if (dist <= capsule.radius * capsule.radius) {
-				return true;
-			}
-		}
-	}
-
-	return false;
+	return IsCollision(expandedAABB, capsule.segment);
 }
 
 bool MyMath::IsCollision(const Capsule& capsule, const AABB& aabb) {
@@ -1783,6 +1754,78 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 
 bool MyMath::IsCollision(const Segment& segment, const OBB& obb) {
 	return IsCollision(obb, segment);
+}
+
+bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
+	// 線分同士の最短距離（二乗）を求めるラムダ式
+	auto SegmentSegmentDistSq = [&](const Segment& seg1, const Segment& seg2) -> float {
+		Vector3 p1 = seg1.origin;
+		Vector3 q1 = seg1.origin + seg1.diff;
+		Vector3 p2 = seg2.origin;
+		Vector3 q2 = seg2.origin + seg2.diff;
+
+		Vector3 d1 = q1 - p1;
+		Vector3 d2 = q2 - p2;
+		Vector3 r = p1 - p2;
+
+		float a = Dot(d1, d1);
+		float e = Dot(d2, d2);
+		float f = Dot(d2, r);
+
+		float s, t;
+
+		if (a <= 1e-6f && e <= 1e-6f) {
+			return Dot(r, r); // 両方の線分が点
+		}
+		if (a <= 1e-6f) {
+			s = 0.0f;
+			t = std::clamp(f / e, 0.0f, 1.0f);
+		}
+		else {
+			float c = Dot(d1, r);
+			if (e <= 1e-6f) {
+				t = 0.0f;
+				s = std::clamp(-c / a, 0.0f, 1.0f);
+			}
+			else {
+				float b = Dot(d1, d2);
+				float denom = a * e - b * b;
+
+				if (denom != 0.0f) {
+					s = std::clamp((b * f - c * e) / denom, 0.0f, 1.0f);
+				}
+				else {
+					s = 0.0f;
+				}
+
+				t = (b * s + f) / e;
+
+				if (t < 0.0f) {
+					t = 0.0f;
+					s = std::clamp(-c / a, 0.0f, 1.0f);
+				}
+				else if (t > 1.0f) {
+					t = 1.0f;
+					s = std::clamp((b - c) / a, 0.0f, 1.0f);
+				}
+			}
+		}
+
+		Vector3 c1 = p1 + d1 * s;
+		Vector3 c2 = p2 + d2 * t;
+		Vector3 diff = c1 - c2;
+
+		return Dot(diff, diff); // 最短距離の二乗
+		};
+
+	// 半径の合計
+	float radiusSum = capsule1.radius + capsule2.radius;
+
+	// 最短距離の二乗を求める
+	float distSq = SegmentSegmentDistSq(capsule1.segment, capsule2.segment);
+
+	// 衝突しているかを判定
+	return distSq <= radiusSum * radiusSum;
 }
 
 void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* lineDrawer, uint32_t subdivision) {

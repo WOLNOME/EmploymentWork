@@ -13,14 +13,6 @@ void PlayerBullet::Initialize() {
 	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	//パーティクルの生成と初期化
-	hit_ = std::make_unique<Particle>();
-	hit_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletHit"), "hit");
-	hit_->emitter_.isPlay = false;
-	hit_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-	hit_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
-	hit_->emitter_.clumpNum = 10;
-	hit_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
-
 	trail_ = std::make_unique<Particle>();
 	trail_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletTrail"), "trail");
 	trail_->emitter_.isPlay = false;
@@ -85,22 +77,41 @@ void PlayerBullet::DebugWithImGui() {
 void PlayerBullet::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Enemy:
 		//敵に当たった場合
+	case CollisionAttribute::Enemy:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの制御
-		hit_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		hit_->emitter_.isPlay = true;
 		//死亡処理
 		DeadProcess();
 
 		break;
-	case CollisionAttribute::EnemyBullet:
 		//敵弾に当たった場合
+	case CollisionAttribute::EnemyBullet:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//死亡処理
+		DeadProcess();
+
+		break;
+		//敵キャノンに当たった場合
+	case CollisionAttribute::EnemyCannon:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//死亡処理
+		DeadProcess();
+
 		break;
 	default:
 		break;
 	}
+}
+
+void PlayerBullet::SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
+	object3d_->worldTransform.translate = _initPos;
+	float speed = param_["speed"];
+	velocity_ = _initDirection * speed;
+	gravity_ = 0.0f;
+	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+	isDead_ = false;
+	trail_->emitter_.isPlay = true;	//トレイルパーティクルを開始
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 
 void PlayerBullet::Move() {
@@ -129,8 +140,6 @@ void PlayerBullet::Move() {
 			DeadProcess();
 		}
 	}
-	
-
 }
 
 void PlayerBullet::UpdateParticle() {

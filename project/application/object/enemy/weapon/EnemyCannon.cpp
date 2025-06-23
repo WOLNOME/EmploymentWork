@@ -36,9 +36,7 @@ void EnemyCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) {
-		return;
-	}
+	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 
 	//移動処理
 	Move();
@@ -75,8 +73,8 @@ void EnemyCannon::DebugWithImGui() {
 void EnemyCannon::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Player:
 		//プレイヤーに当たった場合
+	case CollisionAttribute::Player:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
 		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
@@ -87,8 +85,29 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute) {
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 
 		break;
-	case CollisionAttribute::PlayerBullet:
 		//プレイヤー弾に当たった場合
+	case CollisionAttribute::PlayerBullet:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		particle_->emitter_.isPlay = true;
+		//死亡予約処理
+		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+		break;
+		//プレイヤーキャノンに当たった場合
+	case CollisionAttribute::PlayerCannon:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		particle_->emitter_.isPlay = true;
+		//死亡予約処理
+		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 		break;
 	default:
 		break;
@@ -119,6 +138,7 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 		SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 		//死亡状態を解除
 		isDead_ = false;
+		prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 		return;
 	}
 
@@ -130,6 +150,7 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 	//死亡状態を解除
 	isDead_ = false;
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 
 void EnemyCannon::Move() {

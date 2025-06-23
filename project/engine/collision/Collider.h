@@ -38,6 +38,8 @@ public://getter
 	const AABB& GetAABB() { return collisionLocalAABB_; }
 	//ワールド座標を取得
 	virtual Vector3 GetWorldPosition() = 0;
+	//前フレーム座標を取得
+	virtual Vector3 GetPrePosition() = 0;
 	//属性の取得
 	CollisionAttribute GetCollisionAttribute() { return collisionAttribute_; }
 

@@ -422,6 +422,8 @@ public://静的メンバ関数
 	//OBBと線分の当たり判定
 	static bool IsCollision(const OBB& obb, const Segment& segment);
 	static bool IsCollision(const Segment& segment, const OBB& obb);
+	//カプセル同士の当たり判定
+	static bool IsCollision(const Capsule& capsule1, const Capsule& capsule2);
 
 	///------------------------------------///
 	///              図形の線描画
