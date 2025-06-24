@@ -5,8 +5,8 @@
 #include <memory>
 
 //アプリケーション
-#include "application/object/enemy/Enemy.h"
-#include "application/object/enemy/Boss.h"
+#include "application/object/character/enemy/Canota.h"
+#include "application/object/character/enemy/Boss.h"
 
 class Player;
 class EnemyManager {
@@ -24,10 +24,10 @@ public:
 	void DebugWithImGui();
 
 public://getter
-	//敵のコンテナ
-	const std::list<std::unique_ptr<Enemy>>& GetEnemies() const { return enemies_; }
-	//ボスのポインタ
-	Boss* GetBoss() const { return boss_.get(); }
+	//キャノ太のコンテナ
+	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
+	//ボスのコンテナ
+	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
 
 public://setter
 	//カメラセット
@@ -46,10 +46,13 @@ private:
 	Player* player_ = nullptr;
 
 private:
-	//敵のコンテナ
-	std::list<std::unique_ptr<Enemy>> enemies_;
-	int numEnemies_ = 4;
-	std::unique_ptr<Boss> boss_ = nullptr;
+	//キャノ太のコンテナ
+	std::list<std::unique_ptr<Canota>> canotas_;
+	int numCanotas_ = 4;
+	//ボスのコンテナ
+	std::list<std::unique_ptr<Boss>> bosses_;
+	int numBosses_ = 1;
+
 
 };
 

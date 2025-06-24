@@ -107,12 +107,12 @@
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
     <ClCompile Include="engine\scene\GamePlayScene.cpp" />
-    <ClCompile Include="application\object\Skydome.cpp" />
-    <ClCompile Include="application\object\Ground.cpp" />
-    <ClCompile Include="application\object\player\Player.cpp" />
-    <ClCompile Include="application\object\enemy\Enemy.cpp" />
-    <ClCompile Include="application\object\player\weapon\PlayerBullet.cpp" />
-    <ClCompile Include="application\object\baseCharacter\BaseCharacter.cpp" />
+    <ClCompile Include="application\object\environment\Skydome.cpp" />
+    <ClCompile Include="application\object\environment\Ground.cpp" />
+    <ClCompile Include="application\object\character\player\Player.cpp" />
+    <ClCompile Include="application\object\character\enemy\Canota.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\PlayerBullet.cpp" />
+    <ClCompile Include="application\object\character\base\BaseCharacter.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
     <ClCompile Include="engine\base\D2DRender.cpp" />
     <ClCompile Include="engine\base\GPUDescriptorManager.cpp" />
@@ -120,9 +120,9 @@
     <ClCompile Include="engine\base\RTVManager.cpp" />
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
     <ClCompile Include="engine\util\StringUtility.cpp" />
-    <ClCompile Include="application\object\enemy\weapon\EnemyCannon.cpp" />
-    <ClCompile Include="application\EnemyManager.cpp" />
-    <ClCompile Include="application\object\player\ui\PlayerUI.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyCannon.cpp" />
+    <ClCompile Include="application\object\character\enemy\manager\EnemyManager.cpp" />
+    <ClCompile Include="application\ui\player\PlayerUI.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
     <ClCompile Include="engine\3d\CombinedParticle.cpp" />
     <ClCompile Include="engine\3d\LevelObject.cpp" />
@@ -130,11 +130,12 @@
     <ClCompile Include="engine\base\TextTextureManager.cpp" />
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
     <ClCompile Include="engine\scene\GameOverScene.cpp" />
-    <ClCompile Include="application\object\enemy\Boss.cpp" />
-    <ClCompile Include="application\object\enemy\ui\EnemyUI.cpp" />
-    <ClCompile Include="application\object\player\weapon\PlayerCannon.cpp" />
-    <ClCompile Include="application\PlayerWeaponManager.cpp" />
-    <ClCompile Include="application\EnemyWeaponManager.cpp" />
+    <ClCompile Include="application\object\character\enemy\Boss.cpp" />
+    <ClCompile Include="application\ui\enemy\EnemyUI.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\PlayerCannon.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\manager\PlayerWeaponManager.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.cpp" />
+    <ClCompile Include="application\object\character\enemy\base\IBaseEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -227,12 +228,12 @@
     <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
     <ClInclude Include="engine\scene\GamePlayScene.h" />
-    <ClInclude Include="application\object\Skydome.h" />
-    <ClInclude Include="application\object\Ground.h" />
-    <ClInclude Include="application\object\player\Player.h" />
-    <ClInclude Include="application\object\enemy\Enemy.h" />
-    <ClInclude Include="application\object\player\weapon\PlayerBullet.h" />
-    <ClInclude Include="application\object\baseCharacter\BaseCharacter.h" />
+    <ClInclude Include="application\object\environment\Skydome.h" />
+    <ClInclude Include="application\object\environment\Ground.h" />
+    <ClInclude Include="application\object\character\player\Player.h" />
+    <ClInclude Include="application\object\character\enemy\Canota.h" />
+    <ClInclude Include="application\object\character\weapon\player\PlayerBullet.h" />
+    <ClInclude Include="application\object\character\base\BaseCharacter.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />
     <ClInclude Include="engine\base\D2DRender.h" />
     <ClInclude Include="engine\base\GPUDescriptorManager.h" />
@@ -242,9 +243,9 @@
     <ClInclude Include="engine\util\JsonUtil.h" />
     <ClInclude Include="engine\util\RandomStringUtil.h" />
     <ClInclude Include="engine\util\StringUtility.h" />
-    <ClInclude Include="application\object\enemy\weapon\EnemyCannon.h" />
-    <ClInclude Include="application\EnemyManager.h" />
-    <ClInclude Include="application\object\player\ui\PlayerUI.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyCannon.h" />
+    <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
+    <ClInclude Include="application\ui\player\PlayerUI.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
     <ClInclude Include="engine\3d\CombinedParticle.h" />
     <ClInclude Include="engine\3d\LevelObject.h" />
@@ -253,11 +254,12 @@
     <ClInclude Include="engine\base\TextTextureRender.h" />
     <ClInclude Include="engine\util\Handle.h" />
     <ClInclude Include="engine\scene\GameOverScene.h" />
-    <ClInclude Include="application\object\enemy\Boss.h" />
-    <ClInclude Include="application\object\enemy\ui\EnemyUI.h" />
-    <ClInclude Include="application\object\player\weapon\PlayerCannon.h" />
-    <ClInclude Include="application\PlayerWeaponManager.h" />
-    <ClInclude Include="application\EnemyWeaponManager.h" />
+    <ClInclude Include="application\object\character\enemy\Boss.h" />
+    <ClInclude Include="application\ui\enemy\EnemyUI.h" />
+    <ClInclude Include="application\object\character\weapon\player\PlayerCannon.h" />
+    <ClInclude Include="application\object\character\weapon\player\manager\PlayerWeaponManager.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.h" />
+    <ClInclude Include="application\object\character\enemy\base\IBaseEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\LineDrawer.hlsli" />

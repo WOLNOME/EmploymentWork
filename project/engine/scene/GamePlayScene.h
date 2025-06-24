@@ -1,14 +1,14 @@
 #pragma once
 #include "BaseScene.h"
 #include "GameCamera.h"
-#include "application/object/Skydome.h"
-#include "application/object/Ground.h"
-#include "application/object/player/Player.h"
-#include "application/PlayerWeaponManager.h"
-#include "application/object/player/ui/PlayerUI.h"
-#include "application/EnemyManager.h"
-#include "application/EnemyWeaponManager.h"
-#include "application/object/enemy/ui/EnemyUI.h"
+#include "application/object/environment/Skydome.h"
+#include "application/object/environment/Ground.h"
+#include "application/object/character/player/Player.h"
+#include "application/object/character/weapon/player/manager/PlayerWeaponManager.h"
+#include "application/ui/player/PlayerUI.h"
+#include "application/object/character/enemy/manager/EnemyManager.h"
+#include "application/object/character/weapon/enemy/manager/EnemyWeaponManager.h"
+#include "application/ui/enemy/EnemyUI.h"
 
 
 class GamePlayScene : public BaseScene {

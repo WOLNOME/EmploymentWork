@@ -6,8 +6,8 @@
 #include <memory>
 
 //アプリケーション
-#include "application/object/player/weapon/PlayerBullet.h"
-#include "application/object/player/weapon/PlayerCannon.h"
+#include "application/object/character/weapon/player/PlayerBullet.h"
+#include "application/object/character/weapon/player/PlayerCannon.h"
 
 class Player;
 class PlayerWeaponManager {

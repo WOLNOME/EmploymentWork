@@ -4,7 +4,7 @@
 #include <assert.h>
 
 //アプリケーション
-#include "application/EnemyManager.h"
+#include "application/object/character/enemy/manager/EnemyManager.h"
 
 void EnemyUI::Initialize() {
 	//パラメータ読み込み
@@ -38,7 +38,7 @@ void EnemyUI::Update() {
 	int hpBarIndex = 0;
 	for (int i = 0; i < kNumHPBar; i++) isHPBarVisible_[i] = false;
 
-	//共通描画ラムダ
+	//共通描画用ラムダ式
 	auto drawHPBar = [&](const Vector3& worldPos, float hpRate) {
 		//HPバーの表示率が0以下なら描画しない
 		if (hpBarIndex >= kNumHPBar) return;
@@ -62,17 +62,17 @@ void EnemyUI::Update() {
 		hpBarIndex++;
 		};
 
-	//通常の敵
-	for (const auto& normalEnemy : enemyManager_->GetEnemies()) {
-		Vector3 pos = normalEnemy->GetWorldTransform().worldTranslate;
+	//キャノ太
+	for (const auto& canota : enemyManager_->GetCanotas()) {
+		Vector3 pos = canota->GetWorldTransform().worldTranslate;
 		pos.y += normalEnemyHPBarHeight;
-		float rate = (float)normalEnemy->GetHP() / (float)normalEnemy->GetMaxHP();
+		float rate = (float)canota->GetHP() / (float)canota->GetMaxHP();
 		drawHPBar(pos, rate);
 	}
 
-	//ボス敵
-	if (const auto& boss = enemyManager_->GetBoss()) {
-		Vector3 pos = boss->GetWorldPosition();
+	//ボス
+	for (const auto& boss : enemyManager_->GetBosses()) {
+		Vector3 pos = boss->GetWorldTransform().worldTranslate;
 		pos.y += bossEnemyHPBarHeight;
 		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
 		drawHPBar(pos, rate);

@@ -1,5 +1,5 @@
 #pragma once
-#include "application/object/baseCharacter/BaseCharacter.h"
+#include "application/object/character/base/BaseCharacter.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"

@@ -1,18 +1,14 @@
 #pragma once
-#include "application/object/baseCharacter/BaseCharacter.h"
-#include "GameCamera.h"
-#include "SceneLight.h"
-#include "Object3d.h"
+#include "application/object/character/enemy/base/IBaseEnemy.h"
 #include "MyMath.h"
 #include "Particle.h"
-#include "jsonUtil.h"
 #include <memory>
 
 class Player;
-class Enemy : public BaseCharacter {
+class Canota : public IBaseEnemy {
 public:
 	//デストラクタ
-	~Enemy() override {};
+	~Canota() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -40,40 +36,17 @@ private:
 	void OnCollision(CollisionAttribute attribute) override;
 
 public://getter
-	int GetHP() const { return hp_; }
-	int GetMaxHP() const { return maxHP_; }
 	bool GetIsCannonFire() const { return isCannonFire_; }
 
-public://setter
-	void SetPlayer(Player* _player) { player_ = _player; }
-	void SetPosition(const Vector3& _pos);
-
 private://非公開関数
-	//移動
-	void Move();
-	//回転
-	void Rotate();
 	//攻撃
 	void Attack();
-	//死亡処理
-	void DeadProcess();
 
-private:
-	//プレイヤー
-	Player* player_ = nullptr;
 private://メンバ変数
-	//パラメータ
-	json param_;
-
 	//砲弾攻撃
 	float cannonCoolTime_;
 	float cannonCoolTimer_;
 	bool isCannonFire_ = false;
-
-	//HP
-	int maxHP_;			//最大HP
-	int hp_ = maxHP_;	//現在のHP
-
 
 };
 

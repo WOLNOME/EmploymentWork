@@ -9,12 +9,14 @@ class BaseCharacter : public Collider {
 public:
 	// コンストラクタ
 	BaseCharacter() = default;
+	// デストラクタ
+	virtual ~BaseCharacter() = default;
 	// 初期化
 	virtual void Initialize();
 	// 更新
 	virtual void Update();
 	// 描画
-	virtual void Draw() = 0;
+	virtual void Draw();
 	// ライン描画処理
 	virtual void DrawLine();
 

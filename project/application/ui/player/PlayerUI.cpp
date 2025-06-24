@@ -5,7 +5,7 @@
 #include <cassert>
 
 //アプリケーション
-#include "application/object/player/Player.h"
+#include "application/object/character/player/Player.h"
 
 void PlayerUI::Initialize() {
 	//パラメータ読み込み

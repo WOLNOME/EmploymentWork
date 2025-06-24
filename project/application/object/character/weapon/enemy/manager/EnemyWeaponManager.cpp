@@ -1,8 +1,8 @@
 #include "EnemyWeaponManager.h"
 
 //アプリケーション
-#include "application/EnemyManager.h"
-#include "application/object/player/Player.h"
+#include "application/object/character/enemy/manager/EnemyManager.h"
+#include "application/object/character/player/Player.h"
 
 void EnemyWeaponManager::Initialize() {
 	//パラメーターの読み込み
@@ -66,7 +66,7 @@ void EnemyWeaponManager::SetLight(SceneLight* _light) {
 
 void EnemyWeaponManager::CreateCannon() {
 	//全てのエネミーを回す
-	for (auto& enemy : enemyManager_->GetEnemies()) {
+	for (auto& enemy : enemyManager_->GetCanotas()) {
 		//エネミーから発射フラグを取得
 		if (!enemy->GetIsCannonFire()) continue;
 		//砲弾の追加位置を探す
@@ -83,20 +83,21 @@ void EnemyWeaponManager::CreateCannon() {
 		}
 	}
 
-	//ボスから発射フラグを取得
-	if (!enemyManager_->GetBoss()) return;
-	if (!enemyManager_->GetBoss()->GetIsCannonFire()) return;
-	//砲弾の追加位置を探す
-	for (auto& cannon : cannons_) {
-		//砲弾が生きていたら次へ
-		if (!cannon->GetIsDead()) continue;
-		//砲弾の初期位置と目標位置をセット
-		Vector3 cannonPos = enemyManager_->GetBoss()->GetWorldTransform().translate;
-		cannonPos.y += 2.0f;	//←高さ
-		cannonPos.x += std::sinf(enemyManager_->GetBoss()->GetWorldTransform().rotate.y) * 10.0f;
-		cannonPos.z += std::cosf(enemyManager_->GetBoss()->GetWorldTransform().rotate.y) * 10.0f;
-		cannon->SetInitParam(cannonPos, player_->GetWorldTransform().translate);
-		break;
+	//全てのボスを回す
+	for (auto& boss : enemyManager_->GetBosses()) {
+		//ボスから発射フラグを取得
+		if (!boss->GetIsCannonFire()) continue;
+		//砲弾の追加位置を探す
+		for (auto& cannon : cannons_) {
+			//砲弾が生きていたら次へ
+			if (!cannon->GetIsDead()) continue;
+			//砲弾の初期位置と目標位置をセット
+			Vector3 cannonPos = boss->GetWorldTransform().translate;
+			cannonPos.y += 2.0f;	//←高さ
+			cannonPos.x += std::sinf(boss->GetWorldTransform().rotate.y) * 10.0f;
+			cannonPos.z += std::cosf(boss->GetWorldTransform().rotate.y) * 10.0f;
+			cannon->SetInitParam(cannonPos, player_->GetWorldTransform().translate);
+			break;
+		}
 	}
-
 }

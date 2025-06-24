@@ -54,6 +54,11 @@ void BaseCharacter::Update() {
 
 }
 
+void BaseCharacter::Draw() {
+	//オブジェクトの描画
+	object3d_->Draw(camera_, textureHandle_);
+}
+
 void BaseCharacter::DrawLine() {
 	//当たり判定がNothingnessなら描画しない
 	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) return;

@@ -1,5 +1,5 @@
 #pragma once
-#include "application/object/baseCharacter/BaseCharacter.h"
+#include "application/object/character/base/BaseCharacter.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
@@ -7,10 +7,10 @@
 #include "JsonUtil.h"
 #include <memory>
 
-class PlayerBullet : public BaseCharacter {
+class PlayerCannon : public BaseCharacter {
 public:
 	//デストラクタ
-	~PlayerBullet() override {};
+	~PlayerCannon() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -37,25 +37,16 @@ public:
 public://setter
 	/// 最初にセットするパラメーター
 	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection);
-
 private:
 	//パーティクル
-	std::unique_ptr<Particle> trail_ = nullptr;		//トレイルパーティクル
+	std::unique_ptr<Particle> particle_ = nullptr;
 
 private:
 	//移動処理
 	void Move();
-	//パーティクル
-	void UpdateParticle();
-
-	//死亡処理
-	void DeadProcess();
 private:
 	//パラメータ
 	json param_;
-
-	float lifeTime_;		//寿命
-	float lifeTimer_;		//寿命タイマー
 
 };
 

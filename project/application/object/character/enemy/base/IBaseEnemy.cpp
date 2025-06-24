@@ -1,45 +1,21 @@
-#include "Boss.h"
+#include "IBaseEnemy.h"
 #include "ImGuiManager.h"
-#include "TextureManager.h"
 
 //アプリケーション
-#include "application/object/player/Player.h"
+#include "application/object/character/player/Player.h"
 
-void Boss::Initialize() {
+void IBaseEnemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
-	//テクスチャ
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("boss.png");
-
-	//インスタンスの生成と初期化
-	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, "enemy");
-	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
-	if (light_) {
-		object3d_->SetSceneLight(light_);
-	}
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::AABB;
-	//当たり判定の半径を設定
-	collisionLocalAABB_ = {
-		.min = { -6.0f, -4.5f, -6.0f },	//最小座標
-		.max = { 6.0f, 2.5f, 6.0f }		//最大座標
-	};
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
-	//パラメータの反映
-	maxHP_ = param_["maxHP"];
-	hp_ = maxHP_;
-	cannonCoolTime_ = param_["cannonCoolTime"];
-	cannonCoolTimer_ = 0.0f;
-
 }
 
-void Boss::Update() {
+void IBaseEnemy::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
@@ -47,23 +23,22 @@ void Boss::Update() {
 	Move();
 	//回転処理
 	Rotate();
-	//攻撃
-	Attack();
 	//死亡処理
 	DeadProcess();
 }
 
-void Boss::Draw() {
-	//オブジェクトの描画
-	object3d_->Draw(camera_, textureHandle_);
+void IBaseEnemy::Draw() {
+	//ベースキャラクターの描画
+	BaseCharacter::Draw();
+
 }
 
-void Boss::DrawLine() {
+void IBaseEnemy::DrawLine() {
 	//ベースキャラクターのライン描画
 	BaseCharacter::DrawLine();
 }
 
-void Boss::DebugWithImGui() {
+void IBaseEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("敵");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
@@ -75,7 +50,11 @@ void Boss::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Boss::OnCollision(CollisionAttribute attribute) {
+void IBaseEnemy::SetPosition(const Vector3& _pos) {
+	object3d_->worldTransform.translate = _pos;
+}
+
+void IBaseEnemy::OnCollision(CollisionAttribute attribute) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
@@ -105,18 +84,13 @@ void Boss::OnCollision(CollisionAttribute attribute) {
 	}
 }
 
-void Boss::SetPosition(const Vector3& _pos) {
-	object3d_->worldTransform.translate = _pos;
-	object3d_->worldTransform.translate.y = 4.5f;
-}
-
-void Boss::Move() {
-	//プレイヤーが索敵範囲内にいないなら処理を行わない
+void IBaseEnemy::Move() {
+	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
 	float searchPlayerDistanceMove = param_["searchPlayerDistanceMove"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceMove) {
 		return;
 	}
-	//攻撃範囲内にいたら処理を行わない
+	//攻撃範囲内にいるなら処理を行わない
 	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) < searchPlayerDistanceAttack) {
 		return;
@@ -152,7 +126,7 @@ void Boss::Move() {
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 }
 
-void Boss::Rotate() {
+void IBaseEnemy::Rotate() {
 	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
 	float searchPlayerDistanceRotate = param_["searchPlayerDistanceRotate"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceRotate) {
@@ -200,35 +174,7 @@ void Boss::Rotate() {
 	}
 }
 
-void Boss::Attack() {
-	//クールタイム処理
-	if (cannonCoolTimer_ > 0.0f) {
-		cannonCoolTimer_ -= kDeltaTime;
-		//クールタイムがマイナスになったら0にする
-		if (cannonCoolTimer_ < 0.0f) {
-			cannonCoolTimer_ = 0.0f;
-		}
-		//砲弾を発射したフラグをオフ
-		isCannonFire_ = false;
-		//計算後はこの関数を抜ける
-		return;
-	}
-
-	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceAttack) {
-		return;
-	}
-	//未攻撃状態なら攻撃処理
-	if (!isCannonFire_) {
-		//砲弾を発射したフラグをオン
-		isCannonFire_ = true;
-		//クールタイムをセット
-		cannonCoolTimer_ = cannonCoolTime_;
-	}
-}
-
-void Boss::DeadProcess() {
+void IBaseEnemy::DeadProcess() {
 	//もしHPが0になったら
 	if (hp_ <= 0) {
 		//死亡タイマーをセット
