@@ -11,7 +11,6 @@
 #include "BaseCamera.h"
 #include "MyMath.h"
 #include "ModelFormat.h"
-#include "LineDrawer.h"
 //assimp
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

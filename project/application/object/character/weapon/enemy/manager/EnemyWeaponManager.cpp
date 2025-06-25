@@ -34,13 +34,6 @@ void EnemyWeaponManager::Draw() {
 	}
 }
 
-void EnemyWeaponManager::DrawLine() {
-	//砲弾のライン描画
-	for (const auto& cannon : cannons_) {
-		cannon->DrawLine();
-	}
-}
-
 void EnemyWeaponManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//砲弾のデバッグ

@@ -21,16 +21,8 @@ void DevelopScene::Initialize() {
 	//点光源の生成と初期化
 	pointLight = std::make_unique<PointLight>();
 	pointLight2 = std::make_unique<PointLight>();
-	//点光源目印の生成と初期化
-	plMark = std::make_unique<LineDrawer>();
-	plMark->Initialize();
-	plMark2 = std::make_unique<LineDrawer>();
-	plMark2->Initialize();
 	//スポットライトの生成と初期化
 	spotLight = std::make_unique<SpotLight>();
-	//スポットライト目印の生成と初期化
-	slMark = std::make_unique<LineDrawer>();
-	slMark->Initialize();
 
 	//各光源をシーンライトにセット
 	sceneLight_->SetLight(dirLight.get());
@@ -112,16 +104,13 @@ void DevelopScene::Initialize() {
 	levelObject_->Initialize("Resources/levelOutput");
 	levelObject_->SetCamera(camera.get());
 
-	//パーティクルの生成・初期化
-	ParticleManager::GetInstance()->SetCamera(camera.get());
-	//particle_ = std::make_unique<Particle>();
-	//particle_->Initialize("develop", "basic");
-
-	line_ = std::make_unique<LineDrawer>();
-	line_->Initialize();
-
+	//オーディオの生成・初期化
 	audio_ = std::make_unique<Audio>();
 	audio_->Initialize("demo2.wav");
+
+	//カメラのセット
+	LineManager::GetInstance()->SetCamera(camera.get());
+	ParticleManager::GetInstance()->SetCamera(camera.get());
 
 	//テキストテクスチャの作成
 	{
@@ -245,21 +234,6 @@ void DevelopScene::Draw() {
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
-
-
-	//線描画共通描画設定
-	LineDrawerCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓線描画開始↓↓↓↓
-	///------------------------------///
-
-	//線描画
-	line_->Draw(*camera.get());
-
-	///------------------------------///
-	///↑↑↑↑線描画終了↑↑↑↑
 	///------------------------------///
 
 	//スプライトの共通描画設定

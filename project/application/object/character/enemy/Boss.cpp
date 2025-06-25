@@ -48,11 +48,6 @@ void Boss::Draw() {
 	IBaseEnemy::Draw();
 }
 
-void Boss::DrawLine() {
-	//ベースエネミーのライン描画
-	IBaseEnemy::DrawLine();
-}
-
 void Boss::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースエネミーのデバッグ処理

@@ -1,11 +1,10 @@
 #include "BaseCharacter.h"
 #include "CollisionManager.h"
+#include "LineManager.h"
 #include <float.h>
 #include <cassert>
 
 void BaseCharacter::Initialize() {
-	//デバッグ用ラインの初期化
-	InitDebugLine();
 	//前フレーム座標を初期化
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
@@ -51,7 +50,6 @@ void BaseCharacter::Update() {
 			deadTimer_ = 0.0f;
 		}
 	}
-
 }
 
 void BaseCharacter::Draw() {
@@ -59,13 +57,13 @@ void BaseCharacter::Draw() {
 	object3d_->Draw(camera_, textureHandle_);
 }
 
-void BaseCharacter::DrawLine() {
-	//当たり判定がNothingnessなら描画しない
-	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) return;
+void BaseCharacter::DebugWithImGui() {
+#ifdef _DEBUG
+	//死亡していたらreturn
+	if (isDead_ || deadTimer_ > 0.0f) return;
 
-	//コライダーのライン描画
-	DrawCollisionLine(camera_);
-
+	Collider::DebugWithImGui();
+#endif //_DEBUG
 }
 
 void BaseCharacter::SetDeadTimer(float remainingSeconds) {

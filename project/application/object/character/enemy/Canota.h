@@ -21,10 +21,6 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw() override;
-	/// <summary>
-	/// ライン描画
-	/// </summary>
-	void DrawLine() override;
 
 	/// <summary>
 	/// デバッグ用パラメーター調整

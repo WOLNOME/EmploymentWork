@@ -73,17 +73,6 @@ void EnemyManager::Draw() {
 	}
 }
 
-void EnemyManager::DrawLine() {
-	//全キャノ太のライン描画
-	for (const auto& canota : canotas_) {
-		canota->DrawLine();
-	}
-	//全ボスのライン描画
-	for (const auto& boss : bosses_) {
-		boss->DrawLine();
-	}
-}
-
 void EnemyManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//全キャノ太のデバッグ処理

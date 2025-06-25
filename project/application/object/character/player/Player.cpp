@@ -82,13 +82,11 @@ void Player::Draw() {
 	object3d_->Draw(camera_);
 }
 
-void Player::DrawLine() {
-	//ベースキャラクターのライン描画
-	BaseCharacter::DrawLine();
-}
-
 void Player::DebugWithImGui() {
 #ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
+
 	ImGui::Begin("プレイヤー");
 	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);

@@ -97,7 +97,8 @@ void ParticleManager::Update() {
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(4, particle.second->allResourceForCS_.jsonInfoResource->GetGPUVirtualAddress());
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, particle.second->allResourceForCS_.perFrameResource->GetGPUVirtualAddress());
 
-		mainRender->GetCommandList()->Dispatch(UINT(particle.second->param_["MaxGrains"] + 1023) / 1024, 1, 1);
+		int maxGrains = particle.second->param_["MaxGrains"];
+		mainRender->GetCommandList()->Dispatch(UINT(maxGrains + 1023) / 1024, 1, 1);
 		//粒配列情報をSRV用にリソース遷移
 		mainRender->TransitionResource(particle.second->allResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
 
@@ -132,7 +133,8 @@ void ParticleManager::Draw() {
 		//JSON情報をVSに送信
 		mainRender->GetCommandList()->SetGraphicsRootConstantBufferView(5, particle.second->allResourceForCS_.jsonInfoResource->GetGPUVirtualAddress());
 		//各パーティクル形状の描画
-		particle.second->shape_->Draw(0, 3, (uint32_t)particle.second->param_["MaxGrains"], particle.second->textureHandle_);
+		int maxGrains = particle.second->param_["MaxGrains"];
+		particle.second->shape_->Draw(0, 3, (uint32_t)maxGrains, particle.second->textureHandle_);
 
 		//粒配列情報をUAV用にリソース遷移
 		mainRender->TransitionResource(particle.second->allResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
@@ -164,7 +166,8 @@ void ParticleManager::RegisterParticle(const std::string& name, Particle* partic
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(2, gpuDescriptorManager->GetGPUDescriptorHandle(particles[name]->allResourceForCS_.freeListUavIndex));
 	mainRender->GetCommandList()->SetComputeRootConstantBufferView(3, particles[name]->allResourceForCS_.jsonInfoResource->GetGPUVirtualAddress());
 
-	mainRender->GetCommandList()->Dispatch(UINT(particles[name]->param_["MaxGrains"] + 1023) / 1024, 1, 1);
+	int maxGrains = particles[name]->param_["MaxGrains"];
+	mainRender->GetCommandList()->Dispatch(UINT(maxGrains + 1023) / 1024, 1, 1);
 }
 
 void ParticleManager::DeleteParticle(const std::string& name) {

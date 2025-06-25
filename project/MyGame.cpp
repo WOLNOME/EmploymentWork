@@ -10,6 +10,7 @@
 #include "TextTextureManager.h"
 #include "ImGuiManager.h"
 #include "ModelManager.h"
+#include "LineManager.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
 
@@ -76,6 +77,9 @@ void MyGame::Draw() {
 
 	//シーンの描画
 	SceneManager::GetInstance()->Draw();
+
+	//シーンのライン描画
+	LineManager::GetInstance()->Draw();
 
 	//シーンのパーティクル描画
 	ParticleManager::GetInstance()->Draw();

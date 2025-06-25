@@ -1,16 +1,8 @@
 #include "Collider.h"
 #include "MyMath.h"
 
-void Collider::InitDebugLine() {
+void Collider::DebugWithImGui() {
 #ifdef _DEBUG
-	lineDrawer_ = std::make_unique<LineDrawer>();
-	lineDrawer_->Initialize();
-#endif // _DEBUG
-}
-
-void Collider::DrawCollisionLine(BaseCamera* _camera) {
-#ifdef _DEBUG
-	lineDrawer_->ClearLine();
 	//形状の種類によって分岐
 	switch (collisionShapeKind_) {
 	case Collider::CollisionShapeKind::Sphere: {
@@ -19,7 +11,7 @@ void Collider::DrawCollisionLine(BaseCamera* _camera) {
 			.center = GetWorldPosition(),
 			.radius = collisionRadius_
 		};
-		MyMath::CreateLineSphere(sphere, debugLineColor_, lineDrawer_.get());
+		MyMath::CreateLineSphere(sphere, debugLineColor_);
 		break;
 	}
 	case Collider::CollisionShapeKind::AABB: {
@@ -28,7 +20,7 @@ void Collider::DrawCollisionLine(BaseCamera* _camera) {
 			.min = collisionLocalAABB_.min + GetWorldPosition(),
 			.max = collisionLocalAABB_.max + GetWorldPosition()
 		};
-		MyMath::CreateLineAABB(aabb, debugLineColor_, lineDrawer_.get());
+		MyMath::CreateLineAABB(aabb, debugLineColor_);
 		break;
 	}
 	case Collider::CollisionShapeKind::OBB: {
@@ -37,9 +29,5 @@ void Collider::DrawCollisionLine(BaseCamera* _camera) {
 	default:
 		break;
 	}
-
-	//描画
-	lineDrawer_->Draw(*_camera);
-
-#endif // _DEBUG
+#endif //_DEBUG
 }

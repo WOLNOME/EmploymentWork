@@ -17,7 +17,7 @@
 #include "AudioCommon.h"
 #include "SpriteCommon.h"
 #include "Object3dCommon.h"
-#include "LineDrawerCommon.h"
+#include "LineManager.h"
 #include "SceneManager.h"
 #include "CollisionManager.h"
 
@@ -80,7 +80,7 @@ void Framework::Initialize() {
 	Object3dCommon::GetInstance()->Initialize();
 
 	//線描画共通部
-	LineDrawerCommon::GetInstance()->Initialize();
+	LineManager::GetInstance()->Initialize();
 
 	//シーンマネージャーの生成
 	SceneManager::GetInstance()->Initialize();
@@ -93,7 +93,7 @@ void Framework::Initialize() {
 void Framework::Finalize() {
 	CollisionManager::GetInstance()->Finalize();
 	SceneManager::GetInstance()->Finalize();
-	LineDrawerCommon::GetInstance()->Finalize();
+	LineManager::GetInstance()->Finalize();
 	Object3dCommon::GetInstance()->Finalize();
 	SpriteCommon::GetInstance()->Finalize();
 	AudioCommon::GetInstance()->Finalize();

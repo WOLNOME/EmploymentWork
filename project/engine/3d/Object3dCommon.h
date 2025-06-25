@@ -4,8 +4,7 @@
 #include <array>
 
 //モデル共通部
-class Object3dCommon
-{
+class Object3dCommon {
 public:
 	enum class NameGPS {
 		None,			//通常

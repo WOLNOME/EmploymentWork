@@ -33,13 +33,11 @@ void IBaseEnemy::Draw() {
 
 }
 
-void IBaseEnemy::DrawLine() {
-	//ベースキャラクターのライン描画
-	BaseCharacter::DrawLine();
-}
-
 void IBaseEnemy::DebugWithImGui() {
 #ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
+
 	ImGui::Begin("敵");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();

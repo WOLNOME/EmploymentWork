@@ -1,4 +1,4 @@
-#include "LineDrawer.hlsli"
+#include "Line.hlsli"
 
 struct PixelShaderOutput
 {

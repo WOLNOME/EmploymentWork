@@ -204,8 +204,8 @@ void Sprite::AdjustTextureSize(uint32_t _textureHandle) {
 }
 
 void Sprite::AdjustTextureSize(Handle _textTextureHandle) {
-	textureSize.x = TextTextureManager::GetInstance()->GetTextureWidth(_textTextureHandle);
-	textureSize.y = TextTextureManager::GetInstance()->GetTextureHeight(_textTextureHandle);
+	textureSize.x = (float)TextTextureManager::GetInstance()->GetTextureWidth(_textTextureHandle);
+	textureSize.y = (float)TextTextureManager::GetInstance()->GetTextureHeight(_textTextureHandle);
 	//画像サイズをテクスチャサイズに合わせる
 	size = textureSize;
 }

@@ -1,7 +1,7 @@
 #include "GameCamera.h"
 #include <random>
-#undef min;
-#undef max;
+#undef min
+#undef max
 #include <algorithm>
 
 void GameCamera::Initialize() {

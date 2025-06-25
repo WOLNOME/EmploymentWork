@@ -4,7 +4,6 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "CollisionConfig.h"
-#include "LineDrawer.h"
 #include "WorldTransform.h"
 
 class Collider {
@@ -23,11 +22,8 @@ public:
 	//当たり判定時の処理
 	virtual void OnCollision(CollisionAttribute attribute) = 0;
 
-public://当たり判定可視化用ラインに関する関数群
-	//デバッグライン初期化
-	void InitDebugLine();
-	//当たり判定可視化用ラインの描画
-	void DrawCollisionLine(BaseCamera* _camera);
+	//デバッグ専用処理
+	virtual void DebugWithImGui();
 
 public://getter
 	//形状の種類を取得
@@ -49,8 +45,6 @@ public://setter
 
 private:
 	CollisionAttribute collisionAttribute_ = CollisionAttribute::Nothingness;
-	//デバッグ用ライン
-	std::unique_ptr<LineDrawer> lineDrawer_ = nullptr;
 protected:
 	//形状の種類
 	CollisionShapeKind collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -63,7 +57,6 @@ protected:
 		.min = { -1.0f, -1.0f, -1.0f },	//最小座標
 		.max = { 1.0f, 1.0f, 1.0f }		//最大座標
 	};
-
 
 	//デバッグ用変数
 	Vector4 debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };

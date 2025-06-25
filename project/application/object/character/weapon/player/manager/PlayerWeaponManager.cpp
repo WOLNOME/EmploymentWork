@@ -50,17 +50,6 @@ void PlayerWeaponManager::Draw() {
 	}
 }
 
-void PlayerWeaponManager::DrawLine() {
-	//砲弾のライン描画
-	for (const auto& cannon : cannons_) {
-		cannon->DrawLine();
-	}
-	//銃弾のライン描画
-	for (const auto& bullet : bullets_) {
-		bullet->DrawLine();
-	}
-}
-
 void PlayerWeaponManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//砲弾のデバッグ

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numbers>
-#include "LineDrawer.h"
+#include "LineManager.h"
 
 Vector2 MyMath::Add(const Vector2& v1, const Vector2& v2) {
 	Vector2 c;
@@ -1828,7 +1828,8 @@ bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
 	return distSq <= radiusSum * radiusSum;
 }
 
-void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* lineDrawer, uint32_t subdivision) {
+void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, uint32_t subdivision) {
+	const auto lineManager = LineManager::GetInstance();
 	const uint32_t kSubdivision = subdivision;//分割数
 	const float kLonEvery = 2.0f * pi / kSubdivision;//経度分割1つ分の角度
 	const float kLatEvery = pi / kSubdivision;//緯度分割1つ分の角度
@@ -1856,13 +1857,14 @@ void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, LineDrawer* l
 				sphere.center.z + sphere.radius * cosf(lat) * sinf(kLonEvery + lon)
 			};
 			//描画
-			lineDrawer->CreateLine(a, b, color);
-			lineDrawer->CreateLine(a, c, color);
+			lineManager->CreateLine(a, b, color);
+			lineManager->CreateLine(a, c, color);
 		}
 	}
 }
 
-void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color, LineDrawer* lineDrawer) {
+void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color) {
+	const auto lineManager = LineManager::GetInstance();
 	// 8頂点を計算
 	Vector3 v[8] = {
 		{ aabb.min.x, aabb.min.y, aabb.min.z }, // 0
@@ -1885,7 +1887,7 @@ void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color, LineDrawer* lineDra
 	for (uint32_t i = 0; i < 12; ++i) {
 		const Vector3& from = v[edgeIndices[i][0]];
 		const Vector3& to = v[edgeIndices[i][1]];
-		lineDrawer->CreateLine(from, to, color);
+		lineManager->CreateLine(from, to, color);
 	}
 }
 

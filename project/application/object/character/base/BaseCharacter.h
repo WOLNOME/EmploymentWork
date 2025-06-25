@@ -4,62 +4,60 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 
-// キャラクター基底クラス
+//キャラクター基底クラス
 class BaseCharacter : public Collider {
 public:
-	// コンストラクタ
+	//コンストラクタ
 	BaseCharacter() = default;
-	// デストラクタ
+	//デストラクタ
 	virtual ~BaseCharacter() = default;
-	// 初期化
+	//初期化
 	virtual void Initialize();
-	// 更新
+	//更新
 	virtual void Update();
-	// 描画
+	//描画
 	virtual void Draw();
-	// ライン描画処理
-	virtual void DrawLine();
 
-	// デバッグ用パラメーター調整
-	virtual void DebugWithImGui() = 0;
+	//デバッグ用パラメーター調整
+	virtual void DebugWithImGui();
 
 public://getter
-	// ワールドトランスフォームの取得
+	//ワールドトランスフォームの取得
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
-	// コライダー用のワールド座標を取得
+	//コライダー用のワールド座標を取得
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
-	// コライダー用前フレーム座標を取得
+	//コライダー用前フレーム座標を取得
 	Vector3 GetPrePosition() override { return prePosition_; }
 
-	// 死亡フラグの取得
+	//死亡フラグの取得
 	bool GetIsDead() const { return isDead_; }
-	// 死亡タイマーの取得
+	//死亡タイマーの取得
 	float GetDeadTimer() const { return deadTimer_; }
 
 public://setter
-	// カメラのセット
+	//カメラのセット
 	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
-	// シーンライトのセット
+	//シーンライトのセット
 	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 	//死亡予約関数
 	void SetDeadTimer(float remainingSeconds);
 
 
 protected://インスタンス
-	// カメラ
+	//カメラ
 	GameCamera* camera_ = nullptr;
-	// シーンライト
+	//シーンライト
 	SceneLight* light_ = nullptr;
 protected://オブジェクト
-	// テクスチャハンドル
+	//テクスチャハンドル
 	int32_t textureHandle_ = EOF;
-	// オブジェクト3D
+	//オブジェクト3D
 	std::unique_ptr<Object3d> object3d_ = nullptr;
-	// 前フレームの座標
+	//前フレームの座標
 	Vector3 prePosition_ = {};
 
 protected://キャラ共有のメンバ変数
-	// 速度
+	//速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 	//死亡フラグ
 	bool isDead_ = false;

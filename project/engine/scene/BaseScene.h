@@ -9,10 +9,10 @@
 #include "Object3d.h"
 #include "Particle.h"
 #include "CombinedParticle.h"
+#include "LineManager.h"
 #include "ParticleManager.h"
 #include "Input.h"
 #include "Audio.h"
-#include "LineDrawer.h"
 #include "TextureManager.h"
 #include "TextTextureManager.h"
 #include "LevelObject.h"
@@ -20,7 +20,6 @@
 #include "PostEffectManager.h"
 #include "ImGuiManager.h"
 #include "Object3dCommon.h"
-#include "LineDrawerCommon.h"
 #include "SpriteCommon.h"
 //シーン共通ヘッダー
 #include <cstdint>

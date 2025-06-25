@@ -12,7 +12,7 @@ void GamePlayScene::Initialize() {
 	camera_ = std::make_unique<GameCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(2000.0f);
-	camera_->worldTransform.rotate={ 0.15f,0.0f,0.0f };
+	camera_->worldTransform.rotate = { 0.15f,0.0f,0.0f };
 	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
 
 	//ライトの生成・初期化＆登録
@@ -40,6 +40,7 @@ void GamePlayScene::Initialize() {
 	playerUI_->Initialize();
 	enemyUI_->Initialize();
 	//カメラ、ライトのセット
+	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
 	playerWeaponManager_->SetCamera(camera_.get());
@@ -107,7 +108,7 @@ void GamePlayScene::Update() {
 	//プレイヤーUIのImGui
 	playerUI_->DebugWithImGui();
 	//敵UIのImGui
-
+	enemyUI_->DebugWithImGui();
 
 #endif // _DEBUG
 }
@@ -143,27 +144,6 @@ void GamePlayScene::Draw() {
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
-
-	//線描画共通描画設定
-	LineDrawerCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓線描画開始↓↓↓↓
-	///------------------------------///
-
-	//プレイヤーのライン描画
-	player_->DrawLine();
-	//プレイヤー武器マネージャーのライン描画
-	playerWeaponManager_->DrawLine();
-	//敵のライン描画
-	enemyManager_->DrawLine();
-	//敵武器マネージャーのライン描画
-	enemyWeaponManager_->DrawLine();
-
-
-	///------------------------------///
-	///↑↑↑↑線描画終了↑↑↑↑
 	///------------------------------///
 
 	//フロントスプライト共通描画設定

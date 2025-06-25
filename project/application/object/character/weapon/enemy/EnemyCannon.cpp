@@ -47,17 +47,15 @@ void EnemyCannon::Draw() {
 	if (GetDeadTimer() > 0.0f || GetIsDead()) {
 		return;
 	}
-	//オブジェクトの描画
-	object3d_->Draw(camera_, textureHandle_);
-}
+	//ベースキャラクターの描画
+	BaseCharacter::Draw();
 
-void EnemyCannon::DrawLine() {
-	//ベースキャラクターのライン描画
-	BaseCharacter::DrawLine();
 }
 
 void EnemyCannon::DebugWithImGui() {
 #ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
 
 	ImGui::Begin("敵キャノン");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);

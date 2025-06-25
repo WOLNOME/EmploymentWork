@@ -42,11 +42,6 @@ void Canota::Draw() {
 	IBaseEnemy::Draw();
 }
 
-void Canota::DrawLine() {
-	//ベースエネミーのライン描画
-	IBaseEnemy::DrawLine();
-}
-
 void Canota::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースエネミーのデバッグ処理

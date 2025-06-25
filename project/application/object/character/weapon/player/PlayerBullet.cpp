@@ -55,13 +55,10 @@ void PlayerBullet::Draw() {
 	object3d_->Draw(camera_, textureHandle_);
 }
 
-void PlayerBullet::DrawLine() {
-	//ベースキャラクターのライン描画
-	BaseCharacter::DrawLine();
-}
-
 void PlayerBullet::DebugWithImGui() {
 #ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
 
 	ImGui::Begin("プレイヤー銃弾");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);

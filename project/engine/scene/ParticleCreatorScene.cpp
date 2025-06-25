@@ -2,7 +2,6 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
-#include "ParticleManager.h"
 #include "JsonUtil.h"
 #include <filesystem>
 #include <iostream>
@@ -19,7 +18,8 @@ void ParticleCreatorScene::Initialize() {
 	camera_->Initialize();
 	camera_->worldTransform.translate = { 0.0f,50.0f,0.0f };
 	camera_->worldTransform.rotate = { 0.2f,0.0f,0.0f };
-	//パーティクルマネージャーにカメラをセット
+	//カメラをセット
+	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 
 	//天球と地面の生成と初期化
@@ -28,10 +28,6 @@ void ParticleCreatorScene::Initialize() {
 	textureHandleGround_ = TextureManager::GetInstance()->LoadTexture("grid.png");
 	ground_ = std::make_unique<Object3d>();
 	ground_->Initialize(ModelTag{}, "ground");
-
-	//エミッター可視化ラインの生成初期化
-	lineEmitter_ = std::make_unique<LineDrawer>();
-	lineEmitter_->Initialize();
 
 }
 
@@ -68,7 +64,7 @@ void ParticleCreatorScene::Update() {
 	//セーブ処理
 	SaveWithImGui();
 
-#endif // _DEBUG
+#endif //_DEBUG
 
 }
 
@@ -88,21 +84,6 @@ void ParticleCreatorScene::Draw() {
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
 	///------------------------------///
-
-	//線描画共通描画設定
-	LineDrawerCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓線描画開始↓↓↓↓
-	///------------------------------///
-
-	//線描画
-	lineEmitter_->Draw(*camera_.get());
-
-	///------------------------------///
-	///↑↑↑↑線描画終了↑↑↑↑
-	///------------------------------///
-
 }
 
 void ParticleCreatorScene::StartWithImGui() {
@@ -134,7 +115,7 @@ void ParticleCreatorScene::StartWithImGui() {
 		ImGui::End();
 	}
 
-#endif // _DEBUG
+#endif //_DEBUG
 }
 
 void ParticleCreatorScene::GenerateWithImGui() {
@@ -142,7 +123,7 @@ void ParticleCreatorScene::GenerateWithImGui() {
 	if (isGenerateMode_ && !isEditMode_) {
 		Editor();
 	}
-#endif // _DEBUG
+#endif //_DEBUG
 }
 
 void ParticleCreatorScene::EditWithImGui() {
@@ -182,8 +163,8 @@ void ParticleCreatorScene::EditWithImGui() {
 				if (ImGui::Selectable(file.c_str())) {
 					//.jsonをカット
 					std::string cutJson = std::filesystem::path(file).stem().string();
-					jsonFileName_ = cutJson;  // 選択したファイル名を保存
-					showFileDialog_ = false;  // ウィンドウを閉じる
+					jsonFileName_ = cutJson;  //選択したファイル名を保存
+					showFileDialog_ = false;  //ウィンドウを閉じる
 				}
 			}
 			ImGui::End();
@@ -244,7 +225,7 @@ void ParticleCreatorScene::EditWithImGui() {
 	if (isEditMode_ && !isGenerateMode_) {
 		Editor();
 	}
-#endif // _DEBUG
+#endif //_DEBUG
 }
 
 void ParticleCreatorScene::ResetWithImGui() {
@@ -267,7 +248,7 @@ void ParticleCreatorScene::ResetWithImGui() {
 		}
 		ImGui::EndPopup();
 	}
-#endif // _DEBUG
+#endif //_DEBUG
 
 }
 
@@ -347,7 +328,7 @@ void ParticleCreatorScene::SaveWithImGui() {
 		}
 		ImGui::End();
 	}
-#endif // _DEBUG
+#endif //_DEBUG
 }
 
 void ParticleCreatorScene::Editor() {
@@ -376,9 +357,9 @@ void ParticleCreatorScene::Editor() {
 			ImGui::Begin("テクスチャ一覧");
 			for (const auto& file : textureFiles_) {
 				if (ImGui::Selectable(file.c_str())) {
-					selectedTexture = file;  // 選択したファイル名を保存
-					showFileDialog_ = false;  // ウィンドウを閉じる
-					isChangeTexture = true;  // テクスチャが変更された
+					selectedTexture = file;  //選択したファイル名を保存
+					showFileDialog_ = false;  //ウィンドウを閉じる
+					isChangeTexture = true;  //テクスチャが変更された
 				}
 			}
 			ImGui::End();
@@ -573,73 +554,17 @@ void ParticleCreatorScene::Editor() {
 	//エミッター
 	ImGui::SetNextWindowPos(ImVec2(1000, 80), ImGuiCond_FirstUseEver);
 	ImGui::Begin("エミッター");
-	//エミッター可視化
+	//エミッター可視化用ライン登録処理
 	ImGui::Checkbox("エミッターの枠を表示する", &displayLineEmitter_);
 	if (displayLineEmitter_) {
-		Vector3 prbf;		//右下前
-		Vector3 plbf;		//左下前
-		Vector3 prtf;		//右上前
-		Vector3 pltf;		//左上前
-		Vector3 prbb;		//右下奥
-		Vector3 plbb;		//左下奥
-		Vector3 prtb;		//右上奥
-		Vector3 pltb;		//左上奥
-		prbf = {
-			particle_->emitter_.transform.translate.x + particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y - particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z - particle_->emitter_.transform.scale.z
-		};
-		plbf = {
-			particle_->emitter_.transform.translate.x - particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y - particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z - particle_->emitter_.transform.scale.z
-		};
-		prtf = {
-			particle_->emitter_.transform.translate.x + particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y + particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z - particle_->emitter_.transform.scale.z
-		};
-		pltf = {
-			particle_->emitter_.transform.translate.x - particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y + particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z - particle_->emitter_.transform.scale.z
-		};
-		prbb = {
-			particle_->emitter_.transform.translate.x + particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y - particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z + particle_->emitter_.transform.scale.z
-		};
-		plbb = {
-			particle_->emitter_.transform.translate.x - particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y - particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z + particle_->emitter_.transform.scale.z
-		};
-		prtb = {
-			particle_->emitter_.transform.translate.x + particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y + particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z + particle_->emitter_.transform.scale.z
-		};
-		pltb = {
-			particle_->emitter_.transform.translate.x - particle_->emitter_.transform.scale.x,
-			particle_->emitter_.transform.translate.y + particle_->emitter_.transform.scale.y,
-			particle_->emitter_.transform.translate.z + particle_->emitter_.transform.scale.z
-		};
+		//AABBを作成
+		AABB aabb;
+		aabb.max = particle_->emitter_.transform.translate + particle_->emitter_.transform.scale;
+		aabb.min = particle_->emitter_.transform.translate - particle_->emitter_.transform.scale;
+
 		Vector4 color = { 1,0,0,1 };
 
-		lineEmitter_->CreateLine(prbf, plbf, color);
-		lineEmitter_->CreateLine(plbf, pltf, color);
-		lineEmitter_->CreateLine(pltf, prtf, color);
-		lineEmitter_->CreateLine(prtf, prbf, color);
-
-		lineEmitter_->CreateLine(prbb, plbb, color);
-		lineEmitter_->CreateLine(plbb, pltb, color);
-		lineEmitter_->CreateLine(pltb, prtb, color);
-		lineEmitter_->CreateLine(prtb, prbb, color);
-
-		lineEmitter_->CreateLine(prbf, prbb, color);
-		lineEmitter_->CreateLine(plbf, plbb, color);
-		lineEmitter_->CreateLine(prtf, prtb, color);
-		lineEmitter_->CreateLine(pltf, pltb, color);
+		MyMath::CreateLineAABB(aabb, color);
 	}
 	//エミッターのトランスフォーム
 	if (ImGui::CollapsingHeader("エミッターのトランスフォーム")) {
@@ -715,5 +640,5 @@ void ParticleCreatorScene::Editor() {
 		ImGui::Checkbox("ビルボードの処理をするか(isBillboard)", &particle_->emitter_.isBillboard);
 	}
 	ImGui::End();
-#endif // _DEBUG
+#endif //_DEBUG
 }

@@ -18,8 +18,6 @@ public:
 	void Update();
 	//描画
 	void Draw();
-	//線描画
-	void DrawLine();
 
 	//デバッグ用パラメーター調整
 	void DebugWithImGui();
