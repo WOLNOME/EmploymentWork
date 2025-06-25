@@ -10,7 +10,7 @@
 #include <numbers>
 
 ///------------------------------------///
-///              列挙体
+///             列挙体
 ///------------------------------------///
 
 //δタイム
@@ -19,7 +19,7 @@ const float kDeltaTime = 1.0f / 60.0f;
 const float pi = std::numbers::pi_v<float>;
 
 ///------------------------------------///
-///              列挙体
+///             列挙体
 ///------------------------------------///
 
 //ライトの種類
@@ -30,7 +30,7 @@ enum LightKind {
 };
 
 ///------------------------------------///
-///              構造体
+///             構造体
 ///------------------------------------///
 
 //トランスフォーム
@@ -102,12 +102,12 @@ struct Ball {
 };
 //2D矩形(物理)
 struct Box {
-	Vector2 pos;			// 位置
-	Vector2 size;			// サイズ
-	Vector2 velocity;		// 速度
-	Vector2 accleration;	// 加速度
-	float mass;				// 質量
-	unsigned int color;		// 色
+	Vector2 pos;			//位置
+	Vector2 size;			//サイズ
+	Vector2 velocity;		//速度
+	Vector2 accleration;	//加速度
+	float mass;				//質量
+	unsigned int color;		//色
 };
 //振り子
 struct Pendulum {
@@ -135,7 +135,7 @@ class LineDrawer;
 class MyMath {
 public://静的メンバ関数
 	///------------------------------------///
-	///               Vector2
+	///              Vector2
 	///------------------------------------///
 
 	//加算
@@ -150,7 +150,7 @@ public://静的メンバ関数
 	static Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);
 
 	///------------------------------------///
-	///               Vector3
+	///              Vector3
 	///------------------------------------///
 
 	//加算
@@ -191,14 +191,14 @@ public://静的メンバ関数
 	static float AngleOf2VectorY(const Vector3& v1, const Vector3& v2);
 
 	///------------------------------------///
-	///             Vector4
+	///            Vector4
 	///------------------------------------///
 
 	//線形補完
 	static Vector4 Lerp(const Vector4& v1, const Vector4& v2, float t);
 
 	///------------------------------------///
-	///               Matrix4x4
+	///              Matrix4x4
 	///------------------------------------///
 
 	//加算
@@ -233,49 +233,49 @@ public://静的メンバ関数
 	static Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
 	//ビューポート行列
 	static Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
-	// オイラー角から回転行列を作成する関数
+	//オイラー角から回転行列を作成する関数
 	static Matrix4x4 CreateRotationFromEulerAngles(float pitch, float yaw, float roll);
 	//視点からターゲットに向く関数
 	static Matrix4x4 LookAt(Vector3 eye, Vector3 target, Vector3 up);
 
 
 	///------------------------------------///
-	///            Quaternion
+	///           Quaternion
 	///------------------------------------///
 
-	// 四元数の加算
+	//四元数の加算
 	static Quaternion Add(const Quaternion& q1, const Quaternion& q2);
-	// 四元数の減算
+	//四元数の減算
 	static Quaternion Subtract(const Quaternion& q1, const Quaternion& q2);
-	// 四元数の乗算
+	//四元数の乗算
 	static Quaternion Multiply(const Quaternion& q1, const Quaternion& q2);
-	// 四元数とスカラーの乗算
+	//四元数とスカラーの乗算
 	static Quaternion Multiply(float scalar, const Quaternion& q);
-	// 四元数の内積
+	//四元数の内積
 	static float Dot(const Quaternion& q1, const Quaternion& q2);
-	// 四元数のノルム
+	//四元数のノルム
 	static float Norm(const Quaternion& q);
-	// 四元数の正規化
+	//四元数の正規化
 	static Quaternion Normalize(const Quaternion& q);
-	// 四元数の共役
+	//四元数の共役
 	static Quaternion Conjugate(const Quaternion& q);
-	// 四元数の逆元
+	//四元数の逆元
 	static Quaternion Inverse(const Quaternion& q);
-	// 回転軸と角度から四元数を生成
+	//回転軸と角度から四元数を生成
 	static Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
 	//ベクトルをQuaternionで回転させた結果のベクトルを求める
 	static Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
-	// 四元数から回転行列を生成
+	//四元数から回転行列を生成
 	static Matrix4x4 MakeRotateMatrix(const Quaternion& q);
-	// オイラー角から四元数を生成
+	//オイラー角から四元数を生成
 	static Quaternion FromEulerAngles(Vector3 euler);
-	// 四元数をオイラー角に変換
+	//四元数をオイラー角に変換
 	static Vector3 ToEulerAngles(const Quaternion& q);
 	//球面線形補完
 	static Quaternion Slerp(const Quaternion& q0, const  Quaternion& q1, float t);
 
 	///------------------------------------///
-	///               float
+	///              float
 	///------------------------------------///
 
 	//余接
@@ -290,7 +290,7 @@ public://静的メンバ関数
 	static float Lerp(float s1, float s2, float t);
 
 	///------------------------------------///
-	///             補助関数
+	///            補助関数
 	///------------------------------------///
 
 	//ベクトルを指定した軸に射影し、その最小値と最大値を計算する関数
@@ -362,7 +362,7 @@ public://静的メンバ関数
 	static float EaseInOutBounce(float ratio);
 
 	///------------------------------------///
-	///               当たり判定
+	///              当たり判定
 	///------------------------------------///
 
 	//球同士の当たり判定
@@ -426,7 +426,7 @@ public://静的メンバ関数
 	static bool IsCollision(const Capsule& capsule1, const Capsule& capsule2);
 
 	///------------------------------------///
-	///              図形の線描画
+	///             図形の線描画
 	///------------------------------------///
 
 	static void CreateLineSphere(const Sphere& sphere, Vector4 color, uint32_t subdivision = 15);
@@ -435,7 +435,7 @@ public://静的メンバ関数
 };
 
 ///------------------------------------///
-///       演算子のオーバーロード
+///      演算子のオーバーロード
 ///------------------------------------///
 
 //二項演算子

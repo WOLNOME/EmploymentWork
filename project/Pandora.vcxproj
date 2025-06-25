@@ -189,6 +189,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\PlayerUI.cpp" />
     <ClCompile Include="application\object\character\weapon\player\PlayerCannon.cpp" />
     <ClCompile Include="application\object\character\weapon\player\manager\PlayerWeaponManager.cpp" />
+    <ClCompile Include="engine\2d\SpriteManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
@@ -279,6 +280,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\PlayerUI.h" />
     <ClInclude Include="application\object\character\weapon\player\PlayerCannon.h" />
     <ClInclude Include="application\object\character\weapon\player\manager\PlayerWeaponManager.h" />
+    <ClInclude Include="engine\2d\SpriteManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

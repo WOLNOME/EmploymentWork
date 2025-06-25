@@ -4,6 +4,7 @@
 #include "GPUDescriptorManager.h"
 #include "Logger.h"
 #include "RandomStringUtil.h"
+#include "Particle.h"
 #include <numbers>
 #include <random>
 #undef min

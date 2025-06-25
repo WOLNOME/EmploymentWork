@@ -77,17 +77,14 @@ void MyGame::Draw() {
 
 	//シーンの描画
 	SceneManager::GetInstance()->Draw();
-
 	//シーンのライン描画
 	LineManager::GetInstance()->Draw();
-
 	//シーンのパーティクル描画
 	ParticleManager::GetInstance()->Draw();
 
 	//ImGui描画前処理
 	MainRender::GetInstance()->PreImGuiDraw();
 	PostEffectManager::GetInstance()->CopySceneToRenderTexture();
-
 	//ImGuiの描画
 	ImGuiManager::GetInstance()->Draw();
 

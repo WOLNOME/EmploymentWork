@@ -59,9 +59,9 @@ void LineManager::Draw() {
 		++lineIterator;
 	}
 	//ルートシグネチャをセットするコマンド
-	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
+	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 	//グラフィックスパイプラインステートをセットするコマンド
-	MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState.Get());
+	MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
 	//プリミティブトポロジーをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
@@ -136,7 +136,7 @@ void LineManager::GenerateGraphicsPipeline() {
 	}
 	//バイナリをもとに生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
-		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(hr));
 
 	//InputLayout
@@ -185,7 +185,7 @@ void LineManager::GenerateGraphicsPipeline() {
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature.Get();
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),
 	vertexShaderBlob->GetBufferSize() };
@@ -206,7 +206,7 @@ void LineManager::GenerateGraphicsPipeline() {
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState));
+		IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 }
 

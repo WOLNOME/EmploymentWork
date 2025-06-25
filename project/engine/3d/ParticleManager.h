@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseCamera.h"
-#include "Particle.h"
 #include "MyMath.h"
 #include "BlendMode.h"
 #include <d3d12.h>
@@ -10,6 +9,7 @@
 #include <unordered_map>
 #include <wrl.h>
 
+class Particle;
 class ParticleManager {
 private://コンストラクタ等の隠蔽
 	static ParticleManager* instance;

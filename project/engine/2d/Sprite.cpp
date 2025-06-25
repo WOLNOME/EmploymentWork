@@ -55,7 +55,7 @@ void Sprite::Initialize() {
 	transformationMatrixData->WVP = MyMath::MakeIdentity4x4();
 	transformationMatrixData->World = MyMath::MakeIdentity4x4();
 
-	name = RandomStringUtil::GenerateRandomString(3);
+	name_ = RandomStringUtil::GenerateRandomString(3);
 }
 
 void Sprite::Draw(uint32_t _textureHandle) {
@@ -212,7 +212,7 @@ void Sprite::AdjustTextureSize(Handle _textTextureHandle) {
 
 void Sprite::DebugWithImGui() {
 #ifdef _DEBUG
-	ImGui::Begin(name.c_str());
+	ImGui::Begin(name_.c_str());
 	//位置
 	ImGui::DragFloat2("位置", &position.x, 0.1f);
 	//回転

@@ -24,10 +24,7 @@ public://メンバ関数
 private://非公開メンバ関数(内部処理)
 	//グラフィックスパイプラインの生成
 	void GenerateGraphicsPipeline();
-public://ゲッター
-	
-private://インスタンス
-	
+
 private://メンバ関数
 	//ルートシグネチャ
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature = nullptr;

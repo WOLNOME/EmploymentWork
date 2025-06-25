@@ -135,6 +135,7 @@
     <ClCompile Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.cpp" />
     <ClCompile Include="application\object\character\enemy\base\IBaseEnemy.cpp" />
     <ClCompile Include="engine\3d\LineManager.cpp" />
+    <ClCompile Include="engine\2d\SpriteManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -258,6 +259,7 @@
     <ClInclude Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.h" />
     <ClInclude Include="application\object\character\enemy\base\IBaseEnemy.h" />
     <ClInclude Include="engine\3d\LineManager.h" />
+    <ClInclude Include="engine\2d\SpriteManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />

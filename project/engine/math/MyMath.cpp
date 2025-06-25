@@ -101,43 +101,43 @@ Vector3 MyMath::Lerp(const Vector3& v1, const Vector3& v2, float t) {
 }
 
 Vector3 MyMath::Slerp(const Vector3& vector1, const Vector3& vector2, float t) {
-	// 正規化ベクトルを求める
+	//正規化ベクトルを求める
 	Vector3 start = Normalize(vector1);
 	Vector3 end = Normalize(vector2);
 
-	// 内積を求める
+	//内積を求める
 	float dot = Dot(start, end);
-	// 誤差により1.0fを超えるのを防ぐ
+	//誤差により1.0fを超えるのを防ぐ
 	dot = std::clamp(dot, dot, 1.0f);
 
-	// s－九コサインでθの角度を求める
+	//s－九コサインでθの角度を求める
 	float theta = std::acosf(dot);
 
-	// θの角度からsinθを求める
+	//θの角度からsinθを求める
 	float sinTheta = std::sin(theta);
 
-	// サイン(θ(1-t))を求める
+	//サイン(θ(1-t))を求める
 	float sinThetaFrom = std::sin((1 - t) * theta);
-	// サインθtを求める
+	//サインθtを求める
 	float sinThetaTo = std::sin(t * theta);
 
 	Vector3 normalizeVector;
-	// ゼロ除算を防ぐ
+	//ゼロ除算を防ぐ
 	if (sinTheta < 1.0e-5) {
 		normalizeVector = start;
 	}
 	else {
-		// 球面線形補間したベクトル(単位ベクトル)
+		//球面線形補間したベクトル(単位ベクトル)
 		normalizeVector = Add(Multiply(sinThetaFrom / sinTheta, start), Multiply(sinThetaTo / sinTheta, end));
 	}
 
-	// ベクトルの長さはstartとendの長さを線形補間
+	//ベクトルの長さはstartとendの長さを線形補間
 	float length1 = Length(start);
 	float length2 = Length(end);
-	// Lerpで補間ベクトルの長さを求める
+	//Lerpで補間ベクトルの長さを求める
 	float length = Lerp(length1, length2, t);
 
-	// 長さを反映
+	//長さを反映
 	return Multiply(length, normalizeVector);
 }
 
@@ -251,15 +251,15 @@ float MyMath::AngleOf2VectorY(const Vector3& v1, const Vector3& v2) {
 	//Y軸回転のため、引数のベクトルをxz成分に分解(長さの計算する手間省くため正規化)
 	Vector2 longHand = Vector2(v1.x, v1.z).Normalize();
 	Vector2 hourHand = Vector2(v2.x, v2.z).Normalize();
-	// 内積とベクトル長さを使ってcosθを求める
+	//内積とベクトル長さを使ってcosθを求める
 	float cos_theta = MyMath::Dot(longHand, hourHand);
-	// cosθからθを求める
+	//cosθからθを求める
 	float theta = std::acos(cos_theta);
-	// 2ベクトルの外積を求め、hourHandが左にあるならマイナス
+	//2ベクトルの外積を求め、hourHandが左にあるならマイナス
 	if (MyMath::Cross(longHand, hourHand) > 0.0f) {
 		theta = -theta;
 	}
-	// cosθの値で場合分け(NAN回避処理)
+	//cosθの値で場合分け(NAN回避処理)
 	if (cos_theta >= 1.0f) {
 		theta = 0.0f;
 	}
@@ -551,10 +551,10 @@ Matrix4x4 MyMath::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, 
 Matrix4x4 MyMath::MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate) {
 	Matrix4x4 c;
 
-	// クォータニオンから回転行列を生成
+	//クォータニオンから回転行列を生成
 	Matrix4x4 rotationMatrix = MakeRotateMatrix(rotate);
 
-	// スケールの適用
+	//スケールの適用
 	c.m[0][0] = scale.x * rotationMatrix.m[0][0];
 	c.m[0][1] = scale.x * rotationMatrix.m[0][1];
 	c.m[0][2] = scale.x * rotationMatrix.m[0][2];
@@ -570,7 +570,7 @@ Matrix4x4 MyMath::MakeAffineMatrix(const Vector3& scale, const Quaternion& rotat
 	c.m[2][2] = scale.z * rotationMatrix.m[2][2];
 	c.m[2][3] = 0;
 
-	// 平行移動の適用
+	//平行移動の適用
 	c.m[3][0] = translate.x;
 	c.m[3][1] = translate.y;
 	c.m[3][2] = translate.z;
@@ -643,7 +643,7 @@ Matrix4x4 MyMath::MakeViewportMatrix(float left, float top, float width, float h
 }
 
 Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float roll) {
-	// ピッチ（X軸回転）、ヨー（Y軸回転）、ロール（Z軸回転）の角度をラジアンに変換
+	//ピッチ（X軸回転）、ヨー（Y軸回転）、ロール（Z軸回転）の角度をラジアンに変換
 	float cosPitch = cosf(pitch);
 	float sinPitch = sinf(pitch);
 	float cosYaw = cosf(yaw);
@@ -651,7 +651,7 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 	float cosRoll = cosf(roll);
 	float sinRoll = sinf(roll);
 
-	// X軸回転行列
+	//X軸回転行列
 	Matrix4x4 rotationX = {
 		1, 0, 0, 0,
 		0, cosPitch, -sinPitch, 0,
@@ -659,7 +659,7 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 		0, 0, 0, 1
 	};
 
-	// Y軸回転行列
+	//Y軸回転行列
 	Matrix4x4 rotationY = {
 		cosYaw, 0, sinYaw, 0,
 		0, 1, 0, 0,
@@ -667,7 +667,7 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 		0, 0, 0, 1
 	};
 
-	// Z軸回転行列
+	//Z軸回転行列
 	Matrix4x4 rotationZ = {
 		cosRoll, -sinRoll, 0, 0,
 		sinRoll, cosRoll, 0, 0,
@@ -675,7 +675,7 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 		0, 0, 0, 1
 	};
 
-	// 回転行列を合成する（順番重要）
+	//回転行列を合成する（順番重要）
 	Matrix4x4 rotationMatrix = rotationZ * rotationY * rotationX;
 
 	return rotationMatrix;
@@ -683,16 +683,16 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 
 Matrix4x4 MyMath::LookAt(Vector3 eye, Vector3 target, Vector3 up) {
 
-	// 前方向ベクトル（正規化）
+	//前方向ベクトル（正規化）
 	Vector3 forward = Normalize(target - eye);
 
-	// 右方向ベクトル（正規化）
+	//右方向ベクトル（正規化）
 	Vector3 right = Normalize(Cross(up, forward));
 
-	// 上方向ベクトル（修正済み）
+	//上方向ベクトル（修正済み）
 	Vector3 upCorrected = Cross(forward, right);
 
-	// ビュー行列を構成
+	//ビュー行列を構成
 	Matrix4x4 viewMatrix = {
 		right.x, upCorrected.x, -forward.x, 0.0f,
 		right.y, upCorrected.y, -forward.y, 0.0f,
@@ -821,19 +821,19 @@ Quaternion MyMath::FromEulerAngles(Vector3 euler) {
 Vector3 MyMath::ToEulerAngles(const Quaternion& q) {
 	Vector3 euler;
 
-	// ピッチ（x軸回り）
+	//ピッチ（x軸回り）
 	float sinp = 2.0f * (q.w * q.x + q.y * q.z);
 	if (std::abs(sinp) >= 1)
-		euler.x = std::copysign(std::numbers::pi_v<float> / 2.0f, sinp); // ピッチを -90 〜 90 度にクランプ
+		euler.x = std::copysign(std::numbers::pi_v<float> / 2.0f, sinp); //ピッチを -90 〜 90 度にクランプ
 	else
 		euler.x = std::asin(sinp);
 
-	// ヨー（y軸回り）
+	//ヨー（y軸回り）
 	float siny_cosy = 2.0f * (q.w * q.y - q.z * q.x);
 	float cosy_cosy = 1.0f - 2.0f * (q.y * q.y + q.x * q.x);
 	euler.y = std::atan2(siny_cosy, cosy_cosy);
 
-	// ロール（z軸回り）
+	//ロール（z軸回り）
 	float sinr_cosr = 2.0f * (q.w * q.z + q.x * q.y);
 	float cosr_cosr = 1.0f - 2.0f * (q.z * q.z + q.x * q.x);
 	euler.z = std::atan2(sinr_cosr, cosr_cosr);
@@ -1504,19 +1504,19 @@ bool MyMath::IsCollision(const Ray& ray, const AABB& aabb) {
 }
 
 bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
-	// segmentが点の場合
+	//segmentが点の場合
 	if (segment.diff.x == 0 && segment.diff.y == 0 && segment.diff.z == 0) {
-		// 点がAABB内にあるかチェック
+		//点がAABB内にあるかチェック
 		if (IsCollision(aabb, segment.origin)) {
 			return true;
 		}
 		return false;
 	}
 
-	// AABBの6つの平面を作成
+	//AABBの6つの平面を作成
 	Plane planes[6];
 
-	// 法線のセット
+	//法線のセット
 	planes[0].normal = { 1, 0, 0 };
 	planes[1].normal = { 1, 0, 0 };
 	planes[2].normal = { 0, 1, 0 };
@@ -1524,7 +1524,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 	planes[4].normal = { 0, 0, 1 };
 	planes[5].normal = { 0, 0, 1 };
 
-	// 平面の距離をセット
+	//平面の距離をセット
 	planes[0].distance = Dot(aabb.min, planes[0].normal);
 	planes[1].distance = Dot(aabb.max, planes[1].normal);
 	planes[2].distance = Dot(aabb.min, planes[2].normal);
@@ -1532,11 +1532,11 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 	planes[4].distance = Dot(aabb.min, planes[4].normal);
 	planes[5].distance = Dot(aabb.max, planes[5].normal);
 
-	// 各平面との衝突判定
+	//各平面との衝突判定
 	for (int i = 0; i < 6; ++i) {
 		if (IsCollision(segment, planes[i])) {
 			Vector3 cp = CollisionPoint(segment, planes[i]);
-			// 衝突点がAABBの範囲内にあるかチェック
+			//衝突点がAABBの範囲内にあるかチェック
 			if (cp.x >= aabb.min.x && cp.x <= aabb.max.x &&
 				cp.y >= aabb.min.y && cp.y <= aabb.max.y &&
 				cp.z >= aabb.min.z && cp.z <= aabb.max.z) {
@@ -1545,7 +1545,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 		}
 	}
 
-	// 線分の両端点がAABB内にある場合も衝突と判定
+	//線分の両端点がAABB内にある場合も衝突と判定
 	Vector3 endPoint = segment.origin + segment.diff;
 	bool originInside =
 		segment.origin.x >= aabb.min.x && segment.origin.x <= aabb.max.x &&
@@ -1561,7 +1561,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 		return true;
 	}
 
-	// 衝突なし
+	//衝突なし
 	return false;
 }
 
@@ -1571,7 +1571,7 @@ bool MyMath::IsCollision(const Segment& segment, const AABB& aabb) {
 }
 
 bool MyMath::IsCollision(const AABB& aabb, const Capsule& capsule) {
-	// AABBを半径分膨張
+	//AABBを半径分膨張
 	AABB expandedAABB;
 	expandedAABB.min = aabb.min - Vector3{ capsule.radius, capsule.radius, capsule.radius };
 	expandedAABB.max = aabb.max + Vector3{ capsule.radius, capsule.radius, capsule.radius };
@@ -1584,7 +1584,7 @@ bool MyMath::IsCollision(const Capsule& capsule, const AABB& aabb) {
 }
 
 bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
-	// 各OBBの頂点をローカル座標で定義
+	//各OBBの頂点をローカル座標で定義
 	Vector3 obb1Vertex[8] = {
 		{ -obb1.size.x, obb1.size.y, -obb1.size.z },
 		{ obb1.size.x, obb1.size.y, -obb1.size.z },
@@ -1607,7 +1607,7 @@ bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 		{ obb2.size.x, -obb2.size.y, obb2.size.z },
 	};
 
-	// ワールド行列
+	//ワールド行列
 	Matrix4x4 obb1WorldMatrix = {
 		obb1.orientations[0].x, obb1.orientations[0].y, obb1.orientations[0].z, 0,
 		obb1.orientations[1].x, obb1.orientations[1].y, obb1.orientations[1].z, 0,
@@ -1621,7 +1621,7 @@ bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 		obb2.center.x, obb2.center.y, obb2.center.z, 1
 	};
 
-	// 各頂点をワールド座標に変換
+	//各頂点をワールド座標に変換
 	Vector3 obb1WorldVertex[8];
 	Vector3 obb2WorldVertex[8];
 	for (int i = 0; i < 8; i++) {
@@ -1629,7 +1629,7 @@ bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 		obb2WorldVertex[i] = Transform(obb2Vertex[i], obb2WorldMatrix);
 	}
 
-	// 分離軸の定義
+	//分離軸の定義
 	Vector3 axes[15] = {
 		obb1.orientations[0], obb1.orientations[1], obb1.orientations[2],
 		obb2.orientations[0], obb2.orientations[1], obb2.orientations[2],
@@ -1644,9 +1644,9 @@ bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 		Cross(obb1.orientations[2], obb2.orientations[2]),
 	};
 
-	// 各分離軸について投影範囲を計算し、重なりを確認
+	//各分離軸について投影範囲を計算し、重なりを確認
 	for (const auto& axis : axes) {
-		if (axis == Vector3{ 0, 0, 0 }) continue; // ゼロベクトルは無視
+		if (axis == Vector3{ 0, 0, 0 }) continue; //ゼロベクトルは無視
 
 		Vector3 normalizedAxis = Normalize(axis);
 
@@ -1654,29 +1654,29 @@ bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
 		auto [min2, max2] = ProjectOntoAxis(obb2WorldVertex, 8, normalizedAxis);
 
 		if (max1 < min2 || max2 < min1) {
-			return false; // 分離軸が見つかった → 衝突していない
+			return false; //分離軸が見つかった → 衝突していない
 		}
 	}
 
-	return true; // すべての軸で重なりあり → 衝突している
+	return true; //すべての軸で重なりあり → 衝突している
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Sphere& sphere) {
-	// ワールド行列
+	//ワールド行列
 	Matrix4x4 obbWorldMatrix = {
 		obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
 		obb.orientations[1].x, obb.orientations[1].y, obb.orientations[1].z, 0,
 		obb.orientations[2].x, obb.orientations[2].y, obb.orientations[2].z, 0,
 		obb.center.x, obb.center.y, obb.center.z, 1
 	};
-	// ワールド逆行列
+	//ワールド逆行列
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
 	Vector3 centerInOBBLocalSpace = Transform(sphere.center, obbWorldMatrixInverse);
 	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
 	Sphere sphereOBBLocal = { centerInOBBLocalSpace, sphere.radius };
 
-	// ローカル空間で衝突判定
+	//ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, sphereOBBLocal);
 }
 
@@ -1685,14 +1685,14 @@ bool MyMath::IsCollision(const Sphere& sphere, const OBB& obb) {
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Line& line) {
-	// ワールド行列
+	//ワールド行列
 	Matrix4x4 obbWorldMatrix = {
 		obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
 		obb.orientations[1].x, obb.orientations[1].y, obb.orientations[1].z, 0,
 		obb.orientations[2].x, obb.orientations[2].y, obb.orientations[2].z, 0,
 		obb.center.x, obb.center.y, obb.center.z, 1
 	};
-	// ワールド逆行列
+	//ワールド逆行列
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
 
@@ -1700,7 +1700,7 @@ bool MyMath::IsCollision(const OBB& obb, const Line& line) {
 	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
 	Line lineOBBLocal = { centerInOBBLocalLine, line.diff };
 
-	// ローカル空間で衝突判定
+	//ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, lineOBBLocal);
 }
 
@@ -1709,14 +1709,14 @@ bool MyMath::IsCollision(const Line& line, const OBB& obb) {
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
-	// ワールド行列
+	//ワールド行列
 	Matrix4x4 obbWorldMatrix = {
 		obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
 		obb.orientations[1].x, obb.orientations[1].y, obb.orientations[1].z, 0,
 		obb.orientations[2].x, obb.orientations[2].y, obb.orientations[2].z, 0,
 		obb.center.x, obb.center.y, obb.center.z, 1
 	};
-	// ワールド逆行列
+	//ワールド逆行列
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
 
@@ -1724,7 +1724,7 @@ bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
 	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
 	Ray rayOBBLocal = { centerInOBBLocalRay, ray.diff };
 
-	// ローカル空間で衝突判定
+	//ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, rayOBBLocal);
 }
 
@@ -1733,14 +1733,14 @@ bool MyMath::IsCollision(const Ray& ray, const OBB& obb) {
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
-	// ワールド行列
+	//ワールド行列
 	Matrix4x4 obbWorldMatrix = {
 		obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
 		obb.orientations[1].x, obb.orientations[1].y, obb.orientations[1].z, 0,
 		obb.orientations[2].x, obb.orientations[2].y, obb.orientations[2].z, 0,
 		obb.center.x, obb.center.y, obb.center.z, 1
 	};
-	// ワールド逆行列
+	//ワールド逆行列
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
 
@@ -1748,7 +1748,7 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
 	Segment segmentOBBLocal = { centerInOBBLocalSegment, segment.diff };
 
-	// ローカル空間で衝突判定
+	//ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, segmentOBBLocal);
 }
 
@@ -1757,7 +1757,7 @@ bool MyMath::IsCollision(const Segment& segment, const OBB& obb) {
 }
 
 bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
-	// 線分同士の最短距離（二乗）を求めるラムダ式
+	//線分同士の最短距離（二乗）を求めるラムダ式
 	auto SegmentSegmentDistSq = [&](const Segment& seg1, const Segment& seg2) -> float {
 		Vector3 p1 = seg1.origin;
 		Vector3 q1 = seg1.origin + seg1.diff;
@@ -1775,7 +1775,7 @@ bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
 		float s, t;
 
 		if (a <= 1e-6f && e <= 1e-6f) {
-			return Dot(r, r); // 両方の線分が点
+			return Dot(r, r); //両方の線分が点
 		}
 		if (a <= 1e-6f) {
 			s = 0.0f;
@@ -1815,16 +1815,16 @@ bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
 		Vector3 c2 = p2 + d2 * t;
 		Vector3 diff = c1 - c2;
 
-		return Dot(diff, diff); // 最短距離の二乗
+		return Dot(diff, diff); //最短距離の二乗
 		};
 
-	// 半径の合計
+	//半径の合計
 	float radiusSum = capsule1.radius + capsule2.radius;
 
-	// 最短距離の二乗を求める
+	//最短距離の二乗を求める
 	float distSq = SegmentSegmentDistSq(capsule1.segment, capsule2.segment);
 
-	// 衝突しているかを判定
+	//衝突しているかを判定
 	return distSq <= radiusSum * radiusSum;
 }
 
@@ -1865,23 +1865,23 @@ void MyMath::CreateLineSphere(const Sphere& sphere, Vector4 color, uint32_t subd
 
 void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color) {
 	const auto lineManager = LineManager::GetInstance();
-	// 8頂点を計算
+	//8頂点を計算
 	Vector3 v[8] = {
-		{ aabb.min.x, aabb.min.y, aabb.min.z }, // 0
-		{ aabb.max.x, aabb.min.y, aabb.min.z }, // 1
-		{ aabb.max.x, aabb.max.y, aabb.min.z }, // 2
-		{ aabb.min.x, aabb.max.y, aabb.min.z }, // 3
-		{ aabb.min.x, aabb.min.y, aabb.max.z }, // 4
-		{ aabb.max.x, aabb.min.y, aabb.max.z }, // 5
-		{ aabb.max.x, aabb.max.y, aabb.max.z }, // 6
-		{ aabb.min.x, aabb.max.y, aabb.max.z }  // 7
+		{ aabb.min.x, aabb.min.y, aabb.min.z }, //0
+		{ aabb.max.x, aabb.min.y, aabb.min.z }, //1
+		{ aabb.max.x, aabb.max.y, aabb.min.z }, //2
+		{ aabb.min.x, aabb.max.y, aabb.min.z }, //3
+		{ aabb.min.x, aabb.min.y, aabb.max.z }, //4
+		{ aabb.max.x, aabb.min.y, aabb.max.z }, //5
+		{ aabb.max.x, aabb.max.y, aabb.max.z }, //6
+		{ aabb.min.x, aabb.max.y, aabb.max.z }  //7
 	};
 
-	// 12本の辺を描画（線で結ぶ）
+	//12本の辺を描画（線で結ぶ）
 	const uint32_t edgeIndices[12][2] = {
-		{0, 1}, {1, 2}, {2, 3}, {3, 0}, // 底面
-		{4, 5}, {5, 6}, {6, 7}, {7, 4}, // 上面
-		{0, 4}, {1, 5}, {2, 6}, {3, 7}  // 側面
+		{0, 1}, {1, 2}, {2, 3}, {3, 0}, //底面
+		{4, 5}, {5, 6}, {6, 7}, {7, 4}, //上面
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}  //側面
 	};
 
 	for (uint32_t i = 0; i < 12; ++i) {
@@ -1892,7 +1892,7 @@ void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color) {
 }
 
 ///------------------------------------///
-///       演算子のオーバーロード
+///      演算子のオーバーロード
 ///------------------------------------///
 
 Vector2 operator+(const Vector2& v1, const Vector2& v2) {
@@ -1937,7 +1937,7 @@ Vector3 operator/(const Vector3& v, float s) {
 }
 
 Vector3 operator*(const Matrix4x4& mat, const Vector3& vec) {
-	// 行列とベクトルの掛け算
+	//行列とベクトルの掛け算
 	float x = mat.m[0][0] * vec.x + mat.m[0][1] * vec.y + mat.m[0][2] * vec.z + mat.m[0][3];
 	float y = mat.m[1][0] * vec.x + mat.m[1][1] * vec.y + mat.m[1][2] * vec.z + mat.m[1][3];
 	float z = mat.m[2][0] * vec.x + mat.m[2][1] * vec.y + mat.m[2][2] * vec.z + mat.m[2][3];
@@ -1945,14 +1945,14 @@ Vector3 operator*(const Matrix4x4& mat, const Vector3& vec) {
 }
 
 Vector3 operator*(const Quaternion& q, const Vector3& v) {
-	// クォータニオンを正規化
+	//クォータニオンを正規化
 	Quaternion normalized_q = q;
 	normalized_q.normalize();
 
-	// ベクトルをクォータニオンとして扱う
+	//ベクトルをクォータニオンとして扱う
 	Quaternion q_v(0, v.x, v.y, v.z);
 
-	// クォータニオンの掛け算で回転操作: q * v * q^-1
+	//クォータニオンの掛け算で回転操作: q * v * q^-1
 	Quaternion rotated_q = MyMath::Multiply(MyMath::Multiply(normalized_q, q_v), normalized_q.conjugate());
 
 	return Vector3(rotated_q.x, rotated_q.y, rotated_q.z);

@@ -5,9 +5,8 @@
 #include "MyMath.h"
 #include "Handle.h"
 
-class Sprite
-{
-public://インナークラス
+class Sprite {
+private://構造体
 	//頂点データ
 	struct VertexData {
 		Vector4 position;
@@ -24,6 +23,10 @@ public://インナークラス
 	struct TransformationMatrix {
 		Matrix4x4 WVP;
 		Matrix4x4 World;
+	};
+	//GPU送信用リソース
+	struct ResourceForGPU {
+
 	};
 
 public://メンバ関数
@@ -65,8 +68,11 @@ public://セッター
 	void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
 	void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop = leftTop; }
 	void SetTextureSize(const Vector2& size) { textureSize = size; }
-	
+
 private://メンバ変数
+	//名前
+	std::string name_;
+
 	//バッファリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource = nullptr;
@@ -104,6 +110,6 @@ private://メンバ変数値書き換え用
 	//テクスチャ切り出しサイズ
 	Vector2 textureSize = { 100.0f,100.0f };
 
-	std::string name;
+
 };
 
