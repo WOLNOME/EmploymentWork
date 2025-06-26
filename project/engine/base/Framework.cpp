@@ -15,7 +15,7 @@
 #include "ParticleManager.h"
 #include "Input.h"
 #include "AudioCommon.h"
-#include "SpriteCommon.h"
+#include "SpriteManager.h"
 #include "Object3dCommon.h"
 #include "LineManager.h"
 #include "SceneManager.h"
@@ -73,8 +73,8 @@ void Framework::Initialize() {
 	//オーディオ共通部
 	AudioCommon::GetInstance()->Initialize();
 
-	//スプライト共通部
-	SpriteCommon::GetInstance()->Initialize();
+	//スプライトマネージャー
+	SpriteManager::GetInstance()->Initialize();
 
 	//オブジェクト3D共通部
 	Object3dCommon::GetInstance()->Initialize();
@@ -95,7 +95,7 @@ void Framework::Finalize() {
 	SceneManager::GetInstance()->Finalize();
 	LineManager::GetInstance()->Finalize();
 	Object3dCommon::GetInstance()->Finalize();
-	SpriteCommon::GetInstance()->Finalize();
+	SpriteManager::GetInstance()->Finalize();
 	AudioCommon::GetInstance()->Finalize();
 	Input::GetInstance()->Finalize();
 	ParticleManager::GetInstance()->Finalize();

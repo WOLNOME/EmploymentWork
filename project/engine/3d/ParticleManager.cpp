@@ -181,14 +181,14 @@ void ParticleManager::DeleteParticle(const std::string& name) {
 
 std::string ParticleManager::GenerateName(const std::string& name) {
 	// 出力する名前
-	std::string outputName = name + "_" + RandomStringUtil::GenerateRandomString(4);
+	std::string outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
 
 	// 重複チェック用のラムダ式
 	std::function<void(const std::string&)> checkDuplicate = [&](const std::string& name) {
 		// 重複しているかチェック
 		if (particles.find(name) != particles.end()) {
 			// 重複しているので名前を変更
-			outputName = name + "_" + RandomStringUtil::GenerateRandomString(4);
+			outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
 			checkDuplicate(outputName);
 		}
 		};

@@ -3,6 +3,7 @@
 #include "MainRender.h"
 #include "Logger.h""
 #include "Sprite.h"
+#include "RandomStringUtil.h"
 
 SpriteManager* SpriteManager::instance = nullptr;
 
@@ -27,6 +28,44 @@ void SpriteManager::FrontDraw() {
 void SpriteManager::Finalize() {
 	delete instance;
 	instance = nullptr;
+}
+
+void SpriteManager::RegisterSprite(const std::string& name, Sprite* sprite) {
+	//重複チェック
+	if (sprites_.find(name) != sprites_.end()) {
+		return;
+	}
+	//登録
+	sprites_[name] = sprite;
+}
+
+void SpriteManager::DeleteSprite(const std::string& name) {
+	// 名前がコンテナ内に存在するかチェック
+	auto it = sprites_.find(name);
+	if (it != sprites_.end()) {
+		sprites_.erase(it);  // コンテナから削除
+	}
+}
+
+std::string SpriteManager::GenerateName(const std::string& name) {
+	// 出力する名前
+	std::string outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
+
+	// 重複チェック用のラムダ式
+	std::function<void(const std::string&)> checkDuplicate = [&](const std::string& name) {
+		// 重複しているかチェック
+		if (sprites_.find(name) != sprites_.end()) {
+			// 重複しているので名前を変更
+			outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
+			checkDuplicate(outputName);
+		}
+		};
+
+	// 重複チェック
+	checkDuplicate(outputName);
+
+	// 最終的に出力
+	return outputName;
 }
 
 void SpriteManager::GenerateGraphicsPipeline() {

@@ -26,6 +26,14 @@ public://メンバ関数
 	//終了
 	void Finalize();
 
+	//スプライトをコンテナに登録
+	void RegisterSprite(const std::string& name, Sprite* sprite);
+	//登録されたスプライトを削除
+	void DeleteSprite(const std::string& name);
+
+	//名前生成関数
+	std::string GenerateName(const std::string& name);
+
 private://非公開メンバ関数
 	//グラフィックスパイプラインの生成
 	void GenerateGraphicsPipeline();
