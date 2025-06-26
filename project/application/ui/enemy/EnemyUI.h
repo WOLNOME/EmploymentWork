@@ -12,10 +12,6 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	//バックスプライト描画
-	void DrawBackSprite();
-	//フロントスプライト描画
-	void DrawFrontSprite();
 
 	//デバッグ用ImGui
 	void DebugWithImGui();
@@ -31,7 +27,7 @@ private:
 private:
 	//HPバー
 	static const int kNumHPBar = 10; //一度に表示可能なHPバーの数
-	std::array<std::array<uint32_t, 2>, kNumHPBar> thHPBars_;
+	std::array<uint32_t, 2> thHPBars_;
 	std::array<std::array<std::unique_ptr<Sprite>, 2>, kNumHPBar> spriteHPBar_;
 	std::array<bool, kNumHPBar> isHPBarVisible_; //各HPバーの表示状態 
 	float hpBarWidth_;

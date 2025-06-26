@@ -1,6 +1,7 @@
 #include "EnemyUI.h"
 #include "WinApp.h"
 #include "TextureManager.h"
+#include "SpriteManager.h"
 #include <assert.h>
 
 //アプリケーション
@@ -11,13 +12,15 @@ void EnemyUI::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyUI");
 	float hpBarSizeRatio = param_["hpBarSizeRatio"];
 
+	thHPBars_[0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
+	thHPBars_[1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
 	for (int i = 0; i < kNumHPBar; i++) {
-		thHPBars_[i][0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
-		thHPBars_[i][1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
 		for (int j = 0; j < 2; j++) {
 			spriteHPBar_[i][j] = std::make_unique<Sprite>();
-			spriteHPBar_[i][j]->Initialize();
-			spriteHPBar_[i][j]->AdjustTextureSize(thHPBars_[i][j]);
+			if (j == 0)
+				spriteHPBar_[i][j]->Initialize(SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Sprite::Order::Back0, thHPBars_[j]);
+			else
+				spriteHPBar_[i][j]->Initialize(SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Sprite::Order::Back1, thHPBars_[j]);
 			spriteHPBar_[i][j]->SetSize({
 				spriteHPBar_[i][j]->GetSize().x * hpBarSizeRatio,
 				spriteHPBar_[i][j]->GetSize().y * hpBarSizeRatio
@@ -29,6 +32,7 @@ void EnemyUI::Initialize() {
 }
 
 void EnemyUI::Update() {
+	//エネミーマネージャーチェック
 	assert(enemyManager_ != nullptr && "EnamyUIにEnemyManagerインスタンスを渡してください");
 
 	//パラメータのローカル変数
@@ -36,7 +40,11 @@ void EnemyUI::Update() {
 	float bossEnemyHPBarHeight = param_["bossEnemyHPBarHeight"];
 
 	int hpBarIndex = 0;
-	for (int i = 0; i < kNumHPBar; i++) isHPBarVisible_[i] = false;
+	for (int i = 0; i < kNumHPBar; i++) {
+		//あらかじめ全て非表示状態にしておく
+		spriteHPBar_[i][0]->SetIsDisplay(false);
+		spriteHPBar_[i][1]->SetIsDisplay(false);
+	}
 
 	//共通描画用ラムダ式
 	auto drawHPBar = [&](const Vector3& worldPos, float hpRate) {
@@ -51,15 +59,20 @@ void EnemyUI::Update() {
 			(clipPos.x * 0.5f + 0.5f) * WinApp::kClientWidth,
 			(clipPos.y * -0.5f + 0.5f) * WinApp::kClientHeight
 		};
+
+		//スクリーン座標が画面範囲から外れていたら描画しない
 		if (screenPos.x < 0.0f || screenPos.x > WinApp::kClientWidth ||
 			screenPos.y < 0.0f || screenPos.y > WinApp::kClientHeight) return;
 
 		Vector2 pos = { screenPos.x - hpBarWidth_ * 0.5f, screenPos.y - hpBarHeight_ * 0.5f };
-		isHPBarVisible_[hpBarIndex] = true;
+		//非表示状態を解除
+		spriteHPBar_[hpBarIndex][0]->SetIsDisplay(true);
+		spriteHPBar_[hpBarIndex][1]->SetIsDisplay(true);
+		//パラメーターを代入
 		spriteHPBar_[hpBarIndex][0]->SetPosition(pos);
 		spriteHPBar_[hpBarIndex][1]->SetPosition(pos);
 		spriteHPBar_[hpBarIndex][1]->SetSize({ hpBarWidth_ * hpRate, spriteHPBar_[hpBarIndex][1]->GetSize().y });
-		hpBarIndex++;
+		hpBarIndex++;	//←先着方式
 		};
 
 	//キャノ太
@@ -79,19 +92,8 @@ void EnemyUI::Update() {
 	}
 }
 
-void EnemyUI::DrawBackSprite() {
-	for (int i = 0; i < kNumHPBar; i++) {
-		if (!isHPBarVisible_[i]) continue;
-		for (int j = 0; j < 2; j++) spriteHPBar_[i][j]->Draw(thHPBars_[i][j]);
-	}
-}
-
-void EnemyUI::DrawFrontSprite() {
-	
-}
-
 void EnemyUI::DebugWithImGui() {
 #ifdef _DEBUG
-	
+
 #endif
 }

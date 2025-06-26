@@ -26,6 +26,9 @@ public://メンバ関数
 	//終了
 	void Finalize();
 
+	//デバッグ処理
+	void DebugWithImGui();
+
 	//スプライトをコンテナに登録
 	void RegisterSprite(const std::string& name, Sprite* sprite);
 	//登録されたスプライトを削除

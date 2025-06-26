@@ -6,11 +6,17 @@
 #include "Handle.h"
 
 class Sprite {
-private://列挙体
-	//描画順タグ
+	//スプライトマネージャーに公開
+	friend class SpriteManager;
+public://列挙体
+	//描画順タグ(各レイヤーは今のところ3つずつ←必要に応じて増やす)
 	enum class Order {
-		Back,
-		Front,
+		Back0,
+		Back1,
+		Back2,
+		Front0,
+		Front1,
+		Front2,
 	};
 	//テクスチャの種類
 	enum class TextureKind {
@@ -61,6 +67,7 @@ public://メンバ関数
 	//初期化
 	void Initialize(const std::string& _name,const Order& _order, uint32_t _textureHandle);
 	void Initialize(const std::string& _name,const Order& _order, Handle _textureHandle);
+	//描画
 	void Draw();
 
 	//デバッグ用ImGui
@@ -88,6 +95,8 @@ public://setter
 	void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
 	void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop = leftTop; }
 	void SetTextureSize(const Vector2& size) { textureSize = size; }
+	void SetShakeOffset(const Vector2& _offset) { shakeOffset_ = _offset; }
+	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; }
 
 private://非公開メンバ変数
 	ResourceForGPU CreateResourceForGPU();
@@ -125,6 +134,9 @@ private://メンバ変数
 	//テクスチャ切り出しサイズ
 	Vector2 textureSize = { 100.0f,100.0f };
 
+	Vector2 shakeOffset_ = {};
+
+	bool isDisplay_ = true;
 
 };
 

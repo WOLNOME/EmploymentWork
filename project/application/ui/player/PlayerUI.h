@@ -12,10 +12,6 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	//バックスプライト描画
-	void DrawBackSprite();
-	//フロントスプライト描画
-	void DrawFrontSprite();
 
 	//デバッグ用ImGui
 	void DebugWithImGui();

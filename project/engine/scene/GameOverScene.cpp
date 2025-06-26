@@ -24,7 +24,7 @@ void GameOverScene::Initialize() {
 		edgeParam.color = { 1, 0, 0, 1 };
 		TextTextureManager::GetInstance()->EditEdgeParam(thGameOverText_, edgeParam);
 		spriteGameOverText_ = std::make_unique<Sprite>();
-		spriteGameOverText_->Initialize();
+		spriteGameOverText_->Initialize(SpriteManager::GetInstance()->GenerateName("GameOverText"),Sprite::Order::Front0,thGameOverText_);
 		spriteGameOverText_->SetPosition({ WinApp::kClientWidth / 2.0f, WinApp::kClientHeight / 2.0f });
 		spriteGameOverText_->SetAnchorPoint({ 0.5f, 0.5f });
 		
@@ -44,22 +44,13 @@ void GameOverScene::Update() {
 		sceneManager_->SetNextScene("GamePlay");
 	}
 
+#ifdef _DEBUG
+	SpriteManager::GetInstance()->DebugWithImGui();
+#endif // _DEBUG
+
 }
 
 void GameOverScene::Draw() {
-	//バックスプライト共通描画設定
-	SpriteCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓バックスプライト描画開始↓↓↓↓
-	///------------------------------///
-
-
-
-	///------------------------------///
-	///↑↑↑↑バックスプライト描画終了↑↑↑↑
-	///------------------------------///
-
 	//3Dモデルの共通描画設定
 	Object3dCommon::GetInstance()->SettingCommonDrawing();
 
@@ -71,20 +62,5 @@ void GameOverScene::Draw() {
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
-
-	//フロントスプライト共通描画設定
-	SpriteCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓フロントスプライト描画開始↓↓↓↓
-	///------------------------------///
-
-	//スプライトの描画
-	spriteGameOverText_->AdjustTextureSize(thGameOverText_);
-	spriteGameOverText_->Draw(thGameOverText_);
-
-	///------------------------------///
-	///↑↑↑↑フロントスプライト描画終了↑↑↑↑
 	///------------------------------///
 }

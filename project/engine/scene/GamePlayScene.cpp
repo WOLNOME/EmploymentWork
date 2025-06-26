@@ -109,25 +109,13 @@ void GamePlayScene::Update() {
 	playerUI_->DebugWithImGui();
 	//敵UIのImGui
 	enemyUI_->DebugWithImGui();
+	//スプライトのデバッグ
+	//SpriteManager::GetInstance()->DebugWithImGui();
 
 #endif // _DEBUG
 }
 
 void GamePlayScene::Draw() {
-	//バックスプライト共通描画設定
-	SpriteCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓バックスプライト描画開始↓↓↓↓
-	///------------------------------///
-
-	playerUI_->DrawBackSprite();
-	enemyUI_->DrawBackSprite();
-
-	///------------------------------///
-	///↑↑↑↑バックスプライト描画終了↑↑↑↑
-	///------------------------------///
-
 	//3Dモデルの共通描画設定
 	Object3dCommon::GetInstance()->SettingCommonDrawing();
 
@@ -144,19 +132,5 @@ void GamePlayScene::Draw() {
 
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
-
-	//フロントスプライト共通描画設定
-	SpriteCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓フロントスプライト描画開始↓↓↓↓
-	///------------------------------///
-
-	playerUI_->DrawFrontSprite();
-	enemyUI_->DrawFrontSprite();
-
-	///------------------------------///
-	///↑↑↑↑フロントスプライト描画終了↑↑↑↑
 	///------------------------------///
 }
