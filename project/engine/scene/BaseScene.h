@@ -9,6 +9,7 @@
 #include "Object3d.h"
 #include "Particle.h"
 #include "CombinedParticle.h"
+#include "SpriteManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
 #include "Input.h"
@@ -20,7 +21,6 @@
 #include "PostEffectManager.h"
 #include "ImGuiManager.h"
 #include "Object3dCommon.h"
-#include "SpriteCommon.h"
 //シーン共通ヘッダー
 #include <cstdint>
 #include <chrono>

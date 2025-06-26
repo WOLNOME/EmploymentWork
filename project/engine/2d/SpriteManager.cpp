@@ -1,7 +1,7 @@
 #include "SpriteManager.h"
 #include "DirectXCommon.h"
 #include "MainRender.h"
-#include "Logger.h""
+#include "Logger.h"
 #include "Sprite.h"
 #include "RandomStringUtil.h"
 
@@ -20,14 +20,90 @@ void SpriteManager::Initialize() {
 }
 
 void SpriteManager::BackDraw() {
+	//スプライトが一つもセットされていなかったら抜ける
+	if (sprites_.empty()) return;
+
+	auto mainRender = MainRender::GetInstance();
+
+	//ルートシグネチャをセットするコマンド
+	mainRender->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	//グラフィックスパイプラインステートをセットするコマンド
+	mainRender->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	//プリミティブトポロジーをセットするコマンド
+	mainRender->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//バックスプライト0の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Back0)
+			//描画
+			sprite.second->Draw();
+	}
+	//バックスプライト1の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Back1)
+			//描画
+			sprite.second->Draw();
+	}
+	//バックスプライト2の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Back2)
+			//描画
+			sprite.second->Draw();
+	}
 }
 
 void SpriteManager::FrontDraw() {
+	//スプライトが一つもセットされていなかったら抜ける
+	if (sprites_.empty()) return;
+
+	auto mainRender = MainRender::GetInstance();
+
+	//ルートシグネチャをセットするコマンド
+	mainRender->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	//グラフィックスパイプラインステートをセットするコマンド
+	mainRender->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	//プリミティブトポロジーをセットするコマンド
+	mainRender->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//フロントスプライト0の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Front0)
+			//描画
+			sprite.second->Draw();
+	}
+	//フロントスプライト1の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Front1)
+			//描画
+			sprite.second->Draw();
+	}
+	//フロントスプライト2の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Front2)
+			//描画
+			sprite.second->Draw();
+	}
 }
 
 void SpriteManager::Finalize() {
 	delete instance;
 	instance = nullptr;
+}
+
+void SpriteManager::DebugWithImGui() {
+#ifdef _DEBUG
+	//全コンテナのデバッグ処理
+	for (const auto& sprite : sprites_) {
+		sprite.second->DebugWithImGui();
+	}
+#endif // _DEBUG
+
 }
 
 void SpriteManager::RegisterSprite(const std::string& name, Sprite* sprite) {
@@ -170,11 +246,11 @@ void SpriteManager::GenerateGraphicsPipeline() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Sprite.VS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/sprite/Sprite.VS.hlsl",
 		L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Sprite.PS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/sprite/Sprite.PS.hlsl",
 		L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 

@@ -9,7 +9,7 @@
 #include "DSVManager.h"
 #include "TextTextureManager.h"
 #include "ImGuiManager.h"
-#include "ModelManager.h"
+#include "SpriteManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
@@ -75,12 +75,16 @@ void MyGame::Draw() {
 	MainRender::GetInstance()->PreObjectDraw();
 	GPUDescriptorManager::GetInstance()->SetDescriptorHeap(MainRender::GetInstance()->GetCommandList());
 
+	//シーンのバックスプライト描画
+	SpriteManager::GetInstance()->BackDraw();
 	//シーンの描画
 	SceneManager::GetInstance()->Draw();
 	//シーンのライン描画
 	LineManager::GetInstance()->Draw();
 	//シーンのパーティクル描画
 	ParticleManager::GetInstance()->Draw();
+	//シーンのフロントスプライト描画
+	SpriteManager::GetInstance()->FrontDraw();
 
 	//ImGui描画前処理
 	MainRender::GetInstance()->PreImGuiDraw();

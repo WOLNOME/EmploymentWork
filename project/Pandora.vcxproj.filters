@@ -5,8 +5,8 @@
     <FxCompile Include="Resources\shaders\line\Line.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Object3d.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Object3d.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\Sprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\sprite\Sprite.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\sprite\Sprite.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Skinning.CS.hlsl" />
     <FxCompile Include="Resources\shaders\Skybox.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Skybox.VS.hlsl" />
@@ -262,7 +262,7 @@
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
     <None Include="Resources\shaders\Object3d.hlsli" />
-    <None Include="Resources\shaders\Sprite.hlsli" />
+    <None Include="Resources\shaders\sprite\Sprite.hlsli" />
     <None Include="Resources\shaders\Skybox.hlsli" />
     <None Include="Resources\shaders\postEffects\CopyImage.hlsli" />
     <None Include="Resources\shaders\TextTexture.hlsli" />

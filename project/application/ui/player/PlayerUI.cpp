@@ -1,6 +1,7 @@
 #include "PlayerUI.h"
 #include "WinApp.h"
 #include "TextureManager.h"
+#include "SpriteManager.h"
 #include <random>
 #include <cassert>
 
@@ -16,19 +17,17 @@ void PlayerUI::Initialize() {
 		//2dレティクルの初期化
 		th2dReticle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
 		sprite2dReticle_ = std::make_unique<Sprite>();
-		sprite2dReticle_->Initialize();
+		sprite2dReticle_->Initialize(SpriteManager::GetInstance()->GenerateName("Player2dReticle"), Sprite::Order::Front0, th2dReticle_);
 		sprite2dReticle_->SetAnchorPoint({ 0.5f,0.5f });
 		sprite2dReticle_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
-		sprite2dReticle_->AdjustTextureSize(th2dReticle_);
 	}
 	{
 		//FPSUIの初期化
 		thFPSUI_ = TextureManager::GetInstance()->LoadTexture("FPSUI.png");
 		spriteFPSUI_ = std::make_unique<Sprite>();
-		spriteFPSUI_->Initialize();
+		spriteFPSUI_->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerFPSUI"), Sprite::Order::Front0, thFPSUI_);
 		spriteFPSUI_->SetAnchorPoint({ 0.5f,0.5f });
 		spriteFPSUI_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
-		spriteFPSUI_->AdjustTextureSize(thFPSUI_);
 	}
 	{
 		//HPバーの初期化
@@ -36,9 +35,11 @@ void PlayerUI::Initialize() {
 		thHPBar_[1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
 		for (int i = 0; i < thHPBar_.size(); i++) {
 			spriteHPBar_[i] = std::make_unique<Sprite>();
-			spriteHPBar_[i]->Initialize();
+			if (i == 0)
+				spriteHPBar_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerHPBar"), Sprite::Order::Front1, thHPBar_[i]);
+			else
+				spriteHPBar_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerHPBar"), Sprite::Order::Front2, thHPBar_[i]);
 			spriteHPBar_[i]->SetPosition({ 320.0f,20.0f });
-			spriteHPBar_[i]->AdjustTextureSize(thHPBar_[i]);
 		}
 	}
 	{
@@ -47,9 +48,11 @@ void PlayerUI::Initialize() {
 		thCannon_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 		for (int i = 0; i < thCannon_.size(); i++) {
 			spriteCannon_[i] = std::make_unique<Sprite>();
-			spriteCannon_[i]->Initialize();
+			if (i == 0)
+				spriteCannon_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Sprite::Order::Front1, thCannon_[i]);
+			else
+				spriteCannon_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Sprite::Order::Front2, thCannon_[i]);
 			spriteCannon_[i]->SetPosition({ 330.0f,565.0f });
-			spriteCannon_[i]->AdjustTextureSize(thCannon_[i]);
 		}
 		spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize() });
 		spriteCannon_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
@@ -60,9 +63,11 @@ void PlayerUI::Initialize() {
 		thBullet_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 		for (int i = 0; i < thBullet_.size(); i++) {
 			spriteBullet_[i] = std::make_unique<Sprite>();
-			spriteBullet_[i]->Initialize();
+			if (i == 0)
+				spriteBullet_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerBulletUI"), Sprite::Order::Front1, thBullet_[i]);
+			else
+				spriteBullet_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerBulletUI"), Sprite::Order::Front2, thBullet_[i]);
 			spriteBullet_[i]->SetPosition({ 830.0f,565.0f });
-			spriteBullet_[i]->AdjustTextureSize(thBullet_[i]);
 		}
 		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize() });
 		spriteBullet_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
@@ -95,14 +100,6 @@ void PlayerUI::Update() {
 		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize().x, spriteBullet_[0]->GetSize().y * (1.0f - bulletNumRate) });
 	}
 
-}
-
-void PlayerUI::DrawBackSprite() {
-}
-
-void PlayerUI::DrawFrontSprite() {
-	//スプライトの描画
-	sprite2dReticle_->Draw(th2dReticle_);
 	//もしカメラが揺れてたらUIも一部揺らす(オフセットはそろえる)
 	if (camera_->GetIsShake()) {
 		std::random_device seed_gen;
@@ -112,44 +109,18 @@ void PlayerUI::DrawFrontSprite() {
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 
-		//スプライトのポジションをオフセット分ずらす
-		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() + offset);
+		//設定
+		spriteFPSUI_->SetShakeOffset(offset);
 		for (int i = 0; i < 2; i++) {
-			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() + offset);
-			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() + offset);
-			spriteBullet_[i]->SetPosition(spriteBullet_[i]->GetPosition() + offset);
-		}
-
-
-		//スプライトを描画する
-		spriteFPSUI_->Draw(thFPSUI_);
-		for (int i = 0; i < 2; i++) {
-			spriteHPBar_[i]->Draw(thHPBar_[i]);
-			spriteCannon_[i]->Draw(thCannon_[i]);
-			spriteBullet_[i]->Draw(thBullet_[i]);
-		}
-
-		//描画が終わったのでずらした分元に戻す
-		spriteFPSUI_->SetPosition(spriteFPSUI_->GetPosition() - offset);
-		for (int i = 0; i < 2; i++) {
-			spriteHPBar_[i]->SetPosition(spriteHPBar_[i]->GetPosition() - offset);
-			spriteCannon_[i]->SetPosition(spriteCannon_[i]->GetPosition() - offset);
-			spriteBullet_[i]->SetPosition(spriteBullet_[i]->GetPosition() - offset);
-		}
-	}
-	//揺れていないので普通に描画する
-	else {
-		spriteFPSUI_->Draw(thFPSUI_);
-		for (int i = 0; i < 2; i++) {
-			spriteHPBar_[i]->Draw(thHPBar_[i]);
-			spriteCannon_[i]->Draw(thCannon_[i]);
-			spriteBullet_[i]->Draw(thBullet_[i]);
+			spriteHPBar_[i]->SetShakeOffset(offset);
+			spriteCannon_[i]->SetShakeOffset(offset);
+			spriteBullet_[i]->SetShakeOffset(offset);
 		}
 	}
 }
 
 void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
-	
+
 #endif // _DEBUG
 }

@@ -33,15 +33,13 @@ void DevelopScene::Initialize() {
 	//ゲームシーン変数の初期化
 	sprite_ = std::make_unique<Sprite>();
 	textureHandleSprite_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
-	sprite_->Initialize();
-	sprite_->AdjustTextureSize(textureHandleSprite_);
+	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0,textureHandleSprite_);
 	sprite_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite_->SetFlipX(true);
 
 	sprite2_ = std::make_unique<Sprite>();
 	textureHandleSprite2_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
-	sprite2_->Initialize();
-	sprite_->AdjustTextureSize(textureHandleSprite2_);
+	sprite2_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0, textureHandleSprite2_);
 	sprite2Position = { 100.0f,100.0f };
 	sprite2_->SetPosition(sprite2Position);
 	sprite2_->SetSize({ 300.0f,300.0f });
@@ -122,7 +120,7 @@ void DevelopScene::Initialize() {
 		param.color = { 1,1,1,1 };
 		textHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(param);
 		text_ = std::make_unique<Sprite>();
-		text_->Initialize();
+		text_->Initialize(SpriteManager::GetInstance()->GenerateName("Text"), Sprite::Order::Front0, textHandle_);
 		text_->SetPosition({ 640,360 });
 		text_->SetAnchorPoint({ 0.5f,0.5f });
 		EdgeParam edgeParam;
@@ -235,26 +233,5 @@ void DevelopScene::Draw() {
 	///------------------------------///
 	///↑↑↑↑モデル描画終了↑↑↑↑
 	///------------------------------///
-
-	//スプライトの共通描画設定
-	SpriteCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓スプライト描画開始↓↓↓↓
-	///------------------------------///
-
-	////スプライト描画
-	//sprite_->Draw(textureHandleSprite_);
-	//sprite2_->Draw();
-
-	//テキスト
-	text_->AdjustTextureSize(textHandle_);
-	text_->Draw(textHandle_);
-
-	///------------------------------///
-	///↑↑↑↑スプライト描画終了↑↑↑↑
-	///------------------------------///
-
-
 
 }
