@@ -1,48 +1,126 @@
-#include "Object3dCommon.h"
+#include "Object3dManager.h"
 #include "DirectXCommon.h"
 #include "MainRender.h"
 #include "SceneLight.h"
 #include "Logger.h"
+#include "RandomStringUtil.h"
+#include "Object3d.h"
+#include <cassert>
 
-Object3dCommon* Object3dCommon::instance = nullptr;
+Object3dManager* Object3dManager::instance = nullptr;
 
-Object3dCommon* Object3dCommon::GetInstance() {
+Object3dManager* Object3dManager::GetInstance() {
 	if (instance == nullptr) {
-		instance = new Object3dCommon;
+		instance = new Object3dManager;
 	}
 	return instance;
 }
 
-void Object3dCommon::Initialize() {
+void Object3dManager::Initialize() {
 	//グラフィックスパイプラインの生成
 	GenerateGraphicsPipeline();
 	//コンピュートパイプラインの生成
 	GenerateComputePipeline();
 }
 
-void Object3dCommon::Finalize() {
+void Object3dManager::Update() {
+	//オブジェクトが一つもセットされていなかったら抜ける
+	if (objects_.empty()) return;
+
+	//全オブジェクトの更新
+	for (const auto& object : objects_) {
+		object.second->Update();
+	}
+}
+
+void Object3dManager::Draw() {
+	//オブジェクトが一つもセットされていなかったら抜ける
+	if (objects_.empty()) return;
+
+	auto mainRender = MainRender::GetInstance();
+
+	//カメラチェック
+	if (!camera_) {
+		assert(0 && "カメラがセットされていません");
+	}
+	//シーンライトチェック
+	if (!light_) {
+		assert(0 && "シーンライトがセットされていません");
+	}
+
+	//全オブジェクトの描画
+	for (const auto& object : objects_) {
+		if (!object.second->isDisplay_) {
+			object.second->SetIsDisplay(true);
+			continue;
+		}
+
+		object.second->Draw(camera_, light_);
+	}
+
+
+}
+
+void Object3dManager::Finalize() {
 	delete instance;
 	instance = nullptr;
 }
 
-void Object3dCommon::SettingCommonDrawing(NameGPS index) {
+void Object3dManager::RegisterObject(const std::string& name, Object3d* object) {
+	//重複チェック
+	if (objects_.find(name) != objects_.end()) {
+		return;
+	}
+	//登録
+	objects_[name] = object;
+}
+
+void Object3dManager::DeleteObject(const std::string& name) {
+	//名前がコンテナ内に存在するかチェック
+	auto it = objects_.find(name);
+	if (it != objects_.end()) {
+		objects_.erase(it);  //コンテナから削除
+	}
+}
+
+std::string Object3dManager::GenerateName(const std::string& name) {
+	//出力する名前
+	std::string outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
+
+	//重複チェック用のラムダ式
+	std::function<void(const std::string&)> checkDuplicate = [&](const std::string& name) {
+		//重複しているかチェック
+		if (objects_.find(name) != objects_.end()) {
+			//重複しているので名前を変更
+			outputName = name + "_" + RandomStringUtil::GenerateRandomString(3);
+			checkDuplicate(outputName);
+		}
+		};
+
+	//重複チェック
+	checkDuplicate(outputName);
+
+	//最終的に出力
+	return outputName;
+}
+
+void Object3dManager::SettingCommonDrawing(NameGPS index) {
 	//ルートシグネチャをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature[(int)index].Get());
 	//グラフィックスパイプラインステートをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState[(int)index].Get());
 	//プリミティブトポロジーをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 }
 
-void Object3dCommon::SettingAnimationCS() {
+void Object3dManager::SettingAnimationCS() {
 	//コンピュートルートシグネチャ
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootSignature(computeRootSignature.Get());
 	//コンピュートパイプライン
 	MainRender::GetInstance()->GetCommandList()->SetPipelineState(computePipelineState.Get());
 }
 
-void Object3dCommon::GenerateGraphicsPipeline() {
+void Object3dManager::GenerateGraphicsPipeline() {
 	//通常PSOの設定
 	NormalPSOOption();
 	//アニメーションPSOの設定
@@ -51,7 +129,7 @@ void Object3dCommon::GenerateGraphicsPipeline() {
 	SkyBoxPSOOption();
 }
 
-void Object3dCommon::GenerateComputePipeline() {
+void Object3dManager::GenerateComputePipeline() {
 	HRESULT hr;
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -97,7 +175,7 @@ void Object3dCommon::GenerateComputePipeline() {
 	registerCountU += numDescriptors;
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
-	// MatirixPalette用の設定(0)
+	//MatirixPalette用の設定(0)
 	D3D12_ROOT_PARAMETER matrixPaletteParam = {};
 	matrixPaletteParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	matrixPaletteParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
@@ -105,7 +183,7 @@ void Object3dCommon::GenerateComputePipeline() {
 	matrixPaletteParam.DescriptorTable.NumDescriptorRanges = _countof(matrixPaletteDescriptorRange);
 	rootParameters.push_back(matrixPaletteParam);
 
-	// 入力頂点用の設定(1)
+	//入力頂点用の設定(1)
 	D3D12_ROOT_PARAMETER inputVerticesParam = {};
 	inputVerticesParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	inputVerticesParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
@@ -113,7 +191,7 @@ void Object3dCommon::GenerateComputePipeline() {
 	inputVerticesParam.DescriptorTable.NumDescriptorRanges = _countof(inputVerticesDescriptorRange);
 	rootParameters.push_back(inputVerticesParam);
 
-	// 入力インフルエンス関連の設定(2)
+	//入力インフルエンス関連の設定(2)
 	D3D12_ROOT_PARAMETER inputInfluenceParam = {};
 	inputInfluenceParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	inputInfluenceParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
@@ -121,7 +199,7 @@ void Object3dCommon::GenerateComputePipeline() {
 	inputInfluenceParam.DescriptorTable.NumDescriptorRanges = _countof(inputInfluenceDescriptorRange);
 	rootParameters.push_back(inputInfluenceParam);
 
-	// 出力頂点用の設定(3)
+	//出力頂点用の設定(3)
 	D3D12_ROOT_PARAMETER outputVerticesParam = {};
 	outputVerticesParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	outputVerticesParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
@@ -129,14 +207,14 @@ void Object3dCommon::GenerateComputePipeline() {
 	outputVerticesParam.DescriptorTable.NumDescriptorRanges = _countof(outputVerticesDescriptorRange);
 	rootParameters.push_back(outputVerticesParam);
 
-	// スキニング情報の設定(4)
+	//スキニング情報の設定(4)
 	D3D12_ROOT_PARAMETER skinningInformationParam = {};
 	skinningInformationParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	skinningInformationParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	skinningInformationParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(skinningInformationParam);
 
-	// ルートシグネチャの記述
+	//ルートシグネチャの記述
 	descriptionRootSignature.pParameters = rootParameters.data();
 	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size());
 
@@ -156,7 +234,7 @@ void Object3dCommon::GenerateComputePipeline() {
 
 	//Shaderをコンパイルする
 	Microsoft::WRL::ComPtr<IDxcBlob> computeShaderBlob;
-	computeShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Skinning.CS.hlsl",
+	computeShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Skinning.CS.hlsl",
 		L"cs_6_0");
 	assert(computeShaderBlob != nullptr);
 
@@ -168,11 +246,9 @@ void Object3dCommon::GenerateComputePipeline() {
 	};
 	computePipelineStateDesc.pRootSignature = computeRootSignature.Get();
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState));
-
-
 }
 
-void Object3dCommon::NormalPSOOption() {
+void Object3dManager::NormalPSOOption() {
 	HRESULT hr;
 	//RootSignature作成（使用するレジスタ : t0）
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -201,28 +277,28 @@ void Object3dCommon::NormalPSOOption() {
 	registerCount += numDescriptors;
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
-	// マテリアルの設定(0)
+	//マテリアルの設定(0)
 	D3D12_ROOT_PARAMETER materialParam = {};
 	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	materialParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(materialParam);
 
-	// ワールドトランスフォーム関連の設定(1)
+	//ワールドトランスフォーム関連の設定(1)
 	D3D12_ROOT_PARAMETER worldTransformParam = {};
 	worldTransformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	worldTransformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	worldTransformParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(worldTransformParam);
 
-	// ビュープロジェクション関連の設定(2)
+	//ビュープロジェクション関連の設定(2)
 	D3D12_ROOT_PARAMETER viewProjParam = {};
 	viewProjParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	viewProjParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	viewProjParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(viewProjParam);
 
-	// テクスチャの設定(3)
+	//テクスチャの設定(3)
 	D3D12_ROOT_PARAMETER textureParam = {};
 	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -230,28 +306,28 @@ void Object3dCommon::NormalPSOOption() {
 	textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 	rootParameters.push_back(textureParam);
 
-	// カメラ座標用定数バッファの設定(4)
+	//カメラ座標用定数バッファの設定(4)
 	D3D12_ROOT_PARAMETER cameraParam = {};
 	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	cameraParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(cameraParam);
 
-	// シーンライト用の設定(5)
+	//シーンライト用の設定(5)
 	D3D12_ROOT_PARAMETER lightParam = {};
 	lightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightParam.Descriptor.ShaderRegister = 2;
 	rootParameters.push_back(lightParam);
 
-	// 光源有無用の設定(6)
+	//光源有無用の設定(6)
 	D3D12_ROOT_PARAMETER lightExistParam = {};
 	lightExistParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightExistParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightExistParam.Descriptor.ShaderRegister = 3;
 	rootParameters.push_back(lightExistParam);
 
-	// 環境マップテクスチャ用の設定(7)
+	//環境マップテクスチャ用の設定(7)
 	D3D12_ROOT_PARAMETER elTextureParam = {};
 	elTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	elTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -259,9 +335,9 @@ void Object3dCommon::NormalPSOOption() {
 	elTextureParam.DescriptorTable.NumDescriptorRanges = _countof(eltDescriptorRange);
 	rootParameters.push_back(elTextureParam);
 
-	// ルートシグネチャの記述
-	descriptionRootSignature.pParameters = rootParameters.data(); // std::vectorのデータポインタを使用
-	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); // 要素数を取得
+	//ルートシグネチャの記述
+	descriptionRootSignature.pParameters = rootParameters.data(); //std::vectorのデータポインタを使用
+	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); //要素数を取得
 
 	//Samplerの設定
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -336,10 +412,10 @@ void Object3dCommon::NormalPSOOption() {
 
 	//Shaderをコンパイルする
 	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob;
-	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Object3d.VS.hlsl",
+	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Object3d.VS.hlsl",
 		L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Object3d.PS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Object3d.PS.hlsl",
 		L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
@@ -379,7 +455,7 @@ void Object3dCommon::NormalPSOOption() {
 	assert(SUCCEEDED(hr));
 }
 
-void Object3dCommon::AnimationPSOOption() {
+void Object3dManager::AnimationPSOOption() {
 	HRESULT hr;
 	//RootSignature作成（使用するレジスタ : t0）
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -409,28 +485,28 @@ void Object3dCommon::AnimationPSOOption() {
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
 
-	// マテリアルの設定(0)
+	//マテリアルの設定(0)
 	D3D12_ROOT_PARAMETER materialParam = {};
 	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	materialParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(materialParam);
 
-	// ワールドトランスフォーム関連の設定(1)
+	//ワールドトランスフォーム関連の設定(1)
 	D3D12_ROOT_PARAMETER worldTransformParam = {};
 	worldTransformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	worldTransformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	worldTransformParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(worldTransformParam);
 
-	// ビュープロジェクション関連の設定(2)
+	//ビュープロジェクション関連の設定(2)
 	D3D12_ROOT_PARAMETER viewProjParam = {};
 	viewProjParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	viewProjParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	viewProjParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(viewProjParam);
 
-	// テクスチャの設定(3)
+	//テクスチャの設定(3)
 	D3D12_ROOT_PARAMETER textureParam = {};
 	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -438,28 +514,28 @@ void Object3dCommon::AnimationPSOOption() {
 	textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 	rootParameters.push_back(textureParam);
 
-	// カメラ座標用定数バッファの設定(4)
+	//カメラ座標用定数バッファの設定(4)
 	D3D12_ROOT_PARAMETER cameraParam = {};
 	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	cameraParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(cameraParam);
 
-	// シーンライト用の設定(5)
+	//シーンライト用の設定(5)
 	D3D12_ROOT_PARAMETER lightParam = {};
 	lightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightParam.Descriptor.ShaderRegister = 2;
 	rootParameters.push_back(lightParam);
 
-	// 光源有無用の設定(6)
+	//光源有無用の設定(6)
 	D3D12_ROOT_PARAMETER lightExistParam = {};
 	lightExistParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightExistParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightExistParam.Descriptor.ShaderRegister = 3;
 	rootParameters.push_back(lightExistParam);
 
-	// 環境光テクスチャ用の設定(7)
+	//環境光テクスチャ用の設定(7)
 	D3D12_ROOT_PARAMETER elTextureParam = {};
 	elTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	elTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -467,9 +543,9 @@ void Object3dCommon::AnimationPSOOption() {
 	elTextureParam.DescriptorTable.NumDescriptorRanges = _countof(eltDescriptorRange);
 	rootParameters.push_back(elTextureParam);
 
-	// ルートシグネチャの記述
-	descriptionRootSignature.pParameters = rootParameters.data(); // std::vectorのデータポインタを使用
-	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); // 要素数を取得
+	//ルートシグネチャの記述
+	descriptionRootSignature.pParameters = rootParameters.data(); //std::vectorのデータポインタを使用
+	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); //要素数を取得
 
 	//Samplerの設定
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -546,11 +622,11 @@ void Object3dCommon::AnimationPSOOption() {
 	//Shaderをコンパイルする
 	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob;
 
-	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Object3d.VS.hlsl",
+	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Object3d.VS.hlsl",
 		L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Object3d.PS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Object3d.PS.hlsl",
 		L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
@@ -588,10 +664,9 @@ void Object3dCommon::AnimationPSOOption() {
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState[(int)NameGPS::Animation]));
 	assert(SUCCEEDED(hr));
-
 }
 
-void Object3dCommon::SkyBoxPSOOption() {
+void Object3dManager::SkyBoxPSOOption() {
 	HRESULT hr;
 	//RootSignature作成（使用するレジスタ : t0）
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -612,28 +687,28 @@ void Object3dCommon::SkyBoxPSOOption() {
 	registerCount += numDescriptors;
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
-	// マテリアルの設定
+	//マテリアルの設定
 	D3D12_ROOT_PARAMETER materialParam = {};
 	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	materialParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(materialParam);
 
-	// ワールドトランスフォーム関連の設定
+	//ワールドトランスフォーム関連の設定
 	D3D12_ROOT_PARAMETER worldTransformParam = {};
 	worldTransformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	worldTransformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	worldTransformParam.Descriptor.ShaderRegister = 0;
 	rootParameters.push_back(worldTransformParam);
 
-	// ビュープロジェクション関連の設定
+	//ビュープロジェクション関連の設定
 	D3D12_ROOT_PARAMETER viewProjParam = {};
 	viewProjParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	viewProjParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	viewProjParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(viewProjParam);
 
-	// テクスチャの設定
+	//テクスチャの設定
 	D3D12_ROOT_PARAMETER textureParam = {};
 	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -641,30 +716,30 @@ void Object3dCommon::SkyBoxPSOOption() {
 	textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 	rootParameters.push_back(textureParam);
 
-	// カメラ座標用定数バッファの設定
+	//カメラ座標用定数バッファの設定
 	D3D12_ROOT_PARAMETER cameraParam = {};
 	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	cameraParam.Descriptor.ShaderRegister = 1;
 	rootParameters.push_back(cameraParam);
 
-	// シーンライト用の設定
+	//シーンライト用の設定
 	D3D12_ROOT_PARAMETER lightParam = {};
 	lightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightParam.Descriptor.ShaderRegister = 2;
 	rootParameters.push_back(lightParam);
 
-	// 光源有無用の設定
+	//光源有無用の設定
 	D3D12_ROOT_PARAMETER lightExistParam = {};
 	lightExistParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	lightExistParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	lightExistParam.Descriptor.ShaderRegister = 3;
 	rootParameters.push_back(lightExistParam);
 
-	// ルートシグネチャの記述
-	descriptionRootSignature.pParameters = rootParameters.data(); // std::vectorのデータポインタを使用
-	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); // 要素数を取得
+	//ルートシグネチャの記述
+	descriptionRootSignature.pParameters = rootParameters.data(); //std::vectorのデータポインタを使用
+	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size()); //要素数を取得
 
 	//Samplerの設定
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -739,10 +814,10 @@ void Object3dCommon::SkyBoxPSOOption() {
 
 	//Shaderをコンパイルする
 	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob;
-	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Skybox.VS.hlsl",
+	vertexShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Skybox.VS.hlsl",
 		L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/Skybox.PS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/object/Skybox.PS.hlsl",
 		L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
@@ -781,4 +856,3 @@ void Object3dCommon::SkyBoxPSOOption() {
 		IID_PPV_ARGS(&graphicsPipelineState[(int)NameGPS::SkyBox]));
 	assert(SUCCEEDED(hr));
 }
-

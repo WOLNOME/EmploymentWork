@@ -27,13 +27,6 @@ void EnemyWeaponManager::Update() {
 	}
 }
 
-void EnemyWeaponManager::Draw() {
-	//砲弾の描画
-	for (const auto& cannon : cannons_) {
-		cannon->Draw();
-	}
-}
-
 void EnemyWeaponManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//砲弾のデバッグ
@@ -41,20 +34,6 @@ void EnemyWeaponManager::DebugWithImGui() {
 		cannon->DebugWithImGui();
 	}
 #endif // _DEBUG
-}
-
-void EnemyWeaponManager::SetCamera(GameCamera* _camera) {
-	camera_ = _camera;
-	for (auto& cannon : cannons_) {
-		cannon->SetCamera(_camera);
-	}
-}
-
-void EnemyWeaponManager::SetLight(SceneLight* _light) {
-	sceneLight_ = _light;
-	for (auto& cannon : cannons_) {
-		cannon->SetSceneLight(_light);
-	}
 }
 
 void EnemyWeaponManager::CreateCannon() {

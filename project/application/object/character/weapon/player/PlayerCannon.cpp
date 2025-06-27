@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
+#include "Object3dManager.h"
 
 void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
@@ -10,7 +11,8 @@ void PlayerCannon::Initialize() {
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
+	object3d_->Initialize(ShapeTag{},Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
+	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerCannonHit"), "hit");
@@ -42,14 +44,6 @@ void PlayerCannon::Update() {
 
 	//移動処理
 	Move();
-}
-
-void PlayerCannon::Draw() {
-	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
-
-	//オブジェクトの描画
-	object3d_->Draw(camera_, textureHandle_);
 }
 
 void PlayerCannon::DebugWithImGui() {

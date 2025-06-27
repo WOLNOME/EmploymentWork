@@ -16,7 +16,7 @@
 #include "Input.h"
 #include "AudioCommon.h"
 #include "SpriteManager.h"
-#include "Object3dCommon.h"
+#include "Object3dManager.h"
 #include "LineManager.h"
 #include "SceneManager.h"
 #include "CollisionManager.h"
@@ -76,8 +76,8 @@ void Framework::Initialize() {
 	//スプライトマネージャー
 	SpriteManager::GetInstance()->Initialize();
 
-	//オブジェクト3D共通部
-	Object3dCommon::GetInstance()->Initialize();
+	//オブジェクト3Dマネージャー
+	Object3dManager::GetInstance()->Initialize();
 
 	//線描画共通部
 	LineManager::GetInstance()->Initialize();
@@ -94,7 +94,7 @@ void Framework::Finalize() {
 	CollisionManager::GetInstance()->Finalize();
 	SceneManager::GetInstance()->Finalize();
 	LineManager::GetInstance()->Finalize();
-	Object3dCommon::GetInstance()->Finalize();
+	Object3dManager::GetInstance()->Finalize();
 	SpriteManager::GetInstance()->Finalize();
 	AudioCommon::GetInstance()->Finalize();
 	Input::GetInstance()->Finalize();

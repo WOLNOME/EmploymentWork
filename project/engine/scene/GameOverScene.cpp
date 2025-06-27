@@ -15,7 +15,7 @@ void GameOverScene::Initialize() {
 		textParam.size = 50;
 		textParam.font = Font::UDDegitalNK_B;
 		textParam.fontStyle = FontStyle::Normal;
-		textParam.text = L"Game Over";
+		textParam.text = L"Game Over...";
 		thGameOverText_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
 		EdgeParam edgeParam;
 		edgeParam.width = 2;
@@ -48,19 +48,4 @@ void GameOverScene::Update() {
 	SpriteManager::GetInstance()->DebugWithImGui();
 #endif // _DEBUG
 
-}
-
-void GameOverScene::Draw() {
-	//3Dモデルの共通描画設定
-	Object3dCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓モデル描画開始↓↓↓↓
-	///------------------------------///
-
-
-
-	///------------------------------///
-	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
 }

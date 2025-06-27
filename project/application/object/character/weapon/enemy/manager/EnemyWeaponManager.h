@@ -1,6 +1,4 @@
 #pragma once
-#include "GameCamera.h"
-#include "SceneLight.h"
 #include "JsonUtil.h"
 #include <vector>
 #include <memory>
@@ -16,8 +14,6 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	//描画
-	void Draw();
 
 	//デバッグ用パラメーター調整
 	void DebugWithImGui();
@@ -29,10 +25,6 @@ public://getter
 	//const std::vector<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
 
 public://setter
-	//カメラセット
-	void SetCamera(GameCamera* _camera);
-	//ライトセット
-	void SetLight(SceneLight* _light);
 	//エネミーマネージャーセット
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
 	//プレイヤーセット
@@ -43,10 +35,6 @@ private:
 	void CreateCannon();
 
 private:
-	//カメラ
-	GameCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* sceneLight_ = nullptr;
 	//エネミーマネージャー
 	EnemyManager* enemyManager_ = nullptr;
 	//プレイヤー

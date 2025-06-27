@@ -164,7 +164,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
     <ClCompile Include="engine\3d\Object3d.cpp" />
-    <ClCompile Include="engine\3d\Object3dCommon.cpp" />
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\base\TextureManager.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
@@ -189,6 +188,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\player\PlayerCannon.cpp" />
     <ClCompile Include="application\object\character\weapon\player\manager\PlayerWeaponManager.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
+    <ClCompile Include="engine\3d\Object3dManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
@@ -241,7 +241,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\Model.h" />
     <ClInclude Include="engine\3d\ModelManager.h" />
     <ClInclude Include="engine\3d\Object3d.h" />
-    <ClInclude Include="engine\3d\Object3dCommon.h" />
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\base\TextureManager.h" />
     <ClInclude Include="engine\math\Vector2.h" />
@@ -279,6 +278,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\player\PlayerCannon.h" />
     <ClInclude Include="application\object\character\weapon\player\manager\PlayerWeaponManager.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
+    <ClInclude Include="engine\3d\Object3dManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
@@ -296,7 +296,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Resources\shaders\Object3d.hlsli">
+    <None Include="Resources\shaders\object\Object3d.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -308,7 +308,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Resources\shaders\Skybox.hlsli">
+    <None Include="Resources\shaders\object\Skybox.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -338,11 +338,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Object3d.PS.hlsl">
+    <FxCompile Include="Resources\shaders\object\Object3d.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Object3d.VS.hlsl">
+    <FxCompile Include="Resources\shaders\object\Object3d.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
@@ -410,15 +410,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Skinning.CS.hlsl">
+    <FxCompile Include="Resources\shaders\object\Skinning.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Skybox.PS.hlsl">
+    <FxCompile Include="Resources\shaders\object\Skybox.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Skybox.VS.hlsl">
+    <FxCompile Include="Resources\shaders\object\Skybox.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

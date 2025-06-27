@@ -3,13 +3,13 @@
   <ItemGroup>
     <FxCompile Include="Resources\shaders\line\Line.PS.hlsl" />
     <FxCompile Include="Resources\shaders\line\Line.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\Object3d.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\Object3d.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\object\Object3d.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\object\Object3d.VS.hlsl" />
     <FxCompile Include="Resources\shaders\sprite\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\sprite\Sprite.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\Skinning.CS.hlsl" />
-    <FxCompile Include="Resources\shaders\Skybox.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\Skybox.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\object\Skinning.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\object\Skybox.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\object\Skybox.VS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\BoxFilter.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\CopyImage.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\CopyImage.VS.hlsl" />
@@ -45,7 +45,6 @@
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
     <ClCompile Include="engine\3d\Object3d.cpp" />
-    <ClCompile Include="engine\3d\Object3dCommon.cpp" />
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\base\TextureManager.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
@@ -135,6 +134,7 @@
     <ClCompile Include="application\object\character\enemy\base\IBaseEnemy.cpp" />
     <ClCompile Include="engine\3d\LineManager.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
+    <ClCompile Include="engine\3d\Object3dManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -151,7 +151,6 @@
     <ClInclude Include="engine\3d\Model.h" />
     <ClInclude Include="engine\3d\ModelManager.h" />
     <ClInclude Include="engine\3d\Object3d.h" />
-    <ClInclude Include="engine\3d\Object3dCommon.h" />
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\base\TextureManager.h" />
     <ClInclude Include="engine\math\Vector2.h" />
@@ -258,12 +257,13 @@
     <ClInclude Include="application\object\character\enemy\base\IBaseEnemy.h" />
     <ClInclude Include="engine\3d\LineManager.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
+    <ClInclude Include="engine\3d\Object3dManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
-    <None Include="Resources\shaders\Object3d.hlsli" />
+    <None Include="Resources\shaders\object\Object3d.hlsli" />
     <None Include="Resources\shaders\sprite\Sprite.hlsli" />
-    <None Include="Resources\shaders\Skybox.hlsli" />
+    <None Include="Resources\shaders\object\Skybox.hlsli" />
     <None Include="Resources\shaders\postEffects\CopyImage.hlsli" />
     <None Include="Resources\shaders\TextTexture.hlsli" />
     <None Include="Resources\shaders\particle\ParticleCommon.hlsli" />

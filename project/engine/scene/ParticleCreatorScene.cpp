@@ -24,10 +24,11 @@ void ParticleCreatorScene::Initialize() {
 
 	//天球と地面の生成と初期化
 	skydome_ = std::make_unique<Object3d>();
-	skydome_->Initialize(ModelTag{}, "skydome");
+	skydome_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Skydome"), "skydome");
 	textureHandleGround_ = TextureManager::GetInstance()->LoadTexture("grid.png");
 	ground_ = std::make_unique<Object3d>();
-	ground_->Initialize(ModelTag{}, "ground");
+	ground_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Ground"), "ground");
+	ground_->SetTexture(textureHandleGround_);
 
 }
 
@@ -39,9 +40,6 @@ void ParticleCreatorScene::Update() {
 	BaseScene::Update();
 	//カメラの更新
 	camera_->Update();
-	//オブジェクトの更新
-	skydome_->Update();
-	ground_->Update();
 
 	//リセットコマンド
 	if (!checkContinue_ && !checkSameName_ && !checkEditName_) {
@@ -66,24 +64,6 @@ void ParticleCreatorScene::Update() {
 
 #endif //_DEBUG
 
-}
-
-void ParticleCreatorScene::Draw() {
-	//3Dモデルの共通描画設定
-	Object3dCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓モデル描画開始↓↓↓↓
-	///------------------------------///
-
-	//天球の描画
-	skydome_->Draw(camera_.get());
-	//地面の描画
-	ground_->Draw(camera_.get(), textureHandleGround_);
-
-	///------------------------------///
-	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
 }
 
 void ParticleCreatorScene::StartWithImGui() {

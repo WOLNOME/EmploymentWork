@@ -1,6 +1,4 @@
 #pragma once
-#include "GameCamera.h"
-#include "SceneLight.h"
 #include <list>
 #include <memory>
 
@@ -15,8 +13,6 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	//描画
-	void Draw();
 
 	//デバッグ用パラメーター調整
 	void DebugWithImGui();
@@ -28,18 +24,10 @@ public://getter
 	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
 
 public://setter
-	//カメラセット
-	void SetCamera(GameCamera* _camera);
-	//ライトセット
-	void SetLight(SceneLight* _light);
 	//プレイヤーセット
 	void SetPlayer(Player* _player);
 
 private:
-	//カメラ
-	GameCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* sceneLight_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 

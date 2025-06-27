@@ -62,17 +62,6 @@ void EnemyManager::Update() {
 	}
 }
 
-void EnemyManager::Draw() {
-	//全キャノ太の描画
-	for (const auto& canota : canotas_) {
-		canota->Draw();
-	}
-	//全ボスの描画
-	for (const auto& boss : bosses_) {
-		boss->Draw();
-	}
-}
-
 void EnemyManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//全キャノ太のデバッグ処理
@@ -84,26 +73,6 @@ void EnemyManager::DebugWithImGui() {
 		boss->DebugWithImGui();
 	}
 #endif // _DEBUG
-}
-
-void EnemyManager::SetCamera(GameCamera* _camera) {
-	camera_ = _camera;
-	for (const auto& canota : canotas_) {
-		canota->SetCamera(camera_);
-	}
-	for (const auto& boss : bosses_) {
-		boss->SetCamera(camera_);
-	}
-}
-
-void EnemyManager::SetLight(SceneLight* _light) {
-	sceneLight_ = _light;
-	for (const auto& canota : canotas_) {
-		canota->SetSceneLight(sceneLight_);
-	}
-	for (const auto& boss : bosses_) {
-		boss->SetSceneLight(sceneLight_);
-	}
 }
 
 void EnemyManager::SetPlayer(Player* _player) {

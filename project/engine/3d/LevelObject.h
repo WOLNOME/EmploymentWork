@@ -12,8 +12,6 @@ public:
 	void Initialize(const std::string& _filePath);
 	//更新
 	void Update();
-	//描画
-	void Draw();
 	//デバッグ
 	void DebugWithImGui();
 

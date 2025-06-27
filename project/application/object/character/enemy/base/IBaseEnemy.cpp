@@ -27,12 +27,6 @@ void IBaseEnemy::Update() {
 	DeadProcess();
 }
 
-void IBaseEnemy::Draw() {
-	//ベースキャラクターの描画
-	BaseCharacter::Draw();
-
-}
-
 void IBaseEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理

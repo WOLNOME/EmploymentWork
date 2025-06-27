@@ -13,10 +13,7 @@ public:
 	/// 更新
 	/// </summary>
 	void Update();
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw(BaseCamera& camera_);
+
 private:
 	int32_t textureHandle_ = EOF;
 	std::unique_ptr<Object3d> object3d_ = nullptr;

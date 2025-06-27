@@ -10,6 +10,7 @@
 #include "TextTextureManager.h"
 #include "ImGuiManager.h"
 #include "SpriteManager.h"
+#include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
@@ -36,6 +37,9 @@ void MyGame::Update() {
 
 	//ゲーム基盤更新(シーンの処理もここ、ImGuiの処理も更新処理で)
 	Framework::Update();
+
+	//オブジェクトマネージャーの更新
+	Object3dManager::GetInstance()->Update();
 
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
@@ -77,8 +81,8 @@ void MyGame::Draw() {
 
 	//シーンのバックスプライト描画
 	SpriteManager::GetInstance()->BackDraw();
-	//シーンの描画
-	SceneManager::GetInstance()->Draw();
+	//シーンのオブジェクト描画
+	Object3dManager::GetInstance()->Draw();
 	//シーンのライン描画
 	LineManager::GetInstance()->Draw();
 	//シーンのパーティクル描画

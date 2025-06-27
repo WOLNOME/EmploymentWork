@@ -33,7 +33,7 @@ void DevelopScene::Initialize() {
 	//ゲームシーン変数の初期化
 	sprite_ = std::make_unique<Sprite>();
 	textureHandleSprite_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
-	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0,textureHandleSprite_);
+	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0, textureHandleSprite_);
 	sprite_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite_->SetFlipX(true);
 
@@ -47,55 +47,48 @@ void DevelopScene::Initialize() {
 	//スカイボックスの生成と初期化
 	textureHandleSkyBox_ = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
 	skyBox_ = std::make_unique<Object3d>();
-	skyBox_->Initialize(ShapeTag{}, Shape::ShapeKind::kSkyBox);
+	skyBox_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("SkyBox"), Shape::ShapeKind::kSkyBox);
 	skyBox_->worldTransform.scale = { 300.0f,300.0f,300.0f };
 
 	//3Dオブジェクトの生成と初期化
 	teapot_ = std::make_unique<Object3d>();
-	teapot_->Initialize(ModelTag{}, "teapot");
+	teapot_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Teapot"), "teapot");
 	int32_t elthTeapot = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
 	teapot_->SetEnvironmentLightTextureHandle(elthTeapot);
-	teapot_->SetSceneLight(sceneLight_.get());
 
 	terrain_ = std::make_unique<Object3d>();
-	terrain_->Initialize(ModelTag{}, "terrain");
+	terrain_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Terrain"), "terrain");
 	terrain_->worldTransform.translate = { 0.0f,-1.2f,0.0f };
-	terrain_->SetSceneLight(sceneLight_.get());
 
 	animatedCube_ = std::make_unique<Object3d>();
-	animatedCube_->Initialize(AnimationModelTag{}, "AnimatedCube", GLTF);
+	animatedCube_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("AnimatedCube"), "AnimatedCube");
 	animatedCube_->worldTransform.translate = { 0.0f,3.0f,0.0f };
-	animatedCube_->SetSceneLight(sceneLight_.get());
 
 	sneakWalk_ = std::make_unique<Object3d>();
-	sneakWalk_->Initialize(AnimationModelTag{}, "sneakWalk", GLTF);
+	sneakWalk_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("SneakWalk"), "sneakWalk");
 	sneakWalk_->worldTransform.translate = { 3.0f,3.0f,0.0f };
-	sneakWalk_->SetSceneLight(sceneLight_.get());
 	sneakWalk_->SetNewAnimation("sneakWalk", "sneakWalk");
 	sneakWalk_->SetCurrentAnimation("sneakWalk");
 
 	composite_ = std::make_unique<Object3d>();
-	composite_->Initialize(AnimationModelTag{}, "walk", GLTF);
+	composite_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("Composite"), "walk");
 	composite_->worldTransform.translate = { 0.0f,1.0f,-3.0f };
 	composite_->worldTransform.rotate = { 0.0f,3.14f,0.0f };
-	composite_->SetSceneLight(sceneLight_.get());
 	composite_->SetNewAnimation("walk", "walk");
 	composite_->SetNewAnimation("sneakWalk", "sneakWalk");
 	composite_->SetCurrentAnimation("walk");
 
 	walk_ = std::make_unique<Object3d>();
-	walk_->Initialize(AnimationModelTag{}, "walk", GLTF);
+	walk_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("Walk"), "walk");
 	int32_t elthWalk = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
 	walk_->SetEnvironmentLightTextureHandle(elthWalk);
 	walk_->worldTransform.translate = { 4.0f,3.0f,0.0f };
-	walk_->SetSceneLight(sceneLight_.get());
 	walk_->SetNewAnimation("walk", "walk");
 	walk_->SetCurrentAnimation("walk");
 
 	simpleSkin_ = std::make_unique<Object3d>();
-	simpleSkin_->Initialize(AnimationModelTag{}, "simpleSkin", GLTF);
+	simpleSkin_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("SimpleSkin"), "simpleSkin");
 	simpleSkin_->worldTransform.translate = { 5.0f,3.0f,0.0f };
-	simpleSkin_->SetSceneLight(sceneLight_.get());
 
 	//レベルオブジェクトの生成・初期化
 	levelObject_ = std::make_unique<LevelObject>();
@@ -107,8 +100,11 @@ void DevelopScene::Initialize() {
 	audio_->Initialize("demo2.wav");
 
 	//カメラのセット
+	Object3dManager::GetInstance()->SetCamera(camera.get());
 	LineManager::GetInstance()->SetCamera(camera.get());
 	ParticleManager::GetInstance()->SetCamera(camera.get());
+	//シーンライトのセット
+	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//テキストテクスチャの作成
 	{
@@ -147,19 +143,8 @@ void DevelopScene::Update() {
 	//カメラの更新
 	camera->Update();
 
-	//スカイボックスの更新
-	skyBox_->Update();
-
 	//ティーポットの回転
 	teapot_->worldTransform.rotate.y += 0.03f;
-	//オブジェクトの更新
-	teapot_->Update();
-	terrain_->Update();
-	animatedCube_->Update();
-	walk_->Update();
-	sneakWalk_->Update();
-	composite_->Update();
-	simpleSkin_->Update();
 	//レベルオブジェクトの更新
 	levelObject_->Update();
 
@@ -202,36 +187,4 @@ void DevelopScene::Update() {
 	PostEffectManager::GetInstance()->DebugWithImGui();
 
 #endif // _DEBUG
-}
-
-void DevelopScene::Draw() {
-	//3Dモデルの共通描画設定
-	Object3dCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓モデル描画開始↓↓↓↓
-	///------------------------------///
-
-	//スカイボックス描画
-	skyBox_->Draw(camera.get(), textureHandleSkyBox_);
-
-	terrain_->Draw(camera.get());
-	teapot_->Draw(camera.get());
-
-	animatedCube_->Draw(camera.get());
-
-	walk_->Draw(camera.get());
-
-	sneakWalk_->Draw(camera.get());
-
-	composite_->Draw(camera.get());
-
-	simpleSkin_->Draw(camera.get());
-
-	levelObject_->Draw();
-
-	///------------------------------///
-	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
-
 }

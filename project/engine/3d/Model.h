@@ -63,8 +63,10 @@ private:
 	};
 
 public:
+	//初期化
 	void Initialize(const std::string& filename, ModelFormat format = OBJ, std::string directorypath = "Resources/models/");
-	void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = -1);
+	//描画
+	void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
 
 public://ゲッター
 	const ModelResource& GetModelResource() { return modelResource_; }

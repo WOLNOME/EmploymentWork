@@ -1,7 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
 #include "GameCamera.h"
-#include "SceneLight.h"
 #include "Input.h"
 #include "Object3d.h"
 #include "Sprite.h"
@@ -22,10 +21,6 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw() override;
 
 	/// <summary>
 	/// デバッグ用パラメーター調整
@@ -61,6 +56,9 @@ public://getter
 	//銃弾を発射したかどうか
 	bool GetIsBulletFire() const { return isBulletFire_; }
 
+public://setter
+	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
+
 private://非公開関数
 	//回転
 	void Rotate();
@@ -79,6 +77,8 @@ private://非公開関数
 private:
 	//インプット
 	Input* input_ = nullptr;
+	//カメラ
+	GameCamera* camera_ = nullptr;
 
 private:
 	//パラメータ

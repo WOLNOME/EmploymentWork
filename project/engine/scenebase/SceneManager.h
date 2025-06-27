@@ -27,10 +27,6 @@ public:
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
-	/// <summary>
 	/// 遷移幕描画
 	/// </summary>
 	void CurtainDraw();

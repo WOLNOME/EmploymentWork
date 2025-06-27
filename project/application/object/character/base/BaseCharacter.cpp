@@ -10,9 +10,6 @@ void BaseCharacter::Initialize() {
 }
 
 void BaseCharacter::Update() {
-	//カメラのセットを確認
-	assert(camera_ != nullptr && "カメラがセットされていません");
-
 	//前フレーム座標の更新
 	if (prePosition_.x == FLT_MAX) {
 		//初期化してから最初のフレーム→ローカル座標に合わせる
@@ -34,9 +31,6 @@ void BaseCharacter::Update() {
 		prePosition_ = object3d_->worldTransform.worldTranslate;
 	}
 
-	//オブジェクトの更新
-	object3d_->Update();
-
 	//当たり判定を登録
 	CollisionManager::GetInstance()->SetColliders(this);
 
@@ -50,11 +44,11 @@ void BaseCharacter::Update() {
 			deadTimer_ = 0.0f;
 		}
 	}
-}
 
-void BaseCharacter::Draw() {
-	//オブジェクトの描画
-	object3d_->Draw(camera_, textureHandle_);
+	//死亡しているのなら描画しない
+	if(deadTimer_>0.0f||isDead_)
+		object3d_->SetIsDisplay(false);
+
 }
 
 void BaseCharacter::DebugWithImGui() {

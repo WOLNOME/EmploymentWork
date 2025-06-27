@@ -29,6 +29,9 @@ void ParticleManager::Initialize() {
 }
 
 void ParticleManager::Update() {
+	//パーティクルが一つもセットされていなかったら抜ける
+	if (particles.empty()) return;
+
 	MainRender* mainRender = MainRender::GetInstance();
 	GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
 	auto InsertUAVBarriers = [&](std::vector<ID3D12Resource*>& resources) {

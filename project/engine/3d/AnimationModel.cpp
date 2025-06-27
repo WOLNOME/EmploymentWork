@@ -2,7 +2,7 @@
 #include "DirectXCommon.h"
 #include "GPUDescriptorManager.h"
 #include "MainRender.h"
-#include "Object3dCommon.h"
+#include "Object3dManager.h"
 #include "TextureManager.h"
 #include <fstream>
 #include <sstream>
@@ -90,7 +90,7 @@ void AnimationModel::Draw(uint32_t materialRootParameterIndex, uint32_t textureR
 
 void AnimationModel::SettingCSPreDraw() {
 	//コンピュートシェーダーへの転送
-	Object3dCommon::GetInstance()->SettingAnimationCS();
+	Object3dManager::GetInstance()->SettingAnimationCS();
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(0, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.paletteSrvIndex));
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.inputVertexSrvIndex));
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(2, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.influenceSrvIndex));

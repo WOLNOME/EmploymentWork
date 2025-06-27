@@ -2,6 +2,7 @@
 #include "WinApp.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
+#include "Object3dManager.h"
 #include <algorithm>
 
 void Player::Initialize() {
@@ -14,7 +15,7 @@ void Player::Initialize() {
 	input_->SetIsMouseFixed(true);
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, "player");
+	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Player"), "player");
 	object3d_->worldTransform.translate.y += 2.7f;
 
 	//当たり判定の形状を設定
@@ -75,11 +76,6 @@ void Player::Update() {
 
 	//カメラ処理
 	CameraAlgorithm();
-}
-
-void Player::Draw() {
-	//オブジェクトの描画
-	object3d_->Draw(camera_);
 }
 
 void Player::DebugWithImGui() {

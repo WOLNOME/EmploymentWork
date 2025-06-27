@@ -39,19 +39,18 @@ void GamePlayScene::Initialize() {
 	enemyWeaponManager_->Initialize();
 	playerUI_->Initialize();
 	enemyUI_->Initialize();
-	//カメラ、ライトのセット
+
+	//カメラのセット
+	Object3dManager::GetInstance()->SetCamera(camera_.get());
 	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	player_->SetCamera(camera_.get());
 	playerWeaponManager_->SetCamera(camera_.get());
-	enemyManager_->SetCamera(camera_.get());
-	enemyWeaponManager_->SetCamera(camera_.get());
-	player_->SetSceneLight(sceneLight_.get());
-	playerWeaponManager_->SetLight(sceneLight_.get());
-	enemyManager_->SetLight(sceneLight_.get());
-	enemyWeaponManager_->SetLight(sceneLight_.get());
 	playerUI_->SetCamera(camera_.get());
 	enemyUI_->SetCamera(camera_.get());
+	//ライトのセット
+	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
+
 	//その他インスタンスのセット
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyManager_->SetPlayer(player_.get());
@@ -113,24 +112,4 @@ void GamePlayScene::Update() {
 	//SpriteManager::GetInstance()->DebugWithImGui();
 
 #endif // _DEBUG
-}
-
-void GamePlayScene::Draw() {
-	//3Dモデルの共通描画設定
-	Object3dCommon::GetInstance()->SettingCommonDrawing();
-
-	///------------------------------///
-	///↓↓↓↓モデル描画開始↓↓↓↓
-	///------------------------------///
-
-	skydome_->Draw(*camera_.get());
-	ground_->Draw(*camera_.get());
-	player_->Draw();
-	playerWeaponManager_->Draw();
-	enemyManager_->Draw();
-	enemyWeaponManager_->Draw();
-
-	///------------------------------///
-	///↑↑↑↑モデル描画終了↑↑↑↑
-	///------------------------------///
 }

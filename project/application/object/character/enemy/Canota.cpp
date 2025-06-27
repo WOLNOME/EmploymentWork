@@ -1,5 +1,6 @@
 #include "Canota.h"
 #include "ImGuiManager.h"
+#include "Object3dManager.h"
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
@@ -9,10 +10,7 @@ void Canota::Initialize() {
 	IBaseEnemy::Initialize();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, "enemy");
-	if (light_) {
-		object3d_->SetSceneLight(light_);
-	}
+	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Canota"), "enemy");
 
 	//当たり判定のサイズを設定
 	collisionLocalAABB_ = {
@@ -35,11 +33,6 @@ void Canota::Update() {
 
 	//攻撃
 	Attack();
-}
-
-void Canota::Draw() {
-	//ベースエネミーの描画
-	IBaseEnemy::Draw();
 }
 
 void Canota::DebugWithImGui() {

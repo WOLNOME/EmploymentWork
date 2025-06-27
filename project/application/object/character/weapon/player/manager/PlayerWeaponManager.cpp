@@ -20,7 +20,6 @@ void PlayerWeaponManager::Initialize() {
 		bullets_.emplace_back(std::make_unique<PlayerBullet>());
 		bullets_[i]->Initialize();
 	}
-
 }
 
 void PlayerWeaponManager::Update() {
@@ -39,17 +38,6 @@ void PlayerWeaponManager::Update() {
 	}
 }
 
-void PlayerWeaponManager::Draw() {
-	//砲弾の描画
-	for (const auto& cannon : cannons_) {
-		cannon->Draw();
-	}
-	//銃弾の描画
-	for (const auto& bullet : bullets_) {
-		bullet->Draw();
-	}
-}
-
 void PlayerWeaponManager::DebugWithImGui() {
 #ifdef _DEBUG
 	//砲弾のデバッグ
@@ -61,26 +49,6 @@ void PlayerWeaponManager::DebugWithImGui() {
 		bullet->DebugWithImGui();
 	}
 #endif // _DEBUG
-}
-
-void PlayerWeaponManager::SetCamera(GameCamera* _camera) {
-	camera_ = _camera;
-	for (auto& cannon : cannons_) {
-		cannon->SetCamera(_camera);
-	}
-	for (auto& bullet : bullets_) {
-		bullet->SetCamera(_camera);
-	}
-}
-
-void PlayerWeaponManager::SetLight(SceneLight* _light) {
-	sceneLight_ = _light;
-	for (auto& cannon : cannons_) {
-		cannon->SetSceneLight(_light);
-	}
-	for (auto& bullet : bullets_) {
-		bullet->SetSceneLight(_light);
-	}
 }
 
 void PlayerWeaponManager::CreateCannon() {

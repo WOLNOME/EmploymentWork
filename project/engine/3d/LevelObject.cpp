@@ -1,4 +1,5 @@
 #include "LevelObject.h"
+#include "Object3dManager.h"
 #include <assert.h>
 
 void LevelObject::Initialize(const std::string& _filePath) {
@@ -11,17 +12,6 @@ void LevelObject::Initialize(const std::string& _filePath) {
 }
 
 void LevelObject::Update() {
-	//オブジェクトの更新
-	for (const auto& object : objects_) {
-		object->Update();
-	}
-}
-
-void LevelObject::Draw() {
-	//オブジェクトの描画
-	for (const auto& object : objects_) {
-		object->Draw(camera_);
-	}
 }
 
 void LevelObject::DebugWithImGui() {
@@ -38,7 +28,7 @@ void LevelObject::ScanObjectData(json& object) {
 	if (type.compare("MESH") == 0) {
 		std::unique_ptr<Object3d> addObject;
 		addObject = std::make_unique<Object3d>();
-		addObject->Initialize(ModelTag{}, object["file_name"]);
+		addObject->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("levelObject"), object["file_name"]);
 
 		//トランスフォームパラメータの読み込み
 		json& transform = object["transform"];

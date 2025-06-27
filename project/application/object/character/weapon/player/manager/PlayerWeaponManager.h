@@ -1,6 +1,4 @@
 #pragma once
-#include "GameCamera.h"
-#include "SceneLight.h"
 #include "JsonUtil.h"
 #include <vector>
 #include <memory>
@@ -9,6 +7,7 @@
 #include "application/object/character/weapon/player/PlayerBullet.h"
 #include "application/object/character/weapon/player/PlayerCannon.h"
 
+class GameCamera;
 class Player;
 class PlayerWeaponManager {
 public:
@@ -16,8 +15,6 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	//描画
-	void Draw();
 
 	//デバッグ用パラメーター調整
 	void DebugWithImGui();
@@ -30,9 +27,7 @@ public://getter
 
 public://setter
 	//カメラセット
-	void SetCamera(GameCamera* _camera);
-	//ライトセット
-	void SetLight(SceneLight* _light);
+	void SetCamera(GameCamera* _camera) { camera_ = _camera; };
 	//プレイヤーセット
 	void SetPlayer(Player* _player) { player_ = _player; }
 
@@ -45,8 +40,6 @@ private:
 private:
 	//カメラ
 	GameCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* sceneLight_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 

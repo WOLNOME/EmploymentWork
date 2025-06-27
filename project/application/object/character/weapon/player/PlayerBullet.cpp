@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
+#include "Object3dManager.h"
 
 void PlayerBullet::Initialize() {
 	//ベースキャラクターの初期化
@@ -10,8 +11,9 @@ void PlayerBullet::Initialize() {
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ShapeTag{}, Shape::kSphere);
+	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Bullet"), Shape::kSphere);
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
+	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	trail_ = std::make_unique<Particle>();
 	trail_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletTrail"), "trail");
@@ -45,14 +47,6 @@ void PlayerBullet::Update() {
 	Move();
 	//パーティクルの更新
 	UpdateParticle();
-}
-
-void PlayerBullet::Draw() {
-	//弾が死亡していたら描画しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
-
-	//オブジェクトの描画
-	object3d_->Draw(camera_, textureHandle_);
 }
 
 void PlayerBullet::DebugWithImGui() {

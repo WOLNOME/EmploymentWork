@@ -10,6 +10,7 @@
 #include "Particle.h"
 #include "CombinedParticle.h"
 #include "SpriteManager.h"
+#include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
 #include "Input.h"
@@ -20,7 +21,6 @@
 //シーン共通クラス
 #include "PostEffectManager.h"
 #include "ImGuiManager.h"
-#include "Object3dCommon.h"
 //シーン共通ヘッダー
 #include <cstdint>
 #include <chrono>
@@ -46,10 +46,6 @@ public:
 	/// 更新
 	/// </summary>
 	virtual void Update();
-	/// <summary>
-	/// 描画
-	/// </summary>
-	virtual void Draw();
 	
 	//FPS表示
 	void ShowFPS();

@@ -1,7 +1,5 @@
 #pragma once
 #include "Collider.h"
-#include "GameCamera.h"
-#include "SceneLight.h"
 #include "Object3d.h"
 
 //キャラクター基底クラス
@@ -15,8 +13,6 @@ public:
 	virtual void Initialize();
 	//更新
 	virtual void Update();
-	//描画
-	virtual void Draw();
 
 	//デバッグ用パラメーター調整
 	virtual void DebugWithImGui();
@@ -35,19 +31,9 @@ public://getter
 	float GetDeadTimer() const { return deadTimer_; }
 
 public://setter
-	//カメラのセット
-	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
-	//シーンライトのセット
-	void SetSceneLight(SceneLight* _light) { light_ = _light; if (object3d_) object3d_->SetSceneLight(light_); }
 	//死亡予約関数
 	void SetDeadTimer(float remainingSeconds);
 
-
-protected://インスタンス
-	//カメラ
-	GameCamera* camera_ = nullptr;
-	//シーンライト
-	SceneLight* light_ = nullptr;
 protected://オブジェクト
 	//テクスチャハンドル
 	int32_t textureHandle_ = EOF;
