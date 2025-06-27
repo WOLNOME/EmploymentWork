@@ -2,7 +2,7 @@
 #include <memory>
 
 struct Handle {
-	uint32_t id;
+	uint32_t id = 0u;
 	std::shared_ptr<void> ref;
 
 	void Create(uint32_t _id) {

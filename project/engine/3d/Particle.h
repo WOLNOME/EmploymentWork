@@ -22,11 +22,15 @@ public:
 	enum class GenerateMethod {
 		Random,		//ランダム
 		Clump,		//塊	
+
+		kMaxGenerateMethodNum,
 	};
 	//エフェクトスタイル
 	enum class EffectStyle {
 		Loop,		//ループ(永続)
 		OneShot,	//一度きり
+
+		kMaxEffectStyleNum,
 	};
 
 private://非公開構造体
@@ -48,25 +52,25 @@ private://非公開構造体
 		Vector4 endColor;
 		Vector4 startRotate;
 		Vector4 endRotate;
-		float startSize;
-		float endSize;
-		float lifeTime;
-		float currentTime;
+		float startSize = 0.0f;
+		float endSize = 0.0f;
+		float lifeTime = 0.0f;
+		float currentTime = 0.0f;
 	};
 	//CS用エミッター情報
 	struct EmitterForCS {
 		TransformForCS transform;
-		int generateMethod;
-		int effectStyle;
-		float gravity;
-		float repulsion;
-		float floorHeight;
-		int clumpNum;
-		uint32_t isAffectedField;
-		uint32_t isGravity;
-		uint32_t isBound;
-		uint32_t isBillboard;
-		uint32_t isPlay;
+		int generateMethod = 0;
+		int effectStyle = 0;
+		float gravity = 0.0f;
+		float repulsion = 0.0f;
+		float floorHeight = 0.0f;
+		int clumpNum = 0;
+		uint32_t isAffectedField = 0u;
+		uint32_t isGravity = 0u;
+		uint32_t isBound = 0u;
+		uint32_t isBillboard = 0u;
+		uint32_t isPlay = 0u;
 	};
 	//CS用Json情報
 	struct JsonInfoForCS {
@@ -84,32 +88,32 @@ private://非公開構造体
 		Vector4 startRotateMin;
 		Vector4 endRotateMax;
 		Vector4 endRotateMin;
-		float startSizeMax;
-		float startSizeMin;
-		float endSizeMax;
-		float endSizeMin;
-		float lifeTimeMax;
-		float lifeTimeMin;
-		int emitRate;
-		int maxGrains;
+		float startSizeMax = 0.0f;
+		float startSizeMin = 0.0f;
+		float endSizeMax = 0.0f;
+		float endSizeMin = 0.0f;
+		float lifeTimeMax = 0.0f;
+		float lifeTimeMin = 0.0f;
+		int emitRate = 0;
+		int maxGrains = 0;
 	};
 	//CS用時間情報
 	struct PerFrameForCS {
-		float time;
-		float deltaTime;
+		float time = 0.0f;
+		float deltaTime = 0.0f;
 	};
 	//CS用リソースのまとめ
 	struct AllResourceForCS {
 		//粒の情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> grainsResource;
-		uint32_t grainsSrvIndex;	//VS用
-		uint32_t grainsUavIndex;	//CS用
+		uint32_t grainsSrvIndex = 0u;	//VS用
+		uint32_t grainsUavIndex = 0u;	//CS用
 		//フリーリストのインデックス情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> freeListIndexResource;
-		uint32_t freeListIndexUavIndex;		//CS用
+		uint32_t freeListIndexUavIndex = 0u;		//CS用
 		//フリーリストの情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> freeListResource;
-		uint32_t freeListUavIndex;		//CS用
+		uint32_t freeListUavIndex = 0u;		//CS用
 		//エミッター情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> emitterResource;
 		std::span<EmitterForCS> mappedEmitter;
@@ -124,18 +128,18 @@ private://非公開構造体
 public://公開構造体
 	//エミッター
 	struct Emitter {
-		TransformEuler transform;			//エミッターのトランスフォーム
-		GenerateMethod generateMethod;		//生成方法
-		EffectStyle effectStyle;			//エフェクトスタイル
-		float gravity;						//重力値
-		float repulsion;					//床の反発値
-		float floorHeight;					//床の高さ
-		int clumpNum;						//塊の数(clumpMethodの時のみ使用)
-		bool isAffectedField;				//フィールドに影響を受けるか
-		bool isBillboard;					//ビルボードを適用するか
-		bool isGravity;						//重力を適用するか
-		bool isBound;						//バウンドを適用するか
-		bool isPlay;						//パーティクルを生成するか
+		TransformEuler transform;		//エミッターのトランスフォーム
+		GenerateMethod generateMethod = GenerateMethod::kMaxGenerateMethodNum;		//生成方法
+		EffectStyle effectStyle = EffectStyle::kMaxEffectStyleNum;					//エフェクトスタイル
+		float gravity = 0.0f;			//重力値
+		float repulsion = 0.0f;			//床の反発値
+		float floorHeight = 0.0f;		//床の高さ
+		int clumpNum = 0;				//塊の数(clumpMethodの時のみ使用)
+		bool isAffectedField = false;	//フィールドに影響を受けるか
+		bool isBillboard = false;		//ビルボードを適用するか
+		bool isGravity = false;			//重力を適用するか
+		bool isBound = false;			//バウンドを適用するか
+		bool isPlay = false;			//パーティクルを生成するか
 	};
 public://メンバ関数
 	~Particle();
@@ -180,6 +184,6 @@ private: //メンバ変数(非公開)
 	//各粒のパラメーター
 	json param_;
 	//テクスチャハンドル
-	int32_t textureHandle_;
+	uint32_t textureHandle_ = 0u;
 
 };

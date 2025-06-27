@@ -362,9 +362,6 @@ void TextTextureManager::CheckHandle(Handle _handle) {
 
 TextTextureManager::TextTextureItem TextTextureManager::CreateTextTextureItem(const TextParam& _textParam) {
 	TextTextureItem textTextureItem;
-	//ローカル変数
-	HRESULT hr;
-
 	//縦横の初期化
 	{
 		textTextureItem.width = UINT_MAX;

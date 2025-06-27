@@ -26,10 +26,10 @@ private:
 	GameCamera* camera_ = nullptr;
 private:
 	//2dレティクル
-	uint32_t th2dReticle_;
+	uint32_t th2dReticle_ = 0u;
 	std::unique_ptr<Sprite> sprite2dReticle_ = nullptr;
 	//FPSUI
-	uint32_t thFPSUI_;
+	uint32_t thFPSUI_ = 0u;
 	std::unique_ptr<Sprite> spriteFPSUI_ = nullptr;
 	//HPバー
 	std::array<uint32_t, 2> thHPBar_;

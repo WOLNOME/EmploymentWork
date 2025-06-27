@@ -10,11 +10,11 @@
 struct PointLightData {
 	Vector4 color;		//ライトの色
 	Vector3 position;	//ライトの位置
-	float intensity;	//輝度
-	float radius;		//ライトの届く最大距離
-	float decay;		//減衰率
-	uint32_t isActive;
-	float padding[1];
+	float intensity = 0.0f;	//輝度
+	float radius = 0.0f;		//ライトの届く最大距離
+	float decay = 0.0f;		//減衰率
+	uint32_t isActive = 0u;
+	float padding[1] = {};
 };
 /// <summary>
 /// 点光源

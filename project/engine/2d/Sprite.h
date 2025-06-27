@@ -17,11 +17,15 @@ public://列挙体
 		Front0,
 		Front1,
 		Front2,
+
+		kMaxOrderNum,
 	};
 	//テクスチャの種類
 	enum class TextureKind {
 		Normal,
 		Text,
+
+		kMaxTextureKindNum,
 	};
 
 private://構造体
@@ -46,27 +50,27 @@ private://構造体
 	struct ResourceForGPU {
 		//頂点リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
-		VertexData* vertexData;
+		VertexData* vertexData = nullptr;
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 		//インデックスリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexResource;
-		uint32_t* indexData;
+		uint32_t* indexData = nullptr;
 		D3D12_INDEX_BUFFER_VIEW indexBufferView;
 		//マテリアルリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		Material* materialData;
+		Material* materialData = nullptr;
 		//座標変換行列リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource;
-		TransformationMatrix* transformationMatrixData;
+		TransformationMatrix* transformationMatrixData = nullptr;
 		//テクスチャ用SRV番号
-		uint32_t srvIndex;
+		uint32_t srvIndex = 0u;
 	};
 
 public://メンバ関数
 	~Sprite();
 	//初期化
-	void Initialize(const std::string& _name,const Order& _order, uint32_t _textureHandle);
-	void Initialize(const std::string& _name,const Order& _order, Handle _textureHandle);
+	void Initialize(const std::string& _name, const Order& _order, uint32_t _textureHandle);
+	void Initialize(const std::string& _name, const Order& _order, Handle _textureHandle);
 	//描画
 	void Draw();
 
@@ -112,13 +116,13 @@ private://メンバ変数
 	ResourceForGPU resource_;
 
 	//描画順タグ
-	Order order_;
+	Order order_ = Order::kMaxOrderNum;
 
 	//テクスチャ
-	uint32_t textureHandle_;
+	uint32_t textureHandle_ = 0u;
 	Handle textTextureHandle_;
 	//テクスチャの種類
-	TextureKind textureKind_;
+	TextureKind textureKind_ = TextureKind::kMaxTextureKindNum;
 
 	//パラメーター
 	Vector2 position = { 0.0f,0.0f };

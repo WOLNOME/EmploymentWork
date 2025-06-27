@@ -8,15 +8,15 @@
 
 // データ構造体(サイズが16の倍数になるようにパディングする！)
 struct SpotLightData {
-	Vector4 color;				//ライトの色
-	Vector3 position;			//ライトの位置
-	float intensity;			//輝度
-	Vector3 direction;			//スポットライトの方向
-	float distance;				//ライトの届く最大距離
-	float decay;				//減衰率
-	float cosAngle;				//スポットライトの余弦
-	float cosFalloffStart;		//フォールオフの開始角度
-	uint32_t isActive;
+	Vector4 color;					//ライトの色
+	Vector3 position;				//ライトの位置
+	float intensity = 0.0f;			//輝度
+	Vector3 direction;				//スポットライトの方向
+	float distance = 0.0f;			//ライトの届く最大距離
+	float decay = 0.0f;				//減衰率
+	float cosAngle = 0.0f;			//スポットライトの余弦
+	float cosFalloffStart = 0.0f;	//フォールオフの開始角度
+	uint32_t isActive = 0u;			//稼働させるか
 };
 /// <summary>
 /// スポットライト

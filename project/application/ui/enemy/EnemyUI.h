@@ -30,8 +30,8 @@ private:
 	std::array<uint32_t, 2> thHPBars_;
 	std::array<std::array<std::unique_ptr<Sprite>, 2>, kNumHPBar> spriteHPBar_;
 	std::array<bool, kNumHPBar> isHPBarVisible_; //各HPバーの表示状態 
-	float hpBarWidth_;
-	float hpBarHeight_;
+	float hpBarWidth_ = 0.0f;
+	float hpBarHeight_ = 0.0f;
 
 private://データ駆動設計用パラメータ
 	json param_;

@@ -102,6 +102,7 @@ void PlayerBullet::SetInitParam(const Vector3& _initPos, const Vector3& _initDir
 	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	isDead_ = false;
 	trail_->emitter_.isPlay = true;	//トレイルパーティクルを開始
+	trail_->emitter_.transform.translate = object3d_->worldTransform.translate;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 

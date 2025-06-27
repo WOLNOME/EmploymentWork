@@ -36,12 +36,16 @@ enum class Font {
 	UDDegitalNP_B,
 	UDDegitalNP_R,
 	OnionScript,
+
+	kMaxFontNum,
 };
 //フォントスタイル
 enum class FontStyle {
 	Normal,		//通常
 	Oblique,	//斜体(通常フォントをプログラムで斜体にする)
 	Italic,		//斜体(フォントファイルベース)
+
+	kMaxFontStyleNum,
 };
 
 ///=======================///
@@ -50,18 +54,18 @@ enum class FontStyle {
 
 //テキストのパラメータ
 struct TextParam {
-	std::wstring text;		//書き込むテキスト
-	Font font;				//フォント
-	FontStyle fontStyle;	//フォントスタイル
-	float size;				//文字のサイズ
-	Vector4 color;			//文字の色
+	std::wstring text;									//書き込むテキスト
+	Font font = Font::kMaxFontNum;						//フォント
+	FontStyle fontStyle = FontStyle::kMaxFontStyleNum;	//フォントスタイル
+	float size = 0.0f;									//文字のサイズ
+	Vector4 color;										//文字の色
 };
 //アウトラインのパラメータ
 struct EdgeParam {
-	uint32_t isEdgeDisplay;	//アウトライン表示フラグ
-	float width;			//アウトラインの幅
-	Vector2 slideRate;		//アウトラインのスライド量
-	Vector4 color;			//アウトラインの色
+	uint32_t isEdgeDisplay = 0u;	//アウトライン表示フラグ
+	float width = 0.0f;				//アウトラインの幅
+	Vector2 slideRate;				//アウトラインのスライド量
+	Vector4 color;					//アウトラインの色
 };
 
 class TextTextureManager {
@@ -69,7 +73,7 @@ private://構造体
 	//テキストのリソース
 	struct TextResource {
 		ComPtr<ID3D12Resource> resource;
-		Vector4* color;		//テキストの色(PSに送る)
+		Vector4* color = nullptr;		//テキストの色(PSに送る)
 		TextParam param;
 		TextParam preParam;
 	};
@@ -77,7 +81,7 @@ private://構造体
 	//アウトラインのリソース
 	struct EdgeResource {
 		ComPtr<ID3D12Resource> resource;
-		EdgeParam* param;
+		EdgeParam* param = nullptr;
 		EdgeParam preParam;
 	};
 
@@ -91,12 +95,12 @@ private://構造体
 		ComPtr<IDWriteTextFormat> textFormat;			//DWrite用のテキストフォーマット
 		TextResource textResource;						//テキストのリソース
 		EdgeResource edgeResource;						//アウトラインのリソース
-		uint32_t rtvIndex = 0;								//RTVインデックス
-		uint32_t srvIndex = 0;								//SRVインデックス
-		uint32_t srvCopyIndex = 0;							//コピーリソース用SRVインデックス
+		uint32_t rtvIndex = 0u;								//RTVインデックス
+		uint32_t srvIndex = 0u;								//SRVインデックス
+		uint32_t srvCopyIndex = 0u;							//コピーリソース用SRVインデックス
 
-		UINT width;									//テクスチャの横幅
-		UINT height;								//テクスチャの縦幅
+		UINT width = 0u;									//テクスチャの横幅
+		UINT height = 0u;								//テクスチャの縦幅
 		bool isDrawThisFrame = true;
 	};
 

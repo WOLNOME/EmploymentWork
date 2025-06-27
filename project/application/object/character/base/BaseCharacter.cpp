@@ -42,6 +42,7 @@ void BaseCharacter::Update() {
 		if (deadTimer_ <= 0.0f) {
 			isDead_ = true;
 			deadTimer_ = 0.0f;
+			object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
 		}
 	}
 

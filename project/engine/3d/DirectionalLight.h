@@ -10,9 +10,9 @@
 struct DirectionalLightData {
 	Vector4 color;
 	Vector3 direction;
-	float intensity;
-	uint32_t isActive;
-	float padding[3];
+	float intensity = 0.0f;
+	uint32_t isActive = 0u;
+	float padding[3] = {};
 };
 
 /// <summary>

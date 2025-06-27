@@ -35,11 +35,11 @@ void MyGame::Update() {
 	//ImGui受付開始
 	ImGuiManager::GetInstance()->Begin();
 
-	//ゲーム基盤更新
-	Framework::Update();
-
 	//オブジェクトマネージャーの更新
 	Object3dManager::GetInstance()->Update();
+
+	//ゲーム基盤更新
+	Framework::Update();
 
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
