@@ -27,8 +27,7 @@
 #include <memory>
 
 class SceneManager;
-class BaseScene
-{
+class BaseScene {
 public:
 	/// <summary>
 	/// デストラクタ
@@ -46,10 +45,15 @@ public:
 	/// 更新
 	/// </summary>
 	virtual void Update();
-	
+	/// <summary>
+	/// デバッグ処理
+	/// </summary>
+	virtual void DebugWithImGui() = 0;
+
+
 	//FPS表示
 	void ShowFPS();
-	
+
 protected:
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
@@ -57,7 +61,7 @@ protected:
 	std::unique_ptr<SceneLight> sceneLight_ = nullptr;
 
 	//fps計測用変数
-	std::chrono::steady_clock::time_point lastFrameTime_= std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point lastFrameTime_ = std::chrono::steady_clock::now();
 	float fps_ = 0.0f;
 
 };

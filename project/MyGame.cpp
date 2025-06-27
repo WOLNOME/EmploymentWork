@@ -35,7 +35,7 @@ void MyGame::Update() {
 	//ImGui受付開始
 	ImGuiManager::GetInstance()->Begin();
 
-	//ゲーム基盤更新(シーンの処理もここ、ImGuiの処理も更新処理で)
+	//ゲーム基盤更新
 	Framework::Update();
 
 	//オブジェクトマネージャーの更新
@@ -43,6 +43,9 @@ void MyGame::Update() {
 
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
+
+	//シーンのデバッグ処理
+	SceneManager::GetInstance()->DebugWithImGui();
 
 	//ImGuiの内部コマンドを生成する
 	ImGuiManager::GetInstance()->End();

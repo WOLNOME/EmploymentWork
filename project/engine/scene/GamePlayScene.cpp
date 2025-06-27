@@ -91,6 +91,9 @@ void GamePlayScene::Update() {
 	enemyUI_->Update();
 
 
+	
+}
+void GamePlayScene::DebugWithImGui() {
 	//ImGui
 #ifdef _DEBUG
 	//カメラのImGui

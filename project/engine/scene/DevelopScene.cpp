@@ -153,7 +153,9 @@ void DevelopScene::Update() {
 
 	time_ += kDeltaTime;
 	TextTextureManager::GetInstance()->EditTextString(textHandle_, L"フォント確認 0123 abcDEF\n現在時刻 : {:.1f}", time_);
+}
 
+void DevelopScene::DebugWithImGui() {
 #ifdef _DEBUG
 	//オーディオのデバッグ用ImGui
 	audio_->DebugWithImGui(L"アラーム");

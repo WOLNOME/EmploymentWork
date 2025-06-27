@@ -47,7 +47,9 @@ void ParticleCreatorScene::Update() {
 			isReset_ = true;
 		}
 	}
+}
 
+void ParticleCreatorScene::DebugWithImGui() {
 	//ImGui操作
 #ifdef _DEBUG
 	//最初の操作
@@ -63,7 +65,6 @@ void ParticleCreatorScene::Update() {
 	SaveWithImGui();
 
 #endif //_DEBUG
-
 }
 
 void ParticleCreatorScene::StartWithImGui() {

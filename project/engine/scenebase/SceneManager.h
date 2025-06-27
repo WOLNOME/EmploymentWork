@@ -27,6 +27,10 @@ public:
 	/// </summary>
 	void Update();
 	/// <summary>
+	/// デバッグ処理
+	/// </summary>
+	void DebugWithImGui();
+	/// <summary>
 	/// 遷移幕描画
 	/// </summary>
 	void CurtainDraw();

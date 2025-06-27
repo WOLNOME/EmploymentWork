@@ -14,6 +14,10 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// デバッグ処理
+	/// </summary>
+	void DebugWithImGui() override;
 
 private:
 	//インプット

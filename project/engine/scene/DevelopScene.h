@@ -18,6 +18,10 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// デバッグ処理
+	/// </summary>
+	void DebugWithImGui() override;
 
 private://メンバ変数
 	Input* input_ = nullptr;

@@ -28,8 +28,15 @@ void SceneManager::Update() {
 	ChangeScene();
 	//実行中シーンを更新する
 	scene_->Update();
+}
+
+void SceneManager::DebugWithImGui() {
+#ifdef _DEBUG
 	//FPS表示
 	scene_->ShowFPS();
+	//デバッグ処理
+	scene_->DebugWithImGui();
+#endif // _DEBUG
 
 }
 
