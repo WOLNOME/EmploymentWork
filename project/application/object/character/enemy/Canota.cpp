@@ -48,6 +48,9 @@ void Canota::OnCollision(CollisionAttribute attribute) {
 }
 
 void Canota::Attack() {
+	//死亡していたら処理を行わない
+	if (GetDeadTimer() > 0.0f || isDead_) return;
+
 	//クールタイム処理
 	if (cannonCoolTimer_ > 0.0f) {
 		cannonCoolTimer_ -= kDeltaTime;

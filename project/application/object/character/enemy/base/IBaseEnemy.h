@@ -1,6 +1,8 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include "Particle.h"
 #include "JsonUtil.h"
+#include <memory>
 
 class Player;
 class IBaseEnemy : public BaseCharacter {
@@ -51,6 +53,11 @@ protected://メンバ変数
 	//HP
 	int maxHP_;	//最大HP
 	int hp_;	//現在のHP
+
+	//パーティクル
+	std::unique_ptr<Particle> deadParticle_ = nullptr;
+	float deadParticleOnTime_ = 0.5f;
+	float deadParticleOnTimer_ = 0.0f;
 
 };
 

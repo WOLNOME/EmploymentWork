@@ -1,5 +1,6 @@
 #include "IBaseEnemy.h"
 #include "ImGuiManager.h"
+#include "ParticleManager.h"
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
@@ -12,6 +13,17 @@ void IBaseEnemy::Initialize() {
 	collisionShapeKind_ = CollisionShapeKind::AABB;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
+
+	//パーティクルの生成・初期化
+	deadParticle_ = std::make_unique<Particle>();
+	deadParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyDead"), "enemy_explosion");
+	deadParticle_->emitter_.isPlay = false;
+	deadParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	deadParticle_->emitter_.effectStyle = Particle::EffectStyle::Loop;
+	deadParticle_->emitter_.isGravity = true;
+	deadParticle_->emitter_.gravity = -50.0f;
+	deadParticle_->emitter_.isBound = true;
+	deadParticle_->emitter_.floorHeight = 0.0f;
 
 }
 
@@ -68,7 +80,6 @@ void IBaseEnemy::OnCollision(CollisionAttribute attribute) {
 		hp_ -= 1;
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
-
 
 		break;
 	default:
@@ -169,7 +180,17 @@ void IBaseEnemy::Rotate() {
 void IBaseEnemy::DeadProcess() {
 	//もしHPが0になったら
 	if (hp_ <= 0) {
-		//死亡タイマーをセット
-		SetDeadTimer(0.1f);
+		deadParticleOnTimer_ += kDeltaTime;
+		//死亡パーティクルをオン
+		deadParticle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		deadParticle_->emitter_.isPlay = true;
+		//時間を超えたらオフにする
+		if (deadParticleOnTimer_ > deadParticleOnTime_) {
+			deadParticle_->emitter_.isPlay = false;
+		}
+
+		//死亡タイマーをセット(設計上上書きされることはない)
+		float particleLifeTime = deadParticle_->GetParam()["LifeTime"]["Max"];
+		SetDeadTimer(float(deadParticleOnTime_ + particleLifeTime));
 	}
 }

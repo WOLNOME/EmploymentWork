@@ -67,5 +67,9 @@ void BaseCharacter::SetDeadTimer(float remainingSeconds) {
 
 	//死亡予約時間をセット
 	deadTimer_ = remainingSeconds;
+
+	//当たり判定を消滅させる
+	SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 	return;
 }

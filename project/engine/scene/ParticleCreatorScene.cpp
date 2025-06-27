@@ -19,8 +19,11 @@ void ParticleCreatorScene::Initialize() {
 	camera_->worldTransform.translate = { 0.0f,50.0f,0.0f };
 	camera_->worldTransform.rotate = { 0.2f,0.0f,0.0f };
 	//カメラをセット
+	Object3dManager::GetInstance()->SetCamera(camera_.get());
 	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
+	//シーンライトをセット
+	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//天球と地面の生成と初期化
 	skydome_ = std::make_unique<Object3d>();

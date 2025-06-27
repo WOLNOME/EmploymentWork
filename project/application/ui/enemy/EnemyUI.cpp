@@ -77,6 +77,9 @@ void EnemyUI::Update() {
 
 	//キャノ太
 	for (const auto& canota : enemyManager_->GetCanotas()) {
+		//死亡していたら描画しない
+		if (canota->GetDeadTimer() > 0.0f || canota->GetIsDead()) return;
+
 		Vector3 pos = canota->GetWorldTransform().worldTranslate;
 		pos.y += normalEnemyHPBarHeight;
 		float rate = (float)canota->GetHP() / (float)canota->GetMaxHP();
@@ -85,6 +88,9 @@ void EnemyUI::Update() {
 
 	//ボス
 	for (const auto& boss : enemyManager_->GetBosses()) {
+		//死亡していたら描画しない
+		if (boss->GetDeadTimer() > 0.0f || boss->GetIsDead()) return;
+
 		Vector3 pos = boss->GetWorldTransform().worldTranslate;
 		pos.y += bossEnemyHPBarHeight;
 		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
