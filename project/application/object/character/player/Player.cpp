@@ -47,6 +47,8 @@ void Player::Initialize() {
 void Player::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
+	//ダメージ更新
+	isDamage_ = false;
 
 	//F1キーでマウスカーソルの表示する
 	if (input_->TriggerKey(DIK_F1)) {
@@ -116,7 +118,10 @@ void Player::OnCollision(CollisionAttribute attribute) {
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		//カメラシェイクを入れる
-		camera_->RegistShake(0.4f, 0.5f);
+		camera_->RegistShake(0.4f, 0.8f);
+
+		//ダメージヒット
+		isDamage_ = true;
 
 		break;
 		//敵弾に当たった場合
@@ -126,7 +131,10 @@ void Player::OnCollision(CollisionAttribute attribute) {
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		//カメラシェイクを入れる
-		camera_->RegistShake(0.2f, 0.15f);
+		camera_->RegistShake(0.2f, 0.3f);
+
+		//ダメージヒット
+		isDamage_ = true;
 
 		break;
 	default:

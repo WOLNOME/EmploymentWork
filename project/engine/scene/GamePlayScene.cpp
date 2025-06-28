@@ -83,12 +83,12 @@ void GamePlayScene::Update() {
 	//インスタンスの更新
 	skydome_->Update();
 	ground_->Update();
-	player_->Update();
 	playerWeaponManager_->Update();
 	enemyManager_->Update();
 	enemyWeaponManager_->Update();
 	playerUI_->Update();
 	enemyUI_->Update();
+	player_->Update();
 
 
 	

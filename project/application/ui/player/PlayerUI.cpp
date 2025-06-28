@@ -55,7 +55,6 @@ void PlayerUI::Initialize() {
 			spriteCannon_[i]->SetPosition({ 330.0f,565.0f });
 		}
 		spriteCannon_[1]->SetSize({ spriteCannon_[0]->GetSize() });
-		spriteCannon_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
 	}
 	{
 		//銃弾UIの初期化
@@ -70,7 +69,6 @@ void PlayerUI::Initialize() {
 			spriteBullet_[i]->SetPosition({ 830.0f,565.0f });
 		}
 		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize() });
-		spriteBullet_[1]->SetColor({ 0.0f,0.0f,0.0f,0.94f });
 	}
 
 
@@ -80,7 +78,7 @@ void PlayerUI::Update() {
 	//playerが読み込まれていなかったらassert
 	assert(player_ != nullptr && "PlayerUIにPlayerインスタンスを渡してください");
 
-	//HPバーのサイズをプレイヤーのHPに合わせる
+	//緑HPバーのサイズをプレイヤーのHPに合わせる
 	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
 	spriteHPBar_[1]->SetSize({ spriteHPBar_[0]->GetSize().x * hpRate,spriteHPBar_[0]->GetSize().y });
 
@@ -116,10 +114,61 @@ void PlayerUI::Update() {
 			spriteBullet_[i]->SetShakeOffset(offset);
 		}
 	}
+
+	//ダメージによる点滅処理
+	DamageBlinking();
+
 }
 
 void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
 
-#endif // _DEBUG
+#endif //_DEBUG
+}
+
+void PlayerUI::DamageBlinking() {
+	//共通関数：すべてのスプライトに色をセット
+	auto SetUIColor = [&](const Vector4& color) {
+		spriteFPSUI_->SetColor(color);
+		for (int i = 0; i < 2; ++i) {
+			spriteHPBar_[i]->SetColor(color);
+			spriteCannon_[i]->SetColor(color);
+			spriteBullet_[i]->SetColor(color);
+		}
+		};
+
+	//被弾開始時に点滅開始
+	if (player_->GetIsDamage() && blinkTimer <= 0.0f) {
+		float blinkDuration = param_["blinkDuration"];
+		blinkTimer = blinkDuration;
+		isDamage = true;
+	}
+
+	//点滅処理
+	if (isDamage) {
+		blinkTimer -= kDeltaTime;
+
+		//点滅トグル
+		static float blinkElapsed = 0.0f;
+		blinkElapsed += kDeltaTime;
+
+		float blinkInterval = param_["blinkInterval"];
+		if (blinkElapsed >= blinkInterval) {
+			blinkElapsed = 0.0f;
+			isBright = !isBright;
+
+			Vector4 color = isBright ? Vector4{ 1.0f, 0.6f, 0.6f, 1.0f }
+			: Vector4{ 0.6f, 0.2f, 0.2f, 1.0f };
+			SetUIColor(color);
+		}
+
+		//終了処理
+		if (blinkTimer <= 0.0f) {
+			SetUIColor({ 1.0f, 1.0f, 1.0f, 1.0f }); //元の色に戻す
+			isDamage = false;
+			isBright = true;
+			blinkElapsed = 0.0f;
+			blinkTimer = 0.0f;
+		}
+	}
 }

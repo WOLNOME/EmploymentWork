@@ -51,11 +51,11 @@ private://構造体
 		//頂点リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 		VertexData* vertexData = nullptr;
-		D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
+		D3D12_VERTEX_BUFFER_VIEW vertexBufferView = {};
 		//インデックスリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexResource;
 		uint32_t* indexData = nullptr;
-		D3D12_INDEX_BUFFER_VIEW indexBufferView;
+		D3D12_INDEX_BUFFER_VIEW indexBufferView = {};
 		//マテリアルリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
 		Material* materialData = nullptr;

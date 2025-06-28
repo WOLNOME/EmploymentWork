@@ -55,6 +55,8 @@ public://getter
 	float GetBulletFireIntervalTimer() const { return bulletFireIntervalTimer_; }
 	//銃弾を発射したかどうか
 	bool GetIsBulletFire() const { return isBulletFire_; }
+	//ダメージを受けたか
+	bool GetIsDamage() const { return isDamage_; }
 
 public://setter
 	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
@@ -102,5 +104,7 @@ private:
 	float bulletFireIntervalTime_;	//銃弾の速度
 	float bulletFireIntervalTimer_;	//銃弾の発射間隔タイマー
 	bool isBulletFire_ = false;		//銃弾を発射したかどうか
+
+	bool isDamage_ = false;			//ダメージを受けたか
 };
 

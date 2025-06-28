@@ -1,3 +1,5 @@
 {
-    "shakePower":40
+    "shakePower":40,
+    "blinkDuration":1.0,
+    "blinkInterval":0.05
 }

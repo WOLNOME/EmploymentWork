@@ -19,6 +19,11 @@ public:
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
 	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
+
+private://非公開メンバ関数
+	//点滅処理
+	void DamageBlinking();
+
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -42,8 +47,14 @@ private:
 	std::array<std::unique_ptr<Sprite>, 2> spriteBullet_;
 
 
-private://データ駆動設計用パラメータ
+private://メンバ変数
+	//パラメーター
 	json param_;
+
+	bool isDamage = false;
+	bool isBright = true;
+	float blinkTimer = 0.0f;
+
 
 };
 
