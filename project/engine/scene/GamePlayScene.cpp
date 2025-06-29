@@ -89,8 +89,6 @@ void GamePlayScene::Update() {
 	playerUI_->Update();
 	enemyUI_->Update();
 	player_->Update();
-
-
 	
 }
 void GamePlayScene::DebugWithImGui() {

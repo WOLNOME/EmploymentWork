@@ -2,7 +2,7 @@
     "speed": 3.0,
     "maxSpeed":60.0,
     "rotateSpeed":0.785,
-    "maxHP":100,
+    "maxHP":10,
     "cannonReloadTime":2.0,
     "bulletReloadTime":2.0,
     "bulletMagazine":50,
