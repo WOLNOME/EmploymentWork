@@ -14,7 +14,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{8189685e-5a2b-4283-b253-bc244c6b25e9}</ProjectGuid>
-    <RootNamespace>Pandora</RootNamespace>
+    <RootNamespace>EmploymentWork</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
