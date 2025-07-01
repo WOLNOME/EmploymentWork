@@ -11,6 +11,3 @@ void Ground::Initialize() {
 	object3d_->SetIsLightProcess(false);
 
 }
-
-void Ground::Update() {
-}

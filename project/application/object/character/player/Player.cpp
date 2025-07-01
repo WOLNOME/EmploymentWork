@@ -296,6 +296,9 @@ void Player::DeadProcess() {
 }
 
 void Player::CameraAlgorithm() {
+	//死亡していたら処理をしない
+	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue = input_->GetMousePosition();
 	//デッドゾーン

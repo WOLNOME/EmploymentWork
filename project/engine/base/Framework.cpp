@@ -126,8 +126,6 @@ void Framework::Update() {
 	CollisionManager::GetInstance()->ClearColliders();
 	//シーンマネージャー更新
 	SceneManager::GetInstance()->Update();
-	//当たり判定のチェック
-	CollisionManager::GetInstance()->CheckCollision();
 }
 
 void Framework::Run() {

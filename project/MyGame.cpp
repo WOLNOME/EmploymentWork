@@ -13,6 +13,7 @@
 #include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
+#include "CollisionManager.h"
 #include "SceneManager.h"
 
 void MyGame::Initialize() {
@@ -35,14 +36,17 @@ void MyGame::Update() {
 	//ImGui受付開始
 	ImGuiManager::GetInstance()->Begin();
 
-	//オブジェクトマネージャーの更新
-	Object3dManager::GetInstance()->Update();
-
 	//ゲーム基盤更新
 	Framework::Update();
 
+	//オブジェクトマネージャーの更新
+	Object3dManager::GetInstance()->Update();
+
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
+
+	//当たり判定のチェック
+	CollisionManager::GetInstance()->CheckCollision();
 
 	//シーンのデバッグ処理
 	SceneManager::GetInstance()->DebugWithImGui();

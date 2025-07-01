@@ -23,7 +23,7 @@ public://getter
 	//コライダー用のワールド座標を取得
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
 	//コライダー用前フレーム座標を取得
-	Vector3 GetPrePosition() override { return prePosition_; }
+	Vector3 GetPreWorldPosition() override { return prePosition_; }
 
 	//死亡フラグの取得
 	bool GetIsDead() const { return isDead_; }

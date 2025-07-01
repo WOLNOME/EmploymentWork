@@ -11,6 +11,3 @@ void Skydome::Initialize() {
 	object3d_->SetIsLightProcess(false);
 
 }
-
-void Skydome::Update() {
-}

@@ -72,24 +72,21 @@ void GamePlayScene::Update() {
 	if (input_->TriggerKey(DIK_R)) {
 		sceneManager_->SetNextScene("GamePlay");
 	}
-	//プレイヤーが死亡したら
+	//プレイヤーが死亡したらゲームオーバー
 	if (player_->GetIsDead()) {
 		sceneManager_->SetNextScene("GameOver");
 	}
 
-	//カメラの更新
-	camera_->Update();
-
 	//インスタンスの更新
-	skydome_->Update();
-	ground_->Update();
 	playerWeaponManager_->Update();
 	enemyManager_->Update();
 	enemyWeaponManager_->Update();
 	playerUI_->Update();
 	enemyUI_->Update();
 	player_->Update();
-	
+
+	//カメラの更新(全インスタンスの処理が終わった後にやる)
+	camera_->Update();
 }
 void GamePlayScene::DebugWithImGui() {
 	//ImGui

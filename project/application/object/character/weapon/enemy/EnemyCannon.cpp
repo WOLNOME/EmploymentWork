@@ -125,7 +125,7 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 		//y方向の上昇速度は0
 		velocity_.y = 0.0f;
 		//当たり判定属性をセット
-		SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+		SetCollisionAttribute(CollisionAttribute::EnemyCannon);
 		//死亡状態を解除
 		isDead_ = false;
 		prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
@@ -137,7 +137,7 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
 
 	//当たり判定属性をセット
-	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+	SetCollisionAttribute(CollisionAttribute::EnemyCannon);
 	//死亡状態を解除
 	isDead_ = false;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
