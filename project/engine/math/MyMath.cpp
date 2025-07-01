@@ -1891,6 +1891,47 @@ void MyMath::CreateLineAABB(const AABB& aabb, Vector4 color) {
 	}
 }
 
+void MyMath::CreateLineOBB(const OBB& obb, Vector4 color) {
+	const auto lineManager = LineManager::GetInstance();
+
+	// ローカル座標系での8頂点
+	Vector3 localVertex[8] = {
+		{ -obb.size.x, -obb.size.y, -obb.size.z }, // 0
+		{ +obb.size.x, -obb.size.y, -obb.size.z }, // 1
+		{ +obb.size.x, +obb.size.y, -obb.size.z }, // 2
+		{ -obb.size.x, +obb.size.y, -obb.size.z }, // 3
+		{ -obb.size.x, -obb.size.y, +obb.size.z }, // 4
+		{ +obb.size.x, -obb.size.y, +obb.size.z }, // 5
+		{ +obb.size.x, +obb.size.y, +obb.size.z }, // 6
+		{ -obb.size.x, +obb.size.y, +obb.size.z }  // 7
+	};
+
+	// ワールド座標に変換
+	Vector3 worldVertex[8];
+	for (int i = 0; i < 8; i++) {
+		// OBBのローカル→ワールド変換
+		// center + local * orientations
+		worldVertex[i] =
+			obb.center
+			+ obb.orientations[0] * localVertex[i].x
+			+ obb.orientations[1] * localVertex[i].y
+			+ obb.orientations[2] * localVertex[i].z;
+	}
+
+	// AABB と同じ線の結び方
+	const uint32_t edgeIndices[12][2] = {
+		{0, 1}, {1, 2}, {2, 3}, {3, 0}, // 底面
+		{4, 5}, {5, 6}, {6, 7}, {7, 4}, // 上面
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}  // 側面
+	};
+
+	for (uint32_t i = 0; i < 12; ++i) {
+		const Vector3& from = worldVertex[edgeIndices[i][0]];
+		const Vector3& to = worldVertex[edgeIndices[i][1]];
+		lineManager->CreateLine(from, to, color);
+	}
+}
+
 ///------------------------------------///
 ///      演算子のオーバーロード
 ///------------------------------------///

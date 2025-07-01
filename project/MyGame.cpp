@@ -21,7 +21,7 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("GamePlay");
+	SceneManager::GetInstance()->SetNextScene("GameOver");
 
 	//パーティクルエディター→PARTICLECREATOR
 	//開発用シーン→DEVELOP
@@ -35,6 +35,9 @@ void MyGame::Finalize() {
 void MyGame::Update() {
 	//ImGui受付開始
 	ImGuiManager::GetInstance()->Begin();
+
+	//当たり判定のクリア
+	CollisionManager::GetInstance()->ClearColliders();
 
 	//ゲーム基盤更新
 	Framework::Update();

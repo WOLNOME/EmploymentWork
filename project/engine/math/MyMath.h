@@ -431,6 +431,7 @@ public://静的メンバ関数
 
 	static void CreateLineSphere(const Sphere& sphere, Vector4 color, uint32_t subdivision = 15);
 	static void CreateLineAABB(const AABB& aabb, Vector4 color);
+	static void CreateLineOBB(const OBB& obb, Vector4 color);
 
 };
 

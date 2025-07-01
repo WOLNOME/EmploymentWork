@@ -56,7 +56,7 @@ void ParticleManager::Update() {
 		//エミッターとJSONデータの更新
 		particle.second->TraceEmitterForCS();
 		particle.second->TraceJsonDataForCS();
-		//バリア遷移(状態保証処理)
+		//バリア遷移(状態保証)
 		{
 			std::vector<ID3D12Resource*> uavResources = {
 				particle.second->allResourceForCS_.grainsResource.Get(),

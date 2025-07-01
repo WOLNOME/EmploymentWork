@@ -22,9 +22,6 @@
 #include "CollisionManager.h"
 
 void Framework::Initialize() {
-	//解放処理確認用
-	leakChecker;
-
 	//WindowsAPIの初期化
 	WinApp::GetInstance()->Initialize();
 
@@ -122,8 +119,6 @@ void Framework::Update() {
 	if (WinApp::GetInstance()->ProcessMessage()) {
 		isOver = true;
 	}
-	//当たり判定のクリア
-	CollisionManager::GetInstance()->ClearColliders();
 	//シーンマネージャー更新
 	SceneManager::GetInstance()->Update();
 }
@@ -140,7 +135,6 @@ void Framework::Run() {
 		Update();
 		//描画
 		Draw();
-
 	}
 	//ゲームの終了
 	Finalize();

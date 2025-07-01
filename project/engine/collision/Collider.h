@@ -34,6 +34,10 @@ public://getter
 	const AABB& GetAABB() { return collisionLocalAABB_; }
 	//ワールド座標を取得
 	virtual Vector3 GetWorldPosition() = 0;
+	//回転を取得
+	virtual Vector3 GetRotate() = 0;
+	//スケールを取得
+	virtual Vector3 GetScale() = 0;
 	//前フレーム座標を取得
 	virtual Vector3 GetPreWorldPosition() = 0;
 	//属性の取得
@@ -56,6 +60,13 @@ protected:
 	AABB collisionLocalAABB_ = {
 		.min = { -1.0f, -1.0f, -1.0f },	//最小座標
 		.max = { 1.0f, 1.0f, 1.0f }		//最大座標
+	};
+
+	//OBB用変数
+	OBB collisionLocalOBB_ = {
+		.center = {0.0f,0.0f,0.0f},
+		.orientations = {{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}},
+		.size = {1.0f,1.0f,1.0f}
 	};
 
 	//デバッグ用変数

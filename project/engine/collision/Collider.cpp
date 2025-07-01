@@ -24,6 +24,16 @@ void Collider::DebugWithImGui() {
 		break;
 	}
 	case Collider::CollisionShapeKind::OBB: {
+		// ローカルの3軸
+		Vector3 localX = { 1,0,0 };
+		Vector3 localY = { 0,1,0 };
+		Vector3 localZ = { 0,0,1 };
+		//OBBを定義
+		OBB obb = {
+			.center=collisionLocalOBB_.center+GetWorldPosition(),
+			.orientations={{}}
+		}
+
 		break;
 	}
 	default:
