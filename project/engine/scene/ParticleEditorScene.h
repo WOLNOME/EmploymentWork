@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-class ParticleCreatorScene : public BaseScene {
+class ParticleEditorScene : public BaseScene {
 public:
 	/// <summary>
 	/// 初期化

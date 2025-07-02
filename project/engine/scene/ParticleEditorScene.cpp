@@ -1,4 +1,4 @@
-#include "ParticleCreatorScene.h"
+#include "ParticleEditorScene.h"
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <iostream>
 
-void ParticleCreatorScene::Initialize() {
+void ParticleEditorScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
 
@@ -35,10 +35,10 @@ void ParticleCreatorScene::Initialize() {
 
 }
 
-void ParticleCreatorScene::Finalize() {
+void ParticleEditorScene::Finalize() {
 }
 
-void ParticleCreatorScene::Update() {
+void ParticleEditorScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 	//カメラの更新
@@ -52,7 +52,7 @@ void ParticleCreatorScene::Update() {
 	}
 }
 
-void ParticleCreatorScene::DebugWithImGui() {
+void ParticleEditorScene::DebugWithImGui() {
 	//ImGui操作
 #ifdef _DEBUG
 	//最初の操作
@@ -70,7 +70,7 @@ void ParticleCreatorScene::DebugWithImGui() {
 #endif //_DEBUG
 }
 
-void ParticleCreatorScene::StartWithImGui() {
+void ParticleEditorScene::StartWithImGui() {
 #ifdef _DEBUG
 	//最初の操作
 	if (!isGenerateMode_ && !isEditMode_ && !checkEditName_) {
@@ -102,7 +102,7 @@ void ParticleCreatorScene::StartWithImGui() {
 #endif //_DEBUG
 }
 
-void ParticleCreatorScene::GenerateWithImGui() {
+void ParticleEditorScene::GenerateWithImGui() {
 #ifdef _DEBUG
 	if (isGenerateMode_ && !isEditMode_) {
 		Editor();
@@ -110,7 +110,7 @@ void ParticleCreatorScene::GenerateWithImGui() {
 #endif //_DEBUG
 }
 
-void ParticleCreatorScene::EditWithImGui() {
+void ParticleEditorScene::EditWithImGui() {
 #ifdef _DEBUG
 	//パーティクル名の入力
 	if (checkEditName_) {
@@ -212,7 +212,7 @@ void ParticleCreatorScene::EditWithImGui() {
 #endif //_DEBUG
 }
 
-void ParticleCreatorScene::ResetWithImGui() {
+void ParticleEditorScene::ResetWithImGui() {
 #ifdef _DEBUG
 	if (isReset_) {
 		ImGui::OpenPopup("確認");
@@ -236,7 +236,7 @@ void ParticleCreatorScene::ResetWithImGui() {
 
 }
 
-void ParticleCreatorScene::SaveWithImGui() {
+void ParticleEditorScene::SaveWithImGui() {
 #ifdef _DEBUG
 	if (isSave_) {
 		ImGui::SetNextWindowPos(ImVec2(470, 280));
@@ -315,7 +315,7 @@ void ParticleCreatorScene::SaveWithImGui() {
 #endif //_DEBUG
 }
 
-void ParticleCreatorScene::Editor() {
+void ParticleEditorScene::Editor() {
 #ifdef _DEBUG
 	//パラメーター
 	ImGui::SetNextWindowPos(ImVec2(10, 80), ImGuiCond_FirstUseEver);

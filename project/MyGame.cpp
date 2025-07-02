@@ -21,9 +21,9 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("GamePlay");
+	SceneManager::GetInstance()->SetNextScene("PARTICLEEDITOR");
 
-	//パーティクルエディター→PARTICLECREATOR
+	//パーティクルエディター→PARTICLEEDITOR
 	//開発用シーン→DEVELOP
 }
 

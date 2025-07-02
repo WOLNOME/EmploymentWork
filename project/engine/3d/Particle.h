@@ -16,7 +16,7 @@ class Particle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;
 	//パーティクルクリエイターシーンに公開
-	friend class ParticleCreatorScene;
+	friend class ParticleEditorScene;
 public:
 	//生成方法
 	enum class GenerateMethod {

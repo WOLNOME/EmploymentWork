@@ -10,19 +10,21 @@ class CombinedParticle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;
 	//パーティクルクリエイターシーンに公開
-	friend class ParticleCreatorScene;
+	friend class ParticleEditorScene;
 public://構造体
 	struct ComParticleInfo {
 		std::unique_ptr<Particle> particle; //パーティクル本体
 		float startTime = 0.0f; //発生開始時間(0~1)
 		float endTime = 0.0f; //発生終了時間(0~1)
-		bool isDislplayed = true; //表示フラグ
+		bool isDisplay = true; //表示フラグ
 	};
 
 public:
 	void Initialize(const std::string& _name);
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
 
+
+private://エディター専用
 	//新しいパーティクルを追加
 	uint32_t AddParticle(const std::string& _fileName, float _startTime, float _endTime);
 	//パーティクルを削除

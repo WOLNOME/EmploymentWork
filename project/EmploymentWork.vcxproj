@@ -179,7 +179,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\SpotLight.cpp" />
     <ClCompile Include="engine\3d\Shape.cpp" />
     <ClCompile Include="engine\scenebase\SceneTransitionAnimation.cpp" />
-    <ClCompile Include="engine\scene\ParticleCreatorScene.cpp" />
+    <ClCompile Include="engine\scene\ParticleEditorScene.cpp" />
     <ClCompile Include="engine\3d\ParticleManager.cpp" />
     <ClCompile Include="application\object\environment\Skydome.cpp" />
     <ClCompile Include="application\object\character\player\Player.cpp" />
@@ -269,7 +269,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\SpotLight.h" />
     <ClInclude Include="engine\3d\Shape.h" />
     <ClInclude Include="engine\scenebase\SceneTransitionAnimation.h" />
-    <ClInclude Include="engine\scene\ParticleCreatorScene.h" />
+    <ClInclude Include="engine\scene\ParticleEditorScene.h" />
     <ClInclude Include="engine\3d\ParticleManager.h" />
     <ClInclude Include="application\object\environment\Skydome.h" />
     <ClInclude Include="application\object\character\player\Player.h" />

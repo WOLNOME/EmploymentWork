@@ -49,7 +49,7 @@ const Particle::Emitter& CombinedParticle::GetEmitter(uint32_t _id) {
 		//存在する場合はエミッターを返す
 		return it->second.particle->emitter_;
 	}
-	//存在しない場合はアサート
+	//存在しない場合は警告
 	assert(0 && "指定されたIDのパーティクルが存在しません。");
 	return Particle::Emitter{};
 }
