@@ -82,7 +82,7 @@ void ParticleEditorScene::StartWithImGui() {
 			//パーティクルの生成
 			particle_ = std::make_unique<Particle>();
 			//基本パーティクルをロード
-			particle_->Initialize("Sample", "Basic");
+			particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic");
 			//エミッターの位置を調整
 			particle_->emitter_.transform.translate = { 0.0f,3.0f,0.0f };
 			//jsonデータをロード
@@ -172,7 +172,7 @@ void ParticleEditorScene::EditWithImGui() {
 					checkEditName_ = false;
 					isEditMode_ = true;
 					//基本パーティクルをロード
-					particle_->Initialize("Sample", jsonFileName_);
+					particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), jsonFileName_);
 					//エミッターの位置を調整
 					particle_->emitter_.transform.translate = { 0.0f,3.0f,0.0f };
 					//jsonデータをロード

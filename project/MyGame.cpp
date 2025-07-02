@@ -42,6 +42,9 @@ void MyGame::Update() {
 	//ゲーム基盤更新
 	Framework::Update();
 
+	//シーンのデバッグ処理
+	SceneManager::GetInstance()->DebugWithImGui();
+
 	//オブジェクトマネージャーの更新
 	Object3dManager::GetInstance()->Update();
 
@@ -51,8 +54,6 @@ void MyGame::Update() {
 	//当たり判定のチェック
 	CollisionManager::GetInstance()->CheckCollision();
 
-	//シーンのデバッグ処理
-	SceneManager::GetInstance()->DebugWithImGui();
 
 	//ImGuiの内部コマンドを生成する
 	ImGuiManager::GetInstance()->End();

@@ -20,7 +20,6 @@ public://構造体
 	};
 
 public:
-	void Initialize(const std::string& _name);
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
 
 
@@ -29,14 +28,6 @@ private://エディター専用
 	uint32_t AddParticle(const std::string& _fileName, float _startTime, float _endTime);
 	//パーティクルを削除
 	void RemoveParticle(uint32_t _id);
-
-public://getter
-	//エミッターを取得
-	const Particle::Emitter& GetEmitter(uint32_t _id);
-
-public://setter
-	//エミッターをセット
-	void SetEmitter(uint32_t _id, const Particle::Emitter& emitter);
 
 private:
 	//名前
@@ -53,6 +44,5 @@ private:
 
 	//最新のID
 	uint32_t useId_ = 0;
-
 };
 
