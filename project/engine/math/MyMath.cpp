@@ -5,6 +5,9 @@
 #include <numbers>
 #include "LineManager.h"
 
+#undef min;
+#undef max;
+
 Vector2 MyMath::Add(const Vector2& v1, const Vector2& v2) {
 	Vector2 c;
 	c = {
@@ -455,6 +458,15 @@ Matrix4x4 MyMath::MakeScaleMatrix(const Vector3& scale) {
 	c.m[3][2] = 0;
 	c.m[3][3] = 1;
 	return c;
+}
+
+Matrix4x4 MyMath::MakeRotateMatrix(const Vector3& rotate) {
+	Matrix4x4 result;
+	Matrix4x4 matRotateX = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 matRotateY = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 matRotateZ = MakeRotateZMatrix(rotate.z);
+	result = matRotateX * matRotateY * matRotateZ;
+	return result;
 }
 
 Matrix4x4 MyMath::MakeRotateXMatrix(float radian) {
@@ -908,8 +920,8 @@ std::pair<float, float> MyMath::ProjectOntoAxis(const Vector3* vertices, int cou
 	float max = min;
 	for (int i = 1; i < count; ++i) {
 		float projection = Dot(vertices[i], axis);
-		min = min(min, projection);
-		max = max(max, projection);
+		min = std::min(min, projection);
+		max = std::max(max, projection);
 	}
 	return { min, max };
 }
@@ -1570,6 +1582,63 @@ bool MyMath::IsCollision(const Segment& segment, const AABB& aabb) {
 	return IsCollision(aabb, segment);
 }
 
+bool MyMath::IsCollision(const AABB& aabb, const OBB& obb) {
+	//ワールド行列
+	Matrix4x4 obbWorldMatrix = {
+		obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
+		obb.orientations[1].x, obb.orientations[1].y, obb.orientations[1].z, 0,
+		obb.orientations[2].x, obb.orientations[2].y, obb.orientations[2].z, 0,
+		obb.center.x, obb.center.y, obb.center.z, 1
+	};
+	//ワールド逆行列
+	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
+
+	//AABBの8頂点
+	Vector3 vertices[8] = {
+		{aabb.min.x, aabb.min.y, aabb.min.z},
+		{aabb.max.x, aabb.min.y, aabb.min.z},
+		{aabb.min.x, aabb.max.y, aabb.min.z},
+		{aabb.max.x, aabb.max.y, aabb.min.z},
+		{aabb.min.x, aabb.min.y, aabb.max.z},
+		{aabb.max.x, aabb.min.y, aabb.max.z},
+		{aabb.min.x, aabb.max.y, aabb.max.z},
+		{aabb.max.x, aabb.max.y, aabb.max.z}
+	};
+
+	//OBBローカル空間に変換
+	Vector3 transformed[8];
+	for (int i = 0; i < 8; ++i) {
+		transformed[i] = Transform(vertices[i], obbWorldMatrixInverse);
+	}
+
+	//変換後のAABB(min/max)を計算
+	Vector3 newMin = transformed[0];
+	Vector3 newMax = transformed[0];
+	for (int i = 1; i < 8; ++i) {
+		newMin.x = std::min(newMin.x, transformed[i].x);
+		newMin.y = std::min(newMin.y, transformed[i].y);
+		newMin.z = std::min(newMin.z, transformed[i].z);
+
+		newMax.x = std::max(newMax.x, transformed[i].x);
+		newMax.y = std::max(newMax.y, transformed[i].y);
+		newMax.z = std::max(newMax.z, transformed[i].z);
+	}
+
+	AABB aabbInOBBLocalSpace = { newMin, newMax };
+	//OBBのローカル空間におけるOBB
+	AABB aabbOBBLoacalSpace = {
+		.min = -obb.size,
+		.max = obb.size
+	};
+
+	//AABBどうしの当たり判定をとる
+	return IsCollision(aabbInOBBLocalSpace, aabbOBBLoacalSpace);
+}
+
+bool MyMath::IsCollision(const OBB& obb, const AABB& aabb) {
+	return IsCollision(aabb, obb);
+}
+
 bool MyMath::IsCollision(const AABB& aabb, const Capsule& capsule) {
 	//AABBを半径分膨張
 	AABB expandedAABB;
@@ -1673,7 +1742,10 @@ bool MyMath::IsCollision(const OBB& obb, const Sphere& sphere) {
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
 	Vector3 centerInOBBLocalSpace = Transform(sphere.center, obbWorldMatrixInverse);
-	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
+	AABB aabbOBBLocal = {
+		.min = -obb.size,
+		.max = obb.size 
+	};
 	Sphere sphereOBBLocal = { centerInOBBLocalSpace, sphere.radius };
 
 	//ローカル空間で衝突判定
@@ -1697,7 +1769,10 @@ bool MyMath::IsCollision(const OBB& obb, const Line& line) {
 
 
 	Vector3 centerInOBBLocalLine = Transform(line.origin, obbWorldMatrixInverse);
-	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
+	AABB aabbOBBLocal = {
+		.min = -obb.size,
+		.max = obb.size 
+	};
 	Line lineOBBLocal = { centerInOBBLocalLine, line.diff };
 
 	//ローカル空間で衝突判定
@@ -1721,7 +1796,10 @@ bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
 
 
 	Vector3 centerInOBBLocalRay = Transform(ray.origin, obbWorldMatrixInverse);
-	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
+	AABB aabbOBBLocal = {
+		.min = -obb.size,
+		.max = obb.size 
+	};
 	Ray rayOBBLocal = { centerInOBBLocalRay, ray.diff };
 
 	//ローカル空間で衝突判定
@@ -1743,10 +1821,13 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 	//ワールド逆行列
 	Matrix4x4 obbWorldMatrixInverse = Inverse(obbWorldMatrix);
 
-
 	Vector3 centerInOBBLocalSegment = Transform(segment.origin, obbWorldMatrixInverse);
-	AABB aabbOBBLocal = { .min = { -obb.size.x, -obb.size.y, -obb.size.z }, .max = obb.size };
-	Segment segmentOBBLocal = { centerInOBBLocalSegment, segment.diff };
+	Vector3 diffInOBBLocalSegment = TransformNormal(segment.diff, obbWorldMatrixInverse);
+	AABB aabbOBBLocal = {
+		.min = -obb.size,
+		.max = obb.size 
+	};
+	Segment segmentOBBLocal = { centerInOBBLocalSegment, diffInOBBLocalSegment };
 
 	//ローカル空間で衝突判定
 	return IsCollision(aabbOBBLocal, segmentOBBLocal);
@@ -1754,6 +1835,18 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 
 bool MyMath::IsCollision(const Segment& segment, const OBB& obb) {
 	return IsCollision(obb, segment);
+}
+
+bool MyMath::IsCollision(const OBB& obb, const Capsule& capsule) {
+	//OBBを半径分膨張
+	OBB expandedOBB = obb;
+	expandedOBB.size += capsule.radius;
+
+	return IsCollision(expandedOBB, capsule.segment);
+}
+
+bool MyMath::IsCollision(const Capsule& capsule, const OBB& obb) {
+	return IsCollision(obb, capsule);
 }
 
 bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {

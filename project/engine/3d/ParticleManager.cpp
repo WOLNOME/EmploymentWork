@@ -7,9 +7,10 @@
 #include "Particle.h"
 #include <numbers>
 #include <random>
+#include <algorithm>
+
 #undef min
 #undef max
-#include <algorithm>
 
 ParticleManager* ParticleManager::instance = nullptr;
 

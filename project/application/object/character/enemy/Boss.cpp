@@ -18,11 +18,9 @@ void Boss::Initialize() {
 	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
 	object3d_->SetTexture(textureHandle_);
 
-	//当たり判定の半径を設定
-	collisionLocalAABB_ = {
-		.min = { -6.0f, -4.5f, -6.0f },	//最小座標
-		.max = { 6.0f, 2.5f, 6.0f }		//最大座標
-	};
+	//当たり判定のパラメーター入力
+	collisionCenterOffsetOBB_ = { 0.0f,-1.0f,0.0f };
+	collisionSizeOBB_ = { 6.0f,3.5f,6.0f };
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");

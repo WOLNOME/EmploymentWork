@@ -10,13 +10,11 @@ void Canota::Initialize() {
 	IBaseEnemy::Initialize();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Canota"), "enemy");
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Canota"), "enemy");
 
-	//当たり判定のサイズを設定
-	collisionLocalAABB_ = {
-		.min = { -4.0f, -2.3f, -4.0f },	//最小座標
-		.max = { 4.0f, 1.7f, 4.0f }		//最大座標
-	};
+	//当たり判定のパラメーター入力
+	collisionCenterOffsetOBB_ = { 0.0f,-0.3f,0.0f };
+	collisionSizeOBB_ = { 4.0f,2.0f,4.0f };
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/canota");

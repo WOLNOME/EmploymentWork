@@ -78,12 +78,12 @@ void GamePlayScene::Update() {
 	}
 
 	//インスタンスの更新
+	player_->Update();
 	playerWeaponManager_->Update();
-	enemyManager_->Update();
-	enemyWeaponManager_->Update();
 	playerUI_->Update();
 	enemyUI_->Update();
-	player_->Update();
+	enemyWeaponManager_->Update();
+	enemyManager_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	camera_->Update();

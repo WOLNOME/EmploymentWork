@@ -19,12 +19,11 @@ void Player::Initialize() {
 	object3d_->worldTransform.translate.y += 2.7f;
 
 	//当たり判定の形状を設定
-	collisionShapeKind_ = Collider::CollisionShapeKind::AABB;
-	//当たり判定の大きさを設定
-	collisionLocalAABB_ = {
-		.min = { -4.0f, -2.3f, -4.0f },	//最小座標
-		.max = { 4.0f, 1.7f, 4.0f }		//最大座標
-	};
+	collisionShapeKind_ = Collider::CollisionShapeKind::OBB;
+	//当たり判定のパラメーター入力
+	collisionCenterOffsetOBB_ = { 0.0f,-0.3f,0.0f };
+	collisionSizeOBB_ = { 4.0f,2.0f,4.0f };
+	
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 

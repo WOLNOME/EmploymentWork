@@ -123,11 +123,23 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		case Collider::CollisionShapeKind::AABB: {
 			//AABBを作る
 			AABB aabbB = {
-				.min = colliderB->GetAABB().min + colliderB->GetWorldPosition(),
-				.max = colliderB->GetAABB().max + colliderB->GetWorldPosition()
+				.min = colliderB->GetMinAABB() + colliderB->GetWorldPosition(),
+				.max = colliderB->GetMaxAABB() + colliderB->GetWorldPosition()
 			};
 			//カプセルとAABBの衝突判定
 			HandleCollisionIf(MyMath::IsCollision(capsuleA, aabbB));
+			break;
+		}
+		case Collider::CollisionShapeKind::OBB: {
+			//OBBを作る
+			Matrix4x4 matRotate = MyMath::MakeRotateMatrix(colliderB->GetRotate());
+			OBB obbB = {
+				.center = colliderB->GetWorldPosition() + colliderB->GetCenterOffsetOBB(),
+				.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
+				.size = colliderB->GetSizeOBB()
+			};
+			//カプセルとOBBの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(capsuleA, obbB));
 			break;
 		}
 		default:
@@ -138,8 +150,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 	case Collider::CollisionShapeKind::AABB: {
 		//AABBを作る
 		AABB aabbA = {
-			.min = colliderA->GetAABB().min + colliderA->GetWorldPosition(),
-			.max = colliderA->GetAABB().max + colliderA->GetWorldPosition()
+			.min = colliderA->GetMinAABB() + colliderA->GetWorldPosition(),
+			.max = colliderA->GetMaxAABB() + colliderA->GetWorldPosition()
 		};
 		//Bの形状によって分岐
 		switch (colliderB->GetCollisionShapeKind()) {
@@ -156,11 +168,70 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		case Collider::CollisionShapeKind::AABB: {
 			//AABBを作る
 			AABB aabbB = {
-				.min = colliderB->GetAABB().min + colliderB->GetWorldPosition(),
-				.max = colliderB->GetAABB().max + colliderB->GetWorldPosition()
+				.min = colliderB->GetMinAABB() + colliderB->GetWorldPosition(),
+				.max = colliderB->GetMaxAABB() + colliderB->GetWorldPosition()
 			};
 			//AABB同士の衝突判定
 			HandleCollisionIf(MyMath::IsCollision(aabbA, aabbB));
+			break;
+		}
+		case Collider::CollisionShapeKind::OBB: {
+			//OBBを作る
+			Matrix4x4 matRotate = MyMath::MakeRotateMatrix(colliderB->GetRotate());
+			OBB obbB = {
+				.center = colliderB->GetWorldPosition() + colliderB->GetCenterOffsetOBB(),
+				.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
+				.size = colliderB->GetSizeOBB()
+			};
+			//カプセルとOBBの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(aabbA, obbB));
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case Collider::CollisionShapeKind::OBB: {
+		//OBBを作る
+		Matrix4x4 matRotateA = MyMath::MakeRotateMatrix(colliderA->GetRotate());
+		OBB obbA = {
+			.center = colliderA->GetWorldPosition() + colliderA->GetCenterOffsetOBB(),
+			.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotateA),MyMath::TransformNormal(Vector3(0,1,0),matRotateA),MyMath::TransformNormal(Vector3(0,0,1),matRotateA)},
+			.size = colliderA->GetSizeOBB()
+		};
+		//Bの形状によって分岐
+		switch (colliderB->GetCollisionShapeKind()) {
+		case Collider::CollisionShapeKind::Sphere: {
+			//カプセルを作る
+			Capsule capsuleB;
+			capsuleB.radius = colliderB->GetRadius();
+			capsuleB.segment.origin = colliderB->GetPreWorldPosition();
+			capsuleB.segment.diff = colliderB->GetWorldPosition() - colliderB->GetPreWorldPosition();
+			//AABBとカプセルの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(obbA, capsuleB));
+			break;
+		}
+		case Collider::CollisionShapeKind::AABB: {
+			//AABBを作る
+			AABB aabbB = {
+				.min = colliderB->GetMinAABB() + colliderB->GetWorldPosition(),
+				.max = colliderB->GetMaxAABB() + colliderB->GetWorldPosition()
+			};
+			//AABB同士の衝突判定
+			HandleCollisionIf(MyMath::IsCollision(obbA, aabbB));
+			break;
+		}
+		case Collider::CollisionShapeKind::OBB: {
+			//OBBを作る
+			Matrix4x4 matRotate = MyMath::MakeRotateMatrix(colliderB->GetRotate());
+			OBB obbB = {
+				.center = colliderB->GetWorldPosition() + colliderB->GetCenterOffsetOBB(),
+				.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
+				.size = colliderB->GetSizeOBB()
+			};
+			//カプセルとOBBの衝突判定
+			HandleCollisionIf(MyMath::IsCollision(obbA, obbB));
 			break;
 		}
 		default:

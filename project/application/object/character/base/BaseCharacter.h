@@ -22,6 +22,10 @@ public://getter
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
 	//コライダー用のワールド座標を取得
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	//コライダー用回転を取得
+	Vector3 GetRotate() override { return object3d_->worldTransform.rotate; }
+	//コライダー用スケールを取得
+	Vector3 GetScale() override { return object3d_->worldTransform.scale; }
 	//コライダー用前フレーム座標を取得
 	Vector3 GetPreWorldPosition() override { return prePosition_; }
 

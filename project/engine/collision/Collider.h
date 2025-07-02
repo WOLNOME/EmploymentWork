@@ -31,7 +31,11 @@ public://getter
 	//球体半径情報を取得
 	float GetRadius() { return collisionRadius_; }
 	//AABBローカル情報を取得
-	const AABB& GetAABB() { return collisionLocalAABB_; }
+	const Vector3& GetMinAABB() { return collisionMinAABB_; }
+	const Vector3& GetMaxAABB() { return collisionMaxAABB_; }
+	//OBBローカル情報を取得
+	const Vector3& GetCenterOffsetOBB() { return collisionCenterOffsetOBB_; }
+	const Vector3& GetSizeOBB() { return collisionSizeOBB_; }
 	//ワールド座標を取得
 	virtual Vector3 GetWorldPosition() = 0;
 	//回転を取得
@@ -57,17 +61,12 @@ protected:
 	float collisionRadius_ = 1.0f;	//半径
 
 	//AABB用変数
-	AABB collisionLocalAABB_ = {
-		.min = { -1.0f, -1.0f, -1.0f },	//最小座標
-		.max = { 1.0f, 1.0f, 1.0f }		//最大座標
-	};
+	Vector3 collisionMinAABB_ = { -1,-1,-1 };
+	Vector3 collisionMaxAABB_ = { 1,1,1 };
 
 	//OBB用変数
-	OBB collisionLocalOBB_ = {
-		.center = {0.0f,0.0f,0.0f},
-		.orientations = {{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}},
-		.size = {1.0f,1.0f,1.0f}
-	};
+	Vector3 collisionCenterOffsetOBB_ = { 0,0,0 };
+	Vector3 collisionSizeOBB_ = { 1,1,1 };
 
 	//デバッグ用変数
 	Vector4 debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };

@@ -10,7 +10,7 @@ void IBaseEnemy::Initialize() {
 	BaseCharacter::Initialize();
 
 	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::AABB;
+	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 

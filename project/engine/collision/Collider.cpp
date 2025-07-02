@@ -17,22 +17,23 @@ void Collider::DebugWithImGui() {
 	case Collider::CollisionShapeKind::AABB: {
 		//AABBを定義
 		AABB aabb = {
-			.min = collisionLocalAABB_.min + GetWorldPosition(),
-			.max = collisionLocalAABB_.max + GetWorldPosition()
+			.min = collisionMinAABB_ + GetWorldPosition(),
+			.max = collisionMaxAABB_ + GetWorldPosition()
 		};
 		MyMath::CreateLineAABB(aabb, debugLineColor_);
 		break;
 	}
 	case Collider::CollisionShapeKind::OBB: {
-		// ローカルの3軸
-		Vector3 localX = { 1,0,0 };
-		Vector3 localY = { 0,1,0 };
-		Vector3 localZ = { 0,0,1 };
+		//回転行列
+		Matrix4x4 matRotate = MyMath::MakeRotateMatrix(GetRotate());
 		//OBBを定義
 		OBB obb = {
-			.center=collisionLocalOBB_.center+GetWorldPosition(),
-			.orientations={{}}
-		}
+			.center = GetWorldPosition() + collisionCenterOffsetOBB_,
+			.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
+			.size = collisionSizeOBB_
+		};
+		//線を登録
+		MyMath::CreateLineOBB(obb, debugLineColor_);
 
 		break;
 	}

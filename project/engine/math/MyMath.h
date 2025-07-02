@@ -217,6 +217,8 @@ public://静的メンバ関数
 	static Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 	//スケール行列
 	static Matrix4x4 MakeScaleMatrix(const Vector3& scale);
+	//回転行列
+	static Matrix4x4 MakeRotateMatrix(const Vector3& rotate);
 	//X軸回転行列
 	static Matrix4x4 MakeRotateXMatrix(float radian);
 	//Y軸回転行列
@@ -405,6 +407,9 @@ public://静的メンバ関数
 	//AABBと線分の当たり判定
 	static bool IsCollision(const AABB& aabb, const Segment& segment);
 	static bool IsCollision(const Segment& segment, const AABB& aabb);
+	//AABBとOBBの当たり判定
+	static bool IsCollision(const AABB& aabb, const OBB& obb);
+	static bool IsCollision(const OBB& obb, const AABB& aabb);
 	//AABBとカプセルの当たり判定
 	static bool IsCollision(const AABB& aabb, const Capsule& capsule);
 	static bool IsCollision(const Capsule& capsule, const AABB& aabb);
@@ -422,6 +427,10 @@ public://静的メンバ関数
 	//OBBと線分の当たり判定
 	static bool IsCollision(const OBB& obb, const Segment& segment);
 	static bool IsCollision(const Segment& segment, const OBB& obb);
+	//OBBとカプセルの当たり判定
+	static bool IsCollision(const OBB& obb, const Capsule& capsule);
+	static bool IsCollision(const Capsule& capsule, const OBB& obb);
+
 	//カプセル同士の当たり判定
 	static bool IsCollision(const Capsule& capsule1, const Capsule& capsule2);
 
