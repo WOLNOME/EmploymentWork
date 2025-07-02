@@ -5,7 +5,6 @@
 
 void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
 	
-
 }
 
 uint32_t CombinedParticle::AddParticle(const std::string& _fileName, float _startTime, float _endTime) {

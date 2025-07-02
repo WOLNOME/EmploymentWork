@@ -18,12 +18,13 @@ void Boss::Initialize() {
 	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
 	object3d_->SetTexture(textureHandle_);
 
-	//当たり判定のパラメーター入力
-	collisionCenterOffsetOBB_ = { 0.0f,-1.0f,0.0f };
-	collisionSizeOBB_ = { 6.0f,3.5f,6.0f };
-
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
+
+	//当たり判定のパラメーター入力
+	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
+	collisionSizeOBB_ = { param_["collisionSizeOBB"]["x"],param_["collisionSizeOBB"]["y"] ,param_["collisionSizeOBB"]["z"] };
+
 	//パラメータの反映
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;

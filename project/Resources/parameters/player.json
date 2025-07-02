@@ -1,4 +1,14 @@
 {
+    "collisionCenterOffsetOBB":{
+        "x":0.0,
+        "y":-0.3,
+        "z":0.0
+    },
+    "collisionSizeOBB":{
+        "x":4.0,
+        "y":2.0,
+        "z":4.0
+    },
     "speed": 3.0,
     "maxSpeed":60.0,
     "rotateSpeed":0.785,

@@ -18,17 +18,18 @@ void Player::Initialize() {
 	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Player"), "player");
 	object3d_->worldTransform.translate.y += 2.7f;
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
 	//当たり判定の形状を設定
 	collisionShapeKind_ = Collider::CollisionShapeKind::OBB;
 	//当たり判定のパラメーター入力
-	collisionCenterOffsetOBB_ = { 0.0f,-0.3f,0.0f };
-	collisionSizeOBB_ = { 4.0f,2.0f,4.0f };
+	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
+	collisionSizeOBB_ = { param_["collisionSizeOBB"]["x"],param_["collisionSizeOBB"]["y"] ,param_["collisionSizeOBB"]["z"] };
 	
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
 	//パラメータのセット
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;

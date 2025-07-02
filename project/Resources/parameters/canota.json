@@ -1,4 +1,14 @@
 {
+    "collisionCenterOffsetOBB":{
+        "x":0.0,
+        "y":-0.3,
+        "z":0.0
+    },
+    "collisionSizeOBB":{
+        "x":4.0,
+        "y":2.0,
+        "z":4.0
+    },
     "searchPlayerDistanceMove":250.0,
     "speed": 2.5,
     "maxSpeed":20.0,
