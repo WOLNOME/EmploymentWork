@@ -20,6 +20,17 @@ void BulletTrail::Initialize(const std::string& name) {
 }
 
 void BulletTrail::Update() {
+	//リストが2個以下なら抜ける
+	if (positions_.size() <= 2) return;
+
+	int index = 0;
+
+	//リストのポジションから頂点を作っていく
+	for (const auto& position : positions_) {
+
+	}
+
+
 }
 
 void BulletTrail::Draw(BaseCamera* _camera) {
@@ -29,14 +40,14 @@ BulletTrail::BulletTrailResource BulletTrail::CreateBulletTrailResource() {
 	BulletTrailResource result;
 	//リソースの作成
 	result.vertexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * kMaxVertexNum_);
-	result.indexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * kMaxVertexNum_);
+	result.indexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * kMaxVertexNum_ * 3);
 	//VBVの作成
 	result.vertexBufferView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
 	result.vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * kMaxVertexNum_);
 	result.vertexBufferView.StrideInBytes = sizeof(VertexData);
 	//IBVの作成
 	result.indexBufferView.BufferLocation = result.indexResource->GetGPUVirtualAddress();
-	result.indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * kMaxVertexNum_);
+	result.indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * kMaxVertexNum_ * 3);
 	result.indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	//リソースとデータを同期させる
 	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&result.vertexData));
