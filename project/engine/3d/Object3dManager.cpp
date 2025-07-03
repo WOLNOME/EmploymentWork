@@ -106,18 +106,18 @@ std::string Object3dManager::GenerateName(const std::string& name) {
 
 void Object3dManager::SettingCommonDrawing(NameGPS index) {
 	//ルートシグネチャをセットするコマンド
-	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature[(int)index].Get());
+	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature_[(int)index].Get());
 	//グラフィックスパイプラインステートをセットするコマンド
-	MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState[(int)index].Get());
+	MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)index].Get());
 	//プリミティブトポロジーをセットするコマンド
 	MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Object3dManager::SettingAnimationCS() {
 	//コンピュートルートシグネチャ
-	MainRender::GetInstance()->GetCommandList()->SetComputeRootSignature(computeRootSignature.Get());
+	MainRender::GetInstance()->GetCommandList()->SetComputeRootSignature(computeRootSignature_.Get());
 	//コンピュートパイプライン
-	MainRender::GetInstance()->GetCommandList()->SetPipelineState(computePipelineState.Get());
+	MainRender::GetInstance()->GetCommandList()->SetPipelineState(computePipelineState_.Get());
 }
 
 void Object3dManager::GenerateGraphicsPipeline() {
@@ -229,7 +229,7 @@ void Object3dManager::GenerateComputePipeline() {
 	}
 	//バイナリをもとにコンピュートルートシグネチャを生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
-		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&computeRootSignature));
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&computeRootSignature_));
 	assert(SUCCEEDED(hr));
 
 	//Shaderをコンパイルする
@@ -244,8 +244,8 @@ void Object3dManager::GenerateComputePipeline() {
 		.pShaderBytecode = computeShaderBlob->GetBufferPointer(),
 		.BytecodeLength = computeShaderBlob->GetBufferSize()
 	};
-	computePipelineStateDesc.pRootSignature = computeRootSignature.Get();
-	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState));
+	computePipelineStateDesc.pRootSignature = computeRootSignature_.Get();
+	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState_));
 }
 
 void Object3dManager::NormalPSOOption() {
@@ -366,7 +366,7 @@ void Object3dManager::NormalPSOOption() {
 	}
 	//バイナリをもとに生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
-		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature[(int)NameGPS::None]));
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_[(int)NameGPS::None]));
 	assert(SUCCEEDED(hr));
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
@@ -430,7 +430,7 @@ void Object3dManager::NormalPSOOption() {
 
 	//PSO情報を書き込む
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature[(int)NameGPS::None].Get();
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_[(int)NameGPS::None].Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),
 	vertexShaderBlob->GetBufferSize() };
@@ -451,7 +451,7 @@ void Object3dManager::NormalPSOOption() {
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState[(int)NameGPS::None]));
+		IID_PPV_ARGS(&graphicsPipelineState_[(int)NameGPS::None]));
 	assert(SUCCEEDED(hr));
 }
 
@@ -574,7 +574,7 @@ void Object3dManager::AnimationPSOOption() {
 	}
 	//バイナリをもとに生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
-		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature[(int)NameGPS::Animation]));
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_[(int)NameGPS::Animation]));
 	assert(SUCCEEDED(hr));
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
@@ -641,7 +641,7 @@ void Object3dManager::AnimationPSOOption() {
 
 	//グラフィックスパイプラインようの情報を書き込む
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature[(int)NameGPS::Animation].Get();
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_[(int)NameGPS::Animation].Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),
 	vertexShaderBlob->GetBufferSize() };
@@ -662,7 +662,7 @@ void Object3dManager::AnimationPSOOption() {
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState[(int)NameGPS::Animation]));
+		IID_PPV_ARGS(&graphicsPipelineState_[(int)NameGPS::Animation]));
 	assert(SUCCEEDED(hr));
 }
 
@@ -768,7 +768,7 @@ void Object3dManager::SkyBoxPSOOption() {
 	}
 	//バイナリをもとに生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
-		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature[(int)NameGPS::SkyBox]));
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_[(int)NameGPS::SkyBox]));
 	assert(SUCCEEDED(hr));
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
@@ -832,7 +832,7 @@ void Object3dManager::SkyBoxPSOOption() {
 
 	//PSO情報を書き込む
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature[(int)NameGPS::SkyBox].Get();
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_[(int)NameGPS::SkyBox].Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),
 	vertexShaderBlob->GetBufferSize() };
@@ -853,6 +853,6 @@ void Object3dManager::SkyBoxPSOOption() {
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState[(int)NameGPS::SkyBox]));
+		IID_PPV_ARGS(&graphicsPipelineState_[(int)NameGPS::SkyBox]));
 	assert(SUCCEEDED(hr));
 }

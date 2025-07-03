@@ -53,7 +53,7 @@ public://メンバ関数
 	//形状初期化
 	void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
 
-private://マネージャーの委託処理
+private://マネージャーへの委託処理
 	//更新処理
 	void Update();
 	//描画

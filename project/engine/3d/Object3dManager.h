@@ -73,14 +73,14 @@ private://借用インスタンス
 
 private://メンバ変数
 	//ルートシグネチャ
-	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)NameGPS::kMaxNumNameGPS> rootSignature;
+	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)NameGPS::kMaxNumNameGPS> rootSignature_;
 	//グラフィックスパイプライン
-	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)NameGPS::kMaxNumNameGPS> graphicsPipelineState;
+	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)NameGPS::kMaxNumNameGPS> graphicsPipelineState_;
 
 	//コンピュートルートシグネチャ
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> computeRootSignature = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> computeRootSignature_ = nullptr;
 	//コンピュートパイプライン
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> computePipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> computePipelineState_ = nullptr;
 
 	//オブジェクトのコンテナ
 	std::unordered_map<std::string, Object3d*> objects_;

@@ -135,6 +135,8 @@
     <ClCompile Include="engine\3d\LineManager.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
     <ClCompile Include="engine\3d\Object3dManager.cpp" />
+    <ClCompile Include="BulletTrail.cpp" />
+    <ClCompile Include="BulletTrailManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -258,6 +260,8 @@
     <ClInclude Include="engine\3d\LineManager.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
     <ClInclude Include="engine\3d\Object3dManager.h" />
+    <ClInclude Include="BulletTrail.h" />
+    <ClInclude Include="BulletTrailManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
