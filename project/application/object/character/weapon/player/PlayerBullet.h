@@ -4,6 +4,7 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "Particle.h"
+#include "BulletTrail.h"
 #include "JsonUtil.h"
 #include <memory>
 
@@ -31,14 +32,12 @@ public://setter
 	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection);
 
 private:
-	//パーティクル
-	std::unique_ptr<Particle> trail_ = nullptr;		//トレイルパーティクル
+	//トレールエフェクト
+	std::unique_ptr<BulletTrail> trail_ = nullptr;
 
 private:
 	//移動処理
 	void Move();
-	//パーティクル
-	void UpdateParticle();
 
 	//死亡処理
 	void DeadProcess();

@@ -44,6 +44,8 @@ void GamePlayScene::Initialize() {
 	Object3dManager::GetInstance()->SetCamera(camera_.get());
 	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
+	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
+	BulletTrailManager:
 	player_->SetCamera(camera_.get());
 	playerWeaponManager_->SetCamera(camera_.get());
 	playerUI_->SetCamera(camera_.get());

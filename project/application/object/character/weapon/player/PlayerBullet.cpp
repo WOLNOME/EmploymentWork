@@ -1,8 +1,9 @@
 #include "PlayerBullet.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
-#include "ParticleManager.h"
 #include "Object3dManager.h"
+#include "ParticleManager.h"
+#include "BulletTrailManager.h"
 
 void PlayerBullet::Initialize() {
 	//ベースキャラクターの初期化
@@ -14,13 +15,10 @@ void PlayerBullet::Initialize() {
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Bullet"), Shape::kSphere);
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	object3d_->SetTexture(textureHandle_);
-	//パーティクルの生成と初期化
-	trail_ = std::make_unique<Particle>();
-	trail_->Initialize(ParticleManager::GetInstance()->GenerateName("playerBulletTrail"), "trail");
-	trail_->emitter_.isPlay = false;
-	trail_->emitter_.transform.scale = { 0.01f,0.01f,0.01f };
-	trail_->emitter_.generateMethod = Particle::GenerateMethod::Random;
-	trail_->emitter_.effectStyle = Particle::EffectStyle::Loop;
+	//トレールエフェクトの生成と初期化
+	trail_ = std::make_unique<BulletTrail>();
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"));
+	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -45,8 +43,9 @@ void PlayerBullet::Update() {
 
 	//移動処理
 	Move();
-	//パーティクルの更新
-	UpdateParticle();
+
+	//トレールポジションの設定
+	trail_->SetPosition(object3d_->worldTransform.translate);
 }
 
 void PlayerBullet::DebugWithImGui() {
@@ -62,7 +61,6 @@ void PlayerBullet::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
-
 }
 
 void PlayerBullet::OnCollision(CollisionAttribute attribute) {
@@ -101,8 +99,6 @@ void PlayerBullet::SetInitParam(const Vector3& _initPos, const Vector3& _initDir
 	gravity_ = 0.0f;
 	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	isDead_ = false;
-	trail_->emitter_.isPlay = true;	//トレイルパーティクルを開始
-	trail_->emitter_.transform.translate = object3d_->worldTransform.translate;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 
@@ -134,19 +130,11 @@ void PlayerBullet::Move() {
 	}
 }
 
-void PlayerBullet::UpdateParticle() {
-	//トレイルパーティクルの座標更新
-	trail_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-}
-
 void PlayerBullet::DeadProcess() {
 	//死亡予約処理
 	SetDeadTimer(0.1f);
 	//当たり判定属性をなしに
 	SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-	//パーティクルの制御
-	trail_->emitter_.isPlay = false;	//トレイルパーティクルを停止
 
 	lifeTimer_ = 0.0f;	//寿命タイマーをリセット
 }

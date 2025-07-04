@@ -4,6 +4,10 @@
 #include "MainRender.h"
 #include "GPUDescriptorManager.h"
 #include "BaseCamera.h"
+#include <algorithm>
+
+#undef min
+#undef max
 
 BulletTrail::BulletTrail() {
 }
@@ -38,8 +42,8 @@ void BulletTrail::Update() {
 		if (lower == vertices_.end()) break;
 
 		// 上下を狭める
-		upper->y += widthDecayValue_;
-		lower->y -= widthDecayValue_;
+		upper->y -= widthDecayValue_;
+		lower->y += widthDecayValue_;
 
 		// もし上下が逆転したら削除
 		if (upper->y <= lower->y) {
@@ -63,7 +67,7 @@ void BulletTrail::Update() {
 	}
 
 	//インデックスデータの構築
-	int quadCount = vertices_.size() / 2 - 1;
+	int quadCount = std::max(0, int(vertices_.size() / 2 - 1));
 	indexCount_ = quadCount * 6;
 	for (int i = 0; i < quadCount; i++) {
 		int vi = i * 2;

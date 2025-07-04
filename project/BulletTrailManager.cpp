@@ -46,7 +46,7 @@ void BulletTrailManager::Draw() {
 		//ルートシグネチャのセット
 		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 		//グラフィックスパイプラインステートのセット
-		MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)BlendMode::Add].Get());
+		MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)BlendMode::Normal].Get());
 		//プリミティブトポロジーのセット
 		MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
@@ -60,7 +60,6 @@ void BulletTrailManager::Draw() {
 
 		bulletTrail.second->Draw(camera_);
 	}
-
 }
 
 void BulletTrailManager::Finalize() {
@@ -183,7 +182,7 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 	assert(SUCCEEDED(hr));
 
 	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;

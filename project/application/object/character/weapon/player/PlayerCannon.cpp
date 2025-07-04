@@ -1,8 +1,9 @@
 #include "PlayerCannon.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
-#include "ParticleManager.h"
 #include "Object3dManager.h"
+#include "ParticleManager.h"
+#include "BulletTrailManager.h"
 
 void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
@@ -21,6 +22,10 @@ void PlayerCannon::Initialize() {
 	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
 	particle_->emitter_.clumpNum = 10;
 	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+	//トレールの生成と初期化
+	trail_ = std::make_unique<BulletTrail>();
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"));
+	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = Collider::CollisionShapeKind::Sphere;
@@ -44,6 +49,9 @@ void PlayerCannon::Update() {
 
 	//移動処理
 	Move();
+
+	//トレール座標設定
+	trail_->SetPosition(object3d_->worldTransform.translate);
 }
 
 void PlayerCannon::DebugWithImGui() {

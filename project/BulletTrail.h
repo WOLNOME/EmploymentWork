@@ -71,7 +71,7 @@ private://メンバ変数
 
 	//最大頂点数
 	const int kMaxVertexNum_
-		= 64;
+		= 128;
 	int indexCount_ = 0;
 
 };

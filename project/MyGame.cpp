@@ -13,6 +13,7 @@
 #include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
+#include "BulletTrailManager.h"
 #include "CollisionManager.h"
 #include "SceneManager.h"
 
@@ -50,6 +51,9 @@ void MyGame::Update() {
 
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
+
+	//弾丸マネージャーの更新
+	BulletTrailManager::GetInstance()->Update();
 
 	//当たり判定のチェック
 	CollisionManager::GetInstance()->CheckCollision();
@@ -98,6 +102,8 @@ void MyGame::Draw() {
 	LineManager::GetInstance()->Draw();
 	//シーンのパーティクル描画
 	ParticleManager::GetInstance()->Draw();
+	//シーンの弾丸トレール描画
+	BulletTrailManager::GetInstance()->Draw();
 	//シーンのフロントスプライト描画
 	SpriteManager::GetInstance()->FrontDraw();
 

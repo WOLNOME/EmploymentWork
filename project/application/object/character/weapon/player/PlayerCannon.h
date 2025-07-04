@@ -4,6 +4,7 @@
 #include "SceneLight.h"
 #include "Object3d.h"
 #include "Particle.h"
+#include "BulletTrail.h"
 #include "JsonUtil.h"
 #include <memory>
 
@@ -32,6 +33,8 @@ public://setter
 private:
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
+	//トレールエフェクト
+	std::unique_ptr<BulletTrail> trail_ = nullptr;
 
 private:
 	//移動処理

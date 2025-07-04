@@ -13,6 +13,7 @@
 #include "PostEffectManager.h"
 #include "ModelManager.h"
 #include "ParticleManager.h"
+#include "BulletTrailManager.h"
 #include "Input.h"
 #include "AudioCommon.h"
 #include "SpriteManager.h"
@@ -64,6 +65,9 @@ void Framework::Initialize() {
 	//パーティクルマネージャー
 	ParticleManager::GetInstance()->Initialize();
 
+	//弾丸トレールマネージャー
+	BulletTrailManager::GetInstance()->Initialize();
+
 	//インプット
 	Input::GetInstance()->Initialize();
 
@@ -95,6 +99,7 @@ void Framework::Finalize() {
 	SpriteManager::GetInstance()->Finalize();
 	AudioCommon::GetInstance()->Finalize();
 	Input::GetInstance()->Finalize();
+	BulletTrailManager::GetInstance()->Finalize();
 	ParticleManager::GetInstance()->Finalize();
 	ModelManager::GetInstance()->Finalize();
 	PostEffectManager::GetInstance()->Finalize();
