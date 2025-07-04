@@ -41,6 +41,16 @@ void BulletTrailManager::Draw() {
 		assert(0 && "カメラがセットされていません");
 	}
 
+	//全弾丸共通の処理
+	{
+		//ルートシグネチャのセット
+		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+		//グラフィックスパイプラインステートのセット
+		MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)BlendMode::Add].Get());
+		//プリミティブトポロジーのセット
+		MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
+
 	//全弾丸トレールの描画
 	for (const auto& bulletTrail : bulletTrails_) {
 		if (!bulletTrail.second->isDisplay_) {
@@ -100,7 +110,7 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 	HRESULT hr;
 	auto dxCommon = DirectXCommon::GetInstance();
 
-	// RootSignature作成
+	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
@@ -110,37 +120,10 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 	//使用するデスクリプタの数
 	int numDescriptors = 0;
 
-	// RootParameter作成
+	//RootParameter作成
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
 
-	// マテリアル情報用の設定(0)
-	{
-		//ルートパラメータ入力
-		D3D12_ROOT_PARAMETER param = {};
-		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-		param.Descriptor.ShaderRegister = 0;
-		rootParameters.push_back(param);
-	}
-	// 粒配列情報用の設定(1)
-	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
-		//ルートパラメータ入力
-		D3D12_ROOT_PARAMETER param = {};
-		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-		rootParameters.push_back(param);
-	}
-	// カメラ情報用の設定(2)
+	//カメラ情報用の設定(0)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
@@ -149,7 +132,7 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 		param.Descriptor.ShaderRegister = 0;
 		rootParameters.push_back(param);
 	}
-	// テクスチャ情報用の設定(3)
+	//テクスチャ情報用の設定(1)
 	{
 		//デスクリプタレンジ作成
 		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -167,26 +150,8 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 		rootParameters.push_back(param);
 	}
-	//エミッター情報用の設定(4)
-	{
-		//ルートパラメータ入力
-		D3D12_ROOT_PARAMETER param = {};
-		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.Descriptor.ShaderRegister = 1;
-		rootParameters.push_back(param);
-	}
-	//JSON情報用の設定(5)
-	{
-		//ルートパラメータ入力
-		D3D12_ROOT_PARAMETER param = {};
-		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.Descriptor.ShaderRegister = 2;
-		rootParameters.push_back(param);
-	}
 
-	// Sampler作成
+	//Sampler作成
 	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers(1);
 	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
 	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -227,10 +192,6 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
@@ -297,11 +258,11 @@ void BulletTrailManager::GenerateGraphicsPipeline() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon->CompileShader(L"Resources/shaders/particle/Particle.VS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon->CompileShader(L"Resources/shaders/trail/Trail.VS.hlsl",
 		L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = dxCommon->CompileShader(L"Resources/shaders/particle/Particle.PS.hlsl",
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = dxCommon->CompileShader(L"Resources/shaders/trail/Trail.PS.hlsl",
 		L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 

@@ -28,6 +28,8 @@
     <FxCompile Include="Resources\shaders\postEffects\Dissolve.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\HSVFilter.PS.hlsl" />
     <FxCompile Include="Resources\shaders\postEffects\Random.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\trail\Trail.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\trail\Trail.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -272,6 +274,7 @@
     <None Include="Resources\shaders\TextTexture.hlsli" />
     <None Include="Resources\shaders\particle\ParticleCommon.hlsli" />
     <None Include="Resources\shaders\util\RandomUtility.hlsli" />
+    <None Include="Resources\shaders\trail\Trail.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

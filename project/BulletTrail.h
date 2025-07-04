@@ -42,7 +42,7 @@ private://マネージャーへの委託処理
 
 public://setter
 	//座標のセット
-	void SetPosition(const Vector3& _position) { positions_.push_back(_position); }
+	void SetPosition(const Vector3& _position);
 	//テクスチャ
 	void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
 	//表示するか
@@ -59,12 +59,12 @@ private://メンバ変数
 	//弾丸トレールのリソース
 	BulletTrailResource resource_;
 
-	//座標のリスト
-	std::list<Vector3> positions_;
+	//頂点のリスト
+	std::list<Vector3> vertices_;
 	//最大縦幅
 	const float verWidth_ = 1.0f;
 	//幅の減少量
-	const float widthDicayValue_ = 0.15f;
+	const float widthDecayValue_ = 0.05f;
 
 	//描画するか
 	bool isDisplay_ = true;
@@ -72,6 +72,7 @@ private://メンバ変数
 	//最大頂点数
 	const int kMaxVertexNum_
 		= 64;
+	int indexCount_ = 0;
 
 };
 
