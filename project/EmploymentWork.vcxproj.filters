@@ -139,6 +139,7 @@
     <ClCompile Include="engine\3d\Object3dManager.cpp" />
     <ClCompile Include="BulletTrail.cpp" />
     <ClCompile Include="BulletTrailManager.cpp" />
+    <ClCompile Include="Radar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -264,6 +265,7 @@
     <ClInclude Include="engine\3d\Object3dManager.h" />
     <ClInclude Include="BulletTrail.h" />
     <ClInclude Include="BulletTrailManager.h" />
+    <ClInclude Include="Radar.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
