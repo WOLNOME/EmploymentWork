@@ -13,9 +13,13 @@ BulletTrail::~BulletTrail() {
 	BulletTrailManager::GetInstance()->DeleteBulletTrail(name_);
 }
 
-void BulletTrail::Initialize(const std::string& name) {
+void BulletTrail::Initialize(const std::string& name, float maxVerLength, float lengthDecayValue) {
 	//名前
 	name_ = name;
+	//パラメーター
+	verLength_ = maxVerLength;
+	lengthDecayValue_ = lengthDecayValue;
+
 	//リソース作成
 	resource_ = CreateBulletTrailResource();
 	//マネージャーに登録
@@ -29,7 +33,7 @@ void BulletTrail::ClearPositions() {
 void BulletTrail::Update() {
 	// 頂点・インデックスバッファをクリア
 	memset(resource_.vertexData, 0, sizeof(VertexData) * kMaxVertexNum_);
-	memset(resource_.indexData, 0, sizeof(uint32_t) * kMaxVertexNum_ * 3);
+	memset(resource_.indexData, 0, sizeof(uint32_t) * (((kMaxVertexNum_ / 4) - 1) * 24 + 12));
 	indexCount_ = 0;
 
 	// 1. トレール寿命処理
@@ -155,14 +159,14 @@ BulletTrail::BulletTrailResource BulletTrail::CreateBulletTrailResource() {
 	BulletTrailResource result;
 	//リソースの作成
 	result.vertexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * kMaxVertexNum_);
-	result.indexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * kMaxVertexNum_ * 3);
+	result.indexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * (((kMaxVertexNum_ / 4) - 1) * 24 + 12));
 	//VBVの作成
 	result.vertexBufferView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
 	result.vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * kMaxVertexNum_);
 	result.vertexBufferView.StrideInBytes = sizeof(VertexData);
 	//IBVの作成
 	result.indexBufferView.BufferLocation = result.indexResource->GetGPUVirtualAddress();
-	result.indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * kMaxVertexNum_ * 3);
+	result.indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * (((kMaxVertexNum_ / 4) - 1) * 24 + 12));
 	result.indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	//リソースとデータを同期させる
 	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&result.vertexData));

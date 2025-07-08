@@ -9,6 +9,11 @@ void PlayerBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
+	lifeTime_ = param_["lifeTime"];
+	lifeTimer_ = 0.0f;
+
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
@@ -17,18 +22,13 @@ void PlayerBullet::Initialize() {
 	object3d_->SetTexture(textureHandle_);
 	//トレールエフェクトの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"));
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 0.01f;
-
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
-	lifeTime_ = param_["lifeTime"];
-	lifeTimer_ = 0.0f;
 
 	//初期化時点では死亡状態
 	isDead_ = true;

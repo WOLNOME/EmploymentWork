@@ -1,5 +1,7 @@
 {
     "maxSpeed": 500.0,
     "speed":500.0,
-    "lifeTime":0.3
+    "lifeTime":0.3,
+    "trailMaxLength":0.2,
+    "trailLengthDecayValue":0.008
 }

@@ -32,7 +32,7 @@ public://メンバ変数
 	~BulletTrail();
 
 	//初期化
-	void Initialize(const std::string& name);
+	void Initialize(const std::string& name, float maxVerLength, float lengthDecayValue);
 	//全保存座標のクリア
 	void ClearPositions();
 
@@ -64,16 +64,16 @@ private://メンバ変数
 	//座標のリスト
 	std::list<std::pair<Vector3, uint32_t>> positions_;
 	//最大幅
-	const float verLength_ = 0.2f;
+	float verLength_;
 	//幅の減少量
-	const float lengthDecayValue_ = 0.008f;
+	float lengthDecayValue_;
 
 	//描画するか
 	bool isDisplay_ = true;
 
 	//最大頂点数
 	const int kMaxVertexNum_
-		= 256;
+		= 512;
 	int indexCount_ = 0;
 
 };

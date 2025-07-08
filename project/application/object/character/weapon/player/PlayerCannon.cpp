@@ -9,10 +9,13 @@ void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
+
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ShapeTag{},Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
+	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
@@ -24,7 +27,7 @@ void PlayerCannon::Initialize() {
 	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"));
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 
 	//当たり判定の形状を設定
@@ -32,8 +35,7 @@ void PlayerCannon::Initialize() {
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
 
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
+
 
 	//初期化時点では死亡状態
 	isDead_ = true;
@@ -45,7 +47,7 @@ void PlayerCannon::Update() {
 	BaseCharacter::Update();
 	//弾が死亡していたら更新しない
 	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
-	
+
 
 	//移動処理
 	Move();
