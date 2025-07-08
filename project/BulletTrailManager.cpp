@@ -46,7 +46,7 @@ void BulletTrailManager::Draw() {
 		//ルートシグネチャのセット
 		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 		//グラフィックスパイプラインステートのセット
-		MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)BlendMode::Normal].Get());
+		MainRender::GetInstance()->GetCommandList()->SetPipelineState(graphicsPipelineState_[(int)BlendMode::Add].Get());
 		//プリミティブトポロジーのセット
 		MainRender::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}

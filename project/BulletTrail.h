@@ -33,6 +33,8 @@ public://メンバ変数
 
 	//初期化
 	void Initialize(const std::string& name);
+	//全保存座標のクリア
+	void ClearPositions();
 
 private://マネージャーへの委託処理
 	//更新処理
@@ -42,7 +44,7 @@ private://マネージャーへの委託処理
 
 public://setter
 	//座標のセット
-	void SetPosition(const Vector3& _position) { positions_.push_back(_position); }
+	void SetPosition(const Vector3& _position);
 	//テクスチャ
 	void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
 	//表示するか
@@ -60,18 +62,18 @@ private://メンバ変数
 	BulletTrailResource resource_;
 
 	//座標のリスト
-	std::list<Vector3> positions_;
-	//最大縦幅
-	const float verWidth_ = 1.0f;
+	std::list<std::pair<Vector3, uint32_t>> positions_;
+	//最大幅
+	const float verLength_ = 0.2f;
 	//幅の減少量
-	const float widthDecayValue_ = 0.05f;
+	const float lengthDecayValue_ = 0.008f;
 
 	//描画するか
 	bool isDisplay_ = true;
 
 	//最大頂点数
 	const int kMaxVertexNum_
-		= 128;
+		= 256;
 	int indexCount_ = 0;
 
 };

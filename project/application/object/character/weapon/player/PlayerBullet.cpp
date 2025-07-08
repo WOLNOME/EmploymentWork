@@ -100,6 +100,7 @@ void PlayerBullet::SetInitParam(const Vector3& _initPos, const Vector3& _initDir
 	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	isDead_ = false;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	trail_->ClearPositions();
 }
 
 void PlayerBullet::Move() {

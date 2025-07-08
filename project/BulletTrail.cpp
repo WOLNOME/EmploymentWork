@@ -4,10 +4,6 @@
 #include "MainRender.h"
 #include "GPUDescriptorManager.h"
 #include "BaseCamera.h"
-#include <algorithm>
-
-#undef min
-#undef max
 
 BulletTrail::BulletTrail() {
 }
@@ -26,90 +22,113 @@ void BulletTrail::Initialize(const std::string& name) {
 	BulletTrailManager::GetInstance()->RegisterBulletTrail(name_, this);
 }
 
+void BulletTrail::ClearPositions() {
+	positions_.clear();
+}
+
 void BulletTrail::Update() {
-	//頂点データとインデックスデータをクリア
+	// 頂点・インデックスバッファをクリア
 	memset(resource_.vertexData, 0, sizeof(VertexData) * kMaxVertexNum_);
 	memset(resource_.indexData, 0, sizeof(uint32_t) * kMaxVertexNum_ * 3);
 	indexCount_ = 0;
-	//入力座標数が1以下なら抜ける
+
+	// 1. トレール寿命処理
+	for (auto it = positions_.begin(); it != positions_.end(); ) {
+		it->second++; // カウント進行
+		if (verLength_ - it->second * lengthDecayValue_ <= 0.0f) {
+			it = positions_.erase(it); // 寿命超えたら削除
+		}
+		else {
+			++it;
+		}
+	}
+
+	// 2. 描画対象が1つ以下なら抜ける
 	if (positions_.size() <= 1) return;
 
-	//頂点の生成処理
+	// 3. 頂点生成
 	std::list<Vector3> vertices;
-	int posCount = 0;
-	for (auto it = positions_.begin(); it != positions_.end(); ) {
-		Vector3 direction = {};
-		if (it == positions_.begin()) {
-			direction = Vector3(*std::next(it) - *it).Normalized();
-		}
-		else {
-			direction = Vector3(*it - *std::prev(it)).Normalized();
-		}
+	Vector3 prevPos;
 
-		float verLength = 1.0f - (positions_.size() - (posCount + 1)) * widthDecayValue_;
-		if (verLength > 0.0f) {
-			Vector3 worldUp = { 0.0f, 1.0f, 0.0f };
-			Vector3 right = MyMath::Cross(worldUp, direction).Normalized();
-			Vector3 up = MyMath::Cross(direction, right).Normalized();
-
-			Vector3 pos = *it;
-			vertices.push_back(pos + right * verLength + up * verLength);
-			vertices.push_back(pos - right * verLength + up * verLength);
-			vertices.push_back(pos + right * verLength - up * verLength);
-			vertices.push_back(pos - right * verLength - up * verLength);
-
-			++it;
-			++posCount;
+	bool isFirst = true;
+	for (const auto& [pos, count] : positions_) {
+		// 向き計算
+		Vector3 direction;
+		if (isFirst) {
+			prevPos = pos;
+			isFirst = false;
+			continue; // 初回は次の座標が必要なのでスキップ
 		}
-		else {
-			it = positions_.erase(it);
-		}
+		direction = (pos - prevPos).Normalized();
+		prevPos = pos;
+
+		// 幅計算
+		float verLength = verLength_ - count * lengthDecayValue_;
+		if (verLength <= 0.0f) continue;
+
+		// 軸計算
+		Vector3 worldUp = { 0.0f, 1.0f, 0.0f };
+		Vector3 right = MyMath::Cross(worldUp, direction).Normalized();
+		Vector3 up = MyMath::Cross(direction, right).Normalized();
+
+		// 頂点追加
+		vertices.push_back(pos + right * verLength + up * verLength);  // RT
+		vertices.push_back(pos - right * verLength + up * verLength);  // LT
+		vertices.push_back(pos + right * verLength - up * verLength);  // RB
+		vertices.push_back(pos - right * verLength - up * verLength);  // LB
 	}
 
-
-	//頂点データの移送
-	int index = 0;
-	for (const auto& vertex : vertices) {
-		resource_.vertexData[index].position = Vector4(vertex.x, vertex.y, vertex.z, 1.0f);
-		resource_.vertexData[index].texCoord = Vector2(0.0f, 0.0f);
-		index++;
+	// 4. 頂点データの転送
+	int vtxIdx = 0;
+	for (const auto& vtx : vertices) {
+		resource_.vertexData[vtxIdx].position = Vector4(vtx.x, vtx.y, vtx.z, 1.0f);
+		resource_.vertexData[vtxIdx].texCoord = Vector2(0.0f, 0.0f); // 必要なら後で調整
+		++vtxIdx;
 	}
 
-	//インデックスデータの構築
-	int sectionCount = positions_.size() - 1;
+	// 5. インデックス構築
+	const int sectionCount = static_cast<int>(vertices.size() / 4 - 1);
+	if (sectionCount <= 0) return;
+
 	indexCount_ = sectionCount * 6 * 4 + 6 * 2;
 	int idx = 0;
+	auto AddTriangle = [&](int a, int b, int c) {
+		resource_.indexData[idx++] = a;
+		resource_.indexData[idx++] = b;
+		resource_.indexData[idx++] = c;
+		};
+
 	for (int i = 0; i < sectionCount; ++i) {
 		int vi = i * 4;
+		int ni = vi + 4;
 
 		// 上面
-		resource_.indexData[idx++] = vi;
-		resource_.indexData[idx++] = vi + 4;
-		resource_.indexData[idx++] = vi + 1;
-
-		resource_.indexData[idx++] = vi + 1;
-		resource_.indexData[idx++] = vi + 4;
-		resource_.indexData[idx++] = vi + 5;
+		AddTriangle(vi, ni, vi + 1);
+		AddTriangle(vi + 1, ni, ni + 1);
 
 		// 右面
-
-
+		AddTriangle(vi, vi + 2, ni);
+		AddTriangle(ni, vi + 2, ni + 2);
 
 		// 下面
-		resource_.indexData[idx++] = vi + 2;
-		resource_.indexData[idx++] = vi + 3;
-		resource_.indexData[idx++] = vi + 6;
-
-		resource_.indexData[idx++] = vi + 3;
-		resource_.indexData[idx++] = vi + 7;
-		resource_.indexData[idx++] = vi + 6;
+		AddTriangle(vi + 2, vi + 3, ni + 2);
+		AddTriangle(vi + 3, ni + 3, ni + 2);
 
 		// 左面
+		AddTriangle(vi + 1, ni + 1, vi + 3);
+		AddTriangle(vi + 3, ni + 1, ni + 3);
 
-
-
+		// 前キャップ
+		if (i == 0) {
+			AddTriangle(vi, vi + 1, vi + 2);
+			AddTriangle(vi + 2, vi + 1, vi + 3);
+		}
+		// 後キャップ
+		else if (i == sectionCount - 1) {
+			AddTriangle(ni, ni + 2, ni + 1);
+			AddTriangle(ni + 1, ni + 2, ni + 3);
+		}
 	}
-
 }
 
 void BulletTrail::Draw(BaseCamera* _camera) {
@@ -125,6 +144,11 @@ void BulletTrail::Draw(BaseCamera* _camera) {
 	//ドローコール
 	MainRender::GetInstance()->GetCommandList()->DrawIndexedInstanced(indexCount_, 1, 0, 0, 0);
 
+}
+
+void BulletTrail::SetPosition(const Vector3& _position) {
+	//座標をセット
+	positions_.push_back(std::make_pair(_position, 0));
 }
 
 BulletTrail::BulletTrailResource BulletTrail::CreateBulletTrailResource() {

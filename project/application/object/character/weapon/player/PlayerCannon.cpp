@@ -121,6 +121,7 @@ void PlayerCannon::SetInitParam(const Vector3& _initPos, const Vector3& _initDir
 	SetCollisionAttribute(CollisionAttribute::PlayerCannon);
 	isDead_ = false;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	trail_->ClearPositions();
 }
 
 void PlayerCannon::Move() {
