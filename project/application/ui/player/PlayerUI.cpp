@@ -1,12 +1,15 @@
 #include "PlayerUI.h"
-#include "WinApp.h"
-#include "TextureManager.h"
-#include "SpriteManager.h"
+#include <WinApp.h>
+#include <TextureManager.h>
+#include <SpriteManager.h>
+#include <GameCamera.h>
+
 #include <random>
 #include <cassert>
 
 //アプリケーション
-#include "application/object/character/player/Player.h"
+#include <application/object/character/player/Player.h>
+#include <application/object/character/enemy/manager/EnemyManager.h>
 
 void PlayerUI::Initialize() {
 	//パラメータ読み込み
@@ -70,13 +73,21 @@ void PlayerUI::Initialize() {
 		}
 		spriteBullet_[1]->SetSize({ spriteBullet_[0]->GetSize() });
 	}
-
-
+	{
+		//レーダーUIの初期化
+		radar_ = std::make_unique<Radar>();
+		radar_->Initialize();
+	}
 }
 
 void PlayerUI::Update() {
 	//playerが読み込まれていなかったらassert
 	assert(player_ != nullptr && "PlayerUIにPlayerインスタンスを渡してください");
+	//enemyManagerが読み込まれていなかったらassert
+	assert(enemyManager_ != nullptr && "PlayerUIにEnemyManagerインスタンスを渡してください");
+
+	//レーダーUIの更新
+	radar_->Update();
 
 	//緑HPバーのサイズをプレイヤーのHPに合わせる
 	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
@@ -124,6 +135,22 @@ void PlayerUI::DebugWithImGui() {
 #ifdef _DEBUG
 
 #endif //_DEBUG
+}
+
+void PlayerUI::SetPlayer(Player* _player) {
+	player_ = _player;
+	//レーダーUIにも渡す
+	radar_->SetPlayer(player_);
+}
+
+void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
+	enemyManager_ = _enemyManager;
+	//レーダーUIにも渡す
+	radar_->SetEnemyManager(enemyManager_);
+}
+
+void PlayerUI::SetCamera(GameCamera* _camera) {
+	camera_ = _camera;
 }
 
 void PlayerUI::DamageBlinking() {

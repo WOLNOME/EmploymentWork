@@ -59,6 +59,7 @@ void GamePlayScene::Initialize() {
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	playerUI_->SetPlayer(player_.get());
+	playerUI_->SetEnemyManager(enemyManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
 }

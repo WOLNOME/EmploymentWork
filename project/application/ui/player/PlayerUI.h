@@ -1,11 +1,14 @@
 #pragma once
-#include "GameCamera.h"
-#include "Sprite.h"
-#include "JsonUtil.h"
+#include <Sprite.h>
+#include <JsonUtil.h>
+#include <Radar.h>
+
 #include <array>
 #include <cstdint>
 
 class Player;
+class EnemyManager;
+class GameCamera;
 class PlayerUI {
 public:
 	//初期化
@@ -17,8 +20,9 @@ public:
 	void DebugWithImGui();
 
 public://setter
-	void SetPlayer(Player* _player) { player_ = _player; }
-	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
+	void SetPlayer(Player* _player);
+	void SetEnemyManager(EnemyManager* _enemyManager);
+	void SetCamera(GameCamera* _camera);
 
 private://非公開メンバ関数
 	//点滅処理
@@ -27,6 +31,8 @@ private://非公開メンバ関数
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
+	//エネミーマネージャー
+	EnemyManager* enemyManager_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
 private:
@@ -45,6 +51,8 @@ private:
 	//銃弾UI
 	std::array<uint32_t, 2> thBullet_;
 	std::array<std::unique_ptr<Sprite>, 2> spriteBullet_;
+	//レーダーUI
+	std::unique_ptr<Radar> radar_ = nullptr;
 
 
 private://メンバ変数
