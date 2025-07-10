@@ -124,6 +124,7 @@ void PlayerUI::Update() {
 			spriteCannon_[i]->SetShakeOffset(offset);
 			spriteBullet_[i]->SetShakeOffset(offset);
 		}
+		radar_->AttachShake(offset);
 	}
 
 	//ダメージによる点滅処理
@@ -151,6 +152,8 @@ void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
 
 void PlayerUI::SetCamera(GameCamera* _camera) {
 	camera_ = _camera;
+	//レーダーUIにも渡す
+	radar_->SetCamera(camera_);
 }
 
 void PlayerUI::DamageBlinking() {
@@ -162,6 +165,8 @@ void PlayerUI::DamageBlinking() {
 			spriteCannon_[i]->SetColor(color);
 			spriteBullet_[i]->SetColor(color);
 		}
+		//レーダーUIにも色の変化を適用
+		radar_->AttachBlinking(color);
 		};
 
 	//被弾開始時に点滅開始

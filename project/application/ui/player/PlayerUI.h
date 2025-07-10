@@ -1,10 +1,12 @@
 #pragma once
 #include <Sprite.h>
 #include <JsonUtil.h>
-#include <Radar.h>
 
 #include <array>
 #include <cstdint>
+
+//アプリケーション
+#include <application/ui/player/detail/Radar.h>
 
 class Player;
 class EnemyManager;
