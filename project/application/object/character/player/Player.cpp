@@ -105,12 +105,27 @@ void Player::DebugWithImGui() {
 	
 }
 
-void Player::OnCollision(CollisionAttribute attribute) {
+void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//敵に当たった場合
-	case CollisionAttribute::Enemy:
+	case CollisionAttribute::Enemy: {
+		//HPを減らす
+		hp_ -= 10;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP_);
+		//カメラシェイクを入れる
+		camera_->RegistShake(0.4f, 0.8f);
+
+		//ダメージヒット
+		isDamage_ = true;
+
+		//相手の座標の方向と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
+		velocity_ += reflectVec * velocity_.Length() * 1.5f;
+
 		break;
+	}
 		//敵キャノンに当たった場合
 	case CollisionAttribute::EnemyCannon:
 		//HPを減らす

@@ -20,7 +20,7 @@ public:
 	virtual ~Collider() = default;
 
 	//当たり判定時の処理
-	virtual void OnCollision(CollisionAttribute attribute) = 0;
+	virtual void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) = 0;
 
 	//デバッグ専用処理
 	virtual void DebugWithImGui();

@@ -58,12 +58,22 @@ void IBaseEnemy::SetPosition(const Vector3& _pos) {
 	object3d_->worldTransform.translate = _pos;
 }
 
-void IBaseEnemy::OnCollision(CollisionAttribute attribute) {
+void IBaseEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
-	case CollisionAttribute::Player:
+	case CollisionAttribute::Player: {
+		//HPを減らす
+		hp_ -= 1;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP_);
+
+		//相手の座標の方向と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
+		velocity_ += reflectVec * 10.0f;
+
 		break;
+	}
 		//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };

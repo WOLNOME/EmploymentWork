@@ -41,9 +41,9 @@ void Canota::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Canota::OnCollision(CollisionAttribute attribute) {
+void Canota::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
-	IBaseEnemy::OnCollision(attribute);
+	IBaseEnemy::OnCollision(attribute,subjectPos);
 }
 
 void Canota::Attack() {

@@ -95,8 +95,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 
 			// 衝突時コールバックを呼び出す
-			colliderA->OnCollision(attrB);
-			colliderB->OnCollision(attrA);
+			colliderA->OnCollision(attrB,colliderB->GetWorldPosition());
+			colliderB->OnCollision(attrA, colliderA->GetWorldPosition());
 		}
 		};
 

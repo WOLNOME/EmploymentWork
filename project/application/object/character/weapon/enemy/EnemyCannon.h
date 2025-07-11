@@ -5,6 +5,7 @@
 #include "Object3d.h"
 #include "Particle.h"
 #include "JsonUtil.h"
+#include <Vector3.h>
 #include <memory>
 
 
@@ -25,7 +26,7 @@ public:
 	void DebugWithImGui() override;
 
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute) override;
+	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
 public://setter
 	/// 最初にセットするパラメーター

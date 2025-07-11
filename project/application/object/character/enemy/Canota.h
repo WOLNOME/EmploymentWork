@@ -2,6 +2,7 @@
 #include "application/object/character/enemy/base/IBaseEnemy.h"
 #include "MyMath.h"
 #include "Particle.h"
+#include <Vector3.h>
 #include <memory>
 
 class Player;
@@ -25,7 +26,7 @@ public:
 
 private:
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute) override;
+	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
 public://getter
 	bool GetIsCannonFire() const { return isCannonFire_; }

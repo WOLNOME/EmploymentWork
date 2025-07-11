@@ -72,7 +72,7 @@ void PlayerCannon::DebugWithImGui() {
 
 }
 
-void PlayerCannon::OnCollision(CollisionAttribute attribute) {
+void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//敵に当たった場合

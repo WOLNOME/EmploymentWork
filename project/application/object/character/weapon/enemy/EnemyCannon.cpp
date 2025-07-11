@@ -60,7 +60,7 @@ void EnemyCannon::DebugWithImGui() {
 
 }
 
-void EnemyCannon::OnCollision(CollisionAttribute attribute) {
+void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合

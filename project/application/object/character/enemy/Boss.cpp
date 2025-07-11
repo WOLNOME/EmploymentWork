@@ -48,9 +48,9 @@ void Boss::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Boss::OnCollision(CollisionAttribute attribute) {
+void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
-	IBaseEnemy::OnCollision(attribute);
+	IBaseEnemy::OnCollision(attribute,subjectPos);
 }
 
 void Boss::Attack() {

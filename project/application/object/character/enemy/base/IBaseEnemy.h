@@ -2,6 +2,7 @@
 #include "application/object/character/base/BaseCharacter.h"
 #include "Particle.h"
 #include "JsonUtil.h"
+#include <Vector3.h>
 #include <memory>
 
 class Player;
@@ -33,7 +34,7 @@ public://setter
 
 protected:
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute) override;
+	void OnCollision(CollisionAttribute attribute,const Vector3& subjectPos) override;
 
 private:
 	//移動

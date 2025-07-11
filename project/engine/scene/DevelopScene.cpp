@@ -2,7 +2,6 @@
 #include "SceneManager.h"
 #include <numbers>
 
-
 void DevelopScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
