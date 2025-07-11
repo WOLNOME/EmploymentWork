@@ -156,10 +156,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\2d\ImGuiManager.cpp" />
     <ClCompile Include="engine\base\Framework.cpp" />
     <ClCompile Include="engine\util\JsonUtil.cpp" />
-    <ClCompile Include="engine\scene\GamePlayScene.cpp" />
+    <ClCompile Include="application\scene\GamePlayScene.cpp" />
     <ClCompile Include="application\object\environment\Ground.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
-    <ClCompile Include="engine\scene\GameOverScene.cpp" />
+    <ClCompile Include="application\scene\GameOverScene.cpp" />
     <ClCompile Include="application\object\character\enemy\base\IBaseEnemy.cpp" />
     <ClCompile Include="engine\3d\LineManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -257,10 +257,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\math\MyMath.h" />
     <ClInclude Include="engine\base\MainRender.h" />
     <ClInclude Include="engine\3d\ModelFormat.h" />
-    <ClInclude Include="engine\scene\GamePlayScene.h" />
+    <ClInclude Include="application\scene\GamePlayScene.h" />
     <ClInclude Include="application\object\environment\Ground.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
-    <ClInclude Include="engine\scene\GameOverScene.h" />
+    <ClInclude Include="application\scene\GameOverScene.h" />
     <ClInclude Include="application\object\character\enemy\base\IBaseEnemy.h" />
     <ClInclude Include="engine\3d\LineManager.h" />
     <ClInclude Include="MyGame.h" />

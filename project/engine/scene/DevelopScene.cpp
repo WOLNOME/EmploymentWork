@@ -30,12 +30,13 @@ void DevelopScene::Initialize() {
 	sceneLight_->SetLight(pointLight2.get());
 	sceneLight_->SetLight(spotLight.get());
 
-	//ゲームシーン変数の初期化
+	//シーン変数の初期化
 	sprite_ = std::make_unique<Sprite>();
 	textureHandleSprite_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
 	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0, textureHandleSprite_);
 	sprite_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite_->SetFlipX(true);
+	sprite_->SetIsDisplay(false);
 
 	sprite2_ = std::make_unique<Sprite>();
 	textureHandleSprite2_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
@@ -43,12 +44,14 @@ void DevelopScene::Initialize() {
 	sprite2Position = { 100.0f,100.0f };
 	sprite2_->SetPosition(sprite2Position);
 	sprite2_->SetSize({ 300.0f,300.0f });
+	sprite2_->SetIsDisplay(false);
 
 	//スカイボックスの生成と初期化
 	textureHandleSkyBox_ = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
 	skyBox_ = std::make_unique<Object3d>();
 	skyBox_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("SkyBox"), Shape::ShapeKind::kSkyBox);
 	skyBox_->worldTransform.scale = { 300.0f,300.0f,300.0f };
+	skyBox_->SetTexture(textureHandleSkyBox_);
 
 	//3Dオブジェクトの生成と初期化
 	teapot_ = std::make_unique<Object3d>();

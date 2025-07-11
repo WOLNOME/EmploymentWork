@@ -36,22 +36,28 @@ void SpriteManager::BackDraw() {
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Back0)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 	//バックスプライト1の描画
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Back1)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 	//バックスプライト2の描画
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Back2)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 }
 
@@ -72,22 +78,28 @@ void SpriteManager::FrontDraw() {
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Front0)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 	//フロントスプライト1の描画
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Front1)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 	//フロントスプライト2の描画
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Front2)
-			//描画
-			sprite.second->Draw();
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
 	}
 }
 

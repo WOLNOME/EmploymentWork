@@ -1,8 +1,10 @@
 #include "SceneFactory.h"
 #include "DevelopScene.h"
-#include "GamePlayScene.h"
-#include "GameOverScene.h"
 #include "ParticleEditorScene.h"
+
+//アプリケーション
+#include <application/scene/GamePlayScene.h>
+#include <application/scene/GameOverScene.h>
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {

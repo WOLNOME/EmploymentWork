@@ -89,8 +89,10 @@ void AnimationModel::Draw(uint32_t materialRootParameterIndex, uint32_t textureR
 }
 
 void AnimationModel::SettingCSPreDraw() {
+	//CS前処理
+	Object3dManager::GetInstance()->SettingAnimationCS();	//Cルートシグネチャ&Cグラフィックスパイプラインの設定
+	GPUDescriptorManager::GetInstance()->SetDescriptorHeap(MainRender::GetInstance()->GetCommandList());	//デスクリプタヒープの設定
 	//コンピュートシェーダーへの転送
-	Object3dManager::GetInstance()->SettingAnimationCS();
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(0, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.paletteSrvIndex));
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.inputVertexSrvIndex));
 	MainRender::GetInstance()->GetCommandList()->SetComputeRootDescriptorTable(2, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(skinCluster_.influenceSrvIndex));
