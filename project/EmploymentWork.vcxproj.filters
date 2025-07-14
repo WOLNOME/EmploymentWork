@@ -137,9 +137,14 @@
     <ClCompile Include="engine\3d\LineManager.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
     <ClCompile Include="engine\3d\Object3dManager.cpp" />
-    <ClCompile Include="BulletTrail.cpp" />
-    <ClCompile Include="BulletTrailManager.cpp" />
+    <ClCompile Include="engine\3d\BulletTrail.cpp" />
+    <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
     <ClCompile Include="application\ui\player\detail\Radar.cpp" />
+    <ClCompile Include="application\object\character\enemy\state\IEnemyState.cpp" />
+    <ClCompile Include="application\object\character\enemy\state\EnemyPatrolState.cpp" />
+    <ClCompile Include="application\object\character\enemy\state\EnemyApproachState.cpp" />
+    <ClCompile Include="application\object\character\enemy\state\EnemyAttackState.cpp" />
+    <ClCompile Include="application\object\character\enemy\state\EnemyDeadState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -263,9 +268,14 @@
     <ClInclude Include="engine\3d\LineManager.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
     <ClInclude Include="engine\3d\Object3dManager.h" />
-    <ClInclude Include="BulletTrail.h" />
-    <ClInclude Include="BulletTrailManager.h" />
+    <ClInclude Include="engine\3d\BulletTrail.h" />
+    <ClInclude Include="engine\3d\BulletTrailManager.h" />
     <ClInclude Include="application\ui\player\detail\Radar.h" />
+    <ClInclude Include="application\object\character\enemy\state\IEnemyState.h" />
+    <ClInclude Include="application\object\character\enemy\state\EnemyPatrolState.h" />
+    <ClInclude Include="application\object\character\enemy\state\EnemyApproachState.h" />
+    <ClInclude Include="application\object\character\enemy\state\EnemyAttackState.h" />
+    <ClInclude Include="application\object\character\enemy\state\EnemyDeadState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />

@@ -5,6 +5,13 @@
 #include <Vector3.h>
 #include <memory>
 
+//アプリケーション
+#include "../state/IEnemyState.h"
+#include "../state/EnemyPatrolState.h"
+#include "../state/EnemyApproachState.h"
+#include "../state/EnemyAttackState.h"
+#include "../state/EnemyDeadState.h"
+
 class Player;
 class IBaseEnemy : public BaseCharacter {
 public:
@@ -25,6 +32,8 @@ public:
 	void DebugWithImGui() override;
 
 public://getter
+	Player* GetPlayer() { return player_; }
+	const json& GetParam() { return param_; }
 	int GetMaxHP() const { return maxHP_; }
 	int GetHP() const { return hp_; }
 
@@ -44,6 +53,15 @@ private:
 	//死亡処理
 	void DeadProcess();
 
+public://状態管理用関数
+	void ChangeState(IEnemyState* newState);
+
+	//各ステートへのアクセッサ
+	EnemyPatrolState* GetPatrolState() { return patrolState_; }
+	EnemyApproachState* GetApproachState() { return approachState_; }
+	EnemyAttackState* GetAttackState() { return attackState_; }
+	EnemyDeadState* GetDeadState() { return deadState_; }
+
 protected://借用インスタンス
 	Player* player_ = nullptr;
 
@@ -59,6 +77,15 @@ protected://メンバ変数
 	std::unique_ptr<Particle> deadParticle_ = nullptr;
 	float deadParticleOnTime_ = 0.5f;
 	float deadParticleOnTimer_ = 0.0f;
+
+private:
+	//状態管理用変数
+	IEnemyState* currentState_ = nullptr;
+
+	EnemyPatrolState* patrolState_;
+	EnemyApproachState* approachState_;
+	EnemyAttackState* attackState_;
+	EnemyDeadState* deadState_;
 
 };
 

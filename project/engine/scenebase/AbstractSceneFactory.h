@@ -3,8 +3,7 @@
 #include <string>
 
 //シーン工場
-class AbstractSceneFactory
-{
+class AbstractSceneFactory {
 public:
 	//仮想デストラクタ
 	virtual ~AbstractSceneFactory() = default;

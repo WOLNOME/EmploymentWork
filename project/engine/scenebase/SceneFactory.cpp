@@ -6,8 +6,7 @@
 #include <application/scene/GamePlayScene.h>
 #include <application/scene/GameOverScene.h>
 
-BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
-{
+BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	//次のシーンを生成
 	BaseScene* newScene = nullptr;
 

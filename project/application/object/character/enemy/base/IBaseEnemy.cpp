@@ -216,3 +216,13 @@ void IBaseEnemy::DeadProcess() {
 		SetDeadTimer(float(deadParticleOnTime_ + particleLifeTime));
 	}
 }
+
+void IBaseEnemy::ChangeState(IEnemyState* newState) {
+	if (currentState_) {
+		currentState_->Exit(this);
+	}
+	currentState_ = newState;
+	if (currentState_) {
+		currentState_->Enter(this);
+	}
+}
