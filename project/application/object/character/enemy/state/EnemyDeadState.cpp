@@ -1,9 +1,41 @@
 #include "EnemyDeadState.h"
 
+#include <MyMath.h>
+#include <ParticleManager.h>
+
+//アプリケーション
+#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/player/Player.h>
+
+EnemyDeadState::EnemyDeadState() {
+	//パーティクルの生成・初期化
+	particle_ = std::make_unique<Particle>();
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyDead"), "enemy_explosion");
+	particle_->emitter_.isPlay = false;
+	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	particle_->emitter_.effectStyle = Particle::EffectStyle::Loop;
+	particle_->emitter_.isGravity = true;
+	particle_->emitter_.gravity = -50.0f;
+	particle_->emitter_.isBound = true;
+	particle_->emitter_.floorHeight = 0.0f;
+}
+
 void EnemyDeadState::Enter(IBaseEnemy* enemy) {
 }
 
 void EnemyDeadState::Update(IBaseEnemy* enemy) {
+	particleOnTimer_ += kDeltaTime;
+	//死亡パーティクルをオン
+	particle_->emitter_.transform.translate = enemy->GetWorldPosition();
+	particle_->emitter_.isPlay = true;
+	//時間を超えたらオフにする
+	if (particleOnTimer_ > particleOnTime_) {
+		particle_->emitter_.isPlay = false;
+	}
+
+	//死亡タイマーをセット(設計上上書きされることはない)
+	float particleLifeTime = particle_->GetParam()["LifeTime"]["Max"];
+	enemy->SetDeadTimer(float(particleOnTime_ + particleLifeTime));
 }
 
 void EnemyDeadState::Exit(IBaseEnemy* enemy) {

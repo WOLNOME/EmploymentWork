@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
+#include <string>
 #include <memory>
 
 //アプリケーション
@@ -39,28 +40,13 @@ public://getter
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
-	void SetPosition(const Vector3& _pos);
 
 protected:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute,const Vector3& subjectPos) override;
 
-private:
-	//移動
-	void Move();
-	//回転
-	void Rotate();
-	//死亡処理
-	void DeadProcess();
-
 public://状態管理用関数
-	void ChangeState(IEnemyState* newState);
-
-	//各ステートへのアクセッサ
-	EnemyPatrolState* GetPatrolState() { return patrolState_; }
-	EnemyApproachState* GetApproachState() { return approachState_; }
-	EnemyAttackState* GetAttackState() { return attackState_; }
-	EnemyDeadState* GetDeadState() { return deadState_; }
+	void ChangeState(const std::string& stateName);
 
 protected://借用インスタンス
 	Player* player_ = nullptr;
@@ -72,11 +58,6 @@ protected://メンバ変数
 	//HP
 	int maxHP_;	//最大HP
 	int hp_;	//現在のHP
-
-	//パーティクル
-	std::unique_ptr<Particle> deadParticle_ = nullptr;
-	float deadParticleOnTime_ = 0.5f;
-	float deadParticleOnTimer_ = 0.0f;
 
 private:
 	//状態管理用変数

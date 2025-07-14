@@ -15,7 +15,7 @@ void EnemyManager::Initialize() {
 		canota = std::make_unique<Canota>();
 		canota->Initialize();
 		Vector3 initPos = { dist(gen),2.7f,dist(gen) };
-		canota->SetPosition(initPos);
+		canota->SetTranslate(initPos);
 		//登録
 		canotas_.push_back(std::move(canota));
 	}
@@ -25,7 +25,7 @@ void EnemyManager::Initialize() {
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
 		Vector3 initPos = { 0.0f, 4.5f, 400.0f };
-		boss->SetPosition(initPos);
+		boss->SetTranslate(initPos);
 		//登録
 		bosses_.push_back(std::move(boss));
 	}

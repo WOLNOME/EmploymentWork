@@ -6,5 +6,7 @@ public:
 	void Update(IBaseEnemy* enemy) override;
 	void Exit(IBaseEnemy* enemy) override;
 
+private:
+	void UpdateApproach(IBaseEnemy* enemy);
 };
 

@@ -34,9 +34,24 @@ public://getter
 	//死亡タイマーの取得
 	float GetDeadTimer() const { return deadTimer_; }
 
+	//速度の取得
+	const Vector3& GetVelocity() { return velocity_; }
+	//床の摩擦力の取得
+	float GetFloorFriction() const { return floorFriction_; }
+
 public://setter
+	//スケールのセット
+	void SetScale(const Vector3& scale) { object3d_->worldTransform.scale = scale; }
+	//回転のセット
+	void SetRotate(const Vector3& rotate) { object3d_->worldTransform.rotate = rotate; }
+	//平行移動のセット
+	void SetTranslate(const Vector3& translate) { object3d_->worldTransform.translate = translate; }
+
 	//死亡予約関数
 	void SetDeadTimer(float remainingSeconds);
+
+	//速度のセット
+	void SetVelocity(const Vector3& _velocity) { velocity_ = _velocity; }
 
 protected://オブジェクト
 	//テクスチャハンドル
