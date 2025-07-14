@@ -122,7 +122,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
 		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
-		velocity_ += reflectVec * velocity_.Length() * 1.5f;
+		velocity_.x += reflectVec.x * velocity_.Length() * 1.5f;
+		velocity_.z += reflectVec.z * velocity_.Length() * 1.5f;
 
 		break;
 	}

@@ -70,7 +70,17 @@ void IBaseEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjec
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
 		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
-		velocity_ += reflectVec * 10.0f;
+		velocity_.x += reflectVec.x * 50.0f;
+		velocity_.z += reflectVec.z * 50.0f;
+
+		break;
+	}
+		//エネミーに当たった場合
+	case CollisionAttribute::Enemy: {
+		//相手の座標と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
+		velocity_.x += reflectVec.x * 30.0f;
+		velocity_.z += reflectVec.z * 30.0f;
 
 		break;
 	}
@@ -98,6 +108,14 @@ void IBaseEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjec
 }
 
 void IBaseEnemy::Move() {
+	//摩擦力をかける
+	Vector3 frictionDir = -velocity_.Normalized();
+	Vector3 frictionAccel = frictionDir * floorFriction_;
+	velocity_ += frictionAccel * kDeltaTime;
+
+	//速度を加算
+	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
+
 	//もしプレイヤーが索敵範囲内にいないなら処理を行わない
 	float searchPlayerDistanceMove = param_["searchPlayerDistanceMove"];
 	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceMove) {
@@ -119,10 +137,6 @@ void IBaseEnemy::Move() {
 	//移動量を求める
 	float speed = param_["speed"];
 	velocity_ += dirToPlayer * speed;
-	//摩擦力をかける
-	Vector3 frictionDir = -velocity_.Normalized();
-	Vector3 frictionAccel = frictionDir * floorFriction_;
-	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限
 	float maxSpeed = param_["maxSpeed"];
@@ -135,8 +149,6 @@ void IBaseEnemy::Move() {
 		velocity_ = { 0.0f,0.0f,0.0f };
 	}
 
-	//速度を加算
-	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 }
 
 void IBaseEnemy::Rotate() {

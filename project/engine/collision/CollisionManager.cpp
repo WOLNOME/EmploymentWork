@@ -32,10 +32,6 @@ void CollisionManager::CheckCollision() {
 			// イテレーターBからコライダーBを取得する
 			Collider* colliderB = *itrB;
 			// 衝突フィルタリング
-			// 自分と同じ属性だと当たらない
-			if (colliderA->GetCollisionAttribute() == colliderB->GetCollisionAttribute()) {
-				continue;
-			}
 			// 自機と自弾
 			if (colliderA->GetCollisionAttribute() == CollisionAttribute::Player) {
 				if (colliderB->GetCollisionAttribute() == CollisionAttribute::PlayerCannon) {
