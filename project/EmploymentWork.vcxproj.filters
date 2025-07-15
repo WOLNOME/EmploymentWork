@@ -145,6 +145,7 @@
     <ClCompile Include="application\object\character\enemy\state\EnemyApproachState.cpp" />
     <ClCompile Include="application\object\character\enemy\state\EnemyAttackState.cpp" />
     <ClCompile Include="application\object\character\enemy\state\EnemyDeadState.cpp" />
+    <ClCompile Include="HitIndicator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -276,6 +277,7 @@
     <ClInclude Include="application\object\character\enemy\state\EnemyApproachState.h" />
     <ClInclude Include="application\object\character\enemy\state\EnemyAttackState.h" />
     <ClInclude Include="application\object\character\enemy\state\EnemyDeadState.h" />
+    <ClInclude Include="HitIndicator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
