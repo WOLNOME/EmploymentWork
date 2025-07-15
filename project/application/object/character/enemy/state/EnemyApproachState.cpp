@@ -34,7 +34,6 @@ void EnemyApproachState::Exit(IBaseEnemy* enemy) {
 }
 
 void EnemyApproachState::UpdateApproach(IBaseEnemy* enemy) {
-	
 	//プレイヤーへの方向を求める
 	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
 	//y座標は考慮しない

@@ -24,14 +24,14 @@ void IEnemyState::UpdateRotate(IBaseEnemy* enemy) {
 	Vector3 targetDir = dirToPlayer.Normalized();
 	//回転の差を求める(float型)
 	float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentDir.x, currentDir.z);
-	//もしこの角度がPIより大きい場合は2PI引き、PIより小さい場合は2PI足す
+	//angleを-pi~piでクランプする
 	if (angle > pi) {
 		angle -= 2 * pi;
 	}
 	else if (angle < -pi) {
 		angle += 2 * pi;
 	}
-	//もし、この角度の絶対値が回転スピードより小さい場合は、この角度をそのまま回転スピードとする
+	//回転スピードを決める
 	float usingRotateSpeed;
 	float rotateSpeed = enemy->GetParam()["rotateSpeed"];
 	if (std::abs(angle) < rotateSpeed * kDeltaTime) {

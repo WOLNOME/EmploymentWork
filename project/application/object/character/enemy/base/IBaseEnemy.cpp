@@ -7,17 +7,19 @@
 //アプリケーション
 #include "application/object/character/player/Player.h"
 
+IBaseEnemy::IBaseEnemy(bool _isUseCannon) {
+	//状態管理用変数の初期化
+	patrolState_ = std::make_unique<EnemyPatrolState>();
+	approachState_ = std::make_unique <EnemyApproachState>();
+	attackState_ = std::make_unique <EnemyAttackState>(_isUseCannon);
+	deadState_ = std::make_unique <EnemyDeadState>();
+	//初期ステートを決定
+	currentState_ = patrolState_.get();
+}
+
 void IBaseEnemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
-
-	//状態管理用変数の初期化
-	patrolState_ = new EnemyPatrolState();
-	approachState_ = new EnemyApproachState();
-	attackState_ = new EnemyAttackState();
-	deadState_ = new EnemyDeadState();
-	//初期ステートを決定
-	currentState_ = patrolState_;
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
@@ -101,16 +103,16 @@ void IBaseEnemy::ChangeState(const std::string& stateName) {
 	//新しい状態を決める
 	IEnemyState* newState = nullptr;
 	if (stateName == "Patrol") {
-		newState = patrolState_;
+		newState = patrolState_.get();
 	}
 	else if (stateName == "Approach") {
-		newState = approachState_;
+		newState = approachState_.get();
 	}
 	else if (stateName == "Attack") {
-		newState = attackState_;
+		newState = attackState_.get();
 	}
 	else if (stateName == "Dead") {
-		newState = deadState_;
+		newState = deadState_.get();
 	}
 	else {
 		assert(0 && "使用できない名前が使われています。");

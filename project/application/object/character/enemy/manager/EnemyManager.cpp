@@ -12,7 +12,7 @@ void EnemyManager::Initialize() {
 	//キャノ太の生成・初期化処理
 	for (int i = 0; i < numCanotas_; i++) {
 		std::unique_ptr<Canota> canota = nullptr;
-		canota = std::make_unique<Canota>();
+		canota = std::make_unique<Canota>(true);
 		canota->Initialize();
 		Vector3 initPos = { dist(gen),2.7f,dist(gen) };
 		canota->SetTranslate(initPos);
@@ -22,7 +22,7 @@ void EnemyManager::Initialize() {
 	//ボスの生成・初期化処理
 	for (int i = 0; i < numBosses_; i++) {
 		std::unique_ptr<Boss> boss = nullptr;
-		boss = std::make_unique<Boss>();
+		boss = std::make_unique<Boss>(true);
 		boss->Initialize();
 		Vector3 initPos = { 0.0f, 4.5f, 400.0f };
 		boss->SetTranslate(initPos);

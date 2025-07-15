@@ -16,6 +16,8 @@
 class Player;
 class IBaseEnemy : public BaseCharacter {
 public:
+	//コンストラクタ
+	IBaseEnemy(bool _isUseCannon);
 	// デストラクタ
 	~IBaseEnemy() override = default;
 	/// <summary>
@@ -38,12 +40,14 @@ public://getter
 	int GetMaxHP() const { return maxHP_; }
 	int GetHP() const { return hp_; }
 
+	EnemyAttackState* GetAttackState() const { return attackState_.get(); }
+
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
 
 protected:
 	//当たり判定処理
-	void OnCollision(CollisionAttribute attribute,const Vector3& subjectPos) override;
+	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
 public://状態管理用関数
 	void ChangeState(const std::string& stateName);
@@ -63,10 +67,10 @@ private:
 	//状態管理用変数
 	IEnemyState* currentState_ = nullptr;
 
-	EnemyPatrolState* patrolState_;
-	EnemyApproachState* approachState_;
-	EnemyAttackState* attackState_;
-	EnemyDeadState* deadState_;
+	std::unique_ptr<EnemyPatrolState> patrolState_;
+	std::unique_ptr<EnemyApproachState> approachState_;
+	std::unique_ptr<EnemyAttackState> attackState_;
+	std::unique_ptr<EnemyDeadState> deadState_;
 
 };
 

@@ -28,17 +28,12 @@ void Boss::Initialize() {
 	//パラメータの反映
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
-	cannonCoolTime_ = param_["cannonCoolTime"];
-	cannonCoolTimer_ = 0.0f;
-
 }
 
 void Boss::Update() {
 	//ベースエネミーの更新
 	IBaseEnemy::Update();
 
-	//攻撃
-	Attack();
 }
 
 void Boss::DebugWithImGui() {
@@ -53,33 +48,3 @@ void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 	IBaseEnemy::OnCollision(attribute,subjectPos);
 }
 
-void Boss::Attack() {
-	//死亡していたら処理を行わない
-	if (GetDeadTimer() > 0.0f || isDead_) return;
-
-	//クールタイム処理
-	if (cannonCoolTimer_ > 0.0f) {
-		cannonCoolTimer_ -= kDeltaTime;
-		//クールタイムがマイナスになったら0にする
-		if (cannonCoolTimer_ < 0.0f) {
-			cannonCoolTimer_ = 0.0f;
-		}
-		//砲弾を発射したフラグをオフ
-		isCannonFire_ = false;
-		//計算後はこの関数を抜ける
-		return;
-	}
-
-	//もしプレイヤーが索敵範囲内にいなければ処理を行わない。
-	float searchPlayerDistanceAttack = param_["searchPlayerDistanceAttack"];
-	if (player_->GetWorldTransform().translate.Distance(object3d_->worldTransform.translate) > searchPlayerDistanceAttack) {
-		return;
-	}
-	//未攻撃状態なら攻撃処理
-	if (!isCannonFire_) {
-		//砲弾を発射したフラグをオン
-		isCannonFire_ = true;
-		//クールタイムをセット
-		cannonCoolTimer_ = cannonCoolTime_;
-	}
-}

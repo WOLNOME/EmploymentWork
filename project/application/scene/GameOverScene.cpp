@@ -29,7 +29,6 @@ void GameOverScene::Initialize() {
 		spriteGameOverText_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	}
-
 }
 
 void GameOverScene::Finalize() {
@@ -43,9 +42,6 @@ void GameOverScene::Update() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		sceneManager_->SetNextScene("GamePlay");
 	}
-
-
-
 }
 
 void GameOverScene::DebugWithImGui() {

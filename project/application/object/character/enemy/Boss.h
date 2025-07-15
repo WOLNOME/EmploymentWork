@@ -8,6 +8,8 @@
 class Player;
 class Boss : public IBaseEnemy {
 public:
+	//コンストラクタ
+	Boss(bool _isUseCannon) : IBaseEnemy(_isUseCannon) {}
 	//デストラクタ
 	~Boss() override {};
 	/// <summary>
@@ -27,19 +29,5 @@ public:
 private:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
-
-public://getter
-	bool GetIsCannonFire() const { return isCannonFire_; }
-
-private://非公開関数
-	//攻撃
-	void Attack();
-
-private://メンバ変数
-	//砲弾攻撃
-	float cannonCoolTime_;
-	float cannonCoolTimer_;
-	bool isCannonFire_ = false;
-
 };
 
