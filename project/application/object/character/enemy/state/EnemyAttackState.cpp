@@ -45,6 +45,33 @@ void EnemyAttackState::UpdateAttack(IBaseEnemy* enemy) {
 		return;
 	}
 
+	//角度が一定以下出なければ弾を発射しない
+	{
+		//現在の向きを求める
+		Vector3 currentDir = {
+			std::sinf(enemy->GetWorldTransform().rotate.y),
+			0.0f,
+			std::cosf(enemy->GetWorldTransform().rotate.y)
+		};
+		currentDir.Normalize();
+		//目標ポイントへの方向を求める
+		Vector3 targetDir = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
+		targetDir.Normalize();
+		//回転の差を求める
+		float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentDir.x, currentDir.z);
+		//angleを-pi~piでクランプする
+		if (angle > pi) {
+			angle -= 2 * pi;
+		}
+		else if (angle < -pi) {
+			angle += 2 * pi;
+		}
+		//10度より大きかったら発射しない
+		if (std::abs(angle) > (1.0f / 18.0f) * pi) {
+			return;
+		}
+	}
+
 	//未攻撃状態なら攻撃処理
 	if (!isCannonFire_ && isUseCannon_) {
 		//砲弾を発射したフラグをオン
