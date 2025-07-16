@@ -54,11 +54,11 @@ void GamePlayScene::Initialize() {
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//その他インスタンスのセット
-	player_->SetPlayerUI(playerUI_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
+	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
 	playerUI_->SetPlayer(player_.get());
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());

@@ -8,7 +8,7 @@
 #include <Vector3.h>
 #include <memory>
 
-
+class PlayerUI;
 class EnemyCannon : public BaseCharacter {
 public:
 	//デストラクタ
@@ -31,7 +31,14 @@ public:
 public://setter
 	/// 最初にセットするパラメーター
 	void SetInitParam(const Vector3& _initPos, const Vector3& _targetPos);
+
+	//プレイヤーUIをセット
+	void SetPlayerUI(PlayerUI* _playerUI) { playerUI_ = _playerUI; }
+
 private:
+	//プレイヤーUI
+	PlayerUI* playerUI_ = nullptr;
+
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
 
@@ -42,6 +49,8 @@ private:
 	//パラメータ
 	json param_;
 
+	//生成された座標
+	Vector3 generatedPosition_ = {};
 
 };
 

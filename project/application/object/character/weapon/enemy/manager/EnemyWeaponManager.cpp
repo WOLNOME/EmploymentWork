@@ -37,6 +37,13 @@ void EnemyWeaponManager::DebugWithImGui() {
 #endif // _DEBUG
 }
 
+void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {
+	//砲弾全てに渡す
+	for (auto& cannon : cannons_) {
+		cannon->SetPlayerUI(_playerUI);
+	}
+}
+
 void EnemyWeaponManager::CreateCannon() {
 	//全てのエネミーを回す
 	for (auto& canota : enemyManager_->GetCanotas()) {

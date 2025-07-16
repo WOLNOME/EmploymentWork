@@ -1,11 +1,11 @@
 #pragma once
-#include <Sprite.h>
 #include <JsonUtil.h>
-
-#include <array>
-#include <cstdint>
-
 //アプリケーション
+#include "detail/ReticleUI.h"
+#include "detail/DecorativeUI.h"
+#include "detail/PlayerHPUI.h"
+#include "detail/CannonUI.h"
+#include "detail/BulletUI.h"
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
 
@@ -31,37 +31,31 @@ public://setter
 	void SetGameCamera(GameCamera* _camera);
 
 private://非公開メンバ関数
+	//シェイク処理
+	void DamageShaking();
 	//点滅処理
 	void DamageBlinking();
 
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
-	//エネミーマネージャー
-	EnemyManager* enemyManager_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
 private:
-	//2dレティクル
-	uint32_t th2dReticle_ = 0u;
-	std::unique_ptr<Sprite> sprite2dReticle_ = nullptr;
-	//FPSUI
-	uint32_t thFPSUI_ = 0u;
-	std::unique_ptr<Sprite> spriteFPSUI_ = nullptr;
+	//レティクルUI
+	std::unique_ptr<ReticleUI> reticleUI_ = nullptr;
+	//装飾用UI
+	std::unique_ptr<DecorativeUI> decorativeUI_ = nullptr;
 	//HPバー
-	std::array<uint32_t, 2> thHPBar_;
-	std::array<std::unique_ptr<Sprite>, 2> spriteHPBar_;
+	std::unique_ptr<PlayerHPUI> playerHPUI_ = nullptr;
 	//砲弾UI
-	std::array<uint32_t, 2> thCannon_;
-	std::array<std::unique_ptr<Sprite>, 2> spriteCannon_;
+	std::unique_ptr<CannonUI> cannonUI_ = nullptr;
 	//銃弾UI
-	std::array<uint32_t, 2> thBullet_;
-	std::array<std::unique_ptr<Sprite>, 2> spriteBullet_;
+	std::unique_ptr<BulletUI> bulletUI_ = nullptr;
 	//レーダーUI
 	std::unique_ptr<Radar> radar_ = nullptr;
 	//被弾インジケーターUI
 	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
-
 
 private://メンバ変数
 	//パラメーター

@@ -10,7 +10,6 @@
 #include <vector>
 #include <memory>
 
-class PlayerUI;
 class Player : public BaseCharacter {
 public:
 	//デストラクタ
@@ -62,8 +61,6 @@ public://getter
 
 public://setter
 	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
-	void SetPlayerUI(PlayerUI* _playerUI) { playerUI_ = _playerUI; }
-
 private://非公開関数
 	//回転
 	void Rotate();
@@ -84,9 +81,6 @@ private:
 	Input* input_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
-
-	//プレイヤーUI
-	PlayerUI* playerUI_ = nullptr;
 
 private:
 	//パラメータ

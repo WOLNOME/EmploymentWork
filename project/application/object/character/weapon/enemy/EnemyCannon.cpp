@@ -1,8 +1,11 @@
 #include "EnemyCannon.h"
-#include "TextureManager.h"
-#include "ImGuiManager.h"
-#include "ParticleManager.h"
-#include "Object3dManager.h"
+#include <TextureManager.h>
+#include <ImGuiManager.h>
+#include <ParticleManager.h>
+#include <Object3dManager.h>
+
+//アプリケーション
+#include <application/ui/player/PlayerUI.h>
 
 void EnemyCannon::Initialize() {
 	//ベースキャラクターの初期化
@@ -73,6 +76,8 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
 		//当たり判定属性をなしに
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//被弾インジケーターをつける
+		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
 
 		break;
 		//プレイヤー弾に当たった場合
@@ -107,6 +112,7 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
+	generatedPosition_ = _initPos;
 
 	//向きベクトルを算出
 	Vector3 targetVec = _targetPos - _initPos;

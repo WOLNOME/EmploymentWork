@@ -8,6 +8,7 @@
 
 class EnemyManager;
 class Player;
+class PlayerUI;
 class EnemyWeaponManager {
 public:
 	//初期化
@@ -29,6 +30,8 @@ public://setter
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
 	//プレイヤーセット
 	void SetPlayer(Player* _player) { player_ = _player; }
+	//プレイヤーUIセット
+	void SetPlayerUI(PlayerUI* _playerUI);
 
 private:
 	//砲弾の生成
