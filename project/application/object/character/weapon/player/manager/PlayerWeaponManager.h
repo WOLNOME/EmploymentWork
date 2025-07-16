@@ -27,7 +27,7 @@ public://getter
 
 public://setter
 	//カメラセット
-	void SetCamera(GameCamera* _camera) { camera_ = _camera; };
+	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; };
 	//プレイヤーセット
 	void SetPlayer(Player* _player) { player_ = _player; }
 

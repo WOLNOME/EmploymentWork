@@ -5,6 +5,7 @@
 #include <array>
 
 class Player;
+class GameCamera;
 class HitIndicator {
 private://構造体
 	struct IndicatorInfo {
@@ -22,13 +23,15 @@ public:
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
+	void SetGameCamera(GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
 
 private://借用インスタンス
 	Player* player_ = nullptr;
+	GameCamera* gameCamera_ = nullptr;
 private:
 	static const int kNumIndicators_ = 10;
 	std::array<IndicatorInfo, kNumIndicators_> indicators_;
 
-	const float maxActiveTime_ = 3.0f;
+	const float maxActiveTime_ = 1.0f;
 };
 

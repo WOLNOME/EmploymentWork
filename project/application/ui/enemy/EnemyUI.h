@@ -18,7 +18,7 @@ public:
 
 public://setter
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
-	void SetCamera(GameCamera* _camera) { camera_ = _camera; }
+	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
 private:
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;

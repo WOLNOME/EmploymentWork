@@ -4,6 +4,10 @@
 #include "TextureManager.h"
 #include "Object3dManager.h"
 #include <algorithm>
+#include <cassert>
+
+//アプリケーション
+#include <application/ui/player/PlayerUI.h>
 
 void Player::Initialize() {
 	//ベースキャラクターの初期化
@@ -45,6 +49,11 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
+	//プレイヤーUIがセットされていなければ警告
+	if (!playerUI_) {
+		assert(0 && "プレイヤーUIがセットされていません。");
+	}
+
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//ダメージ更新
@@ -135,6 +144,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.4f, 0.8f);
+		//被弾インジケーターをつける
+		playerUI_->GetHitIndicator()->RegistIndicator(subjectPos);
 
 		//ダメージヒット
 		isDamage_ = true;
@@ -148,6 +159,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.3f);
+		//被弾インジケーターをつける
+		playerUI_->GetHitIndicator()->RegistIndicator(subjectPos);
 
 		//ダメージヒット
 		isDamage_ = true;

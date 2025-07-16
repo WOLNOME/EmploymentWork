@@ -31,7 +31,7 @@ private://非公開メンバ関数
 	void UpdateCompass();
 
 public://setter
-	void SetCamera(BaseCamera* _caemra) { camera_ = _caemra; }
+	void SetGameCamera(BaseCamera* _caemra) { camera_ = _caemra; }
 	void SetPlayer(Player* _player) { player_ = _player; }
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
 

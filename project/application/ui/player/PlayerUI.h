@@ -6,7 +6,8 @@
 #include <cstdint>
 
 //アプリケーション
-#include <application/ui/player/detail/Radar.h>
+#include "detail/Radar.h"
+#include "detail/HitIndicator.h"
 
 class Player;
 class EnemyManager;
@@ -21,10 +22,13 @@ public:
 	//デバッグ用ImGui
 	void DebugWithImGui();
 
+public://getter
+	HitIndicator* GetHitIndicator() { return hitIndicator_.get(); }
+
 public://setter
 	void SetPlayer(Player* _player);
 	void SetEnemyManager(EnemyManager* _enemyManager);
-	void SetCamera(GameCamera* _camera);
+	void SetGameCamera(GameCamera* _camera);
 
 private://非公開メンバ関数
 	//点滅処理
@@ -55,6 +59,8 @@ private:
 	std::array<std::unique_ptr<Sprite>, 2> spriteBullet_;
 	//レーダーUI
 	std::unique_ptr<Radar> radar_ = nullptr;
+	//被弾インジケーターUI
+	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
 
 
 private://メンバ変数

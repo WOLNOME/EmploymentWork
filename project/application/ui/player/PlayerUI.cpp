@@ -78,6 +78,11 @@ void PlayerUI::Initialize() {
 		radar_ = std::make_unique<Radar>();
 		radar_->Initialize();
 	}
+	{
+		//被弾インジケーターUIの初期化
+		hitIndicator_ = std::make_unique<HitIndicator>();
+		hitIndicator_->Initialize();
+	}
 }
 
 void PlayerUI::Update() {
@@ -88,6 +93,8 @@ void PlayerUI::Update() {
 
 	//レーダーUIの更新
 	radar_->Update();
+	//被弾インジケーターUIの更新
+	hitIndicator_->Update();
 
 	//緑HPバーのサイズをプレイヤーのHPに合わせる
 	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
@@ -140,20 +147,24 @@ void PlayerUI::DebugWithImGui() {
 
 void PlayerUI::SetPlayer(Player* _player) {
 	player_ = _player;
-	//レーダーUIにも渡す
+	//レーダーUIに渡す
 	radar_->SetPlayer(player_);
+	//被弾インジケーターUIに渡す
+	hitIndicator_->SetPlayer(player_);
 }
 
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	enemyManager_ = _enemyManager;
-	//レーダーUIにも渡す
+	//レーダーUIに渡す
 	radar_->SetEnemyManager(enemyManager_);
 }
 
-void PlayerUI::SetCamera(GameCamera* _camera) {
+void PlayerUI::SetGameCamera(GameCamera* _camera) {
 	camera_ = _camera;
-	//レーダーUIにも渡す
-	radar_->SetCamera(camera_);
+	//レーダーUIに渡す
+	radar_->SetGameCamera(camera_);
+	//被弾インジケーターUIに渡す
+	hitIndicator_->SetGameCamera(camera_);
 }
 
 void PlayerUI::DamageBlinking() {

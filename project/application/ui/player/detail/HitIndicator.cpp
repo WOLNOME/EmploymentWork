@@ -2,6 +2,7 @@
 #include <WinApp.h>
 #include <TextureManager.h>
 #include <SpriteManager.h>
+#include <GameCamera.h>
 #include <MyMath.h>
 #include <cassert>
 
@@ -33,6 +34,10 @@ void HitIndicator::Update() {
 	if (!player_) {
 		assert(0 && "プレイヤーがセットされていません");
 	}
+	//ゲームカメラがセットされていなかったら警告
+	if (!gameCamera_) {
+		assert(0 && "ゲームカメラがセットされていません");
+	}
 
 	//インジケーターの更新処理
 	for (int i = 0; i < kNumIndicators_; i++) {
@@ -62,51 +67,47 @@ void HitIndicator::Update() {
 		float alpha = float(indicators_[i].currentTime_ / maxActiveTime_);
 		indicators_[i].sprite_->SetColor({ 1,1,1,alpha });
 
-		//スプライトの回転を決める
-		float rotation = 0.0f;
 		//使用する変数
-		Vector3 p=
+		Vector3 p = player_->GetWorldTransform().translate;	//プレイヤーの座標
+		Vector3 v1 = {
+			std::sinf(gameCamera_->worldTransform.rotate.y),
+			0.0f,
+			std::cosf(gameCamera_->worldTransform.rotate.y)
+		};	//カメラの向き
+		Vector3 v2 = indicators_[i].hitPosition_ - p;	//目標位置への方向
+		v2.y = 0.0f;
+		v2.Normalize();
 
-			被弾インジケーターの実装
+		//外積と内積から角度を求める
+		float dot = v1.Dot(v2);
+		float cross = v1.Cross(v2).y;
 
-			HitIndicatorクラスを作る
-			情報をまとめた構造体を作る。
+		//atan2で回転角を得る
+		float rotation = std::atan2f(cross, dot);
 
-			構造体の中身は
-			スプライト
-			現在時間
-			ヒットした弾の座標
-			有効かどうかのフラグ
-
-			max時間 = 3はメンバ変数に持たせる
-
-			この構造体をstd::array<, 10>で宣言し、
-			Initialize()で生成・初期化
-			Updateでの処理は
-			全ての配列を回し、その中の有効な要素のみ
-			現在時間をdeltaTimeで引いていく。
-			現在時間が0以下になったらスプライトを非表示、透明度を戻し、有効フラグを無効化して次の要素へ。
-
-			スプライトのα値を現在時間 / maxTimeでだんだん透明にしていく。
-			また、プレイヤーの正面ベクトルとヒットした弾の座標へのプレイヤーの座標を結ぶベクトルの角度によってスプライトのrotateを変化。
-
-			RegistIndicator関数を追加
-			引数にヒットしたときの弾の座標を入れる
-			要素を回して無効フラグのところに
-			スプライトを有効化
-			現在時間 = max時間
-			ヒットした弾の座標をセット
-			有効フラグを有効化にする。
-
-
-
-
-
-
-
+		//スプライトに適用
+		indicators_[i].sprite_->SetRotation(rotation);
 
 	}
 }
 
 void HitIndicator::RegistIndicator(const Vector3& _hitPosition) {
+	//全てのインジケーターを回す
+	for (int i = 0; i < kNumIndicators_; i++) {
+		//インジケーターが有効なら次へ
+		if (indicators_[i].isActive_) {
+			continue;
+		}
+
+		//衝突点を入れる
+		indicators_[i].hitPosition_ = _hitPosition;
+		//スプライトを表示
+		indicators_[i].sprite_->SetIsDisplay(true);
+		//現在時間をセット
+		indicators_[i].currentTime_ = maxActiveTime_;
+		//この要素を有効に
+		indicators_[i].isActive_ = true;
+
+		break;
+	}
 }

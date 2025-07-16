@@ -46,14 +46,15 @@ void GamePlayScene::Initialize() {
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
 	BulletTrailManager:
-	player_->SetCamera(camera_.get());
-	playerWeaponManager_->SetCamera(camera_.get());
-	playerUI_->SetCamera(camera_.get());
-	enemyUI_->SetCamera(camera_.get());
+	player_->SetGameCamera(camera_.get());
+	playerWeaponManager_->SetGameCamera(camera_.get());
+	playerUI_->SetGameCamera(camera_.get());
+	enemyUI_->SetGameCamera(camera_.get());
 	//ライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//その他インスタンスのセット
+	player_->SetPlayerUI(playerUI_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
