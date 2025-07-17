@@ -46,7 +46,7 @@ void DevelopScene::Initialize() {
 	sprite2_->SetIsDisplay(false);
 
 	//スカイボックスの生成と初期化
-	textureHandleSkyBox_ = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
+	textureHandleSkyBox_ = TextureManager::GetInstance()->LoadTexture("skybox.dds");
 	skyBox_ = std::make_unique<Object3d>();
 	skyBox_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("SkyBox"), Shape::ShapeKind::kSkyBox);
 	skyBox_->worldTransform.scale = { 300.0f,300.0f,300.0f };
