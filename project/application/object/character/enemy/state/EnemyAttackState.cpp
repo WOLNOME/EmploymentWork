@@ -39,8 +39,6 @@ void EnemyAttackState::UpdateAttack(IBaseEnemy* enemy) {
 		if (cannonCoolTimer_ < 0.0f) {
 			cannonCoolTimer_ = 0.0f;
 		}
-		//砲弾を発射したフラグをオフ
-		isCannonFire_ = false;
 		//クールタイム処理を終えたら関数を抜ける
 		return;
 	}

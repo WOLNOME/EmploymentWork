@@ -1,5 +1,4 @@
 #include "Canota.h"
-#include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <Object3dManager.h>
 
@@ -12,8 +11,6 @@ void Canota::Initialize() {
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Canota"), "enemy");
-	uint32_t environmentTextureHandle = TextureManager::GetInstance()->LoadTexture("skybox.dds");
-	object3d_->SetEnvironmentLightTextureHandle(environmentTextureHandle);
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/canota");

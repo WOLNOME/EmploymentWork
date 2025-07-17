@@ -10,6 +10,8 @@ public:
 
 public://getter
 	bool GetIsCannonFire() const { return isCannonFire_; }
+public://setter
+	void SetIsCannonFire(bool isCannonFire) { isCannonFire_ = isCannonFire; }
 
 private:
 	void UpdateAttack(IBaseEnemy* enemy);

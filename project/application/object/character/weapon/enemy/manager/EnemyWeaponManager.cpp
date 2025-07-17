@@ -48,7 +48,13 @@ void EnemyWeaponManager::CreateCannon() {
 	//全てのエネミーを回す
 	for (auto& canota : enemyManager_->GetCanotas()) {
 		//エネミーから発射フラグを取得
-		if (!canota->GetAttackState()->GetIsCannonFire()) continue;
+		if (!canota->GetAttackState()->GetIsCannonFire()) {
+			continue;
+		}
+		else {
+			//砲弾発射フラグを下げる
+			canota->GetAttackState()->SetIsCannonFire(false);
+		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
 			//砲弾が生きていたら次へ
@@ -66,7 +72,13 @@ void EnemyWeaponManager::CreateCannon() {
 	//全てのボスを回す
 	for (auto& boss : enemyManager_->GetBosses()) {
 		//ボスから発射フラグを取得
-		if (!boss->GetAttackState()->GetIsCannonFire()) continue;
+		if (!boss->GetAttackState()->GetIsCannonFire()) {
+			continue;
+		}
+		else {
+			//砲弾発射フラグを下げる
+			boss->GetAttackState()->SetIsCannonFire(false);
+		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
 			//砲弾が生きていたら次へ
