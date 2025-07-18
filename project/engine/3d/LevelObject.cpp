@@ -48,7 +48,25 @@ void LevelObject::ScanObjectData(json& object) {
 		//<!>コライダーは今はスキップ(システム考案中)
 
 		//オブジェクトリストに登録
-		objects_.push_back(std::move(addObject));
+		levelData_.objects.push_back(std::move(addObject));
+	}
+	//自キャラ発生ポイント
+	else if (type.compare("PlayerSpawn") == 0) {
+		PlayerSpawnData data;
+		
+		//トランスフォームパラメータの読み込み
+		json& transform = object["transform"];
+		//平行移動
+		data.translation.x = (float)transform["translation"][0];
+		data.translation.y = (float)transform["translation"][2];
+		data.translation.z = (float)transform["translation"][1];
+		//回転角
+		data.rotation.x = -(float)transform["rotation"][0];
+		data.rotation.y = -(float)transform["rotation"][2];
+		data.rotation.z = -(float)transform["rotation"][1];
+
+		//自キャラコンテナに登録
+		levelData_.players.push_back(data);
 	}
 
 	//子オブジェクトがある場合はその処理も行う(ペアレント処理は割愛→必要に応じて付け加える)
