@@ -22,7 +22,7 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("PARTICLEEDITOR");
+	SceneManager::GetInstance()->SetNextScene("GamePlay");
 
 	//パーティクルエディター→PARTICLEEDITOR
 	//開発用シーン→DEVELOP
