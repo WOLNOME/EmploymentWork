@@ -10,8 +10,6 @@
 #include <application/ui/player/PlayerUI.h>
 
 void Player::Initialize() {
-	//ベースキャラクターの初期化
-	BaseCharacter::Initialize();
 
 	//インプットの初期化
 	input_ = Input::GetInstance();

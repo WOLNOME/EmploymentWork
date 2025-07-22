@@ -30,6 +30,7 @@ void GamePlayScene::Initialize() {
 	enemyWeaponManager_ = std::make_unique<EnemyWeaponManager>();
 	playerUI_ = std::make_unique<PlayerUI>();
 	enemyUI_ = std::make_unique<EnemyUI>();
+	itemManager_ = std::make_unique<ItemManager>();
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
@@ -56,6 +57,7 @@ void GamePlayScene::Initialize() {
 	//その他インスタンスのセット
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->SetItemManager(itemManager_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
@@ -88,6 +90,7 @@ void GamePlayScene::Update() {
 	playerWeaponManager_->Update();
 	enemyWeaponManager_->Update();
 	enemyUI_->Update();
+	itemManager_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	camera_->Update();
@@ -110,6 +113,9 @@ void GamePlayScene::DebugWithImGui() {
 	playerUI_->DebugWithImGui();
 	//敵UIのImGui
 	enemyUI_->DebugWithImGui();
+	//アイテムマネージャーのImGui
+	itemManager_->DebugWithImGui();
+
 	//スプライトのデバッグ
 	//SpriteManager::GetInstance()->DebugWithImGui();
 

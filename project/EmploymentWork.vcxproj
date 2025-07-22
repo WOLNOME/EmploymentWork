@@ -172,6 +172,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\LineManager.cpp" />
     <ClCompile Include="application\object\character\enemy\state\IEnemyState.cpp" />
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp" />
+    <ClCompile Include="application\object\character\item\Item.cpp" />
+    <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
@@ -285,6 +287,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\LineManager.h" />
     <ClInclude Include="application\object\character\enemy\state\IEnemyState.h" />
     <ClInclude Include="application\ui\player\detail\HitIndicator.h" />
+    <ClInclude Include="application\object\character\item\Item.h" />
+    <ClInclude Include="application\object\character\item\manager\ItemManager.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />

@@ -160,7 +160,77 @@ Shape::ShapeResource Shape::MakeSphereResource() {
 
 Shape::ShapeResource Shape::MakeCubeResource() {
 	ShapeResource resource;
+	auto dxCommon = DirectXCommon::GetInstance();
 
+	// 頂点数（6面 × 2三角形 × 3頂点 = 36）
+	resource.vertexNum = 36;
+
+	// バッファ作成
+	size_t vbSize = sizeof(VertexData) * resource.vertexNum;
+	resource.vertexResource = dxCommon->CreateBufferResource(vbSize);
+	resource.materialResource = dxCommon->CreateBufferResource(sizeof(Material));
+
+	// バッファビュー設定
+	resource.vertexBufferView = {
+		resource.vertexResource->GetGPUVirtualAddress(),
+		static_cast<UINT>(vbSize),
+		sizeof(VertexData)
+	};
+
+	// マッピング
+	resource.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&resource.vertexData));
+	resource.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&resource.materialData));
+
+	// 頂点定義（各面に法線を設定）
+	static const Vector4 kPositions[36] = {
+		// +X面（右）→ CCW
+		{1,1,-1,1}, {1,1,1,1}, {1,-1,1,1},
+		{1,1,-1,1}, {1,-1,1,1}, {1,-1,-1,1},
+
+		// -X面（左）→ CCW
+		{-1,1,1,1}, {-1,1,-1,1}, {-1,-1,-1,1},
+		{-1,1,1,1}, {-1,-1,-1,1}, {-1,-1,1,1},
+
+		// +Z面（前）→ CCW
+		{1,1,1,1}, {-1,1,1,1}, {-1,-1,1,1},
+		{1,1,1,1}, {-1,-1,1,1}, {1,-1,1,1},
+
+		// -Z面（後）→ CCW
+		{-1,1,-1,1}, {1,1,-1,1}, {1,-1,-1,1},
+		{-1,1,-1,1}, {1,-1,-1,1}, {-1,-1,-1,1},
+
+		// +Y面（上）→ CCW
+		{-1,1,1,1}, {1,1,-1,1}, {-1,1,-1,1},
+		{-1,1,1,1}, {1,1,1,1}, {1,1,-1,1},
+
+		// -Y面（下）→ CCW
+		{1,-1,1,1}, {-1,-1,-1,1}, {1,-1,-1,1},
+		{1,-1,1,1}, {-1,-1,1,1}, {-1,-1,-1,1},
+	};
+
+	static const Vector3 kNormals[6] = {
+		{1, 0, 0},   // +X
+		{-1, 0, 0},  // -X
+		{0, 0, 1},   // +Z
+		{0, 0, -1},  // -Z
+		{0, 1, 0},   // +Y
+		{0, -1, 0},  // -Y
+	};
+
+	for (int i = 0; i < 36; ++i) {
+		resource.vertexData[i].position = kPositions[i];
+		resource.vertexData[i].texcoord = { 0.0f, 0.0f };
+
+		// 法線（各6頂点ずつ同じ面）
+		int face = i / 6;
+		resource.vertexData[i].normal = kNormals[face];
+	}
+
+	// マテリアル設定
+	resource.materialData->color = { 1,1,1,1 };
+	resource.materialData->isTexture = false;
+	resource.materialData->shininess = 32.0f;
+	resource.materialData->uvTransform = MyMath::MakeIdentity4x4();
 	return resource;
 }
 

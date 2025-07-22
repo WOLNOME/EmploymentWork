@@ -7,6 +7,7 @@
 #include "application/object/character/enemy/Boss.h"
 
 class Player;
+class ItemManager;
 class EnemyManager {
 public:
 	//初期化
@@ -26,10 +27,14 @@ public://getter
 public://setter
 	//プレイヤーセット
 	void SetPlayer(Player* _player);
+	//アイテムマネージャーセット
+	void SetItemManager(ItemManager* _itemManager);
 
 private:
 	//プレイヤー
 	Player* player_ = nullptr;
+	//アイテムマネージャー
+	ItemManager* itemManager_ = nullptr;
 
 private:
 	//キャノ太のコンテナ

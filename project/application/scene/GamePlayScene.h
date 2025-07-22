@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseScene.h"
 #include "GameCamera.h"
+
+//アプリケーション
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
 #include "application/object/character/player/Player.h"
@@ -9,6 +11,8 @@
 #include "application/object/character/enemy/manager/EnemyManager.h"
 #include "application/object/character/weapon/enemy/manager/EnemyWeaponManager.h"
 #include "application/ui/enemy/EnemyUI.h"
+#include <application/object/character/item/manager/ItemManager.h>
+
 
 
 class GamePlayScene : public BaseScene {
@@ -53,6 +57,9 @@ private://オブジェクト
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
 	//敵武器マネージャー
 	std::unique_ptr<EnemyWeaponManager> enemyWeaponManager_ = nullptr;
+
+	//アイテムマネージャー
+	std::unique_ptr<ItemManager> itemManager_ = nullptr;
 
 private://UI
 	//プレイヤーUI

@@ -14,6 +14,7 @@
 #include "../state/EnemyDeadState.h"
 
 class Player;
+class ItemManager;
 class IBaseEnemy : public BaseCharacter {
 public:
 	//コンストラクタ
@@ -23,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize() override;
+	void Initialize();
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -44,6 +45,7 @@ public://getter
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
+	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
 
 protected:
 	//当たり判定処理
@@ -54,6 +56,7 @@ public://状態管理用関数
 
 protected://借用インスタンス
 	Player* player_ = nullptr;
+	ItemManager* itemManager_ = nullptr;
 
 protected://メンバ変数
 	//パラメーター

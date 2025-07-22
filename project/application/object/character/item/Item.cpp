@@ -1,0 +1,134 @@
+#include "Item.h"
+#include <TextureManager.h>
+#include <Object3dManager.h>
+#include <random>
+
+void Item::Initialize(const Vector3& _initPos) {
+	//当たり判定の形状を設定
+	collisionShapeKind_ = CollisionShapeKind::OBB;
+	//オブジェクトを生成・初期化
+	object3d_ = std::make_unique<Object3d>();
+	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item"), Shape::ShapeKind::kCube);
+	object3d_->worldTransform.translate = _initPos;
+	object3d_->worldTransform.translate.y = height_;
+
+	//確率でアイテムの種類を決定
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int> dist(0, 3);
+	int itemType = dist(mt);	//0~3の整数をランダムに生成
+	//アイテムの種類を設定
+	uint32_t textureHandle = 0u;
+	switch (itemType) {
+	case 0:
+		//回復アイテム
+		SetCollisionAttribute(CollisionAttribute::Item_Heal);
+
+		//オブジェクトのテクスチャを設定
+		textureHandle = TextureManager::GetInstance()->LoadTexture("green.png");
+		object3d_->SetTexture(textureHandle);
+
+		break;
+
+	case 1:
+		//リロード速度アップアイテム
+		SetCollisionAttribute(CollisionAttribute::Item_ReloadSpeedUp);
+
+		//オブジェクトのテクスチャを設定
+		textureHandle = TextureManager::GetInstance()->LoadTexture("red.png");
+		object3d_->SetTexture(textureHandle);
+
+		break;
+	case 2:
+		//移動速度アップアイテム
+		SetCollisionAttribute(CollisionAttribute::Item_MoveSpeedUp);
+
+		//オブジェクトのテクスチャを設定
+		textureHandle = TextureManager::GetInstance()->LoadTexture("blue.png");
+		object3d_->SetTexture(textureHandle);
+
+		break;
+	case 3:
+		//回転速度アップアイテム
+		SetCollisionAttribute(CollisionAttribute::Item_TurnSpeedUp);
+
+		//オブジェクトのテクスチャを設定
+		textureHandle = TextureManager::GetInstance()->LoadTexture("yellow.png");
+		object3d_->SetTexture(textureHandle);
+		break;
+	default:
+		break;
+	}
+}
+
+void Item::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
+
+	//死ぬまでの処理
+	UntilDeathProcess();
+
+}
+
+void Item::DebugWithImGui() {
+#ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
+
+	//デバッグ用ラインのカラー
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
+#endif // _DEBUG
+}
+
+void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	//当たり判定時の処理
+	switch (attribute) {
+		//プレイヤーに当たった場合
+	case CollisionAttribute::Player:
+		//死ぬ
+		SetDeadTimer(deadTime_);
+		//当たり判定属性を消す
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		break;
+	default:
+		break;
+	}
+}
+
+void Item::UntilDeathProcess() {
+	//共通処理
+	{
+		// タイマー更新
+		swingTimer_ += kDeltaTime;
+
+		// 補間率計算（0～1）
+		float t = std::clamp(swingTimer_ / swingTime_, 0.0f, 1.0f);
+
+		// 上下移動
+		float from = isUp_ ? height_ : height_ + swingWidth_;
+		float to = isUp_ ? height_ + swingWidth_ : height_;
+		object3d_->worldTransform.translate.y = MyMath::Lerp(from, to, MyMath::EaseInOutSine(t));
+
+		// 状態遷移
+		if (swingTimer_ >= swingTime_) {
+			swingTimer_ = 0.0f;
+			isUp_ = !isUp_; // 上昇/下降切り替え
+		}
+	}
+
+	// アイテムが消えるまでの処理
+	if (GetDeadTimer() > 0.0f) {
+		//表示
+		object3d_->SetIsDisplay(true);
+		//回転させる
+		object3d_->worldTransform.rotate.y += 0.3f;
+		//縮小
+		float scale = MyMath::Lerp(0.0f, 1.0f, GetDeadTimer() / deadTime_);
+		object3d_->worldTransform.scale = { scale, scale, scale };
+	}
+	else {
+		//回転させる
+		object3d_->worldTransform.rotate.y += 0.03f;
+	}
+}

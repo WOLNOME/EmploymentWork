@@ -6,8 +6,6 @@
 #include "BulletTrailManager.h"
 
 void PlayerCannon::Initialize() {
-	//ベースキャラクターの初期化
-	BaseCharacter::Initialize();
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");

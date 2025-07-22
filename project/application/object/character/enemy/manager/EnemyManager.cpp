@@ -3,6 +3,7 @@
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
+#include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
 	//敵を規定数沸かせる(ここら辺の処理は後々jsonから読み込めるようにする)
@@ -82,5 +83,15 @@ void EnemyManager::SetPlayer(Player* _player) {
 	}
 	for (const auto& boss : bosses_) {
 		boss->SetPlayer(player_);
+	}
+}
+
+void EnemyManager::SetItemManager(ItemManager* _itemManager) {
+	itemManager_ = _itemManager;
+	for (const auto& canota : canotas_) {
+		canota->SetItemManager(itemManager_);
+	}
+	for (const auto& boss : bosses_) {
+		boss->SetItemManager(itemManager_);
 	}
 }

@@ -6,8 +6,6 @@
 #include "BulletTrailManager.h"
 
 void PlayerBullet::Initialize() {
-	//ベースキャラクターの初期化
-	BaseCharacter::Initialize();
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");

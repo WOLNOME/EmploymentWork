@@ -9,8 +9,6 @@ public:
 	BaseCharacter() = default;
 	//デストラクタ
 	virtual ~BaseCharacter() = default;
-	//初期化
-	virtual void Initialize();
 	//更新
 	virtual void Update();
 

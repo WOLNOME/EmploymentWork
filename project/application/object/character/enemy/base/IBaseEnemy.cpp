@@ -7,6 +7,7 @@
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
+#include "application/object/character/item/manager/ItemManager.h"
 
 IBaseEnemy::IBaseEnemy(bool _isUseCannon) {
 	//状態管理用変数の初期化
@@ -19,9 +20,6 @@ IBaseEnemy::IBaseEnemy(bool _isUseCannon) {
 }
 
 void IBaseEnemy::Initialize() {
-	//ベースキャラクターの初期化
-	BaseCharacter::Initialize();
-
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//当たり判定の属性を設定
@@ -40,10 +38,6 @@ void IBaseEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
-
-	ImGui::Begin("敵");
-	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
-	ImGui::End();
 
 	//デバッグ用ラインのカラー
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -114,11 +108,12 @@ void IBaseEnemy::ChangeState(const std::string& stateName) {
 	}
 	else if (stateName == "Dead") {
 		newState = deadState_.get();
+		//アイテムを生成
+		itemManager_->AddItem(GetWorldPosition());
 	}
 	else {
 		assert(0 && "使用できない名前が使われています。");
 	}
-
 
 	if (currentState_) {
 		currentState_->Exit(this);

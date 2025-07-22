@@ -3,9 +3,6 @@
 #include "LineManager.h"
 #include <cassert>
 
-void BaseCharacter::Initialize() {
-}
-
 void BaseCharacter::Update() {
 	//前フレーム座標の更新
 	prePosition_ = object3d_->worldTransform.translate;

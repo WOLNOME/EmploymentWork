@@ -8,8 +8,6 @@
 #include <application/ui/player/PlayerUI.h>
 
 void EnemyCannon::Initialize() {
-	//ベースキャラクターの初期化
-	BaseCharacter::Initialize();
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");

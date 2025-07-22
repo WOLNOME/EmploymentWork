@@ -55,7 +55,7 @@ void DevelopScene::Initialize() {
 	//3Dオブジェクトの生成と初期化
 	teapot_ = std::make_unique<Object3d>();
 	teapot_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Teapot"), "teapot");
-	int32_t elthTeapot = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
+	int32_t elthTeapot = TextureManager::GetInstance()->LoadTexture("skybox.dds");
 	teapot_->SetEnvironmentLightTextureHandle(elthTeapot);
 
 	terrain_ = std::make_unique<Object3d>();
@@ -82,7 +82,7 @@ void DevelopScene::Initialize() {
 
 	walk_ = std::make_unique<Object3d>();
 	walk_->Initialize(AnimationModelTag{}, Object3dManager::GetInstance()->GenerateName("Walk"), "walk");
-	int32_t elthWalk = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
+	int32_t elthWalk = TextureManager::GetInstance()->LoadTexture("skybox.dds");
 	walk_->SetEnvironmentLightTextureHandle(elthWalk);
 	walk_->worldTransform.translate = { 4.0f,3.0f,0.0f };
 	walk_->SetNewAnimation("walk", "walk");
@@ -155,6 +155,7 @@ void DevelopScene::Update() {
 
 	time_ += kDeltaTime;
 	TextTextureManager::GetInstance()->EditTextString(textHandle_, L"フォント確認 0123 abcDEF\n現在時刻 : {:.1f}", time_);
+
 }
 
 void DevelopScene::DebugWithImGui() {
