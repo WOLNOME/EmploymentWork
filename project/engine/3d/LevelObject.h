@@ -21,7 +21,6 @@ private://構造体
 		std::list<PlayerSpawnData> players;
 	};
 
-
 public:
 	//初期化(.jsonは省略)
 	void Initialize(const std::string& _filePath);

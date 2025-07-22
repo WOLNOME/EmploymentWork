@@ -68,9 +68,9 @@ public:
 	//描画
 	void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
 
-public://ゲッター
+public://getter
 	const ModelResource& GetModelResource() { return modelResource_; }
-public://セッター
+public://setter
 	void SetColor(Vector4& color) { color_ = &color; }
 
 private:
