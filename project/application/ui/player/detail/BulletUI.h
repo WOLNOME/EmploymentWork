@@ -2,6 +2,7 @@
 #include <Sprite.h>
 #include <array>
 #include <memory>
+#include <JsonUtil.h>
 
 class Player;
 class BulletUI {
@@ -23,6 +24,9 @@ public://借用インスタンス
 	Player* player_ = nullptr;
 
 private:
+	//プレイヤーのパラメーター
+	json param_;
+
 	std::array<uint32_t, 2> textureHandles_;
 	std::array<std::unique_ptr<Sprite>, 2> sprites_;
 };

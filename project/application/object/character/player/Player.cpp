@@ -17,7 +17,7 @@ void Player::Initialize() {
 	input_->SetIsMouseFixed(true);
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Player"), "player");
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Player"), "player");
 	object3d_->worldTransform.translate.y += 2.7f;
 
 	//パラメータの読み込み
@@ -28,21 +28,21 @@ void Player::Initialize() {
 	//当たり判定のパラメーター入力
 	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
 	collisionSizeOBB_ = { param_["collisionSizeOBB"]["x"],param_["collisionSizeOBB"]["y"] ,param_["collisionSizeOBB"]["z"] };
-	
+
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
 	//パラメータのセット
-	maxHP_ = param_["maxHP"];
-	hp_ = maxHP_;
-	cannonReloadTime_ = param_["cannonReloadTime"];
+	int maxHP = param_["maxHP"];
+	hp_ = maxHP;
 	cannonReloadTimer_ = 0.0f;
-	bulletReloadTime_ = param_["bulletReloadTime"];
 	bulletReloadTimer_ = 0.0f;
-	bulletMaxNum_ = param_["bulletMagazine"];
-	bulletNum_ = bulletMaxNum_;
-	bulletFireIntervalTime_ = param_["bulletFireIntervalTime"];
+	int bulletMaxNum = param_["bulletMagazine"];
+	bulletNum_ = bulletMaxNum;
 	bulletFireIntervalTimer_ = 0.0f;
+	item_reloadSpeedUp_ = 0;
+	item_moveSpeedUp_ = 0;
+	item_turnSpeedUp_ = 0;
 
 }
 
@@ -91,7 +91,8 @@ void Player::DebugWithImGui() {
 	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);
 	//HP
-	ImGui::DragInt("HP", &hp_, 1, 0, maxHP_);
+	int maxHP = param_["maxHP"];
+	ImGui::DragInt("HP", &hp_, 1, 0, maxHP);
 	//機関銃
 	ImGui::Text("機関銃");
 	ImGui::Text("リロードタイム: %.2f", bulletReloadTimer_);
@@ -104,19 +105,21 @@ void Player::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
-	
+
 }
 
 void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	//ローカル変数
+	int maxHP = param_["maxHP"];
+	int item_maxNum = param_["item_maxNum"];
 	//当たり判定時の処理
 	switch (attribute) {
-		//敵に当たった場合
 	case CollisionAttribute::Enemy: {
 		//HPを減らす
 		hp_ -= 10;
 		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-		//カメラシェイクを入れる
+		hp_ = std::clamp(hp_, 0, maxHP);
+		//カメラシェイクを入れるmaxHP
 		camera_->RegistShake(0.4f, 0.8f);
 
 		//ダメージヒット
@@ -129,12 +132,11 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 
 		break;
 	}
-		//敵キャノンに当たった場合
 	case CollisionAttribute::EnemyCannon:
 		//HPを減らす
 		hp_ -= 10;
 		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
+		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.4f, 0.8f);
 
@@ -142,17 +144,48 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		isDamage_ = true;
 
 		break;
-		//敵弾に当たった場合
 	case CollisionAttribute::EnemyBullet:
 		//HPを減らす
 		hp_ -= 1;
 		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
+		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.3f);
 
 		//ダメージヒット
 		isDamage_ = true;
+
+		break;
+	case CollisionAttribute::Item_Heal: {
+		//HPを回復
+		int healValue = param_["item_healValue"];
+		hp_ += healValue;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP);
+		break;
+	}
+	case CollisionAttribute::Item_ReloadSpeedUp:
+		//アイテムが制限を超えていなければ取得
+		if (item_reloadSpeedUp_ < (uint32_t)item_maxNum) {
+			//アイテム取得
+			item_reloadSpeedUp_++;
+		}
+
+		break;
+	case CollisionAttribute::Item_MoveSpeedUp:
+		//アイテムが制限を超えていなければ取得
+		if (item_moveSpeedUp_ < (uint32_t)item_maxNum) {
+			//アイテム取得
+			item_moveSpeedUp_++;
+		}
+
+		break;
+	case CollisionAttribute::Item_TurnSpeedUp:
+		//アイテムが制限を超えていなければ取得
+		if (item_turnSpeedUp_ < (uint32_t)item_maxNum) {
+			//アイテム取得
+			item_turnSpeedUp_++;
+		}
 
 		break;
 	default:
@@ -163,8 +196,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 void Player::Rotate() {
 	auto ShortestAngleDiff = [=](float from, float to) -> float {
 		float diff = to - from;
-		while (diff > pi)  diff -= 2 * pi;
-		while (diff < -pi) diff += 2 * pi;
+		while (diff > pi)  diff -= 2.0f * pi;
+		while (diff < -pi) diff += 2.0f * pi;
 		return diff;
 		};
 
@@ -175,8 +208,10 @@ void Player::Rotate() {
 	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
 
 	//回転速度の上限
-	float rotateSpeed = param_["rotateSpeed"];
-	float addRotation = rotateSpeed * kDeltaTime;
+	float turnSpeed = param_["turnSpeed"];
+	float item_turnSpeedUpValue = param_["item_turnSpeedUpValue"];
+	turnSpeed += item_turnSpeedUp_ * item_turnSpeedUpValue;
+	float addRotation = turnSpeed * kDeltaTime;
 
 	//回転すべき角度が小さい場合は目標角度を代入
 	if (std::abs(angleDiff) <= addRotation) {
@@ -187,8 +222,8 @@ void Player::Rotate() {
 		vehicleRotateY += (angleDiff > 0 ? 1 : -1) * addRotation;
 
 		//-π ～ π に整える
-		if (vehicleRotateY > pi)  vehicleRotateY -= 2 * pi;
-		if (vehicleRotateY < -pi) vehicleRotateY += 2 * pi;
+		if (vehicleRotateY > pi)  vehicleRotateY -= 2.0f * pi;
+		if (vehicleRotateY < -pi) vehicleRotateY += 2.0f * pi;
 	}
 
 	//オブジェクトの水平回転量に代入
@@ -206,6 +241,8 @@ void Player::Move() {
 	currentDir.Normalize();
 	//WSキー入力で前後移動
 	float speed = param_["speed"];
+	float item_moveSpeedUpValue = param_["item_moveSpeedUpValue"];
+	speed += item_moveSpeedUp_ * item_moveSpeedUpValue;
 	if (input_->PushKey(DIK_W)) {
 		velocity_ += currentDir * speed;
 	}
@@ -219,10 +256,12 @@ void Player::Move() {
 	velocity_ += frictionAccel * kDeltaTime;
 
 	//移動量の大きさを制限
-	float maxSpeed = param_["maxSpeed"];
-	if (velocity_.Length() > maxSpeed) {
+	float maxSpeed_ = param_["maxSpeed"];
+	float item_maxMoveSpeedUpValue = param_["item_maxMoveSpeedUpValue"];
+	maxSpeed_ += item_moveSpeedUp_ * item_maxMoveSpeedUpValue;
+	if (velocity_.Length() > maxSpeed_) {
 		velocity_.Normalize();
-		velocity_ *= maxSpeed;
+		velocity_ *= maxSpeed_;
 	}
 	//移動量の小ささを制限
 	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {
@@ -253,7 +292,10 @@ void Player::CannonAttack() {
 		//砲弾を発射したフラグをオン
 		isCannonFire_ = true;
 		//リロードタイムをセット
-		cannonReloadTimer_ = cannonReloadTime_;
+		float cannonReloadTime = param_["cannonReloadTime"];
+		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
+		cannonReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
+		cannonReloadTimer_ = cannonReloadTime;
 	}
 }
 
@@ -278,6 +320,7 @@ void Player::BulletAttack() {
 		if (bulletReloadTimer_ < 0.0f) {
 			bulletReloadTimer_ = 0.0f;
 			//銃弾数をリロード
+			int bulletMaxNum_ = param_["bulletMagazine"];
 			bulletNum_ = bulletMaxNum_;
 		}
 	}
@@ -295,12 +338,16 @@ void Player::BulletAttack() {
 		//銃弾を発射したフラグをオン
 		isBulletFire_ = true;
 		//間隔計測用タイマーをセット
-		bulletFireIntervalTimer_ = bulletFireIntervalTime_;
+		float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
+		bulletFireIntervalTimer_ = bulletFireIntervalTime;
 		//現在の銃弾数を減らす
 		bulletNum_--;
 		//銃弾数が0になったらリロードタイマーをセット
 		if (bulletNum_ <= 0) {
-			bulletReloadTimer_ = bulletReloadTime_;
+			float bulletReloadTime = param_["bulletReloadTime"];
+			float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
+			bulletReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
+			bulletReloadTimer_ = bulletReloadTime;
 		}
 	}
 }
@@ -320,10 +367,10 @@ void Player::CameraAlgorithm() {
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue = input_->GetMousePosition();
 	//デッドゾーン
-	float deadZone = 3.0f;
+	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {
-		camera_->worldTransform.rotate.x += moveValue.y * 0.0005f;
-		camera_->worldTransform.rotate.y += moveValue.x * 0.0005f;
+		camera_->worldTransform.rotate.x += moveValue.y * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
+		camera_->worldTransform.rotate.y += moveValue.x * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
 	}
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限

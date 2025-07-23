@@ -7,6 +7,8 @@
 #include <application/object/character/player/Player.h>
 
 void CannonUI::Initialize() {
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("cannonUI.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 	for (int i = 0; i < textureHandles_.size(); i++) {
@@ -25,7 +27,10 @@ void CannonUI::Update() {
 	assert(player_ != nullptr && "プレイヤーがセットされていません。");
 
 	//砲弾UIのマスクを砲弾クールタイムと同期させる
-	float cannonBallCoolRate = player_->GetCannonReloadTimer() / player_->GetCannonReloadTime();
+	float reloadTime = param_["cannonReloadTime"];
+	float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
+	reloadTime -= player_->GetItemReloadSpeedUp() * reloadSpeedUpValue;
+	float cannonBallCoolRate = player_->GetCannonReloadTimer() / reloadTime;
 	sprites_[1]->SetSize({ sprites_[0]->GetSize().x, sprites_[0]->GetSize().y * cannonBallCoolRate });
 
 }

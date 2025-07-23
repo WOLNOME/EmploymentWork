@@ -3,10 +3,10 @@
 #include <string>
 #include <Vector3.h>
 #include <memory>
+#include <JsonUtil.h>
 
 //アプリケーション
 #include <application/object/character/item/Item.h>
-
 
 class ItemManager {
 public:
@@ -15,6 +15,8 @@ public:
 	// デストラクタ
 	~ItemManager() = default;
 
+	//初期化
+	void Initialize();
 	//更新
 	void Update();
 
@@ -24,7 +26,14 @@ public:
 	// アイテムの追加
 	void AddItem(const Vector3& _initPos);
 
+public://getter
+	//アイテムのコンテナを取得
+	const std::list<std::unique_ptr<Item>>& GetItems() const { return items_; }
+
 private:
+	//アイテムのパラメーター
+	json param_;
+
 	//アイテムのコンテナ
 	std::list<std::unique_ptr<Item>> items_;
 };

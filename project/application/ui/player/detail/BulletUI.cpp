@@ -7,6 +7,8 @@
 #include <application/object/character/player/Player.h>
 
 void BulletUI::Initialize() {
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("bulletUI.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 	for (int i = 0; i < textureHandles_.size(); i++) {
@@ -27,12 +29,16 @@ void BulletUI::Update() {
 	//銃弾UIのマスクの処理
 	if (player_->GetBulletReloadTimer() > 0.0f) {
 		//銃弾リロードタイムと同期させる
-		float bulletReloadRate = player_->GetBulletReloadTimer() / player_->GetBulletReloadTime();
+		float reloadTime = param_["bulletReloadTime"];
+		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
+		reloadTime -= player_->GetItemReloadSpeedUp()* reloadSpeedUpValue;
+		float bulletReloadRate = player_->GetBulletReloadTimer() / reloadTime;
 		sprites_[1]->SetSize({ sprites_[0]->GetSize().x, sprites_[0]->GetSize().y * bulletReloadRate });
 	}
 	else {
 		//残弾数に合わせる
-		float bulletNumRate = (float)player_->GetBulletNum() / (float)player_->GetBulletMaxNum();
+		int bulletMaxNum = param_["bulletMagazine"];
+		float bulletNumRate = (float)player_->GetBulletNum() / (float)bulletMaxNum;
 		sprites_[1]->SetSize({ sprites_[0]->GetSize().x, sprites_[0]->GetSize().y * (1.0f - bulletNumRate) });
 	}
 

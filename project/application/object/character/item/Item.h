@@ -2,6 +2,7 @@
 #include <application/object/character/base/BaseCharacter.h>
 #include <string>
 #include <Vector3.h>
+#include <JsonUtil.h>
 
 class Item : public BaseCharacter {
 public:
@@ -30,14 +31,10 @@ private:
 	void UntilDeathProcess();
 
 private:
+	//パラメーター
+	json param_;
 
-	const float deadTime_ = 1.0f; // アイテムが消えるまでの時間
-
-	const float height_ = 1.7f; // アイテムの初期の高さ＆最低値
-	const float swingWidth_ = 2.0f; // アイテムの振り幅
-	const float swingTime_ = 1.0f; // アイテムの振り子の周期(片道)
 	float swingTimer_ = 0.0f; // アイテムの振り子のタイマー
-
 	bool isUp_ = true; // アイテムの上下移動フラグ
 };
 

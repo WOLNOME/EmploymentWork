@@ -11,6 +11,7 @@
 
 class Player;
 class EnemyManager;
+class ItemManager;
 class GameCamera;
 class PlayerUI {
 public:
@@ -28,6 +29,7 @@ public://getter
 public://setter
 	void SetPlayer(Player* _player);
 	void SetEnemyManager(EnemyManager* _enemyManager);
+	void SetItemManager(ItemManager* _itemManager);
 	void SetGameCamera(GameCamera* _camera);
 
 private://非公開メンバ関数
@@ -36,7 +38,7 @@ private://非公開メンバ関数
 	//点滅処理
 	void DamageBlinking();
 
-private:
+private://借用インスタンス
 	//プレイヤー
 	Player* player_ = nullptr;
 	//カメラ

@@ -88,6 +88,11 @@ void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	radar_->SetEnemyManager(_enemyManager);
 }
 
+void PlayerUI::SetItemManager(ItemManager* _itemManager) {
+	//レーダーUIに渡す
+	radar_->SetItemManager(_itemManager);
+}
+
 void PlayerUI::SetGameCamera(GameCamera* _camera) {
 	camera_ = _camera;
 	//レーダーUIに渡す

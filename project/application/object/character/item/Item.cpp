@@ -4,13 +4,16 @@
 #include <random>
 
 void Item::Initialize(const Vector3& _initPos) {
+	//パラメーターの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
+
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//オブジェクトを生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item"), Shape::ShapeKind::kCube);
 	object3d_->worldTransform.translate = _initPos;
-	object3d_->worldTransform.translate.y = height_;
+	object3d_->worldTransform.translate.y = param_["initHeight"];
 
 	//確率でアイテムの種類を決定
 	std::random_device rd;
@@ -85,12 +88,14 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
-	case CollisionAttribute::Player:
+	case CollisionAttribute::Player: {
 		//死ぬ
-		SetDeadTimer(deadTime_);
+		float deadTime = param_["deadTime"];
+		SetDeadTimer(deadTime);
 		//当たり判定属性を消す
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 		break;
+	}
 	default:
 		break;
 	}
@@ -103,15 +108,18 @@ void Item::UntilDeathProcess() {
 		swingTimer_ += kDeltaTime;
 
 		// 補間率計算（0～1）
-		float t = std::clamp(swingTimer_ / swingTime_, 0.0f, 1.0f);
+		float swingTime = param_["swingTime"];
+		float t = std::clamp(swingTimer_ / swingTime, 0.0f, 1.0f);
 
 		// 上下移動
-		float from = isUp_ ? height_ : height_ + swingWidth_;
-		float to = isUp_ ? height_ + swingWidth_ : height_;
+		float initHeight = param_["initHeight"];
+		float swingWidth = param_["swingWidth"];
+		float from = isUp_ ? initHeight : initHeight + swingWidth;
+		float to = isUp_ ? initHeight + swingWidth : initHeight;
 		object3d_->worldTransform.translate.y = MyMath::Lerp(from, to, MyMath::EaseInOutSine(t));
 
 		// 状態遷移
-		if (swingTimer_ >= swingTime_) {
+		if (swingTimer_ >= swingTime) {
 			swingTimer_ = 0.0f;
 			isUp_ = !isUp_; // 上昇/下降切り替え
 		}
@@ -124,7 +132,8 @@ void Item::UntilDeathProcess() {
 		//回転させる
 		object3d_->worldTransform.rotate.y += 0.3f;
 		//縮小
-		float scale = MyMath::Lerp(0.0f, 1.0f, GetDeadTimer() / deadTime_);
+		float deadTime = param_["deadTime"];
+		float scale = MyMath::Lerp(0.0f, 1.0f, GetDeadTimer() / deadTime);
 		object3d_->worldTransform.scale = { scale, scale, scale };
 	}
 	else {

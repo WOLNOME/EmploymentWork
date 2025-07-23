@@ -7,6 +7,8 @@
 #include <application/object/character/player/Player.h>
 
 void PlayerHPUI::Initialize() {
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
 	for (int i = 0; i < sprites_.size(); i++) {
@@ -26,7 +28,8 @@ void PlayerHPUI::Update() {
 	}
 
 	//緑HPバーのサイズをプレイヤーのHPに合わせる
-	float hpRate = (float)player_->GetHP() / (float)player_->GetMaxHP();
+	int maxHP = param_["maxHP"];
+	float hpRate = (float)player_->GetHP() / (float)maxHP;
 	sprites_[1]->SetSize({ sprites_[0]->GetSize().x * hpRate,sprites_[0]->GetSize().y });
 }
 

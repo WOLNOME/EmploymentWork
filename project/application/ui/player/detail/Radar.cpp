@@ -9,6 +9,7 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
+#include <application/object/character/item/manager/ItemManager.h>
 #include <application/object/character/enemy/base/IBaseEnemy.h>
 
 void Radar::Initialize() {
@@ -25,13 +26,23 @@ void Radar::Initialize() {
 	}
 	{
 		//エネミー
+		thEnemyMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kEnemyUINum_; i++) {
-			thEnemyMarks_[i] = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 			enemyMarks_[i] = std::make_unique<Sprite>();
-			enemyMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("enemyMark"), Sprite::Order::Front1, thEnemyMarks_[i]);
+			enemyMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("enemyMark"), Sprite::Order::Front1, thEnemyMark_);
 			enemyMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			enemyMarks_[i]->SetSize(enemyMarks_[i]->GetSize() * 0.1f);
 
+		}
+	}
+	{
+		//アイテム
+		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
+		for (int i = 0; i < kItemUINum_; i++) {
+			itemMarks_[i] = std::make_unique<Sprite>();
+			itemMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("itemMark"), Sprite::Order::Front1, thItemMark_);
+			itemMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
+			itemMarks_[i]->SetSize(itemMarks_[i]->GetSize() * 0.1f);
 		}
 	}
 	{
@@ -51,9 +62,13 @@ void Radar::Update() {
 	assert(player_ != nullptr && "RadarにPlayerインスタンスを渡してください");
 	//エネミーマネージャーがセットされていなければ警告
 	assert(enemyManager_ != nullptr && "RadarにEnemyManagerインスタンスを渡してください");
+	//アイテムマネージャーがセットされていなければ警告
+	assert(itemManager_ != nullptr && "RadarにItemManagerインスタンスを渡してください");
 
 	//エネミーマークの更新
 	UpdateEnemyMark();
+	//アイテムマークの更新
+	UpdateItemMark();
 	//コンパスの更新
 	UpdateCompass();
 
@@ -65,6 +80,10 @@ void Radar::AttachShake(const Vector2& _shakeOffset) {
 	//エネミーマークを揺らす
 	for (int i = 0; i < kEnemyUINum_; i++) {
 		enemyMarks_[i]->SetShakeOffset(_shakeOffset);
+	}
+	//アイテムマークを揺らす
+	for (int i = 0; i < kItemUINum_; i++) {
+		itemMarks_[i]->SetShakeOffset(_shakeOffset);
 	}
 	//コンパスを揺らす
 	compass_->SetShakeOffset(_shakeOffset);
@@ -81,6 +100,11 @@ void Radar::AttachBlinking(const Vector4& _color) {
 	//エネミーマークは現在のカラーと引数を掛けた値を適用する
 	for (int i = 0; i < kEnemyUINum_; i++) {
 		enemyMarks_[i]->SetColor({ enemyMarks_[i]->GetColor().x * _color.x,enemyMarks_[i]->GetColor().y * _color.y ,enemyMarks_[i]->GetColor().z * _color.z ,enemyMarks_[i]->GetColor().w * _color.w });
+	}
+
+	//アイテムマークは現在のカラーと引数を掛けた値を適用する
+	for (int i = 0; i < kItemUINum_; i++) {
+		itemMarks_[i]->SetColor({ itemMarks_[i]->GetColor().x * _color.x,itemMarks_[i]->GetColor().y * _color.y ,itemMarks_[i]->GetColor().z * _color.z ,itemMarks_[i]->GetColor().w * _color.w });
 	}
 }
 
@@ -137,6 +161,43 @@ void Radar::UpdateEnemyMark() {
 	//ボス処理（紫）
 	for (const auto& boss : enemyManager_->GetBosses()) {
 		processEnemy(boss.get(), { 1, 0, 1, 1 }, spriteIndex);
+	}
+}
+
+void Radar::UpdateItemMark() {
+	//回転適用ラムダ
+	auto rotateAttach = [](const Vector3& vec, float angleRad) -> Vector3 {
+		float cosTheta = std::cos(angleRad);
+		float sinTheta = std::sin(angleRad);
+		return {
+			vec.x * cosTheta - vec.z * sinTheta,
+			vec.y,
+			vec.x * sinTheta + vec.z * cosTheta
+		};
+	};
+	//アイテム処理ラムダ
+	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
+		if (itemPos.Length() > searchLength) return;
+		//プレイヤー→アイテムのベクトルを作る
+		Vector3 playerToItem = itemPos - player_->GetWorldPosition();
+		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.rotate.y);
+		itemMarks_[spriteIndex]->SetPosition({
+			centerPosition.x + (rotated.x * unitLength),
+			centerPosition.y - (rotated.z * unitLength)
+			});
+		itemMarks_[spriteIndex]->SetIsDisplay(true);
+		itemMarks_[spriteIndex]->SetColor(color);
+		spriteIndex++;
+	};
+	//全スプライトを非表示に
+	for (int i = 0; i < kItemUINum_; i++) {
+		itemMarks_[i]->SetIsDisplay(false);
+	}
+	//レーダー中心とスプライトインデックス
+	int spriteIndex = 0;
+	//アイテムマークの更新（白）
+	for (const auto& item : itemManager_->GetItems()) {
+		processItem(item->GetWorldPosition(), { 1, 1, 1, 1 }, spriteIndex);
 	}
 }
 

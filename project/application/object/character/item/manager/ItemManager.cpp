@@ -1,6 +1,11 @@
 #include "ItemManager.h"
 #include <random>
 
+void ItemManager::Initialize() {
+	//アイテムのパラメーターを読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
+}
+
 void ItemManager::Update() {
 	//死亡したアイテムを削除
 	for (auto it = items_.begin(); it != items_.end();) {
@@ -31,9 +36,10 @@ void ItemManager::AddItem(const Vector3& _initPos) {
 	//80%の確率でアイテムを生成
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int> dist(0, 9);
-	if (dist(mt) >= 8) {
-		return; // 20%の確率でアイテムを生成しない
+	std::uniform_real_distribution<float> dist(0.0f, 1.0f); // 0から1の範囲で乱数を生成
+	float dropRate = param_["dropRate"];
+	if (dist(mt) >= dropRate) {
+		return;
 	}
 
 	// アイテムの生成
