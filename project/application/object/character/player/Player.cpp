@@ -8,6 +8,7 @@
 
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
+#include <application/ui/message/MessageUI.h>
 
 void Player::Initialize() {
 
@@ -47,6 +48,11 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
+	//カメラがセットされていなかったら警告
+	assert(camera_ != nullptr && "カメラがセットされていません。");
+	//メッセージUIがセットされていなかったら警告
+	assert(messageUI_ != nullptr && "メッセージUIがセットされていません。");
+
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 	//ダメージ更新
@@ -162,6 +168,9 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		hp_ += healValue;
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP);
+		//メッセージUIにアイテム取得を通知
+		std::wstring message = L"HPを" + std::to_wstring(healValue) + L"回復！";
+		messageUI_->AddMessage(message);
 		break;
 	}
 	case CollisionAttribute::Item_ReloadSpeedUp:
@@ -169,6 +178,9 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		if (item_reloadSpeedUp_ < (uint32_t)item_maxNum) {
 			//アイテム取得
 			item_reloadSpeedUp_++;
+			//メッセージUIにアイテム取得を通知
+			std::wstring message = L"リロード速度アップアイテムを取得！";
+			messageUI_->AddMessage(message);
 		}
 
 		break;
@@ -177,6 +189,9 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		if (item_moveSpeedUp_ < (uint32_t)item_maxNum) {
 			//アイテム取得
 			item_moveSpeedUp_++;
+			//メッセージUIにアイテム取得を通知
+			std::wstring message = L"移動速度アップアイテムを取得！";
+			messageUI_->AddMessage(message);
 		}
 
 		break;
@@ -185,6 +200,9 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		if (item_turnSpeedUp_ < (uint32_t)item_maxNum) {
 			//アイテム取得
 			item_turnSpeedUp_++;
+			//メッセージUIにアイテム取得を通知
+			std::wstring message = L"回転速度アップアイテムを取得！";
+			messageUI_->AddMessage(message);
 		}
 
 		break;

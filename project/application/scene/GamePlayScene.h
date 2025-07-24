@@ -12,6 +12,7 @@
 #include "application/object/character/weapon/enemy/manager/EnemyWeaponManager.h"
 #include "application/ui/enemy/EnemyUI.h"
 #include <application/object/character/item/manager/ItemManager.h>
+#include <application/ui/message/MessageUI.h>
 
 
 
@@ -66,6 +67,8 @@ private://UI
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 	//敵UI
 	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
+	//メッセージUI
+	std::unique_ptr<MessageUI> messageUI_ = nullptr;
 
 };
 

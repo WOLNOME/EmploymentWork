@@ -118,7 +118,8 @@ void DevelopScene::Initialize() {
 		param.color = { 1,1,1,1 };
 		textHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(param);
 		text_ = std::make_unique<Sprite>();
-		text_->Initialize(SpriteManager::GetInstance()->GenerateName("Text"), Sprite::Order::Front0, textHandle_);
+		text_->Initialize(SpriteManager::GetInstance()->GenerateName("Text"), Sprite::Order::Front0);
+		text_->SetTexture(textHandle_);
 		text_->SetPosition({ 640,360 });
 		text_->SetAnchorPoint({ 0.5f,0.5f });
 		EdgeParam edgeParam;

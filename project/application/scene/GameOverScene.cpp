@@ -24,10 +24,10 @@ void GameOverScene::Initialize() {
 		edgeParam.color = { 1, 0, 0, 1 };
 		TextTextureManager::GetInstance()->EditEdgeParam(thGameOverText_, edgeParam);
 		spriteGameOverText_ = std::make_unique<Sprite>();
-		spriteGameOverText_->Initialize(SpriteManager::GetInstance()->GenerateName("GameOverText"), Sprite::Order::Front0, thGameOverText_);
+		spriteGameOverText_->Initialize(SpriteManager::GetInstance()->GenerateName("GameOverText"), Sprite::Order::Front0);
+		spriteGameOverText_->SetTexture(thGameOverText_);
 		spriteGameOverText_->SetPosition({ WinApp::kClientWidth / 2.0f, WinApp::kClientHeight / 2.0f });
 		spriteGameOverText_->SetAnchorPoint({ 0.5f, 0.5f });
-
 	}
 }
 

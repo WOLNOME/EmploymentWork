@@ -70,7 +70,7 @@ public://メンバ関数
 	~Sprite();
 	//初期化
 	void Initialize(const std::string& _name, const Order& _order, uint32_t _textureHandle);
-	void Initialize(const std::string& _name, const Order& _order, Handle _textureHandle);
+	void Initialize(const std::string& _name, const Order& _order);
 	//描画
 	void Draw();
 
@@ -101,6 +101,7 @@ public://setter
 	void SetTextureSize(const Vector2& size) { textureSize = size; }
 	void SetShakeOffset(const Vector2& _offset) { shakeOffset_ = _offset; }
 	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; }
+	void SetTexture(Handle _textureHandle) { textTextureHandle_ = _textureHandle; }
 
 private://非公開メンバ変数
 	ResourceForGPU CreateResourceForGPU();

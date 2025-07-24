@@ -32,7 +32,7 @@ void Sprite::Initialize(const std::string& _name, const Order& _order, uint32_t 
 	SpriteManager::GetInstance()->RegisterSprite(name_, this);
 }
 
-void Sprite::Initialize(const std::string& _name, const Order& _order, Handle _textureHandle) {
+void Sprite::Initialize(const std::string& _name, const Order& _order) {
 	//名前
 	name_ = _name;
 
@@ -43,7 +43,6 @@ void Sprite::Initialize(const std::string& _name, const Order& _order, Handle _t
 	order_ = _order;
 
 	//テクスチャ
-	textTextureHandle_ = _textureHandle;
 	textureKind_ = TextureKind::Text;
 
 	//マネージャーに登録

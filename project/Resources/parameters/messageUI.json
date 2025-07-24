@@ -1,0 +1,11 @@
+{
+    "textFont":7,
+    "textFontStyle":0,
+    "textSize":24.0,
+    "textColor":[0.8,0.8,0.2,1.0],
+    "edgeWidth":2,
+    "edgeSlideRate":[0.0,0.0],
+    "edgeColor":[0.1,0.1,0.1,1.0],
+    "inputTime":0.7,
+    "displayTime":2.3
+}
