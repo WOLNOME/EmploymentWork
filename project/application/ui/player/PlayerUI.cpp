@@ -38,6 +38,10 @@ void PlayerUI::Initialize() {
 	//被弾インジケーターUI
 	hitIndicator_ = std::make_unique<HitIndicator>();
 	hitIndicator_->Initialize();
+
+	//アイテムUI
+	itemUI_ = std::make_unique<ItemUI>();
+	itemUI_->Initialize();
 }
 
 void PlayerUI::Update() {
@@ -54,6 +58,8 @@ void PlayerUI::Update() {
 	radar_->Update();
 	//被弾インジケーターUIの更新
 	hitIndicator_->Update();
+	//アイテムUIの更新
+	itemUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -81,6 +87,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	radar_->SetPlayer(player_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetPlayer(player_);
+	//アイテムUIに渡す
+	itemUI_->SetPlayer(player_);
 }
 
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
@@ -116,6 +124,7 @@ void PlayerUI::DamageShaking() {
 		cannonUI_->AttachShake(offset);
 		bulletUI_->AttachShake(offset);
 		radar_->AttachShake(offset);
+		itemUI_->AttachShake(offset);
 	}
 }
 
@@ -132,6 +141,8 @@ void PlayerUI::DamageBlinking() {
 		bulletUI_->AttachBlinking(color);
 		//レーダーUI
 		radar_->AttachBlinking(color);
+		//アイテムUI
+		itemUI_->AttachBlinking(color);
 		};
 
 	//被弾開始時に点滅開始

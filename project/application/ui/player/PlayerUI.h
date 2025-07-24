@@ -8,6 +8,7 @@
 #include "detail/BulletUI.h"
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
+#include "detail/ItemUI.h"
 
 class Player;
 class EnemyManager;
@@ -58,6 +59,8 @@ private:
 	std::unique_ptr<Radar> radar_ = nullptr;
 	//被弾インジケーターUI
 	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
+	//アイテムUI
+	std::unique_ptr<ItemUI> itemUI_ = nullptr;
 
 private://メンバ変数
 	//パラメーター

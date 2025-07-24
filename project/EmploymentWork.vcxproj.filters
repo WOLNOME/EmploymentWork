@@ -155,6 +155,7 @@
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
     <ClCompile Include="application\object\character\item\Item.cpp" />
     <ClCompile Include="application\ui\message\MessageUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\ItemUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -296,6 +297,7 @@
     <ClInclude Include="application\object\character\item\manager\ItemManager.h" />
     <ClInclude Include="application\object\character\item\Item.h" />
     <ClInclude Include="application\ui\message\MessageUI.h" />
+    <ClInclude Include="application\ui\player\detail\ItemUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />
