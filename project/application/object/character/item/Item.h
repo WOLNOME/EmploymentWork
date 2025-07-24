@@ -1,5 +1,6 @@
 #pragma once
 #include <application/object/character/base/BaseCharacter.h>
+#include <Particle.h>
 #include <string>
 #include <Vector3.h>
 #include <JsonUtil.h>
@@ -29,10 +30,16 @@ private:
 private:
 	//死ぬまでの処理
 	void UntilDeathProcess();
+	//パーティクルの更新処理
+	void UpdateParticle();
 
 private:
 	//パラメーター
 	json param_;
+
+	//パーティクル
+	std::unique_ptr<Particle> idleParticle_ = nullptr;
+	std::unique_ptr<Particle> getParticle_ = nullptr;
 
 	float swingTimer_ = 0.0f; // アイテムの振り子のタイマー
 	bool isUp_ = true; // アイテムの上下移動フラグ

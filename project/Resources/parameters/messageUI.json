@@ -6,6 +6,6 @@
     "edgeWidth":2,
     "edgeSlideRate":[0.0,0.0],
     "edgeColor":[0.1,0.1,0.1,1.0],
-    "inputTime":0.7,
-    "displayTime":2.3
+    "inputTime":0.6,
+    "displayTime":2.4
 }

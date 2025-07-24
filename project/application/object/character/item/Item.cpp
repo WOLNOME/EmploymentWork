@@ -1,6 +1,7 @@
 #include "Item.h"
 #include <TextureManager.h>
 #include <Object3dManager.h>
+#include <ParticleManager.h>
 #include <random>
 
 void Item::Initialize(const Vector3& _initPos) {
@@ -15,50 +16,57 @@ void Item::Initialize(const Vector3& _initPos) {
 	object3d_->worldTransform.translate = _initPos;
 	object3d_->worldTransform.translate.y = param_["initHeight"];
 
-	//確率でアイテムの種類を決定
+	//アイドル状態のパーティクルを生成
+	idleParticle_ = std::make_unique<Particle>();
+	idleParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_idle"), "item_idle");
+	idleParticle_->emitter_.transform.translate = _initPos;
+	idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
+	idleParticle_->emitter_.isGravity = true;
+	idleParticle_->emitter_.gravity = 1.0f;
+	//ゲット時のパーティクルを生成
+	getParticle_ = std::make_unique<Particle>();
+	getParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_get"), "item_get");
+	getParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	getParticle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
+	getParticle_->emitter_.clumpNum = 15;
+	getParticle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+	getParticle_->emitter_.isPlay = false;
+	getParticle_->emitter_.isBillboard = false;
+
+	// 確率でアイテムの種類を決定
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int> dist(0, 3);
-	int itemType = dist(mt);	//0~3の整数をランダムに生成
-	//アイテムの種類を設定
+	std::uniform_int_distribution<int> dist(0, 4);
+	int itemType = dist(mt);
+
+	// アイテムの種類を設定
 	uint32_t textureHandle = 0u;
 	switch (itemType) {
 	case 0:
-		//回復アイテム
+	case 1: // 40%の確率（回復）
 		SetCollisionAttribute(CollisionAttribute::Item_Heal);
-
-		//オブジェクトのテクスチャを設定
 		textureHandle = TextureManager::GetInstance()->LoadTexture("green.png");
 		object3d_->SetTexture(textureHandle);
-
 		break;
 
-	case 1:
-		//リロード速度アップアイテム
+	case 2: // 20%：リロード速度アップ
 		SetCollisionAttribute(CollisionAttribute::Item_ReloadSpeedUp);
-
-		//オブジェクトのテクスチャを設定
 		textureHandle = TextureManager::GetInstance()->LoadTexture("red.png");
 		object3d_->SetTexture(textureHandle);
-
 		break;
-	case 2:
-		//移動速度アップアイテム
-		SetCollisionAttribute(CollisionAttribute::Item_MoveSpeedUp);
 
-		//オブジェクトのテクスチャを設定
+	case 3: // 20%：移動速度アップ
+		SetCollisionAttribute(CollisionAttribute::Item_MoveSpeedUp);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("blue.png");
 		object3d_->SetTexture(textureHandle);
-
 		break;
-	case 3:
-		//回転速度アップアイテム
-		SetCollisionAttribute(CollisionAttribute::Item_TurnSpeedUp);
 
-		//オブジェクトのテクスチャを設定
+	case 4: // 20%：回転速度アップ
+		SetCollisionAttribute(CollisionAttribute::Item_TurnSpeedUp);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("yellow.png");
 		object3d_->SetTexture(textureHandle);
 		break;
+
 	default:
 		break;
 	}
@@ -70,6 +78,9 @@ void Item::Update() {
 
 	//死ぬまでの処理
 	UntilDeathProcess();
+
+	//パーティクルの更新
+	UpdateParticle();
 
 }
 
@@ -94,6 +105,13 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 		SetDeadTimer(deadTime);
 		//当たり判定属性を消す
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+		//パーティクル
+		idleParticle_->emitter_.isPlay = false; // パーティクルを非アクティブにする
+		getParticle_->emitter_.isPlay = true; // パーティクルをアクティブにする
+		getParticle_->emitter_.transform.translate = object3d_->worldTransform.translate; // パーティクルの位置をアイテムの位置に合わせる
+		getParticle_->emitter_.transform.translate.y = 0.5f;
+
 		break;
 	}
 	default:
@@ -140,4 +158,10 @@ void Item::UntilDeathProcess() {
 		//回転させる
 		object3d_->worldTransform.rotate.y += 0.03f;
 	}
+}
+
+void Item::UpdateParticle() {
+	//パーティクルの位置をオブジェクトの位置に合わせる
+	idleParticle_->emitter_.transform.translate = object3d_->worldTransform.translate;
+
 }

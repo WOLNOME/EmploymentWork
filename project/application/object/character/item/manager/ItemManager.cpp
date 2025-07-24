@@ -33,7 +33,7 @@ void ItemManager::DebugWithImGui() {
 }
 
 void ItemManager::AddItem(const Vector3& _initPos) {
-	//80%の確率でアイテムを生成
+	//確率でアイテムを生成
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_real_distribution<float> dist(0.0f, 1.0f); // 0から1の範囲で乱数を生成
