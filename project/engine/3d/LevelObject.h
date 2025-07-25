@@ -13,12 +13,21 @@ private://構造体
 		Vector3 translation; //位置
 		Vector3 rotation; //回転角
 	};
+	//敵キャラの生成データ
+	struct EnemySpawnData {
+		std::string fileName;	//ファイル名(敵の区別をするため)
+		Vector3 translation;	//平行移動
+		Vector3 rotation;		//回転角
+	};
+
 	//レベルデータ
 	struct LevelData {
 		//オブジェクトのコンテナ
 		std::list<std::unique_ptr<Object3d>> objects;
 		//自キャラコンテナ
 		std::list<PlayerSpawnData> players;
+		//敵キャラコンテナ
+		std::list<EnemySpawnData> enemies;
 	};
 
 public:
