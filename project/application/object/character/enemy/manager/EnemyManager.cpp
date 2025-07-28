@@ -1,36 +1,11 @@
 #include "EnemyManager.h"
-#include <random>
+#include <LevelLoader.h>
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
-	//敵を規定数沸かせる(ここら辺の処理は後々jsonから読み込めるようにする)
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(-350.0f, 350.0f);
-	//キャノ太の生成・初期化処理
-	for (int i = 0; i < numCanotas_; i++) {
-		std::unique_ptr<Canota> canota = nullptr;
-		canota = std::make_unique<Canota>(true);
-		canota->Initialize();
-		Vector3 initPos = { dist(gen),2.7f,dist(gen) };
-		canota->SetTranslate(initPos);
-		//登録
-		canotas_.push_back(std::move(canota));
-	}
-	//ボスの生成・初期化処理
-	for (int i = 0; i < numBosses_; i++) {
-		std::unique_ptr<Boss> boss = nullptr;
-		boss = std::make_unique<Boss>(true);
-		boss->Initialize();
-		Vector3 initPos = { 0.0f, 4.5f, 400.0f };
-		boss->SetTranslate(initPos);
-		//登録
-		bosses_.push_back(std::move(boss));
-	}
-
 }
 
 void EnemyManager::Update() {
@@ -74,6 +49,35 @@ void EnemyManager::DebugWithImGui() {
 		boss->DebugWithImGui();
 	}
 #endif // _DEBUG
+}
+
+void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
+	//レベルローダーからキャノ太のスポーンデータを取得
+	const auto& canotaSpawnData = _levelLoader->GetEnemySpawnData();
+	for (const auto& data : canotaSpawnData) {
+		if (data.fileName != "canota") {
+			continue; // ファイル名が"canota"でない場合はスキップ
+		}
+		std::unique_ptr<Canota> canota = nullptr;
+		canota = std::make_unique<Canota>(true);
+		canota->Initialize();
+		canota->SetTranslate(data.translation);
+		canota->SetRotate(data.rotation);
+		canotas_.push_back(std::move(canota));
+	}
+	//レベルローダーからボスのスポーンデータを取得
+	const auto& bossSpawnData = _levelLoader->GetEnemySpawnData();
+	for (const auto& data : bossSpawnData) {
+		if (data.fileName != "boss") {
+			continue; // ファイル名が"canota"でない場合はスキップ
+		}
+		std::unique_ptr<Boss> boss = nullptr;
+		boss = std::make_unique<Boss>(true);
+		boss->Initialize();
+		boss->SetTranslate(data.translation);
+		boss->SetRotate(data.rotation);
+		bosses_.push_back(std::move(boss));
+	}
 }
 
 void EnemyManager::SetPlayer(Player* _player) {

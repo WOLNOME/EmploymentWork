@@ -10,6 +10,7 @@
 #include <vector>
 #include <memory>
 
+class LevelLoader;
 class MessageUI;
 class Player : public BaseCharacter {
 public:
@@ -57,6 +58,7 @@ public://getter
 	uint32_t GetItemTurnSpeedUp() const { return item_turnSpeedUp_; }
 
 public://setter
+	void SetLevelLoader(LevelLoader* _levelLoader);
 	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
 	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
 

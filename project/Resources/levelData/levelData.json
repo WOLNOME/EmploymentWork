@@ -1,0 +1,158 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Canota",
+            "transform": {
+                "translation": [
+                    -200.0,
+                    100.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -24.123809814453125
+                ],
+                "scaling": [
+                    0.9999999403953552,
+                    0.9999999403953552,
+                    1.0
+                ]
+            },
+            "file_name": "canota"
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Canota1",
+            "transform": {
+                "translation": [
+                    300.0,
+                    -150.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    50.81620407104492
+                ],
+                "scaling": [
+                    0.9999999403953552,
+                    0.9999999403953552,
+                    1.0
+                ]
+            },
+            "file_name": "canota"
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Canota2",
+            "transform": {
+                "translation": [
+                    0.0,
+                    -300.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    67.38424682617188
+                ],
+                "scaling": [
+                    0.9999999403953552,
+                    0.9999999403953552,
+                    1.0
+                ]
+            },
+            "file_name": "canota"
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Boss",
+            "transform": {
+                "translation": [
+                    50.0,
+                    400.0,
+                    4.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -127.39246368408203
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "file_name": "boss"
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Canota3",
+            "transform": {
+                "translation": [
+                    350.0,
+                    150.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    51.094573974609375
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "canota"
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "Canota4",
+            "transform": {
+                "translation": [
+                    -350.0,
+                    -200.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -32.846893310546875
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "canota"
+        }
+    ]
+}

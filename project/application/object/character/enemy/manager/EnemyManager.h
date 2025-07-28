@@ -6,6 +6,7 @@
 #include "application/object/character/enemy/Canota.h"
 #include "application/object/character/enemy/Boss.h"
 
+class LevelLoader;
 class Player;
 class ItemManager;
 class EnemyManager {
@@ -25,6 +26,8 @@ public://getter
 	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
 
 public://setter
+	//レベルローダーセット
+	void SetLevelLoader(LevelLoader* _levelLoader);
 	//プレイヤーセット
 	void SetPlayer(Player* _player);
 	//アイテムマネージャーセット
@@ -39,10 +42,8 @@ private:
 private:
 	//キャノ太のコンテナ
 	std::list<std::unique_ptr<Canota>> canotas_;
-	int numCanotas_ = 4;
 	//ボスのコンテナ
 	std::list<std::unique_ptr<Boss>> bosses_;
-	int numBosses_ = 1;
 
 
 };

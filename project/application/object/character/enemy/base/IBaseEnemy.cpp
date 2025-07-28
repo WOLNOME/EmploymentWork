@@ -2,7 +2,6 @@
 #include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <ParticleManager.h>
-
 #include <cassert>
 
 //アプリケーション

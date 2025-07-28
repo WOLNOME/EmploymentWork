@@ -32,17 +32,23 @@ private://構造体
 
 public:
 	//初期化(.jsonは省略)
-	void Initialize(const std::string& _filePath);
+	void Initialize();
 	//更新
 	void Update();
 	//デバッグ
 	void DebugWithImGui();
 
+public://getter
+	//プレイヤースポーンデータの取得
+	const std::list<PlayerSpawnData>& GetPlayerSpawnData() const { return levelData_.players; }
+	//敵スポーンデータの取得
+	const std::list<EnemySpawnData>& GetEnemySpawnData() const { return levelData_.enemies; }
+
 public://setter
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 
 private://非公開メンバ関数
-	//オブジェクトデータの走査
+	//オブジェクトデータのロード
 	void ScanObjectData(json& object);
 
 private:

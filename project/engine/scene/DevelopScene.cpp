@@ -94,7 +94,7 @@ void DevelopScene::Initialize() {
 
 	//レベルオブジェクトの生成・初期化
 	levelObject_ = std::make_unique<LevelLoader>();
-	levelObject_->Initialize("Resources/levelOutput");
+	levelObject_->Initialize();
 	levelObject_->SetCamera(camera.get());
 
 	//オーディオの生成・初期化

@@ -2,10 +2,10 @@
 #include "Object3dManager.h"
 #include <assert.h>
 
-void LevelLoader::Initialize(const std::string& _filePath) {
+void LevelLoader::Initialize() {
 	//jsonデータを読み込む
-	json data = JsonUtil::GetJsonData(_filePath);
-	//全オブジェクトデータの走査
+	json data = JsonUtil::GetJsonData("Resources/levelData/levelData");
+	//全オブジェクトデータのロード
 	for (json& object : data["objects"]) {
 		ScanObjectData(object);
 	}
@@ -28,7 +28,7 @@ void LevelLoader::ScanObjectData(json& object) {
 	if (type.compare("MESH") == 0) {
 		std::unique_ptr<Object3d> addObject;
 		addObject = std::make_unique<Object3d>();
-		addObject->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("levelObject"), object["file_name"]);
+		addObject->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("levelLoader"), object["file_name"]);
 
 		//トランスフォームパラメータの読み込み
 		json& transform = object["transform"];

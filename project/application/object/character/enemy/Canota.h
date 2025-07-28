@@ -5,7 +5,6 @@
 #include <Vector3.h>
 #include <memory>
 
-class Player;
 class Canota : public IBaseEnemy {
 public:
 	//コンストラクタ

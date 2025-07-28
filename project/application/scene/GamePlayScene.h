@@ -49,6 +49,8 @@ private://オブジェクト
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
+	//レベルローダー
+	std::unique_ptr<LevelLoader> levelLoader_ = nullptr;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;

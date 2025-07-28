@@ -53,7 +53,6 @@ public:
 	/// </summary>
 	virtual void DebugWithImGui() = 0;
 
-
 	//FPS表示
 	void ShowFPS();
 

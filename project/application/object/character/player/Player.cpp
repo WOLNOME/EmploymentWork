@@ -3,6 +3,7 @@
 #include "ImGuiManager.h"
 #include "TextureManager.h"
 #include "Object3dManager.h"
+#include <LevelLoader.h>
 #include <algorithm>
 #include <cassert>
 
@@ -19,7 +20,6 @@ void Player::Initialize() {
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Player"), "player");
-	object3d_->worldTransform.translate.y += 2.7f;
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
@@ -207,6 +207,17 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 
 		break;
 	default:
+		break;
+	}
+}
+
+void Player::SetLevelLoader(LevelLoader* _levelLoader) {
+	//プレイヤーの座標を読み込む
+	for(const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
+		object3d_->worldTransform.translate = playerSpawnData.translation;
+		object3d_->worldTransform.rotate = playerSpawnData.rotation;
+
+		//最初のデータのみを読み込む
 		break;
 	}
 }

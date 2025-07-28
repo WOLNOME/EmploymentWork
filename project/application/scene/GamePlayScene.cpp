@@ -24,6 +24,8 @@ void GamePlayScene::Initialize() {
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
+	levelLoader_ = std::make_unique<LevelLoader>();
+
 	player_ = std::make_unique<Player>();
 	playerWeaponManager_ = std::make_unique<PlayerWeaponManager>();
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -36,6 +38,8 @@ void GamePlayScene::Initialize() {
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
+	levelLoader_->Initialize();
+
 	player_->Initialize();
 	playerWeaponManager_->Initialize();
 	enemyManager_->Initialize();
@@ -59,10 +63,12 @@ void GamePlayScene::Initialize() {
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//その他インスタンスのセット
+	player_->SetLevelLoader(levelLoader_.get());
 	player_->SetMessageUI(messageUI_.get());
-	playerWeaponManager_->SetPlayer(player_.get());
+	enemyManager_->SetLevelLoader(levelLoader_.get());
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->SetItemManager(itemManager_.get());
+	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
@@ -90,6 +96,7 @@ void GamePlayScene::Update() {
 	}
 
 	//インスタンスの更新
+	levelLoader_->Update();
 	playerUI_->Update();
 	player_->Update();
 	enemyManager_->Update();
@@ -108,6 +115,8 @@ void GamePlayScene::DebugWithImGui() {
 	//カメラのImGui
 	camera_->DebugWithImGui();
 
+	//レベルローダーのImGui
+	levelLoader_->DebugWithImGui();
 	//プレイヤーのImGui
 	player_->DebugWithImGui();
 	//プレイヤー武器マネージャーのImGui

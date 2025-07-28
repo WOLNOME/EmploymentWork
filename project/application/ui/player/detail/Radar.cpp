@@ -12,6 +12,7 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/object/character/enemy/base/IBaseEnemy.h>
 
+
 void Radar::Initialize() {
 	//スプライトの生成・初期化
 	{
