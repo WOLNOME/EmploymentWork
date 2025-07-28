@@ -3,7 +3,6 @@
 #include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <BaseCamera.h>
-
 #include <cassert>
 
 //アプリケーション
