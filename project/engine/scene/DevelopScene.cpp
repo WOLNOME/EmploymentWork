@@ -93,7 +93,7 @@ void DevelopScene::Initialize() {
 	simpleSkin_->worldTransform.translate = { 5.0f,3.0f,0.0f };
 
 	//レベルオブジェクトの生成・初期化
-	levelObject_ = std::make_unique<LevelObject>();
+	levelObject_ = std::make_unique<LevelLoader>();
 	levelObject_->Initialize("Resources/levelOutput");
 	levelObject_->SetCamera(camera.get());
 

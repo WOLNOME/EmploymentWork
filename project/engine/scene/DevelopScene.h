@@ -62,7 +62,7 @@ private://メンバ変数
 	std::unique_ptr<Object3d> simpleSkin_ = nullptr;
 
 	//レベルオブジェクト
-	std::unique_ptr<LevelObject> levelObject_ = nullptr;
+	std::unique_ptr<LevelLoader> levelObject_ = nullptr;
 
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;

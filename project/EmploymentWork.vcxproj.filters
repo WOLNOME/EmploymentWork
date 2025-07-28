@@ -123,7 +123,7 @@
     <ClCompile Include="application\ui\player\PlayerUI.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
     <ClCompile Include="engine\3d\CombinedParticle.cpp" />
-    <ClCompile Include="engine\3d\LevelObject.cpp" />
+    <ClCompile Include="engine\3d\LevelLoader.cpp" />
     <ClCompile Include="engine\base\DSVManager.cpp" />
     <ClCompile Include="engine\base\TextTextureManager.cpp" />
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
@@ -264,7 +264,7 @@
     <ClInclude Include="application\ui\player\PlayerUI.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
     <ClInclude Include="engine\3d\CombinedParticle.h" />
-    <ClInclude Include="engine\3d\LevelObject.h" />
+    <ClInclude Include="engine\3d\LevelLoader.h" />
     <ClInclude Include="engine\base\DSVManager.h" />
     <ClInclude Include="engine\base\TextTextureManager.h" />
     <ClInclude Include="engine\base\TextTextureRender.h" />

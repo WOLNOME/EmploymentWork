@@ -1,8 +1,8 @@
-#include "LevelObject.h"
+#include "LevelLoader.h"
 #include "Object3dManager.h"
 #include <assert.h>
 
-void LevelObject::Initialize(const std::string& _filePath) {
+void LevelLoader::Initialize(const std::string& _filePath) {
 	//jsonデータを読み込む
 	json data = JsonUtil::GetJsonData(_filePath);
 	//全オブジェクトデータの走査
@@ -11,13 +11,13 @@ void LevelObject::Initialize(const std::string& _filePath) {
 	}
 }
 
-void LevelObject::Update() {
+void LevelLoader::Update() {
 }
 
-void LevelObject::DebugWithImGui() {
+void LevelLoader::DebugWithImGui() {
 }
 
-void LevelObject::ScanObjectData(json& object) {
+void LevelLoader::ScanObjectData(json& object) {
 	//"type"データがない場合不正データのため警告
 	assert(object.contains("type"));
 

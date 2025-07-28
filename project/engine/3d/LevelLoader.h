@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-class LevelObject {
+class LevelLoader {
 private://構造体
 	//自キャラの生成データ
 	struct PlayerSpawnData {
@@ -39,11 +39,9 @@ public:
 	void DebugWithImGui();
 
 public://setter
-	void SetCamera(BaseCamera* _camera) {
-		camera_ = _camera;
-	}
+	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 
-private://クラス内限定処理
+private://非公開メンバ関数
 	//オブジェクトデータの走査
 	void ScanObjectData(json& object);
 
