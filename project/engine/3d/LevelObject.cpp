@@ -28,11 +28,39 @@ void LevelObject::Update() {
 
 void LevelObject::DebugWithImGui() {
 #ifdef _DEBUG
+	//コライダーのデバッグ処理
 	Collider::DebugWithImGui();
+	//当たり判定可視化用ラインの色を変更
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
 #endif // _DEBUG
 }
 
 void LevelObject::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	//当たり判定の属性によって分岐
+	switch (attribute) {
+	case CollisionAttribute::Player:
+		//ツリーオブジェクトに当たった場合
+		if (name_ == "TreeObject") {
+			//非表示にする
+			object3d_->SetIsDisplay(false);
+			//当たり判定を無効化
+			isCollisionEnabled_ = false;
+			//属性を変更
+			SetCollisionAttribute(CollisionAttribute::Nothingness);
+			
+		}
+
+		break;
+	case CollisionAttribute::Enemy:
+		break;
+	case CollisionAttribute::PlayerBullet:
+		break;
+	case CollisionAttribute::EnemyBullet:
+		break;
+	default:
+		break;
+	}
 }
 
 void LevelObject::SetCollisionInfo(const Vector3& _center, const Vector3& _size) {

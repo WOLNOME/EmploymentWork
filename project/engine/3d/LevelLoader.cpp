@@ -109,7 +109,7 @@ void LevelLoader::ScanObjectData(json& object) {
 	}
 	//ツリー生成ポイント
 	else if (type.compare("TreeObject") == 0) {
-		createObject(object, levelData_, "tree", "tree");
+		createObject(object, levelData_, "TreeObject", "tree");
 	}
 
 	//子オブジェクトがある場合はその処理も行う(ペアレント処理は割愛→必要に応じて付け加える)
