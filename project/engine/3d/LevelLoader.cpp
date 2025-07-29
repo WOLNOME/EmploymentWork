@@ -18,17 +18,11 @@ void LevelLoader::DebugWithImGui() {
 }
 
 void LevelLoader::ScanObjectData(json& object) {
-	//"type"データがない場合不正データのため警告
-	assert(object.contains("type"));
-
-	//種別を取得
-	std::string type = object["type"].get<std::string>();
-
-	//メッシュオブジェクトの処理
-	if (type.compare("MESH") == 0) {
+	//ラムダ式でオブジェクト生成
+	auto createObject = [](json& object, LevelData& levelData, const std::string& name, const std::string& fileName) {
 		std::unique_ptr<Object3d> addObject;
 		addObject = std::make_unique<Object3d>();
-		addObject->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("levelLoader"), object["file_name"]);
+		addObject->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName(name), fileName);
 
 		//トランスフォームパラメータの読み込み
 		json& transform = object["transform"];
@@ -48,12 +42,25 @@ void LevelLoader::ScanObjectData(json& object) {
 		//<!>コライダーは今はスキップ(システム考案中)
 
 		//オブジェクトリストに登録
-		levelData_.objects.push_back(std::move(addObject));
+		levelData.objects.push_back(std::move(addObject));
+
+		return addObject;
+		};
+
+	//"type"データがない場合不正データのため警告
+	assert(object.contains("type"));
+
+	//種別を取得
+	std::string type = object["type"].get<std::string>();
+
+	//メッシュオブジェクトの処理
+	if (type.compare("MESH") == 0) {
+		createObject(object, levelData_, "mesh", object["file_name"].get<std::string>());
 	}
 	//自キャラ発生ポイント
 	else if (type.compare("PlayerSpawn") == 0) {
 		PlayerSpawnData data;
-		
+
 		//トランスフォームパラメータの読み込み
 		json& transform = object["transform"];
 		//平行移動
@@ -85,6 +92,10 @@ void LevelLoader::ScanObjectData(json& object) {
 		data.fileName = object["file_name"].get<std::string>();
 		//敵キャラコンテナに登録
 		levelData_.enemies.push_back(data);
+	}
+	//ツリー生成ポイント
+	else if (type.compare("TreeObject") == 0) {
+		createObject(object, levelData_, "tree", "tree");
 	}
 
 	//子オブジェクトがある場合はその処理も行う(ペアレント処理は割愛→必要に応じて付け加える)
