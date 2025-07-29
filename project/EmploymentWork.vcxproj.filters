@@ -156,6 +156,7 @@
     <ClCompile Include="application\object\character\item\Item.cpp" />
     <ClCompile Include="application\ui\message\MessageUI.cpp" />
     <ClCompile Include="application\ui\player\detail\ItemUI.cpp" />
+    <ClCompile Include="engine\3d\LevelObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -298,6 +299,7 @@
     <ClInclude Include="application\object\character\item\Item.h" />
     <ClInclude Include="application\ui\message\MessageUI.h" />
     <ClInclude Include="application\ui\player\detail\ItemUI.h" />
+    <ClInclude Include="engine\3d\LevelObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />

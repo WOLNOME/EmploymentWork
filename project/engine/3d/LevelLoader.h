@@ -1,7 +1,6 @@
 #pragma once
-#include "BaseCamera.h"
-#include "Object3d.h"
-#include "JsonUtil.h"
+#include <LevelObject.h>
+#include <JsonUtil.h>
 #include <list>
 #include <string>
 #include <memory>
@@ -23,7 +22,7 @@ private://構造体
 	//レベルデータ
 	struct LevelData {
 		//オブジェクトのコンテナ
-		std::list<std::unique_ptr<Object3d>> objects;
+		std::list<std::unique_ptr<LevelObject>> objects;
 		//自キャラコンテナ
 		std::list<PlayerSpawnData> players;
 		//敵キャラコンテナ
@@ -44,21 +43,13 @@ public://getter
 	//敵スポーンデータの取得
 	const std::list<EnemySpawnData>& GetEnemySpawnData() const { return levelData_.enemies; }
 
-public://setter
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
-
 private://非公開メンバ関数
 	//オブジェクトデータのロード
 	void ScanObjectData(json& object);
 
 private:
-	//カメラ
-	BaseCamera* camera_ = nullptr;
-
 	//レベルデータ
 	LevelData levelData_;
-
-	//<!>テクスチャはレベルエディターが対応していないため実装不可
 
 };
 

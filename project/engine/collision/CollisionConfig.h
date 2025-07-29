@@ -12,6 +12,7 @@ enum class CollisionAttribute {
 	Item_ReloadSpeedUp,	//リロード速度アップアイテム
 	Item_MoveSpeedUp,	//移動速度アップアイテム
 	Item_TurnSpeedUp,	//回転速度アップアイテム
+	Wall,				//壁
 
 	Nothingness,		//虚無オブジェクト
 };

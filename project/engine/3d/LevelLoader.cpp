@@ -1,5 +1,4 @@
 #include "LevelLoader.h"
-#include "Object3dManager.h"
 #include <assert.h>
 
 void LevelLoader::Initialize() {
@@ -12,39 +11,54 @@ void LevelLoader::Initialize() {
 }
 
 void LevelLoader::Update() {
+	//オブジェクトの更新
+	for (const auto& object : levelData_.objects) {
+		object->Update();
+	}
 }
 
 void LevelLoader::DebugWithImGui() {
+#ifdef _DEBUG
+	//全オブジェクトのデバッグ処理
+	for (const auto& object : levelData_.objects) {
+		object->DebugWithImGui();
+	}
+#endif // _DEBUG
+
 }
 
 void LevelLoader::ScanObjectData(json& object) {
 	//ラムダ式でオブジェクト生成
 	auto createObject = [](json& object, LevelData& levelData, const std::string& name, const std::string& fileName) {
-		std::unique_ptr<Object3d> addObject;
-		addObject = std::make_unique<Object3d>();
-		addObject->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName(name), fileName);
-
+		std::unique_ptr<LevelObject> addObject;
+		addObject = std::make_unique<LevelObject>();
 		//トランスフォームパラメータの読み込み
-		json& transform = object["transform"];
+		TransformEuler transform;
 		//平行移動
-		addObject->worldTransform.translate.x = (float)transform["translation"][0];
-		addObject->worldTransform.translate.y = (float)transform["translation"][2];
-		addObject->worldTransform.translate.z = (float)transform["translation"][1];
+		transform.translate.x = (float)object["transform"]["translation"][0];
+		transform.translate.y = (float)object["transform"]["translation"][2];
+		transform.translate.z = (float)object["transform"]["translation"][1];
 		//回転角
-		addObject->worldTransform.rotate.x = -(float)transform["rotation"][0];
-		addObject->worldTransform.rotate.y = -(float)transform["rotation"][2];
-		addObject->worldTransform.rotate.z = -(float)transform["rotation"][1];
+		transform.rotate.x = -(float)object["transform"]["rotation"][0];
+		transform.rotate.y = -(float)object["transform"]["rotation"][2];
+		transform.rotate.z = -(float)object["transform"]["rotation"][1];
 		//スケーリング
-		addObject->worldTransform.scale.x = (float)transform["scaling"][0];
-		addObject->worldTransform.scale.y = (float)transform["scaling"][2];
-		addObject->worldTransform.scale.z = (float)transform["scaling"][1];
+		transform.scale.x = (float)object["transform"]["scaling"][0];
+		transform.scale.y = (float)object["transform"]["scaling"][2];
+		transform.scale.z = (float)object["transform"]["scaling"][1];
+		addObject->Initialize(name, fileName, transform);
 
-		//<!>コライダーは今はスキップ(システム考案中)
+		//コライダー
+		if (object.contains("collider")) {
+			//コリジョン情報の読み込み
+			json& collision = object["collider"];
+			Vector3 center = { (float)collision["center"][0], (float)collision["center"][2], (float)collision["center"][1] };
+			Vector3 size = { (float)collision["size"][0], (float)collision["size"][2], (float)collision["size"][1] };
+			addObject->SetCollisionInfo(center, size);
+		}
 
 		//オブジェクトリストに登録
 		levelData.objects.push_back(std::move(addObject));
-
-		return addObject;
 		};
 
 	//"type"データがない場合不正データのため警告
