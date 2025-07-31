@@ -39,6 +39,10 @@ public://setter
 	//コリジョン情報のセット
 	void SetCollisionInfo(const Vector3& _center, const Vector3& _size);
 
+private://非公開メンバ関数
+	//ツリーオブジェクトの転倒アクション
+	void TreeInvertProcess();
+
 protected://オブジェクト
 	//テクスチャハンドル
 	int32_t textureHandle_ = EOF;
@@ -53,5 +57,13 @@ private:
 
 	//コリジョンが有効か
 	bool isCollisionEnabled_ = false;
+
+
+	//ツリーオブジェクト限定変数
+	bool isAction_ = false;		// 倒れるアクションをするかどうか
+	Vector3 invertDirection_ = { 0.0f,0.0f,0.0f };	// 倒れる方向
+	const float time_ = 1.0f;
+	float timer_ = 0.0f;	// タイマー
+
 };
 
