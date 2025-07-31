@@ -16,6 +16,7 @@ void PlayerBullet::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Bullet"), Shape::kSphere);
+	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	object3d_->SetTexture(textureHandle_);
 	//トレールエフェクトの生成と初期化

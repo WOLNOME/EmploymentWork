@@ -42,6 +42,8 @@ void LevelObject::OnCollision(CollisionAttribute attribute, const Vector3& subje
 	case CollisionAttribute::Player:
 		//ツリーオブジェクトに当たった場合
 		if (name_ == "TreeObject") {
+			//当たり判定可視化用ラインの色を変更
+			debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 			//非表示にする
 			object3d_->SetIsDisplay(false);
 			//当たり判定を無効化

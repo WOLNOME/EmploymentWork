@@ -14,6 +14,7 @@ void PlayerCannon::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
+	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
@@ -32,8 +33,6 @@ void PlayerCannon::Initialize() {
 	collisionShapeKind_ = Collider::CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
-
-
 
 	//初期化時点では死亡状態
 	isDead_ = true;

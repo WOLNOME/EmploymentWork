@@ -50,8 +50,8 @@ void Object3dManager::Draw() {
 
 	//全オブジェクトの描画
 	for (const auto& object : objects_) {
+		//オブジェクトが非表示ならスキップ
 		if (!object.second->isDisplay_) {
-			object.second->SetIsDisplay(true);
 			continue;
 		}
 

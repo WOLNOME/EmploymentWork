@@ -21,11 +21,6 @@ void BaseCharacter::Update() {
 			object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
 		}
 	}
-
-	//死亡しているのなら描画しない
-	if (deadTimer_ > 0.0f || isDead_)
-		object3d_->SetIsDisplay(false);
-
 }
 
 void BaseCharacter::DebugWithImGui() {
@@ -40,6 +35,9 @@ void BaseCharacter::DebugWithImGui() {
 void BaseCharacter::SetDeadTimer(float remainingSeconds) {
 	//もし予約時間が決まっていたらreturn
 	if (deadTimer_ > 0.0f) return;
+
+	//不可視にする
+	object3d_->SetIsDisplay(false);
 
 	//死亡予約時間をセット
 	deadTimer_ = remainingSeconds;

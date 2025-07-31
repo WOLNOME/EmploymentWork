@@ -13,6 +13,7 @@ void EnemyCannon::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Cannon"), Shape::kSphere);
+	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<Particle>();
@@ -111,7 +112,8 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
 	generatedPosition_ = _initPos;
-
+	//表示する
+	object3d_->SetIsDisplay(true);
 	//向きベクトルを算出
 	Vector3 targetVec = _targetPos - _initPos;
 	//XZ方向の速度を算出
