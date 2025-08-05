@@ -93,8 +93,12 @@ void DevelopScene::Initialize() {
 	simpleSkin_->worldTransform.translate = { 5.0f,3.0f,0.0f };
 
 	//レベルオブジェクトの生成・初期化
-	levelObject_ = std::make_unique<LevelLoader>();
-	levelObject_->Initialize();
+	//levelObject_ = std::make_unique<LevelLoader>();
+	//levelObject_->Initialize();
+
+	//パーティクルの生成・初期化
+	particle_ = std::make_unique<Particle>();
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Particle"), "gpu");
 
 	//オーディオの生成・初期化
 	audio_ = std::make_unique<Audio>();
@@ -148,7 +152,7 @@ void DevelopScene::Update() {
 	//ティーポットの回転
 	teapot_->worldTransform.rotate.y += 0.03f;
 	//レベルオブジェクトの更新
-	levelObject_->Update();
+	//levelObject_->Update();
 
 	//スプライトの更新
 	sprite_->SetRotation(sprite_->GetRotation() + 0.03f);
@@ -183,7 +187,7 @@ void DevelopScene::DebugWithImGui() {
 	ImGui::End();
 
 	//レベルオブジェクト用ImGui
-	levelObject_->DebugWithImGui();
+	//levelObject_->DebugWithImGui();
 	//テキスト用ImGui
 	TextTextureManager::GetInstance()->DebugWithImGui(textHandle_);
 	//カメラ用ImGui

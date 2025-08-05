@@ -46,16 +46,13 @@ private://非公開構造体
 	//CS用粒の情報
 	struct GrainForCS {
 		TransformForCS transform;
-		TransformForCS basicTransform;
 		Vector4 velocity;
-		Vector4 startColor;
-		Vector4 endColor;
-		Vector4 startRotate;
-		Vector4 endRotate;
-		float startSize = 0.0f;
-		float endSize = 0.0f;
+		Vector4 rotateValue;
+		float sizeValue;
 		float lifeTime = 0.0f;
 		float currentTime = 0.0f;
+		uint32_t startColor;
+		uint32_t endColor;
 	};
 	//CS用エミッター情報
 	struct EmitterForCS {

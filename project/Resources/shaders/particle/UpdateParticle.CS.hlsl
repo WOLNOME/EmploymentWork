@@ -53,7 +53,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
             //ここに来たら設定がおかしい。安全策をうっておく
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
         }
-        
     }
     ///==================///
     /// エミッターとの処理
@@ -67,7 +66,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (emitterInfo.isBound == 1)
     {
         //粒の最底辺位置の計算
-        float leg = grain.basicTransform.translate.y - lerp(grain.startSize, grain.endSize, normalizedTime);
+        float leg = grain.transform.translate.y - lerp(grain.startSize, grain.endSize, normalizedTime);
         //床の反発処理
         if (leg > emitterInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < emitterInfo.floorHeight)
             grain.velocity.y *= (-1.0f) * emitterInfo.repulsion;
@@ -76,15 +75,15 @@ void main(uint3 DTid : SV_DispatchThreadID)
     /// 粒情報の処理
     ///==================///
     //速度加算
-    grain.basicTransform.translate = grain.basicTransform.translate + (gPerFrame.deltaTime * grain.velocity);
+    float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
     //回転更新
     float4 currentRotate = lerp(grain.startRotate, grain.endRotate, normalizedTime);
     //サイズ更新
     float4 currentSize = lerp(grain.startSize, grain.endSize, normalizedTime);
     //各粒のトランスフォーム
-    grain.transform.translate = grain.basicTransform.translate;
-    grain.transform.rotate = grain.basicTransform.rotate + currentRotate;
-    grain.transform.scale = grain.basicTransform.scale * currentSize;
+    grain.transform.translate += currentVelocity;
+    grain.transform.rotate += currentRotate;
+    grain.transform.scale *= currentSize;
     
     //更新後の粒データを書き込む
     gGrains[grainIndex] = grain;

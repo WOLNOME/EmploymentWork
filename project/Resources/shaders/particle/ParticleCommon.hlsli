@@ -59,16 +59,12 @@ struct JsonInfo
 struct Grain
 {
     Transform transform;
-    Transform basicTransform;
     float4 velocity;
-    float4 startColor;
-    float4 endColor;
-    float4 startRotate;
-    float4 endRotate;
-    float startSize;
-    float endSize;
+    float4 rotateValue;
+    float sizeValue;
     float lifeTime;
     float currentTime;
+    uint 
 };
 
 struct PerFrame
