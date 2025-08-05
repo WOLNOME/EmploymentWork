@@ -311,6 +311,7 @@
     <None Include="Resources\shaders\particle\ParticleCommon.hlsli" />
     <None Include="Resources\shaders\util\RandomUtility.hlsli" />
     <None Include="Resources\shaders\trail\Trail.hlsli" />
+    <None Include="Resources\shaders\util\ColorPackUtility.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -64,7 +64,8 @@ struct Grain
     float sizeValue;
     float lifeTime;
     float currentTime;
-    uint 
+    uint color;
+    uint colorValue;
 };
 
 struct PerFrame

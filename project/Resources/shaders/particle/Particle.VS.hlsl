@@ -128,6 +128,6 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     output.position = mul(input.position, mul(mul(worldMatrix, gCameraInfo.matView), gCameraInfo.matProjection));
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
-    output.color = lerp(grain.startColor, grain.endColor, saturate(grain.currentTime * rcp(grain.lifeTime)));
+    output.color = grain.;
     return output;
 }
