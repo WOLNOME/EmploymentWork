@@ -66,7 +66,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (emitterInfo.isBound == 1)
     {
         //粒の最底辺位置の計算
-        float leg = grain.transform.translate.y - lerp(grain.startSize, grain.endSize, normalizedTime);
+        float leg = grain.transform.translate.y - (normalizedTime * grain.sizeValue);
         //床の反発処理
         if (leg > emitterInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < emitterInfo.floorHeight)
             grain.velocity.y *= (-1.0f) * emitterInfo.repulsion;
@@ -77,13 +77,13 @@ void main(uint3 DTid : SV_DispatchThreadID)
     //速度加算
     float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
     //回転更新
-    float4 currentRotate = lerp(grain.startRotate, grain.endRotate, normalizedTime);
+    float4 currentRotate = normalizedTime * grain.rotateValue;
     //サイズ更新
-    float4 currentSize = lerp(grain.startSize, grain.endSize, normalizedTime);
+    float4 currentSize = normalizedTime * grain.sizeValue;
     //各粒のトランスフォーム
     grain.transform.translate += currentVelocity;
     grain.transform.rotate += currentRotate;
-    grain.transform.scale *= currentSize;
+    grain.transform.scale += currentSize;
     
     //更新後の粒データを書き込む
     gGrains[grainIndex] = grain;

@@ -14,8 +14,6 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
 
-
-
 class GamePlayScene : public BaseScene {
 public:
 	/// <summary>

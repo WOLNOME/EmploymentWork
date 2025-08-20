@@ -1,4 +1,5 @@
 #include "ParticleCommon.hlsli"
+#include "../util/ColorPackUtility.hlsli"
 
 struct CameraInfo
 {
@@ -128,6 +129,6 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     output.position = mul(input.position, mul(mul(worldMatrix, gCameraInfo.matView), gCameraInfo.matProjection));
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
-    output.color = grain.;
+    output.color = lerp(PackColor(grain.startColor), PackColor(grain.endColor), grain.currentTime * rcp(grain.lifeTime));
     return output;
 }

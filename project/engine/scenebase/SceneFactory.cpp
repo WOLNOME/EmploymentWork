@@ -3,7 +3,9 @@
 #include "ParticleEditorScene.h"
 
 //アプリケーション
+#include <application/scene/TitleScene.h>
 #include <application/scene/GamePlayScene.h>
+#include <application/scene/GameClearScene.h>
 #include <application/scene/GameOverScene.h>
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
@@ -13,8 +15,14 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	if (sceneName == "DEVELOP") {
 		newScene = new DevelopScene();
 	}
+	else if (sceneName == "Title") {
+		newScene = new TitleScene();
+	}
 	else if (sceneName == "GamePlay") {
 		newScene = new GamePlayScene();
+	}
+	else if (sceneName == "GameClear") {
+		newScene = new GameClearScene();
 	}
 	else if (sceneName == "GameOver") {
 		newScene = new GameOverScene();
