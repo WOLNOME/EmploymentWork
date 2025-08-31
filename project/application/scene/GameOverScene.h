@@ -1,5 +1,12 @@
 #pragma once
 #include "BaseScene.h"
+#include "GameCamera.h"
+
+//アプリケーション
+#include "application/object/environment/Skydome.h"
+#include "application/object/environment/Ground.h"
+#include <application/system/GameOverSystem.h>
+
 class GameOverScene : public BaseScene {
 public:
 	/// <summary>
@@ -24,16 +31,17 @@ private:
 	Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	//std::unique_ptr<GameCamera> camera_ = nullptr;
+	std::unique_ptr<GameCamera> camera_ = nullptr;
 private://ライト
-	//平行光源
-	//std::unique_ptr<DirectionalLight> dirLight_;
-private://オブジェクト
 
-	//テキストテクスチャハンドル
-	Handle thGameOverText_;
-	//スプライト
-	std::unique_ptr<Sprite> spriteGameOverText_ = nullptr;
+private://オブジェクト
+	//天球
+	std::unique_ptr<Skydome> skydome_ = nullptr;
+	//地面
+	std::unique_ptr<Ground> ground_ = nullptr;
+private://システム
+	std::unique_ptr<GameOverSystem> gameOverSystem_ = nullptr;
+
 
 };
 

@@ -160,6 +160,8 @@
     <ClCompile Include="application\scene\TitleScene.cpp" />
     <ClCompile Include="application\scene\GameClearScene.cpp" />
     <ClCompile Include="application\system\TitleSystem.cpp" />
+    <ClCompile Include="application\system\GameClearSystem.cpp" />
+    <ClCompile Include="application\system\GameOverSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -306,6 +308,8 @@
     <ClInclude Include="application\scene\TitleScene.h" />
     <ClInclude Include="application\scene\GameClearScene.h" />
     <ClInclude Include="application\system\TitleSystem.h" />
+    <ClInclude Include="application\system\GameClearSystem.h" />
+    <ClInclude Include="application\system\GameOverSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />

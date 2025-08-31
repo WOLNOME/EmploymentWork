@@ -89,9 +89,6 @@ private:
 	//パラメータ
 	json param_;
 
-	//デバッグ用フラグ
-	bool isDebug_ = false;
-
 	//変数
 	int hp_;	//現在のHP
 

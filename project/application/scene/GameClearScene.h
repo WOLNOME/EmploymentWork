@@ -5,6 +5,7 @@
 //アプリケーション
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
+#include <application/system/GameClearSystem.h>
 
 class GameClearScene : public BaseScene {
 public:
@@ -38,7 +39,8 @@ private://オブジェクト
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
-private://UI
+private://システム
+	std::unique_ptr<GameClearSystem> gameClearSystem_ = nullptr;
 
 
 };

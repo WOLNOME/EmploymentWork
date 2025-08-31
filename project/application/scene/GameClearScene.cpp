@@ -18,10 +18,12 @@ void GameClearScene::Initialize() {
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
+	gameClearSystem_ = std::make_unique<GameClearSystem>();
 
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
+	gameClearSystem_->Initialize();
 
 	//カメラのセット
 	Object3dManager::GetInstance()->SetCamera(camera_.get());
@@ -41,6 +43,8 @@ void GameClearScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
+	gameClearSystem_->Update();
+
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	camera_->Update();
 }
@@ -48,6 +52,8 @@ void GameClearScene::Update() {
 void GameClearScene::DebugWithImGui() {
 	//ImGui
 #ifdef _DEBUG
+	//ゲームクリアシステムのImGui
+	gameClearSystem_->DebugWithImGui();
 	//カメラのImGui
 	camera_->DebugWithImGui();
 

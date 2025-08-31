@@ -58,22 +58,6 @@ void Player::Update() {
 	//ダメージ更新
 	isDamage_ = false;
 
-	//F1キーでマウスカーソルの表示する
-	if (input_->TriggerKey(DIK_F1)) {
-		if (isDebug_) {
-			//デバッグモードを終了
-			isDebug_ = false;
-			input_->SetIsMouseDisplay(false);
-			input_->SetIsMouseFixed(true);
-		}
-		else {
-			//デバッグモードを開始
-			isDebug_ = true;
-			input_->SetIsMouseDisplay(true);
-			input_->SetIsMouseFixed(false);
-		}
-	}
-
 	//回転処理
 	Rotate();
 	//移動処理

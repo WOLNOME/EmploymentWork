@@ -57,6 +57,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
     ///==================///
     /// エミッターとの処理
     ///==================///
+    //正規化前時間
+    float normalizedPreTime = saturate(grain.currentTime - gPerFrame.deltaTime * rcp(grain.lifeTime));
     //正規化時間
     float normalizedTime = saturate(grain.currentTime * rcp(grain.lifeTime));
     //重力処理
@@ -66,7 +68,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (emitterInfo.isBound == 1)
     {
         //粒の最底辺位置の計算
-        float leg = grain.transform.translate.y - (normalizedTime * grain.sizeValue);
+        float leg = grain.transform.translate.y - (gPerFrame.deltaTime * grain.sizeValue);
         //床の反発処理
         if (leg > emitterInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < emitterInfo.floorHeight)
             grain.velocity.y *= (-1.0f) * emitterInfo.repulsion;
@@ -77,13 +79,18 @@ void main(uint3 DTid : SV_DispatchThreadID)
     //速度加算
     float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
     //回転更新
-    float4 currentRotate = normalizedTime * grain.rotateValue;
+    float4 currentRotate = gPerFrame.deltaTime * grain.rotateValue;
     //サイズ更新
-    float4 currentSize = normalizedTime * grain.sizeValue;
+    float backToBaseSize = rcp(normalizedPreTime * grain.sizeValue);
+    float currentSize = normalizedTime * grain.sizeValue;
     //各粒のトランスフォーム
     grain.transform.translate += currentVelocity;
     grain.transform.rotate += currentRotate;
-    grain.transform.scale += currentSize;
+    if (backToBaseSize != 0.0f)
+    {
+        grain.transform.scale *= backToBaseSize;
+    }
+    grain.transform.scale *= currentSize;
     
     //更新後の粒データを書き込む
     gGrains[grainIndex] = grain;

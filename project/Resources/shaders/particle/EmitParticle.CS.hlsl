@@ -177,6 +177,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                     - generator.GenerateInRange(gJsonInfo.startRotateMin.y, gJsonInfo.startRotateMax.y);
                     gGrains[grainIndex].rotateValue.z = generator.GenerateInRange(gJsonInfo.endRotateMin.z, gJsonInfo.endRotateMax.z)
                     - generator.GenerateInRange(gJsonInfo.startRotateMin.z, gJsonInfo.startRotateMax.z);
+                    gGrains[grainIndex].sizeValue = generator.GenerateInRange(gJsonInfo.endSizeMin, gJsonInfo.endSizeMax) - generator.GenerateInRange(gJsonInfo.startSizeMin, gJsonInfo.startSizeMax);
                     float4 startColor = { generator.GenerateInRange(gJsonInfo.startColorMin.r, gJsonInfo.startColorMax.r), generator.GenerateInRange(gJsonInfo.startColorMin.g, gJsonInfo.startColorMax.g), generator.GenerateInRange(gJsonInfo.startColorMin.b, gJsonInfo.startColorMax.b), generator.GenerateInRange(gJsonInfo.startColorMin.a, gJsonInfo.startColorMax.a) };
                     float4 endColor = { generator.GenerateInRange(gJsonInfo.endColorMin.r, gJsonInfo.endColorMax.r), generator.GenerateInRange(gJsonInfo.endColorMin.g, gJsonInfo.endColorMax.g), generator.GenerateInRange(gJsonInfo.endColorMin.b, gJsonInfo.endColorMax.b), generator.GenerateInRange(gJsonInfo.endColorMin.a, gJsonInfo.endColorMax.a) };
                     gGrains[grainIndex].startColor = PackColor(startColor);

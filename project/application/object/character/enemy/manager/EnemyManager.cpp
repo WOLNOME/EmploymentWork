@@ -1,5 +1,6 @@
 #include "EnemyManager.h"
 #include <LevelLoader.h>
+#include <SceneManager.h>
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
@@ -35,6 +36,12 @@ void EnemyManager::Update() {
 	//全ボスの更新
 	for (const auto& boss : bosses_) {
 		boss->Update();
+	}
+
+	//もし全てのボスが死亡していたら
+	if (bosses_.empty()) {
+		//クリアシーンの移行
+		SceneManager::GetInstance()->SetNextScene("GameClear");
 	}
 }
 

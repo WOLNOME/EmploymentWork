@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	void Update() override;
 	/// <summary>
-	/// デバッグ処理
+	/// デバッグ処理 
 	/// </summary>
 	void DebugWithImGui() override;
 
@@ -69,6 +69,9 @@ private://UI
 	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
 	//メッセージUI
 	std::unique_ptr<MessageUI> messageUI_ = nullptr;
+
+	//デバッグ用フラグ
+	bool isDebug_ = false;
 
 };
 

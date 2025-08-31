@@ -7,6 +7,8 @@ void GamePlayScene::Initialize() {
 
 	//インプットの初期化
 	input_ = Input::GetInstance();
+	input_->SetIsMouseDisplay(false);
+	input_->SetIsMouseFixed(true);
 
 	//カメラの生成・初期化
 	camera_ = std::make_unique<GameCamera>();
@@ -80,6 +82,9 @@ void GamePlayScene::Initialize() {
 }
 
 void GamePlayScene::Finalize() {
+	//デバッグモードを開始
+	input_->SetIsMouseDisplay(true);
+	input_->SetIsMouseFixed(false);
 }
 
 void GamePlayScene::Update() {
@@ -93,6 +98,22 @@ void GamePlayScene::Update() {
 	//プレイヤーが死亡したらゲームオーバー
 	if (player_->GetIsDead()) {
 		sceneManager_->SetNextScene("GameOver");
+	}
+
+	//F1キーでマウスカーソルの表示する
+	if (input_->TriggerKey(DIK_F1)) {
+		if (isDebug_) {
+			//デバッグモードを終了
+			isDebug_ = false;
+			input_->SetIsMouseDisplay(false);
+			input_->SetIsMouseFixed(true);
+		}
+		else {
+			//デバッグモードを開始
+			isDebug_ = true;
+			input_->SetIsMouseDisplay(true);
+			input_->SetIsMouseFixed(false);
+		}
 	}
 
 	//インスタンスの更新

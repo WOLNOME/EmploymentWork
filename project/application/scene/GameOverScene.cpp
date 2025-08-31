@@ -8,27 +8,32 @@ void GameOverScene::Initialize() {
 	//インプットの初期化
 	input_ = Input::GetInstance();
 
-	//オブジェクトの生成・初期化
-	{
-		TextParam textParam;
-		textParam.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-		textParam.size = 50;
-		textParam.font = Font::UDDegitalNK_B;
-		textParam.fontStyle = FontStyle::Normal;
-		textParam.text = L"Game Over...";
-		thGameOverText_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
-		EdgeParam edgeParam;
-		edgeParam.width = 2;
-		edgeParam.isEdgeDisplay = 1;
-		edgeParam.slideRate = { 0.0f, 0.0f };
-		edgeParam.color = { 1, 0, 0, 1 };
-		TextTextureManager::GetInstance()->EditEdgeParam(thGameOverText_, edgeParam);
-		spriteGameOverText_ = std::make_unique<Sprite>();
-		spriteGameOverText_->Initialize(SpriteManager::GetInstance()->GenerateName("GameOverText"), Sprite::Order::Front0);
-		spriteGameOverText_->SetTexture(thGameOverText_);
-		spriteGameOverText_->SetPosition({ WinApp::kClientWidth / 2.0f, WinApp::kClientHeight / 2.0f });
-		spriteGameOverText_->SetAnchorPoint({ 0.5f, 0.5f });
-	}
+	//カメラの生成・初期化
+	camera_ = std::make_unique<GameCamera>();
+	camera_->Initialize();
+	camera_->SetFarClip(2000.0f);
+	camera_->worldTransform.rotate = { 0.15f,0.0f,0.0f };
+	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
+
+	//インスタンスの生成
+	skydome_ = std::make_unique<Skydome>();
+	ground_ = std::make_unique<Ground>();
+	gameOverSystem_ = std::make_unique<GameOverSystem>();
+
+	//インスタンスの初期化
+	skydome_->Initialize();
+	ground_->Initialize();
+	gameOverSystem_->Initialize();
+
+	//カメラのセット
+	Object3dManager::GetInstance()->SetCamera(camera_.get());
+	LineManager::GetInstance()->SetCamera(camera_.get());
+	ParticleManager::GetInstance()->SetCamera(camera_.get());
+	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
+
+	//ライトのセット
+	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
+
 }
 
 void GameOverScene::Finalize() {
@@ -38,14 +43,18 @@ void GameOverScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
-	//スペースキーでgamesceneに移動
-	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneManager_->SetNextScene("GamePlay");
-	}
+	gameOverSystem_->Update();
+
+	//カメラの更新(全インスタンスの処理が終わった後にやる)
+	camera_->Update();
 }
 
 void GameOverScene::DebugWithImGui() {
 #ifdef _DEBUG
-	SpriteManager::GetInstance()->DebugWithImGui();
+	//ゲームクリアシステムのImGui
+	gameOverSystem_->DebugWithImGui();
+	//カメラのImGui
+	camera_->DebugWithImGui();
+
 #endif // _DEBUG
 }
