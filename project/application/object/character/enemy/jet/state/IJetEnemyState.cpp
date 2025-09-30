@@ -9,6 +9,3 @@ void IJetEnemyState::TransitionDeadState(IBaseJetEnemy* enemy) {
 		enemy->ChangeState("Dead");
 	}
 }
-
-void IJetEnemyState::UpdateRotate(IBaseJetEnemy* enemy) {
-}

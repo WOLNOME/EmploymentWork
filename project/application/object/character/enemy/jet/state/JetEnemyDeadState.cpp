@@ -24,7 +24,7 @@ void JetEnemyDeadState::Enter(IBaseJetEnemy* enemy) {
 }
 
 void JetEnemyDeadState::Update(IBaseJetEnemy* enemy) {
-	particleOnTimer_ = 0.0f;
+	particleOnTimer_ +=kDeltaTime;
 	//死亡パーティクルをオン
 	particle_->emitter_.transform.translate = enemy->GetWorldPosition();
 	particle_->emitter_.isPlay = true;

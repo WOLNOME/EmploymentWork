@@ -8,45 +8,28 @@ JetEnemyAttackState::JetEnemyAttackState() {
 }
 
 void JetEnemyAttackState::Enter(IBaseJetEnemy* enemy) {
+	isBombFire_ = false;
+	phaseChangeCoolTimer_ = 0.0f;
 }
 
 void JetEnemyAttackState::Update(IBaseJetEnemy* enemy) {
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 
-	//攻撃範囲から外れたら接近状態に切り替え
-	float searchPlayerDistanceAttack = enemy->GetParam()["searchPlayerDistanceAttack"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() > searchPlayerDistanceAttack) {
-		enemy->ChangeState("Approach");
+	//攻撃済みなら接近状態に切り替え
+	if (isBombFire_) {
+		phaseChangeCoolTimer_ += kDeltaTime;
+		if (phaseChangeCoolTimer_ > phaseChangeCoolTime_) {
+			enemy->ChangeState("Approach");
+		}
 	}
 
-	//回転の更新処理
-	UpdateRotate(enemy);
-	//攻撃の更新処理
-	UpdateAttack(enemy);
+	//移動の更新処理(既存の速度を参照して直進)
+	Vector3 currentPosition = enemy->GetWorldPosition();
+	currentPosition += enemy->GetVelocity() * kDeltaTime;
+	enemy->SetTranslate(currentPosition);
+
 }
 
 void JetEnemyAttackState::Exit(IBaseJetEnemy* enemy) {
-}
-
-void JetEnemyAttackState::UpdateAttack(IBaseJetEnemy* enemy) {
-	//クールタイム処理
-	if (bombCoolTimer_ > 0.0f) {
-		bombCoolTimer_ -= kDeltaTime;
-		//クールタイムがマイナスになったら0にする
-		if (bombCoolTimer_ < 0.0f) {
-			bombCoolTimer_ = 0.0f;
-		}
-		//クールタイム処理を終えたら関数を抜ける
-		return;
-	}
-
-	//未攻撃状態なら攻撃処理
-	if (!isBombFire_) {
-		//砲弾を発射したフラグをオン
-		isBombFire_ = true;
-		//クールタイムをセット
-		float bombCoolTime = enemy->GetParam()["bombCoolTime"];
-		bombCoolTimer_ = bombCoolTime;
-	}
 }

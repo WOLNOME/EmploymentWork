@@ -8,13 +8,18 @@ public:
 	void Update(IBaseJetEnemy* enemy) override;
 	void Exit(IBaseJetEnemy* enemy) override;
 
+public:
+	//getter
+	bool GetIsBombFire() const { return isBombFire_; }
+	//setter
+	void SetIsBombFire(bool isBombFire) { isBombFire_ = isBombFire; }
+
 private:
-	void UpdateAttack(IBaseJetEnemy* enemy);
-private:
-	//爆弾攻撃変数
-	float bombCoolTimer_;
+	//爆弾投下済みかどうか
 	bool isBombFire_ = false;
 
-
+	//フェーズ移行クールタイム
+	const float phaseChangeCoolTime_ = 2.0f;
+	float phaseChangeCoolTimer_ = 0.0f;
 };
 

@@ -10,6 +10,5 @@ class IJetEnemyState {
 
 protected:
 	void TransitionDeadState(IBaseJetEnemy* enemy);
-	void UpdateRotate(IBaseJetEnemy* enemy);
 };
 
