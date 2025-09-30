@@ -1,17 +1,17 @@
-#include "EnemyPatrolState.h"
+#include "TankEnemyPatrolState.h"
 #include <Vector3.h>
 #include <random>
 
 //アプリケーション
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
-void EnemyPatrolState::Enter(IBaseEnemy* enemy) {
+void TankEnemyPatrolState::Enter(IBaseTankEnemy* enemy) {
 	isRotation_ = false;
 	isMoving_ = false;
 }
 
-void EnemyPatrolState::Update(IBaseEnemy* enemy) {
+void TankEnemyPatrolState::Update(IBaseTankEnemy* enemy) {
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 
@@ -25,10 +25,10 @@ void EnemyPatrolState::Update(IBaseEnemy* enemy) {
 	UpdatePatrol(enemy);
 }
 
-void EnemyPatrolState::Exit(IBaseEnemy* enemy) {
+void TankEnemyPatrolState::Exit(IBaseTankEnemy* enemy) {
 }
 
-void EnemyPatrolState::UpdatePatrol(IBaseEnemy* enemy) {
+void TankEnemyPatrolState::UpdatePatrol(IBaseTankEnemy* enemy) {
 	//回転も移動もしていなければ目標ポイントを決める
 	if (!isRotation_ && !isMoving_) {
 		std::random_device rd;

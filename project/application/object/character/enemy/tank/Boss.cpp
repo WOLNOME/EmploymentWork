@@ -8,7 +8,7 @@
 
 void Boss::Initialize() {
 	//ベースキャラクターの初期化
-	IBaseEnemy::Initialize();
+	IBaseTankEnemy::Initialize();
 	//テクスチャ
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("boss.png");
 
@@ -32,19 +32,19 @@ void Boss::Initialize() {
 
 void Boss::Update() {
 	//ベースエネミーの更新
-	IBaseEnemy::Update();
+	IBaseTankEnemy::Update();
 
 }
 
 void Boss::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースエネミーのデバッグ処理
-	IBaseEnemy::DebugWithImGui();
+	IBaseTankEnemy::DebugWithImGui();
 #endif // _DEBUG
 }
 
 void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
-	IBaseEnemy::OnCollision(attribute,subjectPos);
+	IBaseTankEnemy::OnCollision(attribute,subjectPos);
 }
 

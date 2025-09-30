@@ -3,7 +3,7 @@
 //アプリケーション
 #include "application/object/character/enemy/manager/EnemyManager.h"
 #include "application/object/character/player/Player.h"
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 
 void EnemyWeaponManager::Initialize() {
 	//パラメーターの読み込み

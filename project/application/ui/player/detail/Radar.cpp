@@ -9,7 +9,7 @@
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 #include <application/object/character/item/manager/ItemManager.h>
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 
 
 void Radar::Initialize() {
@@ -127,7 +127,7 @@ void Radar::UpdateEnemyMark() {
 		};
 
 	//エネミー処理ラムダ
-	auto processEnemy = [&](IBaseEnemy* enemy, const Vector4& color, int& spriteIndex) {
+	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex) {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();

@@ -1,12 +1,12 @@
 #pragma once
-#include "IEnemyState.h"
-class EnemyAttackState : public IEnemyState {
+#include "ITankEnemyState.h"
+class TankEnemyAttackState : public ITankEnemyState {
 public:
-	EnemyAttackState(bool _isUseCannon);
+	TankEnemyAttackState(bool _isUseCannon);
 
-	void Enter(IBaseEnemy* enemy) override;
-	void Update(IBaseEnemy* enemy) override;
-	void Exit(IBaseEnemy* enemy) override;
+	void Enter(IBaseTankEnemy* enemy) override;
+	void Update(IBaseTankEnemy* enemy) override;
+	void Exit(IBaseTankEnemy* enemy) override;
 
 public://getter
 	bool GetIsCannonFire() const { return isCannonFire_; }
@@ -14,7 +14,7 @@ public://setter
 	void SetIsCannonFire(bool isCannonFire) { isCannonFire_ = isCannonFire; }
 
 private:
-	void UpdateAttack(IBaseEnemy* enemy);
+	void UpdateAttack(IBaseTankEnemy* enemy);
 
 private:
 	bool isUseCannon_ = false;

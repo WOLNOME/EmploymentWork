@@ -3,8 +3,8 @@
 #include <memory>
 
 //アプリケーション
-#include "application/object/character/enemy/Canota.h"
-#include "application/object/character/enemy/Boss.h"
+#include "application/object/character/enemy/tank/Canota.h"
+#include "application/object/character/enemy/tank/Boss.h"
 
 class LevelLoader;
 class Player;

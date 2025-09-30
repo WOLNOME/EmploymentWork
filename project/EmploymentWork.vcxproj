@@ -111,16 +111,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="application\object\character\enemy\Canota.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\Canota.cpp" />
     <ClCompile Include="application\object\character\base\BaseCharacter.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\EnemyCannon.cpp" />
-    <ClCompile Include="application\object\character\enemy\Boss.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\Boss.cpp" />
     <ClCompile Include="application\ui\enemy\EnemyUI.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.cpp" />
-    <ClCompile Include="application\object\character\enemy\state\EnemyPatrolState.cpp" />
-    <ClCompile Include="application\object\character\enemy\state\EnemyApproachState.cpp" />
-    <ClCompile Include="application\object\character\enemy\state\EnemyAttackState.cpp" />
-    <ClCompile Include="application\object\character\enemy\state\EnemyDeadState.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyApproachState.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyAttackState.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyDeadState.cpp" />
     <ClCompile Include="application\ui\player\detail\DecorativeUI.cpp" />
     <ClCompile Include="application\ui\player\detail\BulletUI.cpp" />
     <ClCompile Include="application\ui\player\detail\CannonUI.cpp" />
@@ -168,9 +168,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\environment\Ground.cpp" />
     <ClCompile Include="engine\3d\GameCamera.cpp" />
     <ClCompile Include="application\scene\GameOverScene.cpp" />
-    <ClCompile Include="application\object\character\enemy\base\IBaseEnemy.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\base\IBaseTankEnemy.cpp" />
     <ClCompile Include="engine\3d\LineManager.cpp" />
-    <ClCompile Include="application\object\character\enemy\state\IEnemyState.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\state\ITankEnemyState.cpp" />
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp" />
     <ClCompile Include="application\object\character\item\Item.cpp" />
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
@@ -217,16 +217,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
-    <ClInclude Include="application\object\character\enemy\Canota.h" />
+    <ClInclude Include="application\object\character\enemy\tank\Canota.h" />
     <ClInclude Include="application\object\character\base\BaseCharacter.h" />
     <ClInclude Include="application\object\character\weapon\enemy\EnemyCannon.h" />
-    <ClInclude Include="application\object\character\enemy\Boss.h" />
+    <ClInclude Include="application\object\character\enemy\tank\Boss.h" />
     <ClInclude Include="application\ui\enemy\EnemyUI.h" />
     <ClInclude Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.h" />
-    <ClInclude Include="application\object\character\enemy\state\EnemyPatrolState.h" />
-    <ClInclude Include="application\object\character\enemy\state\EnemyApproachState.h" />
-    <ClInclude Include="application\object\character\enemy\state\EnemyAttackState.h" />
-    <ClInclude Include="application\object\character\enemy\state\EnemyDeadState.h" />
+    <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.h" />
+    <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyApproachState.h" />
+    <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyAttackState.h" />
+    <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyDeadState.h" />
     <ClInclude Include="application\ui\player\detail\DecorativeUI.h" />
     <ClInclude Include="application\ui\player\detail\BulletUI.h" />
     <ClInclude Include="application\ui\player\detail\CannonUI.h" />
@@ -291,9 +291,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\environment\Ground.h" />
     <ClInclude Include="engine\3d\GameCamera.h" />
     <ClInclude Include="application\scene\GameOverScene.h" />
-    <ClInclude Include="application\object\character\enemy\base\IBaseEnemy.h" />
+    <ClInclude Include="application\object\character\enemy\tank\base\IBaseTankEnemy.h" />
     <ClInclude Include="engine\3d\LineManager.h" />
-    <ClInclude Include="application\object\character\enemy\state\IEnemyState.h" />
+    <ClInclude Include="application\object\character\enemy\tank\state\ITankEnemyState.h" />
     <ClInclude Include="application\ui\player\detail\HitIndicator.h" />
     <ClInclude Include="application\object\character\item\Item.h" />
     <ClInclude Include="application\object\character\item\manager\ItemManager.h" />

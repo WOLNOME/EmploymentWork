@@ -1,13 +1,13 @@
-#include "EnemyApproachState.h"
+#include "TankEnemyApproachState.h"
 
 //アプリケーション
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
-void EnemyApproachState::Enter(IBaseEnemy* enemy) {
+void TankEnemyApproachState::Enter(IBaseTankEnemy* enemy) {
 }
 
-void EnemyApproachState::Update(IBaseEnemy* enemy) {
+void TankEnemyApproachState::Update(IBaseTankEnemy* enemy) {
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 
@@ -30,10 +30,10 @@ void EnemyApproachState::Update(IBaseEnemy* enemy) {
 
 }
 
-void EnemyApproachState::Exit(IBaseEnemy* enemy) {
+void TankEnemyApproachState::Exit(IBaseTankEnemy* enemy) {
 }
 
-void EnemyApproachState::UpdateApproach(IBaseEnemy* enemy) {
+void TankEnemyApproachState::UpdateApproach(IBaseTankEnemy* enemy) {
 	//プレイヤーへの方向を求める
 	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
 	//y座標は考慮しない

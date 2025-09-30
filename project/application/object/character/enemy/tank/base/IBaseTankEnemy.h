@@ -7,20 +7,20 @@
 #include <memory>
 
 //アプリケーション
-#include "../state/IEnemyState.h"
-#include "../state/EnemyPatrolState.h"
-#include "../state/EnemyApproachState.h"
-#include "../state/EnemyAttackState.h"
-#include "../state/EnemyDeadState.h"
+#include "../state/ITankEnemyState.h"
+#include "../state/TankEnemyPatrolState.h"
+#include "../state/TankEnemyApproachState.h"
+#include "../state/TankEnemyAttackState.h"
+#include "../state/TankEnemyDeadState.h"
 
 class Player;
 class ItemManager;
-class IBaseEnemy : public BaseCharacter {
+class IBaseTankEnemy : public BaseCharacter {
 public:
 	//コンストラクタ
-	IBaseEnemy(bool _isUseCannon);
+	IBaseTankEnemy(bool _isUseCannon);
 	// デストラクタ
-	~IBaseEnemy() override = default;
+	~IBaseTankEnemy() override = default;
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -41,7 +41,7 @@ public://getter
 	int GetMaxHP() const { return maxHP_; }
 	int GetHP() const { return hp_; }
 
-	EnemyAttackState* GetAttackState() const { return attackState_.get(); }
+	TankEnemyAttackState* GetAttackState() const { return attackState_.get(); }
 
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
@@ -68,12 +68,12 @@ protected://メンバ変数
 
 private:
 	//状態管理用変数
-	IEnemyState* currentState_ = nullptr;
+	ITankEnemyState* currentState_ = nullptr;
 
-	std::unique_ptr<EnemyPatrolState> patrolState_;
-	std::unique_ptr<EnemyApproachState> approachState_;
-	std::unique_ptr<EnemyAttackState> attackState_;
-	std::unique_ptr<EnemyDeadState> deadState_;
+	std::unique_ptr<TankEnemyPatrolState> patrolState_;
+	std::unique_ptr<TankEnemyApproachState> approachState_;
+	std::unique_ptr<TankEnemyAttackState> attackState_;
+	std::unique_ptr<TankEnemyDeadState> deadState_;
 
 };
 

@@ -1,16 +1,17 @@
 #pragma once
-#include "application/object/character/enemy/base/IBaseEnemy.h"
+#include "application/object/character/enemy/tank/base/IBaseTankEnemy.h"
 #include "MyMath.h"
 #include "Particle.h"
 #include <Vector3.h>
 #include <memory>
 
-class Canota : public IBaseEnemy {
+class Player;
+class Boss : public IBaseTankEnemy {
 public:
 	//コンストラクタ
-	Canota(bool _isUseCannon) : IBaseEnemy(_isUseCannon) {}
+	Boss(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
 	//デストラクタ
-	~Canota() override {};
+	~Boss() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -28,6 +29,5 @@ public:
 private:
 	//当たり判定処理
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
-
 };
 

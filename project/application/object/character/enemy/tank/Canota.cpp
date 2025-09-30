@@ -7,7 +7,7 @@
 
 void Canota::Initialize() {
 	//ベースエネミーの初期化
-	IBaseEnemy::Initialize();
+	IBaseTankEnemy::Initialize();
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Canota"), "enemy");
@@ -26,17 +26,17 @@ void Canota::Initialize() {
 
 void Canota::Update() {
 	//ベースエネミーの更新
-	IBaseEnemy::Update();
+	IBaseTankEnemy::Update();
 }
 
 void Canota::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースエネミーのデバッグ処理
-	IBaseEnemy::DebugWithImGui();
+	IBaseTankEnemy::DebugWithImGui();
 #endif // _DEBUG
 }
 
 void Canota::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
-	IBaseEnemy::OnCollision(attribute,subjectPos);
+	IBaseTankEnemy::OnCollision(attribute,subjectPos);
 }

@@ -1,17 +1,17 @@
-#include "EnemyAttackState.h"
+#include "TankEnemyAttackState.h"
 
 //アプリケーション
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
-EnemyAttackState::EnemyAttackState(bool _isUseCannon) {
+TankEnemyAttackState::TankEnemyAttackState(bool _isUseCannon) {
 	isUseCannon_ = _isUseCannon;
 }
 
-void EnemyAttackState::Enter(IBaseEnemy* enemy) {
+void TankEnemyAttackState::Enter(IBaseTankEnemy* enemy) {
 }
 
-void EnemyAttackState::Update(IBaseEnemy* enemy) {
+void TankEnemyAttackState::Update(IBaseTankEnemy* enemy) {
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 
@@ -28,10 +28,10 @@ void EnemyAttackState::Update(IBaseEnemy* enemy) {
 
 }
 
-void EnemyAttackState::Exit(IBaseEnemy* enemy) {
+void TankEnemyAttackState::Exit(IBaseTankEnemy* enemy) {
 }
 
-void EnemyAttackState::UpdateAttack(IBaseEnemy* enemy) {
+void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 	//クールタイム処理
 	if (cannonCoolTimer_ > 0.0f) {
 		cannonCoolTimer_ -= kDeltaTime;

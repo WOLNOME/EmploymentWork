@@ -1,4 +1,4 @@
-#include "IBaseEnemy.h"
+#include "IBaseTankEnemy.h"
 #include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <ParticleManager.h>
@@ -8,24 +8,24 @@
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
 
-IBaseEnemy::IBaseEnemy(bool _isUseCannon) {
+IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
 	//状態管理用変数の初期化
-	patrolState_ = std::make_unique<EnemyPatrolState>();
-	approachState_ = std::make_unique <EnemyApproachState>();
-	attackState_ = std::make_unique <EnemyAttackState>(_isUseCannon);
-	deadState_ = std::make_unique <EnemyDeadState>();
+	patrolState_ = std::make_unique<TankEnemyPatrolState>();
+	approachState_ = std::make_unique <TankEnemyApproachState>();
+	attackState_ = std::make_unique <TankEnemyAttackState>(_isUseCannon);
+	deadState_ = std::make_unique <TankEnemyDeadState>();
 	//初期ステートを決定
 	currentState_ = patrolState_.get();
 }
 
-void IBaseEnemy::Initialize() {
+void IBaseTankEnemy::Initialize() {
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Enemy);
 }
 
-void IBaseEnemy::Update() {
+void IBaseTankEnemy::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
@@ -33,7 +33,7 @@ void IBaseEnemy::Update() {
 	currentState_->Update(this);
 }
 
-void IBaseEnemy::DebugWithImGui() {
+void IBaseTankEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
@@ -44,7 +44,7 @@ void IBaseEnemy::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void IBaseEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+void IBaseTankEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
@@ -93,9 +93,9 @@ void IBaseEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjec
 	}
 }
 
-void IBaseEnemy::ChangeState(const std::string& stateName) {
+void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 	//新しい状態を決める
-	IEnemyState* newState = nullptr;
+	ITankEnemyState* newState = nullptr;
 	if (stateName == "Patrol") {
 		newState = patrolState_.get();
 	}

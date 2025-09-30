@@ -1,16 +1,16 @@
-#include "IEnemyState.h"
+#include "ITankEnemyState.h"
 
 //アプリケーション
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
-void IEnemyState::TransitionDeadState(IBaseEnemy* enemy) {
+void ITankEnemyState::TransitionDeadState(IBaseTankEnemy* enemy) {
 	if (enemy->GetHP() <= 0) {
 		enemy->ChangeState("Dead");
 	}
 }
 
-void IEnemyState::UpdateRotate(IBaseEnemy* enemy) {
+void ITankEnemyState::UpdateRotate(IBaseTankEnemy* enemy) {
 	//移動方向に向かって回転->現在の向きを求める
 	Vector3 currentDir = {
 		std::sinf(enemy->GetWorldTransform().rotate.y),

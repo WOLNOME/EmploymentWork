@@ -1,13 +1,13 @@
-#include "EnemyDeadState.h"
+#include "TankEnemyDeadState.h"
 
 #include <MyMath.h>
 #include <ParticleManager.h>
 
 //アプリケーション
-#include <application/object/character/enemy/base/IBaseEnemy.h>
+#include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
-EnemyDeadState::EnemyDeadState() {
+TankEnemyDeadState::TankEnemyDeadState() {
 	//パーティクルの生成・初期化
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyDead"), "enemy_explosion");
@@ -20,10 +20,10 @@ EnemyDeadState::EnemyDeadState() {
 	particle_->emitter_.floorHeight = 0.0f;
 }
 
-void EnemyDeadState::Enter(IBaseEnemy* enemy) {
+void TankEnemyDeadState::Enter(IBaseTankEnemy* enemy) {
 }
 
-void EnemyDeadState::Update(IBaseEnemy* enemy) {
+void TankEnemyDeadState::Update(IBaseTankEnemy* enemy) {
 	particleOnTimer_ += kDeltaTime;
 	//死亡パーティクルをオン
 	particle_->emitter_.transform.translate = enemy->GetWorldPosition();
@@ -38,5 +38,5 @@ void EnemyDeadState::Update(IBaseEnemy* enemy) {
 	enemy->SetDeadTimer(float(particleOnTime_ + particleLifeTime));
 }
 
-void EnemyDeadState::Exit(IBaseEnemy* enemy) {
+void TankEnemyDeadState::Exit(IBaseTankEnemy* enemy) {
 }
