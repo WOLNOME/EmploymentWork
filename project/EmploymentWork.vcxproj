@@ -179,6 +179,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\scene\GameClearScene.cpp" />
     <ClCompile Include="application\system\GameClearSystem.cpp" />
     <ClCompile Include="application\system\GameOverSystem.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\Jet.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\base\IBaseJetEnemy.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\state\IJetEnemyState.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyApproachState.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyAttackState.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyDeadState.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
@@ -303,6 +310,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\scene\GameClearScene.h" />
     <ClInclude Include="application\system\GameClearSystem.h" />
     <ClInclude Include="application\system\GameOverSystem.h" />
+    <ClInclude Include="application\object\character\enemy\jet\Jet.h" />
+    <ClInclude Include="application\object\character\enemy\jet\base\IBaseJetEnemy.h" />
+    <ClInclude Include="application\object\character\enemy\jet\state\IJetEnemyState.h" />
+    <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyApproachState.h" />
+    <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyAttackState.h" />
+    <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyDeadState.h" />
+    <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />

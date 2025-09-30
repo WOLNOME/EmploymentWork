@@ -17,6 +17,7 @@ private:
 	void UpdateAttack(IBaseTankEnemy* enemy);
 
 private:
+	//砲台を使うかどうか(砲台を使わない敵を作る過程で必要)
 	bool isUseCannon_ = false;
 	//砲弾攻撃変数
 	float cannonCoolTimer_;
