@@ -125,6 +125,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\detail\BulletUI.cpp" />
     <ClCompile Include="application\ui\player\detail\CannonUI.cpp" />
     <ClCompile Include="application\ui\enemy\detail\EnemyHPUI.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="engine\3d\BulletTrail.cpp" />
     <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
@@ -238,6 +239,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\BulletUI.h" />
     <ClInclude Include="application\ui\player\detail\CannonUI.h" />
     <ClInclude Include="application\ui\enemy\detail\EnemyHPUI.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="engine\3d\BulletTrail.h" />
     <ClInclude Include="engine\3d\BulletTrailManager.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />

@@ -5,10 +5,12 @@
 //アプリケーション
 #include "application/object/character/enemy/tank/Canota.h"
 #include "application/object/character/enemy/tank/Boss.h"
+#include "application/object/character/enemy/jet/Jet.h"
 
 class LevelLoader;
 class Player;
 class ItemManager;
+class MessageUI;
 class EnemyManager {
 public:
 	//初期化
@@ -24,6 +26,8 @@ public://getter
 	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
 	//ボスのコンテナ
 	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
+	//ジェットのコンテナ
+	const std::list<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
 
 public://setter
 	//レベルローダーセット
@@ -32,6 +36,8 @@ public://setter
 	void SetPlayer(Player* _player);
 	//アイテムマネージャーセット
 	void SetItemManager(ItemManager* _itemManager);
+	//メッセージUIセット
+	void SetMessageUI(MessageUI* _messageUI);
 
 private:
 	//プレイヤー
@@ -44,6 +50,8 @@ private:
 	std::list<std::unique_ptr<Canota>> canotas_;
 	//ボスのコンテナ
 	std::list<std::unique_ptr<Boss>> bosses_;
+	//ジェットのコンテナ
+	std::list<std::unique_ptr<Jet>> jets_;
 
 
 };

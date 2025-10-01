@@ -15,6 +15,7 @@
 
 class Player;
 class ItemManager;
+class MessageUI;
 class IBaseJetEnemy : public BaseCharacter {
 public:
 	//コンストラクタ
@@ -46,6 +47,7 @@ public://getter
 public://setter
 	void SetPlayer(Player* _player) { player_ = _player; }
 	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
+	void SetMessageUI(MessageUI* messageUI);
 
 protected:
 	//当たり判定処理
@@ -76,4 +78,3 @@ private:
 	std::unique_ptr<JetEnemyDeadState> deadState_;
 
 };
-

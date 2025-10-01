@@ -126,7 +126,7 @@ void Radar::UpdateEnemyMark() {
 		};
 		};
 
-	//エネミー処理ラムダ
+	//タンクエネミー処理ラムダ
 	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex) {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
@@ -140,6 +140,23 @@ void Radar::UpdateEnemyMark() {
 			centerPosition.y - (rotated.z * unitLength)
 			});
 
+		enemyMarks_[spriteIndex]->SetIsDisplay(true);
+		enemyMarks_[spriteIndex]->SetColor(color);
+		spriteIndex++;
+		};
+
+	//ジェットエネミー処理ラムダ
+	auto processJetEnemy = [&](IBaseJetEnemy* enemy, const Vector4& color, int& spriteIndex) {
+		if (!enemy || enemy->GetHP() == 0) return;
+		//プレイヤー→敵のベクトルを作る
+		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();
+		if (playerToEnemy.Length() > searchLength) return;
+		//カメラの回転を適用
+		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.rotate.y);
+		enemyMarks_[spriteIndex]->SetPosition({
+			centerPosition.x + (rotated.x * unitLength),
+			centerPosition.y - (rotated.z * unitLength)
+			});
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
 		enemyMarks_[spriteIndex]->SetColor(color);
 		spriteIndex++;
@@ -161,6 +178,11 @@ void Radar::UpdateEnemyMark() {
 	//ボス処理（紫）
 	for (const auto& boss : enemyManager_->GetBosses()) {
 		processEnemy(boss.get(), { 1, 0, 1, 1 }, spriteIndex);
+	}
+
+	//ジェット処理（緑）
+	for (const auto& jet : enemyManager_->GetJets()) {
+		processJetEnemy(jet.get(), { 0, 1, 0, 1 }, spriteIndex);
 	}
 }
 

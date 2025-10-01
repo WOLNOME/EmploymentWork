@@ -35,6 +35,11 @@ void IBaseJetEnemy::DebugWithImGui() {
 #endif // _DEBUG
 }
 
+void IBaseJetEnemy::SetMessageUI(MessageUI* messageUI) {
+	patrolState_->SetMessageUI(messageUI);
+	approachState_->SetMessageUI(messageUI);
+}
+
 void IBaseJetEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
@@ -59,3 +64,30 @@ void IBaseJetEnemy::OnCollision(CollisionAttribute attribute, const Vector3& sub
 	}
 }
 
+void IBaseJetEnemy::ChangeState(const std::string& stateName) {
+	//新しい状態を決める
+	IJetEnemyState* newState = nullptr;
+	if (stateName == "Patrol") {
+		newState = patrolState_.get();
+	}
+	else if (stateName == "Approach") {
+		newState = approachState_.get();
+	}
+	else if (stateName == "Attack") {
+		newState = attackState_.get();
+	}
+	else if (stateName == "Dead") {
+		newState = deadState_.get();
+	}
+	else {
+		assert(0 && "使用できない名前が使われています。");
+	}
+
+	if (currentState_) {
+		currentState_->Exit(this);
+	}
+	currentState_ = newState;
+	if (currentState_) {
+		currentState_->Enter(this);
+	}
+}

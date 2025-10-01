@@ -1,32 +1,45 @@
 #include "JetEnemyPatrolState.h"
 #include <Vector3.h>
 #include <random>
+#include <cassert>
 
 //アプリケーション
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
+#include <application/ui/message/MessageUI.h>
 
 void JetEnemyPatrolState::Enter(IBaseJetEnemy* enemy) {
 	//目標ポイントをランダムに決定
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(-300.0f, 300.0f);
+	std::uniform_real_distribution<float> dist(500.0f, 500.0f);
 	float height = enemy->GetParam()["height"];
 	targetPosition_ = { dist(gen),height,dist(gen) };
+	stateContinueTimer_ = 0.0f;
 }
 
 void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
+	//メッセージUIの確認
+	assert(messageUI_ && "メッセージUIがセットされていません");
+
+	//状態継続タイマーを更新
+	stateContinueTimer_ += kDeltaTime;
+
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 
-	//プレイヤーが近づいたら接近状態に切り替え
-	float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
-	Vector3 playerPos = enemy->GetPlayer()->GetWorldPosition();
-	playerPos.y = enemy->GetParam()["height"];
-	if (Vector3(playerPos - enemy->GetWorldPosition()).Length() < searchPlayerDistanceApproach) {
-		enemy->ChangeState("Approach");
-		//接近の通知をする
-
+	//プレイヤーが近づいたら接近状態に切り替え(状態継続最低時間を超えているときのみ)
+	if (stateContinueTimer_ > stateContinueTime_) {
+		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
+		Vector3 playerPos = enemy->GetPlayer()->GetWorldTransform().translate;
+		playerPos.y = enemy->GetParam()["height"];
+		Vector3 enemyPos = enemy->GetWorldTransform().translate;
+		float length = Vector3(playerPos - enemyPos).Length();
+		if (length < searchPlayerDistanceApproach) {
+			enemy->ChangeState("Approach");
+			//接近の通知をする
+			messageUI_->AddMessage(L"<注意> ジェットに捕捉された！");
+		}
 	}
 
 	//パトロールの更新処理
@@ -39,10 +52,10 @@ void JetEnemyPatrolState::Exit(IBaseJetEnemy* enemy) {
 void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 	//目標ポイントとジェットの距離が近づいたら目標ポイントを更新
 	float updateTargetPointDistance = enemy->GetParam()["updateTargetPointDistance"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() < updateTargetPointDistance) {
+	if (Vector3(enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate).Length() < updateTargetPointDistance) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<float> dist(-300.0f, 300.0f);
+		std::uniform_real_distribution<float> dist(-500.0f, 500.0f);
 		float height = enemy->GetParam()["height"];
 		targetPosition_ = { dist(gen),height,dist(gen) };
 	}

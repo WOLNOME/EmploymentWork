@@ -70,6 +70,7 @@ void GamePlayScene::Initialize() {
 	enemyManager_->SetLevelLoader(levelLoader_.get());
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->SetItemManager(itemManager_.get());
+	enemyManager_->SetMessageUI(messageUI_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());

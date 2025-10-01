@@ -55,7 +55,7 @@ void IBaseTankEnemy::OnCollision(CollisionAttribute attribute, const Vector3& su
 		hp_ = std::clamp(hp_, 0, maxHP_);
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
+		Vector3 reflectVec = -(subjectPos - GetWorldTransform().translate).Normalized();
 		velocity_.x += reflectVec.x * 50.0f;
 		velocity_.z += reflectVec.z * 50.0f;
 
@@ -64,7 +64,7 @@ void IBaseTankEnemy::OnCollision(CollisionAttribute attribute, const Vector3& su
 								   //エネミーに当たった場合
 	case CollisionAttribute::Enemy: {
 		//相手の座標と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
+		Vector3 reflectVec = -(subjectPos - GetWorldTransform().translate).Normalized();
 		velocity_.x += reflectVec.x * 30.0f;
 		velocity_.z += reflectVec.z * 30.0f;
 
@@ -108,7 +108,7 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 	else if (stateName == "Dead") {
 		newState = deadState_.get();
 		//アイテムを生成
-		itemManager_->AddItem(GetWorldPosition());
+		itemManager_->AddItem(GetWorldTransform().translate);
 	}
 	else {
 		assert(0 && "使用できない名前が使われています。");

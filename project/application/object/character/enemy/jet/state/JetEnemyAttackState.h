@@ -10,13 +10,13 @@ public:
 
 public:
 	//getter
-	bool GetIsBombFire() const { return isBombFire_; }
+	bool GetIsCanBombFire() const { return isCanBombFire_; }
 	//setter
-	void SetIsBombFire(bool isBombFire) { isBombFire_ = isBombFire; }
+	void SetIsCanBombFire(bool isBombFire) { isCanBombFire_ = isBombFire; }
 
 private:
-	//爆弾投下済みかどうか
-	bool isBombFire_ = false;
+	//爆弾投下可能かどうか
+	bool isCanBombFire_ = false;
 
 	//フェーズ移行クールタイム
 	const float phaseChangeCoolTime_ = 2.0f;

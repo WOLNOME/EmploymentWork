@@ -10,12 +10,12 @@
         "z":6.0
     },
     "searchPlayerDistanceApproach": 300.0,
-    "speed": 4.0,
-    "maxSpeed": 30.0,
+    "speed": 50.0,
+    "maxSpeed": 90.0,
     "rotateSpeed": 1.256,
     "searchPlayerDistanceAttack": 10.0,
     "cannonCoolTime":1.5,
     "maxHP":5,
-    "height":50,
-    "updateTargetPointDistance":10
+    "height":40,
+    "updateTargetPointDistance":50
 }

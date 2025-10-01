@@ -169,6 +169,7 @@
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyAttackState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyDeadState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyAttackState.h" />
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyDeadState.h" />
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli" />

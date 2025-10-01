@@ -5,6 +5,7 @@
 
 //アプリケーション
 #include "application/object/character/weapon/enemy/EnemyCannon.h"
+#include "application/object/character/weapon/enemy/EnemyBomb.h"
 
 class EnemyManager;
 class Player;
@@ -22,6 +23,9 @@ public:
 public://getter
 	//砲弾のコンテナ
 	const std::vector<std::unique_ptr<EnemyCannon>>& GetCannons() const { return cannons_; }
+	//爆弾のコンテナ
+	const std::vector<std::unique_ptr<EnemyBomb>>& GetBombs() const { return bombs_; }
+
 	////銃弾のコンテナ
 	//const std::vector<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
 
@@ -36,6 +40,8 @@ public://setter
 private:
 	//砲弾の生成
 	void CreateCannon();
+	//爆弾の生成
+	void CreateBomb();
 
 private:
 	//エネミーマネージャー
@@ -49,6 +55,9 @@ private:
 
 	//砲弾のコンテナ
 	std::vector<std::unique_ptr<EnemyCannon>> cannons_;
+	//爆弾のコンテナ
+	std::vector<std::unique_ptr<EnemyBomb>> bombs_;
+
 	////銃弾のコンテナ
 	//std::vector<std::unique_ptr<EnemyBullet>> bullets_;
 

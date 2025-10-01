@@ -26,7 +26,7 @@ void JetEnemyDeadState::Enter(IBaseJetEnemy* enemy) {
 void JetEnemyDeadState::Update(IBaseJetEnemy* enemy) {
 	particleOnTimer_ +=kDeltaTime;
 	//死亡パーティクルをオン
-	particle_->emitter_.transform.translate = enemy->GetWorldPosition();
+	particle_->emitter_.transform.translate = enemy->GetWorldTransform().translate;
 	particle_->emitter_.isPlay = true;
 	//時間を超えたらオフにする
 	if (particleOnTimer_ > particleOnTime_) {

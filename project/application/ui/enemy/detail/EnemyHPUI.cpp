@@ -99,4 +99,16 @@ void EnemyHPUI::Update() {
 		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
 		drawHPBar(pos, rate);
 	}
+
+	//ジェット
+	for (const auto& jet : enemyManager_->GetJets()) {
+		//死亡していたら描画しない
+		if (jet->GetDeadTimer() > 0.0f || jet->GetIsDead())
+			return;
+
+		Vector3 pos = jet->GetWorldTransform().worldTranslate;
+		pos.y += normalEnemyHPBarHeight;
+		float rate = (float)jet->GetHP() / (float)jet->GetMaxHP();
+		drawHPBar(pos, rate);
+	}
 }

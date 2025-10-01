@@ -1,28 +1,45 @@
 #include "JetEnemyApproachState.h"
+#include <cassert>
 
 //アプリケーション
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
+#include <application/ui/message/MessageUI.h>
 
 void JetEnemyApproachState::Enter(IBaseJetEnemy* enemy) {
 	//目標点を更新(プレイヤーの座標)
 	targetPosition_ = enemy->GetPlayer()->GetWorldTransform().translate;
 	float height = enemy->GetParam()["height"];
 	targetPosition_.y = height;
+	stateContinueTimer_ = 0.0f;
 }
 
 void JetEnemyApproachState::Update(IBaseJetEnemy* enemy) {
+	//メッセージUIの確認
+	assert(messageUI_ && "メッセージUIがセットされていません");
+
+	//状態継続タイマーを更新
+	stateContinueTimer_ += kDeltaTime;
+
 	//死亡状態に切り替え
 	TransitionDeadState(enemy);
 	//攻撃範囲に入ったら攻撃状態に切り替え
 	float searchPlayerDistanceAttack = enemy->GetParam()["searchPlayerDistanceAttack"];
-	if (Vector3(targetPosition_ - enemy->GetWorldPosition()).Length() < searchPlayerDistanceAttack) {
+	if (Vector3(targetPosition_ - enemy->GetWorldTransform().translate).Length() < searchPlayerDistanceAttack) {
 		enemy->ChangeState("Attack");
+
+		//攻撃範囲に入った通知をする
+		messageUI_->AddMessage(L"<注意> ジェットの攻撃範囲に入った！");
 	}
-	//接近範囲から外れたらパトロール状態に切り替え
-	float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() > searchPlayerDistanceApproach) {
-		enemy->ChangeState("Patrol");
+	//接近範囲から外れたらパトロール状態に切り替え(状態継続最低時間を超えている時のみ)
+	if (stateContinueTimer_ > stateContinueTime_) {
+		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
+		if (Vector3(enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate).Length() > searchPlayerDistanceApproach) {
+			enemy->ChangeState("Patrol");
+
+			//接近範囲から外れた通知をする
+			messageUI_->AddMessage(L"ジェットの追跡から逃れた！");
+		}
 	}
 	//接近の更新処理
 	UpdateApproach(enemy);

@@ -28,6 +28,15 @@ void EnemyManager::Update() {
 			++it;
 		}
 	}
+	//全ジェットの死亡時処理
+	for (auto it = jets_.begin(); it != jets_.end();) {
+		if ((*it)->GetIsDead()) {
+			it = jets_.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 
 	//全キャノ太の更新
 	for (const auto& canota : canotas_) {
@@ -36,6 +45,10 @@ void EnemyManager::Update() {
 	//全ボスの更新
 	for (const auto& boss : bosses_) {
 		boss->Update();
+	}
+	//全ジェットの更新
+	for (const auto& jet : jets_) {
+		jet->Update();
 	}
 
 	//もし全てのボスが死亡していたら
@@ -54,6 +67,10 @@ void EnemyManager::DebugWithImGui() {
 	//全ボスのデバッグ処理
 	for (const auto& boss : bosses_) {
 		boss->DebugWithImGui();
+	}
+	//全ジェットのデバッグ処理
+	for (const auto& jet : jets_) {
+		jet->DebugWithImGui();
 	}
 #endif // _DEBUG
 }
@@ -85,6 +102,15 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 		boss->SetRotate(data.rotation);
 		bosses_.push_back(std::move(boss));
 	}
+	//レベルローダーからジェットのスポーンデータを取得
+	std::unique_ptr<Jet> jet = nullptr;
+	jet = std::make_unique<Jet>();
+	jet->Initialize();
+	jet->SetTranslate({ 0.0f,40.0f,400.0f });
+	jet->SetRotate({ 0.0f,0.0f,0.0f });
+	jets_.push_back(std::move(jet));
+
+
 }
 
 void EnemyManager::SetPlayer(Player* _player) {
@@ -95,6 +121,9 @@ void EnemyManager::SetPlayer(Player* _player) {
 	for (const auto& boss : bosses_) {
 		boss->SetPlayer(player_);
 	}
+	for (const auto& jet : jets_) {
+		jet->SetPlayer(player_);
+	}
 }
 
 void EnemyManager::SetItemManager(ItemManager* _itemManager) {
@@ -104,5 +133,14 @@ void EnemyManager::SetItemManager(ItemManager* _itemManager) {
 	}
 	for (const auto& boss : bosses_) {
 		boss->SetItemManager(itemManager_);
+	}
+	for (const auto& jet : jets_) {
+		jet->SetItemManager(itemManager_);
+	}
+}
+
+void EnemyManager::SetMessageUI(MessageUI* _messageUI) {
+	for (const auto& jet : jets_) {
+		jet->SetMessageUI(_messageUI);
 	}
 }

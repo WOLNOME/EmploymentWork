@@ -1,4 +1,5 @@
 {
     "maxCannonNum":10,
+    "maxBombNum":3,
     "maxBulletNum":5
 }
