@@ -3,8 +3,14 @@
 #include <SceneManager.h>
 #include <Object3d.h>
 #include <Sprite.h>
+#include <vector>
 #include <memory>
 #include <Handle.h>
+
+//アプリケーション
+#include "application/object/environment/Skydome.h"
+#include "application/object/environment/Ground.h"
+#include "application/object/character/enemy/manager/EnemyManager.h"
 
 class TitleSystem {
 private://列挙体
@@ -51,9 +57,12 @@ private:
 	Handle startTextHandle_;
 	std::unique_ptr<Sprite> startTextSprite_ = nullptr;
 
-	//終了テキスト
-	Handle exitTextHandle_;
-	std::unique_ptr<Sprite> exitTextSprite_ = nullptr;
 
+private://オブジェクト
+	//ガレージ
+	std::unique_ptr<Object3d> garage_ = nullptr;
+
+	//戦車
+	std::vector<std::unique_ptr<Object3d>> tanks_;
 };
 

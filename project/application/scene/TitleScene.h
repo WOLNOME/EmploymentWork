@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseScene.h"
-#include "GameCamera.h"
+#include "DevelopCamera.h"
 
 //アプリケーション
 #include "application/object/environment/Skydome.h"
@@ -31,15 +31,9 @@ private:
 	Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	std::unique_ptr<GameCamera> camera_ = nullptr;
+	std::unique_ptr<DevelopCamera> camera_ = nullptr;
 private://ライト
 	
-private://オブジェクト
-	//天球
-	std::unique_ptr<Skydome> skydome_ = nullptr;
-	//地面
-	std::unique_ptr<Ground> ground_ = nullptr;
-
 private://システム
 	std::unique_ptr<TitleSystem> titleSystem_ = nullptr;
 

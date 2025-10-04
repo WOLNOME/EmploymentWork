@@ -9,20 +9,16 @@ void TitleScene::Initialize() {
 	input_ = Input::GetInstance();
 
 	//カメラの生成・初期化
-	camera_ = std::make_unique<GameCamera>();
+	camera_ = std::make_unique<DevelopCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(2000.0f);
 	camera_->worldTransform.rotate = { 0.15f,0.0f,0.0f };
 	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
 
 	//インスタンスの生成
-	skydome_ = std::make_unique<Skydome>();
-	ground_ = std::make_unique<Ground>();
 	titleSystem_ = std::make_unique<TitleSystem>();
 
 	//インスタンスの初期化
-	skydome_->Initialize();
-	ground_->Initialize();
 	titleSystem_->Initialize();
 
 	//カメラのセット

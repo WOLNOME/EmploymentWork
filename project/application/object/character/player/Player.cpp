@@ -387,7 +387,7 @@ void Player::CameraAlgorithm() {
 	}
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
-	const float minPitch = -(pi / 11.0f);		//上向き制限
+	const float minPitch = -(pi / 9.0f);		//上向き制限
 	camera_->worldTransform.rotate.x = std::clamp(camera_->worldTransform.rotate.x, minPitch, maxPitch);
 	//水平回転をπ~-πの間に収める
 	if (camera_->worldTransform.rotate.y > pi)
