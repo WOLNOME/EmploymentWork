@@ -446,15 +446,6 @@
     <ClInclude Include="engine\scene\BaseScene.h">
       <Filter>engine\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\Collider.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collision\CollisionConfig.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collision\CollisionManager.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h">
       <Filter>engine\base</Filter>
     </ClInclude>
@@ -793,6 +784,15 @@
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>externals\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\Collider.h">
+      <Filter>engine\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\CollisionConfig.h">
+      <Filter>engine\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\CollisionManager.h">
+      <Filter>engine\collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

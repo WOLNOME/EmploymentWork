@@ -10,12 +10,12 @@ void Jet::Initialize() {
 	//ベースキャラクターの初期化
 	IBaseJetEnemy::Initialize();
 	//テクスチャ
-	//textureHandle_ = TextureManager::GetInstance()->LoadTexture("jet.png");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("jet.png");
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Jet"), "bunny");
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Jet"), "jet");
 	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
-	//object3d_->SetTexture(textureHandle_);
+	object3d_->SetTexture(textureHandle_);
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/jet");
 	//当たり判定のパラメーター入力
