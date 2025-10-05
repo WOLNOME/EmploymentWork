@@ -62,6 +62,10 @@ private:
 	float timer_ = 0.0f;
 	const float time_ = 2.0f;
 
+	//タイトルテキスト
+	Handle titleTextHandle_;
+	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+
 	//スタートテキスト
 	Handle startTextHandle_;
 	std::unique_ptr<Sprite> startTextSprite_ = nullptr;

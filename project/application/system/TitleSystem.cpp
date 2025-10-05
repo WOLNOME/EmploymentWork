@@ -16,6 +16,30 @@ void TitleSystem::Initialize() {
 	//メンバ変数の初期化
 	menu_ = Menu::Start;
 
+	//タイトルテキスト
+	{
+		TextParam textParam;
+		textParam.color = { 1,1,1,1 };
+		textParam.font = Font::UDDegitalNK_B;
+		textParam.fontStyle = FontStyle::Normal;
+		textParam.size = 96.0f;
+		textParam.text = L"タンク決戦";
+		EdgeParam edgeParam;
+		edgeParam.color = { 0,0,0,1 };
+		edgeParam.isEdgeDisplay = true;
+		edgeParam.slideRate = { 0,0 };
+		edgeParam.width = 5.0f;
+		//テクスチャハンドルに登録
+		titleTextHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
+		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
+		//スプライト
+		titleTextSprite_ = std::make_unique<Sprite>();
+		titleTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleUI"), Sprite::Order::Front0);
+		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,150.0f });
+		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
+		titleTextSprite_->SetTexture(titleTextHandle_);
+	}
+
 	//スタートテキスト
 	{
 		TextParam textParam;
@@ -96,8 +120,8 @@ void TitleSystem::DirectionUI() {
 	//スタートテキスト
 	{
 		//周期別の処理
-		Vector2 upPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f };
-		Vector2 downPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 30.0f };
+		Vector2 upPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 40.0f };
+		Vector2 downPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 70.0f };
 		//前周期
 		if (isHalfPeriod_) {
 			//位置を下げる
