@@ -26,6 +26,7 @@ void TitleScene::Initialize() {
 	LineManager::GetInstance()->SetCamera(camera_.get());
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
+	titleSystem_->SetCamera(camera_.get());
 
 	//ライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());

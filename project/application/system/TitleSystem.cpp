@@ -5,6 +5,7 @@
 #include <Object3dManager.h>
 #include <SpriteManager.h>
 #include <MyMath.h>
+#include <cassert>
 
 void TitleSystem::Initialize() {
 	//インプット
@@ -46,7 +47,7 @@ void TitleSystem::Initialize() {
 		garage_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("garage"), "garage");
 
 		//戦車
-		for(int i= 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("player.png");
 			auto tank = std::make_unique<Object3d>();
 			tank->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
@@ -65,6 +66,8 @@ void TitleSystem::Update() {
 	Operate();
 	//UI演出
 	DirectionUI();
+	//カメラ操作
+	OperateCamera();
 }
 
 void TitleSystem::DebugWithImGui() {
@@ -113,5 +116,46 @@ void TitleSystem::DirectionUI() {
 			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
 			startTextSprite_->SetColor({ 1,1,1,alpha });
 		}
+	}
+}
+
+void TitleSystem::OperateCamera() {
+	//カメラのセット確認
+	assert(camera_ != nullptr && "カメラがセットされていません");
+
+	//移動
+	{
+		//タイマー
+		cameraTimer_ += kDeltaTime;
+		if (cameraTimer_ >= cameraMoveTime_) {
+			isHalfPeriodCamera_ = !isHalfPeriodCamera_;
+			cameraTimer_ = 0.0f;
+		}
+		//前周期
+		if (!isHalfPeriodCamera_) {
+			Vector3 position = MyMath::Lerp(cameraStartPos_, cameraEndPos_, MyMath::EaseInOutSine(cameraTimer_ / cameraMoveTime_));
+			camera_->worldTransform.translate = position;
+		}
+		//後周期
+		else {
+			Vector3 position = MyMath::Lerp(cameraEndPos_, cameraStartPos_, MyMath::EaseInOutSine(cameraTimer_ / cameraMoveTime_));
+			camera_->worldTransform.translate = position;
+		}
+	}
+
+	//回転
+	{
+		// カメラからターゲットへの方向ベクトル
+		Vector3 diff = cameraTargetPos_ - camera_->worldTransform.translate;
+		diff.Normalize();
+
+		// Y軸（水平面）上の角度（ヨー / azimuth）
+		float azimuth = std::atan2(diff.x, diff.z);
+
+		// 上下角（ピッチ / elevation）
+		float elevation = std::atan2(-diff.y, std::sqrt(diff.x * diff.x + diff.z * diff.z));
+
+		// 回転をセット
+		camera_->worldTransform.rotate = { elevation, azimuth, 0.0f };
 	}
 }
