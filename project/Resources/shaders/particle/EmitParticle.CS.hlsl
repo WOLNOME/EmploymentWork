@@ -80,8 +80,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
             //生成数は1つだけ
             generateNum = 1;
         }
-        //本来CPU側ではisPlayをここでfalseにするが、できなくなってしまったので
-        //Emitが終了次第OneShotのスタイル限定でisPlayをオフにする処理を追加する。
     }
     //粒の生成
     if (generateNum > 0 && playingGrainNum + generateNum < max)
@@ -137,9 +135,9 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
             }
             else
             {
-            //発生させられなかったので減らした分元に戻す。
+                //発生させられなかったので減らした分元に戻す。
                 InterlockedAdd(gFreeListIndex[0], 1);
-            //Emit中にParticleは消えないので、この後発生することはないためreturnして終わらせる
+                //Emit中にParticleは消えないので、この後発生することはないためreturnして終わらせる
                 return;
             }
         }
