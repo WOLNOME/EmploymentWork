@@ -16,6 +16,7 @@ void JetEnemyPatrolState::Enter(IBaseJetEnemy* enemy) {
 	float height = enemy->GetParam()["height"];
 	targetPosition_ = { dist(gen),height,dist(gen) };
 	stateContinueTimer_ = 0.0f;
+	isDecidedTargetPoint_ = true;
 }
 
 void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
@@ -50,9 +51,19 @@ void JetEnemyPatrolState::Exit(IBaseJetEnemy* enemy) {
 }
 
 void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
+	//もし目標ポイントが決まっていなかったらランダムに決定
+	if (!isDecidedTargetPoint_) {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dist(-500.0f, 500.0f);
+		float height = enemy->GetParam()["height"];
+		targetPosition_ = { dist(gen),height,dist(gen) };
+		isDecidedTargetPoint_ = true;
+	}
+
 	//目標ポイントとジェットの距離が近づいたら目標ポイントを更新
 	float updateTargetPointDistance = enemy->GetParam()["updateTargetPointDistance"];
-	if (Vector3(enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate).Length() < updateTargetPointDistance) {
+	if (Vector3(targetPosition_ - enemy->GetWorldTransform().translate).Length() < updateTargetPointDistance) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<float> dist(-500.0f, 500.0f);

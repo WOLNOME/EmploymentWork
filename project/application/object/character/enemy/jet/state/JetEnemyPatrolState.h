@@ -22,6 +22,7 @@ private:
 
 	//目標ポイント
 	Vector3 targetPosition_ = {};
+	bool isDecidedTargetPoint_ = false;
 
 	//状態継続最低時間
 	const float stateContinueTime_ = 2.0f;

@@ -1,21 +1,21 @@
 {
     "collisionCenterOffsetOBB":{
         "x":0.0,
-        "y":-1.0,
-        "z":0.0
+        "y":0.0,
+        "z":-1.0
     },
     "collisionSizeOBB":{
-        "x":6.0,
-        "y":3.5,
-        "z":6.0
+        "x":4.0,
+        "y":1.0,
+        "z":5.0
     },
-    "searchPlayerDistanceApproach": 300.0,
-    "speed": 50.0,
-    "maxSpeed": 90.0,
+    "searchPlayerDistanceApproach": 200.0,
+    "speed": 35.0,
+    "maxSpeed": 80.0,
     "rotateSpeed": 1.256,
-    "searchPlayerDistanceAttack": 10.0,
+    "searchPlayerDistanceAttack": 5,
     "cannonCoolTime":1.5,
-    "maxHP":5,
+    "maxHP":10,
     "height":40,
-    "updateTargetPointDistance":50
+    "updateTargetPointDistance":20
 }

@@ -1,10 +1,18 @@
 #pragma once
 #include <Input.h>
+#include <BaseCamera.h>
 #include <SceneManager.h>
+#include <Vector3.h>
 #include <Object3d.h>
 #include <Sprite.h>
+#include <vector>
 #include <memory>
 #include <Handle.h>
+
+//アプリケーション
+#include "application/object/environment/Skydome.h"
+#include "application/object/environment/Ground.h"
+#include "application/object/character/enemy/manager/EnemyManager.h"
 
 class TitleSystem {
 private://列挙体
@@ -25,20 +33,27 @@ public:
 	//デバッグ用
 	void DebugWithImGui();
 
+	//カメラセット
+	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+
 private://非公開メンバ関数
 	//操作
 	void Operate();
 	//UI演出
 	void DirectionUI();
+	//カメラ操作
+	void OperateCamera();
 
 private:
 	//インプット
 	Input* input_ = nullptr;
+	//カメラ
+	BaseCamera* camera_ = nullptr;
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 
 private:
-	
+
 	//タイトルメニュー
 	Menu menu_;
 
@@ -47,13 +62,29 @@ private:
 	float timer_ = 0.0f;
 	const float time_ = 2.0f;
 
+	//タイトルテキスト
+	Handle titleTextHandle_;
+	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+
 	//スタートテキスト
 	Handle startTextHandle_;
 	std::unique_ptr<Sprite> startTextSprite_ = nullptr;
 
-	//終了テキスト
-	Handle exitTextHandle_;
-	std::unique_ptr<Sprite> exitTextSprite_ = nullptr;
 
+private://オブジェクト
+	//ガレージ
+	std::unique_ptr<Object3d> garage_ = nullptr;
+
+	//戦車
+	std::vector<std::unique_ptr<Object3d>> tanks_;
+
+private://カメラ操作
+	Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };
+	Vector3 cameraEndPos_ = { 60.0f,12.0f,-17.0f };
+	const float cameraMoveTime_ = 30.0f;
+	float cameraTimer_ = 0.0f;
+	bool isHalfPeriodCamera_ = false;
+
+	Vector3 cameraTargetPos_ = { 0.0,1.0f,0.0f };
 };
 

@@ -788,10 +788,10 @@
     <ClInclude Include="engine\collision\Collider.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\CollisionManager.h">
+    <ClInclude Include="engine\collision\CollisionConfig.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\CollisionConfig.h">
+    <ClInclude Include="engine\collision\CollisionManager.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
   </ItemGroup>

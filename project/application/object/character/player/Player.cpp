@@ -163,7 +163,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 			//アイテム取得
 			item_reloadSpeedUp_++;
 			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"リロード速度アップアイテムを取得！";
+			std::wstring message = L"リロード速度UP！";
 			messageUI_->AddMessage(message);
 		}
 
@@ -174,7 +174,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 			//アイテム取得
 			item_moveSpeedUp_++;
 			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"移動速度アップアイテムを取得！";
+			std::wstring message = L"移動速度UP！";
 			messageUI_->AddMessage(message);
 		}
 
@@ -185,7 +185,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 			//アイテム取得
 			item_turnSpeedUp_++;
 			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"回転速度アップアイテムを取得！";
+			std::wstring message = L"回転速度UP！";
 			messageUI_->AddMessage(message);
 		}
 
@@ -387,7 +387,7 @@ void Player::CameraAlgorithm() {
 	}
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
-	const float minPitch = -(pi / 15.0f);		//上向き制限
+	const float minPitch = -(pi / 9.0f);		//上向き制限
 	camera_->worldTransform.rotate.x = std::clamp(camera_->worldTransform.rotate.x, minPitch, maxPitch);
 	//水平回転をπ~-πの間に収める
 	if (camera_->worldTransform.rotate.y > pi)
