@@ -59,6 +59,15 @@ void SpriteManager::BackDraw() {
 				//描画
 				sprite.second->Draw();
 	}
+	//バックスプライト3の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Back3)
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
+	}
 }
 
 void SpriteManager::FrontDraw() {
@@ -96,6 +105,24 @@ void SpriteManager::FrontDraw() {
 	for (const auto& sprite : sprites_) {
 		//順序選別
 		if (sprite.second->order_ == Sprite::Order::Front2)
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
+	}
+	//フロントスプライト3の描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::Front3)
+			//表示しないなら次へ
+			if (sprite.second->isDisplay_)
+				//描画
+				sprite.second->Draw();
+	}
+	//シーン遷移スプライトの描画
+	for (const auto& sprite : sprites_) {
+		//順序選別
+		if (sprite.second->order_ == Sprite::Order::SceneTransition)
 			//表示しないなら次へ
 			if (sprite.second->isDisplay_)
 				//描画

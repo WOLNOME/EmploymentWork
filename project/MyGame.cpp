@@ -22,7 +22,7 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("PARTICLEEDITOR");
+	SceneManager::GetInstance()->SetNextScene("Title");
 
 	//パーティクルエディター→PARTICLEEDITOR
 	//開発用シーン→DEVELOP
@@ -125,9 +125,6 @@ void MyGame::Draw() {
 
 	//D2Dの描画前処理
 	D2DRender::GetInstance()->PreDraw();
-
-	//シーン遷移アニメーションの描画(一番上に描画)
-	SceneManager::GetInstance()->CurtainDraw();
 
 	//D2Dの描画後処理
 	D2DRender::GetInstance()->PostDraw();

@@ -9,14 +9,18 @@ class Sprite {
 	//スプライトマネージャーに公開
 	friend class SpriteManager;
 public://列挙体
-	//描画順タグ(各レイヤーは今のところ3つずつ←必要に応じて増やす)
+	//描画順タグ(各レイヤーは今のところ4つずつ←必要に応じて増やす)
 	enum class Order {
 		Back0,
 		Back1,
 		Back2,
+		Back3,
 		Front0,
 		Front1,
 		Front2,
+		Front3,
+
+		SceneTransition,
 
 		kMaxOrderNum,
 	};
@@ -102,6 +106,7 @@ public://setter
 	void SetShakeOffset(const Vector2& _offset) { shakeOffset_ = _offset; }
 	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; }
 	void SetTexture(Handle _textureHandle) { textTextureHandle_ = _textureHandle; }
+	void SetTexture(uint32_t _textureHandle);
 
 private://非公開メンバ変数
 	ResourceForGPU CreateResourceForGPU();

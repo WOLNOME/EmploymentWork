@@ -101,7 +101,7 @@ void TitleSystem::DebugWithImGui() {
 void TitleSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneManager_->SetNextScene("GamePlay");
+		sceneManager_->SetNextScene("GamePlay",SceneTransitionAnimation::TransitionType::FADE,1.0f,TextureManager::GetInstance()->LoadTexture("yellow.png"));
 	}
 
 	//Escapeキーで終了

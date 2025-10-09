@@ -31,10 +31,6 @@ public:
 	/// </summary>
 	void DebugWithImGui();
 	/// <summary>
-	/// 遷移幕描画
-	/// </summary>
-	void CurtainDraw();
-	/// <summary>
 	/// 終了
 	/// </summary>
 	void Finalize();
@@ -44,7 +40,7 @@ private:
 	void ChangeScene();
 public:
 	//次シーンのセット
-	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType = SceneTransitionAnimation::TransitionType::FADE, uint32_t frame = 60);
+	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType = SceneTransitionAnimation::TransitionType::FADE, float frame = 1.0f, uint32_t _textureHandle = 0u);
 
 private:
 	//今のシーン

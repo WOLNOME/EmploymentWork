@@ -185,6 +185,11 @@ void Sprite::DebugWithImGui() {
 
 }
 
+void Sprite::SetTexture(uint32_t _textureHandle) {
+	textureHandle_ = _textureHandle;
+	AdjustTextureSize();
+}
+
 Sprite::ResourceForGPU Sprite::CreateResourceForGPU() {
 	ResourceForGPU result;
 

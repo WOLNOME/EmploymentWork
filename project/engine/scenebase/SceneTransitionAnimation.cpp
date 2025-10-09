@@ -1,70 +1,88 @@
 #include "SceneTransitionAnimation.h"
 #include "WinApp.h"
+#include <SpriteManager.h>
+#include  <TextureManager.h>
 #include <cassert>
 
 SceneTransitionAnimation::SceneTransitionAnimation()
-	: state_(TransitionState::NONE), type_(TransitionType::NONE), frame_(0), timer_(0), isTransitioning_(false), alpha_(1.0f) {
+	: state_(TransitionState::NONE), inType_(TransitionType::NONE), outType_(TransitionType::NONE), inOption_(TransitionOption::NONE), outOption_(TransitionOption::NONE), time_(0), timer_(0) {
 }
 
 SceneTransitionAnimation::~SceneTransitionAnimation() {
 }
 
 void SceneTransitionAnimation::Initialize() {
-	//ブラシの色を決定
-	ColorDecide();
+	//スプライト生成
+	sprite_ = std::make_unique<Sprite>();
+	uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
+	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("transitionBack"), Sprite::Order::SceneTransition, textureHandle);
+	sprite_->SetIsDisplay(false);
 
 	//変数の初期化
-	alpha_ = 1.0f;
 	state_ = TransitionState::NONE;
-	type_ = TransitionType::NONE;
-	frame_ = 0;
-	timer_ = 0;
-	isTransitioning_ = false;
+	inType_ = TransitionType::NONE;
+	outType_ = TransitionType::NONE;
+	inOption_ = TransitionOption::NONE;
+	outOption_ = TransitionOption::NONE;
+	time_ = 0.0f;
+	timer_ = 0.0f;
 }
 
 void SceneTransitionAnimation::Update() {
-	
-}
-
-void SceneTransitionAnimation::Draw() {
-	//描画
-	if (isTransitioning_) {
-		DrawD2D();
-	}
 }
 
 void SceneTransitionAnimation::StartTransition() {
 	//必要な変数の確認
-	if (type_ == TransitionType::NONE) {
+	if (inType_ == TransitionType::NONE || outType_ == TransitionType::NONE) {
 		assert(0 && "遷移の種類が設定されていません");
 	}
-	if (frame_ == 0) {
-		assert(0 && "フレームが設定されていません");
+	if (time_ == 0) {
+		assert(0 && "時間が設定されていません");
 	}
 
-	//フェードイン開始
+	//イン開始
 	state_ = TransitionState::UPDATE_IN;
-	//遷移中フラグを立てる
-	isTransitioning_ = true;
+	//スプライトを表示
+	sprite_->SetIsDisplay(true);
+
+	//タイプごとの初期化
+	//switch (inType_) {
+	//case SceneTransitionAnimation::TransitionType::FADE:
+	//	//座標を画面中央に
+	//	sprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
+	//	//アンカーポイント
+	//	sprite_->SetAnchorPoint({ 0.5f,0.5f });
+	//	//オプションがシェイクなら
+	//	if (inOption_ == TransitionOption::SHAKE) {
+	//		//サイズを少し大きく
+	//	}
+	//	break;
+	//case SceneTransitionAnimation::TransitionType::SLIDEUP:
+	//	break;
+	//case SceneTransitionAnimation::TransitionType::SLIDEDOWN:
+	//	break;
+	//};
 }
 
 void SceneTransitionAnimation::UpdateIn() {
-	switch (type_) {
+	switch (inType_) {
 	case SceneTransitionAnimation::TransitionType::FADE:
 		//フェードイン処理
 		if (state_ == TransitionState::UPDATE_IN) {
-			//フレームが0になったら
-			if (timer_ == 0) {
+			//時間が達したら
+			if (timer_ >= time_) {
 				//フェードイン終了
 				state_ = TransitionState::END_IN;
 			}
 			else {
-				//フレームを減らす
-				timer_--;
+				//時間を進める
+				timer_ += kDeltaTime;
 				//透明度を計算
-				float alpha = 1.0f - MyMath::Lerp(0.0f, 1.0f, static_cast<float>(timer_) / static_cast<float>(frame_));
+				float alpha = MyMath::Lerp(0.0f, 1.0f, static_cast<float>(timer_) / static_cast<float>(time_));
 				//スプライトの透明度を設定
-				alpha_ = alpha;
+				Vector4 color = sprite_->GetColor();
+				color.w = alpha;
+				sprite_->SetColor(color);
 			}
 		}
 		break;
@@ -75,16 +93,14 @@ void SceneTransitionAnimation::UpdateIn() {
 }
 
 void SceneTransitionAnimation::EndIn() {
-	switch (type_) {
+	switch (inType_) {
 	case SceneTransitionAnimation::TransitionType::FADE:
 		//フェードイン終了
 		if (state_ == TransitionState::END_IN) {
 			//フェードアウト開始
 			state_ = TransitionState::UPDATE_OUT;
 			//フレームをリセット
-			timer_ = frame_;
-			//スプライトの透明度を設定
-			alpha_ = 1.0f;
+			timer_ = 0.0f;
 		}
 		break;
 	default:
@@ -93,22 +109,24 @@ void SceneTransitionAnimation::EndIn() {
 }
 
 void SceneTransitionAnimation::UpdateOut() {
-	switch (type_) {
+	switch (outType_) {
 	case SceneTransitionAnimation::TransitionType::FADE:
 		//フェードアウト処理
 		if (state_ == TransitionState::UPDATE_OUT) {
-			//フレームが0になったら
-			if (timer_ == 0) {
+			//時間が達したら
+			if (timer_ >= time_) {
 				//フェードアウト終了
 				state_ = TransitionState::END_OUT;
 			}
 			else {
-				//フレームを減らす
-				timer_--;
+				//時間を進める
+				timer_ += kDeltaTime;
 				//透明度を計算
-				float alpha = 1.0f - MyMath::Lerp(1.0f, 0.0f, static_cast<float>(timer_) / static_cast<float>(frame_));
+				float alpha = MyMath::Lerp(1.0f, 0.0f, static_cast<float>(timer_) / static_cast<float>(time_));
 				//スプライトの透明度を設定
-				alpha_ = alpha;
+				Vector4 color = sprite_->GetColor();
+				color.w = alpha;
+				sprite_->SetColor(color);
 			}
 		}
 		break;
@@ -118,16 +136,12 @@ void SceneTransitionAnimation::UpdateOut() {
 }
 
 void SceneTransitionAnimation::EndOut() {
-	switch (type_) {
+	switch (outType_) {
 	case SceneTransitionAnimation::TransitionType::FADE:
 		//フェードアウト終了
 		if (state_ == TransitionState::END_OUT) {
 			//遷移終了
 			state_ = TransitionState::END_ALL;
-			//遷移中フラグを下げる
-			isTransitioning_ = false;
-			//スプライトの透明度を設定
-			alpha_ = 0.0f;
 		}
 		break;
 	default:
@@ -138,28 +152,22 @@ void SceneTransitionAnimation::EndOut() {
 void SceneTransitionAnimation::EndAll() {
 	//遷移終了
 	state_ = TransitionState::NONE;
-	type_ = TransitionType::NONE;
-	frame_ = 0;
-	timer_ = 0;
-	//遷移中フラグを下げる
-	isTransitioning_ = false;
+	inType_ = TransitionType::NONE;
+	outType_ = TransitionType::NONE;
+	inOption_ = TransitionOption::NONE;
+	outOption_ = TransitionOption::NONE;
+	time_ = 0.0f;
+	timer_ = 0.0f;
+	//スプライトを非表示
+	sprite_->SetIsDisplay(false);
 }
 
-void SceneTransitionAnimation::ColorDecide() {
-	HRESULT hr;
-	// 黒色ブラシの作成
-	hr = d2drender->GetD2DDeviceContext()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Black),
-		&blackBrush_
-	);
-	assert(SUCCEEDED(hr) && "カラーブラシの生成に失敗しました");
-}
+void SceneTransitionAnimation::SetTexture(uint32_t _textureHandle) {
+	//もし0なら何もしない
+	if (_textureHandle == 0u) return;
 
-void SceneTransitionAnimation::DrawD2D() {
-	// 黒幕を描画
-	blackBrush_->SetOpacity(alpha_);
-	d2drender->GetD2DDeviceContext()->FillRectangle(
-		D2D1::RectF(0, 0, static_cast<float>(d2drender->GetD2DDeviceContext()->GetSize().width), static_cast<float>(d2drender->GetD2DDeviceContext()->GetSize().height)),
-		blackBrush_.Get()
-	);
+	sprite_->SetTexture(_textureHandle);
+
+	//テクスチャのサイズを画面サイズ(1280x720)に合わせる
+	//sprite_->SetSize({ 1200.0f,700.0f });
 }

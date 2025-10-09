@@ -40,11 +40,6 @@ void SceneManager::DebugWithImGui() {
 
 }
 
-void SceneManager::CurtainDraw() {
-	//シーンの遷移幕描画
-	sceneTransitionAnimation_->Draw();
-}
-
 void SceneManager::Finalize() {
 	//最後のシーンの終了と解放
 	scene_->Finalize();
@@ -95,7 +90,7 @@ void SceneManager::ChangeScene() {
 	}
 }
 
-void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType, uint32_t frame) {
+void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType, float frame, uint32_t _textureHandle) {
 	//遷移中なら何もしない
 	if (sceneTransitionAnimation_->IsTransitioning()) return;
 
@@ -114,7 +109,9 @@ void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitio
 	//次シーンを生成
 	nextScene_ = sceneFactory_->CreateScene(nextSceneName);
 	//遷移アニメーションタイプを設定
-	sceneTransitionAnimation_->SetTransitionType(transitionType);
-	//遷移アニメーションフレームを設定
-	sceneTransitionAnimation_->SetFrame(frame);
+	sceneTransitionAnimation_->SetTransitionType(transitionType, transitionType);
+	//遷移アニメーションも時間を設定
+	sceneTransitionAnimation_->SetTime(frame);
+	//テクスチャを設定
+	sceneTransitionAnimation_->SetTexture(_textureHandle);
 }

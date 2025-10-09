@@ -1,7 +1,6 @@
 #pragma once
-#include "D2DRender.h"
 #include "MyMath.h"
-#include <d2d1_3.h>
+#include <Sprite.h>
 #include <wrl.h>
 #include <cstdint>
 #include <memory>
@@ -21,13 +20,19 @@ public:
 	enum class TransitionType {
 		NONE,
 		FADE,
+		SLIDEUP,
+		SLIDEDOWN,
+	};
+	//遷移オプション
+	enum class TransitionOption {
+		NONE,
+		SHAKE,
 	};
 public:
 	SceneTransitionAnimation();
 	~SceneTransitionAnimation();
 	void Initialize();
 	void Update();
-	void Draw();
 
 	//遷移処理全般
 	void StartTransition();
@@ -41,30 +46,26 @@ public:
 	TransitionState GetState() const { return state_; }
 	bool IsTransitioning() const { return isTransitioning_; }
 	//セッター
-	void SetTransitionType(TransitionType type) { type_ = type; }
-	void SetFrame(const uint32_t frame) { frame_ = frame; timer_ = frame; }
+	void SetTransitionType(TransitionType _in, TransitionType _out) { inType_ = _in; outType_ = _out; }
+	void SetTransitionOption(TransitionOption _in, TransitionOption _out) { inOption_ = _in; outOption_ = _out; }
+	void SetTime(float _time) { time_ = _time; }
+	void SetTexture(uint32_t _textureHandle);
 
 private:
-	//D2D1の初期化
-	void ColorDecide();
-	//D2D1の描画
-	void DrawD2D();
+	//スプライト
+	std::unique_ptr<Sprite> sprite_ = nullptr;
 
-private:
-	D2DRender* d2drender = D2DRender::GetInstance();
-private:
-	//Direct2D関連リソース
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> blackBrush_;
-
-	//α値
-	float alpha_;
 	//遷移の状態
 	TransitionState state_;
 	//遷移の種類
-	TransitionType type_;
-	//フレーム
-	uint32_t frame_;
-	uint32_t timer_;
+	TransitionType inType_;
+	TransitionType outType_;
+	//遷移のオプション
+	TransitionOption inOption_;
+	TransitionOption outOption_;
+	//時間
+	float time_;
+	float timer_;
 	//遷移中フラグ
 	bool isTransitioning_;
 
