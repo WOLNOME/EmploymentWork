@@ -58,11 +58,11 @@ void SceneManager::ChangeScene() {
 		sceneTransitionAnimation_->StartTransition();
 	}
 	//遷移アニメーション中なら
-	if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::TransitionState::UPDATE_IN) {
+	if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::UPDATE_IN) {
 		//フェードイン処理
 		sceneTransitionAnimation_->UpdateIn();
 	}
-	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::TransitionState::END_IN) {
+	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::END_IN) {
 		//フェードイン終了
 		sceneTransitionAnimation_->EndIn();
 		//旧シーンの終了
@@ -76,21 +76,21 @@ void SceneManager::ChangeScene() {
 		//次のシーンを初期化する
 		scene_->Initialize();
 	}
-	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::TransitionState::UPDATE_OUT) {
+	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::UPDATE_OUT) {
 		//フェードアウト処理
 		sceneTransitionAnimation_->UpdateOut();
 	}
-	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::TransitionState::END_OUT) {
+	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::END_OUT) {
 		//フェードアウト終了
 		sceneTransitionAnimation_->EndOut();
 	}
-	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::TransitionState::END_ALL) {
+	else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::END_ALL) {
 		//フェードアウト終了
 		sceneTransitionAnimation_->EndAll();
 	}
 }
 
-void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType, float frame, uint32_t _textureHandle) {
+void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle) {
 	//遷移中なら何もしない
 	if (sceneTransitionAnimation_->IsTransitioning()) return;
 
@@ -109,9 +109,11 @@ void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitio
 	//次シーンを生成
 	nextScene_ = sceneFactory_->CreateScene(nextSceneName);
 	//遷移アニメーションタイプを設定
-	sceneTransitionAnimation_->SetTransitionType(transitionType, transitionType);
+	sceneTransitionAnimation_->SetType(inType, outType);
+	//遷移アニメーションオプションを設定
+	sceneTransitionAnimation_->SetOption(option);
 	//遷移アニメーションも時間を設定
-	sceneTransitionAnimation_->SetTime(frame);
+	sceneTransitionAnimation_->SetTime(time);
 	//テクスチャを設定
 	sceneTransitionAnimation_->SetTexture(_textureHandle);
 }

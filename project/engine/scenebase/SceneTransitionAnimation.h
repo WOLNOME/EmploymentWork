@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "MyMath.h"
 #include <Sprite.h>
 #include <wrl.h>
@@ -8,7 +9,7 @@
 class SceneTransitionAnimation {
 public:
 	//遷移の状態
-	enum class TransitionState {
+	enum class State {
 		NONE,
 		UPDATE_IN,
 		END_IN,
@@ -17,14 +18,14 @@ public:
 		END_ALL,
 	};
 	//遷移の種類
-	enum class TransitionType {
+	enum class Type {
 		NONE,
 		FADE,
 		SLIDEUP,
 		SLIDEDOWN,
 	};
 	//遷移オプション
-	enum class TransitionOption {
+	enum class Option {
 		NONE,
 		SHAKE,
 	};
@@ -43,11 +44,11 @@ public:
 	void EndAll();
 
 	//ゲッター
-	TransitionState GetState() const { return state_; }
+	State GetState() const { return state_; }
 	bool IsTransitioning() const { return isTransitioning_; }
 	//セッター
-	void SetTransitionType(TransitionType _in, TransitionType _out) { inType_ = _in; outType_ = _out; }
-	void SetTransitionOption(TransitionOption _in, TransitionOption _out) { inOption_ = _in; outOption_ = _out; }
+	void SetType(Type _in, Type _out) { inType_ = _in; outType_ = _out; }
+	void SetOption(Option _option) { option_ = _option; }
 	void SetTime(float _time) { time_ = _time; }
 	void SetTexture(uint32_t _textureHandle);
 
@@ -56,18 +57,16 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
 	//遷移の状態
-	TransitionState state_;
+	State state_;
 	//遷移の種類
-	TransitionType inType_;
-	TransitionType outType_;
+	Type inType_;
+	Type outType_;
 	//遷移のオプション
-	TransitionOption inOption_;
-	TransitionOption outOption_;
+	Option option_;
 	//時間
 	float time_;
 	float timer_;
 	//遷移中フラグ
-	bool isTransitioning_;
+	bool isTransitioning_ = false;
 
 };
-

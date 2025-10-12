@@ -80,7 +80,6 @@ void TitleSystem::Initialize() {
 			tanks_.push_back(std::move(tank));
 		}
 
-
 	}
 
 }
@@ -101,7 +100,7 @@ void TitleSystem::DebugWithImGui() {
 void TitleSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneManager_->SetNextScene("GamePlay",SceneTransitionAnimation::TransitionType::FADE,1.0f,TextureManager::GetInstance()->LoadTexture("yellow.png"));
+		sceneManager_->SetNextScene("GamePlay",SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP,SceneTransitionAnimation::Option::SHAKE,1.0f,TextureManager::GetInstance()->LoadTexture("shutter.png"));
 	}
 
 	//Escapeキーで終了

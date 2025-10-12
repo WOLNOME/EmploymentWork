@@ -1,5 +1,6 @@
 #include "GamePlayScene.h"
 #include "SceneManager.h"
+#include <TextureManager.h>
 
 void GamePlayScene::Initialize() {
 	//シーン共通の初期化
@@ -94,11 +95,13 @@ void GamePlayScene::Update() {
 
 	//シーンリセット
 	if (input_->TriggerKey(DIK_R)) {
-		sceneManager_->SetNextScene("GamePlay");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 	//プレイヤーが死亡したらゲームオーバー
 	if (player_->GetIsDead()) {
-		sceneManager_->SetNextScene("GameOver");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+		sceneManager_->SetNextScene("GameOver", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 
 	//F1キーでマウスカーソルの表示する

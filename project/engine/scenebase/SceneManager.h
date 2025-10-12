@@ -40,7 +40,7 @@ private:
 	void ChangeScene();
 public:
 	//次シーンのセット
-	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType = SceneTransitionAnimation::TransitionType::FADE, float frame = 1.0f, uint32_t _textureHandle = 0u);
+	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u);
 
 private:
 	//今のシーン
