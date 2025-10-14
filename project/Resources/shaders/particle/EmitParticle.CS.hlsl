@@ -93,7 +93,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
     for (int i = 0; i < generateNum; i++)
     {
         //乱数のシードを更新
-        generator.seed = rcp((float) i) * gPerFrame.time;
+        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gPerFrame.time * 0.1f) * 10000.0f;
         
         int freeListIndex;
         
@@ -102,7 +102,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-            if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+            if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
             {
                 uint grainIndex = gFreeList[freeListIndex];
                 //値を入れていく
@@ -145,7 +145,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-            if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+            if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
             {
                 uint grainIndex = gFreeList[freeListIndex];
             
@@ -192,7 +192,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                     
                     //粒のインデックスを次の値へ
                     InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-                    if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+                    if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
                     {
                         grainIndex = gFreeList[freeListIndex];
                     }

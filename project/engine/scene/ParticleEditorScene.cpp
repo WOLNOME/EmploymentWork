@@ -221,7 +221,7 @@ void ParticleEditorScene::ResetWithImGui() {
 	if (ImGui::BeginPopupModal("確認", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
 		ImGui::Text("リセットしますか？\n[注意] 編集中のパラメーターは反映されません\n ");
 		if (ImGui::Button("はい", ImVec2(120, 0))) {
-			sceneManager_->SetNextScene("PARTICLECREATOR");
+			sceneManager_->SetNextScene("PARTICLEEDITOR");
 			isReset_ = false;
 			ImGui::CloseCurrentPopup();
 		}
@@ -270,7 +270,7 @@ void ParticleEditorScene::SaveWithImGui() {
 		if (ImGui::BeginPopupModal("パーティクルの作成に成功しました", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text("作業を終了しますか？\n ");
 			if (ImGui::Button("はい", ImVec2(120, 0))) {
-				sceneManager_->SetNextScene("PARTICLECREATOR");
+				sceneManager_->SetNextScene("PARTICLEEDITOR");
 				checkContinue_ = false;
 				isSave_ = false;
 				ImGui::CloseCurrentPopup();

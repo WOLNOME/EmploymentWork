@@ -1,6 +1,5 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
-#include "Particle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
 #include <string>
