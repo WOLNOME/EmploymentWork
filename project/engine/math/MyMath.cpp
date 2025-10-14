@@ -1529,11 +1529,11 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 	Plane planes[6];
 
 	//法線のセット
-	planes[0].normal = { 1, 0, 0 };
+	planes[0].normal = { -1, 0, 0 };
 	planes[1].normal = { 1, 0, 0 };
-	planes[2].normal = { 0, 1, 0 };
+	planes[2].normal = { 0, -1, 0 };
 	planes[3].normal = { 0, 1, 0 };
-	planes[4].normal = { 0, 0, 1 };
+	planes[4].normal = { 0, 0, -1 };
 	planes[5].normal = { 0, 0, 1 };
 
 	//平面の距離をセット
@@ -1557,7 +1557,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 		}
 	}
 
-	//線分の両端点がAABB内にある場合も衝突と判定
+	//線分の両端点のいずれかがAABB内にある場合も衝突と判定
 	Vector3 endPoint = segment.origin + segment.diff;
 	bool originInside =
 		segment.origin.x >= aabb.min.x && segment.origin.x <= aabb.max.x &&
@@ -1569,7 +1569,7 @@ bool MyMath::IsCollision(const AABB& aabb, const Segment& segment) {
 		endPoint.y >= aabb.min.y && endPoint.y <= aabb.max.y &&
 		endPoint.z >= aabb.min.z && endPoint.z <= aabb.max.z;
 
-	if (originInside && endPointInside) {
+	if (originInside || endPointInside) {
 		return true;
 	}
 

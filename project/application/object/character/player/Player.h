@@ -102,6 +102,8 @@ private:
 
 	bool isDamage_ = false;			//ダメージを受けたか
 
+	Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
+
 	//アイテム
 	uint32_t item_reloadSpeedUp_;
 	uint32_t item_moveSpeedUp_;

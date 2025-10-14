@@ -46,6 +46,8 @@ private:
 private:
 	//移動処理
 	void Move();
+	//爆風
+	void Blast();
 
 private:
 	//パラメータ
@@ -53,5 +55,10 @@ private:
 
 	//生成された座標
 	Vector3 generatedPosition_ = {};
+
+	//爆風
+	bool isBlast_ = false;
+	const float durationTime_ = 1.0f;
+	float durationTimer_ = 0.0f;
 };
 

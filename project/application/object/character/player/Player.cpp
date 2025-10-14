@@ -104,7 +104,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 	int item_maxNum = param_["item_maxNum"];
 	//当たり判定時の処理
 	switch (attribute) {
-	case CollisionAttribute::Enemy: {
+	case CollisionAttribute::Enemy:
+	{
 		//HPを減らす
 		hp_ -= 10;
 		//0~MaxHPの範囲に収める
@@ -116,9 +117,9 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		isDamage_ = true;
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized();
-		velocity_.x += reflectVec.x * velocity_.Length() * 1.5f;
-		velocity_.z += reflectVec.z * velocity_.Length() * 1.5f;
+		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized() * 10.0f;
+		reflectVelocity_.x = reflectVec.x;
+		reflectVelocity_.z = reflectVec.z;
 
 		break;
 	}
@@ -146,7 +147,27 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		isDamage_ = true;
 
 		break;
-	case CollisionAttribute::Item_Heal: {
+	case CollisionAttribute::EnemyBlast:
+	{
+		//HPを減らす
+		hp_ -= 30;
+		//0~MaxHPの範囲に収める
+		hp_ = std::clamp(hp_, 0, maxHP);
+		//カメラシェイクを入れるmaxHP
+		camera_->RegistShake(0.4f, 0.8f);
+
+		//ダメージヒット
+		isDamage_ = true;
+
+		//相手の座標の方向と反対方向のベクトルを速度に加算(大きく)
+		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized() * 40.0f;
+		reflectVelocity_.x = reflectVec.x;
+		reflectVelocity_.z = reflectVec.z;
+
+		break;
+	}
+	case CollisionAttribute::Item_Heal:
+	{
 		//HPを回復
 		int healValue = param_["item_healValue"];
 		hp_ += healValue;
@@ -197,7 +218,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 	//プレイヤーの座標を読み込む
-	for(const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
+	for (const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
 		object3d_->worldTransform.translate = playerSpawnData.translation;
 		object3d_->worldTransform.rotate = playerSpawnData.rotation;
 
@@ -279,6 +300,20 @@ void Player::Move() {
 	//移動量の小ささを制限
 	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {
 		velocity_ = { 0.0f,0.0f,0.0f };
+	}
+
+	//反発速度を加算
+	velocity_ += reflectVelocity_;
+
+	//反発速度を徐々に減衰させる
+	if (reflectVelocity_.x != 0.0f || reflectVelocity_.y != 0.0f || reflectVelocity_.z != 0.0f) {
+		//0に近づける
+		Vector3 decayDir = -reflectVelocity_.Normalized();
+		Vector3 decayAccel = decayDir * 40.0f;
+		reflectVelocity_ += decayAccel * kDeltaTime;
+		if (reflectVelocity_.Length() < 1.0f) {
+			reflectVelocity_ = { 0.0f,0.0f,0.0f };
+		}
 	}
 
 	//速度を加算

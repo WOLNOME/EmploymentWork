@@ -57,12 +57,18 @@ void CollisionManager::CheckCollision() {
 				else if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
 					continue;
 				}
+				else if(colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
+					continue;
+				}
 			}
 			if (colliderB->GetCollisionAttribute() == CollisionAttribute::Enemy) {
 				if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyCannon) {
 					continue;
 				}
 				else if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
+					continue;
+				}
+				else if (colliderA->GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
 					continue;
 				}
 			}
@@ -204,7 +210,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			capsuleB.radius = colliderB->GetRadius();
 			capsuleB.segment.origin = colliderB->GetPreWorldPosition();
 			capsuleB.segment.diff = colliderB->GetWorldPosition() - colliderB->GetPreWorldPosition();
-			//AABBとカプセルの衝突判定
+			//OBBとカプセルの衝突判定
 			HandleCollisionIf(MyMath::IsCollision(obbA, capsuleB));
 			break;
 		}
@@ -214,7 +220,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 				.min = colliderB->GetMinAABB() + colliderB->GetWorldPosition(),
 				.max = colliderB->GetMaxAABB() + colliderB->GetWorldPosition()
 			};
-			//AABB同士の衝突判定
+			//OBBとAABBの衝突判定
 			HandleCollisionIf(MyMath::IsCollision(obbA, aabbB));
 			break;
 		}

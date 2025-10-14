@@ -8,6 +8,7 @@ enum class CollisionAttribute {
 	PlayerBullet,		//プレイヤー弾
 	EnemyCannon,		//敵砲弾
 	EnemyBullet,		//敵弾
+	EnemyBlast,			//敵爆風
 	Item_Heal,			//回復アイテム
 	Item_ReloadSpeedUp,	//リロード速度アップアイテム
 	Item_MoveSpeedUp,	//移動速度アップアイテム
