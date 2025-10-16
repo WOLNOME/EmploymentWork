@@ -7,8 +7,15 @@
 #include <Handle.h>
 #include <JsonUtil.h>
 
+/// <summary>
+/// メッセージ(通知)UIを管理するクラス
+/// </summary>
 class MessageUI {
 private://構造体
+
+	/// <summary>
+	/// 1つのメッセージに必要なデータ
+	/// </summary>
 	struct MessageData {
 		std::wstring text;			// 全文テキスト
 		std::wstring currentText;	// 現在の入力中のテキスト

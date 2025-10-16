@@ -1,5 +1,9 @@
 #pragma once
 #include "ITankEnemyState.h"
+
+/// <summary>
+/// 戦車型エネミーの攻撃状態を管理するクラス
+/// </summary>
 class TankEnemyAttackState : public ITankEnemyState {
 public:
 	TankEnemyAttackState(bool _isUseCannon);

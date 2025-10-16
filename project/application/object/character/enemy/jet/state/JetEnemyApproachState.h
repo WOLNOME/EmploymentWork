@@ -3,6 +3,10 @@
 #include <Vector3.h>
 
 class MessageUI;
+
+/// <summary>
+/// ジェットエネミーの接近状態を管理するクラス
+/// </summary>
 class JetEnemyApproachState : public IJetEnemyState {
 public:
 	void Enter(IBaseJetEnemy* enemy) override;

@@ -15,6 +15,10 @@
 class Player;
 class ItemManager;
 class MessageUI;
+
+/// <summary>
+/// ジェットエネミー専用の基底クラス
+/// </summary>
 class IBaseJetEnemy : public BaseCharacter {
 public:
 	//コンストラクタ

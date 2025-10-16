@@ -9,6 +9,10 @@
 
 class GameCamera;
 class Player;
+
+/// <summary>
+/// プレイヤーの武器（砲弾・銃弾）の管理を行うクラスです。
+/// </summary>
 class PlayerWeaponManager {
 public:
 	//初期化

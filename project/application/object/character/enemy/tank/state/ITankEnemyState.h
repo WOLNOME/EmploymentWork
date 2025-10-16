@@ -1,6 +1,11 @@
 #pragma once
 
 class IBaseTankEnemy;
+
+/// <summary>
+/// 戦車型敵キャラクターの状態を表すインターフェースクラス
+/// 状態の遷移や更新処理を定義する
+/// </summary>
 class ITankEnemyState {
 public:
 	virtual ~ITankEnemyState() = default;

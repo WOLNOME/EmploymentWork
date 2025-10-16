@@ -30,6 +30,10 @@
 #include <memory>
 
 class SceneManager;
+
+/// <summary>
+/// シーンの基底クラス
+/// </summary>
 class BaseScene {
 public:
 	/// <summary>

@@ -6,6 +6,10 @@
 
 class Player;
 class GameCamera;
+
+/// <summary>
+/// ヒットインジケーターを管理するクラス
+/// </summary>
 class HitIndicator {
 private://構造体
 	struct IndicatorInfo {

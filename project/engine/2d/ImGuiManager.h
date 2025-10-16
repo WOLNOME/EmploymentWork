@@ -3,8 +3,11 @@
 #include <d3d12.h>
 #include "imgui.h"
 
-class ImGuiManager
-{
+/// <summary>
+/// ImGuiを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
+class ImGuiManager {
 private://コンストラクタ等の隠蔽
 	static ImGuiManager* instance;
 
@@ -44,6 +47,6 @@ public:
 private://インスタンス
 
 private://メンバ変数
-	
+
 };
 

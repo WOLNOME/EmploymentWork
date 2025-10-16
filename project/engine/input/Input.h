@@ -29,7 +29,10 @@ enum GamepadButton {
 	DPadRight		// 十字キー 右
 };
 
-//入力
+/// <summary>
+/// デバイスから入力される操作信号を判定するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class Input {
 private://コンストラクタ等の隠蔽
 	static Input* instance;

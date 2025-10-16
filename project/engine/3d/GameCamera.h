@@ -1,5 +1,9 @@
 #pragma once
 #include "BaseCamera.h"
+
+/// <summary>
+/// ゲームカメラを管理するクラス
+/// </summary>
 class GameCamera : public BaseCamera {
 public:
 	GameCamera() : BaseCamera() {}

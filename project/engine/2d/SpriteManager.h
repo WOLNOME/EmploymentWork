@@ -5,6 +5,11 @@
 #include <string>
 
 class Sprite;
+
+/// <summary>
+/// 全てのスプライトを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class SpriteManager {
 private://コンストラクタ等の隠蔽
 	static SpriteManager* instance;

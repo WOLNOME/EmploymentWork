@@ -4,6 +4,9 @@
 #include <Vector3.h>
 #include <memory>
 
+/// <summary>
+/// キャノンエネミー単体の処理全般を管理するクラス
+/// </summary>
 class Canota : public IBaseTankEnemy {
 public:
 	//コンストラクタ

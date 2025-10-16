@@ -5,6 +5,9 @@
 #include <Vector3.h>
 #include <memory>
 
+/// <summary>
+/// ジェットエネミー単体の処理全般を管理するクラス
+/// </summary>
 class Jet : public IBaseJetEnemy {
 public:
 	//デストラクタ

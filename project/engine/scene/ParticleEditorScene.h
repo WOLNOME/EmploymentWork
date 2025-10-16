@@ -8,6 +8,9 @@
 
 using json = nlohmann::json;
 
+/// <summary>
+/// パーティクルエディター専用シーン
+/// </summary>
 class ParticleEditorScene : public BaseScene {
 public:
 	/// <summary>

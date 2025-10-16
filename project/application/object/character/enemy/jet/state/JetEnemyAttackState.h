@@ -1,5 +1,9 @@
 #pragma once
 #include "IJetEnemyState.h"
+
+/// <summary>
+/// ジェットエネミーの攻撃状態を管理するクラス
+/// </summary>
 class JetEnemyAttackState : public IJetEnemyState {
 public:
 	JetEnemyAttackState();

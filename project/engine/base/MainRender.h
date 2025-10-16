@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <array>
 
+/// <summary>
+/// ほぼ全ての描画を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class MainRender {
 private://コンストラクタ等の隠蔽
 	static MainRender* instance;

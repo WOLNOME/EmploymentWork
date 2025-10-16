@@ -1,6 +1,6 @@
 #pragma once
 
-//列挙体で管理
+//当たり判定の全属性
 enum class CollisionAttribute {
 	Player,				//プレイヤー
 	Enemy,				//敵	

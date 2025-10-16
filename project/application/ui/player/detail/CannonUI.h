@@ -5,6 +5,10 @@
 #include <JsonUtil.h>
 
 class Player;
+
+/// <summary>
+/// 砲弾の装填状況UIを管理するクラス
+/// </summary>
 class CannonUI {
 public:
 	//初期化

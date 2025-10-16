@@ -2,6 +2,9 @@
 #include <Sprite.h>
 #include <memory>
 
+/// <summary>
+/// 戦車内装のスプライトを管理するクラス
+/// </summary>
 class DecorativeUI {
 public:
 	//初期化

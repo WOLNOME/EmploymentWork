@@ -4,6 +4,10 @@
 #include <string>
 
 class MessageUI;
+
+/// <summary>
+/// ジェットエネミーのパトロール状態を管理するクラス
+/// </summary>
 class JetEnemyPatrolState : public IJetEnemyState {
 public:
 	void Enter(IBaseJetEnemy* enemy) override;

@@ -14,6 +14,10 @@ class Player;
 class EnemyManager;
 class ItemManager;
 class GameCamera;
+
+/// <summary>
+/// プレイヤーに関するUI全てを管理するクラス
+/// </summary>
 class PlayerUI {
 public:
 	//初期化

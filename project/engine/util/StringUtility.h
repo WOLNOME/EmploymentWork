@@ -2,6 +2,9 @@
 #include <windows.h>
 #include <string>
 
+/// <summary>
+/// 文字列の型変換
+/// </summary>
 namespace StringUtility
 {
 	//stringをwstringに変換する

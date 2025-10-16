@@ -14,6 +14,9 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
 
+/// <summary>
+/// ゲームプレイシーン全般を管理するクラス
+/// </summary>
 class GamePlayScene : public BaseScene {
 public:
 	/// <summary>

@@ -5,6 +5,10 @@
 #include <JsonUtil.h>
 
 class Player;
+
+/// <summary>
+/// アイテム取得状況UIを管理するクラス
+/// </summary>
 class ItemUI {
 public:
 	//初期化

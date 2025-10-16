@@ -11,7 +11,9 @@
 
 using json = nlohmann::json;
 
-//パーティクル
+/// <summary>
+/// パーティクル単体の処理全般を管理するクラス
+/// </summary>
 class Particle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;

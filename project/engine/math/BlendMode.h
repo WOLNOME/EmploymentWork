@@ -1,5 +1,8 @@
 #pragma once
 
+/// <summary>
+/// ブレンドモード
+/// </summary>
 enum class BlendMode {
 	None,				//ブレンドなし
 	Normal,				//通常

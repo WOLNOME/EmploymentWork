@@ -16,6 +16,7 @@ struct PointLightData {
 	uint32_t isActive = 0u;
 	float padding[1] = {};
 };
+
 /// <summary>
 /// 点光源
 /// </summary>

@@ -1,5 +1,9 @@
 #pragma once
 #include "AbstractSceneFactory.h"
+
+/// <summary>
+/// 文字列を入力してシーンを生成するためのクラス
+/// </summary>
 class SceneFactory : public AbstractSceneFactory {
 public:
 	/// <summary>

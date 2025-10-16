@@ -68,6 +68,10 @@ struct EdgeParam {
 	Vector4 color;					//アウトラインの色
 };
 
+/// <summary>
+/// テキストテクスチャを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class TextTextureManager {
 private://構造体
 	//テキストのリソース

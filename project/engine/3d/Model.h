@@ -10,6 +10,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+/// <summary>
+/// 外部リソース(3Dモデルデータ)単体の情報をまとめたクラス
+/// </summary>
 class Model {
 private:
 	//頂点データ

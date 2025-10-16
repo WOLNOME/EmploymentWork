@@ -6,6 +6,9 @@
 #include <cstdint>
 #include <memory>
 
+/// <summary>
+/// シーン遷移アニメーションの処理を行うクラス
+/// </summary>
 class SceneTransitionAnimation {
 public:
 	//遷移の状態

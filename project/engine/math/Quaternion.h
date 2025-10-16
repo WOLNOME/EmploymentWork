@@ -2,7 +2,9 @@
 #include <iostream>
 #include <cmath>
 
-
+/// <summary>
+/// クォータニオン
+/// </summary>
 struct Quaternion {
     float x;
     float y;

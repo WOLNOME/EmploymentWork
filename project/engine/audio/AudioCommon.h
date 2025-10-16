@@ -7,6 +7,10 @@
 #include <set>
 
 #pragma comment(lib,"xaudio2.lib")
+
+/// <summary>
+/// オーディオ機能の共通処理
+/// </summary>
 class AudioCommon {
 private://シングルトン
 	static AudioCommon* instance;

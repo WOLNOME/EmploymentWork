@@ -12,6 +12,10 @@
 
 class LevelLoader;
 class MessageUI;
+
+/// <summary>
+/// プレイヤーの処理全般を管理するクラス
+/// </summary>
 class Player : public BaseCharacter {
 public:
 	//デストラクタ

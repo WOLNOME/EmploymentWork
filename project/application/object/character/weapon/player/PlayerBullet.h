@@ -9,6 +9,9 @@
 #include <Vector3.h>
 #include <memory>
 
+/// <summary>
+/// プレイヤーの使う機関銃弾単体の処理全般を管理するクラス
+/// </summary>
 class PlayerBullet : public BaseCharacter {
 public:
 	//デストラクタ

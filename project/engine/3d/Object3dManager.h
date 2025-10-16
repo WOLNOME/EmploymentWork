@@ -8,8 +8,14 @@
 class BaseCamera;
 class SceneLight;
 class Object3d;
+
+/// <summary>
+/// 全ての3Dオブジェクトの管理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class Object3dManager {
 public:
+	//オブジェクトの使うグラフィックスパイプラインの名前
 	enum class NameGPS {
 		None,			//通常
 		Animation,		//アニメーション

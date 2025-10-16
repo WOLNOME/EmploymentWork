@@ -3,6 +3,9 @@
 #include "Object3d.h"
 #include <memory>
 
+/// <summary>
+/// シーン上の地面の配置を行うクラス
+/// </summary>
 class Ground {
 public:
 	/// <summary>

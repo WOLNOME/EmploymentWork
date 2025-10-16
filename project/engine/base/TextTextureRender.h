@@ -4,6 +4,10 @@
 #include <cstdint>
 #include <array>
 
+/// <summary>
+/// テキストテクスチャの描画を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class TextTextureRender {
 private://コンストラクタ等の隠蔽
 	static TextTextureRender* instance;

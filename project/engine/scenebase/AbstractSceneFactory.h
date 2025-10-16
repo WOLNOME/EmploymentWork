@@ -2,7 +2,9 @@
 #include "BaseScene.h"
 #include <string>
 
-//シーン工場
+/// <summary>
+/// 文字列を入力してシーンを生成する基底クラス
+/// </summary>
 class AbstractSceneFactory {
 public:
 	//仮想デストラクタ

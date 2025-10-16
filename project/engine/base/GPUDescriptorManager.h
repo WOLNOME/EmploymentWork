@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <queue>
 
+/// <summary>
+/// SRV及びUAVの管理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class GPUDescriptorManager {
 private:
 	static GPUDescriptorManager* instance;

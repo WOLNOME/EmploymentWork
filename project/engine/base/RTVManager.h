@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <queue>
 
+/// <summary>
+/// RTVを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class RTVManager {
 private:
 	static RTVManager* instance;

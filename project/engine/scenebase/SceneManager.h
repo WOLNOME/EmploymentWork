@@ -5,7 +5,11 @@
 #include "Audio.h"
 #include <string>
 #include <memory>
-//シーン管理
+
+/// <summary>
+/// 全てのシーン処理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class SceneManager {
 private://コンストラクタ等の隠蔽
 	static SceneManager* instance;

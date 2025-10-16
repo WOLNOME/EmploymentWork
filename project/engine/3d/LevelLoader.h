@@ -5,6 +5,9 @@
 #include <string>
 #include <memory>
 
+/// <summary>
+/// レベルデータの読み込みと管理を行うクラス
+/// </summary>
 class LevelLoader {
 private://構造体
 	//自キャラの生成データ

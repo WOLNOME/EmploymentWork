@@ -7,6 +7,9 @@
 #include "application/object/environment/Ground.h"
 #include <application/system/TitleSystem.h>
 
+/// <summary>
+/// タイトルシーン全般を管理するクラス
+/// </summary>
 class TitleScene : public BaseScene {
 public:
 	/// <summary>

@@ -5,6 +5,9 @@
 #include <Vector3.h>
 #include <JsonUtil.h>
 
+/// <summary>
+/// アイテム単体の処理全般を管理するクラス
+/// </summary>
 class Item : public BaseCharacter {
 public:
 	// デストラクタ

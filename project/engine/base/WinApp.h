@@ -3,8 +3,11 @@
 #include <wrl.h>
 #include <cstdint>
 
-class WinApp
-{
+/// <summary>
+/// Windowsアプリケーションを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
+class WinApp {
 private://コンストラクタ等の隠蔽
 	static WinApp* instance;
 

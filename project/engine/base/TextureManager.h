@@ -9,6 +9,10 @@
 #include "DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
 
+/// <summary>
+/// テクスチャ全般を管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class TextureManager {
 private://コンストラクタ等の隠蔽
 	static TextureManager* instance;

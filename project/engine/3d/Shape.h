@@ -3,6 +3,9 @@
 #include <d3d12.h>
 #include "MyMath.h"
 
+/// <summary>
+/// 単純な形状モデルを扱うクラス
+/// </summary>
 class Shape {
 public://列挙型
 	enum ShapeKind {

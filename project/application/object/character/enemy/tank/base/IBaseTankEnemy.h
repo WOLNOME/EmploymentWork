@@ -14,6 +14,10 @@
 
 class Player;
 class ItemManager;
+
+/// <summary>
+/// 戦車型エネミー専用の基底クラス
+/// </summary>
 class IBaseTankEnemy : public BaseCharacter {
 public:
 	//コンストラクタ

@@ -6,6 +6,10 @@
 
 class GameCamera;
 class EnemyManager;
+
+/// <summary>
+/// 敵に関するUI全てを管理するクラス
+/// </summary>
 class EnemyUI {
 public:
 	//初期化

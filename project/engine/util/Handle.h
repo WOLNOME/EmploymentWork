@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
 
+/// <summary>
+/// Shared_ptrを持ったIDを提供するクラス
+/// 情報の重複を避けるために使う
+/// </summary>
 struct Handle {
 	uint32_t id = 0u;
 	std::shared_ptr<void> ref;

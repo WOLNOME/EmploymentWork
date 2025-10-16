@@ -13,6 +13,10 @@
 template <typename T>
 using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+/// <summary>
+/// Direct2Dの描画を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class D2DRender {
 private://コンストラクタ等の隠蔽
 	static D2DRender* instance;

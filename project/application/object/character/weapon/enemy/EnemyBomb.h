@@ -9,6 +9,10 @@
 #include <memory>
 
 class PlayerUI;
+
+/// <summary>
+/// 敵(ジェットエネミー)の使う爆弾の処理全般を管理するクラス
+/// </summary>
 class EnemyBomb : public BaseCharacter {
 public:
 	//デストラクタ

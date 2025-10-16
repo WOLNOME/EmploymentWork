@@ -5,10 +5,14 @@
 #include "MyMath.h"
 #include "Handle.h"
 
+/// <summary>
+/// スプライト単体の処理全般を管理するクラス
+/// </summary>
 class Sprite {
 	//スプライトマネージャーに公開
 	friend class SpriteManager;
 public://列挙体
+
 	//描画順タグ(各レイヤーは今のところ4つずつ←必要に応じて増やす)
 	enum class Order {
 		Back0,
@@ -24,6 +28,7 @@ public://列挙体
 
 		kMaxOrderNum,
 	};
+
 	//テクスチャの種類
 	enum class TextureKind {
 		Normal,
