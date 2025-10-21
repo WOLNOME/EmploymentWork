@@ -3,8 +3,9 @@
 #include "Input.h"
 #include "Vector2.h"
 
-
-//開発用カメラ
+/// <summary>
+/// 開発用カメラの管理を行うクラス
+/// </summary>
 class DevelopCamera : public BaseCamera {
 public:
 	DevelopCamera() : BaseCamera() {}

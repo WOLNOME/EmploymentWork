@@ -25,9 +25,9 @@ void EnemyBomb::Initialize() {
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
-	collisionRadius_ = 1.0f;
+	collisionRadius_ = 50.0f;
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
+	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
 	//初期化時点では死亡状態
 	isDead_ = true;
 }
@@ -39,6 +39,8 @@ void EnemyBomb::Update() {
 	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 	//移動処理
 	Move();
+	//爆風処理
+	Blast();
 }
 
 void EnemyBomb::DebugWithImGui() {
@@ -60,13 +62,9 @@ void EnemyBomb::OnCollision(CollisionAttribute attribute, const Vector3& subject
 	switch (attribute) {
 	case CollisionAttribute::Player:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
+		//当たり判定を無しにする
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 		//被弾インジケーターをつける
 		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
 
@@ -87,13 +85,22 @@ void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos)
 	velocity_ = { 0.0f,0.0f,0.0f };
 
 	//当たり判定属性をセット
-	SetCollisionAttribute(CollisionAttribute::EnemyCannon);
+	SetCollisionAttribute(CollisionAttribute::Nothingness);
 	//死亡状態を解除
 	isDead_ = false;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+
+	//爆風
+	isBlast_ = false;
+	durationTimer_ = 0.0f;
 }
 
 void EnemyBomb::Move() {
+	//弾が爆風状態なら移動しない
+	if (isBlast_) {
+		return;
+	}
+
 	//重力の影響を加算
 	velocity_.y -= gravity_ * kDeltaTime;
 	//速度を加算
@@ -105,9 +112,33 @@ void EnemyBomb::Move() {
 		//パーティクルの発生
 		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
+		//モデルを非表示に
+		object3d_->SetIsDisplay(false);
+
+		//当たり判定属性を爆風に
+		SetCollisionAttribute(CollisionAttribute::EnemyBlast);
+		//爆風の処理を開始
+		isBlast_ = true;
+	}
+}
+
+void EnemyBomb::Blast() {
+	//爆風の処理
+	if (!isBlast_) {
+		return;
+	}
+
+	//爆風時間の加算
+	durationTimer_ += kDeltaTime;
+	if (durationTimer_ >= durationTime_) {
+		//爆風時間を超えたら終了
+		isBlast_ = false;
+		durationTimer_ = 0.0f;
+		//パーティクルの発生を止める
+		particle_->emitter_.isPlay = false;
+
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
 	}
+
 }

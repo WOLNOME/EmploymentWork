@@ -9,6 +9,10 @@
 #include <memory>
 
 class PlayerUI;
+
+/// <summary>
+/// 敵の使う砲弾の処理全般を管理するクラス
+/// </summary>
 class EnemyCannon : public BaseCharacter {
 public:
 	//デストラクタ

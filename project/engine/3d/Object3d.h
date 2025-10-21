@@ -20,10 +20,17 @@ struct ShapeTag {};
 
 class BaseCamera;
 class SceneLight;
+
+/// <summary>
+/// 3Dオブジェクト単体の処理を行うクラス
+/// </summary>
 class Object3d {
 	//オブジェクト3dマネージャーに公開
 	friend class Object3dManager;
+
 public://列挙型
+
+	//オブジェクトの種類
 	enum class ObjectKind {
 		Model,				//通常モデル
 		AnimationModel,		//アニメーションモデル
@@ -33,10 +40,13 @@ public://列挙型
 	};
 
 public://構造体
+
+	//GPU送信用フラグデータ
 	struct FlagForGPU {
 		uint32_t isActiveLights;
 		uint32_t isActiveEnvironment;
 	};
+	//フラグデータ用リソース
 	struct FlagResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		FlagForGPU* data;

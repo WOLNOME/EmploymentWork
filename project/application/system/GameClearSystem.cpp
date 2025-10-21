@@ -2,6 +2,7 @@
 #include <WinApp.h>
 #include <ImGuiManager.h>
 #include <TextTextureManager.h>
+#include <TextureManager.h>
 #include <SpriteManager.h>
 #include <MyMath.h>
 
@@ -75,7 +76,8 @@ void GameClearSystem::DebugWithImGui() {
 void GameClearSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneManager_->SetNextScene("Title");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+		sceneManager_->SetNextScene("Title", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 }
 

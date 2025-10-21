@@ -13,7 +13,11 @@
 #include "application/ui/enemy/EnemyUI.h"
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
+#include <application/system/StartDirection.h>
 
+/// <summary>
+/// ゲームプレイシーン全般を管理するクラス
+/// </summary>
 class GamePlayScene : public BaseScene {
 public:
 	/// <summary>
@@ -39,6 +43,10 @@ private:
 
 	//ゲーム用カメラ
 	std::unique_ptr<GameCamera> camera_ = nullptr;
+
+	//スタート演出
+	std::unique_ptr<StartDirection> startDirection_ = nullptr;
+
 private://ライト
 	//平行光源
 	std::unique_ptr<DirectionalLight> dirLight_;

@@ -6,6 +6,10 @@
 
 class GameCamera;
 class EnemyManager;
+
+/// <summary>
+/// 敵のHPUIを管理するクラス
+/// </summary>
 class EnemyHPUI {
 public:
 	//初期化

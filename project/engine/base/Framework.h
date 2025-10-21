@@ -2,6 +2,9 @@
 #include "D3DResourceLeakChecker.h"
 #include <memory>
 
+/// <summary>
+/// プロジェクト全体のフレームワーク
+/// </summary>
 class Framework {
 public:
 	/// <summary>

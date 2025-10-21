@@ -2,6 +2,9 @@
 #include <Sprite.h>
 #include <memory>
 
+/// <summary>
+/// レティクルUIを管理するクラス
+/// </summary>
 class ReticleUI {
 public:
 	//初期化

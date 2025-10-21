@@ -5,6 +5,10 @@
 #include <JsonUtil.h>
 
 class Player;
+
+/// <summary>
+/// 機関銃弾の装填状況UIを管理するクラス
+/// </summary>
 class BulletUI {
 public:
 	//初期化

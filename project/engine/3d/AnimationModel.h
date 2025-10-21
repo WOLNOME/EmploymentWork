@@ -16,6 +16,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+/// <summary>
+/// アニメーションモデルの処理を行うクラス
+/// </summary>
 class AnimationModel {
 private://アニメーション関連構造体
 	//頂点データ

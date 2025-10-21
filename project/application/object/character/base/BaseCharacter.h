@@ -2,7 +2,9 @@
 #include "Collider.h"
 #include "Object3d.h"
 
-//キャラクター基底クラス
+/// <summary>
+/// キャラクター全般の基底クラス
+/// </summary>
 class BaseCharacter : public Collider {
 public:
 	//コンストラクタ

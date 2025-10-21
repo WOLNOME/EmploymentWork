@@ -10,6 +10,10 @@ class BaseCamera;
 class Player;
 class EnemyManager;
 class ItemManager;
+
+/// <summary>
+/// レーダーUIを管理するクラス
+/// </summary>
 class Radar {
 public:
 	//初期化

@@ -4,6 +4,9 @@
 #include <Particle.h>
 #include <memory>
 
+/// <summary>
+/// ジェットエネミーの死亡状態を管理するクラス
+/// </summary>
 class JetEnemyDeadState : public IJetEnemyState {
 public:
 	JetEnemyDeadState();

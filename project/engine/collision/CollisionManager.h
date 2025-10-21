@@ -2,6 +2,10 @@
 #include <list>
 #include "Collider.h"
 
+/// <summary>
+/// 全ての当たり判定処理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class CollisionManager {
 private://コンストラクタ等の隠蔽
 	static CollisionManager* instance;

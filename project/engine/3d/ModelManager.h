@@ -5,6 +5,10 @@
 #include "Model.h"
 #include "ModelFormat.h"
 
+/// <summary>
+/// 外部リソース(3Dモデルデータ)の管理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class ModelManager {
 private://コンストラクタ等の隠蔽
 	static ModelManager* instance;

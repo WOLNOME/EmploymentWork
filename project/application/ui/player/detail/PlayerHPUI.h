@@ -5,6 +5,10 @@
 #include <JsonUtil.h>
 
 class Player;
+
+/// <summary>
+/// プレイヤーのHPUIを管理するクラス
+/// </summary>
 class PlayerHPUI {
 public:
 	//初期化

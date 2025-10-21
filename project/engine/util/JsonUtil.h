@@ -5,6 +5,9 @@
 
 using json = nlohmann::json;
 
+/// <summary>
+/// JSONファイルへの機能全般を管理するクラス
+/// </summary>
 class JsonUtil {
 public:
 	/// <summary>

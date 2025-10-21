@@ -80,8 +80,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
             //生成数は1つだけ
             generateNum = 1;
         }
-        //本来CPU側ではisPlayをここでfalseにするが、できなくなってしまったので
-        //Emitが終了次第OneShotのスタイル限定でisPlayをオフにする処理を追加する。
     }
     //粒の生成
     if (generateNum > 0 && playingGrainNum + generateNum < max)
@@ -95,7 +93,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
     for (int i = 0; i < generateNum; i++)
     {
         //乱数のシードを更新
-        generator.seed = rcp((float) i) * gPerFrame.time;
+        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gPerFrame.time * 0.1f) * 10000.0f;
         
         int freeListIndex;
         
@@ -104,7 +102,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-            if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+            if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
             {
                 uint grainIndex = gFreeList[freeListIndex];
                 //値を入れていく
@@ -137,9 +135,9 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
             }
             else
             {
-            //発生させられなかったので減らした分元に戻す。
+                //発生させられなかったので減らした分元に戻す。
                 InterlockedAdd(gFreeListIndex[0], 1);
-            //Emit中にParticleは消えないので、この後発生することはないためreturnして終わらせる
+                //Emit中にParticleは消えないので、この後発生することはないためreturnして終わらせる
                 return;
             }
         }
@@ -147,7 +145,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-            if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+            if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
             {
                 uint grainIndex = gFreeList[freeListIndex];
             
@@ -194,7 +192,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                     
                     //粒のインデックスを次の値へ
                     InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-                    if (0 <= freeListIndex && freeListIndex < gJsonInfo.maxGrains)
+                    if ((0 <= freeListIndex) && (freeListIndex < gJsonInfo.maxGrains))
                     {
                         grainIndex = gFreeList[freeListIndex];
                     }

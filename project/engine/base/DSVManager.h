@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <queue>
 
+/// <summary>
+/// DSVを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class DSVManager {
 private:
 	static DSVManager* instance;

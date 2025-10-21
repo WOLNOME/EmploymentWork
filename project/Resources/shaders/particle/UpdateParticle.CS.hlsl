@@ -48,11 +48,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
             gFreeList[freeListIndex + 1] = grainIndex;
             return;
         }
-        else
-        {
-            //ここに来たら設定がおかしい。安全策をうっておく
-            InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
-        }
     }
     ///==================///
     /// エミッターとの処理

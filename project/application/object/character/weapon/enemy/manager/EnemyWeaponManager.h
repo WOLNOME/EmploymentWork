@@ -10,6 +10,10 @@
 class EnemyManager;
 class Player;
 class PlayerUI;
+
+/// <summary>
+/// 敵の使う武器全般の管理を行うクラス
+/// </summary>
 class EnemyWeaponManager {
 public:
 	//初期化

@@ -4,6 +4,9 @@
 #include "MyMath.h"
 #include "DevelopCamera.h"
 
+/// <summary>
+/// 機能確認用クラス
+/// </summary>
 class DevelopScene : public BaseScene {
 public:
 	/// <summary>

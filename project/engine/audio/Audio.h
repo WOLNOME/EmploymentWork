@@ -2,6 +2,9 @@
 #include <string>
 #include "AudioCommon.h"
 
+/// <summary>
+/// オーディオ機能単体の処理を行うクラス
+/// </summary>
 class Audio {
 public:
 	/// <summary>

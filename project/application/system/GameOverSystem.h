@@ -6,6 +6,9 @@
 #include <memory>
 #include <Handle.h>
 
+/// <summary>
+/// ゲームオーバーシーンのUIや演出、操作等を管理するクラス
+/// </summary>
 class GameOverSystem {
 public:
 	//初期化

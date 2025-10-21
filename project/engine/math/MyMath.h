@@ -39,6 +39,7 @@ struct TransformEuler {
 	Vector3 rotate;
 	Vector3 translate;
 };
+//トランスフォーム(クォータニオン)
 struct TransformQuaternion {
 	Vector3 scale;
 	Quaternion rotate;
@@ -132,6 +133,10 @@ struct Capsule {
 };
 
 class LineDrawer;
+
+/// <summary>
+/// 数学関数を管理するクラス
+/// </summary>
 class MyMath {
 public://静的メンバ関数
 	///------------------------------------///

@@ -28,6 +28,10 @@ enum class PostEffectKind {
 //ImGuiにも追加しておく
 //描画の個別設定も別途必要
 
+/// <summary>
+/// 全てのポストエフェクトを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class PostEffectManager {
 private://構造体
 	//ディゾルブ系

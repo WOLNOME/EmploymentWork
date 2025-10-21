@@ -8,6 +8,11 @@
 
 class BaseCamera;
 class BulletTrail;
+
+/// <summary>
+/// 弾道トレール全体の管理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class BulletTrailManager {
 private://シングルトン
 	static BulletTrailManager* instance;

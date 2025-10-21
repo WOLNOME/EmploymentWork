@@ -1,6 +1,9 @@
 #pragma once
-class D3DResourceLeakChecker
-{
+
+/// <summary>
+/// リソースの解放漏れをチェックするためのクラス
+/// </summary>
+class D3DResourceLeakChecker {
 public:
 	~D3DResourceLeakChecker();
 };

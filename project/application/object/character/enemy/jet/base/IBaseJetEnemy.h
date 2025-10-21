@@ -1,6 +1,5 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
-#include "Particle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
 #include <string>
@@ -16,6 +15,10 @@
 class Player;
 class ItemManager;
 class MessageUI;
+
+/// <summary>
+/// ジェットエネミー専用の基底クラス
+/// </summary>
 class IBaseJetEnemy : public BaseCharacter {
 public:
 	//コンストラクタ

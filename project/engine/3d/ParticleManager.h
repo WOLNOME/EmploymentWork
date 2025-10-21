@@ -10,6 +10,11 @@
 #include <wrl.h>
 
 class Particle;
+
+/// <summary>
+/// 全てのパーティクルを管理するクラス
+/// シングルトンパターンで実装
+/// </summary>
 class ParticleManager {
 private://コンストラクタ等の隠蔽
 	static ParticleManager* instance;

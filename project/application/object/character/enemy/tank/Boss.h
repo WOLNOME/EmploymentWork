@@ -6,6 +6,10 @@
 #include <memory>
 
 class Player;
+
+/// <summary>
+/// ボスエネミー単体の処理全般を管理するクラス
+/// </summary>
 class Boss : public IBaseTankEnemy {
 public:
 	//コンストラクタ

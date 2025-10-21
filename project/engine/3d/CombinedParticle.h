@@ -6,6 +6,9 @@
 #include <memory>
 #include <queue>
 
+/// <summary>
+/// 複合パーティクルを管理するクラス
+/// </summary>
 class CombinedParticle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;

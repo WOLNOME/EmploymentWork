@@ -3,6 +3,9 @@
 #include "Object3d.h"
 #include <memory>
 
+/// <summary>
+/// シーン上のスカイボックスの配置を行うクラス
+/// </summary>
 class Skydome {
 public:
 	/// <summary>

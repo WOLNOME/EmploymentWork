@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include <LevelLoader.h>
 #include <SceneManager.h>
+#include <TextureManager.h>
 
 //アプリケーション
 #include "application/object/character/player/Player.h"
@@ -54,7 +55,8 @@ void EnemyManager::Update() {
 	//もし全てのボスが死亡していたら
 	if (bosses_.empty()) {
 		//クリアシーンの移行
-		SceneManager::GetInstance()->SetNextScene("GameClear");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+		SceneManager::GetInstance()->SetNextScene("GameClear", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 }
 

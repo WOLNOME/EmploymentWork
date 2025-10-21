@@ -4,6 +4,9 @@
 #include <Particle.h>
 #include <memory>
 
+/// <summary>
+/// 戦車型エネミーの死亡状態を管理するクラス
+/// </summary>
 class TankEnemyDeadState : public ITankEnemyState {
 public:
 	TankEnemyDeadState();

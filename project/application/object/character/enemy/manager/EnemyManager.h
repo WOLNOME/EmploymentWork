@@ -11,6 +11,10 @@ class LevelLoader;
 class Player;
 class ItemManager;
 class MessageUI;
+
+/// <summary>
+/// エネミー全体の管理を行うクラス
+/// </summary>
 class EnemyManager {
 public:
 	//初期化

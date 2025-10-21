@@ -7,6 +7,9 @@
 #include "application/object/environment/Ground.h"
 #include <application/system/GameOverSystem.h>
 
+/// <summary>
+/// ゲームオーバーシーン全般を管理するクラス
+/// </summary>
 class GameOverScene : public BaseScene {
 public:
 	/// <summary>

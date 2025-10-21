@@ -12,6 +12,10 @@
 
 class LevelLoader;
 class MessageUI;
+
+/// <summary>
+/// プレイヤーの処理全般を管理するクラス
+/// </summary>
 class Player : public BaseCharacter {
 public:
 	//デストラクタ
@@ -101,6 +105,8 @@ private:
 	bool isBulletFire_ = false;		//銃弾を発射したかどうか
 
 	bool isDamage_ = false;			//ダメージを受けたか
+
+	Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
 
 	//アイテム
 	uint32_t item_reloadSpeedUp_;

@@ -7,5 +7,7 @@
     "edgeSlideRate":[0.0,0.0],
     "edgeColor":[0.1,0.1,0.1,1.0],
     "inputTime":0.6,
-    "displayTime":2.4
+    "displayTime":2.4,
+    "disappearTime":1.0,
+    "blinkInterval":0.5
 }

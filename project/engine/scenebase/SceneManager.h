@@ -5,7 +5,11 @@
 #include "Audio.h"
 #include <string>
 #include <memory>
-//シーン管理
+
+/// <summary>
+/// 全てのシーン処理を行うクラス
+/// シングルトンパターンで実装
+/// </summary>
 class SceneManager {
 private://コンストラクタ等の隠蔽
 	static SceneManager* instance;
@@ -31,10 +35,6 @@ public:
 	/// </summary>
 	void DebugWithImGui();
 	/// <summary>
-	/// 遷移幕描画
-	/// </summary>
-	void CurtainDraw();
-	/// <summary>
 	/// 終了
 	/// </summary>
 	void Finalize();
@@ -44,7 +44,7 @@ private:
 	void ChangeScene();
 public:
 	//次シーンのセット
-	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::TransitionType transitionType = SceneTransitionAnimation::TransitionType::FADE, uint32_t frame = 60);
+	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u);
 
 private:
 	//今のシーン

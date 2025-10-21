@@ -14,6 +14,9 @@
 #include "application/object/environment/Ground.h"
 #include "application/object/character/enemy/manager/EnemyManager.h"
 
+/// <summary>
+/// タイトルシーンのUIや演出、操作等を管理するクラス
+/// </summary>
 class TitleSystem {
 private://列挙体
 	//タイトルメニュー

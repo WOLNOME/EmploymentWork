@@ -5,6 +5,9 @@
 #include <string>
 #include <memory>
 
+/// <summary>
+/// レベルオブジェクト単体の処理全般を管理するクラス
+/// </summary>
 class LevelObject : public Collider {
 public:
 	//コンストラクタ

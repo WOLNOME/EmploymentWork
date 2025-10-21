@@ -6,6 +6,9 @@
 #include <memory>
 #include <Handle.h>
 
+/// <summary>
+/// ゲームクリアシーンのUIや演出、操作等を管理するクラス
+/// </summary>
 class GameClearSystem {
 public:
 	//初期化

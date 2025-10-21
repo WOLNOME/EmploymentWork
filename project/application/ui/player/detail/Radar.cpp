@@ -18,7 +18,7 @@ void Radar::Initialize() {
 		//プレイヤー
 		thPlayerMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		playerMark_ = std::make_unique<Sprite>();
-		playerMark_->Initialize(SpriteManager::GetInstance()->GenerateName("playerMark"), Sprite::Order::Front1, thPlayerMark_);
+		playerMark_->Initialize(SpriteManager::GetInstance()->GenerateName("playerMark"), Sprite::Order::Front2, thPlayerMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
 		playerMark_->SetSize(playerMark_->GetSize() * 0.2f);
 		playerMark_->SetPosition(centerPosition);
@@ -29,7 +29,7 @@ void Radar::Initialize() {
 		thEnemyMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kEnemyUINum_; i++) {
 			enemyMarks_[i] = std::make_unique<Sprite>();
-			enemyMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("enemyMark"), Sprite::Order::Front1, thEnemyMark_);
+			enemyMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("enemyMark"), Sprite::Order::Front2, thEnemyMark_);
 			enemyMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			enemyMarks_[i]->SetSize(enemyMarks_[i]->GetSize() * 0.1f);
 

@@ -8,6 +8,9 @@
 //アプリケーション
 #include <application/object/character/item/Item.h>
 
+/// <summary>
+/// シーン上すべてのアイテム管理を行うクラス
+/// </summary>
 class ItemManager {
 public:
 	// コンストラクタ

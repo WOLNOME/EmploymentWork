@@ -5,6 +5,10 @@
 #include <list>
 
 class BaseCamera;
+
+/// <summary>
+/// 全てのライン描画を管理するクラス
+/// </summary>
 class LineManager {
 private://構造体
 	//頂点データ

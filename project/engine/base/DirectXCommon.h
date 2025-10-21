@@ -11,6 +11,10 @@
 
 #pragma comment(lib,"dxcompiler.lib")
 
+/// <summary>
+/// DirectXの機能を使うにあたり必要な処理をまとめたクラス
+/// シングルトンパターンで実装
+/// </summary>
 class DirectXCommon {
 private://コンストラクタ等の隠蔽
 	static DirectXCommon* instance;

@@ -6,6 +6,9 @@
 #include "CollisionConfig.h"
 #include "WorldTransform.h"
 
+/// <summary>
+/// 当たり判定に必要な情報を持つクラス
+/// </summary>
 class Collider {
 public:
 	//コリジョン形状の種類

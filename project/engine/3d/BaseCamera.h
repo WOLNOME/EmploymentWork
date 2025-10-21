@@ -16,11 +16,14 @@ struct ViewProjectionTransformationMatrixForVS {
 	Matrix4x4 matView;         // ワールド → ビュー変換行列
 	Matrix4x4 matProjection;   // ビュー → プロジェクション変換行列
 };
+// PS送信用ワールド座標構造体
 struct WorldPositionForPS {
 	Vector3 worldPosition;    // カメラ座標（ワールド座標）
 };
 
-// 基本的なカメラ機能を提供する基底クラス
+/// <summary>
+/// カメラの基底クラス
+/// </summary>
 class BaseCamera {
 public:
 	BaseCamera();

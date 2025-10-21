@@ -8,6 +8,10 @@
 #include "Vector4.h"
 
 class BaseCamera;
+
+/// <summary>
+/// 弾道トレール単体の処理全般を管理するクラス
+/// </summary>
 class BulletTrail {
 	//弾丸トレールマネージャーに公開
 	friend class BulletTrailManager;
