@@ -6,6 +6,9 @@
 //アプリケーション
 #include <application/ui/message/MessageUI.h>
 
+/// <summary>
+/// スタート演出を管理するクラス
+/// </summary>
 class StartDirection {
 public:
 	//初期化
