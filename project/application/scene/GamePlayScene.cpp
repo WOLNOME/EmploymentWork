@@ -24,6 +24,10 @@ void GamePlayScene::Initialize() {
 	dirLight_->direction_ = { 1.0f,-1.0f,1.0f };
 	sceneLight_->SetLight(dirLight_.get());
 
+	//スタート演出の生成・初期化
+	startDirection_ = std::make_unique<StartDirection>();
+	startDirection_->Initialize();
+
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
@@ -66,6 +70,7 @@ void GamePlayScene::Initialize() {
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//その他インスタンスのセット
+	startDirection_->SetMessageUI(messageUI_.get());
 	player_->SetLevelLoader(levelLoader_.get());
 	player_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetLevelLoader(levelLoader_.get());
@@ -81,6 +86,19 @@ void GamePlayScene::Initialize() {
 	playerUI_->SetItemManager(itemManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
+	//全てのインスタンスを更新しておく
+	BaseScene::Update();
+	startDirection_->Update();
+	levelLoader_->Update();
+	playerUI_->Update();
+	player_->Update();
+	enemyManager_->Update();
+	playerWeaponManager_->Update();
+	enemyWeaponManager_->Update();
+	enemyUI_->Update();
+	itemManager_->Update();
+	messageUI_->Update();
+	camera_->Update();
 }
 
 void GamePlayScene::Finalize() {
@@ -120,6 +138,16 @@ void GamePlayScene::Update() {
 		}
 	}
 
+	//スタート演出の更新
+	startDirection_->Update();
+	//メッセージUIの更新
+	messageUI_->Update();
+
+	//もしスタート演出中なら他の更新はしない
+	if (startDirection_->GetIsStartDirection()) {
+		return;
+	}
+
 	//インスタンスの更新
 	levelLoader_->Update();
 	playerUI_->Update();
@@ -129,10 +157,10 @@ void GamePlayScene::Update() {
 	enemyWeaponManager_->Update();
 	enemyUI_->Update();
 	itemManager_->Update();
-	messageUI_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	camera_->Update();
+
 }
 void GamePlayScene::DebugWithImGui() {
 	//ImGui

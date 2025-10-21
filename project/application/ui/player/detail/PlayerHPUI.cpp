@@ -14,9 +14,9 @@ void PlayerHPUI::Initialize() {
 	for (int i = 0; i < sprites_.size(); i++) {
 		sprites_[i] = std::make_unique<Sprite>();
 		if (i == 0)
-			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerHPBar"), Sprite::Order::Front1, textureHandles_[i]);
-		else
 			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerHPBar"), Sprite::Order::Front2, textureHandles_[i]);
+		else
+			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerHPBar"), Sprite::Order::Front3, textureHandles_[i]);
 		sprites_[i]->SetPosition({ 320.0f,20.0f });
 	}
 }

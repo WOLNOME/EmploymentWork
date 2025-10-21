@@ -428,6 +428,7 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>externals\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="application\system\StartDirection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -794,6 +795,7 @@
     <ClInclude Include="engine\collision\CollisionManager.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
+    <ClInclude Include="application\system\StartDirection.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

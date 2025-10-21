@@ -14,9 +14,9 @@ void CannonUI::Initialize() {
 	for (int i = 0; i < textureHandles_.size(); i++) {
 		sprites_[i] = std::make_unique<Sprite>();
 		if (i == 0)
-			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Sprite::Order::Front1, textureHandles_[i]);
-		else
 			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Sprite::Order::Front2, textureHandles_[i]);
+		else
+			sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Sprite::Order::Front3, textureHandles_[i]);
 		sprites_[i]->SetPosition({ 330.0f,565.0f });
 	}
 	sprites_[1]->SetSize({ sprites_[0]->GetSize() });

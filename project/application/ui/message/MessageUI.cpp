@@ -9,7 +9,7 @@ void MessageUI::Initialize() {
 
 	//スプライトの生成・初期化
 	for (int i = 0; i < kMaxSpriteNum_; ++i) {
-		sprites_[i].Initialize(SpriteManager::GetInstance()->GenerateName("messageUI"), Sprite::Order::Front1);
+		sprites_[i].Initialize(SpriteManager::GetInstance()->GenerateName("messageUI"), Sprite::Order::Front2);
 		sprites_[i].SetIsDisplay(false);
 		sprites_[i].SetAnchorPoint({ 0.5f, 0.5f });
 	}
@@ -62,17 +62,38 @@ void MessageUI::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void MessageUI::AddMessage(const std::wstring& text) {
+uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bool _isBlinking) {
 	MessageData newMessage;
-	newMessage.text = text;
+	newMessage.id = messageIdCounter_;
+	newMessage.text = _text;
 	newMessage.currentText = L"";
 	newMessage.inputTimer = param_["inputTime"];
-	newMessage.displayTimer = param_["displayTime"];
-	newMessage.isInput = true;
+	if (_displayTime != 0.0f) {
+		newMessage.displayTimer = _displayTime;
+	}
+	else {
+		newMessage.displayTimer = param_["displayTime"];
+	}
+	newMessage.disappearTimer = param_["disappearTime"];
+	newMessage.blinkTimer = param_["blinkInterval"];
+	newMessage.state = MessageState::Inputting;
 	newMessage.isFinished = false;
+	newMessage.isBlinking = _isBlinking;
 	newMessage.textHandle = TextTextureManager::GetInstance()->LoadTextTexture(baseTextParam_);
 	TextTextureManager::GetInstance()->EditEdgeParam(newMessage.textHandle, baseEdgeParam_);
 	messages_.push_back(newMessage);
+
+	return messageIdCounter_++;
+}
+
+void MessageUI::FinishMessage(uint32_t _messageId) {
+	// 指定されたIDのメッセージを消滅中に移行させる
+	for (auto& message : messages_) {
+		if (message.id == _messageId) {
+			message.state = MessageState::Disappearing;
+			break;
+		}
+	}
 }
 
 void MessageUI::DeleteMessage() {
@@ -89,15 +110,36 @@ void MessageUI::DeleteMessage() {
 
 void MessageUI::UpdateMessage() {
 	for (auto& message : messages_) {
-		//入力中のメッセージ処理
-		if (message.isInput) {
+		//点滅処理
+		if (message.isBlinking) {
+			message.blinkTimer -= kDeltaTime;
+			float blinkInterval = param_["blinkInterval"];
+			if (message.blinkTimer <= 0.0f) {
+				message.blinkTimer = blinkInterval;
+				//テキストの表示・非表示を切り替え
+				Vector4 currentColor = TextTextureManager::GetInstance()->GetTextColor(message.textHandle);
+				if (currentColor.w == 1.0f) {
+					//非表示にする
+					TextTextureManager::GetInstance()->EditTextColor(message.textHandle, { currentColor.x, currentColor.y, currentColor.z, 0.0f });
+				}
+				else {
+					//表示する
+					TextTextureManager::GetInstance()->EditTextColor(message.textHandle, { currentColor.x, currentColor.y, currentColor.z, 1.0f });
+				}
+			}
+		}
+
+		switch (message.state) {
+		case MessageState::Inputting:
+		{
+			// 入力中
 			message.inputTimer -= kDeltaTime;
 			if (message.inputTimer <= 0.0f) {
 				//表示するテキストを更新
 				TextTextureManager::GetInstance()->EditTextString(message.textHandle, message.text);
 
 				message.inputTimer = 0.0f;
-				message.isInput = false; // 入力が完了
+				message.state = MessageState::Displaying; // 表示中へ移行
 
 				continue;	//次のメッセージへ
 			}
@@ -105,22 +147,44 @@ void MessageUI::UpdateMessage() {
 			float inputTime = param_["inputTime"];
 			message.currentText = message.text.substr(0, static_cast<size_t>(message.text.size() * (1.0f - message.inputTimer / inputTime)));
 			TextTextureManager::GetInstance()->EditTextString(message.textHandle, message.currentText);
+
+			break;
 		}
-		//表示中のメッセージ処理
-		else {
+		case MessageState::Displaying:
+		{
+			// 表示中
 			message.displayTimer -= kDeltaTime;
 			if (message.displayTimer <= 0.0f) {
 				message.displayTimer = 0.0f;
-				message.isFinished = true;	// 終了
+				message.state = MessageState::Disappearing; // 消滅中へ移行
 
 				continue;	// 次のメッセージへ
 			}
-
+			break;
+		}
+		case MessageState::Disappearing:
+		{
+			// 消滅中
+			message.disappearTimer -= kDeltaTime;
+			if (message.disappearTimer <= 0.0f) {
+				message.disappearTimer = 0.0f;
+				message.state = MessageState::Finished; // 完了へ移行
+				continue;	// 次のメッセージへ
+			}
 			// 透明にしていく
-			float displayTime = param_["displayTime"];
-			float alpha = message.displayTimer / displayTime;
+			float disappearTime = param_["disappearTime"];
+			float alpha = message.disappearTimer / disappearTime;
 			TextTextureManager::GetInstance()->EditTextColor(message.textHandle, { baseTextParam_.color.x, baseTextParam_.color.y, baseTextParam_.color.z, alpha });
 			TextTextureManager::GetInstance()->EditEdgeColor(message.textHandle, { baseEdgeParam_.color.x, baseEdgeParam_.color.y, baseEdgeParam_.color.z, alpha });
+
+			break;
+		}
+		case MessageState::Finished:
+			// 完了
+			message.isFinished = true;
+			break;
+		default:
+			break;
 		}
 	}
 }
