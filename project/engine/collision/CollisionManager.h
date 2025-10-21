@@ -14,28 +14,55 @@ private://コンストラクタ等の隠蔽
 	CollisionManager(CollisionManager&) = delete;//コピーコンストラクタ封印
 	CollisionManager& operator=(CollisionManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンス取得関数
+	/// </summary>
+	/// <returns></returns>
 	static CollisionManager* GetInstance();
-public:
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-public:
-	// 当たり判定チェック
+	/// <summary>
+	/// 当たり判定チェック
+	/// </summary>
 	void CheckCollision();
-	// コライダー登録関数
+	/// <summary>
+	/// コライダーのセット
+	/// </summary>
+	/// <param name="colliders">コライダーのポインタ</param>
 	void SetColliders(Collider* colliders);
-	// コライダーリストクリア関数
+	/// <summary>
+	/// コライダーリストクリア関数
+	/// </summary>
 	void ClearColliders() { colliders_.clear(); }
 
 private:
-	// 当たり判定演算
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 当たり判定演算
+	/// </summary>
+	/// <param name="colliderA">コライダー1のポインタ</param>
+	/// <param name="colliderB">コライダー2のポインタ</param>
 	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 	
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
-private://メンバ変数
 	// コライダーリスト
 	std::list<Collider*> colliders_;
 };

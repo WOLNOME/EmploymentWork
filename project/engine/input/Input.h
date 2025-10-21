@@ -4,14 +4,18 @@
 #include <dinput.h>
 #include "Vector2.h"
 
-///マウスのコマンド
+/// <summary>
+/// マウスのコマンド
+/// </summary>
 enum MouseButton {
 	LeftButton,    // 左ボタン
 	RightButton,   // 右ボタン
 	MiddleButton   // 中央ボタン
 };
 
-///ゲームパッドのコマンド
+/// <summary>
+/// ゲームパッドのコマンド
+/// </summary>
 enum GamepadButton {
 	ButtonA,		// Aボタン
 	ButtonB,		// Bボタン
@@ -42,44 +46,131 @@ private://コンストラクタ等の隠蔽
 	Input(Input&) = delete;//コピーコンストラクタ封印
 	Input& operator=(Input&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns></returns>
 	static Input* GetInstance();
-public:
+
 	//namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;//エイリアステンプレート
 
-public://メンバ関数
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-private://非公開メンバ関数
-	//ダイレクトインプットの初期化
+	/// ============================== ///
+	///		コマンド操作関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 指定したマウスボタンが現在押されているかを判定する
+	/// </summary>
+	/// <param name="button">判定対象のマウスボタン</param>
+	/// <returns>押されていれば true、押されていなければ false</returns>
+	bool PushMouseButton(MouseButton button);
+	/// <summary>
+	/// 指定したマウスボタンが「このフレームで押された瞬間」であるかを判定する
+	/// </summary>
+	/// <param name="button">判定対象のマウスボタン</param>
+	/// <returns>押された瞬間であれば true、そうでなければ false</returns>
+	bool TriggerMouseButton(MouseButton button);
+	/// <summary>
+	/// 指定したキーが現在押されているかを判定する
+	/// </summary>
+	/// <param name="keyNumber">判定対象のキー番号（例：DIK_SPACE など）</param>
+	/// <returns>押されていれば true、押されていなければ false</returns>
+	bool PushKey(BYTE keyNumber);
+	/// <summary>
+	/// 指定したキーが「このフレームで押された瞬間」であるかを判定する
+	/// </summary>
+	/// <param name="keyNumber">判定対象のキー番号（例：DIK_RETURN など）</param>
+	/// <returns>押された瞬間であれば true、そうでなければ false</returns>
+	bool TriggerKey(BYTE keyNumber);
+	/// <summary>
+	/// 指定したゲームパッドボタンが現在押されているかを判定する
+	/// </summary>
+	/// <param name="button">判定対象のゲームパッドボタン</param>
+	/// <returns>押されていれば true、押されていなければ false</returns>
+	bool PushPadButton(GamepadButton button);
+	/// <summary>
+	/// 指定したゲームパッドボタンが「このフレームで押された瞬間」であるかを判定する
+	/// </summary>
+	/// <param name="button">判定対象のゲームパッドボタン</param>
+	/// <returns>押された瞬間であれば true、そうでなければ false</returns>
+	bool TriggerPadButton(GamepadButton button);
+	/// <summary>
+	/// 現在のマウス座標を取得する
+	/// </summary>
+	/// <returns>マウス座標（ウィンドウ座標系）</returns>
+	Vector2 GetMousePosition();
+	/// <summary>
+	/// マウスホイールの回転量を取得する
+	/// </summary>
+	/// <returns>
+	/// スクロール量（上方向が正の値、下方向が負の値）
+	/// </returns>
+	float GetMouseScrollCount();
+	/// <summary>
+	/// ゲームパッドの左スティックの入力方向を取得する
+	/// </summary>
+	/// <returns>左スティックの入力方向（正規化済みベクトル）</returns>
+	Vector2 GetLeftStickDir();
+	/// <summary>
+	/// ゲームパッドの右スティックの入力方向を取得する
+	/// </summary>
+	/// <returns>右スティックの入力方向（正規化済みベクトル）</returns>
+	Vector2 GetRightStickDir();
+	/// <summary>
+	/// マウスカーソルの表示／非表示を設定する
+	/// </summary>
+	/// <param name="_isDisplay">true ならカーソルを表示、false なら非表示</param>
+	void SetIsMouseDisplay(bool _isDisplay);
+	/// <summary>
+	/// マウスカーソルの固定状態を設定する（画面中央に固定するなど）
+	/// </summary>
+	/// <param name="_isMiddle">true ならカーソルを固定、false なら自由に動かす</param>
+	void SetIsMouseFixed(bool _isMiddle);
+
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// DirectInputの初期化を行う
+	/// </summary>
 	void InitDirectInput();
-	//マウスデバイスの生成
+	/// <summary>
+	/// マウスデバイスを生成する
+	/// </summary>
 	void GenerateMouse();
-	//キーボードデバイスの生成
+	/// <summary>
+	/// キーボードデバイスを生成する
+	/// </summary>
 	void GenerateKeyboard();
-	//ゲームパッドデバイスの生成
+	/// <summary>
+	/// ゲームパッドデバイスを生成する
+	/// </summary>
 	void GenerateGamepad();
 
-public://固有の処理
-	bool PushMouseButton(MouseButton button);
-	bool TriggerMouseButton(MouseButton button);
-	bool PushKey(BYTE keyNumber);
-	bool TriggerKey(BYTE keyNumber);
-	bool PushPadButton(GamepadButton button);
-	bool TriggerPadButton(GamepadButton button);
-	Vector2 GetMousePosition();
-	float GetMouseScrollCount();
-	Vector2 GetLeftStickDir();
-	Vector2 GetRightStickDir();
-	void SetIsMouseDisplay(bool _isDisplay);
-	void SetIsMouseFixed(bool _isMiddle);
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//DiretInput
 	ComPtr<IDirectInput8> directInput;
 

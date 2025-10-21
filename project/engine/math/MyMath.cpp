@@ -1744,7 +1744,7 @@ bool MyMath::IsCollision(const OBB& obb, const Sphere& sphere) {
 	Vector3 centerInOBBLocalSpace = Transform(sphere.center, obbWorldMatrixInverse);
 	AABB aabbOBBLocal = {
 		.min = -obb.size,
-		.max = obb.size 
+		.max = obb.size
 	};
 	Sphere sphereOBBLocal = { centerInOBBLocalSpace, sphere.radius };
 
@@ -1771,7 +1771,7 @@ bool MyMath::IsCollision(const OBB& obb, const Line& line) {
 	Vector3 centerInOBBLocalLine = Transform(line.origin, obbWorldMatrixInverse);
 	AABB aabbOBBLocal = {
 		.min = -obb.size,
-		.max = obb.size 
+		.max = obb.size
 	};
 	Line lineOBBLocal = { centerInOBBLocalLine, line.diff };
 
@@ -1798,7 +1798,7 @@ bool MyMath::IsCollision(const OBB& obb, const Ray& ray) {
 	Vector3 centerInOBBLocalRay = Transform(ray.origin, obbWorldMatrixInverse);
 	AABB aabbOBBLocal = {
 		.min = -obb.size,
-		.max = obb.size 
+		.max = obb.size
 	};
 	Ray rayOBBLocal = { centerInOBBLocalRay, ray.diff };
 
@@ -1825,7 +1825,7 @@ bool MyMath::IsCollision(const OBB& obb, const Segment& segment) {
 	Vector3 diffInOBBLocalSegment = TransformNormal(segment.diff, obbWorldMatrixInverse);
 	AABB aabbOBBLocal = {
 		.min = -obb.size,
-		.max = obb.size 
+		.max = obb.size
 	};
 	Segment segmentOBBLocal = { centerInOBBLocalSegment, diffInOBBLocalSegment };
 
@@ -2053,10 +2053,9 @@ Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 	return MyMath::Add(v1, v2);
 }
 
-//Vector3 operator-(const Vector3& v1, const Vector3& v2)
-//{
-//	return MyMath::Subtract(v1, v2);
-//}
+Vector3 operator-(const Vector3& v1, const Vector3& v2) {
+	return MyMath::Subtract(v1, v2);
+}
 
 Vector3 operator*(float s, const Vector3& v) {
 	return MyMath::Multiply(s, v);

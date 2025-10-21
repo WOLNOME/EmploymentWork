@@ -138,7 +138,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\base\RTVManager.cpp" />
     <ClCompile Include="engine\base\TextTextureManager.cpp" />
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
-    <ClCompile Include="engine\math\Vector3.cpp" />
     <ClCompile Include="engine\collision\Collider.cpp" />
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
     <ClCompile Include="engine\3d\DirectionalLight.cpp" />
