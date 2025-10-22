@@ -7,10 +7,20 @@
 /// </summary>
 class ReticleUI {
 public:
-	//初期化
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	uint32_t textureHandle_ = 0u;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 };

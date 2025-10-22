@@ -12,6 +12,10 @@
 /// </summary>
 class MessageUI {
 private:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
 	/// <summary>
 	/// メッセージの状態
 	/// </summary>
@@ -21,6 +25,10 @@ private:
 		Disappearing,	// 消滅中
 		Finished,		// 完了
 	};
+
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
 
 	/// <summary>
 	/// 1つのメッセージに必要なデータ
@@ -40,35 +48,68 @@ private:
 	};
 
 public:
-	// コンストラクタ
-	MessageUI() = default;
-	// デストラクタ
-	~MessageUI() = default;
-	// 初期化
-	void Initialize();
-	// 更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	// デバッグ用ImGui
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	MessageUI() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~MessageUI() = default;
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用ImGui
+	/// </summary>
 	void DebugWithImGui();
 
-	// メッセージの追加
+	/// <summary>
+	/// メッセージの追加
+	/// </summary>
+	/// <param name="_text">テキスト</param>
+	/// <param name="_displayTime">表示時間</param>
+	/// <param name="_isBlinking"点滅させるか></param>
+	/// <returns>メッセージのハンドル</returns>
 	uint32_t AddMessage(const std::wstring& _text, float _displayTime = 0.0f, bool _isBlinking = false);
 
-	// メッセージの終了通知
+	/// <summary>
+	/// メッセージの完了
+	/// </summary>
+	/// <param name="_messageId">メッセージのハンドル</param>
 	void FinishMessage(uint32_t _messageId);
 
-private://非公開メンバ関数
-	//メッセージの削除処理
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// メッセージの削除
+	/// </summary>
 	void DeleteMessage();
-
-	// メッセージの更新処理
+	/// <summary>
+	/// メッセージの更新処理
+	/// </summary>
 	void UpdateMessage();
-
-	// スプライトの更新処理
+	/// <summary>
+	/// スプライトの更新
+	/// </summary>
 	void UpdateSprite();
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメーター
 	json param_;
 

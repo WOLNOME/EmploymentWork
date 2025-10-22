@@ -13,27 +13,52 @@
 /// </summary>
 class ItemManager {
 public:
-	// コンストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	ItemManager() = default;
-	// デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~ItemManager() = default;
-
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-
-	// デバッグ用パラメーター調整
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-	// アイテムの追加
+	/// <summary>
+	/// アイテムの追加
+	/// </summary>
+	/// <param name="_initPos">初期化用座標</param>
 	void AddItem(const Vector3& _initPos);
 
-public://getter
-	//アイテムのコンテナを取得
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// アイテムのコンテナを取得
+	/// </summary>
+	/// <returns>アイテムのコンテナ</returns>
 	const std::list<std::unique_ptr<Item>>& GetItems() const { return items_; }
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//アイテムのパラメーター
 	json param_;
 

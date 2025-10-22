@@ -6,19 +6,58 @@
 /// </summary>
 class JetEnemyAttackState : public IJetEnemyState {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	JetEnemyAttackState();
 
+	/// <summary>
+	/// 切り替え時の最初の処理
+	/// </summary>
+	/// <param name="enemy">ジェットエネミーのポインタ</param>
 	void Enter(IBaseJetEnemy* enemy) override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="enemy">ジェットエネミーのポインタ</param>
 	void Update(IBaseJetEnemy* enemy) override;
+	/// <summary>
+	/// 切り替え時の最後の処理
+	/// </summary>
+	/// <param name="enemy">ジェットエネミーのポインタ</param>
 	void Exit(IBaseJetEnemy* enemy) override;
 
 public:
-	//getter
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+	
+	/// <summary>
+	/// 爆弾投下可能かどうかを取得する
+	/// </summary>
+	/// <returns>爆弾投下可能かどうか</returns>
 	bool GetIsCanBombFire() const { return isCanBombFire_; }
-	//setter
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+	
+	/// <summary>
+	/// 爆弾投下可能かどうかを設定する
+	/// </summary>
+	/// <param name="isBombFire">爆弾投下可能かどうか</param>
 	void SetIsCanBombFire(bool isBombFire) { isCanBombFire_ = isBombFire; }
 
+
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//爆弾投下可能かどうか
 	bool isCanBombFire_ = false;
 

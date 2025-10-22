@@ -18,7 +18,13 @@ class MessageUI;
 /// </summary>
 class Player : public BaseCharacter {
 public:
-	//デストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Player() override {};
 	/// <summary>
 	/// 初期化
@@ -28,45 +34,103 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
 
-	//当たり判定処理
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-public://getter
-	//HP
+	/// <summary>
+	/// 現在のHPを取得する
+	/// </summary>
+	/// <returns>現在のHP</returns>
 	int GetHP() const { return hp_; }
-	//砲弾リロードタイムタイマー
+	/// <summary>
+	/// 砲弾のリロードタイムタイマーを取得する
+	/// </summary>
+	/// <returns>砲弾リロードタイムタイマー</returns>
 	float GetCannonReloadTimer() const { return cannonReloadTimer_; }
-	//砲弾を発射したかどうか
+	/// <summary>
+	/// 砲弾を発射したかどうかを取得する
+	/// </summary>
+	/// <returns>発射していればtrue</returns>
 	bool GetIsCannonFire() const { return isCannonFire_; }
-	//銃弾リロードタイムタイマー
+	/// <summary>
+	/// 銃弾のリロードタイムタイマーを取得する
+	/// </summary>
+	/// <returns>銃弾リロードタイムタイマー</returns>
 	float GetBulletReloadTimer() const { return bulletReloadTimer_; }
-	//現在の銃弾の数
+	/// <summary>
+	/// 現在の銃弾の数を取得する
+	/// </summary>
+	/// <returns>銃弾の残数</returns>
 	int GetBulletNum() const { return bulletNum_; }
-	//銃弾の発射間隔タイマー
+	/// <summary>
+	/// 銃弾の発射間隔タイマーを取得する
+	/// </summary>
+	/// <returns>発射間隔タイマー</returns>
 	float GetBulletFireIntervalTimer() const { return bulletFireIntervalTimer_; }
-	//銃弾を発射したかどうか
+	/// <summary>
+	/// 銃弾を発射したかどうかを取得する
+	/// </summary>
+	/// <returns>発射していればtrue</returns>
 	bool GetIsBulletFire() const { return isBulletFire_; }
-	//ダメージを受けたか
+	/// <summary>
+	/// ダメージを受けたかどうかを取得する
+	/// </summary>
+	/// <returns>ダメージを受けていればtrue</returns>
 	bool GetIsDamage() const { return isDamage_; }
-	//アイテムのリロード速度アップ数
+	/// <summary>
+	/// アイテムによるリロード速度アップ数を取得する
+	/// </summary>
+	/// <returns>リロード速度アップ数</returns>
 	uint32_t GetItemReloadSpeedUp() const { return item_reloadSpeedUp_; }
-	//アイテムの移動速度アップ数
+	/// <summary>
+	/// アイテムによる移動速度アップ数を取得する
+	/// </summary>
+	/// <returns>移動速度アップ数</returns>
 	uint32_t GetItemMoveSpeedUp() const { return item_moveSpeedUp_; }
-	//アイテムの回転速度アップ数
+	/// <summary>
+	/// アイテムによる回転速度アップ数を取得する
+	/// </summary>
+	/// <returns>回転速度アップ数</returns>
 	uint32_t GetItemTurnSpeedUp() const { return item_turnSpeedUp_; }
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// レベルローダーを設定する
+	/// </summary>
+	/// <param name="_levelLoader">設定するレベルローダー</param>
 	void SetLevelLoader(LevelLoader* _levelLoader);
+	/// <summary>
+	/// ゲームカメラを設定する
+	/// </summary>
+	/// <param name="_camera">設定するゲームカメラ</param>
 	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
+	/// <summary>
+	/// メッセージUIを設定する
+	/// </summary>
+	/// <param name="_messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
 
-private://非公開関数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
 	//回転
 	void Rotate();
 	//移動
@@ -81,7 +145,10 @@ private://非公開関数
 	//カメラ処理
 	void CameraAlgorithm();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 	//カメラ
@@ -89,7 +156,10 @@ private:
 	//メッセージUI
 	MessageUI* messageUI_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメータ
 	json param_;
 

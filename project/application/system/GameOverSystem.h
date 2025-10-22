@@ -11,27 +11,50 @@
 /// </summary>
 class GameOverSystem {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-private://非公開メンバ関数
-	//操作
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 操作処理
+	/// </summary>
 	void Operate();
-	//UI演出
+	/// <summary>
+	/// 演出処理
+	/// </summary>
 	void DirectionUI();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//テキスト操作変数
 	bool isHalfPeriod_ = false;
 	float timer_ = 0.0f;

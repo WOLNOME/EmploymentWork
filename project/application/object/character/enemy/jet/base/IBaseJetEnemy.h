@@ -21,9 +21,17 @@ class MessageUI;
 /// </summary>
 class IBaseJetEnemy : public BaseCharacter {
 public:
-	//コンストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	///	============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	IBaseJetEnemy();
-	// デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~IBaseJetEnemy() override = default;
 	/// <summary>
 	/// 初期化
@@ -33,37 +41,91 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
 
-public://getter
-	Player* GetPlayer() { return player_; }
-	const json& GetParam() { return param_; }
-	int GetMaxHP() const { return maxHP_; }
-	int GetHP() const { return hp_; }
+	/// <summary>
+	/// 状態変更用関数
+	/// </summary>
+	/// <param name="stateName">状態名</param>
+	void ChangeState(const std::string& stateName);
 
+	/// ============================== ///
+	///		getter
+	///	============================== ///
+
+	/// <summary>
+	/// プレイヤーを取得する
+	/// </summary>
+	/// <returns>プレイヤーオブジェクト</returns>
+	Player* GetPlayer() { return player_; }
+	/// <summary>
+	/// 敵パラメータ(json)を取得する
+	/// </summary>
+	/// <returns>敵パラメータ(json)</returns>
+	const json& GetParam() { return param_; }
+	/// <summary>
+	/// 最大HPを取得する
+	/// </summary>
+	/// <returns>最大HP</returns>
+	int GetMaxHP() const { return maxHP_; }
+	/// <summary>
+	/// 現在のHPを取得する
+	/// </summary>
+	/// <returns>現在のHP</returns>
+	int GetHP() const { return hp_; }
+	/// <summary>
+	/// 攻撃ステートを取得する
+	/// </summary>
+	/// <returns>攻撃ステート</returns>
 	JetEnemyAttackState* GetAttackState() const { return attackState_.get(); }
 
-public://setter
+	/// ============================== ///
+	///		setter
+	///	============================== ///
+
+	/// <summary>
+	/// プレイヤーを設定する
+	/// </summary>
+	/// <param name="_player">設定するプレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
+	/// <summary>
+	/// アイテムマネージャーを設定する
+	/// </summary>
+	/// <param name="_itemManager">設定するアイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
+	/// <summary>
+	/// メッセージUIを設定する
+	/// </summary>
+	/// <param name="messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* messageUI);
 
 protected:
-	//当たり判定処理
+	/// ============================== ///
+	///		非公開メンバ関数
+	///	============================== ///
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
-public://状態管理用関数
-	void ChangeState(const std::string& stateName);
 
-protected://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	///	============================== ///
+
 	Player* player_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
 
-protected://メンバ変数
+	/// ============================== ///
+	///		メンバ変数(protected)
+	///	============================== ///
+
 	//パラメーター
 	json param_;
 
@@ -72,6 +134,10 @@ protected://メンバ変数
 	int hp_;	//現在のHP
 
 private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	///	============================== ///
+
 	//状態管理用変数
 	IJetEnemyState* currentState_ = nullptr;
 

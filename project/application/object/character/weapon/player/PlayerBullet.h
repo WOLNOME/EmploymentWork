@@ -14,7 +14,13 @@
 /// </summary>
 class PlayerBullet : public BaseCharacter {
 public:
-	//デストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~PlayerBullet() override {};
 	/// <summary>
 	/// 初期化
@@ -24,28 +30,54 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
-	//ImGuiデバッグ
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui() override;
 
-	//当たり判定処理
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
-public://setter
-	/// 最初にセットするパラメーター
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期パラメーターを設定する
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
 	void SetInitParam(const Vector3& _initPos, const Vector3& _initDirection);
 
 private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 移動処理を行う
+	/// </summary>
+	void Move();
+	/// <summary>
+	/// 死亡処理を行う
+	/// </summary>
+	void DeadProcess();
+
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//トレールエフェクト
 	std::unique_ptr<BulletTrail> trail_ = nullptr;
+	
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
-private:
-	//移動処理
-	void Move();
-
-	//死亡処理
-	void DeadProcess();
-private:
 	//パラメータ
 	json param_;
 

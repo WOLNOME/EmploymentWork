@@ -17,39 +17,82 @@ class MessageUI;
 /// </summary>
 class EnemyManager {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用パラメーター調整
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-public://getter
-	//キャノ太のコンテナ
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// キャノ太のコンテナ取得
+	/// </summary>
+	/// <returns>キャノ太のコンテナ</returns>
 	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
-	//ボスのコンテナ
+	/// <summary>
+	/// ボスのコンテナ取得
+	/// </summary>
+	/// <returns>ボスのコンテナ</returns>
 	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
-	//ジェットのコンテナ
+	/// <summary>
+	/// ジェットのコンテナ取得
+	/// </summary>
+	/// <returns>ジェットのコンテナ</returns>
 	const std::list<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
 
-public://setter
-	//レベルローダーセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// レベルローダーのセット
+	/// </summary>
+	/// <param name="_levelLoader">レベルローダーのポインタ</param>
 	void SetLevelLoader(LevelLoader* _levelLoader);
-	//プレイヤーセット
+	/// <summary>
+	/// プレイヤーのセット
+	/// </summary>
+	/// <param name="_player">プレイヤーのポインタ</param>
 	void SetPlayer(Player* _player);
-	//アイテムマネージャーセット
+	/// <summary>
+	/// アイテムマネージャーのセット
+	/// </summary>
+	/// <param name="_itemManager">アイテムマネージャーのポインタ</param>
 	void SetItemManager(ItemManager* _itemManager);
-	//メッセージUIセット
+	/// <summary>
+	/// メッセージUIのセット
+	/// </summary>
+	/// <param name="_messageUI">メッセージUIのポインタ</param>
 	void SetMessageUI(MessageUI* _messageUI);
 
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//プレイヤー
 	Player* player_ = nullptr;
 	//アイテムマネージャー
 	ItemManager* itemManager_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//キャノ太のコンテナ
 	std::list<std::unique_ptr<Canota>> canotas_;
 	//ボスのコンテナ

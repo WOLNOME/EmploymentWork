@@ -12,20 +12,47 @@ class EnemyManager;
 /// </summary>
 class EnemyHPUI {
 public:
-	//初期化
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// エネミーマネージャーのセット
+	/// </summary>
+	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
+	/// <summary>
+	/// ゲームカメラのセット
+	/// </summary>
+	/// <param name="_camera">ゲームカメラ</param>
 	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
-private:
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメーター
 	json param_;
 

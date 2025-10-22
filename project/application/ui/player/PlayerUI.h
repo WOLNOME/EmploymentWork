@@ -20,35 +20,85 @@ class GameCamera;
 /// </summary>
 class PlayerUI {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用ImGui
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-public://getter
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 被弾インジケーターの取得
+	/// </summary>
+	/// <returns>被弾インジケーター</returns>
 	HitIndicator* GetHitIndicator() { return hitIndicator_.get(); }
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーの設定
+	/// </summary>
+	/// <param name="_player">プレイヤー</param>
 	void SetPlayer(Player* _player);
+	/// <summary>
+	/// エネミーマネージャーの設定
+	/// </summary>
+	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager);
+	/// <summary>
+	/// アイテムマネージャーの設定
+	/// </summary>
+	/// <param name="_itemManager">アイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager);
+	/// <summary>
+	/// ゲームカメラの設定
+	/// </summary>
+	/// <param name="_camera">ゲームカメラ</param>
 	void SetGameCamera(GameCamera* _camera);
 
-private://非公開メンバ関数
-	//シェイク処理
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シェイク処理
+	/// </summary>
 	void DamageShaking();
-	//点滅処理
+	/// <summary>
+	/// 点滅処理
+	/// </summary>
 	void DamageBlinking();
 
-private://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//プレイヤー
 	Player* player_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
-private:
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//レティクルUI
 	std::unique_ptr<ReticleUI> reticleUI_ = nullptr;
 	//装飾用UI
@@ -66,7 +116,6 @@ private:
 	//アイテムUI
 	std::unique_ptr<ItemUI> itemUI_ = nullptr;
 
-private://メンバ変数
 	//パラメーター
 	json param_;
 

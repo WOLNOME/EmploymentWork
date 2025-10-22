@@ -11,9 +11,14 @@
 class Sprite {
 	//スプライトマネージャーに公開
 	friend class SpriteManager;
-public://列挙体
+public:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
 
-	//描画順タグ(各レイヤーは今のところ4つずつ←必要に応じて増やす)
+	/// <summary>
+	/// 描画順タグ
+	/// </summary>
 	enum class Order {
 		Back0,
 		Back1,
@@ -29,7 +34,9 @@ public://列挙体
 		kMaxOrderNum,
 	};
 
-	//テクスチャの種類
+	/// <summary>
+	/// テクスチャの種類
+	/// </summary>
 	enum class TextureKind {
 		Normal,
 		Text,
@@ -37,25 +44,36 @@ public://列挙体
 		kMaxTextureKindNum,
 	};
 
-private://構造体
-	//頂点データ
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ
+	/// </summary>
 	struct VertexData {
 		Vector4 position;
 		Vector2 texcoord;
 		Vector3 normal;
 	};
-	//マテリアルデータ
+	/// <summary>
+	/// マテリアル
+	/// </summary>
 	struct Material {
 		Vector4 color;
 		Matrix4x4 uvTransform;
 		int32_t isTexture;
 	};
-	//座標変換行列データ
+	/// <summary>
+	/// 座標変換行列
+	/// </summary>
 	struct TransformationMatrix {
 		Matrix4x4 WVP;
 		Matrix4x4 World;
 	};
-	//GPU送信用リソース
+	/// <summary>
+	/// GPU用リソース群
+	/// </summary>
 	struct ResourceForGPU {
 		//頂点リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
@@ -75,51 +93,167 @@ private://構造体
 		uint32_t srvIndex = 0u;
 	};
 
-public://メンバ関数
+public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	~Sprite();
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_order">描画順</param>
+	/// <param name="_textureHandle">テクスチャハンドル</param>
 	void Initialize(const std::string& _name, const Order& _order, uint32_t _textureHandle);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_order">描画順</param>
 	void Initialize(const std::string& _name, const Order& _order);
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
-
-	//デバッグ用ImGui
+	/// <summary>
+	/// ImGuiデバッグ表示
+	/// </summary>
 	void DebugWithImGui();
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-public://getter
-	const Vector2& GetPosition()const { return position; }
-	float GetRotation()const { return rotation; }
-	const Vector2& GetSize()const { return size; }
-	const Vector4& GetColor()const { return resource_.materialData->color; }
-	const Vector2& GetAnchorPoint()const { return anchorPoint; }
-	bool GetFlipX()const { return isFlipX_; }
-	bool GetFlipY()const { return isFlipY_; }
-	const Vector2& GetTextureLeftTop()const { return textureLeftTop; }
-	const Vector2& GetTextureSize()const { return textureSize; }
+	/// <summary>
+	/// 位置を取得する
+	/// </summary>
+	const Vector2& GetPosition() const { return position; }
+	/// <summary>
+	/// 回転角度を取得する
+	/// </summary>
+	float GetRotation() const { return rotation; }
+	/// <summary>
+	/// サイズを取得する
+	/// </summary>
+	const Vector2& GetSize() const { return size; }
+	/// <summary>
+	/// カラーを取得する
+	/// </summary>
+	const Vector4& GetColor() const { return resource_.materialData->color; }
+	/// <summary>
+	/// アンカーポイントを取得する
+	/// </summary>
+	const Vector2& GetAnchorPoint() const { return anchorPoint; }
+	/// <summary>
+	/// X方向の反転状態を取得する
+	/// </summary>
+	bool GetFlipX() const { return isFlipX_; }
+	/// <summary>
+	/// Y方向の反転状態を取得する
+	/// </summary>
+	bool GetFlipY() const { return isFlipY_; }
+	/// <summary>
+	/// テクスチャの左上座標を取得する
+	/// </summary>
+	const Vector2& GetTextureLeftTop() const { return textureLeftTop; }
+	/// <summary>
+	/// テクスチャのサイズを取得する
+	/// </summary>
+	const Vector2& GetTextureSize() const { return textureSize; }
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
 
-public://setter
+	/// <summary>
+	/// 位置を設定する
+	/// </summary>
+	/// <param name="position">設定する位置</param>
 	void SetPosition(const Vector2& position) { this->position = position; }
+	/// <summary>
+	/// 回転角度を設定する
+	/// </summary>
+	/// <param name="rotation">設定する回転角度</param>
 	void SetRotation(float rotation) { this->rotation = rotation; }
+	/// <summary>
+	/// サイズを設定する
+	/// </summary>
+	/// <param name="size">設定するサイズ</param>
 	void SetSize(const Vector2& size) { this->size = size; }
+	/// <summary>
+	/// カラーを設定する
+	/// </summary>
+	/// <param name="color">設定するカラー</param>
 	void SetColor(const Vector4& color) { resource_.materialData->color = color; }
+	/// <summary>
+	/// アンカーポイントを設定する
+	/// </summary>
+	/// <param name="anchorPoint">設定するアンカーポイント</param>
 	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint = anchorPoint; }
+	/// <summary>
+	/// X方向の反転状態を設定する
+	/// </summary>
+	/// <param name="isFlipX">反転状態</param>
 	void SetFlipX(bool isFlipX) { isFlipX_ = isFlipX; }
+	/// <summary>
+	/// Y方向の反転状態を設定する
+	/// </summary>
+	/// <param name="isFlipY">反転状態</param>
 	void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
+	/// <summary>
+	/// テクスチャの左上座標を設定する
+	/// </summary>
+	/// <param name="leftTop">設定する左上座標</param>
 	void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop = leftTop; }
+	/// <summary>
+	/// テクスチャのサイズを設定する
+	/// </summary>
+	/// <param name="size">設定するテクスチャサイズ</param>
 	void SetTextureSize(const Vector2& size) { textureSize = size; }
+	/// <summary>
+	/// シェイクオフセットを設定する
+	/// </summary>
+	/// <param name="_offset">設定するシェイクオフセット</param>
 	void SetShakeOffset(const Vector2& _offset) { shakeOffset_ = _offset; }
+	/// <summary>
+	/// 表示状態を設定する
+	/// </summary>
+	/// <param name="_isDisplay">表示状態</param>
 	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; }
+	/// <summary>
+	/// テクスチャを設定する
+	/// </summary>
+	/// <param name="_textureHandle">設定するテクスチャハンドル</param>
 	void SetTexture(Handle _textureHandle) { textTextureHandle_ = _textureHandle; }
+	/// <summary>
+	/// テクスチャを設定する（ハンドル指定）
+	/// </summary>
+	/// <param name="_textureHandle">設定するテクスチャハンドル</param>
 	void SetTexture(uint32_t _textureHandle);
 
-private://非公開メンバ変数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// GPU用リソースの生成
+	/// </summary>
+	/// <returns> GPU用リソース</returns>
 	ResourceForGPU CreateResourceForGPU();
 
-	//テクスチャサイズをイメージに合わせる
+	/// <summary>
+	/// テクスチャサイズの調整
+	/// </summary>
 	void AdjustTextureSize();
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//名前
 	std::string name_;
 

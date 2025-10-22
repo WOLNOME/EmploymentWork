@@ -12,9 +12,18 @@ class Player;
 /// </summary>
 class Boss : public IBaseTankEnemy {
 public:
-	//コンストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="_isUseCannon">砲弾可能フラグ</param>
 	Boss(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Boss() override {};
 	/// <summary>
 	/// 初期化
@@ -24,14 +33,21 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
 
 private:
-	//当たり判定処理
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 };
 

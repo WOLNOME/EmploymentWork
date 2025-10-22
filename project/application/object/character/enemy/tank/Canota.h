@@ -9,9 +9,18 @@
 /// </summary>
 class Canota : public IBaseTankEnemy {
 public:
-	//コンストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="_isUseCannon">砲弾可能フラグ</param>
 	Canota(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Canota() override {};
 	/// <summary>
 	/// 初期化
@@ -28,7 +37,15 @@ public:
 	void DebugWithImGui() override;
 
 private:
-	//当たり判定処理
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
 };

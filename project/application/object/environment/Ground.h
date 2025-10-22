@@ -8,12 +8,20 @@
 /// </summary>
 class Ground {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize();
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	int32_t textureHandle_ = EOF;
 	std::unique_ptr<Object3d> object3d_ = nullptr;
 

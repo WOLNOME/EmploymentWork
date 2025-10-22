@@ -20,6 +20,10 @@
 /// </summary>
 class GamePlayScene : public BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -38,6 +42,10 @@ public:
 	void DebugWithImGui() override;
 
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 
@@ -47,10 +55,9 @@ private:
 	//スタート演出
 	std::unique_ptr<StartDirection> startDirection_ = nullptr;
 
-private://ライト
 	//平行光源
 	std::unique_ptr<DirectionalLight> dirLight_;
-private://オブジェクト
+
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
@@ -70,13 +77,16 @@ private://オブジェクト
 	//アイテムマネージャー
 	std::unique_ptr<ItemManager> itemManager_ = nullptr;
 
-private://UI
 	//プレイヤーUI
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 	//敵UI
 	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
 	//メッセージUI
 	std::unique_ptr<MessageUI> messageUI_ = nullptr;
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
 	//デバッグ用フラグ
 	bool isDebug_ = false;
