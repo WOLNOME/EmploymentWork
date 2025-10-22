@@ -12,22 +12,49 @@ class EnemyManager;
 /// </summary>
 class EnemyUI {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用ImGui
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用ImGui
+	/// </summary>
 	void DebugWithImGui();
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// エネミーマネージャーのセット
+	/// </summary>
+	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager);
+	/// <summary>
+	/// ゲームカメラのセット
+	/// </summary>
+	/// <param name="_camera">ゲームカメラ</param>
 	void SetGameCamera(GameCamera* _camera);
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//HPUI
 	std::unique_ptr<EnemyHPUI> enemyHPUI_ = nullptr;
 
-private://データ駆動設計用パラメータ
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	json param_;
 
 };

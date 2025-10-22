@@ -383,9 +383,6 @@
     <ClCompile Include="engine\math\MyMath.cpp">
       <Filter>engine\math</Filter>
     </ClCompile>
-    <ClCompile Include="engine\math\Vector3.cpp">
-      <Filter>engine\math</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\ParticleEditorScene.cpp">
       <Filter>engine\scene</Filter>
     </ClCompile>

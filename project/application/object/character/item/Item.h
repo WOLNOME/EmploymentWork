@@ -10,7 +10,13 @@
 /// </summary>
 class Item : public BaseCharacter {
 public:
-	// デストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Item() override = default;
 	/// <summary>
 	/// 初期化
@@ -20,23 +26,36 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
 
 private:
-	//当たり判定処理
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
-private:
-	//死ぬまでの処理
+	/// <summary>
+	/// 死亡までの処理
+	/// </summary>
 	void UntilDeathProcess();
-	//パーティクルの更新処理
+	/// <summary>
+	/// パーティクルの更新
+	/// </summary>
 	void UpdateParticle();
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメーター
 	json param_;
 

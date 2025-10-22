@@ -53,7 +53,7 @@ void SceneManager::Finalize() {
 
 void SceneManager::ChangeScene() {
 	//次のシーン予約があるなら
-	if (nextScene_ && !sceneTransitionAnimation_->IsTransitioning()) {
+	if (nextScene_ && !sceneTransitionAnimation_->GetIsTransitioning()) {
 		//遷移アニメーション開始
 		sceneTransitionAnimation_->StartTransition();
 	}
@@ -92,7 +92,7 @@ void SceneManager::ChangeScene() {
 
 void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle) {
 	//遷移中なら何もしない
-	if (sceneTransitionAnimation_->IsTransitioning()) return;
+	if (sceneTransitionAnimation_->GetIsTransitioning()) return;
 
 	//警告
 	assert(sceneFactory_);

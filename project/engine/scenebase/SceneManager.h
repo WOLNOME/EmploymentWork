@@ -19,9 +19,16 @@ private://コンストラクタ等の隠蔽
 	SceneManager(SceneManager&) = delete;//コピーコンストラクタ封印
 	SceneManager& operator=(SceneManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	///	============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns></returns>
 	static SceneManager* GetInstance();
-public:
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -39,14 +46,31 @@ public:
 	/// </summary>
 	void Finalize();
 
-private:
-	//シーン切り替え
-	void ChangeScene();
-public:
-	//次シーンのセット
+	/// <summary>
+	/// 次のシーンのセット
+	/// </summary>
+	/// <param name="nextSceneName"></param>
+	/// <param name="inType"></param>
+	/// <param name="outType"></param>
+	/// <param name="option"></param>
+	/// <param name="time"></param>
+	/// <param name="_textureHandle"></param>
 	void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u);
 
 private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	///	============================== ///
+
+	/// <summary>
+	/// シーン切り替え
+	/// </summary>
+	void ChangeScene();
+
+	/// ============================== ///
+	///		メンバ変数
+	///	============================== ///
+
 	//今のシーン
 	BaseScene* scene_ = nullptr;
 	//次のシーン

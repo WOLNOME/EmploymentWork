@@ -11,23 +11,51 @@ class Player;
 /// </summary>
 class BulletUI {
 public:
-	//初期化
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	//シェイクの適用
+	/// <summary>
+	/// シェイクの適用
+	/// </summary>
+	/// <param name="_shakeOffset">シェイクオフセット</param>
 	void AttachShake(const Vector2& _shakeOffset);
-	//点滅の適用
+	/// <summary>
+	/// 点滅エフェクトの適用
+	/// </summary>
+	/// <param name="_color">色</param>
 	void AttachBlinking(const Vector4& _color);
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーの設定
+	/// </summary>
+	/// <param name="_player"></param>
 	void SetPlayer(Player* _player) { player_ = _player; }
 
-public://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	Player* player_ = nullptr;
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//プレイヤーのパラメーター
 	json param_;
 

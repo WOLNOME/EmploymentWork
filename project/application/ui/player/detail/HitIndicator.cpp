@@ -79,8 +79,8 @@ void HitIndicator::Update() {
 		v2.Normalize();
 
 		//外積と内積から角度を求める
-		float dot = v1.Dot(v2);
-		float cross = v1.Cross(v2).y;
+		float dot = MyMath::Dot(v1, v2);
+		float cross = MyMath::Cross(v1, v2).y;
 
 		//atan2で回転角を得る
 		float rotation = std::atan2f(cross, dot);

@@ -16,9 +16,16 @@ private://コンストラクタ等の隠蔽
 	ImGuiManager(ImGuiManager&) = delete;//コピーコンストラクタ封印
 	ImGuiManager& operator=(ImGuiManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static ImGuiManager* GetInstance();
-public:
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -43,10 +50,6 @@ public:
 	/// 画面への描画
 	/// </summary>
 	void Draw();
-
-private://インスタンス
-
-private://メンバ変数
 
 };
 

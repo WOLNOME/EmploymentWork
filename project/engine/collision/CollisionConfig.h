@@ -1,6 +1,8 @@
 #pragma once
 
-//当たり判定の全属性
+/// <summary>
+/// 当たり判定の全属性
+/// </summary>
 enum class CollisionAttribute {
 	Player,				//プレイヤー
 	Enemy,				//敵	

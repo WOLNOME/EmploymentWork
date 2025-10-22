@@ -12,6 +12,10 @@
 /// </summary>
 class GameOverScene : public BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -30,19 +34,20 @@ public:
 	void DebugWithImGui() override;
 
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 
 	//ゲーム用カメラ
 	std::unique_ptr<GameCamera> camera_ = nullptr;
-private://ライト
-
-private://オブジェクト
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
-private://システム
+	//ゲームオーバーシステム
 	std::unique_ptr<GameOverSystem> gameOverSystem_ = nullptr;
 
 

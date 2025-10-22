@@ -9,6 +9,10 @@
 /// </summary>
 class DevelopScene : public BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	///	============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -26,7 +30,11 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
-private://メンバ変数
+private:
+	/// ============================== ///
+	///		メンバ変数
+	///	============================== ///
+
 	Input* input_ = nullptr;
 	//開発用カメラ
 	std::unique_ptr<DevelopCamera> camera;
@@ -51,17 +59,11 @@ private://メンバ変数
 
 	//3Dオブジェクト
 	std::unique_ptr<Object3d> teapot_ = nullptr;
-
 	std::unique_ptr<Object3d> terrain_ = nullptr;
-
 	std::unique_ptr<Object3d> animatedCube_ = nullptr;
-
 	std::unique_ptr<Object3d> sneakWalk_ = nullptr;
-
 	std::unique_ptr<Object3d> walk_ = nullptr;
-
 	std::unique_ptr<Object3d> composite_ = nullptr;
-
 	std::unique_ptr<Object3d> simpleSkin_ = nullptr;
 
 	//レベルオブジェクト

@@ -15,39 +15,78 @@ class Player;
 /// </summary>
 class PlayerWeaponManager {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用パラメーター調整
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-public://getter
-	//砲弾のコンテナ
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 砲弾のコンテナを取得する
+	/// </summary>
 	const std::vector<std::unique_ptr<PlayerCannon>>& GetCannons() const { return cannons_; }
-	//銃弾のコンテナ
+	/// <summary>
+	/// 銃弾のコンテナを取得する
+	/// </summary>
 	const std::vector<std::unique_ptr<PlayerBullet>>& GetBullets() const { return bullets_; }
 
-public://setter
-	//カメラセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// ゲームカメラを設定する
+	/// </summary>
+	/// <param name="_camera">設定するゲームカメラ</param>
 	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; };
-	//プレイヤーセット
+	/// <summary>
+	/// プレイヤーを設定する
+	/// </summary>
+	/// <param name="_player">設定するプレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
 
 private:
-	//砲弾の生成
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 砲弾を生成する
+	/// </summary>
 	void CreateCannon();
-	//銃弾の生成
+	/// <summary>
+	/// 銃弾を生成する
+	/// </summary>
 	void CreateBullet();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//カメラ
 	GameCamera* camera_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメーター
 	json param_;
 

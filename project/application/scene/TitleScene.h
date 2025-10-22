@@ -12,6 +12,10 @@
 /// </summary>
 class TitleScene : public BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -30,16 +34,17 @@ public:
 	void DebugWithImGui() override;
 
 private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 
 	//ゲーム用カメラ
 	std::unique_ptr<DevelopCamera> camera_ = nullptr;
-private://ライト
-	
-private://システム
-	std::unique_ptr<TitleSystem> titleSystem_ = nullptr;
 
+	std::unique_ptr<TitleSystem> titleSystem_ = nullptr;
 
 };
 

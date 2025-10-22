@@ -16,40 +16,92 @@ class ItemManager;
 /// </summary>
 class Radar {
 public:
-	//初期化
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	//シェイクの適用
+	/// <summary>
+	/// シェイクの適用
+	/// </summary>
+	/// <param name="_shakeOffset">シェイクオフセット</param>
 	void AttachShake(const Vector2& _shakeOffset);
-	//点滅の適用
+	/// <summary>
+	/// 点滅の適用
+	/// </summary>
+	/// <param name="_color">色</param>
 	void AttachBlinking(const Vector4& _color);
 
-	//デバッグ用ImGui
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-private://非公開メンバ関数
-	//エネミーマークを更新
-	void UpdateEnemyMark();
-	//アイテムマークを更新
-	void UpdateItemMark();
-	//コンパスを更新
-	void UpdateCompass();
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
 
-public://setter
+	/// <summary>
+	/// ゲームカメラを設定する
+	/// </summary>
+	/// <param name="_caemra">ゲームカメラ</param>
 	void SetGameCamera(BaseCamera* _caemra) { camera_ = _caemra; }
+	/// <summary>
+	/// プレイヤーを設定する
+	/// </summary>
+	/// <param name="_player">プレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
+	/// <summary>
+	/// エネミーマネージャーを設定する
+	/// </summary>
+	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
+	/// <summary>
+	/// アイテムマネージャーを設定する
+	/// </summary>
+	/// <param name="_itemManager">アイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
 
-private://借用インスタンス
+
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーマークを更新
+	/// </summary>
+	void UpdateEnemyMark();
+	/// <summary>
+	/// アイテムマークを更新
+	/// </summary>
+	void UpdateItemMark();
+	/// <summary>
+	/// コンパスを更新
+	/// </summary>
+	void UpdateCompass();
+
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	BaseCamera* camera_ = nullptr;
 	Player* player_ = nullptr;
 	EnemyManager* enemyManager_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	const Vector2 centerPosition = { 640.0f,620.0f };	//レーダーの中心座標
 	const float unitLength = 31.0f / 100.0f;		//レーダー上の1の長さ
 	const float searchLength = 300.0f;		//索敵距離

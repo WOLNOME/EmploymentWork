@@ -16,44 +16,89 @@ class PlayerUI;
 /// </summary>
 class EnemyWeaponManager {
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用パラメーター調整
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-public://getter
-	//砲弾のコンテナ
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 砲弾のコンテナを取得する
+	/// </summary>
+	/// <returns>砲弾のコンテナ</returns>
 	const std::vector<std::unique_ptr<EnemyCannon>>& GetCannons() const { return cannons_; }
-	//爆弾のコンテナ
+	/// <summary>
+	/// 爆弾のコンテナを取得する
+	/// </summary>
+	/// <returns>爆弾のコンテナ</returns>
 	const std::vector<std::unique_ptr<EnemyBomb>>& GetBombs() const { return bombs_; }
 
 	////銃弾のコンテナ
 	//const std::vector<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
 
-public://setter
-	//エネミーマネージャーセット
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// エネミーマネージャーを設定する
+	/// </summary>
+	/// <param name="_enemyManager">設定するエネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
-	//プレイヤーセット
+	/// <summary>
+	/// プレイヤーを設定する
+	/// </summary>
+	/// <param name="_player">設定するプレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
-	//プレイヤーUIセット
+	/// <summary>
+	/// プレイヤーUIを設定する
+	/// </summary>
+	/// <param name="_playerUI">設定するプレイヤーUI</param>
 	void SetPlayerUI(PlayerUI* _playerUI);
 
 private:
-	//砲弾の生成
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 砲弾を生成する
+	/// </summary>
 	void CreateCannon();
-	//爆弾の生成
+	/// <summary>
+	/// 爆弾を生成する
+	/// </summary>
 	void CreateBomb();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//エネミーマネージャー
 	EnemyManager* enemyManager_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//パラメーター
 	json param_;
 

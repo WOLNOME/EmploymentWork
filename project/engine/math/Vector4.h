@@ -10,7 +10,13 @@ struct Vector4 final {
 	float y;
 	float z;
 	float w;
-	//初期化リスト
+	/// <summary>
+	/// 初期化リスト
+	/// </summary>
+	/// <param name="x">x</param>
+	/// <param name="y">y</param>
+	/// <param name="z">z</param>
+	/// <param name="w">w</param>
 	Vector4(float x = 0, float y = 0, float z = 0, float w = 0) : x(x), y(y), z(z), w(w) {}
 	//複合代入演算子のオーバーロード
 	Vector4& operator+=(const Vector4& other) {
@@ -50,17 +56,27 @@ struct Vector4 final {
 	bool operator!=(const Vector4& other) const {
 		return !(*this == other);
 	}
-	// ベクトルの長さを計算
+
+	/// <summary>
+	/// ベクトルの長さを返す
+	/// </summary>
+	/// <returns>ベクトルの長さ</returns>
 	float Length() const {
 		return std::sqrt(x * x + y * y + z * z + w * w);
 	}
-	// ベクトルの正規化を返す
+	/// <summary>
+	/// ベクトルを正規化した時の値を返す
+	/// </summary>
+	/// <returns>正規化したベクトルの値</returns>
 	Vector4 Normalized() const {
 		float len = Length();
 		if (len == 0.0f) return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
 		return Vector4(x / len, y / len, z / len, w / len);
 	}
-	// 自分自身を正規化する
+	/// <summary>
+	/// 自分自身を正規化して値を返す
+	/// </summary>
+	/// <returns>正規化したベクトルの値</returns>
 	Vector4& Normalize() {
 		float len = Length();
 		if (len == 0.0f) {

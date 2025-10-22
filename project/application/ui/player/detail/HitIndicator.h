@@ -11,7 +11,14 @@ class GameCamera;
 /// ヒットインジケーターを管理するクラス
 /// </summary>
 class HitIndicator {
-private://構造体
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// インジケーター情報
+	/// </summary>
 	struct IndicatorInfo {
 		uint32_t textureHandle = 0u;
 		std::unique_ptr<Sprite> sprite_ = nullptr;
@@ -19,20 +26,54 @@ private://構造体
 		Vector3 hitPosition_;
 		bool isActive_;
 	};
+
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// ヒットインジケーター登録
+	/// </summary>
+	/// <param name="_hitPosition">衝突点</param>
 	void RegistIndicator(const Vector3& _hitPosition);
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーの設定
+	/// </summary>
+	/// <param name="_player">プレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
+	/// <summary>
+	/// ゲームカメラの設定
+	/// </summary>
+	/// <param name="_gameCamera">ゲームカメラ</param>
 	void SetGameCamera(GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
 
-private://借用インスタンス
+private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	Player* player_ = nullptr;
 	GameCamera* gameCamera_ = nullptr;
-private:
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	static const int kNumIndicators_ = 10;
 	std::array<IndicatorInfo, kNumIndicators_> indicators_;
 

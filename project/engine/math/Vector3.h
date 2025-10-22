@@ -9,7 +9,12 @@ struct Vector3 final {
 	float x;
 	float y;
 	float z;
-	//初期化リスト
+	/// <summary>
+	/// 初期化リスト
+	/// </summary>
+	/// <param name="x">x</param>
+	/// <param name="y">y</param>
+	/// <param name="z">z</param>
 	Vector3(float x = 0, float y = 0, float z = 0) : x(x), y(y), z(z) {}
 	//複合代入演算子のオーバーロード
 	Vector3& operator+=(const Vector3& other) {
@@ -45,17 +50,27 @@ struct Vector3 final {
 	bool operator!=(const Vector3& other) const {
 		return !(*this == other);
 	}
-	//ベクトルの長さを取得
+
+	/// <summary>
+	/// ベクトルの長さを返す
+	/// </summary>
+	/// <returns>ベクトルの長さ</returns>
 	float Length() const {
 		return std::sqrt(x * x + y * y + z * z);
 	}
-	//ベクトルを正規化した値を出力
+	/// <summary>
+	/// ベクトルを正規化した時の値を返す
+	/// </summary>
+	/// <returns>正規化したベクトルの値</returns>
 	Vector3 Normalized() const {
 		float len = Length();
 		if (len == 0.0f) return Vector3(0.0f, 0.0f, 0.0f);
 		return Vector3(x / len, y / len, z / len);
 	}
-	//自分自身を正規化
+	/// <summary>
+	/// 自分自身を正規化して値を返す
+	/// </summary>
+	/// <returns>正規化したベクトルの値</returns>
 	Vector3& Normalize() {
 		float len = Length();
 		if (len == 0.0f) {
@@ -67,19 +82,4 @@ struct Vector3 final {
 		z /= len;
 		return *this;
 	}
-
-	Vector3 operator-(const Vector3& other) const {
-		return Vector3(x - other.x, y - other.y, z - other.z);
-	}
-
-
-	/////////// 以下追加 ///////////
-
-	float   Dot(const Vector3& _v)                  const;
-	Vector3 Cross(const Vector3& _v)                const;
-	float   LengthWithoutRoot()                     const;
-	Vector3 Normalize()                             const;
-	float   Distance(const Vector3& _destination)   const;
-	float   Projection(const Vector3& _a)           const;
-	void    Theta(float& _azimuth, float& _elevation, const Vector3& _origin = { 0.0f, 0.0f }) const;
 };

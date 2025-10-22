@@ -11,52 +11,121 @@
 /// </summary>
 class Collider {
 public:
-	//コリジョン形状の種類
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// コリジョン形状の種類
+	/// </summary>
 	enum class CollisionShapeKind {
 		Sphere,		//球体
 		AABB,		//AABB
 		OBB,		//OBB
 	};
 
-public:
-	//デストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~Collider() = default;
 
-	//当たり判定時の処理
+	/// <summary>
+	/// 当たり判定時の処理
+	/// </summary>
+	/// <param name="attribute">属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	virtual void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) = 0;
 
-	//デバッグ専用処理
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	virtual void DebugWithImGui();
 
-public://getter
-	//形状の種類を取得
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 形状の種類を取得する
+	/// </summary>
+	/// <returns>コリジョン形状の種類（Sphere, AABB, OBB など）</returns>
 	CollisionShapeKind GetCollisionShapeKind() const { return collisionShapeKind_; }
-	//球体半径情報を取得
+	/// <summary>
+	/// 球体の半径を取得する
+	/// </summary>
+	/// <returns>コリジョン球の半径</returns>
 	float GetRadius() { return collisionRadius_; }
-	//AABBローカル情報を取得
+	/// <summary>
+	/// AABB（軸平行境界ボックス）の最小座標を取得する
+	/// </summary>
+	/// <returns>AABB の最小ローカル座標（min）</returns>
 	const Vector3& GetMinAABB() { return collisionMinAABB_; }
+	/// <summary>
+	/// AABB（軸平行境界ボックス）の最大座標を取得する
+	/// </summary>
+	/// <returns>AABB の最大ローカル座標（max）</returns>
 	const Vector3& GetMaxAABB() { return collisionMaxAABB_; }
-	//OBBローカル情報を取得
+	/// <summary>
+	/// OBB（有向境界ボックス）の中心オフセットを取得する
+	/// </summary>
+	/// <returns>OBB のローカル中心オフセット</returns>
 	const Vector3& GetCenterOffsetOBB() { return collisionCenterOffsetOBB_; }
+	/// <summary>
+	/// OBB（有向境界ボックス）のサイズを取得する
+	/// </summary>
+	/// <returns>OBB の幅・高さ・奥行きを表すローカルサイズ</returns>
 	const Vector3& GetSizeOBB() { return collisionSizeOBB_; }
-	//ワールド座標を取得
+	/// <summary>
+	/// オブジェクトの現在のワールド座標を取得する
+	/// </summary>
+	/// <returns>ワールド座標系での位置ベクトル</returns>
 	virtual Vector3 GetWorldPosition() = 0;
-	//回転を取得
+	/// <summary>
+	/// オブジェクトの回転量を取得する
+	/// </summary>
+	/// <returns>各軸回転を表すベクトル（ラジアン）</returns>
 	virtual Vector3 GetRotate() = 0;
-	//スケールを取得
+	/// <summary>
+	/// オブジェクトのスケールを取得する
+	/// </summary>
+	/// <returns>各軸方向の拡縮率を表すベクトル</returns>
 	virtual Vector3 GetScale() = 0;
-	//前フレーム座標を取得
+	/// <summary>
+	/// 前フレーム時点のワールド座標を取得する
+	/// </summary>
+	/// <returns>1フレーム前のワールド座標</returns>
 	virtual Vector3 GetPreWorldPosition() = 0;
-	//属性の取得
+	/// <summary>
+	/// コリジョン属性を取得する
+	/// </summary>
+	/// <returns>コリジョン判定に使用される属性値</returns>
 	CollisionAttribute GetCollisionAttribute() { return collisionAttribute_; }
 
-public://setter
-	//属性のセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// コリジョン属性を設定する
+	/// </summary>
+	/// <param name="collisionAttribute">設定するコリジョン属性</param>
 	void SetCollisionAttribute(const CollisionAttribute collisionAttribute) { collisionAttribute_ = collisionAttribute; }
 
 private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	CollisionAttribute collisionAttribute_ = CollisionAttribute::Nothingness;
 protected:
+	/// ============================== ///
+	///		メンバ変数(protected)
+	/// ============================== ///
+
 	//形状の種類
 	CollisionShapeKind collisionShapeKind_ = CollisionShapeKind::Sphere;
 

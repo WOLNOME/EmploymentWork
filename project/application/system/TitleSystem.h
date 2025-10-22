@@ -18,8 +18,14 @@
 /// タイトルシーンのUIや演出、操作等を管理するクラス
 /// </summary>
 class TitleSystem {
-private://列挙体
-	//タイトルメニュー
+private:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// タイトルメニュー
+	/// </summary>
 	enum class Menu {
 		Start,
 		Exit,
@@ -28,26 +34,55 @@ private://列挙体
 	};
 
 public:
-	//初期化
-	void Initialize();
-	//更新
-	void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// デバッグ用パラメーター調整
+	/// </summary>
 	void DebugWithImGui();
 
-	//カメラセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラセット
+	/// </summary>
+	/// <param name="_camera">カメラのポインタ</param>
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 
-private://非公開メンバ関数
-	//操作
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 操作処理
+	/// </summary>
 	void Operate();
-	//UI演出
+	/// <summary>
+	/// メニューUI
+	/// </summary>
 	void DirectionUI();
-	//カメラ操作
+	/// <summary>
+	/// カメラ操作
+	/// </summary>
 	void OperateCamera();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 	//カメラ
@@ -55,7 +90,9 @@ private:
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
 	//タイトルメニュー
 	Menu menu_;
@@ -73,15 +110,13 @@ private:
 	Handle startTextHandle_;
 	std::unique_ptr<Sprite> startTextSprite_ = nullptr;
 
-
-private://オブジェクト
 	//ガレージ
 	std::unique_ptr<Object3d> garage_ = nullptr;
 
 	//戦車
 	std::vector<std::unique_ptr<Object3d>> tanks_;
 
-private://カメラ操作
+	//カメラ操作
 	Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };
 	Vector3 cameraEndPos_ = { 60.0f,12.0f,-17.0f };
 	const float cameraMoveTime_ = 30.0f;

@@ -36,6 +36,10 @@ class SceneManager;
 /// </summary>
 class BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	///	============================== ///
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -57,10 +61,16 @@ public:
 	/// </summary>
 	virtual void DebugWithImGui() = 0;
 
-	//FPS表示
+	/// <summary>
+	/// FPS表示
+	/// </summary>
 	void ShowFPS();
 
 protected:
+	/// ============================== ///
+	///		メンバ変数
+	///	============================== ///
+
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 	//シーンライト

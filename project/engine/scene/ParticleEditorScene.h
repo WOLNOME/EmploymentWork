@@ -13,6 +13,10 @@ using json = nlohmann::json;
 /// </summary>
 class ParticleEditorScene : public BaseScene {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	///	============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -30,21 +34,40 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
-private://ImGui操作
-	//最初の画面
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	///	============================== ///
+
+	/// <summary>
+	/// 最初のメニュー画面時処理
+	/// </summary>
 	void StartWithImGui();
-	//新規作成
+	/// <summary>
+	/// 新規作成時処理
+	/// </summary>
 	void GenerateWithImGui();
-	//編集
+	/// <summary>
+	/// 編集時処理
+	/// </summary>
 	void EditWithImGui();
-	//リセット
+	/// <summary>
+	/// リセット処理
+	/// </summary>
 	void ResetWithImGui();
-	//セーブ
+	/// <summary>
+	/// セーブ処理
+	/// </summary>
 	void SaveWithImGui();
-	//エディター本体
+	/// <summary>
+	/// エディターのメイン処理
+	/// </summary>
 	void Editor();
 
-private://必要なオブジェクト
+	/// ============================== ///
+	///		メンバ変数
+	///	============================== ///
+
 	//インプット
 	Input* input_ = nullptr;
 	//開発用カメラ
@@ -55,13 +78,12 @@ private://必要なオブジェクト
 	uint32_t textureHandleGround_ = EOF;
 	std::unique_ptr<Object3d> ground_ = nullptr;
 
-private:
 	// 編集するパーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
 	// 編集するパラメーター
 	json editParam_;
 
-private://ImGui操作で必要な変数
+	//ImGui操作用変数
 	std::vector<std::string> textureFiles_;
 	std::vector<std::string> particleFiles_;
 	std::string jsonFileName_;
