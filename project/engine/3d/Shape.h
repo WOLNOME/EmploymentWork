@@ -7,7 +7,14 @@
 /// 単純な形状モデルを扱うクラス
 /// </summary>
 class Shape {
-public://列挙型
+public:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// 形状の種類
+	/// </summary>
 	enum ShapeKind {
 		kSphere,		//球体
 		kCube,			//立方体
@@ -18,21 +25,32 @@ public://列挙型
 
 		kMaxShapeKindNum//最大形状数
 	};//※ここに新しい形状を追加する場合、パーティクルクリエイターシーンの形状選択部分も変更すること
+
 private:
-	//頂点データ
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ
+	/// </summary>
 	struct VertexData {
 		Vector4 position;
 		Vector2 texcoord;
 		Vector3 normal;
 	};
-	//マテリアル
+	/// <summary>
+	/// マテリアル
+	/// </summary>
 	struct Material {
 		Vector4 color;
 		Matrix4x4 uvTransform;
 		float isTexture;
 		float shininess;
 	};
-	//形状リソース作成用データ型
+	/// <summary>
+	/// 形状リソース作成用データ型
+	/// </summary>
 	struct ShapeResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -43,32 +61,84 @@ private:
 	};
 
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="shapeKind">形状の種類</param>
 	void Initialize(ShapeKind shapeKind);
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="materialRootParameterIndex">マテリアルのルートパラメータ番号</param>
+	/// <param name="textureRootParameterIndex">テクスチャのルートパラメータ番号</param>
+	/// <param name="instancingNum">インスタンシング描画の数</param>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
 
-public://getter
-	//形状の種類を取得
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 形状の種類を取得
+	/// </summary>
+	/// <returns>形状の種類</returns>
 	ShapeKind GetShapeKind() const { return shapeKind_; }
 
-private://非公開メンバ関数
-	//形状リソース作成関数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 形状リソース作成関数
+	/// </summary>
+	/// <returns>形状リソース</returns>
 	ShapeResource MakeShapeResource();
 
-	//球体リソースの作成関数
+	/// <summary>
+	/// 球体リソースの作成関数
+	/// </summary>
+	/// <returns>球体リソース</returns>
 	ShapeResource MakeSphereResource();
-	//立方体リソースの作成関数
+	/// <summary>
+	/// 立方体リソースの作成関数
+	/// </summary>
+	/// <returns>立方体リソース</returns>
 	ShapeResource MakeCubeResource();
-	//スカイボックスリソースの作成関数
+	/// <summary>
+	/// スカイボックスリソースの作成関数
+	/// </summary>
+	/// <returns>スカイボックスリソース</returns>
 	ShapeResource MakeSkyBoxResource();
-	//平面リソースの作成関数
+	/// <summary>
+	/// 平面リソースの作成関数
+	/// </summary>
+	/// <returns>平面リソース</returns>
 	ShapeResource MakePlaneResource();
-	//リングリソースの作成関数
+	/// <summary>
+	/// リングリソースの作成関数
+	/// </summary>
+	/// <returns>リングリソース</returns>
 	ShapeResource MakeRingResource();
-	//筒リソースの作成関数
+	/// <summary>
+	/// 筒リソースの作成関数
+	/// </summary>
+	/// <returns>筒リソース</returns>
 	ShapeResource MakeTubeResource();
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//形状の種類
 	ShapeKind shapeKind_;
 	//形状用リソース

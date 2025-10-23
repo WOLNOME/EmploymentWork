@@ -24,7 +24,9 @@ using ComPtr = Microsoft::WRL::ComPtr<T>;
 ///		　　列挙型
 ///=======================///
 
-//フォント
+/// <summary>
+/// フォント
+/// </summary>
 enum class Font {
 	Meiryo,
 	YuGothic,
@@ -39,7 +41,9 @@ enum class Font {
 
 	kMaxFontNum,
 };
-//フォントスタイル
+/// <summary>
+/// フォントスタイル
+/// </summary>
 enum class FontStyle {
 	Normal,		//通常
 	Oblique,	//斜体(通常フォントをプログラムで斜体にする)
@@ -52,7 +56,9 @@ enum class FontStyle {
 ///		　　構造体
 ///=======================///
 
-//テキストのパラメータ
+/// <summary>
+/// テキストのパラメータ
+/// </summary>
 struct TextParam {
 	std::wstring text;									//書き込むテキスト
 	Font font = Font::kMaxFontNum;						//フォント
@@ -60,7 +66,9 @@ struct TextParam {
 	float size = 0.0f;									//文字のサイズ
 	Vector4 color;										//文字の色
 };
-//アウトラインのパラメータ
+/// <summary>
+/// アウトラインのパラメータ
+/// </summary>
 struct EdgeParam {
 	uint32_t isEdgeDisplay = 0u;	//アウトライン表示フラグ
 	float width = 0.0f;				//アウトラインの幅
@@ -73,8 +81,14 @@ struct EdgeParam {
 /// シングルトンパターンで実装
 /// </summary>
 class TextTextureManager {
-private://構造体
-	//テキストのリソース
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// テキストのリソース
+	/// </summary>
 	struct TextResource {
 		ComPtr<ID3D12Resource> resource;
 		Vector4* color = nullptr;		//テキストの色(PSに送る)
@@ -82,14 +96,18 @@ private://構造体
 		TextParam preParam;
 	};
 
-	//アウトラインのリソース
+	/// <summary>
+	/// アウトラインのリソース
+	/// </summary>
 	struct EdgeResource {
 		ComPtr<ID3D12Resource> resource;
 		EdgeParam* param = nullptr;
 		EdgeParam preParam;
 	};
 
-	//各テキストテクスチャの必須項目
+	/// <summary>
+	/// 各テキストテクスチャの必須項目
+	/// </summary>
 	struct TextTextureItem {
 		ComPtr<ID3D12Resource> resource;				//テクスチャリソース
 		ComPtr<ID3D12Resource> copyResource;			//コピー用テクスチャリソース
@@ -116,31 +134,61 @@ private://コンストラクタ等の隠蔽
 	TextTextureManager(TextTextureManager&) = delete;//コピーコンストラクタ封印
 	TextTextureManager& operator=(TextTextureManager&) = delete;//コピー代入演算子封印
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	//シングルトンインスタンスの取得
 	static TextTextureManager* GetInstance();
-public:
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
-
-	//ImGuiでテキストデバッグ
+	/// <summary>
+	/// ImGuiでテキストデバッグ
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
 	void DebugWithImGui(Handle _handle);
 
-public:
-	///=======================
-	/// 外部とのやり取り
-	///=======================
-
-	//テクスチャの読み込み
+	/// <summary>
+	/// テクスチャの読み込み
+	/// </summary>
+	/// <param name="_textParam">テキストパラメーター</param>
+	/// <returns>ハンドル</returns>
 	Handle LoadTextTexture(const TextParam& _textParam);
+	/// <summary>
+	/// テクスチャの読み込み
+	/// </summary>
+	/// <param name="_id">番号</param>
+	/// <returns>ハンドル</returns>
 	Handle LoadTextTexture(uint32_t _id);
 
-	//各種パラメータの編集
+	/// <summary>
+	/// 各種パラメータの編集
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_textParam">テキストパラメーター</param>
 	void EditTextParam(Handle _handle, const TextParam& _textParam);
+	/// <summary>
+	/// アウトラインパラメータの編集
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_textParam">アウトラインパラメーター</param>
 	void EditEdgeParam(Handle _handle, const EdgeParam& _edgeParam);
 
 	//各パラメータの個別編集
 	template <typename... Args>
+	/// <summary>
+	/// テキスト内容の編集
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="text">テキスト</param>
+	/// <param name="...args">参照変数等</param>
 	void EditTextString(Handle _handle, const std::wstring& text, Args&&... args) {
 		//使用可能なハンドルかチェック
 		CheckHandle(_handle);
@@ -148,87 +196,232 @@ public:
 		//テキストを生成
 		textTextureMap[_handle.id].textResource.param.text = std::vformat(text, std::make_wformat_args(args...));
 	}
+
+	/// <summary>
+	/// フォントを編集する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_font">フォント</param>
 	void EditTextFont(Handle _handle, const Font& _font);
+	/// <summary>
+	/// フォントスタイルを編集する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_fontStyle">フォントスタイル</param>
 	void EditTextFontStyle(Handle _handle, const FontStyle& _fontStyle);
+	/// <summary>
+	/// テキストサイズを編集する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_size">文字サイズ</param>
 	void EditTextSize(Handle _handle, const float _size);
+	/// <summary>
+	/// テキストカラーを編集する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_color">文字色</param>
 	void EditTextColor(Handle _handle, const Vector4& _color);
-
+	/// <summary>
+	/// 文字の縁取り表示を設定する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_isDisplay">縁取りを表示するかどうか</param>
 	void EditIsEdgeDisplay(Handle _handle, const bool _isDisplay);
+	/// <summary>
+	/// 縁取りの太さを設定する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_width">縁取りの太さ</param>
 	void EditEdgeWidth(Handle _handle, const float _width);
+	/// <summary>
+	/// 縁取りのスライド率を設定する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_slideRate">縁取りのスライド率</param>
 	void EditEdgeSlideRate(Handle _handle, const Vector2& _slideRate);
+	/// <summary>
+	/// 縁取りの色を設定する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <param name="_color">縁取りの色</param>
 	void EditEdgeColor(Handle _handle, const Vector4& _color);
-
-	//テクスチャそのもののgetter
+	/// <summary>
+	/// テクスチャの幅を取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>テクスチャの幅</returns>
 	const UINT GetTextureWidth(Handle _handle);
+	/// <summary>
+	/// テクスチャの高さを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>テクスチャの高さ</returns>
 	const UINT GetTextureHeight(Handle _handle);
 
-	//各パラメータのgetter
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// テキスト文字列を取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>テキスト文字列</returns>
 	const std::wstring& GetTextString(Handle _handle);
+	/// <summary>
+	/// フォントを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>フォント</returns>
 	const Font& GetTextFont(Handle _handle);
+	/// <summary>
+	/// フォントスタイルを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>フォントスタイル</returns>
 	const FontStyle& GetTextFontStyle(Handle _handle);
+	/// <summary>
+	/// テキストサイズを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>文字サイズ</returns>
 	const float GetTextSize(Handle _handle);
+	/// <summary>
+	/// テキストカラーを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>文字色</returns>
 	const Vector4& GetTextColor(Handle _handle);
 
+	/// <summary>
+	/// 縁取り表示の有無を取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>縁取りを表示する場合はtrue</returns>
 	const bool GetIsEdgeDisplay(Handle _handle);
+	/// <summary>
+	/// 縁取りの太さを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>縁取りの太さ</returns>
 	const float GetEdgeWidth(Handle _handle);
+	/// <summary>
+	/// 縁取りのスライド率を取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>縁取りのスライド率</returns>
 	const Vector2& GetEdgeSlideRate(Handle _handle);
+	/// <summary>
+	/// 縁取りの色を取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>縁取りの色</returns>
 	const Vector4& GetEdgeColor(Handle _handle);
 
-
-	//SRV関係のgetter
+	/// <summary>
+	/// SRVインデックスを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>SRVインデックス</returns>
 	uint32_t GetSrvIndex(Handle _handle);
+	/// <summary>
+	/// GPU用SRVハンドルを取得する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
+	/// <returns>GPUディスクリプタハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(Handle _handle);
 
 private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// ハンドルの有効性を確認する
+	/// </summary>
+	/// <param name="_handle">ハンドル</param>
 	void CheckHandle(Handle _handle);
+	/// <summary>
+	/// テキストテクスチャアイテムを作成する
+	/// </summary>
+	/// <param name="_textParam">テキストパラメータ</param>
+	/// <returns>作成したテキストテクスチャアイテム</returns>
 	TextTextureItem CreateTextTextureItem(const TextParam& _textParam);
+	/// <summary>
+	/// SolidColorBrushを作成する
+	/// </summary>
+	/// <param name="color">ブラシの色</param>
+	/// <returns>作成したSolidColorBrush</returns>
 	ComPtr<ID2D1SolidColorBrush> CreateSolidColorBrush(const Vector4& color);
+	/// <summary>
+	/// テキストフォーマットを作成する
+	/// </summary>
+	/// <param name="_font">フォント</param>
+	/// <param name="_fontStyle">フォントスタイル</param>
+	/// <param name="fontSize">フォントサイズ</param>
+	/// <returns>作成したテキストフォーマット</returns>
 	ComPtr<IDWriteTextFormat> CreateTextFormat(const Font& _font, const FontStyle& _fontStyle, const float fontSize) noexcept;
+	/// <summary>
+	/// リソースのステートを遷移させる
+	/// </summary>
+	/// <param name="pResource">リソース</param>
+	/// <param name="before">遷移前のステート</param>
+	/// <param name="after">遷移後のステート</param>
 	void TransitionState(ID3D12Resource* pResource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
-
-private:
-	///=======================
-	/// 初期化時処理
-	///=======================
-
+	/// <summary>
+	/// IDWriteファクトリを生成する
+	/// </summary>
 	void GenerateIDWriteFactory();
+	/// <summary>
+	/// フォントファイルを生成する
+	/// </summary>
 	void GenerateFontFile();
+	/// <summary>
+	/// フォント名とスタイルからフォントキーを生成する
+	/// </summary>
+	/// <param name="fontName">フォント名</param>
+	/// <param name="style">フォントスタイル</param>
+	/// <returns>生成されたフォントキー</returns>
 	std::string GenerateFontKey(const std::wstring& fontName, const FontStyle& style);
+	/// <summary>
+	/// グラフィックスパイプラインを生成する
+	/// </summary>
 	void GenerateGraphicsPipeline();
-
-private:
-	///=======================
-	/// 描画前準備
-	///=======================
-
-	//描画前参照チェック関数
+	/// <summary>
+	/// 描画前の参照チェックを行う
+	/// </summary>
 	void CheckAllReference();
-	//テクスチャのサイズを揃える
+	/// <summary>
+	/// テクスチャサイズを揃える
+	/// </summary>
+	/// <param name="_id">テクスチャID</param>
 	void ArrangeTextureSize(uint32_t _id);
-
-public:
-	///=======================
-	/// 描画処理
-	///=======================
-
-	//D2Dでの文字列描画
+	/// <summary>
+	/// D2Dで文字列を描画する
+	/// </summary>
 	void WriteTextOnD2D();
-	//D3D12でのデコレーション描画
+	/// <summary>
+	/// D3D12でデコレーションを描画する
+	/// </summary>
 	void DrawDecorationOnD3D12();
-
-	///=======================
-	/// 描画後処理
-	///=======================
-
-	//次のフレームで使える状態に遷移
+	/// <summary>
+	/// 次のフレームで使用可能なリソース状態に遷移する
+	/// </summary>
 	void ReadyNextResourceState();
 
-private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	//省略変数
 	WinApp* winapp = WinApp::GetInstance();
 	DirectXCommon* dxcommon = DirectXCommon::GetInstance();
 	TextTextureRender* ttrender = TextTextureRender::GetInstance();
 	D2DRender* d2drender = D2DRender::GetInstance();
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
 	//マネージャ全体での保存用変数
 	ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;			//ルートシグネチャ

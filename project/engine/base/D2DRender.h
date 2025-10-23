@@ -25,38 +25,78 @@ private://コンストラクタ等の隠蔽
 	D2DRender(D2DRender&) = delete;//コピーコンストラクタ封印
 	D2DRender& operator=(D2DRender&) = delete;//コピー代入演算子封印
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	//シングルトンインスタンスの取得
 	static D2DRender* GetInstance();
-public:
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//描画前処理
+	/// <summary>
+	/// 描画前処理
+	/// </summary>
 	void PreDraw();
-	//描画後処理
+	/// <summary>
+	/// 描画後処理
+	/// </summary>
 	void PostDraw();
 
-public://getter
-	//D3D11On12Device
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// D3D11On12Deviceの取得
+	/// </summary>
+	/// <returns>D3D11On12Device</returns>
 	ID3D11On12Device* GetD3D11On12Device() const { return d3d11On12Device.Get(); }
-	//D3D11On12DeviceContext
+	/// <summary>
+	/// D3D11On12DeviceContextの取得
+	/// </summary>
+	/// <returns>D3D11On12DeviceContext</returns>
 	ID3D11DeviceContext* GetD3D11On12DeviceContext() const { return d3d11On12DeviceContext.Get(); }
-	//D2DFactory
+	/// <summary>
+	/// D2DFactoryの取得
+	/// </summary>
+	/// <returns>D2DFactory</returns>
 	ID2D1Factory3* GetD2DFactory() const { return d2dFactory.Get(); }
-	//D2DDeviceContext
+	/// <summary>
+	/// D2DDeviceContextの取得
+	/// </summary>
+	/// <returns>D2DDeviceContext</returns>
 	ID2D1DeviceContext2* GetD2DDeviceContext() const { return d2dDeviceContext.Get(); }
+
 private:
-	//D2DFactoryの生成
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// D2Dリソースの生成
+	/// </summary>
 	void CreateD2DResources();
 
-private://インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	WinApp* winapp = WinApp::GetInstance();
 	DirectXCommon* dxcommon = DirectXCommon::GetInstance();
 	MainRender* mainrender = MainRender::GetInstance();
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//D3D11On12Device
 	ComPtr<ID3D11On12Device> d3d11On12Device = nullptr;
 	//D3D11On12DeviceContext

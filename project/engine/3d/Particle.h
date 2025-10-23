@@ -20,14 +20,22 @@ class Particle {
 	//パーティクルクリエイターシーンに公開
 	friend class ParticleEditorScene;
 public:
-	//生成方法
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// 生成方法
+	/// </summary>
 	enum class GenerateMethod {
 		Random,		//ランダム
 		Clump,		//塊	
 
 		kMaxGenerateMethodNum,
 	};
-	//エフェクトスタイル
+	/// <summary>
+	/// エフェクトスタイル
+	/// </summary>
 	enum class EffectStyle {
 		Loop,		//ループ(永続)
 		OneShot,	//一度きり
@@ -35,17 +43,22 @@ public:
 		kMaxEffectStyleNum,
 	};
 
-private://非公開構造体
-	///========================///
-	///		CSで使用する構造体
-	///========================///
-	//CS用トランスフォーム(paddingの手間を防ぐため)
+private:
+	/// ============================== ///
+	///		構造体(private)
+	/// ============================== ///
+
+	/// <summary>
+	/// CS用トランスフォーム情報
+	/// </summary>
 	struct TransformForCS {
 		Vector4 scale;
 		Vector4 rotate;
 		Vector4 translate;
 	};
-	//CS用粒の情報
+	/// <summary>
+	/// CS用粒情報
+	/// </summary>
 	struct GrainForCS {
 		TransformForCS transform;
 		Vector4 velocity;
@@ -56,7 +69,9 @@ private://非公開構造体
 		uint32_t startColor;
 		uint32_t endColor;
 	};
-	//CS用エミッター情報
+	/// <summary>
+	/// CS用エミッター情報
+	/// </summary>
 	struct EmitterForCS {
 		TransformForCS transform;
 		int generateMethod = 0;
@@ -71,7 +86,9 @@ private://非公開構造体
 		uint32_t isBillboard = 0u;
 		uint32_t isPlay = 0u;
 	};
-	//CS用Json情報
+	/// <summary>
+	/// CS用JSON情報
+	/// </summary>
 	struct JsonInfoForCS {
 		Vector4 velocityMax;
 		Vector4 velocityMin;
@@ -96,12 +113,16 @@ private://非公開構造体
 		int emitRate = 0;
 		int maxGrains = 0;
 	};
-	//CS用時間情報
+	/// <summary>
+	/// CS用フレーム情報
+	/// </summary>
 	struct PerFrameForCS {
 		float time = 0.0f;
 		float deltaTime = 0.0f;
 	};
-	//CS用リソースのまとめ
+	/// <summary>
+	/// CS用全リソース
+	/// </summary>
 	struct AllResourceForCS {
 		//粒の情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> grainsResource;
@@ -124,8 +145,14 @@ private://非公開構造体
 		std::span<PerFrameForCS> mappedPerFrame;
 	};
 
-public://公開構造体
-	//エミッター
+public:
+	/// ============================== ///
+	///		構造体(public)
+	/// ============================== ///
+
+	/// <summary>
+	/// エミッター情報
+	/// </summary>
 	struct Emitter {
 		TransformEuler transform;		//エミッターのトランスフォーム
 		GenerateMethod generateMethod = GenerateMethod::kMaxGenerateMethodNum;		//生成方法
@@ -140,7 +167,15 @@ public://公開構造体
 		bool isBound = false;			//バウンドを適用するか
 		bool isPlay = false;			//パーティクルを生成するか
 	};
-public://メンバ関数
+
+public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Particle();
 	/// <summary>
 	/// 初期化
@@ -148,31 +183,67 @@ public://メンバ関数
 	/// <param name="name">インスタンスの名前</param>
 	/// <param name="fileName">使用するパーティクルの名前(.jsonは省略)</param>
 	void Initialize(const std::string& name, const std::string& fileName);
-private://メンバ関数(非公開)
-	//CS専用リソースの作成
-	AllResourceForCS CreateAllResourceForCS();
 
-	//形状の変更
-	void ShapeChange();
-	//テクスチャの変更
-	void TextureChange();
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-	//エミッター反映(CSに反映)
-	void TraceEmitterForCS();
-	//JSONデータ反映(CSに反映)
-	void TraceJsonDataForCS();
-
-public: //getter
-	//パラメーター
+	/// <summary>
+	///　パラメーターの取得
+	/// </summary>
+	/// <returns>パラメーター</returns>
 	const json& GetParam() { return param_; }
-public: //setter
-	//パラメーター
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// パラメーターのセット
+	/// </summary>
+	/// <param name="param">パラメーターのセット</param>
 	void SetParam(const json& param) { param_ = param; }
 
-public://公開パラメーター
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
 	Emitter emitter_;
 
-private: //メンバ変数(非公開)
+private:
+	/// ============================== ///
+	///		メンバ関数(private)
+	/// ============================== ///
+
+	/// <summary>
+	/// CS用全リソースの作成
+	/// </summary>
+	/// <returns>CS用全リソース</returns>
+	AllResourceForCS CreateAllResourceForCS();
+
+	/// <summary>
+	/// 形状の変更
+	/// </summary>
+	void ShapeChange();
+	/// <summary>
+	/// テクスチャの変更
+	/// </summary>
+	void TextureChange();
+
+	/// <summary>
+	/// エミッター情報反映(CSに反映)
+	/// </summary>
+	void TraceEmitterForCS();
+	/// <summary>
+	/// JSON情報反映(CSに反映)
+	/// </summary>
+	void TraceJsonDataForCS();
+
+private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	//形状(見た目)
 	std::unique_ptr<Shape> shape_;
 	//CS専用のリソース

@@ -28,9 +28,14 @@ class Object3d {
 	//オブジェクト3dマネージャーに公開
 	friend class Object3dManager;
 
-public://列挙型
+public:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
 
-	//オブジェクトの種類
+	/// <summary>
+	/// オブジェクトの種類
+	/// </summary>
 	enum class ObjectKind {
 		Model,				//通常モデル
 		AnimationModel,		//アニメーションモデル
@@ -39,63 +44,143 @@ public://列挙型
 		kMaxNumObjectKind,
 	};
 
-public://構造体
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
 
-	//GPU送信用フラグデータ
+	/// <summary>
+	/// ライト用フラグ(GPU用)
+	/// </summary>
 	struct FlagForGPU {
 		uint32_t isActiveLights;
 		uint32_t isActiveEnvironment;
 	};
-	//フラグデータ用リソース
+	/// <summary>
+	/// ライト用リソース
+	/// </summary>
 	struct FlagResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		FlagForGPU* data;
 	};
 
-public://メンバ関数
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Object3d();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Object3d();
 
-	//モデル初期化
+	/// <summary>
+	/// 通常モデル初期化
+	/// </summary>
+	/// <param name="">ModelTag{}と入力</param>
+	/// <param name="name">名前</param>
+	/// <param name="filePath">ファイルパス</param>
 	void Initialize(ModelTag, const std::string& name, const std::string& filePath);
-	//アニメーションモデル初期化
+	/// <summary>
+	/// アニメーションモデル初期化
+	/// </summary>
+	/// <param name="">AnimationModeltag{}と入力</param>
+	/// <param name="name">名前</param>
+	/// <param name="filePath">ファイルパス</param>
 	void Initialize(AnimationModelTag, const std::string& name, const std::string& filePath);
-	//形状初期化
+	/// <summary>
+	/// 形状初期化
+	/// </summary>
+	/// <param name="">ShapeTag{}と入力</param>
+	/// <param name="name">名前</param>
+	/// <param name="kind">形状の種類</param>
 	void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
 
-private://マネージャーへの委託処理
-	//更新処理
-	void Update();
-	//描画
-	void Draw(BaseCamera* _camera, SceneLight* _sceneLight);
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
 
-public://setter
-	//テクスチャ
+	/// <summary>
+	/// テクスチャのセット
+	/// </summary>
+	/// <param name="_textureHandle">テクスチャハンドル</param>
 	void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
-	//環境光テクスチャ
+	/// <summary>
+	/// 環境光用テクスチャのセット
+	/// </summary>
+	/// <param name="_textureHandle">テクスチャハンドル</param>
 	void SetEnvironmentLightTextureHandle(int32_t _textureHandle) { environmentLightTextureHandle_ = _textureHandle; }
-	//表示するか
+	/// <summary>
+	///	表示するか
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
 	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; };
-	//ライトの処理をするか
+	/// <summary>
+	///	ライトの処理をするか
+	/// </summary>
+	/// <param name="_isLightProcess">ライトの処理をするか</param>
 	void SetIsLightProcess(bool _isLightProcess) { isLightProcess_ = _isLightProcess; }
 
-	//新しいアニメーションをセット
+	/// <summary>
+	/// 新しいアニメーションを追加
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_filePath">ファイルパス</param>
 	void SetNewAnimation(const std::string& _name, const std::string& _filePath);
-	//現在のアニメーションを変更
+	/// <summary>
+	/// 現在のアニメーションを設定
+	/// </summary>
+	/// <param name="_name">名前</param>
 	void SetCurrentAnimation(const std::string& _name);
 
-private://非公開メンバ関数
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
+	//ワールドトランスフォーム
+	WorldTransform worldTransform;
+
+private:
+	/// ============================== ///
+	///		マネージャーへの委託処理用
+	/// ============================== ///
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="_camera">カメラ</param>
+	/// <param name="_sceneLight">シーンライト</param>
+	void Draw(BaseCamera* _camera, SceneLight* _sceneLight);
+
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// ライト用フラグリソースの作成
+	/// </summary>
+	/// <returns>ライト用フラグリソース</returns>
 	FlagResource CreateFlagResource();
 
-private://描画に利用するリソース
+	/// ============================== ///
+	///		描画に利用するメンバ変数
+	/// ============================== ///
+
 	//テクスチャ
 	int32_t textureHandle_ = EOF;
 	//環境光用のテクスチャ
 	int32_t environmentLightTextureHandle_ = EOF;
-public://外部編集用メンバ変数
-	WorldTransform worldTransform;
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//名前
 	std::string name_;
 

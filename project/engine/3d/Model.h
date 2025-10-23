@@ -15,40 +15,56 @@
 /// </summary>
 class Model {
 private:
-	//頂点データ
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ
+	/// </summary>
 	struct VertexData {
 		Vector4 position;
 		Vector2 texcoord;
 		Vector3 normal;
 	};
-	//マテリアル
+	/// <summary>
+	/// マテリアル
+	/// </summary>
 	struct Material {
 		Vector4 color;
 		Matrix4x4 uvTransform;
 		float isTexture;
 		float shininess;
 	};
-	//ノード
+	/// <summary>
+	/// ノード
+	/// </summary>
 	struct Node {
 		Matrix4x4 localMatrix;
 		std::string name;
 		std::vector<Node> children;
 	};
-	//マテリアルデータ
+	/// <summary>
+	/// マテリアルデータ
+	/// </summary>
 	struct MaterialData {
 		std::string materialName;
 		std::string textureFilePath;
 		Vector4 colorData;
 		uint32_t textureHandle;
 	};
-	//モデルデータ
+	/// <summary>
+	/// モデルデータ
+	/// </summary>
 	struct ModelData {
 		std::vector<VertexData> vertices;
 		std::vector<uint32_t> indices;
 		MaterialData material;
 		Node rootNode;
 	};
-	//モデルリソース作成用データ型
+	/// <summary>
+	/// モデルリソース作成用データ型
+	/// </summary>
 	struct ModelResource {
 		std::vector<ModelData> modelData;
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
@@ -66,26 +82,76 @@ private:
 	};
 
 public:
-	//初期化
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="format">フォーマット指定子</param>
+	/// <param name="directorypath">ディレクトリパス</param>
 	void Initialize(const std::string& filename, ModelFormat format = OBJ, std::string directorypath = "Resources/models/");
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="materialRootParameterIndex">マテリアルのルートパラメータ番号</param>
+	/// <param name="textureRootParameterIndex"テクスチャのルートパラメータ番号></param>
+	/// <param name="instancingNum">インスタンシング描画数</param>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
 
-public://getter
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// モデルリソースの取得
+	/// </summary>
+	/// <returns>モデルリソース</returns>
 	const ModelResource& GetModelResource() { return modelResource_; }
-public://setter
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 色のセット
+	/// </summary>
+	/// <param name="color">色</param>
 	void SetColor(Vector4& color) { color_ = &color; }
 
 private:
-	//モデルファイルの読み取り
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// モデルデータファイル読み込み
+	/// </summary>
+	/// <returns>モデルデータファイル</returns>
 	std::vector<ModelData> LoadModelFile();
-	//assimpのノード→構造体ノード変換関数
+	/// <summary>
+	/// ノード読み取り
+	/// </summary>
+	/// <param name="node">aiノード</param>
+	/// <returns>ノード</returns>
 	Node ReadNode(aiNode* node);
-	//モデルリソース作成関数
+	/// <summary>
+	/// モデルリソース作成
+	/// </summary>
+	/// <returns>モデルリソース</returns>
 	ModelResource MakeModelResource();
-	//テクスチャ読み込み
+	/// <summary>
+	/// テクスチャ設定
+	/// </summary>
 	void SettingTexture();
-private:
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+	
 	//モデル用リソース
 	ModelResource modelResource_;
 	//モデル数

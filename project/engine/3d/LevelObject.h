@@ -10,43 +10,92 @@
 /// </summary>
 class LevelObject : public Collider {
 public:
-	//コンストラクタ
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	LevelObject() = default;
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~LevelObject() override = default;
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_filePath">ファイルパス</param>
+	/// <param name="_transform">トランスフォーム(オイラー角)</param>
 	void Initialize(const std::string& _name, const std::string& _filePath, const TransformEuler& _transform);
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	//デバッグ用パラメーター調整
+	/// <summary>
+	/// ImGui操作
+	/// </summary>
 	void DebugWithImGui();
 
-	//当たり判定時の処理
+	/// <summary>
+	/// 当たり判定時の処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
 	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
 
-public://getter
-	//名前の取得
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 名前の取得
+	/// </summary>
+	/// <returns>名前</returns>
 	const std::string& GetName() const { return name_; }
-	//ワールドトランスフォームの取得
+	/// <summary>
+	/// ワールド変換情報の取得
+	/// </summary>
+	/// <returns>ワールド変換情報</returns>
 	const WorldTransform& GetWorldTransform() const { return object3d_->worldTransform; }
-	//コライダー用のワールド座標を取得
+	/// <summary>
+	///	オブジェクトの現在のワールド座標を取得する
+	/// </summary>
+	/// <returns>オブジェクトの現在のワールド座標</returns>
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
-	//コライダー用回転を取得
+	/// <summary>
+	/// オブジェクトの回転量を取得する
+	/// </summary>
+	/// <returns>オブジェクトの回転量</returns>
 	Vector3 GetRotate() override { return object3d_->worldTransform.rotate; }
-	//コライダー用スケールを取得
+	/// <summary>
+	/// オブジェクトのスケールを取得する
+	/// </summary>
+	/// <returns>オブジェクトのスケール</returns>
 	Vector3 GetScale() override { return object3d_->worldTransform.scale; }
-	//コライダー用前フレーム座標を取得
+	/// <summary>
+	/// 前フレーム時点のワールド座標を取得する
+	/// </summary>
+	/// <returns>前フレーム時点のワールド座標</returns>
 	Vector3 GetPreWorldPosition() override { return prePosition_; }
 
-public://setter
-	//コリジョン情報のセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// コリジョン情報の設定
+	/// </summary>
+	/// <param name="_center">中心点</param>
+	/// <param name="_size">サイズ</param>
 	void SetCollisionInfo(const Vector3& _center, const Vector3& _size);
 
-private://非公開メンバ関数
-	//ツリーオブジェクトの転倒アクション
-	void TreeInvertProcess();
+protected:
+	/// ============================== ///
+	///		メンバ変数(protected)
+	/// ============================== ///
 
-protected://オブジェクト
 	//テクスチャハンドル
 	int32_t textureHandle_ = EOF;
 	//オブジェクト3D
@@ -55,6 +104,19 @@ protected://オブジェクト
 	Vector3 prePosition_ = {};
 
 private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 木が倒れる処理
+	/// </summary>
+	void TreeInvertProcess();
+
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	//名前
 	std::string name_;
 

@@ -6,7 +6,9 @@
 #include "Vector3.h"
 
 
-// データ構造体(サイズが16の倍数になるようにパディングする！)
+/// <summary>
+/// 点光源データ構造体
+/// </summary>
 struct PointLightData {
 	Vector4 color;		//ライトの色
 	Vector3 position;	//ライトの位置
@@ -22,6 +24,10 @@ struct PointLightData {
 /// </summary>
 class PointLight {
 public:
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
 	//色
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//向き
@@ -35,26 +41,46 @@ public:
 	//オンオフ
 	bool isActive_ = true;
 
-	PointLight() = default;
-	~PointLight() = default;
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	PointLight() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~PointLight() = default;
 	/// <summary>
 	/// 行列の更新
 	/// </summary>
 	void Update();
 	/// <summary>
+	/// デバッグ用ImGui
+	/// </summary>
+	/// <param name="_name">名前</param>
+	void DebugWithImGui(const std::wstring& _name);
+
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
 	/// 平行光源のデータを取得
 	/// </summary>
 	/// <returns>スポットライトのデータ</returns>
 	const PointLightData& GetData() { return data_; }
-	/// <summary>
-	/// デバッグ用ImGui
-	/// </summary>
-	void DebugWithImGui(const std::wstring& _name);
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	// データ
 	PointLightData data_;
+
 	// コピー禁止
 	PointLight(const PointLight&) = delete;
 	PointLight& operator=(const PointLight&) = delete;

@@ -15,7 +15,13 @@ class Object3d;
 /// </summary>
 class Object3dManager {
 public:
-	//オブジェクトの使うグラフィックスパイプラインの名前
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// オブジェクト名用グラフィックスパイプラインの種類
+	/// </summary>
 	enum class NameGPS {
 		None,			//通常
 		Animation,		//アニメーション
@@ -24,60 +30,123 @@ public:
 		kMaxNumNameGPS,	//最大数
 	};
 
-private://シングルトン
+private:
 	static Object3dManager* instance;
 
 	Object3dManager() = default;//コンストラクタ隠蔽
 	~Object3dManager() = default;//デストラクタ隠蔽
 	Object3dManager(Object3dManager&) = delete;//コピーコンストラクタ封印
 	Object3dManager& operator=(Object3dManager&) = delete;//コピー代入演算子封印
-public://シングルトン
+public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static Object3dManager* GetInstance();
-public://メンバ関数
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//オブジェクトをコンテナに登録
+	/// <summary>
+	/// オブジェクトをコンテナに登録
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="object">オブジェクト</param>
 	void RegisterObject(const std::string& name, Object3d* object);
-	//登録されたオブジェクトを削除
+	/// <summary>
+	/// 登録されたオブジェクトを削除
+	/// </summary>
+	/// <param name="name">名前</param>
 	void DeleteObject(const std::string& name);
 
-	//名前を決める関数
+	/// <summary>
+	/// 名前を決める関数
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <returns>重複しない名前</returns>
 	std::string GenerateName(const std::string& name);
 
-	//描画前設定
+	/// <summary>
+	/// 共通のグラフィックスパイプライン設定
+	/// </summary>
+	/// <param name="index">番号</param>
 	void SettingCommonDrawing(NameGPS index = NameGPS::None);
-	//アニメーション専用コンピュートシェーダー前設定
+	/// <summary>
+	/// アニメーション用のグラフィックスパイプライン設定
+	/// </summary>
 	void SettingAnimationCS();
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラのセット
+	/// </summary>
+	/// <param name="_camera">カメラ</param>
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	/// <summary>
+	/// シーンライトのセット
+	/// </summary>
+	/// <param name="_light">シーンライト</param>
 	void SetSceneLight(SceneLight* _light) { light_ = _light; }
 
-private://非公開メンバ関数
-	//グラフィックスパイプライン
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// グラフィックスパイプラインの生成
+	/// </summary>
 	void GenerateGraphicsPipeline();
-	//コンピュートパイプライン
+	/// <summary>
+	/// コンピュートパイプラインの生成
+	/// </summary>
 	void GenerateComputePipeline();
 
-	//通常のPSO設定
+	/// <summary>
+	/// 通常用のPSO設定
+	/// </summary>
 	void NormalPSOOption();
-	//アニメーション用のPSO設定
+	/// <summary>
+	/// アニメーション用のPSO設定
+	/// </summary>
 	void AnimationPSOOption();
-	//スカイボックス用のPSO設定
+	/// <summary>
+	/// スカイボックス用のPSO設定
+	/// </summary>
 	void SkyBoxPSOOption();
 
-private://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	BaseCamera* camera_ = nullptr;
 	SceneLight* light_ = nullptr;
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//ルートシグネチャ
 	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)NameGPS::kMaxNumNameGPS> rootSignature_;
 	//グラフィックスパイプライン

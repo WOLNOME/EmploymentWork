@@ -19,34 +19,71 @@ private://コンストラクタ等の隠蔽
 	SpriteManager(SpriteManager&) = delete;//コピーコンストラクタ封印
 	SpriteManager& operator=(SpriteManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static SpriteManager* GetInstance();
-public://メンバ関数
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//バック描画
+	/// <summary>
+	/// バック描画
+	/// </summary>
 	void BackDraw();
-	//フロント描画
+	/// <summary>
+	/// フロント描画
+	/// </summary>
 	void FrontDraw();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//デバッグ処理
+	/// <summary>
+	/// ImGuiデバッグ表示
+	/// </summary>
 	void DebugWithImGui();
 
-	//スプライトをコンテナに登録
+	/// <summary>
+	/// スプライトをコンテナに登録
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="sprite">スプライトのポインタ</param>
 	void RegisterSprite(const std::string& name, Sprite* sprite);
-	//登録されたスプライトを削除
+	/// <summary>
+	/// 登録されたスプライトを削除
+	/// </summary>
+	/// <param name="name">名前</param>
 	void DeleteSprite(const std::string& name);
 
-	//名前生成関数
+	/// <summary>
+	/// 名前を決める関数
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <returns>重複しない名前</returns>
 	std::string GenerateName(const std::string& name);
 
-private://非公開メンバ関数
-	//グラフィックスパイプラインの生成
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// グラフィックスパイプラインの生成
+	/// </summary>
 	void GenerateGraphicsPipeline();
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//ルートシグネチャ
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
 	//グラフィックスパイプライン

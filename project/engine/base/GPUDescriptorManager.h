@@ -19,39 +19,118 @@ private:
 	GPUDescriptorManager& operator=(GPUDescriptorManager&) = delete;
 
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static GPUDescriptorManager* GetInstance();
 
-	// 初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	// 終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	// 描画前設定
+	/// <summary>
+	/// 描画前設定
+	/// </summary>
+	/// <param name="pCommandList"></param>
 	void SetDescriptorHeap(ID3D12GraphicsCommandList* pCommandList);
-	// 割り当て用関数
+	/// <summary>
+	/// 割り当て用関数
+	/// </summary>
+	/// <returns>番号</returns>
 	uint32_t Allocate();
-	// 解放用関数
+	/// <summary>
+	/// 解放用関数
+	/// </summary>
+	/// <param name="index">番号</param>
 	void Free(uint32_t index);
-	// 空きインデックスの存在確認用関数
+	/// <summary>
+	/// 空きインデックスの存在確認用関数
+	/// </summary>
+	/// <returns>判定結果</returns>
 	bool CheckCanSecured();
-	// 使用不可能インデックスを使用可能インデックスに遷移させる関数
+	/// <summary>
+	/// 使用不可能インデックスを使用可能インデックスに遷移させる関数
+	/// </summary>
 	void TransferEnable();
 
-	// SRV生成関数
+	/// <summary>
+	/// レンダーテクスチャ用SRVの生成関数
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <param name="pResource">リソースのポインタ</param>
 	void CreateSRVforRenderTexture(uint32_t index, ID3D12Resource* pResource);
+	/// <summary>
+	/// ストラクチャードバッファ用SRVの生成関数
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <param name="pResource">リソースのポインタ</param>
+	/// <param name="numElements">素材の数</param>
+	/// <param name="structureByteStride">範囲</param>
 	void CreateSRVforStructuredBuffer(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
-	// UAV生成関数
+	/// <summary>
+	/// RWストラクチャ―ドバッファ用UAV生成関数
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <param name="pResource">リソースのポインタ</param>
+	/// <param name="numElements">素材の数</param>
+	/// <param name="structureByteStride">範囲</param>
 	void CreateUAVforRWStructuredBuffer(uint32_t index, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 
-	// ゲッター
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// デスクリプタヒープの取得
+	/// </summary>
+	/// <returns></returns>
 	ID3D12DescriptorHeap* GetDescriptorHeap() const { return descriptorHeap.Get(); }
+	/// <summary>
+	/// CPUデスクリプタハンドルの取得
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <returns>ハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
+	/// <summary>
+	/// GPUデスクリプタハンドルの取得
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <returns>ハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// デスクリプタテーブルのセット
+	/// </summary>
+	/// <param name="pCommandList">コマンドリストのポインタ</param>
+	/// <param name="RootParameterIndex">ルートパラメータの番号</param>
+	/// <param name="index">番号</param>
 	void SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* pCommandList, UINT RootParameterIndex, uint32_t index);
+
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
 
 	static const uint32_t kMaxHeapSize;
 
 private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	//デスクリプタのサイズ
 	uint32_t descriptorSize = 0;
 	//デスクリプタヒープ

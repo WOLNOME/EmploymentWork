@@ -8,17 +8,36 @@
 /// </summary>
 class DevelopCamera : public BaseCamera {
 public:
-	DevelopCamera() : BaseCamera() {}
-	virtual ~DevelopCamera() = default;
-	//初期化
-	void Initialize() override;
-	//更新
-	void Update() override;
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//ImGui操作
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	DevelopCamera() : BaseCamera() {}
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~DevelopCamera() = default;
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// ImGui操作
+	/// </summary>
 	void DebugWithImGui();
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	Input* input_ = nullptr;
 
 	Vector2 start = { 0.0f,0.0f };

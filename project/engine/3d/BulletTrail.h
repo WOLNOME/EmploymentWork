@@ -15,13 +15,21 @@ class BaseCamera;
 class BulletTrail {
 	//弾丸トレールマネージャーに公開
 	friend class BulletTrailManager;
-private://構造体
-	//頂点データ
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ
+	/// </summary>
 	struct VertexData {
 		Vector4 position;
 		Vector2 texCoord;
 	};
-	//弾丸トレールリソース作成用データ型
+	/// <summary>
+	/// 弾丸トレール用リソース
+	/// </summary>
 	struct BulletTrailResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -31,33 +39,81 @@ private://構造体
 		uint32_t* indexData;
 	};
 
-public://メンバ変数
+public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	BulletTrail();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~BulletTrail();
 
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="maxVerLength">トレールの長さ</param>
+	/// <param name="lengthDecayValue">減衰値</param>
 	void Initialize(const std::string& name, float maxVerLength, float lengthDecayValue);
-	//全保存座標のクリア
+	/// <summary>
+	/// 座標のクリア
+	/// </summary>
 	void ClearPositions();
 
-private://マネージャーへの委託処理
-	//更新処理
-	void Update();
-	//描画
-	void Draw(BaseCamera* _camera);
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
 
-public://setter
-	//座標のセット
+	/// <summary>
+	/// 座標のセット
+	/// </summary>
+	/// <param name="_position">座標</param>
 	void SetPosition(const Vector3& _position);
-	//テクスチャ
+	/// <summary>
+	/// テクスチャのセット
+	/// </summary>
+	/// <param name="_textureHandle">テクスチャハンドル</param>
 	void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
-	//表示するか
+	/// <summary>
+	/// 表示するかのセット
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
 	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; };
 
-private://非公開メンバ関数
+private:
+	/// ============================== ///
+	///		マネージャーへの委託処理
+	/// ============================== ///
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="_camera">カメラ</param>
+	void Draw(BaseCamera* _camera);
+
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 弾丸トレールリソースの生成
+	/// </summary>
+	/// <returns>弾丸トレールリソース</returns>
 	BulletTrailResource CreateBulletTrailResource();
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//名前
 	std::string name_;
 	//テクスチャ

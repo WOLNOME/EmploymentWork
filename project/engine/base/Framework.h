@@ -7,6 +7,10 @@
 /// </summary>
 class Framework {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -32,10 +36,17 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	virtual bool GetOver() { return isOver; }
-public:
-	//実行
+
+	/// <summary>
+	/// 実行
+	/// </summary>
 	void Run();
-protected://基盤インスタンス
+
+protected:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	D3DResourceLeakChecker leakChecker;
 	bool isOver = false;
 

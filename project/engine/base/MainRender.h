@@ -18,53 +18,129 @@ private://コンストラクタ等の隠蔽
 	MainRender(MainRender&) = delete;//コピーコンストラクタ封印
 	MainRender& operator=(MainRender&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static MainRender* GetInstance();
-public:
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//オブジェクト描画前処理
+	/// <summary>
+	/// オブジェクト描画前処理
+	/// </summary>
 	void PreObjectDraw();
-	//ImGui描画前処理
+	/// <summary>
+	/// ImGui描画前処理
+	/// </summary>
 	void PreImGuiDraw();
-	//描画後処理
+	/// <summary>
+	/// 描画後処理
+	/// </summary>
 	void PostDraw();
-	//画面切り替え処理
+	/// <summary>
+	/// 画面切り替え処理
+	/// </summary>
 	void ExchangeScreen();
 
-	//コマンドの準備
+	/// <summary>
+	/// コマンドの準備
+	/// </summary>
 	void ReadyNextCommand();
 
-	//リソースの状態遷移用関数
+	/// <summary>
+	/// リソースの状態遷移用関数
+	/// </summary>
+	/// <param name="resource">リソースのポインタ</param>
+	/// <param name="beforeState">前状態</param>
+	/// <param name="afterState">後状態</param>
 	void TransitionResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
 
-private://生成系メンバ関数
-	void InitCommand();
-	void GenerateSwapChain();
-	void GenerateDepthBuffer();
-	void InitRenderTargetView();
-	void InitDepthStencilView();
-	void InitViewPort();
-	void InitScissorRect();
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-public://getter
-	//コマンドアロケーター
+	/// <summary>
+	/// コマンドアロケーターの取得
+	/// </summary>
+	/// <returns>コマンドアロケーター</returns>
 	ID3D12CommandAllocator* GetCommandAllocator() const { return commandAllocator.Get(); }
-	//コマンドリスト
+	/// <summary>
+	/// コマンドリストの取得
+	/// </summary>
+	/// <returns>コマンドリスト</returns>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }
-	//スワップチェーンのバッファ数を取得
-	size_t GetSwapChainBufferCount()const { DXGI_SWAP_CHAIN_DESC1 desc{}; swapChain->GetDesc1(&desc); return desc.BufferCount; }
-	//スワップチェーン
-	IDXGISwapChain4* GetSwapChain()const { return swapChain.Get(); }
-	//スワップチェーンのリソース
-	ID3D12Resource* GetSwapChainResource(uint32_t index)const { return swapChainResources[index].Get(); }
-	//DSVインデックス(オフスクで使うため)
+	/// <summary>
+	/// スワップチェーンのバッファ数を取得
+	/// </summary>
+	/// <returns>スワップチェーンのバッファ数</returns>
+	size_t GetSwapChainBufferCount() const { DXGI_SWAP_CHAIN_DESC1 desc{}; swapChain->GetDesc1(&desc); return desc.BufferCount; }
+	/// <summary>
+	/// スワップチェーンの取得
+	/// </summary>
+	/// <returns>スワップチェーン</returns>
+	IDXGISwapChain4* GetSwapChain() const { return swapChain.Get(); }
+	/// <summary>
+	/// スワップチェーンのリソースの取得
+	/// </summary>
+	/// <param name="index">番号</param>
+	/// <returns>スワップチェーンのリソース</returns>
+	ID3D12Resource* GetSwapChainResource(uint32_t index) const { return swapChainResources[index].Get(); }
+	/// <summary>
+	/// DSVインデックス(オフスクで使うため)の取得
+	/// </summary>
+	/// <returns>DSVインデックス</returns>
 	uint32_t GetDSVIndex()const { return dsvIndex; }
 
-private://メンバ変数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コマンドの初期化
+	/// </summary>
+	void InitCommand();
+	/// <summary>
+	/// スワップチェーンの生成
+	/// </summary>
+	void GenerateSwapChain();
+	/// <summary>
+	/// 深度バッファの生成
+	/// </summary>
+	void GenerateDepthBuffer();
+	/// <summary>
+	/// RTVの初期化
+	/// </summary>
+	void InitRenderTargetView();
+	/// <summary>
+	/// DSVの初期化
+	/// </summary>
+	void InitDepthStencilView();
+	/// <summary>
+	/// ビューポートの初期化
+	/// </summary>
+	void InitViewPort();
+	/// <summary>
+	/// シザーレクトの初期化
+	/// </summary>
+	void InitScissorRect();
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//コマンドアロケーター
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
 	//コマンドリスト
