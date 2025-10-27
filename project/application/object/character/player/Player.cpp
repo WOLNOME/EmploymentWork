@@ -403,6 +403,8 @@ void Player::BulletAttack() {
 void Player::DeadProcess() {
 	//HPが0になったら死亡
 	if (hp_ <= 0) {
+		//死亡演出開始
+
 		//死亡予約
 		SetDeadTimer(0.1f);
 	}
