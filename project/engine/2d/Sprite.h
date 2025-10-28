@@ -67,6 +67,7 @@ private:
 		float switchTime;		//切り替え時間
 		float switchTimer;		//切り替えタイマー
 		bool isLoop;			//ループさせるか
+		bool isPlay;			//UVスクロールを動かす
 		bool isFinished;		//終了したか
 	};
 
@@ -282,6 +283,11 @@ public:
 	/// </summary>
 	/// <param name="_textureHandle">設定するテクスチャハンドル</param>
 	void SetTexture(uint32_t _textureHandle);
+	/// <summary>
+	/// UVスクロールの動作フラグを設定
+	/// </summary>
+	/// <param name="_isPlay">UVスクロールの動作フラグ</param>
+	void SetIsPlayUVScroll(bool _isPlay) { uvScrollData_.isPlay = _isPlay; }
 
 private:
 	/// ============================== ///

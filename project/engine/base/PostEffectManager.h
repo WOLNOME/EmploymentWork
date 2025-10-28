@@ -83,7 +83,7 @@ private:
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		HSVFilterData* data;
 	};
-	
+
 	/// <summary>
 	/// 全ポストエフェクトのリソース管理用構造体
 	/// </summary>
@@ -148,6 +148,16 @@ public:
 	/// </summary>
 	void InitUniqueResources();
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// ポストエフェクトの種類の設定
+	/// </summary>
+	/// <param name="_kind">ポストエフェクトの種類</param>
+	void SetPostEffect(const PostEffectKind& _kind) { currentPostEffectKind = _kind; }
+
 private:
 	/// ============================== ///
 	///		メンバ変数
@@ -158,7 +168,7 @@ private:
 	//レンダーテクスチャのSRVインデックス
 	uint32_t srvIndex = 0;
 	//ルートシグネチャ
-	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>,(int)PostEffectKind::kMaxNumPostEffectKind> rootSignature;
+	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)PostEffectKind::kMaxNumPostEffectKind> rootSignature;
 	//グラフィックスパイプライン
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)PostEffectKind::kMaxNumPostEffectKind> graphicsPipelineState;
 	//RTVのディスクリプタハンドル

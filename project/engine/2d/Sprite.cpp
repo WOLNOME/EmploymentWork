@@ -49,6 +49,8 @@ void Sprite::Initialize(UVScrollTag, const std::string& _name, const Order& _ord
 	uvScrollData_.switchTimer = 0.0f;
 	uvScrollData_.isLoop = _isLoop;
 	uvScrollData_.isFinished = false;
+	//任意のタイミングで開始する
+	uvScrollData_.isPlay = false;
 
 	//テクスチャ
 	textureHandle_ = _textureHandle;
@@ -86,7 +88,7 @@ void Sprite::Update() {
 	position += shakeOffset_;
 
 	//UVスクロールの切り替え処理
-	if (!uvScrollData_.isFinished) {
+	if (!uvScrollData_.isFinished && uvScrollData_.isPlay) {
 		//タイマーカウント
 		uvScrollData_.switchTimer += kDeltaTime;
 

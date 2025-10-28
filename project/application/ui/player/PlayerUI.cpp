@@ -48,6 +48,8 @@ void PlayerUI::Update() {
 	//playerが読み込まれていなかったらassert
 	assert(player_ != nullptr && "PlayerUIにPlayerインスタンスを渡してください");
 
+	//装飾用UIの更新
+	decorativeUI_->Update();
 	//プレイヤーHPUIの更新
 	playerHPUI_->Update();
 	//砲弾UIの更新
@@ -77,6 +79,8 @@ void PlayerUI::DebugWithImGui() {
 
 void PlayerUI::SetPlayer(Player* _player) {
 	player_ = _player;
+	//装飾用UIに渡す
+	decorativeUI_->SetPlayer(_player);
 	//プレイヤーHPUIに渡す
 	playerHPUI_->SetPlayer(player_);
 	//砲弾UIに渡す

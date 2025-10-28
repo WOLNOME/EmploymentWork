@@ -2,6 +2,9 @@
 #include <Sprite.h>
 #include <memory>
 
+//アプリケーション
+#include <application/object/character/player/player.h>
+
 /// <summary>
 /// 戦車内装のスプライトを管理するクラス
 /// </summary>
@@ -12,9 +15,17 @@ public:
 	/// ============================== ///
 
 	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~DecorativeUI();
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
 
 	/// <summary>
 	/// シェイクの適用
@@ -27,13 +38,35 @@ public:
 	/// <param name="_color">色</param>
 	void AttachBlinking(const Vector4& _color);
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーの設定
+	/// </summary>
+	/// <param name="_player">プレイヤーインスタンス</param>
+	void SetPlayer(Player* _player) { player_ = _player; }
+
 private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
-	uint32_t textureHandle_ = 0u;
+	//プレイヤー
+	Player* player_ = nullptr;
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
+	//スプライト
+	uint32_t textureHandleN_ = 0u;
+	uint32_t textureHandleD_ = 0u;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
+	//通常状態→ダメージ状態UVスクロール
+	uint32_t textureHandleND_ = 0u;
+	std::unique_ptr<Sprite> uvScroll_ = nullptr;
 };
 
