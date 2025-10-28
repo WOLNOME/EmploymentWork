@@ -22,7 +22,7 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("Title");
+	SceneManager::GetInstance()->SetNextScene("DEVELOP");
 
 	//パーティクルエディター→PARTICLEEDITOR
 	//開発用シーン→DEVELOP
@@ -46,12 +46,12 @@ void MyGame::Update() {
 	//シーンのデバッグ処理
 	SceneManager::GetInstance()->DebugWithImGui();
 
+	//スプライトマネージャーの更新
+	SpriteManager::GetInstance()->Update();
 	//オブジェクトマネージャーの更新
 	Object3dManager::GetInstance()->Update();
-
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
-
 	//弾丸マネージャーの更新
 	BulletTrailManager::GetInstance()->Update();
 

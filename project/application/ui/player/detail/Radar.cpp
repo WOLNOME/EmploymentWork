@@ -18,7 +18,7 @@ void Radar::Initialize() {
 		//プレイヤー
 		thPlayerMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		playerMark_ = std::make_unique<Sprite>();
-		playerMark_->Initialize(SpriteManager::GetInstance()->GenerateName("playerMark"), Sprite::Order::Front2, thPlayerMark_);
+		playerMark_->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front2, thPlayerMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
 		playerMark_->SetSize(playerMark_->GetSize() * 0.2f);
 		playerMark_->SetPosition(centerPosition);
@@ -29,7 +29,7 @@ void Radar::Initialize() {
 		thEnemyMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kEnemyUINum_; i++) {
 			enemyMarks_[i] = std::make_unique<Sprite>();
-			enemyMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("enemyMark"), Sprite::Order::Front2, thEnemyMark_);
+			enemyMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("enemyMark"), Order::Front2, thEnemyMark_);
 			enemyMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			enemyMarks_[i]->SetSize(enemyMarks_[i]->GetSize() * 0.1f);
 
@@ -40,7 +40,7 @@ void Radar::Initialize() {
 		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kItemUINum_; i++) {
 			itemMarks_[i] = std::make_unique<Sprite>();
-			itemMarks_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("itemMark"), Sprite::Order::Front1, thItemMark_);
+			itemMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("itemMark"), Order::Front1, thItemMark_);
 			itemMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			itemMarks_[i]->SetSize(itemMarks_[i]->GetSize() * 0.1f);
 		}
@@ -49,7 +49,7 @@ void Radar::Initialize() {
 		//コンパス
 		thCompass_ = TextureManager::GetInstance()->LoadTexture("compass.png");
 		compass_ = std::make_unique<Sprite>();
-		compass_->Initialize(SpriteManager::GetInstance()->GenerateName("compass"), Sprite::Order::Front2, thCompass_);
+		compass_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("compass"), Order::Front2, thCompass_);
 		compass_->SetAnchorPoint({ 0.5f,0.5f });
 		compass_->SetPosition(centerPosition);
 	}

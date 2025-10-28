@@ -16,7 +16,7 @@ void HitIndicator::Initialize() {
 		indicators_[i].textureHandle = TextureManager::GetInstance()->LoadTexture("HitIndicator.png");
 		//スプライト
 		indicators_[i].sprite_ = std::make_unique<Sprite>();
-		indicators_[i].sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("hitIndicator"),Sprite::Order::Front3,indicators_[i].textureHandle);
+		indicators_[i].sprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("hitIndicator"), Order::Front3, indicators_[i].textureHandle);
 		indicators_[i].sprite_->SetAnchorPoint({ 0.5f,0.5f });
 		indicators_[i].sprite_->SetPosition({ WinApp::GetInstance()->kClientWidth / 2.0f,WinApp::GetInstance()->kClientHeight / 2.0f });
 		indicators_[i].sprite_->SetIsDisplay(false);
@@ -58,7 +58,7 @@ void HitIndicator::Update() {
 			indicators_[i].hitPosition_ = {};
 			//有効フラグを無効化
 			indicators_[i].isActive_ = false;
-			
+
 			//次の要素へ
 			continue;
 		}

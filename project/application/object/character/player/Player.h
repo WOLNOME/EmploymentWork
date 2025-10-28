@@ -10,6 +10,9 @@
 #include <vector>
 #include <memory>
 
+//アプリケーション
+#include <application/system/DeathDirection.h>
+
 class LevelLoader;
 class MessageUI;
 
@@ -91,6 +94,11 @@ public:
 	/// <returns>ダメージを受けていればtrue</returns>
 	bool GetIsDamage() const { return isDamage_; }
 	/// <summary>
+	/// 死亡演出中フラグを取得
+	/// </summary>
+	/// <returns>死亡演出中フラグ</returns>
+	bool GetIsDeathDir() const { return deathDirection_->GetIsDirection(); }
+	/// <summary>
 	/// アイテムによるリロード速度アップ数を取得する
 	/// </summary>
 	/// <returns>リロード速度アップ数</returns>
@@ -119,7 +127,10 @@ public:
 	/// ゲームカメラを設定する
 	/// </summary>
 	/// <param name="_camera">設定するゲームカメラ</param>
-	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; }
+	void SetGameCamera(GameCamera* _camera) {
+		camera_ = _camera;
+		deathDirection_->SetGameCamera(_camera);
+	}
 	/// <summary>
 	/// メッセージUIを設定する
 	/// </summary>
@@ -155,6 +166,8 @@ private:
 	GameCamera* camera_ = nullptr;
 	//メッセージUI
 	MessageUI* messageUI_ = nullptr;
+	//死亡演出
+	std::unique_ptr<DeathDirection> deathDirection_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

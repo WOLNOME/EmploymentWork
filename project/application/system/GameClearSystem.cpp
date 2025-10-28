@@ -30,7 +30,7 @@ void GameClearSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(clearTextHandle_, edgeParam);
 		//スプライト
 		clearTextSprite_ = std::make_unique<Sprite>();
-		clearTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Sprite::Order::Front0);
+		clearTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
 		clearTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 300.0f });
 		clearTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		clearTextSprite_->SetTexture(clearTextHandle_);
@@ -53,7 +53,7 @@ void GameClearSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
-		titleTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Sprite::Order::Front0);
+		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
 		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 50.0f });
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		titleTextSprite_->SetTexture(titleTextHandle_);

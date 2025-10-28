@@ -6,7 +6,7 @@
 void DecorativeUI::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("FPSUI.png");
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerFPSUI"), Sprite::Order::Front1, textureHandle_);
+	sprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerFPSUI"), Order::Front1, textureHandle_);
 	sprite_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
 }

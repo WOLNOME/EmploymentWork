@@ -13,7 +13,7 @@ Sprite::~Sprite() {
 	SpriteManager::GetInstance()->DeleteSprite(name_);
 }
 
-void Sprite::Initialize(const std::string& _name, const Order& _order, uint32_t _textureHandle) {
+void Sprite::Initialize(SpriteTag, const std::string& _name, const Order& _order, uint32_t _textureHandle) {
 	//名前
 	name_ = _name;
 
@@ -32,7 +32,34 @@ void Sprite::Initialize(const std::string& _name, const Order& _order, uint32_t 
 	SpriteManager::GetInstance()->RegisterSprite(name_, this);
 }
 
-void Sprite::Initialize(const std::string& _name, const Order& _order) {
+void Sprite::Initialize(UVScrollTag, const std::string& _name, const Order& _order, int _sheetsNum, float _switchTime, bool _isLoop, uint32_t _textureHandle) {
+	//名前
+	name_ = _name;
+
+	//リソースの作成
+	resource_ = CreateResourceForGPU();
+
+	//描画順タグ
+	order_ = _order;
+
+	//UVスクロールデータ
+	uvScrollData_.sheetsNum = _sheetsNum;
+	uvScrollData_.currentSheetNum = 0;
+	uvScrollData_.switchTime = _switchTime;
+	uvScrollData_.switchTimer = 0.0f;
+	uvScrollData_.isLoop = _isLoop;
+	uvScrollData_.isFinished = false;
+
+	//テクスチャ
+	textureHandle_ = _textureHandle;
+	textureKind_ = TextureKind::UVScroll;
+	AdjustTextureSize();
+
+	//マネージャーに登録
+	SpriteManager::GetInstance()->RegisterSprite(name_, this);
+}
+
+void Sprite::Initialize(TextTag, const std::string& _name, const Order& _order) {
 	//名前
 	name_ = _name;
 
@@ -49,112 +76,161 @@ void Sprite::Initialize(const std::string& _name, const Order& _order) {
 	SpriteManager::GetInstance()->RegisterSprite(name_, this);
 }
 
+void Sprite::Update() {
+	//表示しないなら処理しない
+	if (!isDisplay_) {
+		return;
+	}
+
+	//揺れの処理
+	position += shakeOffset_;
+
+	//UVスクロールの切り替え処理
+	if (!uvScrollData_.isFinished) {
+		//タイマーカウント
+		uvScrollData_.switchTimer += kDeltaTime;
+
+		//規定時間に達したら
+		if (uvScrollData_.switchTimer >= uvScrollData_.switchTime) {
+			//タイマーリセット
+			uvScrollData_.switchTimer = 0.0f;
+			//カウントを進める
+			uvScrollData_.currentSheetNum++;
+			//カウントが合計枚数を超えたら
+			if (uvScrollData_.currentSheetNum >= uvScrollData_.sheetsNum) {
+				//もしループするなら
+				if (uvScrollData_.isLoop) {
+					//カウントリセット
+					uvScrollData_.currentSheetNum = 0;
+				}
+				//ループしないのであれば
+				else {
+					//カウントを維持
+					uvScrollData_.currentSheetNum = uvScrollData_.sheetsNum - 1;
+					//終了通知
+					uvScrollData_.isFinished = true;
+				}
+			}
+		}
+	}
+
+	//Text用ならサイズを常にテクスチャに合わせておく
+	if (textureKind_ == Sprite::TextureKind::Text) {
+		AdjustTextureSize();
+	}
+
+	//トランスフォームの情報を作る
+	TransformEuler transform;
+	transform.translate = { position.x,position.y,0.0f };
+	transform.rotate = { 0.0f,0.0f,rotation };
+	transform.scale = { size.x,size.y,1.0f };
+
+	float left = 0.0f - anchorPoint.x;
+	float right = 1.0f - anchorPoint.x;
+	float top = 0.0f - anchorPoint.y;
+	float bottom = 1.0f - anchorPoint.y;
+
+	//左右反転
+	if (isFlipX_) {
+		left = -left;
+		right = -right;
+	}
+	//上下反転
+	if (isFlipY_) {
+		top = -top;
+		bottom = -bottom;
+	}
+
+	//テクスチャのサイズからtexcoordを計算
+	float tex_left = 0.0f, tex_right = 0.0f, tex_top = 0.0f, tex_bottom = 0.0f;
+	switch (textureKind_) {
+	case Sprite::TextureKind::Normal: {
+		//指定したテクスチャ番号のメタデータを取得
+		const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureHandle_);
+		tex_left = textureLeftTop.x / metadata.width;
+		tex_right = (textureLeftTop.x + textureSize.x) / metadata.width;
+		tex_top = textureLeftTop.y / metadata.height;
+		tex_bottom = (textureLeftTop.y + textureSize.y) / metadata.height;
+		break;
+	}
+	case Sprite::TextureKind::UVScroll: {
+		//指定したテクスチャ番号のメタデータを取得
+		const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureHandle_);
+		//現在のシート数に応じたオフセット
+		float texOffsetX = textureSize.x * uvScrollData_.currentSheetNum;
+
+		tex_left = (textureLeftTop.x + texOffsetX) / metadata.width;
+		tex_right = (textureLeftTop.x + texOffsetX + textureSize.x) / metadata.width;
+		tex_top = textureLeftTop.y / metadata.height;
+		tex_bottom = (textureLeftTop.y + textureSize.y) / metadata.height;
+		break;
+	}
+	case Sprite::TextureKind::Text: {
+		tex_left = textureLeftTop.x / TextTextureManager::GetInstance()->GetTextureWidth(textTextureHandle_);
+		tex_right = (textureLeftTop.x + textureSize.x) / TextTextureManager::GetInstance()->GetTextureWidth(textTextureHandle_);
+		tex_top = textureLeftTop.y / TextTextureManager::GetInstance()->GetTextureHeight(textTextureHandle_);
+		tex_bottom = (textureLeftTop.y + textureSize.y) / TextTextureManager::GetInstance()->GetTextureHeight(textTextureHandle_);
+		break;
+	}
+	default:
+		break;
+	}
+
+	//データ書き換え処理
+	resource_.vertexData[0].position = { left,bottom,0.0f,1.0f };
+	resource_.vertexData[1].position = { left,top,0.0f,1.0f };
+	resource_.vertexData[2].position = { right,bottom,0.0f,1.0f };
+	resource_.vertexData[3].position = { right,top,0.0f,1.0f };
+
+	resource_.vertexData[0].texcoord = { tex_left,tex_bottom };
+	resource_.vertexData[1].texcoord = { tex_left,tex_top };
+	resource_.vertexData[2].texcoord = { tex_right,tex_bottom };
+	resource_.vertexData[3].texcoord = { tex_right,tex_top };
+
+	//レンダリングパイプライン
+	Matrix4x4 worldMatrix = MyMath::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	Matrix4x4 viewMatrix = MyMath::MakeIdentity4x4();
+	Matrix4x4 projectionMatrix = MyMath::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth, (float)WinApp::kClientHeight, 0.0f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrix = MyMath::Multiply(worldMatrix, MyMath::Multiply(viewMatrix, projectionMatrix));
+	resource_.transformationMatrixData->WVP = worldViewProjectionMatrix;
+	resource_.transformationMatrixData->World = worldMatrix;
+}
+
 void Sprite::Draw() {
-	if (isDisplay_) {
-		//揺れの処理
-		position += shakeOffset_;
-
-		//Text用ならサイズをテクスチャに合わせておく
-		if (textureKind_ == Sprite::TextureKind::Text)
-			AdjustTextureSize();
-
-		//トランスフォームの情報を作る
-		TransformEuler transform;
-		transform.translate = { position.x,position.y,0.0f };
-		transform.rotate = { 0.0f,0.0f,rotation };
-		transform.scale = { size.x,size.y,1.0f };
-
-		float left = 0.0f - anchorPoint.x;
-		float right = 1.0f - anchorPoint.x;
-		float top = 0.0f - anchorPoint.y;
-		float bottom = 1.0f - anchorPoint.y;
-
-		//左右反転
-		if (isFlipX_) {
-			left = -left;
-			right = -right;
-		}
-		//上下反転
-		if (isFlipY_) {
-			top = -top;
-			bottom = -bottom;
-		}
-
-		//テクスチャのサイズからtexcoordを計算
-		float tex_left = 0.0f, tex_right = 0.0f, tex_top = 0.0f, tex_bottom = 0.0f;
-		switch (textureKind_) {
-		case Sprite::TextureKind::Normal: {
-			//指定したテクスチャ番号のメタデータを取得
-			const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureHandle_);
-			tex_left = textureLeftTop.x / metadata.width;
-			tex_right = (textureLeftTop.x + textureSize.x) / metadata.width;
-			tex_top = textureLeftTop.y / metadata.height;
-			tex_bottom = (textureLeftTop.y + textureSize.y) / metadata.height;
-			break;
-		}
-		case Sprite::TextureKind::Text: {
-			tex_left = textureLeftTop.x / TextTextureManager::GetInstance()->GetTextureWidth(textTextureHandle_);
-			tex_right = (textureLeftTop.x + textureSize.x) / TextTextureManager::GetInstance()->GetTextureWidth(textTextureHandle_);
-			tex_top = textureLeftTop.y / TextTextureManager::GetInstance()->GetTextureHeight(textTextureHandle_);
-			tex_bottom = (textureLeftTop.y + textureSize.y) / TextTextureManager::GetInstance()->GetTextureHeight(textTextureHandle_);
-			break;
-		}
-		default:
-			break;
-		}
-
-		//データ書き換え処理
-		resource_.vertexData[0].position = { left,bottom,0.0f,1.0f };
-		resource_.vertexData[1].position = { left,top,0.0f,1.0f };
-		resource_.vertexData[2].position = { right,bottom,0.0f,1.0f };
-		resource_.vertexData[3].position = { right,top,0.0f,1.0f };
-
-		resource_.vertexData[0].texcoord = { tex_left,tex_bottom };
-		resource_.vertexData[1].texcoord = { tex_left,tex_top };
-		resource_.vertexData[2].texcoord = { tex_right,tex_bottom };
-		resource_.vertexData[3].texcoord = { tex_right,tex_top };
-
-		//レンダリングパイプライン
-		Matrix4x4 worldMatrix = MyMath::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-		Matrix4x4 viewMatrix = MyMath::MakeIdentity4x4();
-		Matrix4x4 projectionMatrix = MyMath::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth, (float)WinApp::kClientHeight, 0.0f, 100.0f);
-		Matrix4x4 worldViewProjectionMatrix = MyMath::Multiply(worldMatrix, MyMath::Multiply(viewMatrix, projectionMatrix));
-		resource_.transformationMatrixData->WVP = worldViewProjectionMatrix;
-		resource_.transformationMatrixData->World = worldMatrix;
-
-		//頂点バッファービューを設定
-		MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &resource_.vertexBufferView);
-		//インデックスバッファービューを設定
-		MainRender::GetInstance()->GetCommandList()->IASetIndexBuffer(&resource_.indexBufferView);
-
-		//マテリアルCBufferの場所を設定
-		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
-		//座標変換行列CBufferの場所を設定
-		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.transformationMatrixResource->GetGPUVirtualAddress());
-
-		//テクスチャを設定
-		switch (textureKind_) {
-		case Sprite::TextureKind::Normal:
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureHandle_));
-			break;
-		case Sprite::TextureKind::Text:
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextTextureManager::GetInstance()->GetSrvHandleGPU(textTextureHandle_));
-			break;
-		default:
-			break;
-		}
-
-		//描画
-		MainRender::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-
-		//揺らした分元に戻す
-		position -= shakeOffset_;
-		shakeOffset_ = {};
+	//非表示状態ならreturn
+	if (!isDisplay_) {
+		return;
 	}
-	else {
-		//非表示状態を解除
-		isDisplay_ = true;
+
+	//頂点バッファービューを設定
+	MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &resource_.vertexBufferView);
+	//インデックスバッファービューを設定
+	MainRender::GetInstance()->GetCommandList()->IASetIndexBuffer(&resource_.indexBufferView);
+
+	//マテリアルCBufferの場所を設定
+	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
+	//座標変換行列CBufferの場所を設定
+	MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.transformationMatrixResource->GetGPUVirtualAddress());
+
+	//テクスチャを設定
+	switch (textureKind_) {
+	case Sprite::TextureKind::Normal:
+	case Sprite::TextureKind::UVScroll:
+		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureHandle_));
+		break;
+	case Sprite::TextureKind::Text:
+		MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextTextureManager::GetInstance()->GetSrvHandleGPU(textTextureHandle_));
+		break;
+	default:
+		break;
 	}
+
+	//描画
+	MainRender::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+
+	//揺らした分元に戻す
+	position -= shakeOffset_;
+	shakeOffset_ = {};
 }
 
 void Sprite::DebugWithImGui() {
@@ -250,6 +326,17 @@ void Sprite::AdjustTextureSize() {
 
 		textureSize.x = static_cast<float>(metadata.width);
 		textureSize.y = static_cast<float>(metadata.height);
+		//画像サイズをテクスチャサイズに合わせる
+		size = textureSize;
+		break;
+	}
+	case Sprite::TextureKind::UVScroll: {
+		//テクスチャメタデータを取得
+		const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureHandle_);
+
+		textureSize.x = static_cast<float>(metadata.width) / uvScrollData_.sheetsNum;
+		textureSize.y = static_cast<float>(metadata.height);
+
 		//画像サイズをテクスチャサイズに合わせる
 		size = textureSize;
 		break;

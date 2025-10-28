@@ -156,6 +156,19 @@ public:
 	void DebugWithImGui(Handle _handle);
 
 	/// <summary>
+	/// D2Dで文字列を描画する
+	/// </summary>
+	void WriteTextOnD2D();
+	/// <summary>
+	/// D3D12でデコレーションを描画する
+	/// </summary>
+	void DrawDecorationOnD3D12();
+	/// <summary>
+	/// 次のフレームで使用可能なリソース状態に遷移する
+	/// </summary>
+	void ReadyNextResourceState();
+
+	/// <summary>
 	/// テクスチャの読み込み
 	/// </summary>
 	/// <param name="_textParam">テキストパラメーター</param>
@@ -396,18 +409,7 @@ private:
 	/// </summary>
 	/// <param name="_id">テクスチャID</param>
 	void ArrangeTextureSize(uint32_t _id);
-	/// <summary>
-	/// D2Dで文字列を描画する
-	/// </summary>
-	void WriteTextOnD2D();
-	/// <summary>
-	/// D3D12でデコレーションを描画する
-	/// </summary>
-	void DrawDecorationOnD3D12();
-	/// <summary>
-	/// 次のフレームで使用可能なリソース状態に遷移する
-	/// </summary>
-	void ReadyNextResourceState();
+	
 
 	/// ============================== ///
 	///		インスタンス

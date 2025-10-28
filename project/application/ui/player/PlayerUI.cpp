@@ -145,8 +145,8 @@ void PlayerUI::DamageBlinking() {
 		itemUI_->AttachBlinking(color);
 		};
 
-	//被弾開始時に点滅開始
-	if (player_->GetIsDamage() && blinkTimer <= 0.0f) {
+	//被弾開始時または死亡演出中に点滅開始
+	if ((player_->GetIsDamage() || player_->GetIsDeathDir()) && blinkTimer <= 0.0f) {
 		float blinkDuration = param_["blinkDuration"];
 		blinkTimer = blinkDuration;
 		isDamage = true;
