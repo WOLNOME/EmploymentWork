@@ -11,6 +11,8 @@ public:
 	BaseCharacter() = default;
 	//デストラクタ
 	virtual ~BaseCharacter() = default;
+	//初期化
+	virtual void Initialize();
 	//更新
 	virtual void Update();
 
@@ -58,6 +60,9 @@ protected://オブジェクト
 	int32_t textureHandle_ = EOF;
 	//オブジェクト3D
 	std::unique_ptr<Object3d> object3d_ = nullptr;
+	//丸影
+	std::unique_ptr<Object3d> circleShadow_ = nullptr;
+
 	//前フレームの座標
 	Vector3 prePosition_ = {};
 

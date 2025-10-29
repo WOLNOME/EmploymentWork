@@ -19,6 +19,9 @@ IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
 }
 
 void IBaseTankEnemy::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
+
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//当たり判定の属性を設定

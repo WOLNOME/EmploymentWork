@@ -12,6 +12,8 @@
 #include <application/ui/message/MessageUI.h>
 
 void Player::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
 
 	//インプットの初期化
 	input_ = Input::GetInstance();

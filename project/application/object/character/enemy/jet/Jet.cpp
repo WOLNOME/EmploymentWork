@@ -7,7 +7,7 @@
 #include <application/object/character/player/Player.h>
 
 void Jet::Initialize() {
-	//ベースキャラクターの初期化
+	//ベースエネミーの初期化
 	IBaseJetEnemy::Initialize();
 	//テクスチャ
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("jet.png");

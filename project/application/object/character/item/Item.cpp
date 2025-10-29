@@ -4,7 +4,7 @@
 #include <ParticleManager.h>
 #include <random>
 
-void Item::Initialize(const Vector3& _initPos) {
+void Item::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
 
@@ -13,13 +13,11 @@ void Item::Initialize(const Vector3& _initPos) {
 	//オブジェクトを生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item"), Shape::ShapeKind::kCube);
-	object3d_->worldTransform.translate = _initPos;
 	object3d_->worldTransform.translate.y = param_["initHeight"];
 
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<Particle>();
 	idleParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_idle"), "item_idle");
-	idleParticle_->emitter_.transform.translate = _initPos;
 	idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
 	idleParticle_->emitter_.isGravity = true;
 	idleParticle_->emitter_.gravity = 1.0f;
@@ -93,6 +91,11 @@ void Item::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
+}
+
+void Item::SetInitPos(const Vector3& _initPos) {
+	object3d_->worldTransform.translate = _initPos;
+	idleParticle_->emitter_.transform.translate = _initPos;
 }
 
 void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {

@@ -7,7 +7,6 @@
 #include "ImGuiManager.h"
 #include "SpriteManager.h"
 
-
 Sprite::~Sprite() {
 	//マネージャーから削除
 	SpriteManager::GetInstance()->DeleteSprite(name_);
