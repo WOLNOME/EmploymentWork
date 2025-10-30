@@ -14,7 +14,7 @@ void Boss::Initialize() {
 
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Boss"), "enemy");
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Boss"), "enemy");
 	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
 	object3d_->SetTexture(textureHandle_);
 
@@ -28,6 +28,9 @@ void Boss::Initialize() {
 	//パラメータの反映
 	maxHP_ = param_["maxHP"];
 	hp_ = maxHP_;
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 8.0f,8.0f,8.0f };
 }
 
 void Boss::Update() {
@@ -45,6 +48,6 @@ void Boss::DebugWithImGui() {
 
 void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
-	IBaseTankEnemy::OnCollision(attribute,subjectPos);
+	IBaseTankEnemy::OnCollision(attribute, subjectPos);
 }
 

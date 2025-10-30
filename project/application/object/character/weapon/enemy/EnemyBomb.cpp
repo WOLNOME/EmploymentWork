@@ -8,6 +8,9 @@
 #include <application/ui/player/PlayerUI.h>
 
 void EnemyBomb::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
+
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
@@ -30,6 +33,10 @@ void EnemyBomb::Initialize() {
 	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
 	//初期化時点では死亡状態
 	isDead_ = true;
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
+
 }
 
 void EnemyBomb::Update() {
@@ -81,6 +88,7 @@ void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos)
 	generatedPosition_ = _initPos;
 	//表示する
 	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
 	//速度は0(自由落下)
 	velocity_ = { 0.0f,0.0f,0.0f };
 

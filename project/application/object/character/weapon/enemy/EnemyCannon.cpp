@@ -8,6 +8,8 @@
 #include <application/ui/player/PlayerUI.h>
 
 void EnemyCannon::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
@@ -34,6 +36,9 @@ void EnemyCannon::Initialize() {
 
 	//初期化時点では死亡状態
 	isDead_ = true;
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 }
 
 void EnemyCannon::Update() {
@@ -114,6 +119,7 @@ void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPo
 	generatedPosition_ = _initPos;
 	//表示する
 	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
 	//向きベクトルを算出
 	Vector3 targetVec = _targetPos - _initPos;
 	//XZ方向の速度を算出

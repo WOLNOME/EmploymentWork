@@ -6,6 +6,8 @@
 #include "BulletTrailManager.h"
 
 void PlayerCannon::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
@@ -36,6 +38,9 @@ void PlayerCannon::Initialize() {
 
 	//初期化時点では死亡状態
 	isDead_ = true;
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 
 }
 
@@ -114,7 +119,12 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 }
 
 void PlayerCannon::SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
+	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
+	//表示する
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
+	//速度を算出
 	float speed = param_["speed"];
 	velocity_ = _initDirection * speed;
 	SetCollisionAttribute(CollisionAttribute::PlayerCannon);

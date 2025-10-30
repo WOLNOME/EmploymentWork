@@ -5,6 +5,9 @@
 #include <random>
 
 void Item::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
+
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
 
@@ -68,6 +71,9 @@ void Item::Initialize() {
 	default:
 		break;
 	}
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 }
 
 void Item::Update() {

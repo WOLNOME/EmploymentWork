@@ -8,6 +8,7 @@ void BaseCharacter::Initialize() {
 	//丸影の生成
 	circleShadow_ = std::make_unique<Object3d>();
 	circleShadow_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("CircleShadow"), "circleShadow");
+	circleShadow_->SetIsLightProcess(false);
 	circleShadow_->worldTransform.scale = { 5.0f,5.0f,5.0f };
 }
 
@@ -52,6 +53,9 @@ void BaseCharacter::SetDeadTimer(float remainingSeconds) {
 
 	//不可視にする
 	object3d_->SetIsDisplay(false);
+	if (circleShadow_) {
+		circleShadow_->SetIsDisplay(false);
+	}
 
 	//死亡予約時間をセット
 	deadTimer_ = remainingSeconds;
