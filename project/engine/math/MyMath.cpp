@@ -177,41 +177,12 @@ Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
 	return c;
 }
 
-Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
-	Vector3 cp;
-	//もし線分のdiffが0ベクトルならoriginをreturn
-	if (segment.diff.x == 0.0f && segment.diff.y == 0.0f && segment.diff.z == 0.0f) {
-		cp = segment.origin;
-		return cp;
-	}
-
-	Vector3 a;
-	Vector3 proj;
-	a = Subtract(point, segment.origin);
-	proj = Project(a, segment.diff);
-	cp = {
-		segment.origin.x + proj.x,
-		segment.origin.y + proj.y,
-		segment.origin.z + proj.z
-	};
-	return cp;
-}
-
 Vector3 MyMath::Perpendicular(const Vector3& vector) {
 	if (vector.x != 0.0f || vector.y != 0.0f) {
 		return { -vector.y,vector.x,0.0f };
 	}
 	//法線がz成分のみなら
 	return{ 0.0f,-vector.z,vector.y };
-}
-
-Vector3 MyMath::ClosestPoint(const Vector3& point, const AABB& aabb) {
-	Vector3 closestPoint{
-		std::clamp(point.x,aabb.min.x,aabb.max.x),
-		std::clamp(point.y,aabb.min.y,aabb.max.y),
-		std::clamp(point.z,aabb.min.z,aabb.max.z)
-	};
-	return closestPoint;
 }
 
 Vector3 MyMath::CollisionPoint(const Line& l, const Plane& p) {
@@ -282,66 +253,37 @@ Vector4 MyMath::Lerp(const Vector4& v1, const Vector4& v2, float t) {
 }
 
 Matrix4x4 MyMath::Add(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 c;
-	c.m[0][0] = m1.m[0][0] + m2.m[0][0];
-	c.m[0][1] = m1.m[0][1] + m2.m[0][1];
-	c.m[0][2] = m1.m[0][2] + m2.m[0][2];
-	c.m[0][3] = m1.m[0][3] + m2.m[0][3];
-	c.m[1][0] = m1.m[1][0] + m2.m[1][0];
-	c.m[1][1] = m1.m[1][1] + m2.m[1][1];
-	c.m[1][2] = m1.m[1][2] + m2.m[1][2];
-	c.m[1][3] = m1.m[1][3] + m2.m[1][3];
-	c.m[2][0] = m1.m[2][0] + m2.m[2][0];
-	c.m[2][1] = m1.m[2][1] + m2.m[2][1];
-	c.m[2][2] = m1.m[2][2] + m2.m[2][2];
-	c.m[2][3] = m1.m[2][3] + m2.m[2][3];
-	c.m[3][0] = m1.m[3][0] + m2.m[3][0];
-	c.m[3][1] = m1.m[3][1] + m2.m[3][1];
-	c.m[3][2] = m1.m[3][2] + m2.m[3][2];
-	c.m[3][3] = m1.m[3][3] + m2.m[3][3];
+	Matrix4x4 c{};
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			c.m[i][j] = m1.m[i][j] + m2.m[i][j];
+		}
+	}
 	return c;
 }
 
 Matrix4x4 MyMath::Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 c;
-	c.m[0][0] = m1.m[0][0] - m2.m[0][0];
-	c.m[0][1] = m1.m[0][1] - m2.m[0][1];
-	c.m[0][2] = m1.m[0][2] - m2.m[0][2];
-	c.m[0][3] = m1.m[0][3] - m2.m[0][3];
-	c.m[1][0] = m1.m[1][0] - m2.m[1][0];
-	c.m[1][1] = m1.m[1][1] - m2.m[1][1];
-	c.m[1][2] = m1.m[1][2] - m2.m[1][2];
-	c.m[1][3] = m1.m[1][3] - m2.m[1][3];
-	c.m[2][0] = m1.m[2][0] - m2.m[2][0];
-	c.m[2][1] = m1.m[2][1] - m2.m[2][1];
-	c.m[2][2] = m1.m[2][2] - m2.m[2][2];
-	c.m[2][3] = m1.m[2][3] - m2.m[2][3];
-	c.m[3][0] = m1.m[3][0] - m2.m[3][0];
-	c.m[3][1] = m1.m[3][1] - m2.m[3][1];
-	c.m[3][2] = m1.m[3][2] - m2.m[3][2];
-	c.m[3][3] = m1.m[3][3] - m2.m[3][3];
+	Matrix4x4 c{};
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			c.m[i][j] = m1.m[i][j] - m2.m[i][j];
+		}
+	}
 	return c;
 }
 
 Matrix4x4 MyMath::Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 c;
-	c.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
-	c.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
-	c.m[0][2] = m1.m[0][0] * m2.m[0][2] + m1.m[0][1] * m2.m[1][2] + m1.m[0][2] * m2.m[2][2] + m1.m[0][3] * m2.m[3][2];
-	c.m[0][3] = m1.m[0][0] * m2.m[0][3] + m1.m[0][1] * m2.m[1][3] + m1.m[0][2] * m2.m[2][3] + m1.m[0][3] * m2.m[3][3];
-	c.m[1][0] = m1.m[1][0] * m2.m[0][0] + m1.m[1][1] * m2.m[1][0] + m1.m[1][2] * m2.m[2][0] + m1.m[1][3] * m2.m[3][0];
-	c.m[1][1] = m1.m[1][0] * m2.m[0][1] + m1.m[1][1] * m2.m[1][1] + m1.m[1][2] * m2.m[2][1] + m1.m[1][3] * m2.m[3][1];
-	c.m[1][2] = m1.m[1][0] * m2.m[0][2] + m1.m[1][1] * m2.m[1][2] + m1.m[1][2] * m2.m[2][2] + m1.m[1][3] * m2.m[3][2];
-	c.m[1][3] = m1.m[1][0] * m2.m[0][3] + m1.m[1][1] * m2.m[1][3] + m1.m[1][2] * m2.m[2][3] + m1.m[1][3] * m2.m[3][3];
-	c.m[2][0] = m1.m[2][0] * m2.m[0][0] + m1.m[2][1] * m2.m[1][0] + m1.m[2][2] * m2.m[2][0] + m1.m[2][3] * m2.m[3][0];
-	c.m[2][1] = m1.m[2][0] * m2.m[0][1] + m1.m[2][1] * m2.m[1][1] + m1.m[2][2] * m2.m[2][1] + m1.m[2][3] * m2.m[3][1];
-	c.m[2][2] = m1.m[2][0] * m2.m[0][2] + m1.m[2][1] * m2.m[1][2] + m1.m[2][2] * m2.m[2][2] + m1.m[2][3] * m2.m[3][2];
-	c.m[2][3] = m1.m[2][0] * m2.m[0][3] + m1.m[2][1] * m2.m[1][3] + m1.m[2][2] * m2.m[2][3] + m1.m[2][3] * m2.m[3][3];
-	c.m[3][0] = m1.m[3][0] * m2.m[0][0] + m1.m[3][1] * m2.m[1][0] + m1.m[3][2] * m2.m[2][0] + m1.m[3][3] * m2.m[3][0];
-	c.m[3][1] = m1.m[3][0] * m2.m[0][1] + m1.m[3][1] * m2.m[1][1] + m1.m[3][2] * m2.m[2][1] + m1.m[3][3] * m2.m[3][1];
-	c.m[3][2] = m1.m[3][0] * m2.m[0][2] + m1.m[3][1] * m2.m[1][2] + m1.m[3][2] * m2.m[2][2] + m1.m[3][3] * m2.m[3][2];
-	c.m[3][3] = m1.m[3][0] * m2.m[0][3] + m1.m[3][1] * m2.m[1][3] + m1.m[3][2] * m2.m[2][3] + m1.m[3][3] * m2.m[3][3];
-	return c;
+	Matrix4x4 result{};
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			result.m[i][j] =
+				m1.m[i][0] * m2.m[0][j] +
+				m1.m[i][1] * m2.m[1][j] +
+				m1.m[i][2] * m2.m[2][j] +
+				m1.m[i][3] * m2.m[3][j];
+		}
+	}
+	return result;
 }
 
 Matrix4x4 MyMath::Inverse(const Matrix4x4& m) {
@@ -378,43 +320,19 @@ Matrix4x4 MyMath::Inverse(const Matrix4x4& m) {
 
 Matrix4x4 MyMath::Transpose(const Matrix4x4& m) {
 	Matrix4x4 c;
-	c.m[0][0] = m.m[0][0];
-	c.m[0][1] = m.m[1][0];
-	c.m[0][2] = m.m[2][0];
-	c.m[0][3] = m.m[3][0];
-	c.m[1][0] = m.m[0][1];
-	c.m[1][1] = m.m[1][1];
-	c.m[1][2] = m.m[2][1];
-	c.m[1][3] = m.m[3][1];
-	c.m[2][0] = m.m[0][2];
-	c.m[2][1] = m.m[1][2];
-	c.m[2][2] = m.m[2][2];
-	c.m[2][3] = m.m[3][2];
-	c.m[3][0] = m.m[0][3];
-	c.m[3][1] = m.m[1][3];
-	c.m[3][2] = m.m[2][3];
-	c.m[3][3] = m.m[3][3];
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			c.m[i][j] = m.m[j][i];
+		}
+	}
 	return c;
 }
 
 Matrix4x4 MyMath::MakeIdentity4x4() {
-	Matrix4x4 c;
-	c.m[0][0] = 1.0f;
-	c.m[0][1] = 0.0f;
-	c.m[0][2] = 0.0f;
-	c.m[0][3] = 0.0f;
-	c.m[1][0] = 0.0f;
-	c.m[1][1] = 1.0f;
-	c.m[1][2] = 0.0f;
-	c.m[1][3] = 0.0f;
-	c.m[2][0] = 0.0f;
-	c.m[2][1] = 0.0f;
-	c.m[2][2] = 1.0f;
-	c.m[2][3] = 0.0f;
-	c.m[3][0] = 0.0f;
-	c.m[3][1] = 0.0f;
-	c.m[3][2] = 0.0f;
-	c.m[3][3] = 1.0f;
+	Matrix4x4 c = {};
+	for (int i = 0; i < 4; ++i) {
+		c.m[i][i] = 1.0f;
+	}
 	return c;
 }
 
@@ -1114,12 +1032,7 @@ bool MyMath::IsCollision(const Sphere& s1, const Sphere& s2) {
 
 bool MyMath::IsCollision(const Plane& plane, const Sphere& sphere) {
 	//球の中心と平面との距離を計算
-	float distance;
-	float k;
-	k = sqrtf(powf(Dot(plane.normal, sphere.center) - plane.distance, 2));
-	Vector3 q;//球の中心から平面に垂直に線を下したときに交わる点
-	q = Subtract(sphere.center, Multiply(k, plane.normal));
-	distance = Length(Subtract(sphere.center, q));
+	float distance = DistancePointToPlane(sphere.center, plane);
 	//衝突判定
 	if (distance <= sphere.radius) {
 		return true;
@@ -1199,15 +1112,14 @@ bool MyMath::IsCollision(const Plane& plane, const Ray& ray) {
 bool MyMath::IsCollision(const Segment& segment, const Plane& plane) {
 	//平行判定
 	float dot = Dot(segment.diff, plane.normal);
+	//平行なので衝突していない
 	if (dot == 0.0f) {
 		return false;
 	}
-
 	//媒介変数
 	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
-
 	//当たり判定結果
-	if (t >= 0 && t <= 1) {
+	if (t >= 0.0f && t <= 1.0f) {
 		return true;
 	}
 	else {
@@ -1220,6 +1132,7 @@ bool MyMath::IsCollision(const Plane& plane, const Segment& segment) {
 }
 
 bool MyMath::IsCollision(const Capsule& capsule, const Plane& plane) {
+	///判定を使う場合ここに処理を記入
 	return false;
 }
 
@@ -1228,23 +1141,21 @@ bool MyMath::IsCollision(const Plane& plane, const Capsule& capsule) {
 }
 
 bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
-	//三角形のある面を作る
-	Plane plane;
-	//三角形の座標から、法線nを求める
-	Vector3 vv1, vv2, n;
-	vv1 = Subtract(triangle.vertices[1], triangle.vertices[0]);
-	vv2 = Subtract(triangle.vertices[2], triangle.vertices[1]);
-	n = Normalize(Cross(vv1, vv2));
-	//距離を求める
-	float d = Dot(triangle.vertices[0], n);
-	//面に変換
-	plane.normal = n;
-	plane.distance = d;
+	//三角形を含んでいる面を作る
+	Plane plane = MakePlane(triangle);
 
 	//面と線の当たり判定
 	//接触点Pを求める
 	float dot = Dot(segment.diff, plane.normal);
+	if (dot == 0.0f) {
+		//線分と平面は平行(衝突しない)
+		return false;
+	}
 	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
+	if (t < 0.0f || t > 1.0f) {
+		//線分が平面とそもそも衝突していない
+		return false;
+	}
 	Vector3 p = Add(segment.origin, Multiply(t, segment.diff));
 	//当たり判定
 	if (IsCollision(segment, plane)) {
@@ -2023,6 +1934,63 @@ void MyMath::CreateLineOBB(const OBB& obb, Vector4 color) {
 		const Vector3& to = worldVertex[edgeIndices[i][1]];
 		lineManager->CreateLine(from, to, color);
 	}
+}
+
+float MyMath::DistancePointToPlane(const Vector3& _point, const Plane& _plane) {
+	//点と平面との距離kを計算
+	float k;
+	k = sqrtf(powf(Dot(_plane.normal, _point) - _plane.distance, 2.0f));
+	//点から平面に垂直に線を下したときに交わる点qを求める
+	Vector3 q;
+	q = _point - Multiply(k, _plane.normal);
+
+	return Length(Subtract(_point, q));
+}
+
+Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
+	Vector3 cp;
+	//もし線分のdiffが0ベクトルならoriginをreturn
+	if (segment.diff.x == 0.0f && segment.diff.y == 0.0f && segment.diff.z == 0.0f) {
+		cp = segment.origin;
+		return cp;
+	}
+
+	Vector3 a;
+	Vector3 proj;
+	a = Subtract(point, segment.origin);
+	proj = Project(a, segment.diff);
+	cp = {
+		segment.origin.x + proj.x,
+		segment.origin.y + proj.y,
+		segment.origin.z + proj.z
+	};
+	return cp;
+}
+
+Vector3 MyMath::ClosestPoint(const Vector3& point, const AABB& aabb) {
+	Vector3 closestPoint{
+		std::clamp(point.x,aabb.min.x,aabb.max.x),
+		std::clamp(point.y,aabb.min.y,aabb.max.y),
+		std::clamp(point.z,aabb.min.z,aabb.max.z)
+	};
+	return closestPoint;
+}
+
+Plane MyMath::MakePlane(const Triangle& tri) {
+	//三角形のある面を作る
+	Plane plane;
+	//三角形の座標から、法線nを求める
+	Vector3 vv1, vv2, n;
+	vv1 = Subtract(tri.vertices[1], tri.vertices[0]);
+	vv2 = Subtract(tri.vertices[2], tri.vertices[1]);
+	n = Normalize(Cross(vv1, vv2));
+	//距離を求める
+	float d = Dot(tri.vertices[0], n);
+	//面に変換
+	plane.normal = n;
+	plane.distance = d;
+
+	return plane;
 }
 
 ///------------------------------------///

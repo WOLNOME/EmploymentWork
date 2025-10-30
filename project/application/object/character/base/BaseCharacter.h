@@ -7,55 +7,120 @@
 /// </summary>
 class BaseCharacter : public Collider {
 public:
-	//コンストラクタ
-	BaseCharacter() = default;
-	//デストラクタ
-	virtual ~BaseCharacter() = default;
-	//初期化
-	virtual void Initialize();
-	//更新
-	virtual void Update();
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//デバッグ用パラメーター調整
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	BaseCharacter() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~BaseCharacter() = default;
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	virtual void Initialize();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	virtual void Update();
+	/// <summary>
+	/// デバッグ用パラメータ調整
+	/// </summary>
 	virtual void DebugWithImGui();
 
-public://getter
-	//ワールドトランスフォームの取得
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// ワールドトランスフォームの取得
+	/// </summary>
+	/// <returns>ワールドトランスフォーム</returns>
 	const WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
-	//コライダー用のワールド座標を取得
+	/// <summary>
+	/// コライダー用のワールド座標を取得
+	/// </summary>
+	/// <returns>コライダー用のワールド座標</returns>
 	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
-	//コライダー用回転を取得
+	/// <summary>
+	/// コライダー用回転を取得
+	/// </summary>
+	/// <returns>コライダー用回転</returns>
 	Vector3 GetRotate() override { return object3d_->worldTransform.rotate; }
-	//コライダー用スケールを取得
+	/// <summary>
+	/// コライダー用スケールを取得
+	/// </summary>
+	/// <returns>コライダー用スケール</returns>
 	Vector3 GetScale() override { return object3d_->worldTransform.scale; }
-	//コライダー用前フレーム座標を取得
+	/// <summary>
+	/// コライダー用前フレーム座標を取得
+	/// </summary>
+	/// <returns>コライダー用前フレーム座標</returns>
 	Vector3 GetPreWorldPosition() override { return prePosition_; }
 
-	//死亡フラグの取得
+	/// <summary>
+	/// 死亡フラグの取得
+	/// </summary>
+	/// <returns>死亡フラグ</returns>
 	bool GetIsDead() const { return isDead_; }
-	//死亡タイマーの取得
+	/// <summary>
+	/// 死亡タイマーの取得
+	/// </summary>
+	/// <returns>死亡タイマー</returns>
 	float GetDeadTimer() const { return deadTimer_; }
 
-	//速度の取得
+	/// <summary>
+	/// 速度の取得
+	/// </summary>
+	/// <returns>速度</returns>
 	const Vector3& GetVelocity() { return velocity_; }
-	//床の摩擦力の取得
+	/// <summary>
+	/// 床の摩擦力の取得
+	/// </summary>
+	/// <returns>床の摩擦力</returns>
 	float GetFloorFriction() const { return floorFriction_; }
 
-public://setter
-	//スケールのセット
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// スケールのセット
+	/// </summary>
+	/// <param name="scale">スケール</param>
 	void SetScale(const Vector3& scale) { object3d_->worldTransform.scale = scale; }
-	//回転のセット
+	/// <summary>
+	/// 回転のセット
+	/// </summary>
+	/// <param name="rotate">回転</param>
 	void SetRotate(const Vector3& rotate) { object3d_->worldTransform.rotate = rotate; }
-	//平行移動のセット
+	/// <summary>
+	/// 平行移動のセット
+	/// </summary>
+	/// <param name="translate">平行移動</param>
 	void SetTranslate(const Vector3& translate) { object3d_->worldTransform.translate = translate; }
 
-	//死亡予約関数
+	/// <summary>
+	/// 死亡予約関数
+	/// </summary>
+	/// <param name="remainingSeconds">死亡までの時間</param>
 	void SetDeadTimer(float remainingSeconds);
 
-	//速度のセット
+	/// <summary>
+	/// 速度のセット
+	/// </summary>
+	/// <param name="_velocity">速度</param>
 	void SetVelocity(const Vector3& _velocity) { velocity_ = _velocity; }
 
-protected://オブジェクト
+protected:
+	/// ============================== ///
+	///		メンバ変数(protected)
+	/// ============================== ///
+
 	//テクスチャハンドル
 	int32_t textureHandle_ = EOF;
 	//オブジェクト3D
@@ -66,7 +131,6 @@ protected://オブジェクト
 	//前フレームの座標
 	Vector3 prePosition_ = {};
 
-protected://キャラ共有のメンバ変数
 	//速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 	//死亡フラグ
@@ -79,7 +143,12 @@ protected://キャラ共有のメンバ変数
 	//床の摩擦値
 	float floorFriction_ = 40.0f;
 
-private://死亡予約用変数
-	float deadTimer_ = 0.0f;	//死亡までの時間
+private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+	
+	//死亡までの時間
+	float deadTimer_ = 0.0f;
 };
 

@@ -29,7 +29,7 @@ void PlayerBullet::Initialize() {
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
-	collisionRadius_ = 1000.0f;
+	collisionRadius_ = 0.01f;
 
 	//初期化時点では死亡状態
 	isDead_ = true;
