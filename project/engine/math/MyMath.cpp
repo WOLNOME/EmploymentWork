@@ -784,8 +784,7 @@ Quaternion MyMath::Slerp(const Quaternion& q0, const Quaternion& q1, float t) {
 		dot = -dot;
 	}
 	//内積が1に近い場合、線形補完を使用
-	const float EPSILON = 5e-4f;//0.0005
-	if (dot >= 1.0f - EPSILON) {
+	if (dot >= 1.0f - epsilon) {
 		c = q0c * (1.0f - t) + q1c * t;
 		return c;
 	}
@@ -1140,50 +1139,427 @@ bool MyMath::IsCollision(const Plane& plane, const Capsule& capsule) {
 	return IsCollision(capsule, plane);
 }
 
-bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
-	//三角形を含んでいる面を作る
-	Plane plane = MakePlane(triangle);
+bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
+	//重複処理防止ラムダ式
+	auto makeTriangleSegments = [](const Triangle& tri) -> std::vector<Segment> {
+		return {
+			{ tri.vertices[0], tri.vertices[1] - tri.vertices[0] },
+			{ tri.vertices[1], tri.vertices[2] - tri.vertices[1] },
+			{ tri.vertices[2], tri.vertices[0] - tri.vertices[2] }
+		};
+		};
 
-	//面と線の当たり判定
-	//接触点Pを求める
-	float dot = Dot(segment.diff, plane.normal);
-	if (dot == 0.0f) {
-		//線分と平面は平行(衝突しない)
-		return false;
-	}
-	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
-	if (t < 0.0f || t > 1.0f) {
-		//線分が平面とそもそも衝突していない
-		return false;
-	}
-	Vector3 p = Add(segment.origin, Multiply(t, segment.diff));
-	//当たり判定
-	if (IsCollision(segment, plane)) {
-		//必要なベクトル
-		Vector3 v01 = Subtract(triangle.vertices[1], triangle.vertices[0]);
-		Vector3 v12 = Subtract(triangle.vertices[2], triangle.vertices[1]);
-		Vector3 v20 = Subtract(triangle.vertices[0], triangle.vertices[2]);
-		Vector3 v0p = Subtract(p, triangle.vertices[0]);
-		Vector3 v1p = Subtract(p, triangle.vertices[1]);
-		Vector3 v2p = Subtract(p, triangle.vertices[2]);
-		//各辺を結んだベクトルと、頂点の衝突点pを結んだベクトルのクロス積を取る
-		Vector3 cross01 = Cross(v01, v1p);
-		Vector3 cross12 = Cross(v12, v2p);
-		Vector3 cross20 = Cross(v20, v0p);
-		//全ての小三角形のクロス積と法線が同じ方向を向いていたら衝突
-		if (Dot(cross01, plane.normal) >= 0.0f &&
-			Dot(cross12, plane.normal) >= 0.0f &&
-			Dot(cross20, plane.normal) >= 0.0f) {
-			//衝突
+	//カプセル内部の線分が三角形平面と平行かどうかの判定を行う
+	Plane triPlane = MakePlane(tri);
+	if (CheckParallel(capsule.segment, triPlane)) {
+		//カプセル内部の線分を平面に射影したときの線分を求める
+		Segment projSeg = ProjectSegmentOntoPlane(capsule.segment, triPlane);
+		//三角形とカプセル線分の最短距離
+		float distanceOfMin = 0.0f;
+		//射影線分が三角形に衝突しているかの判定を行う
+		if (IsCollision(projSeg, tri)) {
+			//カプセルの線分との距離を求めるための三角形内部のある点
+			Vector3 point = {};
+			//始点終点の三角形の内外判定で調べる
+			Vector3 sp = projSeg.origin;
+			Vector3 ep = projSeg.origin + projSeg.diff;
+			if (IsPointInTriangle(sp, tri)) {
+				point = sp;
+			}
+			else if (IsPointInTriangle(ep, tri)) {
+				point = ep;
+			}
+
+			//三角形を線分に分解する
+			Segment s1, s2, s3;
+			s1.origin = tri.vertices[0];
+			s1.diff = tri.vertices[1] - tri.vertices[0];
+			s2.origin = tri.vertices[1];
+			s2.diff = tri.vertices[2] - tri.vertices[1];
+			s3.origin = tri.vertices[2];
+			s3.diff = tri.vertices[0] - tri.vertices[2];
+			//射影線分と各線分の交差点を求める(どこでもいいのでelse if)
+			if (DistanceSegmentToSegment(projSeg, s1) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, s1);
+			}
+			else if (DistanceSegmentToSegment(projSeg, s2) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, s2);
+			}
+			else if (DistanceSegmentToSegment(projSeg, s3) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, s3);
+			}
+			//ポイントが求まったのでそのポイントとカプセル線分との距離を求める
+			distanceOfMin = DistancePointToSegment(point, capsule.segment);
+		}
+		else {
+			//三角形を線分に分解する
+			Segment s1, s2, s3;
+			s1.origin = tri.vertices[0];
+			s1.diff = tri.vertices[1] - tri.vertices[0];
+			s2.origin = tri.vertices[1];
+			s2.diff = tri.vertices[2] - tri.vertices[1];
+			s3.origin = tri.vertices[2];
+			s3.diff = tri.vertices[0] - tri.vertices[2];
+			//カプセル線分と三角形線分を比較し、一番短いのを選別する
+			float d1, d2, d3;
+			d1 = DistanceSegmentToSegment(capsule.segment, s1);
+			d2 = DistanceSegmentToSegment(capsule.segment, s2);
+			d3 = DistanceSegmentToSegment(capsule.segment, s3);
+			distanceOfMin = std::min(d1, std::min(d2, d3));
+		}
+		//求めた最短距離とカプセルの半径を比較して判定処理を行う
+		if (distanceOfMin <= capsule.radius) {
+			//衝突してる
 			return true;
 		}
 		else {
+			//衝突してない
 			return false;
 		}
 	}
+	//媒介変数から交差点を求める(線分を伸ばした場合も含む)
+	float dot = Dot(capsule.segment.diff, triPlane.normal);
+	float t = (triPlane.distance - Dot(capsule.segment.origin, triPlane.normal)) / dot;
+	Vector3 crossPoint = capsule.segment.origin + capsule.segment.diff * t;
+	//カプセル線分が三角形含む平面を通ってる場合
+	if (IsCollision(capsule.segment, triPlane)) {
+		//カプセル線分が平面に垂直か調べる
+		if (std::fabs(Dot(Vector3(capsule.segment.diff).Normalized(), Vector3(triPlane.normal).Normalized()) > 1.0f - epsilon)) {
+			//交差点が三角形の内側にあるかを判定
+			if (IsPointInTriangle(crossPoint, tri)) {
+				//衝突してる
+				return true;
+			}
+			else {
+				//交差点と三角形の(三角形上の)最近接点を求める
+				Vector3 cp = ClosestPoint(crossPoint, tri);
+				//交差点→最近接点の距離とカプセルの半径を比較して衝突判定をとる
+				if (Vector3(cp - crossPoint).Length() <= capsule.radius) {
+					//衝突してる
+					return true;
+				}
+				else {
+					//衝突していない
+					return false;
+				}
+			}
+		}
+		else {
+			//交差点が三角形の内側にあるかを判定
+			if (IsPointInTriangle(crossPoint, tri)) {
+				//衝突してる
+				return true;
+			}
+			else {
+				//三角形を線分に分解する
+				Segment s1, s2, s3;
+				s1.origin = tri.vertices[0];
+				s1.diff = tri.vertices[1] - tri.vertices[0];
+				s2.origin = tri.vertices[1];
+				s2.diff = tri.vertices[2] - tri.vertices[1];
+				s3.origin = tri.vertices[2];
+				s3.diff = tri.vertices[0] - tri.vertices[2];
+				//カプセル線分と三角形線分を比較し、一番短いのを選別する
+				float d1, d2, d3;
+				d1 = DistanceSegmentToSegment(capsule.segment, s1);
+				d2 = DistanceSegmentToSegment(capsule.segment, s2);
+				d3 = DistanceSegmentToSegment(capsule.segment, s3);
+				float distanceOfMin = std::min(d1, std::min(d2, d3));
+				//最短距離をカプセルの半径と比較して判定する
+				if (distanceOfMin <= capsule.radius) {
+					//衝突してる
+					return true;
+				}
+				else {
+					//衝突してない
+					return false;
+				}
+			}
+		}
+	}
+	//カプセル線分が平面とぶつかっていない場合
 	else {
+		//交差点の三角形の内外判定を求める
+		if (IsPointInTriangle(crossPoint, tri)) {
+			//線分の始点と終点の内、交差点と近い方の点の射影点を求める
+			Vector3 projPoint;
+			float lsp = Vector3(crossPoint - capsule.segment.origin).Length();
+			float lep = Vector3(crossPoint - (capsule.segment.origin + capsule.segment.diff)).Length();
+			//始点の方が近い場合
+			if (lsp < lep) {
+				projPoint = ClosestPoint(capsule.segment.origin, triPlane);
+			}
+			//終点の方が近い場合
+			else {
+				projPoint = ClosestPoint((capsule.segment.origin + capsule.segment.diff), triPlane);
+			}
+			//射影点の三角形の内外判定をとる
+			if (IsPointInTriangle(projPoint, tri)) {
+				//射影点→カプセル線分の最短距離とカプセルの半径を比較して判定
+				float distanceOfMin = DistancePointToSegment(projPoint, capsule.segment);
+				if (distanceOfMin <= capsule.radius) {
+					//衝突してる
+					return true;
+				}
+				else {
+					//衝突してない
+					return false;
+				}
+			}
+			else {
+				//交差点→射影点の線分を作る
+				Segment segment = {
+					.origin = crossPoint,
+					.diff = projPoint - crossPoint
+				};
+				//三角形を線分に分解する
+				Segment s1, s2, s3;
+				s1.origin = tri.vertices[0];
+				s1.diff = tri.vertices[1] - tri.vertices[0];
+				s2.origin = tri.vertices[1];
+				s2.diff = tri.vertices[2] - tri.vertices[1];
+				s3.origin = tri.vertices[2];
+				s3.diff = tri.vertices[0] - tri.vertices[2];
+				//線分同士がぶつかっているペアに限ってその交差点を求める
+				Vector3 crossPoint2;
+				if (DistanceSegmentToSegment(segment, s1) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, s1);
+					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
+					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
+						//衝突してる
+						return true;
+					}
+					else {
+						//衝突してない
+						return false;
+					}
+				}
+				else if (DistanceSegmentToSegment(segment, s2) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, s2);
+					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
+					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
+						//衝突してる
+						return true;
+					}
+					else {
+						//衝突してない
+						return false;
+					}
+				}
+				else if (DistanceSegmentToSegment(segment, s3) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, s3);
+					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
+					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
+						//衝突してる
+						return true;
+					}
+					else {
+						//衝突してない
+						return false;
+					}
+				}
+			}
+		}
+		//交差点が三角形の外側なら
+		else {
+			//カプセル線分を平面上に射影する
+			Segment projSegment = ProjectSegmentOntoPlane(capsule.segment, triPlane);
+			//射影線分と三角形の衝突判定
+			if (IsCollision(projSegment, tri)) {
+				//射影後の始点と終点の距離を求める
+				float lsp = Vector3(projSegment.origin - capsule.segment.origin).Length();
+				float lep = Vector3((projSegment.origin + projSegment.diff) - (capsule.segment.origin + capsule.segment.diff)).Length();
+				//それぞれの距離の短い方の射影点を求める
+				Vector3 projPoint;	//射影点(平面に近い点を参照)
+				//始点の方が短い場合
+				if (lsp < lep) {
+					projPoint = projSegment.origin;
+				}
+				//終点の方が短い場合
+				else {
+					projPoint = projSegment.origin + projSegment.diff;
+				}
+				//求めた射影点で三角形の内外判定
+				if (IsPointInTriangle(projPoint, tri)) {
+					//射影点→線分の長さとカプセルの半径を比較して判定
+					if (DistancePointToSegment(projPoint, capsule.segment) <= capsule.radius) {
+						//衝突してる
+						return true;
+					}
+					else {
+						//衝突してない
+						return false;
+					}
+				}
+				else {
+					//三角形を線分に分解する
+					Segment s1, s2, s3;
+					s1.origin = tri.vertices[0];
+					s1.diff = tri.vertices[1] - tri.vertices[0];
+					s2.origin = tri.vertices[1];
+					s2.diff = tri.vertices[2] - tri.vertices[1];
+					s3.origin = tri.vertices[2];
+					s3.diff = tri.vertices[0] - tri.vertices[2];
+					//射影線分と三角形線分の衝突判定
+					Vector3 crossPoint2;
+					bool isCompetition = false;
+					if (DistanceSegmentToSegment(projSegment, s1) <= epsilon) {
+						//交点を求める
+						crossPoint2 = IntersectionSegmentToSegment(projSegment, s1);
+						isCompetition = true;
+					}
+					if (DistanceSegmentToSegment(projSegment, s2) <= epsilon) {
+						//競合していたら旧交点と比較
+						if (isCompetition) {
+							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, s2);
+							//新交点→射影点の方が短い場合
+							if (Vector3(projPoint - newCrossPoint).Length() < Vector3(projPoint - crossPoint2).Length()) {
+								//交点を更新
+								crossPoint2 = newCrossPoint;
+							}
+						}
+						else {
+							//交点を求める
+							crossPoint2 = IntersectionSegmentToSegment(projSegment, s2);
+						}
+						isCompetition = true;
+					}
+					if (DistanceSegmentToSegment(projSegment, s3) <= epsilon) {
+						//競合していたら旧交点と比較
+						if (isCompetition) {
+							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, s2);
+							//新交点→射影点の方が短い場合
+							if (Vector3(projPoint - newCrossPoint).Length() < Vector3(projPoint - crossPoint2).Length()) {
+								//交点を更新
+								crossPoint2 = newCrossPoint;
+							}
+						}
+						else {
+							//交点を求める
+							crossPoint2 = IntersectionSegmentToSegment(projSegment, s2);
+						}
+					}
+					//一番カプセル線分に近い射影線分と三角形の交点が求まったのでカプセル半径と比較して判定
+					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
+						//衝突してる
+						return true;
+					}
+					else {
+						//衝突してない
+						return false;
+					}
+				}
+			}
+			else {
+				//三角形を線分に分解する
+				Segment s1, s2, s3;
+				s1.origin = tri.vertices[0];
+				s1.diff = tri.vertices[1] - tri.vertices[0];
+				s2.origin = tri.vertices[1];
+				s2.diff = tri.vertices[2] - tri.vertices[1];
+				s3.origin = tri.vertices[2];
+				s3.diff = tri.vertices[0] - tri.vertices[2];
+				//カプセル線分と三角形線分を比較し、一番短いのを選別する
+				float d1, d2, d3;
+				d1 = DistanceSegmentToSegment(capsule.segment, s1);
+				d2 = DistanceSegmentToSegment(capsule.segment, s2);
+				d3 = DistanceSegmentToSegment(capsule.segment, s3);
+				float distanceOfMin = std::min(d1, std::min(d2, d3));
+				//最短距離をカプセルの半径と比較して判定する
+				if (distanceOfMin <= capsule.radius) {
+					//衝突してる
+					return true;
+				}
+				else {
+					//衝突してない
+					return false;
+				}
+			}
+		}
+	}
+}
+
+bool MyMath::IsCollision(const Triangle& tri, const Capsule& capsule) {
+	return IsCollision(capsule, tri);
+}
+
+bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
+	// 三角形を含んでいる面を作る
+	Plane plane = MakePlane(triangle);
+
+	// 面と線分の交差判定
+	float dot = Dot(segment.diff, plane.normal);
+	if (fabs(dot) < epsilon) {
+		//内外判定と最短距離を使って三角形内部かを調べる
+		bool isHitting = false;
+		//線分の始点と終点
+		Vector3 startPoint = segment.origin;
+		Vector3 endPoint = segment.origin + segment.diff;
+		//始点の内外判定
+		if (IsPointInTriangle(startPoint, triangle)) {
+			//内側にあるので当たってる
+			return true;
+		}
+		//終点の内外判定
+		if (IsPointInTriangle(endPoint, triangle)) {
+			//内側にあるので当たってる
+			return true;
+		}
+		//三角形が構成する3つの線分を出す
+		Segment s1, s2, s3;
+		s1.origin = triangle.vertices[0];
+		s1.diff = triangle.vertices[1] - triangle.vertices[0];
+		s2.origin = triangle.vertices[1];
+		s2.diff = triangle.vertices[2] - triangle.vertices[1];
+		s3.origin = triangle.vertices[2];
+		s3.diff = triangle.vertices[0] - triangle.vertices[2];
+		//射影線分と各線分の交差点を求める
+		if (DistanceSegmentToSegment(segment, s1) < epsilon) {
+			return true;
+		}
+		else if (DistanceSegmentToSegment(segment, s2) < epsilon) {
+			return true;
+		}
+		else if (DistanceSegmentToSegment(segment, s3) < epsilon) {
+			return true;
+		}
+
+
+		//平行かつ線分が三角形内部に存在しない
 		return false;
 	}
+
+	// tを求める
+	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
+
+	// 線分範囲外なら交差しない
+	if (t < 0.0f || t > 1.0f) {
+		return false;
+	}
+
+	// 衝突点p
+	Vector3 p = segment.origin + segment.diff * t;
+
+	// ---- 三角形内判定 ----
+	Vector3 v01 = triangle.vertices[1] - triangle.vertices[0];
+	Vector3 v12 = triangle.vertices[2] - triangle.vertices[1];
+	Vector3 v20 = triangle.vertices[0] - triangle.vertices[2];
+
+	Vector3 v0p = p - triangle.vertices[0];
+	Vector3 v1p = p - triangle.vertices[1];
+	Vector3 v2p = p - triangle.vertices[2];
+
+	Vector3 cross01 = Cross(v01, v0p);
+	Vector3 cross12 = Cross(v12, v1p);
+	Vector3 cross20 = Cross(v20, v2p);
+
+	if (Dot(cross01, plane.normal) >= 0.0f &&
+		Dot(cross12, plane.normal) >= 0.0f &&
+		Dot(cross20, plane.normal) >= 0.0f) {
+		return true;  // 衝突
+	}
+
+	return false; // 平面には当たっているが、三角形外部
 }
 
 bool MyMath::IsCollision(const Triangle& triangle, const Segment& segment) {
@@ -1749,11 +2125,83 @@ bool MyMath::IsCollision(const Segment& segment, const OBB& obb) {
 }
 
 bool MyMath::IsCollision(const OBB& obb, const Capsule& capsule) {
-	//OBBを半径分膨張
-	OBB expandedOBB = obb;
-	expandedOBB.size += capsule.radius;
+	//ある座標がOBB内にあるか判定するラムダ式
+	auto isPointInOBB = [&](const Vector3& point) -> bool {
+		Vector3 d = point - obb.center;
+		for (int i = 0; i < 3; ++i) {
+			float dist = Dot(d, obb.orientations[i]);
+			float halfLength = (i == 0) ? obb.size.x
+				: (i == 1) ? obb.size.y
+				: obb.size.z;
+			if (std::fabs(dist) > halfLength) {
+				return false; // どれか1軸でも範囲外なら外部
+			}
+		}
+		return true;
+		};
+	//OBB→三角形平面に分解するラムダ式
+	auto makeOBBTriangles = [&]() -> std::vector<Triangle> {
+		std::vector<Vector3> axes = {
+			obb.orientations[0] * obb.size.x,
+			obb.orientations[1] * obb.size.y,
+			obb.orientations[2] * obb.size.z
+		};
 
-	return IsCollision(expandedOBB, capsule.segment);
+		// 8頂点生成（中心±各軸の組み合わせ）
+		std::vector<Vector3> v(8);
+		v[0] = obb.center + axes[0] + axes[1] + axes[2];
+		v[1] = obb.center + axes[0] + axes[1] - axes[2];
+		v[2] = obb.center + axes[0] - axes[1] + axes[2];
+		v[3] = obb.center + axes[0] - axes[1] - axes[2];
+		v[4] = obb.center - axes[0] + axes[1] + axes[2];
+		v[5] = obb.center - axes[0] + axes[1] - axes[2];
+		v[6] = obb.center - axes[0] - axes[1] + axes[2];
+		v[7] = obb.center - axes[0] - axes[1] - axes[2];
+
+		// 各面を三角形に分割
+		std::vector<Triangle> tris;
+
+		auto addFace = [&](int a, int b, int c, int d) {
+			tris.push_back({ v[a], v[b], v[c] });
+			tris.push_back({ v[a], v[c], v[d] });
+			};
+
+		// +X, -X, +Y, -Y, +Z, -Z の6面
+		addFace(0, 1, 3, 2); // +X面
+		addFace(4, 6, 7, 5); // -X面
+		addFace(0, 4, 5, 1); // +Y面
+		addFace(2, 3, 7, 6); // -Y面
+		addFace(0, 2, 6, 4); // +Z面
+		addFace(1, 5, 7, 3); // -Z面
+
+		return tris;
+		};
+
+
+	//カプセル内線分がOBB内にあるかの判定処理
+	Vector3 start = capsule.segment.origin;
+	Vector3 end = capsule.segment.origin + capsule.segment.diff;
+
+	bool startInside = isPointInOBB(start);
+	bool endInside = isPointInOBB(end);
+
+	if (startInside && endInside) {
+		return true; // カプセル線分がOBB内に完全に含まれる
+	}
+
+	//OBBを三角形に分解
+	auto triangles = makeOBBTriangles();
+
+	//各三角形とカプセルの当たり判定
+	for (const auto& tri : triangles) {
+		if (IsCollision(capsule, tri)) {
+			return true;
+		}
+	}
+
+	//どの面とも衝突していないのでfalse
+	return false;
+
 }
 
 bool MyMath::IsCollision(const Capsule& capsule, const OBB& obb) {
@@ -1936,34 +2384,172 @@ void MyMath::CreateLineOBB(const OBB& obb, Vector4 color) {
 	}
 }
 
-float MyMath::DistancePointToPlane(const Vector3& _point, const Plane& _plane) {
-	//点と平面との距離kを計算
-	float k;
-	k = sqrtf(powf(Dot(_plane.normal, _point) - _plane.distance, 2.0f));
-	//点から平面に垂直に線を下したときに交わる点qを求める
-	Vector3 q;
-	q = _point - Multiply(k, _plane.normal);
+float MyMath::DistancePointToPlane(const Vector3& point, const Plane& plane) {
+	//点と平面の最近接点を求める
+	Vector3 closestPoint = ClosestPoint(point, plane);
 
-	return Length(Subtract(_point, q));
+	//長さを返す
+	return Vector3(point - closestPoint).Length();
+}
+
+float MyMath::DistancePointToSegment(const Vector3& point, const Segment& segment) {
+	//点と線分の最近接点を求める
+	Vector3 closestPoint = ClosestPoint(point, segment);
+
+	//長さを返す
+	return Vector3(point - closestPoint).Length();
+}
+
+float MyMath::DistanceSegmentToSegment(const Segment& s1, const Segment& s2) {
+	Vector3 p1 = s1.origin;
+	Vector3 q1 = s1.origin + s1.diff;
+	Vector3 p2 = s2.origin;
+	Vector3 q2 = s2.origin + s2.diff;
+
+	//各線分の方向ベクトル
+	Vector3 u = q1 - p1; //s1の方向ベクトル
+	Vector3 v = q2 - p2; //s2の方向ベクトル
+	Vector3 w = p1 - p2; //p1とp2の差
+
+	//便利変数
+	float a = Dot(u, u); //s1の長さの2乗	
+	float b = Dot(u, v);
+	float c = Dot(v, v); //s2の長さの2乗
+	float d = Dot(u, w);
+	float e = Dot(v, w);
+
+	float denom = a * c - b * b; //直線の場合の分母
+
+	float s = 0.0f; //パラメータ s (s1 上の位置: p1 + s * u), 期待範囲 [0,1]
+	float t = 0.0f; //パラメータ t (s2 上の位置: p2 + t * v), 期待範囲 [0,1]
+
+	//まずは直線（無制約）上の解を計算（denom が十分大きければ）
+	if (denom > epsilon) {
+		//二本の非平行線の最近接点パラメータ（直線同士）
+		s = (b * e - c * d) / denom;
+		t = (a * e - b * d) / denom;
+	}
+	else {
+		//平行（またはほぼ平行）: 任意に s = 0 として t を求めるのが一つの選択肢
+		//このとき t は v に沿った p1 の射影
+		s = 0.0f;
+		if (c > epsilon) {
+			t = e / c;
+		}
+		else {
+			//両方ともほぼゼロ長（退化）：どちらも点に近い
+			t = 0.0f;
+		}
+	}
+
+	//s, t を [0,1] に制約する（clamp）。ただし一方だけクランプされた場合は、もう一方を再計算して調整する。
+	//1) s をクランプしてから t を再計算
+	s = std::clamp(s, 0.0f, 1.0f);
+	if (c > epsilon) {
+		// t = (b * s + e) / c は、s を固定したときの s2 側パラメータの最小化解
+		t = (b * s + e) / c;
+		t = std::clamp(t, 0.0f, 1.0f);
+	}
+	else {
+		t = 0.0f;
+	}
+
+	//2) t をクランプした結果に基づき s を再計算（もし t がクランプされているなら）
+	if (a > epsilon) {
+		// s = (b * t - d) / a は、t を固定したときの s1 側パラメータの最小化解
+		float sCandidate = (b * t - d) / a;
+		sCandidate = std::clamp(sCandidate, 0.0f, 1.0f);
+
+		//もし sCandidate が現在の s と異なる（つまり t のクランプにより s が変わるべきなら）
+		//再代入して、t を再計算して最終調整
+		if (fabsf(sCandidate - s) > epsilon) {
+			s = sCandidate;
+			if (c > epsilon) {
+				t = (b * s + e) / c;
+				t = std::clamp(t, 0.0f, 1.0f);
+			}
+			else {
+				t = 0.0f;
+			}
+		}
+	}
+
+	//最近接点
+	Vector3 closestOnS1 = p1 + s * u;
+	Vector3 closestOnS2 = p2 + t * v;
+
+	//距離を返す
+	return Length(closestOnS1 - closestOnS2);
+}
+
+Vector3 MyMath::ClosestPoint(const Vector3& point, const Plane& plane) {
+	float distance = Dot(plane.normal, point) - plane.distance;
+	return point - distance * plane.normal;
+}
+
+Vector3 MyMath::ClosestPoint(const Vector3& point, const Triangle& tri) {
+	//三角形を含む平面を作成
+	Plane plane = MakePlane(tri);
+	//点を平面上に射影
+	Vector3 projected = ClosestPoint(point, plane);
+	//射影点が三角形内部かチェック
+	if (IsPointInTriangle(projected, tri)) {
+		return projected;	//内側にある場合はそのまま返す
+	}
+	//三角形の各辺上の最近接点を求めて、一番近い点を探す
+	Vector3 closest;
+	//三角形から3つの線分を取り出す
+	Segment s1 = {
+	.origin = tri.vertices[0],
+	.diff = tri.vertices[1] - tri.vertices[0]
+	};
+	Segment s2 = {
+	.origin = tri.vertices[1],
+	.diff = tri.vertices[2] - tri.vertices[1]
+	};
+	Segment s3 = {
+	.origin = tri.vertices[2],
+	.diff = tri.vertices[0] - tri.vertices[2]
+	};
+	//ひとつずつ求めて一番短いやつを使う
+	Vector3 c1 = ClosestPoint(point, s1);
+	Vector3 c2 = ClosestPoint(point, s2);
+	Vector3 c3 = ClosestPoint(point, s3);
+	//一番近い点を選ぶ
+	float d1 = Length(point - c1);
+	float d2 = Length(point - c2);
+	float d3 = Length(point - c3);
+
+	closest = c1;
+	float minDist = d1;
+
+	if (d2 < minDist) {
+		minDist = d2;
+		closest = c2;
+	}
+	if (d3 < minDist) {
+		minDist = d3;
+		closest = c3;
+	}
+
+	//最も近い点を返す
+	return closest;
 }
 
 Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
-	Vector3 cp;
-	//もし線分のdiffが0ベクトルならoriginをreturn
+	// diffが0ベクトル（始点＝終点）の場合
 	if (segment.diff.x == 0.0f && segment.diff.y == 0.0f && segment.diff.z == 0.0f) {
-		cp = segment.origin;
-		return cp;
+		return segment.origin;
 	}
 
-	Vector3 a;
-	Vector3 proj;
-	a = Subtract(point, segment.origin);
-	proj = Project(a, segment.diff);
-	cp = {
-		segment.origin.x + proj.x,
-		segment.origin.y + proj.y,
-		segment.origin.z + proj.z
-	};
+	Vector3 a = point - segment.origin;
+	float t = Dot(a, segment.diff) / Dot(segment.diff, segment.diff);
+
+	// 線分の範囲 [0,1] にクランプ
+	t = std::clamp(t, 0.0f, 1.0f);
+
+	// 始点 + t * diff が最近接点
+	Vector3 cp = segment.origin + segment.diff * t;
 	return cp;
 }
 
@@ -1991,6 +2577,106 @@ Plane MyMath::MakePlane(const Triangle& tri) {
 	plane.distance = d;
 
 	return plane;
+}
+
+bool MyMath::CheckParallel(const Segment& segment, const Plane& plane) {
+	// 線分の方向ベクトル
+	Vector3 dir = segment.diff;
+
+	// 平面の法線ベクトル
+	Vector3 normal = plane.normal;
+
+	// 方向ベクトルを正規化（任意だが安定性のため推奨）
+	dir = Normalize(dir);
+	normal = Normalize(normal);
+
+	// 平面の法線と線分の方向が垂直（内積がほぼ0）なら「平行」
+	float dot = Dot(dir, normal);
+
+	return fabsf(dot) < epsilon;
+}
+
+Segment MyMath::ProjectSegmentOntoPlane(const Segment& segment, const Plane& plane) {
+	Segment projected;
+
+	//始点と終点を求める
+	Vector3 start = segment.origin;
+	Vector3 end = segment.origin + segment.diff;
+
+	//各点を平面に射影
+	Vector3 projStart = ClosestPoint(start, plane);
+	Vector3 projEnd = ClosestPoint(end, plane);
+
+	//結果の線分をセット
+	projected.origin = projStart;
+	projected.diff = projEnd - projStart;
+
+	return projected;
+}
+
+bool MyMath::IsPointInTriangle(const Vector3& point, const Triangle& tri) {
+	const Vector3& a = tri.vertices[0];
+	const Vector3& b = tri.vertices[1];
+	const Vector3& c = tri.vertices[2];
+
+	//三角形の法線
+	Vector3 normal = Normalize(Cross(b - a, c - a));
+
+	//各辺に対するクロス積
+	Vector3 c0 = Cross(b - a, point - a);
+	Vector3 c1 = Cross(c - b, point - b);
+	Vector3 c2 = Cross(a - c, point - c);
+
+	//全てのクロス積が法線と同じ向きなら内側
+	if (Dot(c0, normal) >= 0.0f &&
+		Dot(c1, normal) >= 0.0f &&
+		Dot(c2, normal) >= 0.0f) {
+		return true;
+	}
+
+	return false;
+}
+
+Vector3 MyMath::IntersectionSegmentToSegment(const Segment& s1, const Segment& s2) {
+	const Vector3 p1 = s1.origin;
+	const Vector3 p2 = s1.origin + s1.diff;
+	const Vector3 q1 = s2.origin;
+	const Vector3 q2 = s2.origin + s2.diff;
+
+	const Vector3 u = p2 - p1; // s1方向ベクトル
+	const Vector3 v = q2 - q1; // s2方向ベクトル
+	const Vector3 w = p1 - q1;
+
+	float a = Dot(u, u); // |u|^2
+	float b = Dot(u, v);
+	float c = Dot(v, v); // |v|^2
+	float d = Dot(u, w);
+	float e = Dot(v, w);
+
+	float D = a * c - b * b; // 平行なら0
+
+	float sc, tc;
+
+	if (D < epsilon) {
+		// ほぼ平行
+		sc = 0.0f;
+		tc = (b > c ? d / b : e / c);
+	}
+	else {
+		sc = (b * e - c * d) / D;
+		tc = (a * e - b * d) / D;
+	}
+
+	// パラメータを[0,1]にクランプ
+	sc = std::clamp(sc, 0.0f, 1.0f);
+	tc = std::clamp(tc, 0.0f, 1.0f);
+
+	// 交点（どちらの線分を使っても同じはず）
+	Vector3 pointOnS1 = p1 + u * sc;
+	Vector3 pointOnS2 = q1 + v * tc;
+
+	// 最短距離が0前提なら、両点はほぼ一致している
+	return (pointOnS1 + pointOnS2) * 0.5f; // 安定化のため中点を採用
 }
 
 ///------------------------------------///
