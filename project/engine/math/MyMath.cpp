@@ -1140,7 +1140,7 @@ bool MyMath::IsCollision(const Plane& plane, const Capsule& capsule) {
 }
 
 bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
-	//重複処理防止ラムダ式
+	//三角形を線分に分ける処理
 	auto makeTriangleSegments = [](const Triangle& tri) -> std::vector<Segment> {
 		return {
 			{ tri.vertices[0], tri.vertices[1] - tri.vertices[0] },
@@ -1148,6 +1148,42 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 			{ tri.vertices[2], tri.vertices[0] - tri.vertices[2] }
 		};
 		};
+	//線分同士の距離による判定
+	auto judgeSegmentsDistance = [&]() -> bool {
+		//三角形を線分に分解する
+		std::vector<Segment> s;
+		s = makeTriangleSegments(tri);
+		//カプセル線分と三角形線分を比較し、一番短いのを選別する
+		float d1, d2, d3;
+		d1 = DistanceSegmentToSegment(capsule.segment, s[0]);
+		d2 = DistanceSegmentToSegment(capsule.segment, s[1]);
+		d3 = DistanceSegmentToSegment(capsule.segment, s[2]);
+		float distanceOfMin = std::min(d1, std::min(d2, d3));
+		//最短距離をカプセルの半径と比較して判定する
+		if (distanceOfMin < capsule.radius) {
+			//衝突してる
+			return true;
+		}
+		else {
+			//衝突してない
+			return false;
+		}
+		};
+	//点と線分の距離による判定
+	auto judgePointToSegmentDistance = [&](const Vector3& point, const Segment& segment)->bool {
+		if (DistancePointToSegment(point, segment) < capsule.radius) {
+			//衝突してる
+			return true;
+		}
+		else {
+			//衝突してない
+			return false;
+		}
+		};
+
+	//三角形を線分に分解する
+	std::vector<Segment> triSegments;
+	triSegments = makeTriangleSegments(tri);
 
 	//カプセル内部の線分が三角形平面と平行かどうかの判定を行う
 	Plane triPlane = MakePlane(tri);
@@ -1170,45 +1206,29 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 				point = ep;
 			}
 
-			//三角形を線分に分解する
-			Segment s1, s2, s3;
-			s1.origin = tri.vertices[0];
-			s1.diff = tri.vertices[1] - tri.vertices[0];
-			s2.origin = tri.vertices[1];
-			s2.diff = tri.vertices[2] - tri.vertices[1];
-			s3.origin = tri.vertices[2];
-			s3.diff = tri.vertices[0] - tri.vertices[2];
 			//射影線分と各線分の交差点を求める(どこでもいいのでelse if)
-			if (DistanceSegmentToSegment(projSeg, s1) < epsilon) {
-				point = IntersectionSegmentToSegment(projSeg, s1);
+			if (DistanceSegmentToSegment(projSeg, triSegments[0]) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, triSegments[0]);
 			}
-			else if (DistanceSegmentToSegment(projSeg, s2) < epsilon) {
-				point = IntersectionSegmentToSegment(projSeg, s2);
+			else if (DistanceSegmentToSegment(projSeg, triSegments[1]) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, triSegments[1]);
 			}
-			else if (DistanceSegmentToSegment(projSeg, s3) < epsilon) {
-				point = IntersectionSegmentToSegment(projSeg, s3);
+			else if (DistanceSegmentToSegment(projSeg, triSegments[2]) < epsilon) {
+				point = IntersectionSegmentToSegment(projSeg, triSegments[2]);
 			}
 			//ポイントが求まったのでそのポイントとカプセル線分との距離を求める
 			distanceOfMin = DistancePointToSegment(point, capsule.segment);
 		}
 		else {
-			//三角形を線分に分解する
-			Segment s1, s2, s3;
-			s1.origin = tri.vertices[0];
-			s1.diff = tri.vertices[1] - tri.vertices[0];
-			s2.origin = tri.vertices[1];
-			s2.diff = tri.vertices[2] - tri.vertices[1];
-			s3.origin = tri.vertices[2];
-			s3.diff = tri.vertices[0] - tri.vertices[2];
 			//カプセル線分と三角形線分を比較し、一番短いのを選別する
 			float d1, d2, d3;
-			d1 = DistanceSegmentToSegment(capsule.segment, s1);
-			d2 = DistanceSegmentToSegment(capsule.segment, s2);
-			d3 = DistanceSegmentToSegment(capsule.segment, s3);
+			d1 = DistanceSegmentToSegment(capsule.segment, triSegments[0]);
+			d2 = DistanceSegmentToSegment(capsule.segment, triSegments[1]);
+			d3 = DistanceSegmentToSegment(capsule.segment, triSegments[2]);
 			distanceOfMin = std::min(d1, std::min(d2, d3));
 		}
 		//求めた最短距離とカプセルの半径を比較して判定処理を行う
-		if (distanceOfMin <= capsule.radius) {
+		if (distanceOfMin < capsule.radius) {
 			//衝突してる
 			return true;
 		}
@@ -1234,7 +1254,7 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 				//交差点と三角形の(三角形上の)最近接点を求める
 				Vector3 cp = ClosestPoint(crossPoint, tri);
 				//交差点→最近接点の距離とカプセルの半径を比較して衝突判定をとる
-				if (Vector3(cp - crossPoint).Length() <= capsule.radius) {
+				if (Vector3(cp - crossPoint).Length() < capsule.radius) {
 					//衝突してる
 					return true;
 				}
@@ -1251,29 +1271,8 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 				return true;
 			}
 			else {
-				//三角形を線分に分解する
-				Segment s1, s2, s3;
-				s1.origin = tri.vertices[0];
-				s1.diff = tri.vertices[1] - tri.vertices[0];
-				s2.origin = tri.vertices[1];
-				s2.diff = tri.vertices[2] - tri.vertices[1];
-				s3.origin = tri.vertices[2];
-				s3.diff = tri.vertices[0] - tri.vertices[2];
-				//カプセル線分と三角形線分を比較し、一番短いのを選別する
-				float d1, d2, d3;
-				d1 = DistanceSegmentToSegment(capsule.segment, s1);
-				d2 = DistanceSegmentToSegment(capsule.segment, s2);
-				d3 = DistanceSegmentToSegment(capsule.segment, s3);
-				float distanceOfMin = std::min(d1, std::min(d2, d3));
-				//最短距離をカプセルの半径と比較して判定する
-				if (distanceOfMin <= capsule.radius) {
-					//衝突してる
-					return true;
-				}
-				else {
-					//衝突してない
-					return false;
-				}
+				//線分同士の距離による判定
+				return judgeSegmentsDistance();
 			}
 		}
 	}
@@ -1296,15 +1295,7 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 			//射影点の三角形の内外判定をとる
 			if (IsPointInTriangle(projPoint, tri)) {
 				//射影点→カプセル線分の最短距離とカプセルの半径を比較して判定
-				float distanceOfMin = DistancePointToSegment(projPoint, capsule.segment);
-				if (distanceOfMin <= capsule.radius) {
-					//衝突してる
-					return true;
-				}
-				else {
-					//衝突してない
-					return false;
-				}
+				return judgePointToSegmentDistance(projPoint, capsule.segment);
 			}
 			else {
 				//交差点→射影点の線分を作る
@@ -1312,51 +1303,27 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 					.origin = crossPoint,
 					.diff = projPoint - crossPoint
 				};
-				//三角形を線分に分解する
-				Segment s1, s2, s3;
-				s1.origin = tri.vertices[0];
-				s1.diff = tri.vertices[1] - tri.vertices[0];
-				s2.origin = tri.vertices[1];
-				s2.diff = tri.vertices[2] - tri.vertices[1];
-				s3.origin = tri.vertices[2];
-				s3.diff = tri.vertices[0] - tri.vertices[2];
+				//平行かを調べる
+				if (CheckParallel(segment, triPlane)) {
+					int a = 0;
+				}
+
 				//線分同士がぶつかっているペアに限ってその交差点を求める
 				Vector3 crossPoint2;
-				if (DistanceSegmentToSegment(segment, s1) < epsilon) {
-					crossPoint2 = IntersectionSegmentToSegment(segment, s1);
+				if (DistanceSegmentToSegment(segment, triSegments[0]) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, triSegments[0]);
 					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
-					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
-						//衝突してる
-						return true;
-					}
-					else {
-						//衝突してない
-						return false;
-					}
+					return judgePointToSegmentDistance(crossPoint2, capsule.segment);
 				}
-				else if (DistanceSegmentToSegment(segment, s2) < epsilon) {
-					crossPoint2 = IntersectionSegmentToSegment(segment, s2);
+				else if (DistanceSegmentToSegment(segment, triSegments[1]) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, triSegments[1]);
 					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
-					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
-						//衝突してる
-						return true;
-					}
-					else {
-						//衝突してない
-						return false;
-					}
+					return judgePointToSegmentDistance(crossPoint2, capsule.segment);
 				}
-				else if (DistanceSegmentToSegment(segment, s3) < epsilon) {
-					crossPoint2 = IntersectionSegmentToSegment(segment, s3);
+				else if (DistanceSegmentToSegment(segment, triSegments[2]) < epsilon) {
+					crossPoint2 = IntersectionSegmentToSegment(segment, triSegments[2]);
 					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
-					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
-						//衝突してる
-						return true;
-					}
-					else {
-						//衝突してない
-						return false;
-					}
+					return judgePointToSegmentDistance(crossPoint2, capsule.segment);
 				}
 			}
 		}
@@ -1382,36 +1349,21 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 				//求めた射影点で三角形の内外判定
 				if (IsPointInTriangle(projPoint, tri)) {
 					//射影点→線分の長さとカプセルの半径を比較して判定
-					if (DistancePointToSegment(projPoint, capsule.segment) <= capsule.radius) {
-						//衝突してる
-						return true;
-					}
-					else {
-						//衝突してない
-						return false;
-					}
+					return judgePointToSegmentDistance(projPoint, capsule.segment);
 				}
 				else {
-					//三角形を線分に分解する
-					Segment s1, s2, s3;
-					s1.origin = tri.vertices[0];
-					s1.diff = tri.vertices[1] - tri.vertices[0];
-					s2.origin = tri.vertices[1];
-					s2.diff = tri.vertices[2] - tri.vertices[1];
-					s3.origin = tri.vertices[2];
-					s3.diff = tri.vertices[0] - tri.vertices[2];
 					//射影線分と三角形線分の衝突判定
 					Vector3 crossPoint2;
 					bool isCompetition = false;
-					if (DistanceSegmentToSegment(projSegment, s1) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[0]) <= epsilon) {
 						//交点を求める
-						crossPoint2 = IntersectionSegmentToSegment(projSegment, s1);
+						crossPoint2 = IntersectionSegmentToSegment(projSegment, triSegments[0]);
 						isCompetition = true;
 					}
-					if (DistanceSegmentToSegment(projSegment, s2) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[1]) <= epsilon) {
 						//競合していたら旧交点と比較
 						if (isCompetition) {
-							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, s2);
+							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, triSegments[1]);
 							//新交点→射影点の方が短い場合
 							if (Vector3(projPoint - newCrossPoint).Length() < Vector3(projPoint - crossPoint2).Length()) {
 								//交点を更新
@@ -1420,14 +1372,14 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 						}
 						else {
 							//交点を求める
-							crossPoint2 = IntersectionSegmentToSegment(projSegment, s2);
+							crossPoint2 = IntersectionSegmentToSegment(projSegment, triSegments[1]);
 						}
 						isCompetition = true;
 					}
-					if (DistanceSegmentToSegment(projSegment, s3) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[2]) <= epsilon) {
 						//競合していたら旧交点と比較
 						if (isCompetition) {
-							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, s2);
+							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, triSegments[1]);
 							//新交点→射影点の方が短い場合
 							if (Vector3(projPoint - newCrossPoint).Length() < Vector3(projPoint - crossPoint2).Length()) {
 								//交点を更新
@@ -1436,47 +1388,20 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 						}
 						else {
 							//交点を求める
-							crossPoint2 = IntersectionSegmentToSegment(projSegment, s2);
+							crossPoint2 = IntersectionSegmentToSegment(projSegment, triSegments[1]);
 						}
 					}
 					//一番カプセル線分に近い射影線分と三角形の交点が求まったのでカプセル半径と比較して判定
-					if (DistancePointToSegment(crossPoint2, capsule.segment) <= capsule.radius) {
-						//衝突してる
-						return true;
-					}
-					else {
-						//衝突してない
-						return false;
-					}
+					return judgePointToSegmentDistance(crossPoint2, capsule.segment);
 				}
 			}
 			else {
-				//三角形を線分に分解する
-				Segment s1, s2, s3;
-				s1.origin = tri.vertices[0];
-				s1.diff = tri.vertices[1] - tri.vertices[0];
-				s2.origin = tri.vertices[1];
-				s2.diff = tri.vertices[2] - tri.vertices[1];
-				s3.origin = tri.vertices[2];
-				s3.diff = tri.vertices[0] - tri.vertices[2];
-				//カプセル線分と三角形線分を比較し、一番短いのを選別する
-				float d1, d2, d3;
-				d1 = DistanceSegmentToSegment(capsule.segment, s1);
-				d2 = DistanceSegmentToSegment(capsule.segment, s2);
-				d3 = DistanceSegmentToSegment(capsule.segment, s3);
-				float distanceOfMin = std::min(d1, std::min(d2, d3));
-				//最短距離をカプセルの半径と比較して判定する
-				if (distanceOfMin <= capsule.radius) {
-					//衝突してる
-					return true;
-				}
-				else {
-					//衝突してない
-					return false;
-				}
+				//線分同士の距離による判定
+				return judgeSegmentsDistance();
 			}
 		}
 	}
+	assert(0 && "ここに来るのはありえない");
 }
 
 bool MyMath::IsCollision(const Triangle& tri, const Capsule& capsule) {
@@ -1523,7 +1448,6 @@ bool MyMath::IsCollision(const Segment& segment, const Triangle& triangle) {
 		else if (DistanceSegmentToSegment(segment, s3) < epsilon) {
 			return true;
 		}
-
 
 		//平行かつ線分が三角形内部に存在しない
 		return false;
@@ -2479,7 +2403,8 @@ float MyMath::DistanceSegmentToSegment(const Segment& s1, const Segment& s2) {
 	Vector3 closestOnS2 = p2 + t * v;
 
 	//距離を返す
-	return Length(closestOnS1 - closestOnS2);
+	float distance = Length(closestOnS1 - closestOnS2);
+	return distance;
 }
 
 Vector3 MyMath::ClosestPoint(const Vector3& point, const Plane& plane) {

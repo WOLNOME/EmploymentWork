@@ -18,7 +18,7 @@ const float kDeltaTime = 1.0f / 60.0f;
 //π
 const float pi = std::numbers::pi_v<float>;
 //許容数(限りなく0.0fに近い値)
-const float epsilon = 1e-6f;
+const float epsilon = 1e-4f;
 
 ///------------------------------------///
 ///             列挙体
@@ -868,7 +868,7 @@ public:
 
 private:
 	///------------------------------------///
-	///          当たり判定補助関数
+	///          補助関数
 	///------------------------------------///
 
 	/// <summary>
