@@ -1303,11 +1303,6 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 					.origin = crossPoint,
 					.diff = projPoint - crossPoint
 				};
-				//平行かを調べる
-				if (CheckParallel(segment, triPlane)) {
-					int a = 0;
-				}
-
 				//線分同士がぶつかっているペアに限ってその交差点を求める
 				Vector3 crossPoint2;
 				if (DistanceSegmentToSegment(segment, triSegments[0]) < epsilon) {
@@ -1324,6 +1319,10 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 					crossPoint2 = IntersectionSegmentToSegment(segment, triSegments[2]);
 					//求めた交差点→カプセル線分の最短距離をカプセルと比較して判定
 					return judgePointToSegmentDistance(crossPoint2, capsule.segment);
+				}
+				else {
+					//本来ここは通らない
+					return false;
 				}
 			}
 		}
@@ -1355,12 +1354,12 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 					//射影線分と三角形線分の衝突判定
 					Vector3 crossPoint2;
 					bool isCompetition = false;
-					if (DistanceSegmentToSegment(projSegment, triSegments[0]) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[0]) < epsilon) {
 						//交点を求める
 						crossPoint2 = IntersectionSegmentToSegment(projSegment, triSegments[0]);
 						isCompetition = true;
 					}
-					if (DistanceSegmentToSegment(projSegment, triSegments[1]) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[1]) < epsilon) {
 						//競合していたら旧交点と比較
 						if (isCompetition) {
 							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, triSegments[1]);
@@ -1376,7 +1375,7 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 						}
 						isCompetition = true;
 					}
-					if (DistanceSegmentToSegment(projSegment, triSegments[2]) <= epsilon) {
+					if (DistanceSegmentToSegment(projSegment, triSegments[2]) < epsilon) {
 						//競合していたら旧交点と比較
 						if (isCompetition) {
 							Vector3 newCrossPoint = IntersectionSegmentToSegment(projSegment, triSegments[1]);
@@ -1401,7 +1400,6 @@ bool MyMath::IsCollision(const Capsule& capsule, const Triangle& tri) {
 			}
 		}
 	}
-	assert(0 && "ここに来るのはありえない");
 }
 
 bool MyMath::IsCollision(const Triangle& tri, const Capsule& capsule) {

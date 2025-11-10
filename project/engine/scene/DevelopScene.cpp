@@ -171,27 +171,6 @@ void DevelopScene::Update() {
 	TextTextureManager::GetInstance()->EditTextString(textHandle_, L"フォント確認 0123 abcDEF\n現在時刻 : {:.1f}", time_);
 
 	bool testCaseJudge = false;
-
-	// 当たっていない
-	{
-		// Capsule
-		Capsule capsule;
-		capsule.segment.origin = { 219.313263f, 4.97527409f, -31.2826023f };
-		capsule.segment.diff = { -0.586914062f, -0.00682067871f, -1.52366829f };
-		capsule.radius = 1.0f;
-
-		// OBB
-		OBB obb;
-		obb.center = { 193.964844f, 2.70000005f, -107.323105f };
-		obb.orientations[0] = { 0.0781016052f, 0.0f, -0.996945381f };
-		obb.orientations[1] = { 0.0f, 1.0f, 0.0f };
-		obb.orientations[2] = { 0.996945381f, 0.0f, 0.0781016052f };
-		obb.size = { 4.0f, 2.0f, 4.0f };
-
-		testCaseJudge = MyMath::IsCollision(capsule, obb);
-	}
-
-	int a = 0;
 }
 
 void DevelopScene::DebugWithImGui() {
