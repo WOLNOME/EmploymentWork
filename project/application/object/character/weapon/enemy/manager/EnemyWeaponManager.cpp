@@ -126,7 +126,7 @@ void EnemyWeaponManager::CreateBomb() {
 			//爆弾が生きていたら次へ
 			if (!bomb->GetIsDead()) continue;
 			//爆弾の初期位置と目標位置をセット
-			Vector3 bombPos = jet->GetWorldTransform().translate;
+			Vector3 bombPos = jet->GetWorldTransform().worldTranslate;
 			bomb->SetInitParam(bombPos, { 0.0f,0.0f,0.0f });
 			//投下不可能状態に移行
 			jet->GetAttackState()->SetIsCanBombFire(false);

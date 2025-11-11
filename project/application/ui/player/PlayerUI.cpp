@@ -42,6 +42,15 @@ void PlayerUI::Initialize() {
 	//アイテムUI
 	itemUI_ = std::make_unique<ItemUI>();
 	itemUI_->Initialize();
+
+	//操作UI
+	operationUI_ = std::make_unique<OperationUI>();
+	operationUI_->Initialize();
+
+	//移動レバーUI
+	moveLeverUI_ = std::make_unique<MoveLever>();
+	moveLeverUI_->Initialize();
+
 }
 
 void PlayerUI::Update() {
@@ -62,6 +71,10 @@ void PlayerUI::Update() {
 	hitIndicator_->Update();
 	//アイテムUIの更新
 	itemUI_->Update();
+	//操作UIの更新
+	operationUI_->Update();
+	//移動レバーUIの更新
+	moveLeverUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -129,6 +142,8 @@ void PlayerUI::DamageShaking() {
 		bulletUI_->AttachShake(offset);
 		radar_->AttachShake(offset);
 		itemUI_->AttachShake(offset);
+		operationUI_->AttachShake(offset);
+		moveLeverUI_->AttachShake(offset);
 	}
 }
 
@@ -147,6 +162,11 @@ void PlayerUI::DamageBlinking() {
 		radar_->AttachBlinking(color);
 		//アイテムUI
 		itemUI_->AttachBlinking(color);
+		//操作UI
+		operationUI_->AttachBlinking(color);
+		//移動レバーUI
+		moveLeverUI_->AttachBlinking(color);
+
 		};
 
 	//被弾開始時または死亡演出中に点滅開始

@@ -9,6 +9,8 @@
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
 #include "detail/ItemUI.h"
+#include "detail/OperationUI.h"
+#include "detail/MoveLever.h"
 
 class Player;
 class EnemyManager;
@@ -115,6 +117,11 @@ private:
 	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
 	//アイテムUI
 	std::unique_ptr<ItemUI> itemUI_ = nullptr;
+	//操作UI
+	std::unique_ptr<OperationUI> operationUI_ = nullptr;
+	//移動レバーUI
+	std::unique_ptr<MoveLever> moveLeverUI_ = nullptr;
+
 
 	//パラメーター
 	json param_;

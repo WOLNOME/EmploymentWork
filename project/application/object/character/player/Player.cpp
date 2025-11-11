@@ -50,6 +50,8 @@ void Player::Initialize() {
 	item_moveSpeedUp_ = 0;
 	item_turnSpeedUp_ = 0;
 
+	circleShadow_->SetIsDisplay(false);
+
 }
 
 void Player::Update() {
