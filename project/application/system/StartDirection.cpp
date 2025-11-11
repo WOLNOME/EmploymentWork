@@ -10,7 +10,7 @@ void StartDirection::Initialize() {
 	//マスクスプライトの生成・初期化
 	uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("blue.png");
 	maskSprite_ = std::make_unique<Sprite>();
-	maskSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("startMask"), Sprite::Order::Front0, textureHandle);
+	maskSprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("startMask"), Order::Front0, textureHandle);
 	maskSprite_->SetPosition({ 640.0f,360.0f });
 	maskSprite_->SetSize({ 1280.0f,720.0f });
 	maskSprite_->SetAnchorPoint({ 0.5f,0.5f });

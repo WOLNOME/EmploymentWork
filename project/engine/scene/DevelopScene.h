@@ -82,5 +82,9 @@ private:
 	Handle textHandle_;
 	std::unique_ptr<Sprite> text_ = nullptr;
 
+	//UVスクロール
+	std::unique_ptr<Sprite> uvScroll_ = nullptr;
+	uint32_t textureHandleUV = 0u;
+
 };
 

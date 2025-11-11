@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const Vector3& _initPos);
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -30,6 +30,17 @@ public:
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
+
+	/// ============================== ///
+	///		settter
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期ポジションの設定
+	/// </summary>
+	/// <param name="initPos_">初期ポジション</param>
+	void SetInitPos(const Vector3& _initPos);
+	
 
 private:
 	/// ============================== ///

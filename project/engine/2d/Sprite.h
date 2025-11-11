@@ -5,47 +5,75 @@
 #include "MyMath.h"
 #include "Handle.h"
 
+//初期化用のタグ
+struct SpriteTag {};
+struct UVScrollTag {};
+struct TextTag {};
+
+/// ============================== ///
+///		列挙体
+/// ============================== ///
+
+/// <summary>
+/// スプライトの描画順タグ
+/// </summary>
+enum class Order {
+	Back0,
+	Back1,
+	Back2,
+	Back3,
+	Front0,
+	Front1,
+	Front2,
+	Front3,
+
+	SceneTransition,	//シーン遷移用のタグ
+
+	kMaxOrderNum,
+};
+
 /// <summary>
 /// スプライト単体の処理全般を管理するクラス
 /// </summary>
 class Sprite {
 	//スプライトマネージャーに公開
 	friend class SpriteManager;
-public:
+private:
 	/// ============================== ///
-	///		列挙体
+	///		列挙体(private)
 	/// ============================== ///
-
-	/// <summary>
-	/// 描画順タグ
-	/// </summary>
-	enum class Order {
-		Back0,
-		Back1,
-		Back2,
-		Back3,
-		Front0,
-		Front1,
-		Front2,
-		Front3,
-
-		SceneTransition,
-
-		kMaxOrderNum,
-	};
 
 	/// <summary>
 	/// テクスチャの種類
 	/// </summary>
 	enum class TextureKind {
 		Normal,
+		UVScroll,
 		Text,
 
 		kMaxTextureKindNum,
 	};
 
 	/// ============================== ///
-	///		構造体
+	///		構造体(private)
+	/// ============================== ///
+
+	/// <summary>
+	/// UVスクロール用のデータ構造体
+	/// </summary>
+	struct UVScrollData {
+		int sheetsNum;			//合計枚数
+		int currentSheetNum;	//現在のシートナンバー(0から始まる)
+		float switchTime;		//切り替え時間
+		float switchTimer;		//切り替えタイマー
+		bool isLoop;			//ループさせるか
+		bool isPlay;			//UVスクロールを動かす
+		bool isFinished;		//終了したか
+	};
+
+public:
+	/// ============================== ///
+	///		構造体(public)
 	/// ============================== ///
 
 	/// <summary>
@@ -99,22 +127,38 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// コンストラクタ
+	/// デストラクタ
 	/// </summary>
 	~Sprite();
 	/// <summary>
-	/// 初期化
+	/// 初期化(通常スプライト)
 	/// </summary>
+	/// <param name="">タグ</param>
 	/// <param name="_name">名前</param>
 	/// <param name="_order">描画順</param>
 	/// <param name="_textureHandle">テクスチャハンドル</param>
-	void Initialize(const std::string& _name, const Order& _order, uint32_t _textureHandle);
+	void Initialize(SpriteTag, const std::string& _name, const Order& _order, uint32_t _textureHandle);
 	/// <summary>
 	/// 初期化
 	/// </summary>
+	/// <param name="">タグ</param>
 	/// <param name="_name">名前</param>
 	/// <param name="_order">描画順</param>
-	void Initialize(const std::string& _name, const Order& _order);
+	/// <param name="_sheetsNum">連番枚数</param>
+	/// <param name="_switchTime">切り替えにかかる時間</param>
+	/// <param name="_textureHandle">テクスチャハンドル</param>
+	void Initialize(UVScrollTag, const std::string& _name, const Order& _order, int _sheetsNum, float _switchTime, bool _isLoop, uint32_t _textureHandle);
+	/// <summary>
+	/// 初期化(テキスト)
+	/// </summary>
+	/// <param name="">タグ</param>
+	/// <param name="_name">名前</param>
+	/// <param name="_order">描画順</param>
+	void Initialize(TextTag, const std::string& _name, const Order& _order);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -123,6 +167,7 @@ public:
 	/// ImGuiデバッグ表示
 	/// </summary>
 	void DebugWithImGui();
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -163,6 +208,11 @@ public:
 	/// テクスチャのサイズを取得する
 	/// </summary>
 	const Vector2& GetTextureSize() const { return textureSize; }
+	/// <summary>
+	/// UVスクロールの終了フラグを取得する(UVスクロールかつループしない設定のみ)
+	/// </summary>
+	/// <returns>UVスクロールの終了フラグ</returns>
+	bool GetIsFinishedUVScroll() const { return uvScrollData_.isFinished; }
 
 	/// ============================== ///
 	///		setter
@@ -233,6 +283,11 @@ public:
 	/// </summary>
 	/// <param name="_textureHandle">設定するテクスチャハンドル</param>
 	void SetTexture(uint32_t _textureHandle);
+	/// <summary>
+	/// UVスクロールの動作フラグを設定
+	/// </summary>
+	/// <param name="_isPlay">UVスクロールの動作フラグ</param>
+	void SetIsPlayUVScroll(bool _isPlay) { uvScrollData_.isPlay = _isPlay; }
 
 private:
 	/// ============================== ///
@@ -269,6 +324,7 @@ private:
 	//テクスチャの種類
 	TextureKind textureKind_ = TextureKind::kMaxTextureKindNum;
 
+
 	//パラメーター
 	Vector2 position = { 0.0f,0.0f };
 	float rotation = 0.0f;
@@ -286,6 +342,9 @@ private:
 	Vector2 shakeOffset_ = {};
 
 	bool isDisplay_ = true;
+
+	UVScrollData uvScrollData_ = {};	//UVスクロールのデータ
+
 
 };
 

@@ -17,36 +17,83 @@ private://コンストラクタ等の隠蔽
 	TextTextureRender(TextTextureRender&) = delete;//コピーコンストラクタ封印
 	TextTextureRender& operator=(TextTextureRender&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static TextTextureRender* GetInstance();
-public:
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//ビューポートとシザーのセッティング処理
+	/// <summary>
+	/// ビューポートを設定する
+	/// </summary>
+	/// <param name="_width">幅</param>
+	/// <param name="_height">高さ</param>
 	void SettingViewPort(UINT _width, UINT _height);
+	/// <summary>
+	/// シザー矩形を設定する
+	/// </summary>
+	/// <param name="_width">幅</param>
+	/// <param name="_height">高さ</param>
 	void SettingScissorRect(UINT _width, UINT _height);
-	//描画後処理
+	/// <summary>
+	/// 描画後の処理を行う
+	/// </summary>
 	void PostDraw();
-
-	//コマンドの準備
+	/// <summary>
+	/// 次のコマンドを実行する準備を行う
+	/// </summary>
 	void ReadyNextCommand();
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-private://生成系メンバ関数
-	void InitCommand();
-	void InitViewPort();
-	void InitScissorRect();
-
-public://getter
-	//コマンドアロケーター
+	/// <summary>
+	/// コマンドアロケーターを取得する
+	/// </summary>
+	/// <returns>コマンドアロケーター</returns>
 	ID3D12CommandAllocator* GetCommandAllocator() const { return commandAllocator.Get(); }
-	//コマンドリスト
+	/// <summary>
+	/// コマンドリストを取得する
+	/// </summary>
+	/// <returns>コマンドリスト</returns>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }
 
-private://メンバ変数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コマンドを初期化する
+	/// </summary>
+	void InitCommand();
+	/// <summary>
+	/// ビューポートを初期化する
+	/// </summary>
+	void InitViewPort();
+	/// <summary>
+	/// シザー矩形を初期化する
+	/// </summary>
+	void InitScissorRect();
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+	
 	//コマンドアロケーター
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
 	//コマンドリスト

@@ -44,6 +44,7 @@ void ItemManager::AddItem(const Vector3& _initPos) {
 
 	// アイテムの生成
 	std::unique_ptr<Item> item = std::make_unique<Item>();
-	item->Initialize(_initPos);
+	item->Initialize();
+	item->SetInitPos(_initPos);
 	items_.push_back(std::move(item)); // アイテムをコンテナに追加
 }

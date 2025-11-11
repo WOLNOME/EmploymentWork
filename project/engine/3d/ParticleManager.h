@@ -24,44 +24,100 @@ private://コンストラクタ等の隠蔽
 	ParticleManager(ParticleManager&) = delete;//コピーコンストラクタ封印
 	ParticleManager& operator=(ParticleManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static ParticleManager* GetInstance();
-public://メンバ関数
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	// 更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	// 描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//パーティクルをコンテナに登録
+	/// <summary>
+	/// パーティクルをコンテナに登録
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="particle">パーティクルのポインタ</param>
 	void RegisterParticle(const std::string& name, Particle* particle);
-	//登録されたパーティクルを削除
+	/// <summary>
+	/// 登録されたパーティクルを削除
+	/// </summary>
+	/// <param name="name">名前</param>
 	void DeleteParticle(const std::string& name);
 
-	//名前を決める関数
+	/// <summary>
+	/// 名前を決める関数
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <returns>重複しない名前</returns>
 	std::string GenerateName(const std::string& name);
 
-private://パーティクル全体の操作
-	//グラフィックスパイプライン
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラのセット
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	void SetCamera(BaseCamera* camera) { camera_ = camera; }
+
+
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// グラフィックスパイプライン
+	/// </summary>
 	void GenerateGraphicsPipeline();
-	//コンピュートパイプライン
+	/// <summary>
+	/// コンピュートパイプライン
+	/// </summary>
 	void GenerateComputePipeline();
 
-	//初期化用CPSOの設定
+	/// <summary>
+	/// CPSO(コンピュートパイプラインステートオブジェクト)の初期化
+	/// </summary>
 	void InitCPSOOption();
-	//エミット用CPSOの設定
+	/// <summary>
+	/// CPSO(コンピュートパイプラインステートオブジェクト)の発行
+	/// </summary>
 	void EmitCPSOOption();
-	//更新用CPSOの設定
+	/// <summary>
+	/// CPSO(コンピュートパイプラインステートオブジェクト)の更新
+	/// </summary>
 	void UpdateCPSOOption();
 
-public://セッター
-	void SetCamera(BaseCamera* camera) { camera_ = camera; }
-private://インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	BaseCamera* camera_ = nullptr;
-private://メンバ変数
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//Gルートシグネチャ
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> gRootSignature = nullptr;
 	//グラフィックスパイプライン

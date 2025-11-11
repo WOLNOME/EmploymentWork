@@ -14,7 +14,14 @@ class CombinedParticle {
 	friend class ParticleManager;
 	//パーティクルクリエイターシーンに公開
 	friend class ParticleEditorScene;
-public://構造体
+public:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 複合パーティクル情報
+	/// </summary>
 	struct ComParticleInfo {
 		std::unique_ptr<Particle> particle; //パーティクル本体
 		float startTime = 0.0f; //発生開始時間(0~1)
@@ -22,17 +29,41 @@ public://構造体
 		bool isDisplay = true; //表示フラグ
 	};
 
-public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
 
 
-private://エディター専用
-	//新しいパーティクルを追加
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// パーティクルを追加
+	/// </summary>
+	/// <param name="_fileName">ファイル名</param>
+	/// <param name="_startTime">開始時間</param>
+	/// <param name="_endTime">終了時間</param>
+	/// <returns>ハンドル</returns>
 	uint32_t AddParticle(const std::string& _fileName, float _startTime, float _endTime);
-	//パーティクルを削除
+	/// <summary>
+	/// パーティクルを削除
+	/// </summary>
+	/// <param name="_id">ハンドル</param>
 	void RemoveParticle(uint32_t _id);
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//名前
 	std::string name_;
 

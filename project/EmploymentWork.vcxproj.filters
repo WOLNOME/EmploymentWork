@@ -426,6 +426,7 @@
       <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="application\system\StartDirection.cpp" />
+    <ClCompile Include="application\system\DeathDirection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -793,6 +794,7 @@
       <Filter>engine\collision</Filter>
     </ClInclude>
     <ClInclude Include="application\system\StartDirection.h" />
+    <ClInclude Include="application\system\DeathDirection.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

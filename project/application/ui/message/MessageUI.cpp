@@ -9,7 +9,7 @@ void MessageUI::Initialize() {
 
 	//スプライトの生成・初期化
 	for (int i = 0; i < kMaxSpriteNum_; ++i) {
-		sprites_[i].Initialize(SpriteManager::GetInstance()->GenerateName("messageUI"), Sprite::Order::Front2);
+		sprites_[i].Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("messageUI"), Order::Front2);
 		sprites_[i].SetIsDisplay(false);
 		sprites_[i].SetAnchorPoint({ 0.5f, 0.5f });
 	}

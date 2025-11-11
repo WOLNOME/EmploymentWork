@@ -21,37 +21,83 @@ private://シングルトン
 	~BulletTrailManager() = default;//デストラクタ隠蔽
 	BulletTrailManager(BulletTrailManager&) = delete;//コピーコンストラクタ封印
 	BulletTrailManager& operator=(BulletTrailManager&) = delete;//コピー代入演算子封印
-public://シングルトン
+public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returnsインスタンスreturns>
 	static BulletTrailManager* GetInstance();
-public://メンバ関数
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//オブジェクトをコンテナに登録
+	/// <summary>
+	/// 弾丸トレールの登録
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="bulletTrail">弾丸トレール</param>
 	void RegisterBulletTrail(const std::string& name, BulletTrail* bulletTrail);
-	//登録されたオブジェクトを削除
+	/// <summary>
+	/// 弾丸トレールの取得
+	/// </summary>
+	/// <param name="name">名前</param>
 	void DeleteBulletTrail(const std::string& name);
 
-	//名前を決める関数
+	/// <summary>
+	/// 名前の生成
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <returns>重複しない名前</returns>
 	std::string GenerateName(const std::string& name);
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラのセット
+	/// </summary>
+	/// <param name="_camera">カメラ</param>
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 
-private://非公開メンバ関数
-	//グラフィックスパイプライン
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// グラフィックスパイプラインの生成
+	/// </summary>
 	void GenerateGraphicsPipeline();
 
-private://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	BaseCamera* camera_ = nullptr;
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//ルートシグネチャ
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
 	//グラフィックスパイプライン

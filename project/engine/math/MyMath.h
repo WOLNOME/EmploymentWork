@@ -170,7 +170,7 @@ class LineDrawer;
 /// 数学関数を管理するクラス
 /// </summary>
 class MyMath {
-public://静的メンバ関数
+public:
 	///------------------------------------///
 	///              Vector2
 	///------------------------------------///
@@ -288,25 +288,11 @@ public://静的メンバ関数
 	/// <returns>正射影ベクトル</returns>
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 	/// <summary>
-	/// 最近接点
-	/// </summary>
-	/// <param name="point">座標</param>
-	/// <param name="segment">対象の線分</param>
-	/// <returns>最近接点</returns>
-	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
-	/// <summary>
 	/// 平面の法線から矩形を構成する4頂点をもとめる
 	/// </summary>
 	/// <param name="vector">法線</param>
 	/// <returns>頂点の座標</returns>
 	static Vector3 Perpendicular(const Vector3& vector);
-	/// <summary>
-	/// 点とAABBの最近接点をもとめる
-	/// </summary>
-	/// <param name="point">座標</param>
-	/// <param name="aabb">AABB</param>
-	/// <returns>最近接点の座標</returns>
-	static Vector3 ClosestPoint(const Vector3& point, const AABB& aabb);
 	/// <summary>
 	/// 平面と直線の衝突点をもとめる
 	/// </summary>
@@ -875,6 +861,38 @@ public://静的メンバ関数
 	/// <param name="color">線の色</param>
 	static void CreateLineOBB(const OBB& obb, Vector4 color);
 
+private:
+	///------------------------------------///
+	///          当たり判定補助関数
+	///------------------------------------///
+
+	/// <summary>
+	/// 点と平面の距離を求める
+	/// </summary>
+	/// <param name="_point">点</param>
+	/// <param name="_plane">平面</param>
+	/// <returns>点と平面の距離</returns>
+	static float DistancePointToPlane(const Vector3& _point, const Plane& _plane);
+	/// <summary>
+	/// 点と線分の最近接点を求める
+	/// </summary>
+	/// <param name="point">座標</param>
+	/// <param name="segment">対象の線分</param>
+	/// <returns>最近接点</returns>
+	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+	/// <summary>
+	/// 点とAABBの最近接点をもとめる
+	/// </summary>
+	/// <param name="point">座標</param>
+	/// <param name="aabb">AABB</param>
+	/// <returns>最近接点の座標</returns>
+	static Vector3 ClosestPoint(const Vector3& point, const AABB& aabb);
+	/// <summary>
+	/// 三角形を含んでいる平面を作る
+	/// </summary>
+	/// <param name="tri">三角形</param>
+	/// <returns>三角形を含んでいる平面</returns>
+	static Plane MakePlane(const Triangle& tri);
 };
 
 ///------------------------------------///

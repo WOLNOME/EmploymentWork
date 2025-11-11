@@ -15,7 +15,7 @@ void ItemUI::Initialize() {
 	textureHandles_[2] = TextureManager::GetInstance()->LoadTexture("ItemUI_TurnSpeedUp.png");
 	for (int i = 0; i < sprites_.size(); i++) {
 		sprites_[i] = std::make_unique<Sprite>();
-		sprites_[i]->Initialize(SpriteManager::GetInstance()->GenerateName("PlayerItem"), Sprite::Order::Front2, textureHandles_[i]);
+		sprites_[i]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("PlayerItem"), Order::Front2, textureHandles_[i]);
 		sprites_[i]->SetPosition({ 150.0f,560.0f + (float)i * 60.0f });
 		sprites_[i]->SetSize({ (float)textureWidth_ / spriteStateNum_, (float)textureHeight_ });
 		sprites_[i]->SetAnchorPoint({ 0.5f, 0.5f });

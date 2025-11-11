@@ -14,34 +14,11 @@
 /// シングルトンパターンで実装
 /// </summary>
 class TextureManager {
-private://コンストラクタ等の隠蔽
-	static TextureManager* instance;
-
-	TextureManager() = default;
-	~TextureManager() = default;
-	TextureManager(TextureManager&) = delete;
-	TextureManager& operator=(TextureManager&) = delete;
-public://公開メンバ関数
-	//シングルトンインスタンスの取得
-	static TextureManager* GetInstance();
-	//初期化
-	void Initialize();
-	//終了
-	void Finalize();
-
-	//テクスチャファイル読み込み
-	uint32_t LoadTexture(const std::string& filePath);
-private://非公開メンバ関数
-	//テクスチャデータの転送
-	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
-public://ゲッター
-	//メタデータを取得
-	const DirectX::TexMetadata& GetMetaData(uint32_t textureHandle);
-	//SRVインデックスの取得
-	uint32_t GetSrvIndex(uint32_t textureHandle);
-	//GPUハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureHandle);
 private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
 	//テクスチャデータ
 	struct TextureData {
 		DirectX::TexMetadata metadata;
@@ -49,11 +26,87 @@ private:
 		uint32_t srvIndex;
 		std::string textureName;
 	};
+
+private://コンストラクタ等の隠蔽
+	static TextureManager* instance;
+
+	TextureManager() = default;
+	~TextureManager() = default;
+	TextureManager(TextureManager&) = delete;
+	TextureManager& operator=(TextureManager&) = delete;
 public:
-	//テクスチャデータの確保数
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returns>インスタンス</returns>
+	static TextureManager* GetInstance();
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
+	/// テクスチャファイルを読み込む
+	/// </summary>
+	/// <param name="filePath">テクスチャファイルのパス</param>
+	/// <returns>テクスチャハンドル</returns>
+	uint32_t LoadTexture(const std::string& filePath);
+
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// テクスチャのメタデータを取得する
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <returns>テクスチャのメタデータ</returns>
+	const DirectX::TexMetadata& GetMetaData(uint32_t textureHandle);
+	/// <summary>
+	/// SRVインデックスを取得する
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <returns>SRVインデックス</returns>
+	uint32_t GetSrvIndex(uint32_t textureHandle);
+	/// <summary>
+	/// GPUディスクリプタハンドルを取得する
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <returns>GPUディスクリプタハンドル</returns>
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureHandle);
+
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
+	//確保するテクスチャデータの最大数
 	static const uint32_t kNumTextureData = 512;
 
-private://メンバ変数
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// テクスチャデータをGPUに転送する
+	/// </summary>
+	/// <param name="texture">転送先のテクスチャリソース</param>
+	/// <param name="mipImages">ミップマップ画像データ</param>
+	/// <returns>アップロード済みのリソース</returns>
+	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	//テクスチャデータコンテナ(要素数がテクスチャハンドル)
 	std::array<std::optional<TextureData>, kNumTextureData> textureDatas;
 	//ディレクトリパス

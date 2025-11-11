@@ -34,7 +34,7 @@ void TitleSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
-		titleTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleUI"), Sprite::Order::Front0);
+		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleUI"), Order::Front0);
 		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,150.0f });
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		titleTextSprite_->SetTexture(titleTextHandle_);
@@ -58,7 +58,7 @@ void TitleSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(startTextHandle_, edgeParam);
 		//スプライト
 		startTextSprite_ = std::make_unique<Sprite>();
-		startTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Sprite::Order::Front0);
+		startTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
 		startTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
 		startTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		startTextSprite_->SetTexture(startTextHandle_);
@@ -100,7 +100,7 @@ void TitleSystem::DebugWithImGui() {
 void TitleSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE)) {
-		sceneManager_->SetNextScene("GamePlay",SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP,SceneTransitionAnimation::Option::SHAKE,1.0f,TextureManager::GetInstance()->LoadTexture("shutter.png"));
+		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"));
 	}
 
 	//Escapeキーで終了

@@ -10,19 +10,29 @@ class BaseCamera;
 /// 全てのライン描画を管理するクラス
 /// </summary>
 class LineManager {
-private://構造体
-	//頂点データ
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ構造体
+	/// </summary>
 	struct VertexForGPU {
 		Vector4 position;
 		float vertexIndex;
 	};
-	//座標変換行列データ(インスタンスごとに変えられるデータ)
+	/// <summary>
+	/// ラインデータ構造体(インスタンスごと)
+	/// </summary>
 	struct LineForGPU {
 		Vector4 start;
 		Vector4 end;
 		Vector4 color;
 	};
-	//線リソース作成用データ型
+	/// <summary>
+	/// ライン用リソース構造体
+	/// </summary>
 	struct LineResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -31,7 +41,9 @@ private://構造体
 		LineForGPU* instancingData;
 		uint32_t srvIndex;
 	};
-	//ライン情報(外から書き換える用)
+	/// <summary>
+	/// ライン構造体
+	/// </summary>
 	struct Line {
 		Vector4 start;
 		Vector4 end;
@@ -45,35 +57,76 @@ private://コンストラクタ等の隠蔽
 	LineManager(LineManager&) = delete;//コピーコンストラクタ封印
 	LineManager& operator=(LineManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// インスタンス取得関数
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static LineManager* GetInstance();
-public://メンバ関数
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//ライン作成関数
+	/// <summary>
+	/// ライン作成関数
+	/// </summary>
+	/// <param name="start">始点</param>
+	/// <param name="end">終点</param>
+	/// <param name="color">色</param>
 	void CreateLine(Vector3 start, Vector3 end, Vector4 color);
 
-public://setter
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラセット関数
+	/// </summary>
+	/// <param name="_camera">カメラ</param>
 	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
 
-private://非公開メンバ関数
-	//グラフィックスパイプライン
-	void GenerateGraphicsPipeline();
+private:
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
 
-	//ラインリソース作成関数
+	/// <summary>
+	/// グラフィックスパイプライン作成関数
+	/// </summary>
+	void GenerateGraphicsPipeline();
+	/// <summary>
+	/// ライン用リソース作成関数
+	/// </summary>
+	/// <returns></returns>
 	LineResource MakeLineResource();
-	//インスタンシングリソースにSRV用の設定をする
+	/// <summary>
+	/// SRV設定関数
+	/// </summary>
 	void SettingSRV();
 
-private://借用インスタンス
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
 	BaseCamera* camera_ = nullptr;
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//ルートシグネチャ
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
 	//グラフィックスパイプライン

@@ -1,6 +1,8 @@
 #pragma once
 
-//読み込むモデルの形式
+/// <summary>
+/// モデルフォーマットの種類
+/// </summary>
 enum ModelFormat {
 	OBJ,
 	GLTF,

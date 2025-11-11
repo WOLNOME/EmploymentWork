@@ -12,35 +12,43 @@
 /// オーディオ機能の共通処理
 /// </summary>
 class AudioCommon {
-private://シングルトン
-	static AudioCommon* instance;
+private:
+	/// ============================== ///
+	///		構造体(private)
+	/// ============================== ///
 
-	AudioCommon() = default;//コンストラクタ隠蔽
-	~AudioCommon() = default;//デストラクタ隠蔽
-	AudioCommon(AudioCommon&) = delete;//コピーコンストラクタ封印
-	AudioCommon& operator=(AudioCommon&) = delete;//コピー代入演算子封印
-public://シングルトン
-	static AudioCommon* GetInstance();
-private://非公開構造体
-	//チャンクヘッダ
+	/// <summary>
+	/// チャンクヘッダー
+	/// </summary>
 	struct ChunkHeader {
 		char id[4];
 		int32_t size;
 	};
 
-	//RIFFヘッダチャンク
+	/// <summary>
+	/// RIFFヘッダー
+	/// </summary>
 	struct RiffHeader {
 		ChunkHeader chunk;
 		char type[4];
 	};
 
-	//FMTチャンク
+	/// <summary>
+	/// フォーマットチャンク
+	/// </summary>
 	struct FormatChunk {
 		ChunkHeader chunk;
 		WAVEFORMATEX fmt;
 	};
-public://公開構造体
-	//音声データ
+
+public:
+	/// ============================== ///
+	///		構造体(public)
+	/// ============================== ///
+
+	/// <summary>
+	/// サウンドデータ
+	/// </summary>
 	struct SoundData {
 		//波形フォーマット
 		WAVEFORMATEX wfex;
@@ -51,7 +59,9 @@ public://公開構造体
 		//ファイルパス
 		std::string name;
 	};
-	// 再生データ
+	/// <summary>
+	/// ボイスデータ
+	/// </summary>
 	struct VoiceData {
 		//アクセスハンドル
 		uint32_t handle = 0u;
@@ -59,34 +69,102 @@ public://公開構造体
 		IXAudio2SourceVoice* sourceVoice = nullptr;
 	};
 
+private://シングルトン
+	static AudioCommon* instance;
+
+	AudioCommon() = default;//コンストラクタ隠蔽
+	~AudioCommon() = default;//デストラクタ隠蔽
+	AudioCommon(AudioCommon&) = delete;//コピーコンストラクタ封印
+	AudioCommon& operator=(AudioCommon&) = delete;//コピー代入演算子封印
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
+	static AudioCommon* GetInstance();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
+	/// <summary>
+	/// 音声データの読み込み
+	/// </summary>
+	/// <param name="filename">ファイルパス</param>
+	/// <returns>音声データハンドル</returns>
+	uint32_t SoundLoadWave(const std::string& filename);
+	/// <summary>
+	/// サウンドの再生
+	/// </summary>
+	/// <param name="soundDataHandle">音声データハンドル</param>
+	/// <param name="loop">ループするか</param>
+	/// <param name="volume">ボリューム(1.0fが通常)</param>
+	/// <returns>ボイスハンドル</returns>
+	uint32_t SoundPlayWave(uint32_t soundDataHandle, bool loop = false, float volume = 1.0f);
+	/// <summary>
+	/// サウンドの停止
+	/// </summary>
+	/// <param name="voiceHandle">ボイスハンドル</param>
+	void SoundStop(uint32_t voiceHandle);
+	/// <summary>
+	/// サウンドの一時停止
+	/// </summary>
+	/// <param name="voiceHandle">ボイスハンドル</param>
+	void SoundPause(uint32_t voiceHandle);
+	/// <summary>
+	/// サウンドの再開
+	/// </summary>
+	/// <param name="voiceHandle">ボイスハンドル</param>
+	void SoundResume(uint32_t voiceHandle);
+	/// <summary>
+	/// サウンドのボリューム設定
+	/// </summary>
+	/// <param name="voiceHandle">ボイスハンドル</param>
+	/// <param name="volume">ボリューム(1.0fが通常)</param>
+	void SetVolume(uint32_t voiceHandle, float volume);
+
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
 	// サウンドデータの最大数
 	static const int kMaxSoundData = 128;
 
-	//初期化
-	void Initialize();
-	//終了
-	void Finalize();
-	//音声データの読み込み
-	uint32_t SoundLoadWave(const std::string& filename);
-	//サウンドの再生
-	uint32_t SoundPlayWave(uint32_t soundDataHandle, bool loop = false, float volume = 1.0f);
-	//サウンドの停止
-	void SoundStop(uint32_t voiceHandle);
-	//サウンドの一時停止
-	void SoundPause(uint32_t voiceHandle);
-	//サウンドの再生再開
-	void SoundResume(uint32_t voiceHandle);
-	//音量の調整
-	void SetVolume(uint32_t voiceHandle, float volume);
-
 private:
+	/// ============================== ///
+	///		メンバ関数(private)
+	/// ============================== ///
+
+	/// <summary>
+	/// サウンドデータの解放
+	/// </summary>
+	/// <param name="soundData">サウンドデータ</param>
 	void SoundUnload(SoundData* soundData);
+	/// <summary>
+	/// サウンドデータコンテナのクリア
+	/// </summary>
 	void ClearSoundData();
+	/// <summary>
+	/// ボイスデータコンテナのクリア
+	/// </summary>
 	void ClearVoiceData();
+	/// <summary>
+	/// コンテナのシャットダウン
+	/// </summary>
 	void ShutdownContainer();
 
-private://メンバ変数
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//xAudio2
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_ = nullptr;
 	//マスターボイス

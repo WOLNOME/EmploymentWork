@@ -7,7 +7,9 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-//ポストエフェクトの種類
+/// <summary>
+/// ポストエフェクトの種類
+/// </summary>
 enum class PostEffectKind {
 	None,					// 何もしない
 	Grayscale,				// グレースケール
@@ -22,48 +24,69 @@ enum class PostEffectKind {
 
 	kMaxNumPostEffectKind,	// ポストエフェクトの最大数
 };
-//もしポストエフェクトを追加した場合
-//ルートシグネチャを追加したい場合は別途設定必須
-//グラフィックスパイプラインではPSを増やす
-//ImGuiにも追加しておく
-//描画の個別設定も別途必要
+/*もしポストエフェクトを追加した場合
+ルートシグネチャを追加したい場合は別途設定必須
+グラフィックスパイプラインではPSを増やす
+ImGuiにも追加しておく
+描画の個別設定も別途必要*/
 
 /// <summary>
 /// 全てのポストエフェクトを管理するクラス
 /// シングルトンパターンで実装
 /// </summary>
 class PostEffectManager {
-private://構造体
-	//ディゾルブ系
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// ディゾルブ用データ
+	/// </summary>
 	struct DissolveData {
 		float threshold;	//閾値
 
 		//追加予定項目
 		//全体の色、エッジの色、エッジの大きさ
 	};
+	/// <summary>
+	/// ディゾルブ用リソース
+	/// </summary>
 	struct DissolveResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		DissolveData* data;
 		uint32_t textureHandle;		//ディゾルブに使用するテクスチャ
 	};
-	//ランダム系
+	/// <summary>
+	/// ランダム用データ
+	/// </summary>
 	struct RandomData {
 		float seed;	//シード値
 	};
+	/// <summary>
+	/// ランダム用リソース
+	/// </summary>
 	struct RandomResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		RandomData* data;
 	};
-	//HSVフィルター系
+	/// <summary>
+	/// HSVフィルター用データ
+	/// </summary>
 	struct HSVFilterData {
 		Vector3 hsvColor;	//HSVの色
 	};
+	/// <summary>
+	/// HSVフィルター用リソース
+	/// </summary>
 	struct HSVFilterResource {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		HSVFilterData* data;
 	};
-	
-	//全ポストエフェクトのリソース管理用構造体
+
+	/// <summary>
+	/// 全ポストエフェクトのリソース管理用構造体
+	/// </summary>
 	struct PostEffectResource {
 		DissolveResource dissolveResource;
 		RandomResource randomResource;
@@ -78,39 +101,74 @@ private://コンストラクタ等の隠蔽
 	PostEffectManager(PostEffectManager&) = delete;//コピーコンストラクタ封印
 	PostEffectManager& operator=(PostEffectManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static PostEffectManager* GetInstance();
-public:
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//オブジェクト描画前処理
+	/// <summary>
+	/// オブジェクト描画前処理
+	/// </summary>
 	void PreObjectDraw();
 
-	//シーンのコピー
+	/// <summary>
+	/// シーンのコピー
+	/// </summary>
 	void CopySceneToRenderTexture();
 
-	//デバッグ用ImGui
+	/// <summary>
+	/// デバッグ用ImGui
+	/// </summary>
 	void DebugWithImGui();
 
-private://生成系メンバ関数
-
-	//オフスクの初期化
+	/// <summary>
+	/// オフスクの初期化
+	/// </summary>
 	void InitOffScreenRenderingOption();
-	//オフスクのグラフィックスパイプラインの生成
+	/// <summary>
+	/// オフスクのグラフィックスパイプラインの生成
+	/// </summary>
 	void GenerateRenderTextureGraphicsPipeline();
-	//固有リソースの初期化
+	/// <summary>
+	/// 固有リソースの初期化
+	/// </summary>
 	void InitUniqueResources();
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// ポストエフェクトの種類の設定
+	/// </summary>
+	/// <param name="_kind">ポストエフェクトの種類</param>
+	void SetPostEffect(const PostEffectKind& _kind) { currentPostEffectKind = _kind; }
+
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//レンダーテクスチャのリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource = nullptr;
 	//レンダーテクスチャのSRVインデックス
 	uint32_t srvIndex = 0;
 	//ルートシグネチャ
-	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>,(int)PostEffectKind::kMaxNumPostEffectKind> rootSignature;
+	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, (int)PostEffectKind::kMaxNumPostEffectKind> rootSignature;
 	//グラフィックスパイプライン
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)PostEffectKind::kMaxNumPostEffectKind> graphicsPipelineState;
 	//RTVのディスクリプタハンドル

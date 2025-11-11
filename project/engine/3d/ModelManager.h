@@ -18,19 +18,43 @@ private://コンストラクタ等の隠蔽
 	ModelManager(ModelManager&) = delete;//コピーコンストラクタ封印
 	ModelManager& operator=(ModelManager&) = delete;//コピー代入演算子封印
 public:
-	//シングルトンインスタンスの取得
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	///	シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static ModelManager* GetInstance();
-	//初期化
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-	//終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//通常モデル読み込み関数
+	/// <summary>
+	/// モデルデータ読み込み関数
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	/// <param name="format">読み込むモデルの形式</param>
 	void LoadModel(const std::string& filePath, ModelFormat format = OBJ);
-	//通常モデルデータ取得関数
+	/// <summary>
+	/// モデルデータ検索関数
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	/// <returns>モデルデータ</returns>
 	Model* FindModel(const std::string& filePath);
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//モデルデータ
 	std::map<std::string, std::unique_ptr<Model>> models_;
 

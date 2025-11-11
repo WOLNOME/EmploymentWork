@@ -6,7 +6,9 @@
 #include "Vector4.h"
 #include "Vector3.h"
 
-// データ構造体(サイズが16の倍数になるようにパディングする！)
+/// <summary>
+/// データ構造体(サイズが16の倍数になるようにパディングする！)
+/// </summary>
 struct SpotLightData {
 	Vector4 color;					//ライトの色
 	Vector3 position;				//ライトの位置
@@ -18,11 +20,16 @@ struct SpotLightData {
 	float cosFalloffStart = 0.0f;	//フォールオフの開始角度
 	uint32_t isActive = 0u;			//稼働させるか
 };
+
 /// <summary>
 /// スポットライト
 /// </summary>
 class SpotLight {
 public:
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
 	//色
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//向き
@@ -42,9 +49,18 @@ public:
 	//オンオフ
 	bool isActive_ = true;
 
-	SpotLight() = default;
-	~SpotLight() = default;
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	SpotLight() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~SpotLight() = default;
 	/// <summary>
 	/// 行列の更新
 	/// </summary>
@@ -60,6 +76,10 @@ public:
 	void DebugWithImGui(const std::wstring& _name);
 
 private:
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+
 	//データ
 	SpotLightData data_;
 

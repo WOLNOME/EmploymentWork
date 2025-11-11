@@ -20,15 +20,23 @@
 /// アニメーションモデルの処理を行うクラス
 /// </summary>
 class AnimationModel {
-private://アニメーション関連構造体
-	//頂点データ
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// 頂点データ
+	/// </summary>
 	struct VertexData {
 		Vector4 position;
 		Vector2 texcoord;
 		Vector3 normal;
 	};
-	//キーフレーム
 	template <typename tValue>
+	/// <summary>
+	/// キーフレーム
+	/// </summary>
 	struct Keyframe {
 		float time;
 		tValue value;
@@ -37,22 +45,31 @@ private://アニメーション関連構造体
 	using keyframeQuaternion = Keyframe<Quaternion>;
 	//ノードアニメーション
 	template <typename tValue>
+	/// <summary>
+	/// アニメーションカーブ
+	/// </summary>
 	struct AnimationCurve {
 		std::vector<Keyframe<tValue>> keyframes;
 	};
-
+	/// <summary>
+	/// ノードアニメーション
+	/// </summary>
 	struct NodeAnimation {
 		AnimationCurve<Vector3> translate;
 		AnimationCurve<Quaternion> rotate;
 		AnimationCurve<Vector3> scale;
 	};
-	//アニメーション
+	/// <summary>
+	/// アニメーション
+	/// </summary>
 	struct Animation {
 		float duration;//アニメーション全体の尺(秒)
 		//NodeAnimationの集合、Node名で開けるようにしておく
 		std::map<std::string, NodeAnimation> nodeAnimations;
 	};
-	//joint
+	/// <summary>
+	/// ジョイント(骨)
+	/// </summary>
 	struct Joint {
 		TransformQuaternion transform;
 		Matrix4x4 localMatrix;
@@ -62,39 +79,53 @@ private://アニメーション関連構造体
 		int32_t index;
 		std::optional<int32_t> parent;
 	};
-	//skeleton
+	/// <summary>
+	/// スケルトン
+	/// </summary>
 	struct Skeleton {
 		int32_t root;
 		std::map<std::string, int32_t> jointMap;
 		std::vector<Joint> joints;
 	};
-	//頂点ウェイト
+	/// <summary>
+	/// 頂点ウェイト
+	/// </summary>
 	struct VertexWeightData {
 		float weight;
 		uint32_t vertexIndex;
 	};
-	//ジョイントウェイト
+	/// <summary>
+	/// ジョイントウェイトデータ
+	/// </summary>
 	struct JointWeightData {
 		Matrix4x4 inverseBindPoseMatrix;
 		std::vector<VertexWeightData> vertexWeights;
 	};
-	//インフルエンス
+	/// <summary>
+	/// 頂点インフルエンスの最大数
+	/// </summary>
 	static const uint32_t kNumMaxInfluence = 4;
 	struct VertexInfluence {
 		std::array<float, kNumMaxInfluence> weights;
 		std::array<int32_t, kNumMaxInfluence> jointIndices;
 	};
-	//CSに送る用MatrixPalette
+	/// <summary>
+	/// GPU用ウェル行列
+	/// </summary>
 	struct WellForGPU {
 		Matrix4x4 skeletonSpaceMatrix;			//位置用
 		Matrix4x4 skeletonSpaceInverseMatrix;	//法線用
 	};
-	//CSに送る用SkinningInformation
+	/// <summary>
+	/// GPU用スキニング情報
+	/// </summary>
 	struct SkinningInformationForGPU {
 		uint32_t numVertices;
 	};
 
-	//スキンクラスター
+	/// <summary>
+	/// スキンクラスター
+	/// </summary>
 	struct SkinCluster {
 		std::vector<Matrix4x4> inverseBindPoseMatrices;
 		//MatrixPalette
@@ -118,29 +149,36 @@ private://アニメーション関連構造体
 		std::span<SkinningInformationForGPU> mappedSkinningInfo;
 	};
 
-private://メッシュ関連構造体
-	//マテリアル
+	/// <summary>
+	/// マテリアル
+	/// </summary>
 	struct Material {
 		Vector4 color;
 		Matrix4x4 uvTransform;
 		float isTexture;
 		float shininess;
 	};
-	//ノード
+	/// <summary>
+	/// ノード構造体
+	/// </summary>
 	struct Node {
 		TransformQuaternion transform;
 		Matrix4x4 localMatrix;
 		std::string name;
 		std::vector<Node> children;
 	};
-	//マテリアルデータ
+	/// <summary>
+	/// マテリアルデータ
+	/// </summary>
 	struct MaterialData {
 		std::string materialName;
 		std::string textureFilePath;
 		Vector4 colorData;
 		uint32_t textureHandle;
 	};
-	//モデルデータ
+	/// <summary>
+	/// モデルデータ
+	/// </summary>
 	struct ModelData {
 		std::map<std::string, JointWeightData> skinClusterData;
 		std::vector<VertexData> vertices;
@@ -148,7 +186,9 @@ private://メッシュ関連構造体
 		MaterialData material;
 		Node rootNode;
 	};
-	//モデルリソース作成用データ型
+	/// <summary>
+	/// モデルリソース
+	/// </summary>
 	struct ModelResource {
 		std::vector<ModelData> modelData;
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource;
@@ -163,7 +203,20 @@ private://メッシュ関連構造体
 	};
 
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="format">フォーマット指定子</param>
+	/// <param name="directorypath">ディレクトリパス</param>
 	void Initialize(const std::string& filename, ModelFormat format = OBJ, std::string directorypath = "Resources/models/");
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 	/// <summary>
 	/// モデル描画
@@ -181,46 +234,125 @@ public:
 	/// </summary>
 	void SettingCSPostDraw();
 
-public://ゲッター
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// モデルリソースの取得
+	/// </summary>
+	/// <returns>モデルリソース</returns>
 	const ModelResource& GetModelResource() { return modelResource_; }
-public://セッター
-	//色のセット
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 色のセット
+	/// </summary>
+	/// <param name="color">色</param>
 	void SetColor(Vector4& color) { color_ = &color; }
-public://アニメーション関連セッター
-	//新しいアニメーションのセット
+
+	/// <summary>
+	/// 新しいアニメーションのセット
+	/// </summary>
+	/// <param name="_name">名前</param>
+	/// <param name="_fileName">ファイル名</param>
 	void SetNewAnimation(const std::string& _name, const std::string& _fileName);
-	//現在のアニメーションのセット
+	/// <summary>
+	/// 現在のアニメーションのセット
+	/// </summary>
+	/// <param name="_name">名前</param>
 	void SetCurrentAnimation(const std::string& _name);
 
 private:
-	//モデルファイルの読み取り
-	std::vector<ModelData> LoadModelFile();
-	//アニメーションの読み取り
-	Animation LoadAnimationFile(const std::string& fileName);
-	//assimpのノード→構造体ノード変換関数
-	Node ReadNode(aiNode* node);
-	//モデルリソース作成関数
-	ModelResource MakeModelResource();
-	//スキンクラスター生成関数
-	SkinCluster CreateSkinCluster();
-	//テクスチャ読み込み
-	void SettingTexture();
+	/// ============================== ///
+	///		非公開メンバ関数
+	/// ============================== ///
 
-	//任意の時刻に対する値を取得する関数
+	/// <summary>
+	/// モデルファイルを読み込む
+	/// </summary>
+	/// <returns>モデルデータの配列</returns>
+	std::vector<ModelData> LoadModelFile();
+	/// <summary>
+	/// アニメーションファイルを読み込む
+	/// </summary>
+	/// <param name="fileName">アニメーションファイル名</param>
+	/// <returns>アニメーションデータ</returns>
+	Animation LoadAnimationFile(const std::string& fileName);
+	/// <summary>
+	/// Assimpのノードを構造体ノードに変換する
+	/// </summary>
+	/// <param name="node">Assimpノード</param>
+	/// <returns>変換後のノード</returns>
+	Node ReadNode(aiNode* node);
+	/// <summary>
+	/// モデルリソースを作成する
+	/// </summary>
+	/// <returns>作成したモデルリソース</returns>
+	ModelResource MakeModelResource();
+	/// <summary>
+	/// スキンクラスターを生成する
+	/// </summary>
+	/// <returns>スキンクラスター</returns>
+	SkinCluster CreateSkinCluster();
+	/// <summary>
+	/// テクスチャを読み込む
+	/// </summary>
+	void SettingTexture();
+	/// <summary>
+	/// 任意の時刻におけるベクトル値を計算する
+	/// </summary>
+	/// <param name="keyframes">ベクトルキーの配列</param>
+	/// <param name="time">再生時間</param>
+	/// <returns>補間後のベクトル値</returns>
 	Vector3 CalculateValue(const std::vector<Keyframe<Vector3>>& keyframes, float time);
+	/// <summary>
+	/// 任意の時刻におけるクォータニオン値を計算する
+	/// </summary>
+	/// <param name="keyframes">クォータニオンキーの配列</param>
+	/// <param name="time">再生時間</param>
+	/// <returns>補間後のクォータニオン値</returns>
 	Quaternion CalculateValue(const std::vector<Keyframe<Quaternion>>& keyframes, float time);
-	//NodeからJointを作り出す
+	/// <summary>
+	/// NodeからJointを作成する
+	/// </summary>
+	/// <param name="node">ノード</param>
+	/// <param name="parent">親ジョイントのインデックス</param>
+	/// <param name="joints">ジョイント配列</param>
+	/// <returns>作成したジョイントのインデックス</returns>
 	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
-	//NodeからSkeletonを作り出す関数
+	/// <summary>
+	/// NodeからSkeletonを作成する
+	/// </summary>
+	/// <param name="rootNode">ルートノード</param>
+	/// <returns>スケルトン</returns>
 	Skeleton CreateSkeleton(const Node& rootNode);
-	//joint(骨)の更新
+	/// <summary>
+	/// ジョイントを更新する
+	/// </summary>
+	/// <param name="skeleton">スケルトン</param>
 	void UpdateJoints(Skeleton& skeleton);
-	//アニメーションを適用する関数
+	/// <summary>
+	/// アニメーションをスケルトンに適用する
+	/// </summary>
+	/// <param name="skeleton">スケルトン</param>
+	/// <param name="animation">アニメーション</param>
+	/// <param name="animationTime">再生時間</param>
 	void ApplyAnimation(Skeleton& skeleton, const Animation& animation, float animationTime);
-	//SkinClusterの更新
+	/// <summary>
+	/// スキンクラスターを更新する
+	/// </summary>
+	/// <param name="skinCluster">スキンクラスター</param>
+	/// <param name="skeleton">スケルトン</param>
 	void UpdateSkinCluster(SkinCluster& skinCluster, const Skeleton& skeleton);
 
-private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//モデル用リソース
 	ModelResource modelResource_;
 	//モデル数

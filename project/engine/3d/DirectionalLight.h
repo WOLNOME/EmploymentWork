@@ -6,7 +6,9 @@
 #include "Vector4.h"
 #include "Vector3.h"
 
-// データ構造体(サイズが16の倍数になるようにパディングする！)
+/// <summary>
+/// 平行光源用データ構造体
+/// </summary>
 struct DirectionalLightData {
 	Vector4 color;
 	Vector3 direction;
@@ -20,6 +22,10 @@ struct DirectionalLightData {
 /// </summary>
 class DirectionalLight {
 public:
+	/// ============================== ///
+	///		メンバ変数(public)
+	/// ============================== ///
+
 	//色
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//向き
@@ -29,7 +35,17 @@ public:
 	//オンオフ
 	bool isActive_ = true;
 
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	DirectionalLight() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~DirectionalLight() = default;
 
 	/// <summary>
@@ -41,16 +57,25 @@ public:
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// 平行光源のデータを取得
-	/// </summary>
-	/// <returns>平行光源のデータ</returns>
-	const DirectionalLightData& GetData() const { return data_; }
-	/// <summary>
 	/// デバッグ用ImGui
 	/// </summary>
 	void DebugWithImGui(const std::wstring& _name);
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 平行光源のデータを取得
+	/// </summary>
+	/// <returns>平行光源のデータ</returns>
+	const DirectionalLightData& GetData() const { return data_; }
+
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//データ
 	DirectionalLightData data_;
 

@@ -19,9 +19,9 @@ void EnemyHPUI::Initialize() {
 		for (int j = 0; j < 2; j++) {
 			sprites_[i][j] = std::make_unique<Sprite>();
 			if (j == 0)
-				sprites_[i][j]->Initialize(SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Sprite::Order::Back1, textureHandles_[j]);
+				sprites_[i][j]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back1, textureHandles_[j]);
 			else
-				sprites_[i][j]->Initialize(SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Sprite::Order::Back2, textureHandles_[j]);
+				sprites_[i][j]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back2, textureHandles_[j]);
 			sprites_[i][j]->SetSize({
 				sprites_[i][j]->GetSize().x * hpBarSizeRatio,
 				sprites_[i][j]->GetSize().y * hpBarSizeRatio

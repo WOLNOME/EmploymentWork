@@ -13,7 +13,9 @@ const uint32_t kMaxNumDirectionalLight = 1;
 const uint32_t kMaxNumPointLight = 16;
 const uint32_t kMaxNumSpotLight = 16;
 
-//定数バッファ用データ構造体
+/// <summary>
+/// シーン上全てのライトのデータ構造体
+/// </summary>
 struct SceneLightForPS {
 	DirectionalLightData directionalLights[kMaxNumDirectionalLight];
 	PointLightData pointLights[kMaxNumPointLight];
@@ -29,6 +31,10 @@ struct SceneLightForPS {
 /// </summary>
 class SceneLight {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -65,6 +71,10 @@ public:
 	void SetLight(SpotLight* spotLight);
 
 private:
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	//シーンライト用定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> sceneLightResource_;
 	//シーンライト用マッピング済みアドレス

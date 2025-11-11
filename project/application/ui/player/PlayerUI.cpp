@@ -48,6 +48,8 @@ void PlayerUI::Update() {
 	//playerが読み込まれていなかったらassert
 	assert(player_ != nullptr && "PlayerUIにPlayerインスタンスを渡してください");
 
+	//装飾用UIの更新
+	decorativeUI_->Update();
 	//プレイヤーHPUIの更新
 	playerHPUI_->Update();
 	//砲弾UIの更新
@@ -77,6 +79,8 @@ void PlayerUI::DebugWithImGui() {
 
 void PlayerUI::SetPlayer(Player* _player) {
 	player_ = _player;
+	//装飾用UIに渡す
+	decorativeUI_->SetPlayer(_player);
 	//プレイヤーHPUIに渡す
 	playerHPUI_->SetPlayer(player_);
 	//砲弾UIに渡す
@@ -145,8 +149,8 @@ void PlayerUI::DamageBlinking() {
 		itemUI_->AttachBlinking(color);
 		};
 
-	//被弾開始時に点滅開始
-	if (player_->GetIsDamage() && blinkTimer <= 0.0f) {
+	//被弾開始時または死亡演出中に点滅開始
+	if ((player_->GetIsDamage() || player_->GetIsDeathDir()) && blinkTimer <= 0.0f) {
 		float blinkDuration = param_["blinkDuration"];
 		blinkTimer = blinkDuration;
 		isDamage = true;

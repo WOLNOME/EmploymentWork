@@ -12,6 +12,8 @@
 #include <application/ui/message/MessageUI.h>
 
 void Player::Initialize() {
+	//ベースキャラクターの初期化
+	BaseCharacter::Initialize();
 
 	//インプットの初期化
 	input_ = Input::GetInstance();
@@ -20,6 +22,9 @@ void Player::Initialize() {
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Player"), "player");
+
+	deathDirection_ = std::make_unique<DeathDirection>();
+	deathDirection_->Initialize();
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
@@ -67,6 +72,8 @@ void Player::Update() {
 	BulletAttack();
 	//死亡処理
 	DeadProcess();
+	//死亡演出更新
+	deathDirection_->Update();
 
 	//カメラ処理
 	CameraAlgorithm();
@@ -76,6 +83,8 @@ void Player::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
+	//死亡演出のデバッグ処理
+	deathDirection_->DebugWithImGui();
 
 	ImGui::Begin("プレイヤー");
 	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
@@ -228,6 +237,11 @@ void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 }
 
 void Player::Rotate() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection()) return;
+	//死亡していたら処理をしない
+	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
 	auto ShortestAngleDiff = [=](float from, float to) -> float {
 		float diff = to - from;
 		while (diff > pi)  diff -= 2.0f * pi;
@@ -266,6 +280,11 @@ void Player::Rotate() {
 }
 
 void Player::Move() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection()) return;
+	//死亡していたら処理をしない
+	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
 	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
 		std::sinf(object3d_->worldTransform.rotate.y),
@@ -322,6 +341,11 @@ void Player::Move() {
 }
 
 void Player::CannonAttack() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection()) return;
+	//死亡していたら処理をしない
+	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
 	//リロードタイムの計算
 	if (cannonReloadTimer_ > 0.0f) {
 		cannonReloadTimer_ -= kDeltaTime;
@@ -348,6 +372,11 @@ void Player::CannonAttack() {
 }
 
 void Player::BulletAttack() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection()) return;
+	//死亡していたら処理をしない
+	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
 	//発射間隔の計算
 	bool isInterval = false;
 	if (bulletFireIntervalTimer_ > 0.0f) {
@@ -401,14 +430,21 @@ void Player::BulletAttack() {
 }
 
 void Player::DeadProcess() {
-	//HPが0になったら死亡
+	//HPが0になったら死亡演出開始
 	if (hp_ <= 0) {
+		//死亡演出開始
+		deathDirection_->SetIsDirection(true);
+	}
+	//死亡演出が終了したら死亡
+	if (deathDirection_->GetIsDirFinished()) {
 		//死亡予約
 		SetDeadTimer(0.1f);
 	}
 }
 
 void Player::CameraAlgorithm() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection()) return;
 	//死亡していたら処理をしない
 	if (isDead_ && GetDeadTimer() > 0.0f) return;
 

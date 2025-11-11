@@ -30,7 +30,7 @@ void GameOverSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(gameOverTextHandle_, edgeParam);
 		//スプライト
 		gameOverTextSprite_ = std::make_unique<Sprite>();
-		gameOverTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Sprite::Order::Front0);
+		gameOverTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
 		gameOverTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 300.0f });
 		gameOverTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		gameOverTextSprite_->SetTexture(gameOverTextHandle_);
@@ -53,7 +53,7 @@ void GameOverSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
-		titleTextSprite_->Initialize(SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Sprite::Order::Front0);
+		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
 		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 50.0f });
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		titleTextSprite_->SetTexture(titleTextHandle_);
@@ -77,7 +77,7 @@ void GameOverSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE)) {
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		sceneManager_->SetNextScene("Title",SceneTransitionAnimation::Type::SLIDEDOWN,SceneTransitionAnimation::Type::SLIDEUP,SceneTransitionAnimation::Option::SHAKE,1.0f, textureHandle);
+		sceneManager_->SetNextScene("Title", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 }
 

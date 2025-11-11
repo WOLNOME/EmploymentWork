@@ -32,14 +32,14 @@ void DevelopScene::Initialize() {
 	//シーン変数の初期化
 	sprite_ = std::make_unique<Sprite>();
 	textureHandleSprite_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
-	sprite_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0, textureHandleSprite_);
+	sprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("MonsterBall"), Order::Front0, textureHandleSprite_);
 	sprite_->SetAnchorPoint({ 0.5f,0.5f });
 	sprite_->SetFlipX(true);
 	sprite_->SetIsDisplay(false);
 
 	sprite2_ = std::make_unique<Sprite>();
 	textureHandleSprite2_ = TextureManager::GetInstance()->LoadTexture("monsterBall.png");
-	sprite2_->Initialize(SpriteManager::GetInstance()->GenerateName("MonsterBall"), Sprite::Order::Front0, textureHandleSprite2_);
+	sprite2_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("MonsterBall"), Order::Front0, textureHandleSprite2_);
 	sprite2Position = { 100.0f,100.0f };
 	sprite2_->SetPosition(sprite2Position);
 	sprite2_->SetSize({ 300.0f,300.0f });
@@ -111,6 +111,16 @@ void DevelopScene::Initialize() {
 	//シーンライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
+	//UVスクロールの作成
+	{
+		textureHandleUV = TextureManager::GetInstance()->LoadTexture("uvscroll.png");
+		uvScroll_ = std::make_unique<Sprite>();
+		uvScroll_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("UVScroll"), Order::Front1, 11, 0.3f, true, textureHandleUV);
+		uvScroll_->SetAnchorPoint({ 0.5f,0.5f });
+		uvScroll_->SetPosition({ 800.0f,500.0f });
+		uvScroll_->SetIsDisplay(true);
+	}
+
 	//テキストテクスチャの作成
 	{
 		TextParam param;
@@ -121,7 +131,7 @@ void DevelopScene::Initialize() {
 		param.color = { 1,1,1,1 };
 		textHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(param);
 		text_ = std::make_unique<Sprite>();
-		text_->Initialize(SpriteManager::GetInstance()->GenerateName("Text"), Sprite::Order::Front0);
+		text_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("Text"), Order::Front0);
 		text_->SetTexture(textHandle_);
 		text_->SetPosition({ 640,360 });
 		text_->SetAnchorPoint({ 0.5f,0.5f });
