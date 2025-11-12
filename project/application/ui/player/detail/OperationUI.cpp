@@ -40,13 +40,13 @@ void OperationUI::Update() {
 }
 
 void OperationUI::AttachShake(const Vector2& _shakeOffset) {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < (int)Type::kMaxTypeNum; i++) {
 		sprites_[i]->SetShakeOffset(_shakeOffset);
 	}
 }
 
 void OperationUI::AttachBlinking(const Vector4& _color) {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < (int)Type::kMaxTypeNum; i++) {
 		sprites_[i]->SetColor(_color);
 	}
 }
