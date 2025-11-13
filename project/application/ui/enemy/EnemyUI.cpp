@@ -21,9 +21,11 @@ void EnemyUI::DebugWithImGui() {
 }
 
 void EnemyUI::SetEnemyManager(EnemyManager* _enemyManager) {
+	//エネミーマネージャーのセット
 	enemyHPUI_->SetEnemyManager(_enemyManager);
 }
 
 void EnemyUI::SetGameCamera(GameCamera* _camera) {
+	//カメラのセット
 	enemyHPUI_->SetGameCamera(_camera);
 }

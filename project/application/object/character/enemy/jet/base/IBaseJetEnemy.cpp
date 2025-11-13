@@ -85,10 +85,11 @@ void IBaseJetEnemy::ChangeState(const std::string& stateName) {
 	else {
 		assert(0 && "使用できない名前が使われています。");
 	}
-
+	//現在の状態の終了処理
 	if (currentState_) {
 		currentState_->Exit(this);
 	}
+	//新しい状態の開始処理
 	currentState_ = newState;
 	if (currentState_) {
 		currentState_->Enter(this);

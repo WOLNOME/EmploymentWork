@@ -116,10 +116,11 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 	else {
 		assert(0 && "使用できない名前が使われています。");
 	}
-
+	//現在の状態を終了する
 	if (currentState_) {
 		currentState_->Exit(this);
 	}
+	//新しい状態を開始する
 	currentState_ = newState;
 	if (currentState_) {
 		currentState_->Enter(this);

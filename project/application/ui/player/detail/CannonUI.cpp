@@ -7,8 +7,9 @@
 #include <application/object/character/player/Player.h>
 
 void CannonUI::Initialize() {
+	//パラメーターの初期化
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
-
+	//スプライトの初期化
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("cannonUI.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 	for (int i = 0; i < textureHandles_.size(); i++) {
@@ -36,12 +37,14 @@ void CannonUI::Update() {
 }
 
 void CannonUI::AttachShake(const Vector2& _shakeOffset) {
+	//スプライトにシェイクを適用する
 	for (int i = 0; i < 2; i++) {
 		sprites_[i]->SetShakeOffset(_shakeOffset);
 	}
 }
 
 void CannonUI::AttachBlinking(const Vector4& _color) {
+	//スプライトに点滅を適用する
 	for (int i = 0; i < 2; i++) {
 		sprites_[i]->SetColor(_color);
 	}

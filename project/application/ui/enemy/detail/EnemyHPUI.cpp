@@ -12,7 +12,7 @@ void EnemyHPUI::Initialize() {
 	//パラメータ読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyUI");
 	float hpBarSizeRatio = param_["hpBarSizeRatio"];
-
+	//スプライトの初期化
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("hp_redBar.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("hp_greenBar.png");
 	for (int i = 0; i < kNumHPBar; i++) {

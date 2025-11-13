@@ -40,12 +40,14 @@ void OperationUI::Update() {
 }
 
 void OperationUI::AttachShake(const Vector2& _shakeOffset) {
+	//スプライトにシェイクを適用する
 	for (int i = 0; i < (int)Type::kMaxTypeNum; i++) {
 		sprites_[i]->SetShakeOffset(_shakeOffset);
 	}
 }
 
 void OperationUI::AttachBlinking(const Vector4& _color) {
+	//スプライトに点滅を適用する
 	for (int i = 0; i < (int)Type::kMaxTypeNum; i++) {
 		sprites_[i]->SetColor(_color);
 	}

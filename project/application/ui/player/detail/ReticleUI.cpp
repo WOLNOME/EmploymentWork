@@ -4,6 +4,7 @@
 #include <SpriteManager.h>
 
 void ReticleUI::Initialize() {
+	//スプライトの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("Player2dReticle"), Order::Front1, textureHandle_);

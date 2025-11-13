@@ -57,11 +57,13 @@ void DecorativeUI::Update() {
 }
 
 void DecorativeUI::AttachShake(const Vector2& _shakeOffset) {
+	//スプライトにシェイクを適用する
 	sprite_->SetShakeOffset(_shakeOffset);
 	uvScroll_->SetShakeOffset(_shakeOffset);
 }
 
 void DecorativeUI::AttachBlinking(const Vector4& _color) {
+	//スプライトに点滅を適用する
 	sprite_->SetColor(_color);
 	uvScroll_->SetColor(_color);
 }

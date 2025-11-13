@@ -5,6 +5,7 @@
 #include <application/object/character/player/Player.h>
 
 void ITankEnemyState::TransitionDeadState(IBaseTankEnemy* enemy) {
+	//HPが0になったら死亡
 	if (enemy->GetHP() <= 0) {
 		enemy->ChangeState("Dead");
 	}
