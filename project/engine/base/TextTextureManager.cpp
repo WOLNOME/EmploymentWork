@@ -4,6 +4,7 @@
 #include "MainRender.h"
 #include "ImGuiManager.h"
 #include "Logger.h"
+#include <StringUtility.h>
 #include <algorithm>
 #include <filesystem>
 #include <format>
@@ -567,7 +568,7 @@ void TextTextureManager::GenerateFontFile() {
 }
 
 std::string TextTextureManager::GenerateFontKey(const std::wstring& fontName, const FontStyle& style) {
-	std::string key(fontName.begin(), fontName.end()); // wstring → string 変換
+	std::string key = StringUtility::ConvertString(fontName); // wstring → string 変換
 
 	switch (style) {
 	case FontStyle::Normal:  key += "_Normal"; break;

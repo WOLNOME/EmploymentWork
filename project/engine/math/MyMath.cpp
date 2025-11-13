@@ -5,8 +5,8 @@
 #include <numbers>
 #include "LineManager.h"
 
-#undef min;
-#undef max;
+#undef min
+#undef max
 
 Vector2 MyMath::Add(const Vector2& v1, const Vector2& v2) {
 	Vector2 c;

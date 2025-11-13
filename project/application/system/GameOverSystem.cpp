@@ -1,7 +1,7 @@
 #include "GameOverSystem.h"
 #include <WinApp.h>
 #include <ImGuiManager.h>
-#include <TextTextureManager.h>]
+#include <TextTextureManager.h>
 #include <TextureManager.h>
 #include <SpriteManager.h>
 #include <MyMath.h>

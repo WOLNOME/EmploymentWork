@@ -32,8 +32,8 @@ void TextTextureRender::Finalize() {
 
 void TextTextureRender::SettingViewPort(UINT _width, UINT _height) {
 	//テクスチャの範囲に合わせる
-	viewport.Width = _width;
-	viewport.Height = _height;
+	viewport.Width = (FLOAT)_width;
+	viewport.Height = (FLOAT)_height;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
