@@ -5,6 +5,7 @@
 #include <application/object/character/player/Player.h>
 
 void IJetEnemyState::TransitionDeadState(IBaseJetEnemy* enemy) {
+	//HPが0になったら死亡する
 	if (enemy->GetHP() <= 0) {
 		enemy->ChangeState("Dead");
 	}

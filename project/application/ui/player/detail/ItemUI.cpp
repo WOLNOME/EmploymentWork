@@ -8,8 +8,9 @@
 #include <application/object/character/player/Player.h>
 
 void ItemUI::Initialize() {
+	//パラメーターの初期化
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
-
+	//スプライトの初期化
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("ItemUI_ReloadSpeedUp.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("ItemUI_MoveSpeedUp.png");
 	textureHandles_[2] = TextureManager::GetInstance()->LoadTexture("ItemUI_TurnSpeedUp.png");
@@ -53,12 +54,14 @@ void ItemUI::Update() {
 }
 
 void ItemUI::AttachShake(const Vector2& _shakeOffset) {
+	//スプライトにシェイクを適用する
 	for (auto& sprite : sprites_) {
 		sprite->SetShakeOffset(_shakeOffset);
 	}
 }
 
 void ItemUI::AttachBlinking(const Vector4& _color) {
+	//スプライトに点滅を適用する
 	for (auto& sprite : sprites_) {
 		sprite->SetColor(_color);
 	}

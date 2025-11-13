@@ -170,6 +170,7 @@ void DevelopScene::Update() {
 	time_ += kDeltaTime;
 	TextTextureManager::GetInstance()->EditTextString(textHandle_, L"フォント確認 0123 abcDEF\n現在時刻 : {:.1f}", time_);
 
+	bool testCaseJudge = false;
 }
 
 void DevelopScene::DebugWithImGui() {

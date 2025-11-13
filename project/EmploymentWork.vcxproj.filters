@@ -427,6 +427,8 @@
     </ClCompile>
     <ClCompile Include="application\system\StartDirection.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
+    <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\MoveLever.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -795,6 +797,8 @@
     </ClInclude>
     <ClInclude Include="application\system\StartDirection.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
+    <ClInclude Include="application\ui\player\detail\OperationUI.h" />
+    <ClInclude Include="application\ui\player\detail\MoveLever.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

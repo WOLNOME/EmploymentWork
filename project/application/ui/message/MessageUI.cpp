@@ -63,6 +63,7 @@ void MessageUI::DebugWithImGui() {
 }
 
 uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bool _isBlinking) {
+	//新たなメッセージを定義し、パラメーターを設定する
 	MessageData newMessage;
 	newMessage.id = messageIdCounter_;
 	newMessage.text = _text;
@@ -83,6 +84,7 @@ uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bo
 	TextTextureManager::GetInstance()->EditEdgeParam(newMessage.textHandle, baseEdgeParam_);
 	messages_.push_back(newMessage);
 
+	//メッセージのハンドルを返す
 	return messageIdCounter_++;
 }
 
@@ -191,6 +193,7 @@ void MessageUI::UpdateMessage() {
 
 void MessageUI::UpdateSprite() {
 	int index = 0;
+	//登録されたメッセージのうち先入れされたメッセージを表示する処理
 	for (auto it = messages_.rbegin(); it != messages_.rend(); ++it) {
 		if (index >= kMaxSpriteNum_) break;
 

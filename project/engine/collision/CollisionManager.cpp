@@ -57,7 +57,7 @@ void CollisionManager::CheckCollision() {
 				else if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBullet) {
 					continue;
 				}
-				else if(colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
+				else if (colliderB->GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
 					continue;
 				}
 			}
@@ -97,7 +97,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 
 			// 衝突時コールバックを呼び出す
-			colliderA->OnCollision(attrB,colliderB->GetWorldPosition());
+			colliderA->OnCollision(attrB, colliderB->GetWorldPosition());
 			colliderB->OnCollision(attrA, colliderA->GetWorldPosition());
 		}
 		};
@@ -140,6 +140,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 				.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
 				.size = colliderB->GetSizeOBB()
 			};
+
 			//カプセルとOBBの衝突判定
 			HandleCollisionIf(MyMath::IsCollision(capsuleA, obbB));
 			break;
@@ -232,7 +233,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 				.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
 				.size = colliderB->GetSizeOBB()
 			};
-			//カプセルとOBBの衝突判定
+			//OBB同士の衝突判定
 			HandleCollisionIf(MyMath::IsCollision(obbA, obbB));
 			break;
 		}

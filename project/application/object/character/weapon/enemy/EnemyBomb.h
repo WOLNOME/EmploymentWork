@@ -80,8 +80,13 @@ private:
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
 
+	//爆破範囲警告
+	std::unique_ptr<Object3d> warning_ = nullptr;
+
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
+	//爆風
+	std::unique_ptr<Particle> explosion_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

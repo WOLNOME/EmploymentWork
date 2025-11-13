@@ -17,6 +17,8 @@
 const float kDeltaTime = 1.0f / 60.0f;
 //π
 const float pi = std::numbers::pi_v<float>;
+//許容数(限りなく0.0fに近い値)
+const float epsilon = 5e-4f;
 
 ///------------------------------------///
 ///             列挙体
@@ -791,6 +793,9 @@ public:
 	//カプセルと平面の当たり判定
 	static bool IsCollision(const Capsule& capsule, const Plane& plane);
 	static bool IsCollision(const Plane& plane, const Capsule& capsule);
+	//カプセルと三角形の辺り判定
+	static bool IsCollision(const Capsule& capsule, const Triangle& tri);
+	static bool IsCollision(const Triangle& tri, const Capsule& capsule);
 	//線分と三角形の当たり判定
 	static bool IsCollision(const Segment& segment, const Triangle& triangle);
 	static bool IsCollision(const Triangle& triangle, const Segment& segment);
@@ -863,16 +868,44 @@ public:
 
 private:
 	///------------------------------------///
-	///          当たり判定補助関数
+	///          補助関数
 	///------------------------------------///
 
 	/// <summary>
-	/// 点と平面の距離を求める
+	/// 点と平面の最短距離を求める
 	/// </summary>
 	/// <param name="_point">点</param>
 	/// <param name="_plane">平面</param>
-	/// <returns>点と平面の距離</returns>
-	static float DistancePointToPlane(const Vector3& _point, const Plane& _plane);
+	/// <returns>点と平面の最短距離</returns>
+	static float DistancePointToPlane(const Vector3& point, const Plane& plane);
+	/// <summary>
+	/// 点と線分の最短距離を求める
+	/// </summary>
+	/// <param name="point">点</param>
+	/// <param name="segment">線分</param>
+	/// <returns>点と線分の最短距離</returns>
+	static float DistancePointToSegment(const Vector3& point, const Segment& segment);
+	/// <summary>
+	/// 線分同士の最短距離を求める
+	/// </summary>
+	/// <param name="s1">線分1</param>
+	/// <param name="s2">線分2</param>
+	/// <returns>線分同士の最短距離</returns>
+	static float DistanceSegmentToSegment(const Segment& s1, const Segment& s2);
+	/// <summary>
+	/// 点と平面の最近接点を求める
+	/// </summary>
+	/// <param name="point">点</param>
+	/// <param name="plane">平面</param>
+	/// <returns>最近接点</returns>
+	static Vector3 ClosestPoint(const Vector3& point, const Plane& plane);
+	/// <summary>
+	/// 点と三角形の最近接点を求める
+	/// </summary>
+	/// <param name="point">点</param>
+	/// <param name="tri">三角形</param>
+	/// <returns>最近接点</returns>
+	static Vector3 ClosestPoint(const Vector3& point, const Triangle& tri);
 	/// <summary>
 	/// 点と線分の最近接点を求める
 	/// </summary>
@@ -893,6 +926,36 @@ private:
 	/// <param name="tri">三角形</param>
 	/// <returns>三角形を含んでいる平面</returns>
 	static Plane MakePlane(const Triangle& tri);
+	/// <summary>
+	/// 平行の判定
+	/// </summary>
+	/// <param name="segment">線分</param>
+	/// <param name="plane">平面</param>
+	/// <returns>判定結果</returns>
+	static bool CheckParallel(const Segment& segment, const Plane& plane);
+	/// <summary>
+	/// 線分を平面に射影したときにできる線分を求める
+	/// </summary>
+	/// <param name="segment">線分</param>
+	/// <param name="plane">平面</param>
+	/// <returns>求まった線分</returns>
+	static Segment ProjectSegmentOntoPlane(const Segment& segment, const Plane& plane);
+	/// <summary>
+	/// 点が三角形内部にあるかの判定
+	/// </summary>
+	/// <param name="point">点</param>
+	/// <param name="tri">三角形</param>
+	/// <returns>内部にあるか</returns>
+	static bool IsPointInTriangle(const Vector3& point, const Triangle& tri);
+	/// <summary>
+	/// 線分同士の交点を求める(最短距離がEpsolon未満である線分同士に限る)
+	/// </summary>
+	/// <param name="s1">線分1</param>
+	/// <param name="s2">線分2</param>
+	/// <returns>交点の座標</returns>
+	static Vector3 IntersectionSegmentToSegment(const Segment& s1, const Segment& s2);
+
+
 };
 
 ///------------------------------------///

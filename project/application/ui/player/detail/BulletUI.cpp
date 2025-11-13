@@ -7,8 +7,9 @@
 #include <application/object/character/player/Player.h>
 
 void BulletUI::Initialize() {
+	//パラメーターの初期化
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
-
+	//スプライトの初期化
 	textureHandles_[0] = TextureManager::GetInstance()->LoadTexture("bulletUI.png");
 	textureHandles_[1] = TextureManager::GetInstance()->LoadTexture("black.png");
 	for (int i = 0; i < textureHandles_.size(); i++) {
@@ -45,12 +46,14 @@ void BulletUI::Update() {
 }
 
 void BulletUI::AttachShake(const Vector2& _shakeOffset) {
+	//スプライトにシェイクを適用する
 	for (int i = 0; i < 2; i++) {
 		sprites_[i]->SetShakeOffset(_shakeOffset);
 	}
 }
 
 void BulletUI::AttachBlinking(const Vector4& _color) {
+	//スプライトに点滅を適用する
 	for (int i = 0; i < 2; i++) {
 		sprites_[i]->SetColor(_color);
 	}

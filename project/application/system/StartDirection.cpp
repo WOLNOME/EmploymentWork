@@ -3,7 +3,10 @@
 #include <SpriteManager.h>
 
 void StartDirection::Initialize() {
+	//インスタンスの初期化
 	input_ = Input::GetInstance();
+
+	//メンバ変数の初期化
 	isStartDirection_ = true;
 	isMaskDisappear_ = false;
 

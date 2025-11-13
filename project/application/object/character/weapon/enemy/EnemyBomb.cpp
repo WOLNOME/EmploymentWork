@@ -15,20 +15,37 @@ void EnemyBomb::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bomb"), Shape::kSphere);
-	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
+	object3d_->worldTransform.translate = { 0.0f,10000.0f,0.0f };
 	object3d_->SetTexture(textureHandle_);
+
+	uint32_t thWarning = TextureManager::GetInstance()->LoadTexture("red.png");
+	warning_ = std::make_unique<Object3d>();
+	warning_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("warning"), "circleShadow");
+	warning_->SetIsDisplay(false);
+	warning_->SetTexture(thWarning);
+	warning_->SetIsLightProcess(false);
+	warning_->worldTransform.scale = { 40.0f,1.0f,40.0f };
+
 	//パーティクルの生成と初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyBombHit"), "hit");
-	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-	particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
-	particle_->emitter_.clumpNum = 10;
-	particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+	{
+		particle_ = std::make_unique<Particle>();
+		particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyBombHit"), "hit");
+		particle_->emitter_.isPlay = false;
+		particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+		particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
+		particle_->emitter_.clumpNum = 10;
+		particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
+	}
+	{
+		explosion_ = std::make_unique<Particle>();
+		explosion_->Initialize(ParticleManager::GetInstance()->GenerateName("Explosion"), "enemy_explosion");
+		explosion_->emitter_.isPlay = false;
+		explosion_->emitter_.transform.scale = { 40,20,40 };
+	}
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
-	collisionRadius_ = 50.0f;
+	collisionRadius_ = 40.0f;
 	//パラメータの読み込み
 	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
 	//初期化時点では死亡状態
@@ -86,9 +103,12 @@ void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos)
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
 	generatedPosition_ = _initPos;
+	warning_->worldTransform.translate = _initPos;
+	warning_->worldTransform.translate.y = 0.005f;
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
+	warning_->SetIsDisplay(true);
 	//速度は0(自由落下)
 	velocity_ = { 0.0f,0.0f,0.0f };
 
@@ -120,8 +140,13 @@ void EnemyBomb::Move() {
 		//パーティクルの発生
 		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
+		explosion_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		explosion_->emitter_.transform.translate.y = 10.0f;
+		explosion_->emitter_.isPlay = true;
 		//モデルを非表示に
 		object3d_->SetIsDisplay(false);
+		warning_->SetIsDisplay(false);
+		circleShadow_->SetIsDisplay(false);
 
 		//当たり判定属性を爆風に
 		SetCollisionAttribute(CollisionAttribute::EnemyBlast);
@@ -144,9 +169,9 @@ void EnemyBomb::Blast() {
 		durationTimer_ = 0.0f;
 		//パーティクルの発生を止める
 		particle_->emitter_.isPlay = false;
+		explosion_->emitter_.isPlay = false;
 
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
 	}
-
 }

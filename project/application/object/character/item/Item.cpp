@@ -100,6 +100,7 @@ void Item::DebugWithImGui() {
 }
 
 void Item::SetInitPos(const Vector3& _initPos) {
+	//座標のセット
 	object3d_->worldTransform.translate = _initPos;
 	idleParticle_->emitter_.transform.translate = _initPos;
 }

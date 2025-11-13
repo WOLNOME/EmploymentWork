@@ -116,6 +116,7 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 }
 
 void EnemyManager::SetPlayer(Player* _player) {
+	//全敵にプレイヤーをセットする
 	player_ = _player;
 	for (const auto& canota : canotas_) {
 		canota->SetPlayer(player_);
@@ -129,6 +130,7 @@ void EnemyManager::SetPlayer(Player* _player) {
 }
 
 void EnemyManager::SetItemManager(ItemManager* _itemManager) {
+	//全敵にアイテムマネージャーをセットする
 	itemManager_ = _itemManager;
 	for (const auto& canota : canotas_) {
 		canota->SetItemManager(itemManager_);

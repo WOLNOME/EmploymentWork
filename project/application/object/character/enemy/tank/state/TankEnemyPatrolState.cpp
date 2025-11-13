@@ -7,6 +7,7 @@
 #include <application/object/character/player/Player.h>
 
 void TankEnemyPatrolState::Enter(IBaseTankEnemy* enemy) {
+	//メンバ変数のリセット
 	isRotation_ = false;
 	isMoving_ = false;
 }
