@@ -4,16 +4,16 @@
 #include <cassert>
 
 void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
-	
+
 }
 
 uint32_t CombinedParticle::AddParticle(const std::string& _fileName, float _startTime, float _endTime) {
 	//コンテナのサイズが最大数を超えていたらreturn
 	if (particles_.size() >= kMaxCombinedParticles) {
-		return 0;
+		return kMaxCombinedParticles;
 	}
 	//新しいパーティクルを作成
-	ComParticleInfo newParticle;
+	SingleParticleInfo newParticle;
 	newParticle.startTime = _startTime;
 	newParticle.endTime = _endTime;
 	newParticle.particle = std::make_unique<Particle>();

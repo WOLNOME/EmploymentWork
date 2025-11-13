@@ -12,7 +12,7 @@
 class CombinedParticle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;
-	//パーティクルクリエイターシーンに公開
+	//パーティクルエディターシーンに公開
 	friend class ParticleEditorScene;
 public:
 	/// ============================== ///
@@ -20,9 +20,9 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// 複合パーティクル情報
+	/// 単パーティクル情報(これをつなぎ合わせて複合にする)
 	/// </summary>
-	struct ComParticleInfo {
+	struct SingleParticleInfo {
 		std::unique_ptr<Particle> particle; //パーティクル本体
 		float startTime = 0.0f; //発生開始時間(0~1)
 		float endTime = 0.0f; //発生終了時間(0~1)
@@ -47,7 +47,7 @@ private:
 	/// ============================== ///
 
 	/// <summary>
-	/// パーティクルを追加
+	/// パーティクルを追加(パーティクルエディター用)
 	/// </summary>
 	/// <param name="_fileName">ファイル名</param>
 	/// <param name="_startTime">開始時間</param>
@@ -55,7 +55,7 @@ private:
 	/// <returns>ハンドル</returns>
 	uint32_t AddParticle(const std::string& _fileName, float _startTime, float _endTime);
 	/// <summary>
-	/// パーティクルを削除
+	/// パーティクルを削除(パーティクルエディター用)
 	/// </summary>
 	/// <param name="_id">ハンドル</param>
 	void RemoveParticle(uint32_t _id);
@@ -68,7 +68,7 @@ private:
 	std::string name_;
 
 	//パーティクルのコンテナ
-	std::unordered_map<uint32_t, ComParticleInfo> particles_;
+	std::unordered_map<uint32_t, SingleParticleInfo> particles_;
 
 	//全体の尺
 	float totalDuration_ = 0.0f;
