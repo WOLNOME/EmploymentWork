@@ -79,22 +79,22 @@ public:
 	/// 縦方向の視野角を取得する
 	/// </summary>
 	/// <returns>視野角</returns>
-	float GetFovY() { return fovY; }
+	const float GetFovY() { return fovY; }
 	/// <summary>
 	/// アスペクト比を取得する
 	/// </summary>
 	/// <returns>アスペクト比</returns>
-	float GetAspectRatio() { return aspectRatio; }
+	const float GetAspectRatio() { return aspectRatio; }
 	/// <summary>
 	/// ニアクリップ距離を取得する
 	/// </summary>
 	/// <returns>ニアクリップ距離</returns>
-	float GetNearClip() { return nearClip; }
+	const float GetNearClip() { return nearClip; }
 	/// <summary>
 	/// ファークリップ距離を取得する
 	/// </summary>
 	/// <returns>ファークリップ距離</returns>
-	float GetFarClip() { return farClip; }
+	const float GetFarClip() { return farClip; }
 	/// <summary>
 	/// ビュープロジェクション用の定数バッファを取得する
 	/// </summary>
