@@ -1,7 +1,10 @@
 #pragma once
 #include "Particle.h"
+#include "JsonUtil.h"
+#include <MyMath.h>
 #include <string>
 #include <cstdint>
+#include <vector>
 #include <unordered_map>
 #include <memory>
 #include <queue>
@@ -26,7 +29,6 @@ public:
 		std::unique_ptr<Particle> particle; //パーティクル本体
 		float startTime = 0.0f; //発生開始時間(0~1)
 		float endTime = 0.0f; //発生終了時間(0~1)
-		bool isDisplay = true; //表示フラグ
 	};
 
 	/// ============================== ///
@@ -39,7 +41,46 @@ public:
 	/// <param name="_name">名前</param>
 	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update();
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// 全てのハンドル名をコンテナとして渡す
+	/// </summary>
+	/// <returns>全てのハンドル名</returns>
+	std::vector<std::string> GetAllHandleName();
+	/// <summary>
+	/// パラメーターの取得
+	/// </summary>
+	/// <returns>パラメーター</returns>
+	std::unordered_map<std::string, json> GetParams();
+
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 基準のトランスフォームをセットする
+	/// </summary>
+	/// <param name="transform">基準トランスフォーム</param>
+	void SetBaseTransform(const TransformEuler& transform) { baseTransform_ = transform; }
+	/// <summary>
+	/// 再生フラグのセット
+	/// </summary>
+	/// <param name="isPlay">再生するか</param>
+	void SetIsPlay(bool isPlay) { isPlay_ = isPlay; }
+	/// <summary>
+	/// パラメーターのセット
+	/// </summary>
+	/// <param name="_params">パラメーター</param>
+	void SetParams(const std::unordered_map<std::string, json>& _params);
 
 private:
 	/// ============================== ///
@@ -52,13 +93,13 @@ private:
 	/// <param name="_fileName">ファイル名</param>
 	/// <param name="_startTime">開始時間</param>
 	/// <param name="_endTime">終了時間</param>
-	/// <returns>ハンドル</returns>
-	uint32_t AddParticle(const std::string& _fileName, float _startTime, float _endTime);
+	/// <returns>ハンドル名(エラーなら"error"を返す)</returns>
+	std::string AddParticle(const std::string& _fileName, float _startTime, float _endTime);
 	/// <summary>
 	/// パーティクルを削除(パーティクルエディター用)
 	/// </summary>
-	/// <param name="_id">ハンドル</param>
-	void RemoveParticle(uint32_t _id);
+	/// <param name="_id">ハンドル名</param>
+	void RemoveParticle(const std::string& _handleName);
 
 	/// ============================== ///
 	///		メンバ変数
@@ -68,15 +109,19 @@ private:
 	std::string name_;
 
 	//パーティクルのコンテナ
-	std::unordered_map<uint32_t, SingleParticleInfo> particles_;
+	std::unordered_map<std::string, SingleParticleInfo> particles_;
+
+	//基準のトランスフォーム
+	TransformEuler baseTransform_;
+	//再生フラグ
+	bool isPlay_ = false;
 
 	//全体の尺
 	float totalDuration_ = 0.0f;
+	//タイマー
+	float timer_ = 0.0f;
 
 	//複合最大数
 	const uint32_t kMaxCombinedParticles = 8;
-
-	//最新のID
-	uint32_t useId_ = 0;
 };
 

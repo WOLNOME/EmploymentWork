@@ -12,6 +12,40 @@ using json = nlohmann::json;
 /// パーティクルエディター専用シーン
 /// </summary>
 class ParticleEditorScene : public BaseScene {
+private:
+	/// ============================== ///
+	///		列挙体
+	///	============================== ///
+	
+	/// <summary>
+	/// モード
+	/// </summary>
+	enum class Mode {
+		None,			//未選択
+		pGenerate,		//単体パーティクルの生成
+		cpGenerate,		//複合パーティクルの生成
+		pEdit,			//単体パーティクルの編集
+		cpEdit,			//複合パーティクルの編集
+	};
+	/// <summary>
+	/// オプション
+	/// </summary>
+	enum class Option {
+		None,			//未選択
+		Reset,			//リセット
+		Save,			//セーブ
+		ShowFileDialog,	//ファイルのダイアログの表示
+	};
+	/// <summary>
+	/// 確認
+	/// </summary>
+	enum class Check {
+		None,		//未選択
+		Continue,	//続けるか
+		SameName,	//同名か
+		EditName,	//編集対象名
+	};
+
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -80,21 +114,19 @@ private:
 
 	// 編集するパーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
+	std::unique_ptr<CombinedParticle> cParticle_ = nullptr;
 	// 編集するパラメーター
 	json editParam_;
+	std::unordered_map<std::string, json> cEditParam_;
 
 	//ImGui操作用変数
 	std::vector<std::string> textureFiles_;
 	std::vector<std::string> particleFiles_;
 	std::string jsonFileName_;
-	bool showFileDialog_ = false;
-	bool isGenerateMode_ = false;
-	bool isEditMode_ = false;
-	bool isReset_ = false;
-	bool isSave_ = false;
-	bool checkContinue_ = false;
-	bool checkSameName_ = false;
-	bool checkEditName_ = false;
+
+	Mode mode_ = Mode::None;
+	Option option_ = Option::None;
+	Check check_ = Check::None;
 	bool displayLineEmitter_ = true;
 };
 

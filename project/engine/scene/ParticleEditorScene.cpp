@@ -27,7 +27,7 @@ void ParticleEditorScene::Initialize() {
 
 	//天球と地面の生成と初期化
 	skydome_ = std::make_unique<Object3d>();
-	skydome_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Skydome"), "skydome");
+	skydome_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Skydome"), "skydome");
 	textureHandleGround_ = TextureManager::GetInstance()->LoadTexture("grid.png");
 	ground_ = std::make_unique<Object3d>();
 	ground_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Ground"), "ground");
@@ -45,9 +45,9 @@ void ParticleEditorScene::Update() {
 	camera_->Update();
 
 	//リセットコマンド
-	if (!checkContinue_ && !checkSameName_ && !checkEditName_) {
+	if (check_ == Check::None) {
 		if (input_->TriggerKey(DIK_ESCAPE)) {
-			isReset_ = true;
+			option_ = Option::Reset;
 		}
 	}
 }
@@ -73,12 +73,12 @@ void ParticleEditorScene::DebugWithImGui() {
 void ParticleEditorScene::StartWithImGui() {
 #ifdef _DEBUG
 	//最初の操作
-	if (!isGenerateMode_ && !isEditMode_ && !checkEditName_) {
+	if (mode_ == Mode::None && check_ == Check::None) {
 		ImGui::SetNextWindowPos(ImVec2(450, 300), ImGuiCond_FirstUseEver);
 		ImGui::Begin("メニュー");
 		ImGui::Text("パーティクルエディターへようこそ！\n以下の項目から希望のオプションを選択して下さい。\n");
-		if (ImGui::Button("新しくパーティクルを作成する")) {
-			isGenerateMode_ = true;
+		if (ImGui::Button("単体パーティクルを新しく作成する")) {
+			mode_ = Mode::pGenerate;
 			//パーティクルの生成
 			particle_ = std::make_unique<Particle>();
 			//基本パーティクルをロード
@@ -91,10 +91,29 @@ void ParticleEditorScene::StartWithImGui() {
 			camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
 			camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
 		}
-		if (ImGui::Button("既存のパーティクルを編集する")) {
-			checkEditName_ = true;
+		if (ImGui::Button("複合パーティクルを新しく作成する")) {
+			mode_ = Mode::cpGenerate;
+			//パーティクルの生成
+			cParticle_ = std::make_unique<CombinedParticle>();
+			//パーティクルの初期化
+			cParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic");
+			//エミッターの位置を調整
+			cParticle_->SetBaseTransform(TransformEuler({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }));
+			//jsonデータをロード
+			cEditParam_ = cParticle_->GetParams();
+			//カメラの位置をセット
+			camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
+			camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
+		}
+		if (ImGui::Button("単体パーティクルを編集する")) {
+			check_ = Check::EditName;
 			//パーティクルの生成
 			particle_ = std::make_unique<Particle>();
+		}
+		if (ImGui::Button("複合パーティクルを編集する")) {
+			check_ = Check::EditName;
+			//パーティクルの生成
+			cParticle_ = std::make_unique<CombinedParticle>();
 		}
 		ImGui::End();
 	}
@@ -104,7 +123,7 @@ void ParticleEditorScene::StartWithImGui() {
 
 void ParticleEditorScene::GenerateWithImGui() {
 #ifdef _DEBUG
-	if (isGenerateMode_ && !isEditMode_) {
+	if (mode_ == Mode::pGenerate) {
 		Editor();
 	}
 #endif //_DEBUG
@@ -112,8 +131,16 @@ void ParticleEditorScene::GenerateWithImGui() {
 
 void ParticleEditorScene::EditWithImGui() {
 #ifdef _DEBUG
+	//単体パーティクルかどうか
+	bool isSingleParticle;
+	if (particle_) {
+		isSingleParticle = true;
+	}
+	else {
+		isSingleParticle = false;
+	}
 	//パーティクル名の入力
-	if (checkEditName_) {
+	if (check_ == Check::EditName) {
 		ImGui::OpenPopup("パーティクル名の入力");
 	}
 	ImGui::SetWindowSize(ImVec2(510, 120));
@@ -121,7 +148,7 @@ void ParticleEditorScene::EditWithImGui() {
 		ImGui::Text("{particles}フォルダ内のJsonファイル名を入力してください(.jsonは省略)\n ");
 		//particlesから参照
 		if (ImGui::Button("{particles}フォルダから参照する")) {
-			showFileDialog_ = true;
+			option_ = Option::ShowFileDialog;
 			particleFiles_.clear();
 			for (const auto& entry : std::filesystem::directory_iterator("Resources/particles")) {
 				if (entry.is_regular_file() && entry.path().extension() == ".json") {
@@ -136,10 +163,9 @@ void ParticleEditorScene::EditWithImGui() {
 		if (ImGui::InputText("入力欄", buffer, sizeof(buffer))) {
 			jsonFileName_ = buffer;
 		}
-		ImGui::Text("入力されている名前\n%s\n ", jsonFileName_.c_str());
 
 		//検索済みのパーティクル一覧を表示
-		if (showFileDialog_) {
+		if (option_ == Option::ShowFileDialog) {
 			ImGui::SetNextWindowFocus();
 			ImGui::SetNextWindowPos(ImVec2(860, 280));
 			ImGui::Begin("パーティクル一覧");
@@ -148,7 +174,7 @@ void ParticleEditorScene::EditWithImGui() {
 					//.jsonをカット
 					std::string cutJson = std::filesystem::path(file).stem().string();
 					jsonFileName_ = cutJson;  //選択したファイル名を保存
-					showFileDialog_ = false;  //ウィンドウを閉じる
+					option_ = Option::None;	  //ウィンドウを閉じる
 				}
 			}
 			ImGui::End();
@@ -158,19 +184,14 @@ void ParticleEditorScene::EditWithImGui() {
 			//particleフォルダ内にあるか照合
 			if (JsonUtil::CheckJson(jsonFileName_, "Resources/particles/")) {
 				//ちゃんと見つかった
-				checkSameName_ = true;
-			}
-			else {
-				//見つからない
-				checkSameName_ = false;
+				check_ = Check::SameName;
 			}
 			//名前があるかで決める処理
-			if (checkSameName_) {
+			if (check_ == Check::SameName) {
 				//ある場合
 				if (ImGui::Button("このファイルを編集する")) {
-					checkSameName_ = false;
-					checkEditName_ = false;
-					isEditMode_ = true;
+					mode_ = Mode::pEdit;
+					check_ = Check::None;
 					//基本パーティクルをロード
 					particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), jsonFileName_);
 					//エミッターの位置を調整
@@ -196,9 +217,8 @@ void ParticleEditorScene::EditWithImGui() {
 		}
 		//戻る
 		if (ImGui::Button("Back")) {
-			showFileDialog_ = false;
-			checkSameName_ = false;
-			checkEditName_ = false;
+			option_ = Option::None;
+			check_ = Check::None;
 			jsonFileName_ = std::string();
 			particle_.release();
 			ImGui::CloseCurrentPopup();
@@ -206,7 +226,7 @@ void ParticleEditorScene::EditWithImGui() {
 		ImGui::EndPopup();
 	}
 	//編集モード本番
-	if (isEditMode_ && !isGenerateMode_) {
+	if (mode_ == Mode::pEdit) {
 		Editor();
 	}
 #endif //_DEBUG
@@ -214,7 +234,7 @@ void ParticleEditorScene::EditWithImGui() {
 
 void ParticleEditorScene::ResetWithImGui() {
 #ifdef _DEBUG
-	if (isReset_) {
+	if (option_ == Option::Reset) {
 		ImGui::OpenPopup("確認");
 	}
 	ImGui::SetNextWindowPos(ImVec2(510, 30));
@@ -222,12 +242,12 @@ void ParticleEditorScene::ResetWithImGui() {
 		ImGui::Text("リセットしますか？\n[注意] 編集中のパラメーターは反映されません\n ");
 		if (ImGui::Button("はい", ImVec2(120, 0))) {
 			sceneManager_->SetNextScene("PARTICLEEDITOR");
-			isReset_ = false;
+			option_ = Option::None;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("いいえ", ImVec2(120, 0))) {
-			isReset_ = false;
+			option_ = Option::None;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -238,7 +258,7 @@ void ParticleEditorScene::ResetWithImGui() {
 
 void ParticleEditorScene::SaveWithImGui() {
 #ifdef _DEBUG
-	if (isSave_) {
+	if (option_ == Option::Save) {
 		ImGui::SetNextWindowPos(ImVec2(470, 280));
 		ImGui::Begin("パーティクルのセーブ");
 
@@ -254,16 +274,16 @@ void ParticleEditorScene::SaveWithImGui() {
 			if (ImGui::Button("名前を確定する")) {
 				//JsonUtilを使ってパーティクルを保存
 				if (JsonUtil::CreateJson(jsonFileName_, "Resources/particles/", editParam_)) {
-					checkContinue_ = true;
+					check_ = Check::Continue;
 				}
 				//すでに同名ファイルがある
 				else {
-					checkSameName_ = true;
+					check_ = Check::SameName;
 				}
 			}
 		}
 		//続行するかチェック
-		if (checkContinue_) {
+		if (check_ == Check::Continue) {
 			ImGui::OpenPopup("パーティクルの作成に成功しました");
 		}
 		ImGui::SetNextWindowPos(ImVec2(510, 30));
@@ -271,20 +291,20 @@ void ParticleEditorScene::SaveWithImGui() {
 			ImGui::Text("作業を終了しますか？\n ");
 			if (ImGui::Button("はい", ImVec2(120, 0))) {
 				sceneManager_->SetNextScene("PARTICLEEDITOR");
-				checkContinue_ = false;
-				isSave_ = false;
+				option_ = Option::None;
+				check_ = Check::None;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("いいえ", ImVec2(120, 0))) {
-				checkContinue_ = false;
-				isSave_ = false;
+				option_ = Option::None;
+				check_ = Check::None;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
 		}
 		//同名ファイルがあった時の処理
-		if (checkSameName_) {
+		if (check_ == Check::SameName) {
 			ImGui::OpenPopup("同名のファイルが見つかりました");
 		}
 		ImGui::SetNextWindowPos(ImVec2(510, 30));
@@ -294,13 +314,12 @@ void ParticleEditorScene::SaveWithImGui() {
 				//JsonUtilで既存のファイルを編集
 				std::string fullPath = "Resources/particles/" + jsonFileName_;
 				JsonUtil::EditJson(fullPath, editParam_);
-				checkSameName_ = false;
-				checkContinue_ = true;
+				check_ = Check::Continue;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("いいえ", ImVec2(120, 0))) {
-				checkSameName_ = false;
+				check_ = Check::None;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
@@ -308,7 +327,7 @@ void ParticleEditorScene::SaveWithImGui() {
 
 		//表示を消す
 		if (ImGui::Button("Back")) {
-			isSave_ = false;
+			option_ = Option::None;
 		}
 		ImGui::End();
 	}
@@ -327,7 +346,7 @@ void ParticleEditorScene::Editor() {
 		ImGui::Text("選択中のテクスチャ : %s", selectedTexture.c_str());
 		//フォルダ内のテクスチャを検索
 		if (ImGui::Button("{textures}フォルダ内のテクスチャを検索")) {
-			showFileDialog_ = true;
+			option_ = Option::ShowFileDialog;
 			textureFiles_.clear();
 			for (const auto& entry : std::filesystem::directory_iterator("Resources/textures")) {
 				if (entry.is_regular_file() && entry.path().extension() == ".png") {
@@ -336,13 +355,13 @@ void ParticleEditorScene::Editor() {
 			}
 		}
 		//検索済みのテクスチャ一覧を表示
-		if (showFileDialog_) {
+		if (option_ == Option::ShowFileDialog) {
 			ImGui::SetNextWindowPos(ImVec2(360, 80));
 			ImGui::Begin("テクスチャ一覧");
 			for (const auto& file : textureFiles_) {
 				if (ImGui::Selectable(file.c_str())) {
 					selectedTexture = file;  //選択したファイル名を保存
-					showFileDialog_ = false;  //ウィンドウを閉じる
+					option_ = Option::None;  //ウィンドウを閉じる
 					isChangeTexture = true;  //テクスチャが変更された
 				}
 			}
@@ -531,7 +550,7 @@ void ParticleEditorScene::Editor() {
 
 	//セーブボタン
 	if (ImGui::Button("セーブ")) {
-		isSave_ = true;
+		option_ = Option::Save;
 	}
 	ImGui::End();
 
