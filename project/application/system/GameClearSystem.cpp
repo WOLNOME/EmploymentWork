@@ -14,6 +14,10 @@ void GameClearSystem::Initialize() {
 	//シーンマネージャー
 	sceneManager_ = SceneManager::GetInstance();
 
+	//ランダムエンジン
+	std::random_device seed;
+	std::mt19937 engine(seed());
+
 	//戦車オブジェクト
 	{
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("player.png");
@@ -47,13 +51,33 @@ void GameClearSystem::Initialize() {
 			clearTextHandles_.emplace_back(textHandle);
 			//スプライト
 			std::unique_ptr<Sprite> textSprite = std::make_unique<Sprite>();
-			textSprite->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("ClearTextUI"), Order::Front0);
+			textSprite->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("ClearTextUI"), Order::Front1);
 			textSprite->SetPosition({ WinApp::kClientWidth / 2.0f - (perfectText.size() - 1) * 45.0f + i * 90.0f,WinApp::kClientHeight / 2.0f - 200.0f });
 			textSprite->SetAnchorPoint({ 0.5f,0.5f });
 			textSprite->SetTexture(textHandle);
 			clearTextSprites_.emplace_back(std::move(textSprite));
 		}
 	}
+	//クリアテキスト背景
+	{
+		std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+		Vector2 pos;
+		//テクスチャハンドルに登録
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
+		//スプライト
+		for (auto& sprite : clearTextSprites_) {
+			std::unique_ptr<Sprite> bgSprite = std::make_unique<Sprite>();
+			bgSprite->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("ClearTextBGUI"), Order::Front0, textureHandle);
+			pos = sprite->GetPosition();
+			pos.y += 5.0f;	//少し下にずらす
+			bgSprite->SetPosition(pos);
+			bgSprite->SetAnchorPoint({ 0.5f,0.5f });
+			bgSprite->SetColor({ dist(engine),dist(engine),dist(engine),0.8f });
+			bgSprite->SetSize({ 75.0f,80.0f });
+			clearTextBack_.emplace_back(std::move(bgSprite));
+		}
+	}
+
 	//タイトルテキスト
 	{
 		TextParam textParam;
@@ -72,18 +96,27 @@ void GameClearSystem::Initialize() {
 		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
-		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
-		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f});
+		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front1);
+		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		titleTextSprite_->SetTexture(titleTextHandle_);
 	}
 
-
+	//紙吹雪パーティクル
+	{
+		confettiParticle_ = std::make_unique<Particle>();
+		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "confetti");
+		confettiParticle_->emitter_.transform.scale = { 15.0f,1.0f,15.0f };
+		confettiParticle_->emitter_.gravity = -1.0f;
+		confettiParticle_->emitter_.isGravity = true;
+		confettiParticle_->emitter_.isBillboard = false;
+		confettiParticle_->emitter_.isPlay = true;
+	}
 }
 
 void GameClearSystem::Update() {
 	//ゲームカメラのチェック
-	assert(gameCamera_ != nullptr"ゲームカメラがセットされていません");
+	assert(gameCamera_ != nullptr && "ゲームカメラがセットされていません");
 
 	//操作
 	Operate();
@@ -91,6 +124,8 @@ void GameClearSystem::Update() {
 	DirectionUI();
 	//カメラワーク
 	CameraWork();
+	//紙吹雪パーティクル更新
+	ConfettiParticleUpdate();
 }
 
 void GameClearSystem::DebugWithImGui() {
@@ -124,8 +159,9 @@ void GameClearSystem::DirectionUI() {
 		//タイマーをリセット
 		textDirectionParam_.timer = 0.0f;
 		//スプライトの回転をリセット
-		for (auto& sprite : clearTextSprites_) {
-			sprite->SetRotation(0.0f);
+		for (int i = 0; i < clearTextSprites_.size(); i++) {
+			clearTextSprites_[i]->SetRotation(0.0f);
+			clearTextBack_[i]->SetRotation(0.0f);
 		}
 	}
 
@@ -135,6 +171,7 @@ void GameClearSystem::DirectionUI() {
 		if (textDirectionParam_.timer < charRotateStartTime[i] || textDirectionParam_.timer > charRotateEndTime[i]) {
 			//回転を0にする
 			clearTextSprites_[i]->SetRotation(0.0f);
+			clearTextBack_[i]->SetRotation(0.0f);
 			//次へ
 			continue;
 		}
@@ -142,6 +179,7 @@ void GameClearSystem::DirectionUI() {
 		float t = (textDirectionParam_.timer - charRotateStartTime[i]) / (charRotateEndTime[i] - charRotateStartTime[i]);
 		float rotation = MyMath::Lerp(0.0f, 2.0f * pi, MyMath::EaseOutCubic(t));
 		clearTextSprites_[i]->SetRotation(rotation);
+		clearTextBack_[i]->SetRotation(rotation);
 	}
 
 }
@@ -165,4 +203,10 @@ void GameClearSystem::CameraWork() {
 		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.translate));
 		gameCamera_->worldTransform.rotate = cameraRotate;
 	}
+}
+
+void GameClearSystem::ConfettiParticleUpdate() {
+	//エミッターの座標をカメラの座標に合わせる
+	confettiParticle_->emitter_.transform.translate = gameCamera_->worldTransform.translate;
+	confettiParticle_->emitter_.transform.translate.y += 7.0f;
 }

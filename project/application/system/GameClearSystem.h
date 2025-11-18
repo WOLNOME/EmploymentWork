@@ -1,11 +1,13 @@
 #pragma once
 #include <Input.h>
+#include <Particle.h>
 #include <GameCamera.h>
 #include <SceneManager.h>
 #include <Object3d.h>
 #include <Sprite.h>
 #include <vector>
 #include <memory>
+#include <random>
 #include <Handle.h>
 
 /// <summary>
@@ -22,7 +24,7 @@ private:
 	/// </summary>
 	struct TextDirectionParam {
 		const float allCharRotateStartTime = 1.8f;		//全文字回転開始にかかる時間(X秒までに全て回転開始してる=最後の文字が回転開始する時間)
-		 float charRotateDuration = 1.2f;			//一const文字が回転する時間
+		float charRotateDuration = 1.2f;			//一文字が回転する時間
 		float timer = 0.0f;					//タイマー
 	};
 	/// <summary>
@@ -81,6 +83,10 @@ private:
 	/// カメラワーク処理
 	/// </summary>
 	void CameraWork();
+	/// <summary>
+	/// 紙吹雪パーティクル更新処理
+	/// </summary>
+	void ConfettiParticleUpdate();
 
 	/// ============================== ///
 	///		インスタンス
@@ -96,7 +102,10 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
-	
+
+	//ランダムエンジン
+	std::mt19937 engine{ std::random_device{}() };
+
 	//戦車オブジェクト
 	std::unique_ptr<Object3d> tank_ = nullptr;
 
@@ -104,9 +113,15 @@ private:
 	std::vector<Handle> clearTextHandles_;
 	std::vector<std::unique_ptr<Sprite>> clearTextSprites_;
 
+	//クリアテキスト背景
+	std::vector<std::unique_ptr<Sprite>> clearTextBack_;
+
 	//タイトルに戻るテキスト
 	Handle titleTextHandle_;
 	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+
+	//紙吹雪パーティクル
+	std::unique_ptr<Particle> confettiParticle_ = nullptr;
 
 	//テキスト操作変数
 	TextDirectionParam textDirectionParam_;
