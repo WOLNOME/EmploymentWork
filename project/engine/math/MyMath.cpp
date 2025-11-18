@@ -243,6 +243,24 @@ float MyMath::AngleOf2VectorY(const Vector3& v1, const Vector3& v2) {
 	return theta;
 }
 
+Vector3 MyMath::DirectionToRotation(const Vector3& dir) {
+	// 正規化（必須）
+	Vector3 n = dir.Normalized();
+
+	// --- Pitch（上下） ---
+	// forward.y から角度を求める：-asin(y)
+	float pitch = -std::asin(n.y);
+
+	// --- Yaw（左右） ---
+	// x, z を使って atan2
+	float yaw = std::atan2(n.x, n.z);
+
+	// Rollは考慮しないので0
+	float roll = 0.0f;
+
+	return { pitch, yaw, roll };
+}
+
 Vector4 MyMath::Lerp(const Vector4& v1, const Vector4& v2, float t) {
 	Vector4 result;
 	result.x = Lerp(v1.x, v2.x, t);
@@ -609,29 +627,6 @@ Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float ro
 	Matrix4x4 rotationMatrix = rotationZ * rotationY * rotationX;
 
 	return rotationMatrix;
-}
-
-Matrix4x4 MyMath::LookAt(Vector3 eye, Vector3 target, Vector3 up) {
-
-	//前方向ベクトル（正規化）
-	Vector3 forward = Normalize(target - eye);
-
-	//右方向ベクトル（正規化）
-	Vector3 right = Normalize(Cross(up, forward));
-
-	//上方向ベクトル（修正済み）
-	Vector3 upCorrected = Cross(forward, right);
-
-	//ビュー行列を構成
-	Matrix4x4 viewMatrix = {
-		right.x, upCorrected.x, -forward.x, 0.0f,
-		right.y, upCorrected.y, -forward.y, 0.0f,
-		right.z, upCorrected.z, -forward.z, 0.0f,
-		-Dot(right, eye), -Dot(upCorrected, eye), Dot(forward, eye), 1.0f
-	};
-
-	return viewMatrix;
-
 }
 
 Quaternion MyMath::Add(const Quaternion& q1, const Quaternion& q2) {

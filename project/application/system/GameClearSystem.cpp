@@ -1,10 +1,12 @@
 #include "GameClearSystem.h"
 #include <WinApp.h>
 #include <ImGuiManager.h>
+#include <Object3dManager.h>
 #include <TextTextureManager.h>
 #include <TextureManager.h>
 #include <SpriteManager.h>
 #include <MyMath.h>
+#include <cassert>
 
 void GameClearSystem::Initialize() {
 	//インプット
@@ -12,28 +14,45 @@ void GameClearSystem::Initialize() {
 	//シーンマネージャー
 	sceneManager_ = SceneManager::GetInstance();
 
+	//戦車オブジェクト
+	{
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("player.png");
+		tank_ = std::make_unique<Object3d>();
+		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
+		tank_->SetTexture(textureHandle);
+		tank_->SetIsDisplay(true);
+		tank_->worldTransform.translate = { 0.0f,3.0f,0.0f };
+	}
+
 	//クリアテキスト
 	{
+		std::wstring perfectText = L"GameClear!";
 		TextParam textParam;
-		textParam.color = { 1,1,0,1 };
+		textParam.color = { 1,1,1,1 };
 		textParam.font = Font::UDDegitalNK_B;
 		textParam.fontStyle = FontStyle::Normal;
-		textParam.size = 60.0f;
-		textParam.text = L"ステージクリア！";
+		textParam.size = 90.0f;
 		EdgeParam edgeParam;
-		edgeParam.color = { 1,1,1,1 };
+		edgeParam.color = { 0,0,0,1 };
 		edgeParam.isEdgeDisplay = true;
 		edgeParam.slideRate = { 0,0 };
 		edgeParam.width = 3.0f;
-		//テクスチャハンドルに登録
-		clearTextHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
-		TextTextureManager::GetInstance()->EditEdgeParam(clearTextHandle_, edgeParam);
-		//スプライト
-		clearTextSprite_ = std::make_unique<Sprite>();
-		clearTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
-		clearTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 300.0f });
-		clearTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
-		clearTextSprite_->SetTexture(clearTextHandle_);
+
+		//各文字ごとに登録
+		for (int i = 0; i < perfectText.size(); i++) {
+			textParam.text = perfectText.substr(i, 1);
+			//テクスチャハンドルに登録
+			Handle textHandle = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
+			TextTextureManager::GetInstance()->EditEdgeParam(textHandle, edgeParam);
+			clearTextHandles_.emplace_back(textHandle);
+			//スプライト
+			std::unique_ptr<Sprite> textSprite = std::make_unique<Sprite>();
+			textSprite->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("ClearTextUI"), Order::Front0);
+			textSprite->SetPosition({ WinApp::kClientWidth / 2.0f - (perfectText.size() - 1) * 45.0f + i * 90.0f,WinApp::kClientHeight / 2.0f - 200.0f });
+			textSprite->SetAnchorPoint({ 0.5f,0.5f });
+			textSprite->SetTexture(textHandle);
+			clearTextSprites_.emplace_back(std::move(textSprite));
+		}
 	}
 	//タイトルテキスト
 	{
@@ -54,7 +73,7 @@ void GameClearSystem::Initialize() {
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
 		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
-		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 50.0f });
+		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f});
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		titleTextSprite_->SetTexture(titleTextHandle_);
 	}
@@ -63,10 +82,15 @@ void GameClearSystem::Initialize() {
 }
 
 void GameClearSystem::Update() {
+	//ゲームカメラのチェック
+	assert(gameCamera_ != nullptr"ゲームカメラがセットされていません");
+
 	//操作
 	Operate();
 	//UI演出
 	DirectionUI();
+	//カメラワーク
+	CameraWork();
 }
 
 void GameClearSystem::DebugWithImGui() {
@@ -82,50 +106,63 @@ void GameClearSystem::Operate() {
 }
 
 void GameClearSystem::DirectionUI() {
-	//タイマー
-	timer_ += kDeltaTime;
-	if (timer_ >= time_) {
-		isHalfPeriod_ = !isHalfPeriod_;
-		timer_ = 0.0f;
+	//必要変数の計算
+	float allCharRotateEndTime;		//全文字回転終了時間
+	allCharRotateEndTime = textDirectionParam_.allCharRotateStartTime + textDirectionParam_.charRotateDuration;
+	std::vector<float> charRotateStartTime;		//各文字の回転開始時間
+	std::vector<float> charRotateEndTime;		//各文字の回転終了時間
+	for (int i = 0; i < clearTextSprites_.size(); i++) {
+		float rate = float(i + 1.0f) / clearTextSprites_.size();
+		charRotateStartTime.emplace_back(MyMath::Lerp(0.0f, textDirectionParam_.allCharRotateStartTime, MyMath::EaseInSine(rate)));
+		charRotateEndTime.emplace_back(charRotateStartTime[i] + textDirectionParam_.charRotateDuration);
 	}
 
-	//スタートテキスト
-	{
-		//周期別の処理
-		Vector2 upPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 250.0f };
-		Vector2 downPosition = { WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f - 200.0f };
-		//前周期
-		if (isHalfPeriod_) {
-			//位置を下げる
-			Vector2 position = MyMath::Lerp(upPosition, downPosition, MyMath::EaseInSine(timer_ / time_));
-			clearTextSprite_->SetPosition(position);
-			//透明にしていく
-			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / time_));
-			clearTextSprite_->SetColor({ 1,1,1,alpha });
-		}
-		//後周期
-		else {
-			//位置を上げる
-			Vector2 position = MyMath::Lerp(downPosition, upPosition, MyMath::EaseOutSine(timer_ / time_));
-			clearTextSprite_->SetPosition(position);
-			//透明にしていく
-			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
-			clearTextSprite_->SetColor({ 1,1,1,alpha });
+	//タイマー更新
+	textDirectionParam_.timer += kDeltaTime;
+	//タイマーが最大値を超えたら
+	if (textDirectionParam_.timer > allCharRotateEndTime) {
+		//タイマーをリセット
+		textDirectionParam_.timer = 0.0f;
+		//スプライトの回転をリセット
+		for (auto& sprite : clearTextSprites_) {
+			sprite->SetRotation(0.0f);
 		}
 	}
-	//終了テキスト
-	{
-		//前周期
-		if (isHalfPeriod_) {
-			//透明にしていく
-			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / time_));
-			titleTextSprite_->SetColor({ 1,1,1,alpha });
+
+	//各文字の回転処理
+	for (int i = 0; i < clearTextSprites_.size(); i++) {
+		//回転しない時間なら
+		if (textDirectionParam_.timer < charRotateStartTime[i] || textDirectionParam_.timer > charRotateEndTime[i]) {
+			//回転を0にする
+			clearTextSprites_[i]->SetRotation(0.0f);
+			//次へ
+			continue;
 		}
-		//後周期
-		else {
-			//透明にしていく
-			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
-			titleTextSprite_->SetColor({ 1,1,1,alpha });
+		//回転中の処理
+		float t = (textDirectionParam_.timer - charRotateStartTime[i]) / (charRotateEndTime[i] - charRotateStartTime[i]);
+		float rotation = MyMath::Lerp(0.0f, 2.0f * pi, MyMath::EaseOutCubic(t));
+		clearTextSprites_[i]->SetRotation(rotation);
+	}
+
+}
+
+void GameClearSystem::CameraWork() {
+	if (!cameraWorkParam_.isEnd) {
+		//タイマー更新
+		cameraWorkParam_.timer += kDeltaTime;
+		//タイマーが移動時間を超えたら
+		if (cameraWorkParam_.timer > cameraWorkParam_.moveDuration) {
+			cameraWorkParam_.timer = cameraWorkParam_.moveDuration;
+			cameraWorkParam_.isEnd = true;
 		}
+		//カメラ位置更新
+		float t = (float)cameraWorkParam_.timer / cameraWorkParam_.moveDuration;
+		Vector3 cameraPos = MyMath::Lerp(cameraWorkParam_.startPos, cameraWorkParam_.endPos, MyMath::EaseOutQuad(t));
+		gameCamera_->worldTransform.translate = cameraPos;
+		//カメラの回転更新
+		Vector3 targetPos = tank_->worldTransform.translate;
+		targetPos.y += 2.5f;	//少し上を見る
+		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.translate));
+		gameCamera_->worldTransform.rotate = cameraRotate;
 	}
 }

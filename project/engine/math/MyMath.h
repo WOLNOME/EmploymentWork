@@ -330,6 +330,12 @@ public:
 	/// <param name="v2">ベクトル2</param>
 	/// <returns>なす角</returns>
 	static float AngleOf2VectorY(const Vector3& v1, const Vector3& v2);
+	/// <summary>
+	/// 向きベクトルから回転を求める関数(Z回転は考慮しない)
+	/// </summary>
+	/// <param name="dir">向きベクトル</param>
+	/// <returns>回転</returns>
+	static Vector3 DirectionToRotation(const Vector3& dir);
 
 	///------------------------------------///
 	///            Vector4
@@ -477,14 +483,7 @@ public:
 	/// <param name="roll">Z軸回転（ラジアン）</param>
 	/// <returns>回転行列</returns>
 	static Matrix4x4 CreateRotationFromEulerAngles(float pitch, float yaw, float roll);
-	/// <summary>
-	/// 視点と注視点からビュー行列を作成する
-	/// </summary>
-	/// <param name="eye">視点位置</param>
-	/// <param name="target">注視点位置</param>
-	/// <param name="up">上方向ベクトル</param>
-	/// <returns>ビュー変換行列</returns>
-	static Matrix4x4 LookAt(Vector3 eye, Vector3 target, Vector3 up);
+	
 
 	///------------------------------------///
 	///           Quaternion

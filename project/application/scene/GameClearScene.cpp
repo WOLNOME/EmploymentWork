@@ -34,6 +34,9 @@ void GameClearScene::Initialize() {
 	//ライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
+	//その他インスタンスのセット
+	gameClearSystem_->SetGameCamera(camera_.get());
+
 }
 
 void GameClearScene::Finalize() {
@@ -43,6 +46,13 @@ void GameClearScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
+	//シーンリセット
+	if (input_->TriggerKey(DIK_R)) {
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
+		sceneManager_->SetNextScene("GameClear", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);
+	}
+
+	//インスタンスの更新処理
 	gameClearSystem_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
