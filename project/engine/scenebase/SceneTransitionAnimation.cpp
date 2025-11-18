@@ -274,6 +274,10 @@ void SceneTransitionAnimation::EndAll() {
 	timer_ = 0.0f;
 	//スプライトを非表示
 	sprite_->SetIsDisplay(false);
+	//スプライトの透明度を1に
+	Vector4 color = sprite_->GetColor();
+	color.w = 1.0f;
+	sprite_->SetColor(color);
 	//遷移中フラグを下ろす
 	isTransitioning_ = false;
 	

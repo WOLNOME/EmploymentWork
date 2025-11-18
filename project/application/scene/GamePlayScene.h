@@ -14,6 +14,8 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
 #include <application/system/StartDirection.h>
+#include <application/system/EndDirection.h>
+#include <application/system/TimeScaleManager.h>
 
 /// <summary>
 /// ゲームプレイシーン全般を管理するクラス
@@ -52,8 +54,14 @@ private:
 	//ゲーム用カメラ
 	std::unique_ptr<GameCamera> camera_ = nullptr;
 
+	//タイムスケールマネージャー
+	std::unique_ptr<TimeScaleManager> timeScaleManager_ = nullptr;
+
 	//スタート演出
 	std::unique_ptr<StartDirection> startDirection_ = nullptr;
+
+	//エンド演出
+	std::unique_ptr<EndDirection> endDirection_ = nullptr;
 
 	//平行光源
 	std::unique_ptr<DirectionalLight> dirLight_;

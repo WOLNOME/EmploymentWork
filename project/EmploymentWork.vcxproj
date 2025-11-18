@@ -128,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\enemy\detail\EnemyHPUI.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
+    <ClCompile Include="application\system\EndDirection.cpp" />
     <ClCompile Include="engine\3d\BulletTrail.cpp" />
     <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
     <ClCompile Include="engine\3d\AnimationModel.cpp" />
@@ -226,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\TitleSystem.cpp" />
     <ClCompile Include="application\system\StartDirection.cpp" />
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
+    <ClCompile Include="application\system\TimeScaleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
@@ -245,6 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\enemy\detail\EnemyHPUI.h" />
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
+    <ClInclude Include="application\system\EndDirection.h" />
     <ClInclude Include="engine\3d\BulletTrail.h" />
     <ClInclude Include="engine\3d\BulletTrailManager.h" />
     <ClInclude Include="engine\3d\AnimationModel.h" />
@@ -353,6 +356,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\TitleSystem.h" />
     <ClInclude Include="application\system\StartDirection.h" />
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
+    <ClInclude Include="application\system\TimeScaleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

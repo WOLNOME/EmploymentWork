@@ -51,13 +51,6 @@ void EnemyManager::Update() {
 	for (const auto& jet : jets_) {
 		jet->Update();
 	}
-
-	//もし全てのボスが死亡していたら
-	if (bosses_.empty()) {
-		//クリアシーンの移行
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		SceneManager::GetInstance()->SetNextScene("GameClear", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
-	}
 }
 
 void EnemyManager::DebugWithImGui() {

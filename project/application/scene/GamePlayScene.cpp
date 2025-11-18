@@ -24,9 +24,17 @@ void GamePlayScene::Initialize() {
 	dirLight_->direction_ = { 1.0f,-1.0f,1.0f };
 	sceneLight_->SetLight(dirLight_.get());
 
+	//タイムスケールマネージャーの生成・初期化
+	timeScaleManager_ = std::make_unique<TimeScaleManager>();
+	timeScaleManager_->Initialize();
+
 	//スタート演出の生成・初期化
 	startDirection_ = std::make_unique<StartDirection>();
 	startDirection_->Initialize();
+
+	//エンド演出の生成・初期化
+	endDirection_ = std::make_unique<EndDirection>();
+	endDirection_->Initialize();
 
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
@@ -71,6 +79,9 @@ void GamePlayScene::Initialize() {
 
 	//その他インスタンスのセット
 	startDirection_->SetMessageUI(messageUI_.get());
+	endDirection_->SetTimeScaleManager(timeScaleManager_.get());
+	endDirection_->SetPlayer(player_.get());
+	endDirection_->SetEnemyManager(enemyManager_.get());
 	player_->SetLevelLoader(levelLoader_.get());
 	player_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetLevelLoader(levelLoader_.get());
@@ -88,7 +99,9 @@ void GamePlayScene::Initialize() {
 
 	//全てのインスタンスを更新しておく
 	BaseScene::Update();
+	timeScaleManager_->Update();
 	startDirection_->Update();
+	endDirection_->Update();
 	levelLoader_->Update();
 	playerUI_->Update();
 	player_->Update();
@@ -111,17 +124,6 @@ void GamePlayScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
-	//シーンリセット
-	if (input_->TriggerKey(DIK_R)) {
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
-	}
-	//プレイヤーが死亡したらゲームオーバー
-	if (player_->GetIsDead()) {
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		sceneManager_->SetNextScene("GameOver", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
-	}
-
 	//F1キーでマウスカーソルの表示する
 	if (input_->TriggerKey(DIK_F1)) {
 		if (isDebug_) {
@@ -138,8 +140,19 @@ void GamePlayScene::Update() {
 		}
 	}
 
+	//タイムスケールマネージャーの更新
+	timeScaleManager_->Update();
+
 	//スタート演出の更新
 	startDirection_->Update();
+	//エンド演出の更新
+	endDirection_->Update();
+
+	//タイムスケールマネージャーによる再生速度の管理
+	if(!timeScaleManager_->GetIsPlay()){
+		return;
+	}
+
 	//メッセージUIの更新
 	messageUI_->Update();
 

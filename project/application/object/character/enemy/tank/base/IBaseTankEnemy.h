@@ -21,6 +21,16 @@ class ItemManager;
 class IBaseTankEnemy : public BaseCharacter {
 public:
 	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+	enum class StateName {
+		Patrol,		//巡回
+		Approach,	//接近
+		Attack,		//攻撃
+		Dead,		//死亡
+	};
+
+	/// ============================== ///
 	///		メンバ関数
 	/// ============================== ///
 
@@ -76,6 +86,11 @@ public:
 	/// </summary>
 	/// <returns>現在のHP</returns>
 	int GetHP() const { return hp_; }
+	/// <summary>
+	/// 現在の状態名を取得する
+	/// </summary>
+	/// <returns>現在の状態名</returns>
+	StateName GetCurrentStateName() const { return currentStateName_; }
 	/// <summary>
 	/// 攻撃ステートを取得する
 	/// </summary>
@@ -133,6 +148,7 @@ private:
 	/// ============================== ///
 
 	//状態管理用変数
+	StateName currentStateName_;	//現在の状態名
 	ITankEnemyState* currentState_ = nullptr;
 
 	std::unique_ptr<TankEnemyPatrolState> patrolState_;
