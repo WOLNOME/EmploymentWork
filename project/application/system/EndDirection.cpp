@@ -49,7 +49,7 @@ void EndDirection::SceneChange() {
 		sceneManager_->SetNextScene("GameOver", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);
 	}
 	//もしスローモーション中で、かつスローモーションタイマーが一定時間を超えたら
-	if (isSlowMotion_ && slowMotionTimer_ >= slowMotionToSceneChangeTime_) {
+	if (isSlowMotion_ && slowMotionTimer_ >= kSlowMotionToSceneChangeTime_) {
 		//クリアシーンへ遷移
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
 		sceneManager_->SetNextScene("GameClear", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);

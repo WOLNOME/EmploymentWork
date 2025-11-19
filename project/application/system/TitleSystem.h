@@ -27,8 +27,8 @@ private:
 	/// タイトルメニュー
 	/// </summary>
 	enum class Menu {
-		Start,
-		Exit,
+		kStart,
+		kExit,
 
 		kNumMaxMenu,
 	};
@@ -100,7 +100,7 @@ private:
 	//テキスト操作変数
 	bool isHalfPeriod_ = false;
 	float timer_ = 0.0f;
-	const float time_ = 2.0f;
+	const float kTime_ = 2.0f;
 
 	//タイトルテキスト
 	Handle titleTextHandle_;
@@ -119,7 +119,7 @@ private:
 	//カメラ操作
 	Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };
 	Vector3 cameraEndPos_ = { 60.0f,12.0f,-17.0f };
-	const float cameraMoveTime_ = 30.0f;
+	const float kCameraMoveTime_ = 30.0f;
 	float cameraTimer_ = 0.0f;
 	bool isHalfPeriodCamera_ = false;
 

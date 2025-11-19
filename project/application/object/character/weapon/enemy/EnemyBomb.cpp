@@ -163,7 +163,7 @@ void EnemyBomb::Blast() {
 
 	//爆風時間の加算
 	durationTimer_ += kDeltaTime;
-	if (durationTimer_ >= durationTime_) {
+	if (durationTimer_ >= kDurationTime_) {
 		//爆風時間を超えたら終了
 		isBlast_ = false;
 		durationTimer_ = 0.0f;

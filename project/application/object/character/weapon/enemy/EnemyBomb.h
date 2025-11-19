@@ -100,7 +100,7 @@ private:
 
 	//爆風
 	bool isBlast_ = false;
-	const float durationTime_ = 1.0f;
+	const float kDurationTime_ = 1.0f;
 	float durationTimer_ = 0.0f;
 };
 
