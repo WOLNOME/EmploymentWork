@@ -19,7 +19,7 @@ void JetEnemyAttackState::Update(IBaseJetEnemy* enemy) {
 	//攻撃済みなら接近状態に切り替え
 	if (!isCanBombFire_) {
 		phaseChangeCoolTimer_ += kDeltaTime;
-		if (phaseChangeCoolTimer_ > phaseChangeCoolTime_) {
+		if (phaseChangeCoolTimer_ > kPhaseChangeCoolTime_) {
 			enemy->ChangeState("Approach");
 		}
 	}

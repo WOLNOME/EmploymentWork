@@ -24,10 +24,10 @@ public:
 	///		列挙体
 	/// ============================== ///
 	enum class StateName {
-		Patrol,		//巡回
-		Approach,	//接近
-		Attack,		//攻撃
-		Dead,		//死亡
+		kPatrol,		//巡回
+		kApproach,		//接近
+		kAttack,		//攻撃
+		kDead,			//死亡
 	};
 
 	/// ============================== ///

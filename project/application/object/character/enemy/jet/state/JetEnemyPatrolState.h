@@ -63,7 +63,7 @@ private:
 	bool isDecidedTargetPoint_ = false;
 
 	//状態継続最低時間
-	const float stateContinueTime_ = 2.0f;
+	const float kStateContinueTime_ = 2.0f;
 	float stateContinueTimer_ = 0.0f;
 
 };

@@ -62,7 +62,7 @@ private:
 	bool isCanBombFire_ = false;
 
 	//フェーズ移行クールタイム
-	const float phaseChangeCoolTime_ = 2.0f;
+	const float kPhaseChangeCoolTime_ = 2.0f;
 	float phaseChangeCoolTimer_ = 0.0f;
 };
 
