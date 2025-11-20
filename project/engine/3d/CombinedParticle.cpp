@@ -17,15 +17,15 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 			//拡張子が .json かを判別
 			if (entry.path().extension() == ".json") {
 				//データファイルコンテナに格納
-				dataFiles.push_back(entry.path().string());
+				dataFiles.push_back(entry.path().generic_string());
 			}
 		}
 	}
 	//データファイルコンテナを使ってパーティクルのコンテナに内部データを移す
 	for (const auto& dataFile : dataFiles) {
 		//初期化
-		std::string name = _comParticleFileName + "_" + dataFile.substr(0, dataFile.rfind(".json"));	//名前
-		std::string fileName = dataFile.substr(0, dataFile.rfind(".json"));	//ファイル名(.json抜き)
+		std::string name = _comParticleFileName + "_" + dataFile.substr(0, dataFile.rfind(".json"));	//名前(〇〇_△△→.json省略)
+		std::string fileName = dataFile.substr(0, dataFile.rfind(".json"));	//ファイル名()
 		std::string relativePath = _comParticleFileName + "/" + dataFile;	//データの相対パス
 		//パーティクルを生成
 		particles_[fileName].particle = std::make_unique<Particle>();

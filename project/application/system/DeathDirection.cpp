@@ -58,13 +58,13 @@ void DeathDirection::CameraControl() {
 		}
 
 		//カメラのシェイクを開始する
-		camera_->RegistShake(time_, 0.5f);
+		camera_->RegistShake(kTime_, 0.5f);
 	}
 
 	//タイマーを進める
 	timer_ += kDeltaTime;
 	//時間になったら
-	if (timer_ >= time_) {
+	if (timer_ >= kTime_) {
 		//演出の終了フラグを立てる
 		isDirFinished_ = true;
 	}
