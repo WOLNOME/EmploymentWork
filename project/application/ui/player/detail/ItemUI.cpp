@@ -18,7 +18,7 @@ void ItemUI::Initialize() {
 		sprites_[i] = std::make_unique<Sprite>();
 		sprites_[i]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("PlayerItem"), Order::Front2, textureHandles_[i]);
 		sprites_[i]->SetPosition({ 150.0f,560.0f + (float)i * 60.0f });
-		sprites_[i]->SetSize({ (float)textureWidth_ / spriteStateNum_, (float)textureHeight_ });
+		sprites_[i]->SetSize({ (float)kTextureWidth_ / kSpriteStateNum_, (float)kTextureHeight_ });
 		sprites_[i]->SetAnchorPoint({ 0.5f, 0.5f });
 	}
 }
@@ -46,9 +46,9 @@ void ItemUI::Update() {
 			break;
 		}
 
-		float uvScrollRateX = (float)itemCount / spriteStateNum_;
-		sprites_[i]->SetTextureLeftTop({ uvScrollRateX * textureWidth_, 0.0f });
-		sprites_[i]->SetTextureSize({ (float)textureWidth_ / spriteStateNum_, (float)textureHeight_ });
+		float uvScrollRateX = (float)itemCount / kSpriteStateNum_;
+		sprites_[i]->SetTextureLeftTop({ uvScrollRateX * kTextureWidth_, 0.0f });
+		sprites_[i]->SetTextureSize({ (float)kTextureWidth_ / kSpriteStateNum_, (float)kTextureHeight_ });
 	}
 
 }

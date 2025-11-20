@@ -102,9 +102,9 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	const Vector2 centerPosition = { 640.0f,620.0f };	//レーダーの中心座標
-	const float unitLength = 31.0f / 100.0f;		//レーダー上の1の長さ
-	const float searchLength = 300.0f;		//索敵距離
+	const Vector2 kCenterPosition_ = { 640.0f,620.0f };	//レーダーの中心座標
+	const float kUnitLength_ = 31.0f / 100.0f;		//レーダー上の1の長さ
+	const float kSearchLength_ = 300.0f;		//索敵距離
 
 	uint32_t thPlayerMark_ = 0u;
 	std::unique_ptr<Sprite> playerMark_ = nullptr;

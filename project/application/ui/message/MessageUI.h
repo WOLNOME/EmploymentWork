@@ -20,10 +20,10 @@ private:
 	/// メッセージの状態
 	/// </summary>
 	enum class MessageState {
-		Inputting,		// 入力中
-		Displaying,		// 表示中
-		Disappearing,	// 消滅中
-		Finished,		// 完了
+		kInputting,		// 入力中
+		kDisplaying,		// 表示中
+		kDisappearing,	// 消滅中
+		kFinished,		// 完了
 	};
 
 	/// ============================== ///

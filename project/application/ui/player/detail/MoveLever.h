@@ -15,8 +15,8 @@ private:
 	/// ============================== ///
 
 	enum class Type {
-		ControlScale,	//制御目盛り
-		Lever,			//レバー
+		kControlScale,	//制御目盛り
+		kLever,			//レバー
 
 		kMaxTypeNum,	//タイプの数
 	};
@@ -62,7 +62,7 @@ private:
 	std::array<std::unique_ptr<Sprite>, (int)Type::kMaxTypeNum> sprites_;
 
 	//ゲージ(0~500)
-	const int maxGauge_ = 250;
+	const int kMaxGauge_ = 250;
 	int gauge_ = 125;
 };
 
