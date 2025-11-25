@@ -15,7 +15,7 @@ IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
 	attackState_ = std::make_unique <TankEnemyAttackState>(_isUseCannon);
 	deadState_ = std::make_unique <TankEnemyDeadState>();
 	//初期ステートを決定
-	currentStateName_ = StateName::Patrol;
+	currentStateName_ = StateName::kPatrol;
 	currentState_ = patrolState_.get();
 }
 
@@ -102,19 +102,19 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 	ITankEnemyState* newState = nullptr;
 	if (stateName == "Patrol") {
 		newState = patrolState_.get();
-		currentStateName_ = StateName::Patrol;
+		currentStateName_ = StateName::kPatrol;
 	}
 	else if (stateName == "Approach") {
 		newState = approachState_.get();
-		currentStateName_ = StateName::Approach;
+		currentStateName_ = StateName::kApproach;
 	}
 	else if (stateName == "Attack") {
 		newState = attackState_.get();
-		currentStateName_ = StateName::Attack;
+		currentStateName_ = StateName::kAttack;
 	}
 	else if (stateName == "Dead") {
 		newState = deadState_.get();
-		currentStateName_ = StateName::Dead;
+		currentStateName_ = StateName::kDead;
 		//アイテムを生成
 		itemManager_->AddItem(GetWorldTransform().translate);
 	}

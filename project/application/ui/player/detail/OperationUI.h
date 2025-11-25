@@ -13,12 +13,12 @@ private:
 	/// ============================== ///
 
 	enum class Type {
-		Cannon,			//砲弾攻撃
-		Bullet,			//機関銃攻撃
-		Perspective,	//視点移動
-		Move,			//移動
+		kCannon,			//砲弾攻撃
+		kBullet,			//機関銃攻撃
+		kPerspective,		//視点移動
+		kMove,				//移動
 
-		kMaxTypeNum,	//タイプの数
+		kMaxTypeNum,		//タイプの数
 	};
 
 public:

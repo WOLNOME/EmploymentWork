@@ -84,7 +84,7 @@ void GameOverSystem::Operate() {
 void GameOverSystem::DirectionUI() {
 	//タイマー
 	timer_ += kDeltaTime;
-	if (timer_ >= time_) {
+	if (timer_ >= kTime_) {
 		isHalfPeriod_ = !isHalfPeriod_;
 		timer_ = 0.0f;
 	}
@@ -97,19 +97,19 @@ void GameOverSystem::DirectionUI() {
 		//前周期
 		if (isHalfPeriod_) {
 			//位置を下げる
-			Vector2 position = MyMath::Lerp(upPosition, downPosition, MyMath::EaseInSine(timer_ / time_));
+			Vector2 position = MyMath::Lerp(upPosition, downPosition, MyMath::EaseInSine(timer_ / kTime_));
 			gameOverTextSprite_->SetPosition(position);
 			//透明にしていく
-			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / time_));
+			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / kTime_));
 			gameOverTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 		//後周期
 		else {
 			//位置を上げる
-			Vector2 position = MyMath::Lerp(downPosition, upPosition, MyMath::EaseOutSine(timer_ / time_));
+			Vector2 position = MyMath::Lerp(downPosition, upPosition, MyMath::EaseOutSine(timer_ / kTime_));
 			gameOverTextSprite_->SetPosition(position);
 			//透明にしていく
-			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
+			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / kTime_));
 			gameOverTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 	}
@@ -118,13 +118,13 @@ void GameOverSystem::DirectionUI() {
 		//前周期
 		if (isHalfPeriod_) {
 			//透明にしていく
-			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / time_));
+			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / kTime_));
 			titleTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 		//後周期
 		else {
 			//透明にしていく
-			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
+			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / kTime_));
 			titleTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 	}

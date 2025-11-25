@@ -21,10 +21,10 @@ private:
 	/// </summary>
 	struct IndicatorInfo {
 		uint32_t textureHandle = 0u;
-		std::unique_ptr<Sprite> sprite_ = nullptr;
-		float currentTime_;
-		Vector3 hitPosition_;
-		bool isActive_;
+		std::unique_ptr<Sprite> sprite = nullptr;
+		float currentTime;
+		Vector3 hitPosition;
+		bool isActive;
 	};
 
 public:
@@ -77,6 +77,6 @@ private:
 	static const int kNumIndicators_ = 10;
 	std::array<IndicatorInfo, kNumIndicators_> indicators_;
 
-	const float maxActiveTime_ = 1.0f;
+	const float kMaxActiveTime_ = 1.0f;
 };
 

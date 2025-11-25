@@ -58,7 +58,7 @@ private:
 	//テキスト操作変数
 	bool isHalfPeriod_ = false;
 	float timer_ = 0.0f;
-	const float time_ = 2.0f;
+	const float kTime_ = 2.0f;
 
 	//ゲームオーバーテキスト
 	Handle gameOverTextHandle_;

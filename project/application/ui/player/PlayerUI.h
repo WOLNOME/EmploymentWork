@@ -126,9 +126,9 @@ private:
 	//パラメーター
 	json param_;
 
-	bool isDamage = false;
-	bool isBright = true;
-	float blinkTimer = 0.0f;
+	bool isDamage_ = false;
+	bool isBright_ = true;
+	float blinkTimer_ = 0.0f;
 
 
 };

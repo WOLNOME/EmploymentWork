@@ -32,7 +32,7 @@ void JetEnemyApproachState::Update(IBaseJetEnemy* enemy) {
 		messageUI_->AddMessage(L"<注意> ジェットの攻撃範囲に入った！");
 	}
 	//接近範囲から外れたらパトロール状態に切り替え(状態継続最低時間を超えている時のみ)
-	if (stateContinueTimer_ > stateContinueTime_) {
+	if (stateContinueTimer_ > kStateContinueTime_) {
 		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
 		if (Vector3(enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate).Length() > searchPlayerDistanceApproach) {
 			enemy->ChangeState("Patrol");

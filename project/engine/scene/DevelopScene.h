@@ -71,6 +71,8 @@ private:
 
 	//パーティクル
 	std::unique_ptr<Particle> particle_ = nullptr;
+	//複合パーティクル
+	std::unique_ptr<CombinedParticle> combinedParticle_ = nullptr;
 
 	//オーディオ
 	bool isDrawSphere_ = false;
@@ -81,10 +83,6 @@ private:
 	float time_ = 0.0f;
 	Handle textHandle_;
 	std::unique_ptr<Sprite> text_ = nullptr;
-
-	//UVスクロール
-	std::unique_ptr<Sprite> uvScroll_ = nullptr;
-	uint32_t textureHandleUV = 0u;
 
 };
 

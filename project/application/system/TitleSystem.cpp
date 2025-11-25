@@ -14,7 +14,7 @@ void TitleSystem::Initialize() {
 	sceneManager_ = SceneManager::GetInstance();
 
 	//メンバ変数の初期化
-	menu_ = Menu::Start;
+	menu_ = Menu::kStart;
 
 	//タイトルテキスト
 	{
@@ -111,7 +111,7 @@ void TitleSystem::Operate() {
 void TitleSystem::DirectionUI() {
 	//タイマー
 	timer_ += kDeltaTime;
-	if (timer_ >= time_) {
+	if (timer_ >= kTime_) {
 		isHalfPeriod_ = !isHalfPeriod_;
 		timer_ = 0.0f;
 	}
@@ -124,19 +124,19 @@ void TitleSystem::DirectionUI() {
 		//前周期
 		if (isHalfPeriod_) {
 			//位置を下げる
-			Vector2 position = MyMath::Lerp(upPosition, downPosition, MyMath::EaseInSine(timer_ / time_));
+			Vector2 position = MyMath::Lerp(upPosition, downPosition, MyMath::EaseInSine(timer_ / kTime_));
 			startTextSprite_->SetPosition(position);
 			//透明にしていく
-			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / time_));
+			float alpha = MyMath::Lerp(1.0f, 0.0f, MyMath::EaseInSine(timer_ / kTime_));
 			startTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 		//後周期
 		else {
 			//位置を上げる
-			Vector2 position = MyMath::Lerp(downPosition, upPosition, MyMath::EaseOutSine(timer_ / time_));
+			Vector2 position = MyMath::Lerp(downPosition, upPosition, MyMath::EaseOutSine(timer_ / kTime_));
 			startTextSprite_->SetPosition(position);
 			//透明にしていく
-			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / time_));
+			float alpha = MyMath::Lerp(0.0f, 1.0f, MyMath::EaseOutSine(timer_ / kTime_));
 			startTextSprite_->SetColor({ 1,1,1,alpha });
 		}
 	}
@@ -150,18 +150,18 @@ void TitleSystem::OperateCamera() {
 	{
 		//タイマー
 		cameraTimer_ += kDeltaTime;
-		if (cameraTimer_ >= cameraMoveTime_) {
+		if (cameraTimer_ >= kCameraMoveTime_) {
 			isHalfPeriodCamera_ = !isHalfPeriodCamera_;
 			cameraTimer_ = 0.0f;
 		}
 		//前周期
 		if (!isHalfPeriodCamera_) {
-			Vector3 position = MyMath::Lerp(cameraStartPos_, cameraEndPos_, MyMath::EaseInOutSine(cameraTimer_ / cameraMoveTime_));
+			Vector3 position = MyMath::Lerp(cameraStartPos_, cameraEndPos_, MyMath::EaseInOutSine(cameraTimer_ / kCameraMoveTime_));
 			camera_->worldTransform.translate = position;
 		}
 		//後周期
 		else {
-			Vector3 position = MyMath::Lerp(cameraEndPos_, cameraStartPos_, MyMath::EaseInOutSine(cameraTimer_ / cameraMoveTime_));
+			Vector3 position = MyMath::Lerp(cameraEndPos_, cameraStartPos_, MyMath::EaseInOutSine(cameraTimer_ / kCameraMoveTime_));
 			camera_->worldTransform.translate = position;
 		}
 	}

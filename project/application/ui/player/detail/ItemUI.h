@@ -61,9 +61,9 @@ private:
 
 	std::array<uint32_t, 3> textureHandles_;
 	std::array<std::unique_ptr<Sprite>, 3> sprites_;
-	const int textureWidth_ = 680;
-	const int textureHeight_ = 48;
-	const int spriteStateNum_ = 4;	//0,1,2,3の4状態
+	const int kTextureWidth_ = 680;
+	const int kTextureHeight_ = 48;
+	const int kSpriteStateNum_ = 4;	//0,1,2,3の4状態
 
 };
 

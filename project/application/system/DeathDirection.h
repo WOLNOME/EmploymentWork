@@ -5,8 +5,6 @@
 #include <MyMath.h>
 #include <memory>
 
-//アプリケーション
-
 
 /// <summary>
 /// プレイヤーの死亡演出処理
@@ -101,11 +99,11 @@ private:
 	Vector3 rotateVelocity_ = {};
 
 	//定数グループ
-	const float time_ = 3.0f;	//演出の時間
-	const float gravity_ = 33.0f;	//重力	
-	const float floorHeight_ = 3.0f;	//床の高さ
-	const float restitution_ = 0.7f;	//床の反発値
-	const float rotateDecay_ = 0.5f;	//回転の減衰値
+	const float kTime_ = 3.0f;	//演出の時間
+	const float kGravity_ = 33.0f;	//重力	
+	const float kFloorHeight_ = 3.0f;	//床の高さ
+	const float kRestitution_ = 0.7f;	//床の反発値
+	const float kRotateDecay_ = 0.5f;	//回転の減衰値
 
 
 

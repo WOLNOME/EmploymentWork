@@ -21,7 +21,7 @@ void Radar::Initialize() {
 		playerMark_->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front2, thPlayerMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
 		playerMark_->SetSize(playerMark_->GetSize() * 0.2f);
-		playerMark_->SetPosition(centerPosition);
+		playerMark_->SetPosition(kCenterPosition_);
 		playerMark_->SetColor({ 1,0,0,1 });
 	}
 	{
@@ -51,7 +51,7 @@ void Radar::Initialize() {
 		compass_ = std::make_unique<Sprite>();
 		compass_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("compass"), Order::Front2, thCompass_);
 		compass_->SetAnchorPoint({ 0.5f,0.5f });
-		compass_->SetPosition(centerPosition);
+		compass_->SetPosition(kCenterPosition_);
 	}
 }
 
@@ -131,13 +131,13 @@ void Radar::UpdateEnemyMark() {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();
-		if (playerToEnemy.Length() > searchLength) return;
+		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.rotate.y);
 
 		enemyMarks_[spriteIndex]->SetPosition({
-			centerPosition.x + (rotated.x * unitLength),
-			centerPosition.y - (rotated.z * unitLength)
+			kCenterPosition_.x + (rotated.x * kUnitLength_),
+			kCenterPosition_.y - (rotated.z * kUnitLength_)
 			});
 
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
@@ -150,12 +150,12 @@ void Radar::UpdateEnemyMark() {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();
-		if (playerToEnemy.Length() > searchLength) return;
+		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.rotate.y);
 		enemyMarks_[spriteIndex]->SetPosition({
-			centerPosition.x + (rotated.x * unitLength),
-			centerPosition.y - (rotated.z * unitLength)
+			kCenterPosition_.x + (rotated.x * kUnitLength_),
+			kCenterPosition_.y - (rotated.z * kUnitLength_)
 			});
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
 		enemyMarks_[spriteIndex]->SetColor(color);
@@ -199,13 +199,13 @@ void Radar::UpdateItemMark() {
 	};
 	//アイテム処理ラムダ
 	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
-		if (itemPos.Length() > searchLength) return;
+		if (itemPos.Length() > kSearchLength_) return;
 		//プレイヤー→アイテムのベクトルを作る
 		Vector3 playerToItem = itemPos - player_->GetWorldPosition();
 		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.rotate.y);
 		itemMarks_[spriteIndex]->SetPosition({
-			centerPosition.x + (rotated.x * unitLength),
-			centerPosition.y - (rotated.z * unitLength)
+			kCenterPosition_.x + (rotated.x * kUnitLength_),
+			kCenterPosition_.y - (rotated.z * kUnitLength_)
 			});
 		itemMarks_[spriteIndex]->SetIsDisplay(true);
 		itemMarks_[spriteIndex]->SetColor(color);

@@ -30,7 +30,7 @@ void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
 	TransitionDeadState(enemy);
 
 	//プレイヤーが近づいたら接近状態に切り替え(状態継続最低時間を超えているときのみ)
-	if (stateContinueTimer_ > stateContinueTime_) {
+	if (stateContinueTimer_ > kStateContinueTime_) {
 		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
 		Vector3 playerPos = enemy->GetPlayer()->GetWorldTransform().translate;
 		playerPos.y = enemy->GetParam()["height"];

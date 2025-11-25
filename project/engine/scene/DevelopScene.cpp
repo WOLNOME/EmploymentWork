@@ -97,8 +97,12 @@ void DevelopScene::Initialize() {
 	//levelObject_->Initialize();
 
 	//パーティクルの生成・初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Particle"), "gpu");
+	/*particle_ = std::make_unique<Particle>();
+	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("Particle"), "gpu");*/
+	//複合パーティクルの生成・初期化
+	combinedParticle_ = std::make_unique<CombinedParticle>();
+	combinedParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("CombinedParticle"), "Basic");
+	combinedParticle_->SetBaseTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,5.0f,0.0f} });
 
 	//オーディオの生成・初期化
 	audio_ = std::make_unique<Audio>();
@@ -110,16 +114,6 @@ void DevelopScene::Initialize() {
 	ParticleManager::GetInstance()->SetCamera(camera.get());
 	//シーンライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
-	//UVスクロールの作成
-	{
-		textureHandleUV = TextureManager::GetInstance()->LoadTexture("uvscroll.png");
-		uvScroll_ = std::make_unique<Sprite>();
-		uvScroll_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("UVScroll"), Order::Front1, 11, 0.3f, true, textureHandleUV);
-		uvScroll_->SetAnchorPoint({ 0.5f,0.5f });
-		uvScroll_->SetPosition({ 800.0f,500.0f });
-		uvScroll_->SetIsDisplay(true);
-	}
 
 	//テキストテクスチャの作成
 	{
@@ -169,6 +163,9 @@ void DevelopScene::Update() {
 
 	time_ += kDeltaTime;
 	TextTextureManager::GetInstance()->EditTextString(textHandle_, L"フォント確認 0123 abcDEF\n現在時刻 : {:.1f}", time_);
+
+	//複合パーティクルの更新
+	combinedParticle_->Update();
 
 	bool testCaseJudge = false;
 }

@@ -58,13 +58,13 @@ void DeathDirection::CameraControl() {
 		}
 
 		//カメラのシェイクを開始する
-		camera_->RegistShake(time_, 0.5f);
+		camera_->RegistShake(kTime_, 0.5f);
 	}
 
 	//タイマーを進める
 	timer_ += kDeltaTime;
 	//時間になったら
-	if (timer_ >= time_) {
+	if (timer_ >= kTime_) {
 		//演出の終了フラグを立てる
 		isDirFinished_ = true;
 	}
@@ -72,22 +72,22 @@ void DeathDirection::CameraControl() {
 	//カメラの移動処理
 	{
 		//重力の加算
-		velocity_.y += -gravity_ * kDeltaTime;
+		velocity_.y += -kGravity_ * kDeltaTime;
 		//速度の加算
 		camera_->worldTransform.translate += velocity_ * kDeltaTime;
 
 		//床との当たり判定
-		if (camera_->worldTransform.translate.y <= floorHeight_) {
+		if (camera_->worldTransform.translate.y <= kFloorHeight_) {
 			//速度を反転(上向きになるように)
 			if (velocity_.y < 0.0f) {
 				//速度反転
-				velocity_.y = std::fabs(velocity_.y) * restitution_;
+				velocity_.y = std::fabs(velocity_.y) * kRestitution_;
 				//XZ方向の速度を減衰
-				velocity_.x *= restitution_;
-				velocity_.z *= restitution_;
+				velocity_.x *= kRestitution_;
+				velocity_.z *= kRestitution_;
 
 				//回転速度の減衰
-				rotateVelocity_ *= rotateDecay_;
+				rotateVelocity_ *= kRotateDecay_;
 			}
 		}
 	}

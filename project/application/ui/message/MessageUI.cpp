@@ -77,7 +77,7 @@ uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bo
 	}
 	newMessage.disappearTimer = param_["disappearTime"];
 	newMessage.blinkTimer = param_["blinkInterval"];
-	newMessage.state = MessageState::Inputting;
+	newMessage.state = MessageState::kInputting;
 	newMessage.isFinished = false;
 	newMessage.isBlinking = _isBlinking;
 	newMessage.textHandle = TextTextureManager::GetInstance()->LoadTextTexture(baseTextParam_);
@@ -92,7 +92,7 @@ void MessageUI::FinishMessage(uint32_t _messageId) {
 	// 指定されたIDのメッセージを消滅中に移行させる
 	for (auto& message : messages_) {
 		if (message.id == _messageId) {
-			message.state = MessageState::Disappearing;
+			message.state = MessageState::kDisappearing;
 			break;
 		}
 	}
@@ -132,7 +132,7 @@ void MessageUI::UpdateMessage() {
 		}
 
 		switch (message.state) {
-		case MessageState::Inputting:
+		case MessageState::kInputting:
 		{
 			// 入力中
 			message.inputTimer -= kDeltaTime;
@@ -141,7 +141,7 @@ void MessageUI::UpdateMessage() {
 				TextTextureManager::GetInstance()->EditTextString(message.textHandle, message.text);
 
 				message.inputTimer = 0.0f;
-				message.state = MessageState::Displaying; // 表示中へ移行
+				message.state = MessageState::kDisplaying; // 表示中へ移行
 
 				continue;	//次のメッセージへ
 			}
@@ -152,25 +152,25 @@ void MessageUI::UpdateMessage() {
 
 			break;
 		}
-		case MessageState::Displaying:
+		case MessageState::kDisplaying:
 		{
 			// 表示中
 			message.displayTimer -= kDeltaTime;
 			if (message.displayTimer <= 0.0f) {
 				message.displayTimer = 0.0f;
-				message.state = MessageState::Disappearing; // 消滅中へ移行
+				message.state = MessageState::kDisappearing; // 消滅中へ移行
 
 				continue;	// 次のメッセージへ
 			}
 			break;
 		}
-		case MessageState::Disappearing:
+		case MessageState::kDisappearing:
 		{
 			// 消滅中
 			message.disappearTimer -= kDeltaTime;
 			if (message.disappearTimer <= 0.0f) {
 				message.disappearTimer = 0.0f;
-				message.state = MessageState::Finished; // 完了へ移行
+				message.state = MessageState::kFinished; // 完了へ移行
 				continue;	// 次のメッセージへ
 			}
 			// 透明にしていく
@@ -181,7 +181,7 @@ void MessageUI::UpdateMessage() {
 
 			break;
 		}
-		case MessageState::Finished:
+		case MessageState::kFinished:
 			// 完了
 			message.isFinished = true;
 			break;

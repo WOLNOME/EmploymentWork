@@ -7,17 +7,17 @@
 
 void MoveLever::Initialize() {
 	//制御目盛りUIのスプライトの初期化
-	textureHandles_[(int)Type::ControlScale] = TextureManager::GetInstance()->LoadTexture("controlScale.png");
-	sprites_[(int)Type::ControlScale] = std::make_unique<Sprite>();
-	sprites_[(int)Type::ControlScale]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("controlScaleUI"), Order::Front2, textureHandles_[(int)Type::ControlScale]);
-	sprites_[(int)Type::ControlScale]->SetAnchorPoint({ 0.5f,0.5f });
-	sprites_[(int)Type::ControlScale]->SetPosition({ 1100.0f,640.0f });
+	textureHandles_[(int)Type::kControlScale] = TextureManager::GetInstance()->LoadTexture("controlScale.png");
+	sprites_[(int)Type::kControlScale] = std::make_unique<Sprite>();
+	sprites_[(int)Type::kControlScale]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("controlScaleUI"), Order::Front2, textureHandles_[(int)Type::kControlScale]);
+	sprites_[(int)Type::kControlScale]->SetAnchorPoint({ 0.5f,0.5f });
+	sprites_[(int)Type::kControlScale]->SetPosition({ 1100.0f,640.0f });
 	//レバーUIのスプライトの初期化
-	textureHandles_[(int)Type::Lever] = TextureManager::GetInstance()->LoadTexture("lever.png");
-	sprites_[(int)Type::Lever] = std::make_unique<Sprite>();
-	sprites_[(int)Type::Lever]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("leverUI"), Order::Front3, textureHandles_[(int)Type::Lever]);
-	sprites_[(int)Type::Lever]->SetAnchorPoint({ 0.5f,0.5f });
-	sprites_[(int)Type::Lever]->SetPosition({ 1100.0f,640.0f });
+	textureHandles_[(int)Type::kLever] = TextureManager::GetInstance()->LoadTexture("lever.png");
+	sprites_[(int)Type::kLever] = std::make_unique<Sprite>();
+	sprites_[(int)Type::kLever]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("leverUI"), Order::Front3, textureHandles_[(int)Type::kLever]);
+	sprites_[(int)Type::kLever]->SetAnchorPoint({ 0.5f,0.5f });
+	sprites_[(int)Type::kLever]->SetPosition({ 1100.0f,640.0f });
 }
 
 void MoveLever::Update() {
@@ -28,7 +28,7 @@ void MoveLever::Update() {
 	//W,Sに対してゲージを変動させる
 	if (input_->PushKey(DIK_W)) {
 		//半分より小さいなら
-		if (gauge_ < maxGauge_ / 2.0f) {
+		if (gauge_ < kMaxGauge_ / 2.0f) {
 			gauge_ += 2;
 		}
 		else {
@@ -37,7 +37,7 @@ void MoveLever::Update() {
 	}
 	if (input_->PushKey(DIK_S)) {
 		//半分より大きいなら
-		if (gauge_ > maxGauge_ / 2.0f) {
+		if (gauge_ > kMaxGauge_ / 2.0f) {
 			gauge_ -= 2;
 		}
 		else {
@@ -48,22 +48,22 @@ void MoveLever::Update() {
 	//何も入力されていない場合は1500になるようにする
 	if (!input_->PushKey(DIK_W) && !input_->PushKey(DIK_S)) {
 		//半分より大きいなら
-		if (gauge_ > maxGauge_ / 2.0f) {
+		if (gauge_ > kMaxGauge_ / 2.0f) {
 			gauge_ -= 2;
 		}
 		//半分より小さいなら
-		else if (gauge_ < maxGauge_ / 2.0f) {
+		else if (gauge_ < kMaxGauge_ / 2.0f) {
 			gauge_ += 2;
 		}
 	}
 
 	//ゲージをクランプする
-	gauge_ = std::clamp<int>(gauge_, 0, maxGauge_);
+	gauge_ = std::clamp<int>(gauge_, 0, kMaxGauge_);
 
-	float leverHeight = MyMath::Lerp(minHeight, maxHeight, (float)gauge_ / maxGauge_);
+	float leverHeight = MyMath::Lerp(minHeight, maxHeight, (float)gauge_ / kMaxGauge_);
 
 	//レバーの座標を決める
-	sprites_[(int)Type::Lever]->SetPosition({ 1100.0f,leverHeight });
+	sprites_[(int)Type::kLever]->SetPosition({ 1100.0f,leverHeight });
 }
 
 void MoveLever::AttachShake(const Vector2& _shakeOffset) {

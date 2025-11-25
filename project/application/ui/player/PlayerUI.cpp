@@ -170,15 +170,15 @@ void PlayerUI::DamageBlinking() {
 		};
 
 	//被弾開始時または死亡演出中に点滅開始
-	if ((player_->GetIsDamage() || player_->GetIsDeathDir()) && blinkTimer <= 0.0f) {
+	if ((player_->GetIsDamage() || player_->GetIsDeathDir()) && blinkTimer_ <= 0.0f) {
 		float blinkDuration = param_["blinkDuration"];
-		blinkTimer = blinkDuration;
-		isDamage = true;
+		blinkTimer_ = blinkDuration;
+		isDamage_ = true;
 	}
 
 	//点滅処理
-	if (isDamage) {
-		blinkTimer -= kDeltaTime;
+	if (isDamage_) {
+		blinkTimer_ -= kDeltaTime;
 
 		//点滅トグル
 		static float blinkElapsed = 0.0f;
@@ -187,20 +187,20 @@ void PlayerUI::DamageBlinking() {
 		float blinkInterval = param_["blinkInterval"];
 		if (blinkElapsed >= blinkInterval) {
 			blinkElapsed = 0.0f;
-			isBright = !isBright;
+			isBright_ = !isBright_;
 
-			Vector4 color = isBright ? Vector4{ 1.0f, 0.6f, 0.6f, 1.0f }
+			Vector4 color = isBright_ ? Vector4{ 1.0f, 0.6f, 0.6f, 1.0f }
 			: Vector4{ 0.6f, 0.2f, 0.2f, 1.0f };
 			SetUIColor(color);
 		}
 
 		//終了処理
-		if (blinkTimer <= 0.0f) {
+		if (blinkTimer_ <= 0.0f) {
 			SetUIColor({ 1.0f, 1.0f, 1.0f, 1.0f }); //元の色に戻す
-			isDamage = false;
-			isBright = true;
+			isDamage_ = false;
+			isBright_ = true;
 			blinkElapsed = 0.0f;
-			blinkTimer = 0.0f;
+			blinkTimer_ = 0.0f;
 		}
 	}
 }

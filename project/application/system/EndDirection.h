@@ -87,7 +87,7 @@ private:
 	//スローモーション中かどうかのフラグ
 	bool isSlowMotion_ = false;
 	//スローモーション開始後何秒間で遷移を開始するかの時間
-	const float slowMotionToSceneChangeTime_ = 2.0f;
+	const float kSlowMotionToSceneChangeTime_ = 2.0f;
 	//スローモーション中に測るタイマー
 	float slowMotionTimer_ = 0.0f;
 };
