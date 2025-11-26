@@ -1,4 +1,6 @@
 {
+    "StartTime": 3,
+    "EndTime": 7,
     "BlendMode": 2,
     "EmitRate": 33333,
     "EndColor": {

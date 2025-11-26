@@ -24,26 +24,23 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 	//データファイルコンテナを使ってパーティクルのコンテナに内部データを移す
 	for (const auto& dataFile : dataFiles) {
 		//初期化
-		std::string name = _comParticleFileName + "_" + dataFile.substr(0, dataFile.rfind(".json"));	//名前(〇〇_△△→.json省略)
-		std::string fileName = dataFile.substr(0, dataFile.rfind(".json"));	//ファイル名()
-		std::string relativePath = _comParticleFileName + "/" + dataFile;	//データの相対パス
+		std::string fileName = dataFile.substr(
+			dataFile.find_last_of("/\\") + 1,
+			dataFile.rfind(".json") - dataFile.find_last_of("/\\") - 1
+		);		//ファイル名(〇〇/△△.json→△△)
+		std::string name = _comParticleFileName + "_" + fileName;	//名前(複合名_ファイル名)
+		std::string relativePath = _comParticleFileName + "/" + fileName;	//データの相対パス
 		//パーティクルを生成
 		particles_[fileName].particle = std::make_unique<Particle>();
 		particles_[fileName].particle->Initialize(name, relativePath);
 		particles_[fileName].particle->emitter_.isPlay = false;
 		//発生開始時間&終了時間のセット
-		json data = JsonUtil::GetJsonData(folderPath + "/" + dataFile);
+		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		particles_[fileName].startTime = data["StartTime"];
 		particles_[fileName].endTime = data["EndTime"];
 		//全体の尺のうち長ければ更新
 		totalDuration_ = std::max(totalDuration_, particles_[fileName].endTime);
 	}
-	//メンバ変数の初期化
-	baseTransform_ = {
-		.scale = {1.0f,1.0f,1.0f},
-		.rotate = {0.0f,0.0f,0.0f},
-		.translate = {0.0f,0.0f,0.0f}
-	};
 }
 
 void CombinedParticle::Update() {
@@ -53,10 +50,6 @@ void CombinedParticle::Update() {
 		timer_ += kDeltaTime;
 		//全てのパーティクルを走査
 		for (auto& [key, particleInfo] : particles_) {
-			//トランスフォームに基準のトランスフォームを加算
-			particleInfo.particle->emitter_.transform.translate += baseTransform_.translate;
-			particleInfo.particle->emitter_.transform.rotate += baseTransform_.rotate;
-
 			//再生フラグがオフの時
 			if (!particleInfo.particle->emitter_.isPlay) {
 				//タイマーがstartTime~endTimeの間にある時
@@ -106,6 +99,14 @@ std::unordered_map<std::string, json> CombinedParticle::GetParams() {
 	}
 
 	return result;
+}
+
+void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
+	//パーティクルを走査
+	for(auto& [key, particleInfo] : particles_) {
+		//基準トランスフォームをセット
+		particleInfo.particle->emitter_.transform.translate += transform.translate;
+	}
 }
 
 void CombinedParticle::SetParams(const std::unordered_map<std::string, json>& _params) {

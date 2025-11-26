@@ -70,7 +70,7 @@ public:
 	/// 基準のトランスフォームをセットする
 	/// </summary>
 	/// <param name="transform">基準トランスフォーム</param>
-	void SetBaseTransform(const TransformEuler& transform) { baseTransform_ = transform; }
+	void SetBaseTransform(const TransformEuler& transform);
 	/// <summary>
 	/// 再生フラグのセット
 	/// </summary>
@@ -111,8 +111,6 @@ private:
 	//パーティクルのコンテナ
 	std::unordered_map<std::string, SingleParticleInfo> particles_;
 
-	//基準のトランスフォーム
-	TransformEuler baseTransform_;
 	//再生フラグ
 	bool isPlay_ = false;
 

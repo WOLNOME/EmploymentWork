@@ -103,6 +103,7 @@ void DevelopScene::Initialize() {
 	combinedParticle_ = std::make_unique<CombinedParticle>();
 	combinedParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("CombinedParticle"), "Basic");
 	combinedParticle_->SetBaseTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,5.0f,0.0f} });
+	combinedParticle_->SetIsPlay(true);
 
 	//オーディオの生成・初期化
 	audio_ = std::make_unique<Audio>();
