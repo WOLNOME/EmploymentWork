@@ -129,15 +129,21 @@ private:
 	std::unordered_map<std::string, json> cEditParam_;
 
 	//ImGui操作用変数
-	std::vector<std::string> textureFiles_;
-	std::vector<std::string> particleFiles_;
-	std::string jsonFileName_;
+	std::vector<std::string> particleFiles_;	//Resources/particles内ファイル一覧
+	std::vector<std::string> textureFiles_;		//Resources/textures内ファイル一覧
+	std::string particleFileName_;		//編集するパーティクルファイルの名前
+	std::vector<std::string> jsonFileNames_;	//編集するパーティクルファイル内のjsonファイル名のコンテナ
 
+	//状態管理用変数
 	EditorState state_;
-	bool displayLineEmitter_ = true;
-
-	//オプション用変数
+	//オプション処理で使う変数
 	std::string selectedTexture_;
 	bool isChangeTexture_ = false;
+	//チェック処理で使う変数
+
+
+	//エミッターのライン表示フラグ
+	bool displayLineEmitter_ = true;
+
 };
 
