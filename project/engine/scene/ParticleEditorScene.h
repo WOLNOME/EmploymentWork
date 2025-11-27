@@ -21,29 +21,42 @@ private:
 	/// モード
 	/// </summary>
 	enum class Mode {
-		None,			//未選択
-		pGenerate,		//単体パーティクルの生成
-		cpGenerate,		//複合パーティクルの生成
-		pEdit,			//単体パーティクルの編集
-		cpEdit,			//複合パーティクルの編集
+		kNone,			//未選択
+		kEdit,			//パーティクルの編集
 	};
 	/// <summary>
 	/// オプション
+	/// (選択→確認→実行)の選択の部分
 	/// </summary>
 	enum class Option {
-		None,			//未選択
-		Reset,			//リセット
-		Save,			//セーブ
-		ShowFileDialog,	//ファイルのダイアログの表示
+		kNone,						//未選択
+		kReset,						//リセット
+		kSave,						//セーブ
+		kShowParticleFileDialog,	//パーティクルファイルのダイアログの表示
+		kShowTextureFileDialog,		//テクスチャファイルのダイアログの表示
 	};
 	/// <summary>
 	/// 確認
+	///	(選択→確認→実行)の確認の部分
 	/// </summary>
 	enum class Check {
-		None,		//未選択
-		Continue,	//続けるか
-		SameName,	//同名か
-		EditName,	//編集対象名
+		kNone,		//未選択
+		kContinue,	//続けるか
+		kSameName,	//同名か
+		kEditName,	//編集対象名
+	};
+
+	/// ============================== ///
+	///		構造体
+	///	============================== ///
+
+	/// <summary>
+	/// 状態管理
+	/// </summary>
+	struct EditorState {
+		Mode mode = Mode::kNone;		//モード
+		Option option = Option::kNone;	//オプション
+		Check check = Check::kNone;		//確認
 	};
 
 public:
@@ -78,21 +91,19 @@ private:
 	/// </summary>
 	void StartWithImGui();
 	/// <summary>
-	/// 新規作成時処理
-	/// </summary>
-	void GenerateWithImGui();
-	/// <summary>
-	/// 編集時処理
+	/// エディター画面時処理
 	/// </summary>
 	void EditWithImGui();
+
 	/// <summary>
-	/// リセット処理
+	/// オプション処理
 	/// </summary>
-	void ResetWithImGui();
+	void OptionWithImGui();
 	/// <summary>
-	/// セーブ処理
+	/// 確認処理
 	/// </summary>
-	void SaveWithImGui();
+	void CheckWithImGui();
+
 	/// <summary>
 	/// エディターのメイン処理
 	/// </summary>
@@ -113,10 +124,8 @@ private:
 	std::unique_ptr<Object3d> ground_ = nullptr;
 
 	// 編集するパーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
 	std::unique_ptr<CombinedParticle> cParticle_ = nullptr;
 	// 編集するパラメーター
-	json editParam_;
 	std::unordered_map<std::string, json> cEditParam_;
 
 	//ImGui操作用変数
@@ -124,9 +133,11 @@ private:
 	std::vector<std::string> particleFiles_;
 	std::string jsonFileName_;
 
-	Mode mode_ = Mode::None;
-	Option option_ = Option::None;
-	Check check_ = Check::None;
+	EditorState state_;
 	bool displayLineEmitter_ = true;
+
+	//オプション用変数
+	std::string selectedTexture_;
+	bool isChangeTexture_ = false;
 };
 

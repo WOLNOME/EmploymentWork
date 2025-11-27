@@ -25,8 +25,8 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 	for (const auto& dataFile : dataFiles) {
 		//初期化
 		std::string fileName = dataFile.substr(
-			dataFile.find_last_of("/\\") + 1,
-			dataFile.rfind(".json") - dataFile.find_last_of("/\\") - 1
+			dataFile.find_last_of("/") + 1,
+			dataFile.rfind(".json") - dataFile.find_last_of("/") - 1
 		);		//ファイル名(〇〇/△△.json→△△)
 		std::string name = _comParticleFileName + "_" + fileName;	//名前(複合名_ファイル名)
 		std::string relativePath = _comParticleFileName + "/" + fileName;	//データの相対パス
