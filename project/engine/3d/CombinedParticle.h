@@ -55,11 +55,7 @@ public:
 	/// </summary>
 	/// <returns>全てのハンドル名</returns>
 	std::vector<std::string> GetAllHandleName();
-	/// <summary>
-	/// パラメーターの取得
-	/// </summary>
-	/// <returns>パラメーター</returns>
-	std::unordered_map<std::string, json> GetParams();
+	
 
 
 	/// ============================== ///
@@ -76,11 +72,7 @@ public:
 	/// </summary>
 	/// <param name="isPlay">再生するか</param>
 	void SetIsPlay(bool isPlay) { isPlay_ = isPlay; }
-	/// <summary>
-	/// パラメーターのセット
-	/// </summary>
-	/// <param name="_params">パラメーター</param>
-	void SetParams(const std::unordered_map<std::string, json>& _params);
+	
 
 private:
 	/// ============================== ///
@@ -100,6 +92,26 @@ private:
 	/// </summary>
 	/// <param name="_id">ハンドル名</param>
 	void RemoveParticle(const std::string& _handleName);
+
+	/// ============================== ///
+	///		getter(エディター専用)
+	/// ============================== ///
+
+	/// <summary>
+	/// パラメーターの取得
+	/// </summary>
+	/// <returns>パラメーター</returns>
+	std::unordered_map<std::string, json> GetParams();
+
+	/// ============================== ///
+	///		setter(エディター専用)
+	/// ============================== ///
+
+	/// <summary>
+	/// パラメーターのセット
+	/// </summary>
+	/// <param name="_params">パラメーター</param>
+	void SetParams(const std::unordered_map<std::string, json>& _params);
 
 	/// ============================== ///
 	///		メンバ変数

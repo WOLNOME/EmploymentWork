@@ -90,30 +90,11 @@ std::vector<std::string> CombinedParticle::GetAllHandleName() {
 	return result;
 }
 
-std::unordered_map<std::string, json> CombinedParticle::GetParams() {
-	std::unordered_map<std::string, json> result;
-	//全パーティクルを走査
-	for (auto& [key, particleInfo] : particles_) {
-		//keyを指定してパラメーターを格納
-		result[key].push_back(particleInfo.particle->GetParam());
-	}
-
-	return result;
-}
-
 void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
 	//パーティクルを走査
 	for(auto& [key, particleInfo] : particles_) {
 		//基準トランスフォームをセット
 		particleInfo.particle->emitter_.transform.translate += transform.translate;
-	}
-}
-
-void CombinedParticle::SetParams(const std::unordered_map<std::string, json>& _params) {
-	//取得したパラメーターを走査
-	for (auto& [key, param] : _params) {
-		//キーを指定してパラメーターをセット
-		particles_[key].particle->SetParam(param);
 	}
 }
 
@@ -141,5 +122,24 @@ void CombinedParticle::RemoveParticle(const std::string& _handleName) {
 	if (it != particles_.end()) {
 		//存在する場合は削除
 		particles_.erase(it);
+	}
+}
+
+std::unordered_map<std::string, json> CombinedParticle::GetParams() {
+	std::unordered_map<std::string, json> result;
+	//全パーティクルを走査　(keyは.jsonを省いた形を想定)
+	for (auto& [key, particleInfo] : particles_) {
+		//keyを指定してパラメーターを格納
+		result[key].push_back(particleInfo.particle->GetParam());
+	}
+
+	return result;
+}
+
+void CombinedParticle::SetParams(const std::unordered_map<std::string, json>& _params) {
+	//取得したパラメーターを走査 (keyは.jsonを省いた形を想定)
+	for (auto& [key, param] : _params) {
+		//キーを指定してパラメーターをセット
+		particles_[key].particle->SetParam(param);
 	}
 }

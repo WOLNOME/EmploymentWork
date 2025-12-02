@@ -42,7 +42,6 @@ private:
 	enum class Check {
 		kNone,		//未選択
 		kContinue,	//続けるか
-		kSameName,	//同名か
 		kEditName,	//編集対象名
 	};
 
@@ -132,7 +131,10 @@ private:
 	std::vector<std::string> particleFiles_;	//Resources/particles内ファイル一覧
 	std::vector<std::string> textureFiles_;		//Resources/textures内ファイル一覧
 	std::string particleFileName_;		//編集するパーティクルファイルの名前
-	std::vector<std::string> jsonFileNames_;	//編集するパーティクルファイル内のjsonファイル名のコンテナ
+	std::vector<std::string> jsonFileNames_;	//編集するパーティクルファイル内のjsonファイル名(.jsonはカット)のコンテナ
+
+	//選択中のパーティクルのハンドル名
+	std::string selectedParticleHandle_;
 
 	//状態管理用変数
 	EditorState state_;
@@ -140,7 +142,6 @@ private:
 	std::string selectedTexture_;
 	bool isChangeTexture_ = false;
 	//チェック処理で使う変数
-
 
 	//エミッターのライン表示フラグ
 	bool displayLineEmitter_ = true;
