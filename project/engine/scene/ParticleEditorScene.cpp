@@ -164,9 +164,9 @@ void ParticleEditorScene::OptionWithImGui() {
 					}
 				}
 				//保持しているJsonファイル名を走査
-				for (const auto& name : jsonFileNames_) {
+				for (const auto& [key, param] : cEditParam_) {
 					//JsonUtilを使ってパーティクルを保存
-					JsonUtil::CreateJson(name, "Resources/particles/" + particleFileName_, cEditParam_[name]);
+					JsonUtil::CreateJson(key, "Resources/particles/" + particleFileName_, param);
 				}
 				//編集をさらに続けるかの確認へ
 				state_.check = Check::kContinue;
@@ -191,21 +191,10 @@ void ParticleEditorScene::OptionWithImGui() {
 			if (ImGui::Selectable(file.c_str())) {
 				//パーティクルファイル名をクリア
 				particleFileName_.clear();
-				//jsonファイル名コンテナをクリア
-				jsonFileNames_.clear();
 
 				//パーティクルファイル名を保存
 				particleFileName_ = file;
 
-				//更にそのファイルの中を走査
-				for (const auto& entry : std::filesystem::directory_iterator("Resources/particles/" + file)) {
-					//jsonファイルなら
-					if (entry.is_regular_file() && entry.path().extension() == ".json") {
-						//entryから.jsonをカット
-						std::string cutJson = std::filesystem::path(entry.path().string()).stem().string();
-						jsonFileNames_.push_back(cutJson);  //ファイル名を保存
-					}
-				}
 				state_.option = Option::kNone;	  //ウィンドウを閉じる
 			}
 		}
@@ -288,16 +277,6 @@ void ParticleEditorScene::CheckWithImGui() {
 
 			//確定ボタン(該当ファイル内の全てのJSONファイルを読み込む)
 			if (ImGui::Button("このファイルを編集する")) {
-				//ファイル内全てのJSONファイルを保持
-				for (const auto& entry : std::filesystem::directory_iterator("Resources/particles/" + particleFileName_)) {
-					//jsonファイルなら
-					if (entry.is_regular_file() && entry.path().extension() == ".json") {
-						//entryから.jsonをカット
-						std::string cutJson = std::filesystem::path(entry.path().string()).stem().string();
-						//ファイル名を保存
-						jsonFileNames_.push_back(cutJson);
-					}
-				}
 				//編集モードへ移行
 				state_.mode = Mode::kEdit;
 				//パーティクルの初期化
@@ -322,8 +301,6 @@ void ParticleEditorScene::CheckWithImGui() {
 				state_.check = Check::kNone;
 				//パーティクルファイル名をクリア
 				particleFileName_ = std::string();
-				//jsonファイル名コンテナをクリア
-				jsonFileNames_.clear();
 				//パーティクルを破棄
 				cParticle_.release();
 
@@ -643,11 +620,164 @@ void ParticleEditorScene::Editor() {
 		ImGui::End();
 		};
 
+	//各パーティクルの管理のラムダ式
+	auto particleManagement = [this]() {
+		//管理
+		ImGui::SetNextWindowPos(ImVec2(10, 500), ImGuiCond_FirstUseEver);
+		ImGui::Begin("パーティクルの管理");
+
+		//パーティクルの新規作成
+		{
+
+		}
+		//全パーティクルの再生＆ループチェック
+		{
+
+		}
+		//シークバー
+		{
+
+		}
+
+		ImGui::End();
+		};
+
+	//各パーティクルのオプションのラムダ式
+	auto particleOption = [this]() {
+		//管理
+		ImGui::SetNextWindowPos(ImVec2(110, 500), ImGuiCond_FirstUseEver);
+		ImGui::Begin("パーティクルごとのオプション");
+
+		//タブ分け
+		if (ImGui::BeginTabBar("タブ")) {
+			//タブごとの処理
+			for (const auto& [key, param] : cEditParam_) {
+				if (ImGui::BeginTabItem(key.c_str())) {
+					//選択中パーティクルのハンドル名を保持
+					selectedParticleHandle_ = key;
+
+					//名前の変更
+					{
+						ImGui::Text("名前");
+						char buffer[256];
+						strncpy_s(buffer, sizeof(buffer), particleName_.c_str(), _TRUNCATE);
+						buffer[sizeof(buffer) - 1] = '\0';
+						if (ImGui::InputText("入力欄", buffer, sizeof(buffer))) {
+							particleName_ = buffer;
+						}
+						ImGui::SameLine();
+						//もしキーと名前が違ったら
+						if (key != particleName_) {
+							//別のキーとかぶっている、もしくは空文字列なら変更不可フラグを立てる
+							bool isDisable = false;
+							if (particleName_.size() == 0) {
+								isDisable = true;
+							}
+							else {
+								for (const auto& [otherKey, otherParam] : cEditParam_) {
+									if (otherKey == particleName_) {
+										isDisable = true;
+										break;
+									}
+								}
+							}
+							//変更可能なら
+							if (!isDisable) {
+								if (ImGui::Button("変更")) {
+									//編集用パラメーターのキーを変更
+									cEditParam_[particleName_] = cEditParam_[key];
+									//選択中のパーティクルハンドル名を変更
+									selectedParticleHandle_ = particleName_;
+									//編集用複合パーティクル内のパーティクル名を変更
+									std::vector<CombinedParticle::SingleParticleInfo> particles = cParticle_->GetParticles();
+									for (auto& particleInfo : particles) {
+										if (particleInfo.particle->GetName() == key) {
+											//変更
+											particleInfo.particle->SetName(particleName_);
+											break;
+										}
+									}
+									cParticle_->SetParticles(std::move(particles));
+									//元のキーを削除
+									cEditParam_.erase(key);
+								}
+							}
+							//変更不可なら
+							else {
+								//警告文を表示
+								ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "この名前は使用できません");
+							}
+						}
+						ImGui::Separator();
+					}
+					//開始時間及び、終了時間の設定
+					{
+						//パーティクルコンテナを取得
+						std::vector<CombinedParticle::SingleParticleInfo> particles = cParticle_->GetParticles();
+						for (auto& particleInfo : particles) {
+							if (particleInfo.particle->GetName() == key) {
+								//開始時間
+								float startTime = particleInfo.startTime;
+								ImGui::DragFloat("開始", &startTime, 0.01f, 0.0f);
+								particleInfo.startTime = startTime;
+								//終了時間
+								float endTime = particleInfo.endTime;
+								ImGui::DragFloat("終了", &endTime, 0.01f, startTime);
+								particleInfo.endTime = endTime;
+								break;
+							}
+						}
+						//パーティクルコンテナをセット
+						cParticle_->SetParticles(std::move(particles));
+
+						ImGui::Separator();
+					}
+					//パーティクルの表示/非表示
+					{
+						//パーティクルコンテナを取得
+						std::vector<CombinedParticle::SingleParticleInfo> particles = cParticle_->GetParticles();
+						for (auto& particleInfo : particles) {
+							if (particleInfo.particle->GetName() == key) {
+								//チェックボックスを使って表示/非表示を切り替え
+								ImGui::Checkbox("表示/非表示", &particleInfo.particle->emitter_.isPlay);
+
+								break;
+							}
+						}
+						//パーティクルコンテナをセット
+						cParticle_->SetParticles(std::move(particles));
+
+						ImGui::Separator();
+					}
+					//パーティクルの削除
+					{
+						//削除ボタン
+						if (ImGui::Button("パーティクルの削除")) {
+							cParticle_->RemoveParticle(key);
+						}
+					}
+
+					ImGui::EndTabItem();
+				}
+			}
+			ImGui::EndTabBar();
+		}
+
+		ImGui::End();
+		};
+
+
 	//パラメーター処理の呼び出し
 	paramProcess();
 
 	//エミッター処理の呼び出し
 	emitterProcess();
+
+	//各パーティクル管理の呼び出し
+	particleManagement();
+
+	//各パーティクルオプションの呼び出し
+	particleOption();
 
 
 #endif //_DEBUG

@@ -131,7 +131,6 @@ private:
 	std::vector<std::string> particleFiles_;	//Resources/particles内ファイル一覧
 	std::vector<std::string> textureFiles_;		//Resources/textures内ファイル一覧
 	std::string particleFileName_;		//編集するパーティクルファイルの名前
-	std::vector<std::string> jsonFileNames_;	//編集するパーティクルファイル内のjsonファイル名(.jsonはカット)のコンテナ
 
 	//選択中のパーティクルのハンドル名
 	std::string selectedParticleHandle_;
@@ -145,6 +144,8 @@ private:
 
 	//エミッターのライン表示フラグ
 	bool displayLineEmitter_ = true;
+
+	std::string particleName_;
 
 };
 

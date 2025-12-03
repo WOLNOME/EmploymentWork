@@ -55,8 +55,6 @@ public:
 	/// </summary>
 	/// <returns>全てのハンドル名</returns>
 	std::vector<std::string> GetAllHandleName();
-	
-
 
 	/// ============================== ///
 	///		setter
@@ -72,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="isPlay">再生するか</param>
 	void SetIsPlay(bool isPlay) { isPlay_ = isPlay; }
-	
+
 
 private:
 	/// ============================== ///
@@ -101,7 +99,12 @@ private:
 	/// パラメーターの取得
 	/// </summary>
 	/// <returns>パラメーター</returns>
-	std::unordered_map<std::string, json> GetParams();
+	const std::unordered_map<std::string, json> GetParams();
+	/// <summary>
+	/// パーティクルコンテナの取得
+	/// </summary>
+	/// <returns>パーティクルコンテナ</returns>
+	const std::vector<SingleParticleInfo>& GetParticles() { return particles_; }
 
 	/// ============================== ///
 	///		setter(エディター専用)
@@ -112,6 +115,11 @@ private:
 	/// </summary>
 	/// <param name="_params">パラメーター</param>
 	void SetParams(const std::unordered_map<std::string, json>& _params);
+	/// <summary>
+	/// パーティクルコンテナのセット
+	/// </summary>
+	/// <param name="_particles">パーティクルコンテナ(std::move()を使用すること)</param>
+	void SetParticles(std::vector<SingleParticleInfo>&& _particles) { particles_ = std::move(_particles); }
 
 	/// ============================== ///
 	///		メンバ変数
@@ -121,7 +129,7 @@ private:
 	std::string name_;
 
 	//パーティクルのコンテナ
-	std::unordered_map<std::string, SingleParticleInfo> particles_;
+	std::vector<SingleParticleInfo> particles_;
 
 	//再生フラグ
 	bool isPlay_ = false;

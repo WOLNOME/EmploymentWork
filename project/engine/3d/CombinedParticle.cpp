@@ -31,15 +31,20 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		std::string name = _comParticleFileName + "_" + fileName;	//名前(複合名_ファイル名)
 		std::string relativePath = _comParticleFileName + "/" + fileName;	//データの相対パス
 		//パーティクルを生成
-		particles_[fileName].particle = std::make_unique<Particle>();
-		particles_[fileName].particle->Initialize(name, relativePath);
-		particles_[fileName].particle->emitter_.isPlay = false;
+		SingleParticleInfo sParticle;
+
+		sParticle.particle = std::make_unique<Particle>();
+		sParticle.particle->Initialize(name, relativePath);
+		sParticle.particle->emitter_.isPlay = false;
 		//発生開始時間&終了時間のセット
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
-		particles_[fileName].startTime = data["StartTime"];
-		particles_[fileName].endTime = data["EndTime"];
+		sParticle.startTime = data["StartTime"];
+		sParticle.endTime = data["EndTime"];
 		//全体の尺のうち長ければ更新
-		totalDuration_ = std::max(totalDuration_, particles_[fileName].endTime);
+		totalDuration_ = std::max(totalDuration_, sParticle.endTime);
+
+		//コンテナに格納
+		particles_.push_back(std::move(sParticle));
 	}
 }
 
@@ -49,21 +54,21 @@ void CombinedParticle::Update() {
 		//タイマーをカウント
 		timer_ += kDeltaTime;
 		//全てのパーティクルを走査
-		for (auto& [key, particleInfo] : particles_) {
+		for (auto& sParInfo : particles_) {
 			//再生フラグがオフの時
-			if (!particleInfo.particle->emitter_.isPlay) {
+			if (!sParInfo.particle->emitter_.isPlay) {
 				//タイマーがstartTime~endTimeの間にある時
-				if (timer_ > particleInfo.startTime && timer_ < particleInfo.endTime) {
+				if (timer_ > sParInfo.startTime && timer_ < sParInfo.endTime) {
 					//パーティクルをオンにする
-					particleInfo.particle->emitter_.isPlay = true;
+					sParInfo.particle->emitter_.isPlay = true;
 				}
 			}
 			//再生フラグがオンの時
 			else {
 				//タイマーがstartTime~endTimeの外にある時
-				if (timer_ < particleInfo.startTime || timer_ > particleInfo.endTime) {
+				if (timer_ < sParInfo.startTime || timer_ > sParInfo.endTime) {
 					//パーティクルをオフにする
-					particleInfo.particle->emitter_.isPlay = false;
+					sParInfo.particle->emitter_.isPlay = false;
 				}
 			}
 		}
@@ -72,9 +77,9 @@ void CombinedParticle::Update() {
 			//再生フラグをオフにする
 			isPlay_ = false;
 			//全てのパーティクルを走査
-			for (auto& [key, particleInfo] : particles_) {
+			for (auto& sParInfo : particles_) {
 				//全てのパーティクルを停止させる
-				particleInfo.particle->emitter_.isPlay = false;
+				sParInfo.particle->emitter_.isPlay = false;
 			}
 		}
 	}
@@ -83,18 +88,18 @@ void CombinedParticle::Update() {
 std::vector<std::string> CombinedParticle::GetAllHandleName() {
 	std::vector<std::string> result;
 	//全てのパーティクルを走査
-	for (auto& [key, particleInfo] : particles_) {
+	for (auto& sParInfo : particles_) {
 		//キーをresultに格納
-		result.push_back(key);
+		result.push_back(sParInfo.particle->GetName());
 	}
 	return result;
 }
 
 void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
 	//パーティクルを走査
-	for(auto& [key, particleInfo] : particles_) {
+	for (auto& sParInfo : particles_) {
 		//基準トランスフォームをセット
-		particleInfo.particle->emitter_.transform.translate += transform.translate;
+		sParInfo.particle->emitter_.transform.translate += transform.translate;
 	}
 }
 
@@ -108,29 +113,33 @@ std::string CombinedParticle::AddParticle(const std::string& _fileName, float _s
 	newParticle.startTime = _startTime;
 	newParticle.endTime = _endTime;
 	newParticle.particle = std::make_unique<Particle>();
+	//パーティクルの名前を決める(例 : fire.json→fire)
+	std::string name = _fileName.substr(0, _fileName.rfind(".json"));
 	//パーティクルの初期化
-	newParticle.particle->Initialize(ParticleManager::GetInstance()->GenerateName(name_), _fileName);
+	newParticle.particle->Initialize(name, _fileName);
 	//パーティクルをコンテナに追加
-	std::string name = _fileName.substr(0, _fileName.rfind(".json"));	//ファイル名(.json抜き)
-	particles_[name] = std::move(newParticle);
+	particles_.push_back(std::move(newParticle));
 	return name;
 }
 
 void CombinedParticle::RemoveParticle(const std::string& _handleName) {
-	//指定されたIDのパーティクルが存在するかチェック
-	auto it = particles_.find(_handleName);
-	if (it != particles_.end()) {
-		//存在する場合は削除
-		particles_.erase(it);
+	//パーティクルを走査
+	for (auto& sParinfo : particles_) {
+		//ハンドル名と一致するパーティクルを探す
+		if (sParinfo.particle->GetName() == _handleName) {
+			//見つかったらコンテナから削除してreturn
+			particles_.erase(std::remove(particles_.begin(), particles_.end(), sParinfo), particles_.end());
+			return;
+		}
 	}
 }
 
-std::unordered_map<std::string, json> CombinedParticle::GetParams() {
+const std::unordered_map<std::string, json> CombinedParticle::GetParams() {
 	std::unordered_map<std::string, json> result;
 	//全パーティクルを走査　(keyは.jsonを省いた形を想定)
-	for (auto& [key, particleInfo] : particles_) {
+	for (auto& sParInfo : particles_) {
 		//keyを指定してパラメーターを格納
-		result[key].push_back(particleInfo.particle->GetParam());
+		result[sParInfo.particle->GetName()] = sParInfo.particle->GetParam();
 	}
 
 	return result;
@@ -139,7 +148,17 @@ std::unordered_map<std::string, json> CombinedParticle::GetParams() {
 void CombinedParticle::SetParams(const std::unordered_map<std::string, json>& _params) {
 	//取得したパラメーターを走査 (keyは.jsonを省いた形を想定)
 	for (auto& [key, param] : _params) {
-		//キーを指定してパラメーターをセット
-		particles_[key].particle->SetParam(param);
+		//パーティクルを走査
+		for(auto& sParInfo : particles_) {
+			//keyとパーティクル名が一致したら
+			if (sParInfo.particle->GetName() == key) {
+				//パラメーターをセット
+				sParInfo.particle->SetParam(param);
+				break;
+			}
+		}
+
+		//ここへくる事は想定していない
+		assert(false && "単パーティクルの名前変更時に反映されていない可能性があります");
 	}
 }
