@@ -57,6 +57,12 @@ private:
 		Option option = Option::kNone;	//オプション
 		Check check = Check::kNone;		//確認
 	};
+	/// <summary>
+	/// メンバ変数まとめた構造体
+	/// </summary>
+	struct Variable {
+
+	};
 
 public:
 	/// ============================== ///
@@ -139,6 +145,7 @@ private:
 	EditorState state_;
 	//オプション処理で使う変数
 	std::string selectedTexture_;
+	bool isShapeChange_ = false;
 	bool isChangeTexture_ = false;
 	//チェック処理で使う変数
 
@@ -146,6 +153,8 @@ private:
 	bool displayLineEmitter_ = true;
 
 	std::string particleName_;
+
+	bool isLoop_ = true;
 
 };
 

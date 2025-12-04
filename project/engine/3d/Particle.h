@@ -187,6 +187,16 @@ public:
 	void Initialize(const std::string& name, const std::string& fileName);
 
 	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	///　パラメーターの取得
+	/// </summary>
+	/// <returns>パラメーター</returns>
+	const json& GetParam() { return param_; }
+
+	/// ============================== ///
 	///		メンバ変数(public)
 	/// ============================== ///
 
@@ -220,41 +230,6 @@ private:
 	/// JSON情報反映(CSに反映)
 	/// </summary>
 	void TraceJsonDataForCS();
-
-	/// ============================== ///
-	///		getter(firend専用)
-	/// ============================== ///
-
-	/// <summary>
-	///　パラメーターの取得
-	/// </summary>
-	/// <returns>パラメーター</returns>
-	const json& GetParam() { return param_; }
-
-	/// <summary>
-	/// 名前の取得
-	/// </summary>
-	/// <returns>名前</returns>
-	const std::string& GetName() { return name_; }
-
-
-	/// ============================== ///
-	///		setter(firend専用)
-	/// ============================== ///
-	
-	/// <summary>
-	/// パラメーターのセット
-	/// </summary>
-	/// <param name="param">パラメーターのセット</param>
-	void SetParam(const json& param) { param_ = param; }
-
-	/// <summary>
-	/// 名前のセット
-	/// </summary>
-	/// <param name="name">名前</param>
-	void SetName(const std::string& name) { name_ = name; }
-
-
 
 private:
 	/// ============================== ///

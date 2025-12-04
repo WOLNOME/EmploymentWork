@@ -19,18 +19,30 @@ class CombinedParticle {
 	friend class ParticleEditorScene;
 public:
 	/// ============================== ///
-	///		構造体
+	///		構造体(public)
 	/// ============================== ///
 
 	/// <summary>
 	/// 単パーティクル情報(これをつなぎ合わせて複合にする)
 	/// </summary>
 	struct SingleParticleInfo {
-		std::unique_ptr<Particle> particle; //パーティクル本体
-		float startTime = 0.0f; //発生開始時間(0~1)
-		float endTime = 0.0f; //発生終了時間(0~1)
+		std::unique_ptr<Particle> particle; // パーティクル本体
+		float startTime = 0.0f; // 発生開始時間
+		float endTime = 0.0f;   // 発生終了時間
 	};
 
+private:
+	/// ============================== ///
+	///		構造体(private)
+	/// ============================== ///
+
+	struct PlayInfo {
+		bool isPlay = false;		//再生フラグ
+		float currentTime = 0.0f;	//現在の時間
+		float duration = 0.0f;		//尺
+	};
+
+public:
 	/// ============================== ///
 	///		メンバ関数
 	/// ============================== ///
@@ -55,6 +67,11 @@ public:
 	/// </summary>
 	/// <returns>全てのハンドル名</returns>
 	std::vector<std::string> GetAllHandleName();
+	/// <summary>
+	/// 再生フラグの取得
+	/// </summary>
+	/// <returns>再生するか</returns>
+	bool GetIsPlay() const { return playInfo_.isPlay; }
 
 	/// ============================== ///
 	///		setter
@@ -69,7 +86,7 @@ public:
 	/// 再生フラグのセット
 	/// </summary>
 	/// <param name="isPlay">再生するか</param>
-	void SetIsPlay(bool isPlay) { isPlay_ = isPlay; }
+	void SetIsPlay(bool isPlay) { playInfo_.isPlay = isPlay; }
 
 
 private:
@@ -83,8 +100,8 @@ private:
 	/// <param name="_fileName">ファイル名</param>
 	/// <param name="_startTime">開始時間</param>
 	/// <param name="_endTime">終了時間</param>
-	/// <returns>ハンドル名(エラーなら"error"を返す)</returns>
-	std::string AddParticle(const std::string& _fileName, float _startTime, float _endTime);
+	/// <returns>成功したか</returns>
+	bool AddParticle(const std::string& _fileName, float _startTime, float _endTime);
 	/// <summary>
 	/// パーティクルを削除(パーティクルエディター用)
 	/// </summary>
@@ -101,10 +118,10 @@ private:
 	/// <returns>パラメーター</returns>
 	const std::unordered_map<std::string, json> GetParams();
 	/// <summary>
-	/// パーティクルコンテナの取得
+	/// 再生情報の取得
 	/// </summary>
-	/// <returns>パーティクルコンテナ</returns>
-	const std::vector<SingleParticleInfo>& GetParticles() { return particles_; }
+	/// <returns>再生情報</returns>
+	const PlayInfo& GetPlayInfo() { return playInfo_; }
 
 	/// ============================== ///
 	///		setter(エディター専用)
@@ -115,11 +132,6 @@ private:
 	/// </summary>
 	/// <param name="_params">パラメーター</param>
 	void SetParams(const std::unordered_map<std::string, json>& _params);
-	/// <summary>
-	/// パーティクルコンテナのセット
-	/// </summary>
-	/// <param name="_particles">パーティクルコンテナ(std::move()を使用すること)</param>
-	void SetParticles(std::vector<SingleParticleInfo>&& _particles) { particles_ = std::move(_particles); }
 
 	/// ============================== ///
 	///		メンバ変数
@@ -131,13 +143,8 @@ private:
 	//パーティクルのコンテナ
 	std::vector<SingleParticleInfo> particles_;
 
-	//再生フラグ
-	bool isPlay_ = false;
-
-	//全体の尺
-	float totalDuration_ = 0.0f;
-	//タイマー
-	float timer_ = 0.0f;
+	//再生情報
+	PlayInfo playInfo_;
 
 	//複合最大数
 	const uint32_t kMaxCombinedParticles = 8;
