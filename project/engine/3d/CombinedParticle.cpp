@@ -120,7 +120,7 @@ bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTim
 	std::string cutJson = _fileName.substr(0, _fileName.rfind(".json"));
 	std::string name = ParticleManager::GetInstance()->GenerateName(cutJson);
 	//パーティクルの初期化(名前はnameベースで適当に生成)
-	newParticle.particle->Initialize(name, _fileName);
+	newParticle.particle->Initialize(name, cutJson);
 	//パーティクルをコンテナに追加
 	particles_.push_back(std::move(newParticle));
 

@@ -152,6 +152,7 @@ private:
 	//エミッターのライン表示フラグ
 	bool displayLineEmitter_ = true;
 
+	//名前変更時に編集用文字列を保存しておく変数
 	std::string particleName_;
 
 	bool isLoop_ = true;

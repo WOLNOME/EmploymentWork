@@ -111,6 +111,11 @@ void ParticleEditorScene::StartWithImGui() {
 
 void ParticleEditorScene::EditWithImGui() {
 #ifdef _DEBUG
+	//パーティクルがnullならreturn
+	if (!cParticle_) {
+		return;
+	}
+
 	if (state_.mode == Mode::kEdit) {
 		Editor();
 	}
@@ -162,19 +167,37 @@ void ParticleEditorScene::OptionWithImGui() {
 		}
 		if (particleFileName_.size() != 0) {
 			if (ImGui::Button("名前を確定する")) {
-				//該当ファイル内全てのJsonファイルを削除
+				//該当ファイルのディレクトリパス
 				std::string targetDir = "Resources/particles/" + particleFileName_;
-				for (const auto& entry : std::filesystem::directory_iterator(targetDir)) {
-					//jsonファイルなら
-					if (entry.is_regular_file() && entry.path().extension() == ".json") {
-						std::filesystem::remove(entry.path());
+				std::string targetDirInto = targetDir + "/";
+				//該当ファイルが存在するか確認
+				bool isFind = std::filesystem::exists(targetDir) &&
+					std::filesystem::is_directory(targetDir);
+				//該当ファイルが存在する場合中身をすべて消してから上書きする
+				if (isFind) {
+					//jsonファイルを全て消す
+					for (const auto& entry : std::filesystem::directory_iterator(targetDir)) {
+						//jsonファイルなら
+						if (entry.is_regular_file() && entry.path().extension() == ".json") {
+							std::filesystem::remove(entry.path());
+						}
+					}
+					//targetDirIntoにJsonファイル保存
+					for (const auto& [key, param] : cEditParam_) {
+						JsonUtil::CreateJson(key, targetDirInto, param);
 					}
 				}
-				//保持しているJsonファイル名を走査
-				for (const auto& [key, param] : cEditParam_) {
-					//JsonUtilを使ってパーティクルを保存
-					JsonUtil::CreateJson(key, "Resources/particles/" + particleFileName_, param);
+				//該当ファイルが存在しない場合新しくフォルダを作ってそこにデータを入れる
+				else {
+					//フォルダ作成
+					std::filesystem::create_directories(targetDir);
+
+					//targetDirIntoにJsonファイル保存
+					for (const auto& [key, param] : cEditParam_) {
+						JsonUtil::CreateJson(key, targetDirInto, param);
+					}
 				}
+
 				//編集をさらに続けるかの確認へ
 				state_.check = Check::kContinue;
 			}
@@ -250,6 +273,8 @@ void ParticleEditorScene::CheckWithImGui() {
 				sceneManager_->SetNextScene("PARTICLEEDITOR");
 				state_.option = Option::kNone;
 				state_.check = Check::kNone;
+				cParticle_.reset();
+				cEditParam_.clear();
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
@@ -339,8 +364,14 @@ void ParticleEditorScene::Editor() {
 			return selectedParticleHandle_ == sParInfo.particle->name_;
 		}
 	);
-	//見つからなかったのでreturn
-	if (it == cParticle_->particles_.end()) {
+	//selectedParticleHandle_に入っている文字列で処理を決める
+	bool isEmpty = false;
+	if (selectedParticleHandle_.size() == 0) {
+		//空文字(インスタンスに何も含まれていない状態)だったら、生成ボタンだけ表示
+		isEmpty = true;
+	}
+	else if (it == cParticle_->particles_.end()) {
+		//インスタンスに含まれていない名前だったらreturn(本来ここは通らない)
 		return;
 	}
 	//インデックス取得
@@ -685,16 +716,15 @@ void ParticleEditorScene::Editor() {
 			//新規作成ボタン
 			if (ImGui::Button("新規パーティクルの作成")) {
 				//複合パーティクルインスタンスにのみ保持(JSON出力はセーブ時)
-				if (cParticle_->AddParticle("Basic/basic.json", 0.0f, 10.0f)) {
-					//成功したら
-					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "作成できました");
-				}
-				else {
-					//失敗したら
-					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "これ以上作成できません\nどれか削除してください");
-				}
+				cParticle_->AddParticle("Basic/basic.json", 0.0f, 10.0f);
 				//cEditParam_に新規パーティクルのパラメーターを追加
 				cEditParam_[cParticle_->particles_.back().particle->name_] = cParticle_->particles_.back().particle->GetParam();
+				//もしパーティクルが今生成したもののみだった場合
+				if (cParticle_->particles_.size() == 1) {
+					//選択中のパーティクルをそのパーティクルにセットする
+					selectedParticleHandle_ = cParticle_->particles_[0].particle->name_;
+				}
+
 			}
 		}
 		//全パーティクルの再生＆ループチェック
@@ -726,7 +756,7 @@ void ParticleEditorScene::Editor() {
 		{
 			float currentTime = cParticle_->GetPlayInfo().currentTime;
 			float maxTime = cParticle_->GetPlayInfo().duration;
-			ImGui::SliderFloat("a", &currentTime, 0.0f, maxTime);
+			ImGui::SliderFloat(" ", &currentTime, 0.0f, maxTime);
 		}
 
 		ImGui::End();
@@ -740,6 +770,8 @@ void ParticleEditorScene::Editor() {
 
 		//タブ分け
 		if (ImGui::BeginTabBar("タブ")) {
+			//削除依頼キーコンテナ
+			std::vector<std::string> eraseKeys;
 			//タブごとの処理
 			for (const auto& [key, param] : cEditParam_) {
 				if (ImGui::BeginTabItem(key.c_str())) {
@@ -786,8 +818,11 @@ void ParticleEditorScene::Editor() {
 											break;
 										}
 									}
-									//元のキーを削除
-									cEditParam_.erase(key);
+									//編集用パーティクル名に空文字をセット
+									particleName_ = "";
+
+									//元のキーの削除を依頼
+									eraseKeys.push_back(key);
 								}
 							}
 							//変更不可なら
@@ -816,31 +851,40 @@ void ParticleEditorScene::Editor() {
 
 						ImGui::Separator();
 					}
-					//パーティクルの表示/非表示
-					{
-						//パーティクル情報を走査
-						for (auto& particleInfo : cParticle_->particles_) {
-							if (particleInfo.particle->name_ == key) {
-								//チェックボックスを使って表示/非表示を切り替え
-								ImGui::Checkbox("表示/非表示", &particleInfo.particle->emitter_.isPlay);
-
-								break;
-							}
-						}
-
-						ImGui::Separator();
-					}
 					//パーティクルの削除
 					{
 						//削除ボタン
 						if (ImGui::Button("パーティクルの削除")) {
+							//複合パーティクルインスタンスから該当キーオブジェクトの削除
 							cParticle_->RemoveParticle(key);
+							//削除依頼をだす
+							eraseKeys.push_back(key);
+							//選択中のパーティクルハンドル名を記入
+							bool isSet = false;
+							for (const auto& [key2, param] : cEditParam_) {
+								if (key2 == key) {
+									continue;
+								}
+								//次の選択タブ
+								isSet = true;
+								selectedParticleHandle_ = key2;
+							}
+							//次の選択タブが未設定なら
+							if (!isSet) {
+								//空文字を入れる
+								selectedParticleHandle_ = "";
+							}
 						}
 					}
 
 					ImGui::EndTabItem();
 				}
 			}
+			//依頼された要素の削除
+			for (const auto& key : eraseKeys) {
+				cEditParam_.erase(key);
+			}
+
 			ImGui::EndTabBar();
 		}
 
@@ -848,17 +892,21 @@ void ParticleEditorScene::Editor() {
 		};
 
 
-	//パラメーター処理の呼び出し
-	paramProcess();
+	//コンテナにパーティクルが一つも含まれていない場合に表示しないもの
+	if (!isEmpty) {
+		//パラメーター処理の呼び出し
+		paramProcess();
 
-	//エミッター処理の呼び出し
-	emitterProcess();
+		//エミッター処理の呼び出し
+		emitterProcess();
+
+		//各パーティクルオプションの呼び出し
+		particleOption();
+	}
 
 	//各パーティクル管理の呼び出し
 	particleManagement();
 
-	//各パーティクルオプションの呼び出し
-	particleOption();
 
 
 #endif //_DEBUG
