@@ -8,6 +8,12 @@
 void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
 	//名前をセット
 	name_ = _name;
+	//基準のトランスフォームを初期化
+	baseTransform_ = {
+		.scale = {1,1,1},
+		.rotate = {0,0,0},
+		.translate = {0,0,0}
+	};
 	//フォルダパス
 	std::string folderPath = "Resources/particles/" + _comParticleFileName;
 	std::vector<std::string> dataFiles;
@@ -99,11 +105,25 @@ std::vector<std::string> CombinedParticle::GetAllHandleName() {
 }
 
 void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
-	//パーティクルを走査
-	for (auto& sParInfo : particles_) {
-		//基準トランスフォームをセット
-		sParInfo.particle->emitter_.transform.translate += transform.translate;
+	//新旧の差分を求める
+	TransformEuler diff;
+	diff.translate = transform.translate - baseTransform_.translate;
+	diff.rotate = transform.rotate - baseTransform_.rotate;
+	diff.scale.x = transform.scale.x / baseTransform_.scale.x;
+	diff.scale.y = transform.scale.y / baseTransform_.scale.y;
+	diff.scale.z = transform.scale.z / baseTransform_.scale.z;
+	//全パーティクルを走査
+	for (auto& particle : particles_) {
+		//パーティクルのエミッターに差分を加算
+		particle.particle->emitter_.transform.translate += diff.translate;
+		particle.particle->emitter_.transform.rotate += diff.rotate;
+		particle.particle->emitter_.transform.scale.x *= diff.scale.x;
+		particle.particle->emitter_.transform.scale.y *= diff.scale.y;
+		particle.particle->emitter_.transform.scale.z *= diff.scale.z;
 	}
+
+	//基準値を変更
+	baseTransform_ = transform;
 }
 
 bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTime, float _endTime) {
@@ -116,6 +136,11 @@ bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTim
 	newParticle.startTime = _startTime;
 	newParticle.endTime = _endTime;
 	newParticle.particle = std::make_unique<Particle>();
+	newParticle.particle->emitter_.transform.translate += baseTransform_.translate;
+	newParticle.particle->emitter_.transform.rotate += baseTransform_.rotate;
+	newParticle.particle->emitter_.transform.scale.x *= baseTransform_.scale.x;
+	newParticle.particle->emitter_.transform.scale.y *= baseTransform_.scale.y;
+	newParticle.particle->emitter_.transform.scale.z *= baseTransform_.scale.z;
 	//パーティクルの名前を決める(例 : basic.json→basic)
 	std::string cutJson = _fileName.substr(0, _fileName.rfind(".json"));
 	std::string name = ParticleManager::GetInstance()->GenerateName(cutJson);

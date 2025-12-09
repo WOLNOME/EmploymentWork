@@ -89,7 +89,9 @@ void ParticleEditorScene::StartWithImGui() {
 			//パーティクルの初期化
 			cParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic");
 			//エミッターの位置を調整
-			cParticle_->SetBaseTransform(TransformEuler({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }));
+			TransformEuler baseTransform = cParticle_->GetBaseTransform();
+			baseTransform.translate.y += 3.0f;
+			cParticle_->SetBaseTransform(baseTransform);
 			//jsonデータをロード
 			cEditParam_ = cParticle_->GetParams();
 			//selectedParticleHandle_に最初の要素を入れる
@@ -323,7 +325,9 @@ void ParticleEditorScene::CheckWithImGui() {
 						ParticleManager::GetInstance()->GenerateName("Sample"),
 						particleFileName_
 					);
-					cParticle_->SetBaseTransform(TransformEuler({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }));
+					TransformEuler baseTransform = cParticle_->GetBaseTransform();
+					baseTransform.translate.y += 3.0f;
+					cParticle_->SetBaseTransform(baseTransform);
 					cEditParam_ = cParticle_->GetParams();
 					camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
 					camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
@@ -638,8 +642,8 @@ void ParticleEditorScene::Editor() {
 		}
 		//エミッターのトランスフォーム
 		if (ImGui::CollapsingHeader("エミッターのトランスフォーム")) {
-			ImGui::DragFloat3("平行移動", &particle->emitter_.transform.translate.x, 0.1f);
-			ImGui::DragFloat3("拡縮", &particle->emitter_.transform.scale.x, 0.1f, 0.0f);
+			ImGui::DragFloat3("平行移動(エミッター)", &particle->emitter_.transform.translate.x, 0.1f);
+			ImGui::DragFloat3("拡縮(エミッター)", &particle->emitter_.transform.scale.x, 0.1f, 0.1f, 100.0f);
 		}
 		//生成アルゴリズム
 		if (ImGui::CollapsingHeader("生成アルゴリズム")) {
@@ -708,6 +712,21 @@ void ParticleEditorScene::Editor() {
 		if (ImGui::CollapsingHeader("ビルボード")) {
 			ImGui::Checkbox("ビルボードの処理をするか(isBillboard)", &particle->emitter_.isBillboard);
 		}
+
+		//基準のトランスフォーム
+		{
+			//区切り
+			ImGui::Separator();
+
+			if (ImGui::CollapsingHeader("基準のトランスフォーム")) {
+				TransformEuler baseTransform = cParticle_->GetBaseTransform();
+				ImGui::DragFloat3("平行移動(ベース)", &baseTransform.translate.x, 0.1f);
+				ImGui::DragFloat3("拡縮(ベース)", &baseTransform.scale.x, 0.1f, 0.1f, 100.0f);
+				cParticle_->SetBaseTransform(baseTransform);
+			}
+		}
+
+
 		ImGui::End();
 		};
 

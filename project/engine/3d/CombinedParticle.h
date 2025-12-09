@@ -63,6 +63,11 @@ public:
 	/// ============================== ///
 
 	/// <summary>
+	/// 基準のトランスフォームを取得する
+	/// </summary>
+	/// <returns>基準のトランスフォーム</returns>
+	const TransformEuler& GetBaseTransform() { return baseTransform_; }
+	/// <summary>
 	/// 全てのハンドル名をコンテナとして渡す
 	/// </summary>
 	/// <returns>全てのハンドル名</returns>
@@ -145,6 +150,9 @@ private:
 
 	//再生情報
 	PlayInfo playInfo_;
+
+	//基準のトランスフォーム
+	TransformEuler baseTransform_;
 
 	//複合最大数
 	const uint32_t kMaxCombinedParticles = 8;

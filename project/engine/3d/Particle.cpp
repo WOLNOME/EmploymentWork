@@ -26,9 +26,9 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	if (data) param_ = data;
 	else assert(0 && "JSONファイルが存在しません");
 	//エミッターの初期化
-	emitter_.transform.translate = Vector3(0.0f, 0.0f, 0.0f);
-	emitter_.transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
-	emitter_.transform.scale = Vector3(1.0f, 1.0f, 1.0f);
+	emitter_.transform.translate = { 0,0,0 };
+	emitter_.transform.rotate = { 0,0,0 };
+	emitter_.transform.scale = { 1,1,1 };
 	emitter_.generateMethod = GenerateMethod::Random;
 	emitter_.effectStyle = EffectStyle::Loop;
 	emitter_.gravity = -1.0f;
@@ -104,7 +104,7 @@ Particle::AllResourceForCS Particle::CreateAllResourceForCS() {
 		result.jsonInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedJsonInfo));
 		std::memset(mappedJsonInfo, 0, sizeof(JsonInfoForCS));
 		result.mappedJsonInfo = { mappedJsonInfo,1 };
-		
+
 	}
 	{
 		//時間の情報用のResorceを確保
