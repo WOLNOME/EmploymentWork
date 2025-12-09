@@ -17,16 +17,7 @@ struct Transform
 struct EmitterInfo
 {
     Transform transform;
-    int generateMethod;
-    int effectStyle;
-    float gravity;
-    float repulsion;
-    float floorHeight;
-    int clumpNum;
     uint isAffectedField;
-    uint isGravity;
-    uint isBound;
-    uint isBillboard;
     uint isPlay;
 };
 
@@ -52,8 +43,17 @@ struct JsonInfo
     float endSizeMin;
     float lifeTimeMax;
     float lifeTimeMin;
+    float gravity;
+    float repulsion;
+    float floorHeight;
     int emitRate;
     int maxGrains;
+    int generateMethod;
+    int clumpNum;
+    int effectStyle;
+    int isGravity;
+    int isBound;
+    int isBillboard;
 };
 
 struct Grain

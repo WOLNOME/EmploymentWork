@@ -107,9 +107,6 @@ void GameClearSystem::Initialize() {
 		confettiParticle_ = std::make_unique<Particle>();
 		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "confetti");
 		confettiParticle_->emitter_.transform.scale = { 15.0f,1.0f,15.0f };
-		confettiParticle_->emitter_.gravity = -1.0f;
-		confettiParticle_->emitter_.isGravity = true;
-		confettiParticle_->emitter_.isBillboard = false;
 		confettiParticle_->emitter_.isPlay = true;
 	}
 }

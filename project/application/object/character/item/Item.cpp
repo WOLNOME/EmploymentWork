@@ -22,17 +22,10 @@ void Item::Initialize() {
 	idleParticle_ = std::make_unique<Particle>();
 	idleParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_idle"), "item_idle");
 	idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
-	idleParticle_->emitter_.isGravity = true;
-	idleParticle_->emitter_.gravity = 1.0f;
 	//ゲット時のパーティクルを生成
 	getParticle_ = std::make_unique<Particle>();
 	getParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_get"), "item_get");
 	getParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-	getParticle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
-	getParticle_->emitter_.clumpNum = 15;
-	getParticle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
-	getParticle_->emitter_.isPlay = false;
-	getParticle_->emitter_.isBillboard = false;
 
 	// 確率でアイテムの種類を決定
 	std::random_device rd;

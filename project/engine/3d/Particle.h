@@ -112,8 +112,17 @@ private:
 		float endSizeMin = 0.0f;
 		float lifeTimeMax = 0.0f;
 		float lifeTimeMin = 0.0f;
+		float gravity = 0.0f;
+		float repulsion = 0.0f;
+		float floorHeight = 0.0f;
 		int emitRate = 0;
 		int maxGrains = 0;
+		int generateMethod = 0;
+		int clumpNum = 0;
+		int effectStyle = 0;
+		int isGravity = 0;
+		int isBound = 0;
+		int isBillboard = 0;
 	};
 	/// <summary>
 	/// CS用フレーム情報
@@ -157,16 +166,7 @@ public:
 	/// </summary>
 	struct Emitter {
 		TransformEuler transform;		//エミッターのトランスフォーム
-		GenerateMethod generateMethod = GenerateMethod::kMaxGenerateMethodNum;		//生成方法
-		EffectStyle effectStyle = EffectStyle::kMaxEffectStyleNum;					//エフェクトスタイル
-		float gravity = 0.0f;			//重力値
-		float repulsion = 0.0f;			//床の反発値
-		float floorHeight = 0.0f;		//床の高さ
-		int clumpNum = 0;				//塊の数(clumpMethodの時のみ使用)
 		bool isAffectedField = false;	//フィールドに影響を受けるか
-		bool isBillboard = false;		//ビルボードを適用するか
-		bool isGravity = false;			//重力を適用するか
-		bool isBound = false;			//バウンドを適用するか
 		bool isPlay = false;			//パーティクルを生成するか
 	};
 

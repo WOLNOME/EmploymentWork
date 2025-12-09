@@ -112,7 +112,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     //WorldMatrixを求める
     float4x4 worldMatrix = MakeIdentity4x4();
     //billboardの計算をする
-    if (gEmitterInfo.isBillboard == 1)
+    if (gJsonInfo.isBillboard == 1)
     {
         float4x4 backToFrontMatrix = MakeRotateZMatrix(grain.transform.rotate.z);
         float4x4 billboardMatrix = mul(backToFrontMatrix, gCameraInfo.matWorld);

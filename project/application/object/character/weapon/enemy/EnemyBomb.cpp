@@ -32,9 +32,6 @@ void EnemyBomb::Initialize() {
 		particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyBombHit"), "hit");
 		particle_->emitter_.isPlay = false;
 		particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-		particle_->emitter_.generateMethod = Particle::GenerateMethod::Clump;
-		particle_->emitter_.clumpNum = 10;
-		particle_->emitter_.effectStyle = Particle::EffectStyle::OneShot;
 	}
 	{
 		explosion_ = std::make_unique<Particle>();

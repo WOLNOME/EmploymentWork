@@ -62,7 +62,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     //乱数生成機の作成
     RandomGenerator generator;
     //エフェクトの生成スタイルによって分ける
-    if (gEmitterInfo.effectStyle == 0)      //ループ処理
+    if (gJsonInfo.effectStyle == 0)      //ループ処理
     {
         //ratePerFrameの整数部分を生成数に設定
         generateNum = (int) ratePerFrame;
@@ -72,7 +72,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
             generateNum++;
         }
     }
-    else if (gEmitterInfo.effectStyle == 1)     //一度きり処理
+    else if (gJsonInfo.effectStyle == 1)     //一度きり処理
     {
         //現在の粒の数が0なら生成
         if (playingGrainNum == 0)
@@ -98,7 +98,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
         int freeListIndex;
         
         //生成方法ごとに処理を分ける
-        if (gEmitterInfo.generateMethod == 0)       //ランダム生成
+        if (gJsonInfo.generateMethod == 0)       //ランダム生成
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
@@ -141,7 +141,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                 return;
             }
         }
-        else if (gEmitterInfo.generateMethod == 1)      //クランプ生成
+        else if (gJsonInfo.generateMethod == 1)      //クランプ生成
         {
             //FreeListのIndexを1つ前に設定し、現在のIndexを取得する
             InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
@@ -161,7 +161,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                 float lifeTime = 0.0f;
                 lifeTime = generator.GenerateInRange(gJsonInfo.lifeTimeMin, gJsonInfo.lifeTimeMax);
                 //クランプ数だけ回す
-                for (int j = 0; j < gEmitterInfo.clumpNum; j++)
+                for (int j = 0; j < gJsonInfo.clumpNum; j++)
                 {
                     //値を入れていく
                     gGrains[grainIndex].transform.translate = basicTranslate;
@@ -187,7 +187,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                     gGrains[grainIndex].currentTime = 0.0f;
                     
                     //最後の周ならここでreturn
-                    if (j == gEmitterInfo.clumpNum - 1)
+                    if (j == gJsonInfo.clumpNum - 1)
                         return;
                     
                     //粒のインデックスを次の値へ

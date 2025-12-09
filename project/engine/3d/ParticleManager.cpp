@@ -79,7 +79,8 @@ void ParticleManager::Update() {
 
 		mainRender->GetCommandList()->Dispatch(1, 1, 1);
 		//OneShotスタイルの場合isPlayをfalseにする
-		if (particle.second->emitter_.effectStyle == Particle::EffectStyle::OneShot) {
+		int effectStyle = particle.second->param_["EffectStyle"];
+		if ((Particle::EffectStyle)effectStyle == Particle::EffectStyle::OneShot) {
 			particle.second->emitter_.isPlay = false;
 		}
 		//バリア遷移(状態保証処理)

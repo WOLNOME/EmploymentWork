@@ -6,6 +6,10 @@
 #include "TextureManager.h"
 #include "JsonUtil.h"
 
+inline UINT Align256(UINT size) {
+	return (size + 255) & ~255;
+}
+
 Particle::~Particle() {
 	//確保したSRV・UAVデスクリプタヒープの解放
 	GPUDescriptorManager::GetInstance()->Free(allResourceForCS_.grainsSrvIndex);
@@ -29,16 +33,7 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	emitter_.transform.translate = { 0,0,0 };
 	emitter_.transform.rotate = { 0,0,0 };
 	emitter_.transform.scale = { 1,1,1 };
-	emitter_.generateMethod = GenerateMethod::Random;
-	emitter_.effectStyle = EffectStyle::Loop;
-	emitter_.gravity = -1.0f;
-	emitter_.repulsion = 0.5f;
-	emitter_.floorHeight = 0.0f;
-	emitter_.clumpNum = 1;
 	emitter_.isAffectedField = false;
-	emitter_.isBillboard = true;
-	emitter_.isGravity = false;
-	emitter_.isBound = false;
 	emitter_.isPlay = true;
 	//テクスチャハンドルの取得
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture(param_["Texture"]);
@@ -51,8 +46,9 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 
 	//CS専用リソースの作成
 	allResourceForCS_ = CreateAllResourceForCS();
-	//エミッターの情報とJSONの情報を写す
+	//エミッターの情報を写す
 	TraceEmitterForCS();
+	//JSONの情報を写す
 	TraceJsonDataForCS();
 
 	//最後にマネージャーに登録
@@ -141,16 +137,7 @@ void Particle::TraceEmitterForCS() {
 	allResourceForCS_.mappedEmitter[0].transform.scale = Vec3ToVec4(emitter_.transform.scale);
 	allResourceForCS_.mappedEmitter[0].transform.rotate = Vec3ToVec4(emitter_.transform.rotate);
 	allResourceForCS_.mappedEmitter[0].transform.translate = Vec3ToVec4(emitter_.transform.translate);
-	allResourceForCS_.mappedEmitter[0].generateMethod = (int)emitter_.generateMethod;
-	allResourceForCS_.mappedEmitter[0].effectStyle = (int)emitter_.effectStyle;
-	allResourceForCS_.mappedEmitter[0].gravity = emitter_.gravity;
-	allResourceForCS_.mappedEmitter[0].repulsion = emitter_.repulsion;
-	allResourceForCS_.mappedEmitter[0].floorHeight = emitter_.floorHeight;
-	allResourceForCS_.mappedEmitter[0].clumpNum = emitter_.clumpNum;
 	allResourceForCS_.mappedEmitter[0].isAffectedField = emitter_.isAffectedField;
-	allResourceForCS_.mappedEmitter[0].isGravity = emitter_.isGravity;
-	allResourceForCS_.mappedEmitter[0].isBound = emitter_.isBound;
-	allResourceForCS_.mappedEmitter[0].isBillboard = emitter_.isBillboard;
 	allResourceForCS_.mappedEmitter[0].isPlay = emitter_.isPlay;
 }
 
@@ -182,6 +169,15 @@ void Particle::TraceJsonDataForCS() {
 	allResourceForCS_.mappedJsonInfo[0].endSizeMin = param_["EndSize"]["Min"];
 	allResourceForCS_.mappedJsonInfo[0].lifeTimeMax = param_["LifeTime"]["Max"];
 	allResourceForCS_.mappedJsonInfo[0].lifeTimeMin = param_["LifeTime"]["Min"];
+	allResourceForCS_.mappedJsonInfo[0].gravity = param_["Gravity"];
+	allResourceForCS_.mappedJsonInfo[0].repulsion = param_["Repulsion"];
+	allResourceForCS_.mappedJsonInfo[0].floorHeight = param_["FloorHeight"];
 	allResourceForCS_.mappedJsonInfo[0].emitRate = param_["EmitRate"];
 	allResourceForCS_.mappedJsonInfo[0].maxGrains = param_["MaxGrains"];
+	allResourceForCS_.mappedJsonInfo[0].generateMethod = param_["GenerateMethod"];
+	allResourceForCS_.mappedJsonInfo[0].clumpNum = param_["ClumpNum"];
+	allResourceForCS_.mappedJsonInfo[0].effectStyle = param_["EffectStyle"];
+	allResourceForCS_.mappedJsonInfo[0].isGravity = param_["IsGravity"];
+	allResourceForCS_.mappedJsonInfo[0].isBound = param_["IsBound"];
+	allResourceForCS_.mappedJsonInfo[0].isBillboard = param_["IsBillboard"];
 }

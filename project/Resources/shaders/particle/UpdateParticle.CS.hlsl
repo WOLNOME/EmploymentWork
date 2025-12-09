@@ -27,8 +27,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
     
     //Outputから粒の情報を受け取る
     Grain grain = gGrains[grainIndex];
-    //使用するエミッターを選択
-    EmitterInfo emitterInfo = gEmitterInfo;
     
     //現在時間の更新
     grain.currentTime += gPerFrame.deltaTime;
@@ -50,23 +48,21 @@ void main(uint3 DTid : SV_DispatchThreadID)
         }
     }
     ///==================///
-    /// エミッターとの処理
+    /// 粒情報の処理
     ///==================///
+    
     //重力処理
-    if (emitterInfo.isGravity == 1)
-        grain.velocity.y += emitterInfo.gravity * gPerFrame.deltaTime;
+    if (gJsonInfo.isGravity == 1)
+        grain.velocity.y += gJsonInfo.gravity * gPerFrame.deltaTime;
     //バウンド処理
-    if (emitterInfo.isBound == 1)
+    if (gJsonInfo.isBound == 1)
     {
         //粒の最底辺位置の計算
         float leg = grain.transform.translate.y - (grain.transform.scale.y + gPerFrame.deltaTime * grain.sizeValue);
         //床の反発処理
-        if (leg > emitterInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < emitterInfo.floorHeight)
-            grain.velocity.y *= (-1.0f) * emitterInfo.repulsion;
+        if (leg > gJsonInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < gJsonInfo.floorHeight)
+            grain.velocity.y *= (-1.0f) * gJsonInfo.repulsion;
     }
-    ///==================///
-    /// 粒情報の処理
-    ///==================///
     //速度加算
     float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
     //回転更新

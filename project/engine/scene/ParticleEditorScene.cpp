@@ -493,12 +493,13 @@ void ParticleEditorScene::Editor() {
 			if (ImGui::CollapsingHeader("粒の最大数")) {
 				//推奨値の計算
 				int RecommendValue;
-				switch (particle->emitter_.generateMethod) {
+				int generateMethod = param["GenerateMethod"];
+				switch ((Particle::GenerateMethod)generateMethod) {
 				case Particle::GenerateMethod::Random:
 					RecommendValue = int(lifeTimeMax * param["EmitRate"]);
 					break;
 				case Particle::GenerateMethod::Clump:
-					RecommendValue = int(lifeTimeMax * param["EmitRate"] * particle->emitter_.clumpNum);
+					RecommendValue = int(lifeTimeMax * param["EmitRate"] * param["ClumpNum"]);
 					break;
 				default:
 					break;
@@ -535,6 +536,66 @@ void ParticleEditorScene::Editor() {
 					//形状の変更通知
 					isShapeChange_ = true;
 				}
+			}
+		}
+		//生成方法を写す
+		int generateMethod = param["GenerateMethod"];
+		int clumpNum = param["ClumpNum"];
+		{
+			if (ImGui::CollapsingHeader("生成方法")) {
+				const char* methods[] = { "Random", "Clump" };
+				ImGui::Combo("変更（生成方法）", &generateMethod, methods, IM_ARRAYSIZE(methods));
+
+				if (generateMethod == (int)Particle::GenerateMethod::Clump) {
+					ImGui::DragInt("一塊の粒の数", &clumpNum, 1, 1, 20);
+				}
+			}
+		}
+		//スタイルを写す
+		int effectStyle = param["EffectStyle"];
+		{
+			if (ImGui::CollapsingHeader("スタイル")) {
+				const char* styles[] = { "Loop","OneShot" };
+				const char* currentStyle = "";
+				switch ((Particle::EffectStyle)effectStyle) {
+				case Particle::EffectStyle::Loop:
+					currentStyle = styles[0];
+					break;
+				case Particle::EffectStyle::OneShot:
+					currentStyle = styles[1];
+					break;
+				default:
+					break;
+				}
+				ImGui::Text("今のスタイル : %s", currentStyle);
+				ImGui::Combo("変更（スタイル）", &effectStyle, styles, IM_ARRAYSIZE(styles));
+			}
+		}
+		//重力を写す
+		int isGravity = param["IsGravity"];
+		float gravity = param["Gravity"];
+		{
+			if (ImGui::CollapsingHeader("重力")) {
+				ImGui::Checkbox("重力の処理をするか", (bool*)&isGravity);
+				ImGui::DragFloat("重力値", &gravity, 0.1f);
+			}
+		}
+		//床を写す
+		int isBound = param["IsBound"];
+		float repulsion = param["Repulsion"];
+		float floorHeight = param["FloorHeight"];
+		{
+			if (ImGui::CollapsingHeader("床")) {
+				ImGui::Checkbox("床の処理をするか", (bool*)&isBound);
+				ImGui::DragFloat("床の反発値", &repulsion, 0.1f);
+				ImGui::DragFloat("床の高さ", &floorHeight, 0.1f);
+			}
+		}
+		//ビルボードを写す
+		int isBillboard = param["IsBillboard"];
+		{
+			if (ImGui::CollapsingHeader("ビルボード")) {
+				ImGui::Checkbox("ビルボードの処理をするか", (bool*)&isBillboard);
 			}
 		}
 		//editParamに変更を反映
@@ -596,6 +657,15 @@ void ParticleEditorScene::Editor() {
 			param["EmitRate"] = emitRate;
 			param["BlendMode"] = blendMode;
 			param["Primitive"] = primitive;
+			param["GenerateMethod"] = generateMethod;
+			param["ClumpNum"] = clumpNum;
+			param["EffectStyle"] = effectStyle;
+			param["IsGravity"] = isGravity;
+			param["Gravity"] = gravity;
+			param["IsBound"] = isBound;
+			param["Repulsion"] = repulsion;
+			param["FloorHeight"] = floorHeight;
+			param["IsBillboard"] = isBillboard;
 			//パーティクルに反映
 			cParticle_->SetParams(cEditParam_);
 			//形状の変更通知を受け取ったら
@@ -648,71 +718,7 @@ void ParticleEditorScene::Editor() {
 		//生成アルゴリズム
 		if (ImGui::CollapsingHeader("生成アルゴリズム")) {
 			ImGui::Checkbox("生成するか(isPlay)", &particle->emitter_.isPlay);
-			if (ImGui::TreeNode("生成方法")) {
-				//現在の生成方法を表示
-				const char* methods[] = { "Random","Clump" };
-				const char* currentMethod = "";
-				switch (particle->emitter_.generateMethod) {
-				case Particle::GenerateMethod::Random:
-					currentMethod = methods[0];
-					break;
-				case Particle::GenerateMethod::Clump:
-					currentMethod = methods[1];
-					break;
-				default:
-					break;
-				}
-				ImGui::Text("現在の生成方法 : %s", currentMethod);
-				//生成方法の選択
-				ImGui::Combo("生成方法(generateMethod)", (int*)&particle->emitter_.generateMethod, methods, IM_ARRAYSIZE(methods));
-				//生成方法ごとの設定
-				switch (particle->emitter_.generateMethod) {
-				case Particle::GenerateMethod::Random:
-					break;
-				case Particle::GenerateMethod::Clump:
-					ImGui::DragInt("一塊の粒の数(clumpNum)", &particle->emitter_.clumpNum, 1, 1, 20);
-					break;
-				default:
-					break;
-				}
-				ImGui::TreePop();
-			}
-			//エフェクトの発生スタイル
-			if (ImGui::TreeNode("スタイル")) {
-				const char* styles[] = { "Loop","OneShot" };
-				const char* currentStyle = "";
-				switch (particle->emitter_.effectStyle) {
-				case Particle::EffectStyle::Loop:
-					currentStyle = styles[0];
-					break;
-				case Particle::EffectStyle::OneShot:
-					currentStyle = styles[1];
-					break;
-				default:
-					break;
-				}
-				ImGui::Text("現在のスタイル : %s", currentStyle);
-				ImGui::Combo("スタイル(effectStyle)", (int*)&particle->emitter_.effectStyle, styles, IM_ARRAYSIZE(styles));
-				ImGui::TreePop();
-			}
 		}
-
-		//重力関係
-		if (ImGui::CollapsingHeader("重力")) {
-			ImGui::Checkbox("重力の処理をするか(isGravity)", &particle->emitter_.isGravity);
-			ImGui::DragFloat("重力値", &particle->emitter_.gravity, 0.1f);
-		}
-		//床関係
-		if (ImGui::CollapsingHeader("床")) {
-			ImGui::Checkbox("床の処理をするか(isBound)", &particle->emitter_.isBound);
-			ImGui::DragFloat("床の反発値", &particle->emitter_.repulsion, 0.1f);
-			ImGui::DragFloat("床の高さ", &particle->emitter_.floorHeight, 0.1f);
-		}
-		//ビルボードを適用するか
-		if (ImGui::CollapsingHeader("ビルボード")) {
-			ImGui::Checkbox("ビルボードの処理をするか(isBillboard)", &particle->emitter_.isBillboard);
-		}
-
 		//基準のトランスフォーム
 		{
 			//区切り
