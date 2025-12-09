@@ -384,8 +384,11 @@ void ParticleEditorScene::Editor() {
 		auto& param = cEditParam_[selectedParticleHandle_];
 
 		//パラメーター
-		ImGui::SetNextWindowPos(ImVec2(10, 80), ImGuiCond_FirstUseEver);
-		ImGui::Begin("パーティクルのパラメーター");
+		ImGui::SetNextWindowPos(ImVec2(10, 80));
+		ImGui::SetNextWindowSize(ImVec2(300, 380));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove;
+		ImGui::Begin("パーティクルのパラメーター", nullptr, flags);
 		//テクスチャ
 		{
 			isChangeTexture_ = false;
@@ -616,8 +619,11 @@ void ParticleEditorScene::Editor() {
 		auto& particle = cParticle_->particles_[index].particle;
 
 		//エミッター
-		ImGui::SetNextWindowPos(ImVec2(1000, 80), ImGuiCond_FirstUseEver);
-		ImGui::Begin("エミッター");
+		ImGui::SetNextWindowPos(ImVec2(970, 80));
+		ImGui::SetNextWindowSize(ImVec2(300, 380));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove;
+		ImGui::Begin("エミッター", nullptr, flags);
 		//エミッター可視化用ライン登録処理
 		ImGui::Checkbox("エミッターの枠を表示する", &displayLineEmitter_);
 		if (displayLineEmitter_) {
@@ -708,8 +714,11 @@ void ParticleEditorScene::Editor() {
 	//各パーティクルの管理のラムダ式
 	auto particleManagement = [this]() {
 		//管理
-		ImGui::SetNextWindowPos(ImVec2(10, 500), ImGuiCond_FirstUseEver);
-		ImGui::Begin("パーティクルの管理");
+		ImGui::SetNextWindowPos(ImVec2(10, 470));
+		ImGui::SetNextWindowSize(ImVec2(300, 240));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove;
+		ImGui::Begin("パーティクルの管理", nullptr, flags);
 
 		//パーティクルの新規作成
 		{
@@ -765,8 +774,11 @@ void ParticleEditorScene::Editor() {
 	//各パーティクルのオプションのラムダ式
 	auto particleOption = [this]() {
 		//管理
-		ImGui::SetNextWindowPos(ImVec2(110, 500), ImGuiCond_FirstUseEver);
-		ImGui::Begin("パーティクルごとのオプション");
+		ImGui::SetNextWindowPos(ImVec2(320, 470));
+		ImGui::SetNextWindowSize(ImVec2(950, 240));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove;
+		ImGui::Begin("パーティクルごとのオプション", nullptr, flags);
 
 		//タブ分け
 		if (ImGui::BeginTabBar("タブ")) {
