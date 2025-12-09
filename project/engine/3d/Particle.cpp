@@ -100,7 +100,6 @@ Particle::AllResourceForCS Particle::CreateAllResourceForCS() {
 		result.jsonInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedJsonInfo));
 		std::memset(mappedJsonInfo, 0, sizeof(JsonInfoForCS));
 		result.mappedJsonInfo = { mappedJsonInfo,1 };
-
 	}
 	{
 		//時間の情報用のResorceを確保
