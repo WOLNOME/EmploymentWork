@@ -34,7 +34,7 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	emitter_.transform.rotate = { 0,0,0 };
 	emitter_.transform.scale = { 1,1,1 };
 	emitter_.isAffectedField = false;
-	emitter_.isPlay = true;
+	emitter_.isPlay = false;
 	//テクスチャハンドルの取得
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture(param_["Texture"]);
 

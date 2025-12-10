@@ -40,7 +40,6 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 
 		sParticle.particle = std::make_unique<Particle>();
 		sParticle.particle->Initialize(fileName, relativePath);
-		sParticle.particle->emitter_.isPlay = false;
 		//発生開始時間&終了時間のセット
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		sParticle.startTime = data["StartTime"];

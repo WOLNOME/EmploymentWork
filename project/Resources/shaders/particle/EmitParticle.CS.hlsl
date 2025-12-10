@@ -93,7 +93,7 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
     for (int i = 0; i < generateNum; i++)
     {
         //乱数のシードを更新
-        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gPerFrame.time * 0.1f) * 10000.0f;
+        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gPerFrame.time * 0.1f) * 1000.0f;
         
         int freeListIndex;
         

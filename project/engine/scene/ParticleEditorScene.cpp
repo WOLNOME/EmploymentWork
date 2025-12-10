@@ -88,7 +88,7 @@ void ParticleEditorScene::StartWithImGui() {
 			cParticle_ = std::make_unique<CombinedParticle>();
 			//パーティクルの初期化
 			cParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic");
-			//エミッターの位置を調整
+			//基準のトランスフォームを調整
 			TransformEuler baseTransform = cParticle_->GetBaseTransform();
 			baseTransform.translate.y += 3.0f;
 			cParticle_->SetBaseTransform(baseTransform);
@@ -765,7 +765,7 @@ void ParticleEditorScene::Editor() {
 		{
 			//全パーティクル再生ボタン
 			if (ImGui::Button("再生")) {
-				//再生状態出ないなら
+				//再生状態でないなら
 				if (cParticle_->GetIsPlay()) {
 					cParticle_->SetIsPlay(true);
 				}
