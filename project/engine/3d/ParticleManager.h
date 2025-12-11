@@ -56,12 +56,12 @@ public:
 	/// </summary>
 	/// <param name="name">名前</param>
 	/// <param name="particle">パーティクルのポインタ</param>
-	void RegisterParticle(const std::string& name, Particle* particle);
+	void Regist(const std::string& name, Particle* particle);
 	/// <summary>
 	/// 登録されたパーティクルを削除
 	/// </summary>
 	/// <param name="name">名前</param>
-	void DeleteParticle(const std::string& name);
+	void Delete(const std::string& name);
 
 	/// <summary>
 	/// 名前を決める関数

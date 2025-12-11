@@ -76,16 +76,7 @@ private:
 	/// </summary>
 	struct EmitterForCS {
 		TransformForCS transform;
-		int generateMethod = 0;
-		int effectStyle = 0;
-		float gravity = 0.0f;
-		float repulsion = 0.0f;
-		float floorHeight = 0.0f;
-		int clumpNum = 0;
 		uint32_t isAffectedField = 0u;
-		uint32_t isGravity = 0u;
-		uint32_t isBound = 0u;
-		uint32_t isBillboard = 0u;
 		uint32_t isPlay = 0u;
 	};
 	/// <summary>

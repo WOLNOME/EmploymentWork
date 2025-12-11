@@ -15,6 +15,8 @@
 class CombinedParticle {
 	//パーティクルマネージャーに公開
 	friend class ParticleManager;
+	//複合パーティクルマネージャーに公開
+	friend class CombinedParticleManager;
 	//パーティクルエディターシーンに公開
 	friend class ParticleEditorScene;
 public:
@@ -53,11 +55,7 @@ public:
 	/// <param name="_name">名前</param>
 	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update();
-
+	
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -98,6 +96,11 @@ private:
 	/// ============================== ///
 	///		非公開メンバ関数
 	/// ============================== ///
+
+	/// <summary>
+	/// 更新処理(複合パーティクルマネージャー用)
+	/// </summary>
+	void Update();
 
 	/// <summary>
 	/// パーティクルを追加(パーティクルエディター用)

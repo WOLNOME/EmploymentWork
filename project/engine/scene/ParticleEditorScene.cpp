@@ -44,10 +44,6 @@ void ParticleEditorScene::Update() {
 	BaseScene::Update();
 	//カメラの更新
 	camera_->Update();
-	//パーティクルの更新
-	if (cParticle_) {
-		cParticle_->Update();
-	}
 
 	//リセットコマンド
 	if (state_.check == Check::kNone) {
@@ -237,18 +233,17 @@ void ParticleEditorScene::OptionWithImGui() {
 	case ParticleEditorScene::Option::kShowTextureFileDialog:
 	{
 		//検索済みのテクスチャ一覧を表示
-		if (state_.option == Option::kShowTextureFileDialog) {
-			ImGui::SetNextWindowPos(ImVec2(360, 80));
-			ImGui::Begin("テクスチャ一覧");
-			for (const auto& file : textureFiles_) {
-				if (ImGui::Selectable(file.c_str())) {
-					selectedTexture_ = file;  //選択したファイル名を保存
-					state_.option = Option::kNone;  //ウィンドウを閉じる
-					isChangeTexture_ = true;  //テクスチャが変更された
-				}
+		ImGui::SetNextWindowPos(ImVec2(360, 80));
+		ImGui::Begin("テクスチャ一覧");
+		for (const auto& file : textureFiles_) {
+			if (ImGui::Selectable(file.c_str())) {
+				selectedTexture_ = file;  //選択したファイル名を保存
+				state_.option = Option::kNone;  //ウィンドウを閉じる
+				isChangeTexture_ = true;  //テクスチャが変更された
 			}
-			ImGui::End();
 		}
+		ImGui::End();
+
 		break;
 	}
 	default:
@@ -308,7 +303,10 @@ void ParticleEditorScene::CheckWithImGui() {
 				state_.option = Option::kShowParticleFileDialog;
 				particleFiles_.clear();
 				for (const auto& entry : std::filesystem::directory_iterator("Resources/particles")) {
-					particleFiles_.push_back(entry.path().filename().string());
+					//フォルダのみ
+					if (entry.is_directory()) {
+						particleFiles_.push_back(entry.path().filename().string());
+					}
 				}
 			}
 
@@ -395,8 +393,6 @@ void ParticleEditorScene::Editor() {
 		ImGui::Begin("パーティクルのパラメーター", nullptr, flags);
 		//テクスチャ
 		{
-			isChangeTexture_ = false;
-			selectedTexture_ = particle->GetParam()["Texture"];
 			if (ImGui::CollapsingHeader("テクスチャの設定")) {
 				ImGui::Text("選択中のテクスチャ : %s", selectedTexture_.c_str());
 				//フォルダ内のテクスチャを検索
@@ -677,12 +673,9 @@ void ParticleEditorScene::Editor() {
 			if (isChangeTexture_) {
 				//パーティクルのテクスチャを変更
 				particle->TextureChange();
+				//変更通知フラグを下げる
+				isChangeTexture_ = false;
 			}
-		}
-
-		//セーブボタン
-		if (ImGui::Button("セーブ")) {
-			state_.option = Option::kSave;
 		}
 		ImGui::End();
 		};
@@ -792,7 +785,14 @@ void ParticleEditorScene::Editor() {
 			float maxTime = cParticle_->GetPlayInfo().duration;
 			ImGui::SliderFloat(" ", &currentTime, 0.0f, maxTime);
 		}
-
+		//セーブボタン
+		{
+			if (cParticle_ && cParticle_->particles_.size() != 0) {
+				if (ImGui::Button("セーブ")) {
+					state_.option = Option::kSave;
+				}
+			}
+		}
 		ImGui::End();
 		};
 
@@ -943,8 +943,6 @@ void ParticleEditorScene::Editor() {
 
 	//各パーティクル管理の呼び出し
 	particleManagement();
-
-
 
 #endif //_DEBUG
 }

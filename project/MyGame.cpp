@@ -13,6 +13,7 @@
 #include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
+#include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 #include "CollisionManager.h"
 #include "SceneManager.h"
@@ -50,6 +51,8 @@ void MyGame::Update() {
 	SpriteManager::GetInstance()->Update();
 	//オブジェクトマネージャーの更新
 	Object3dManager::GetInstance()->Update();
+	//複合パーティクルマネージャーの更新
+	CombinedParticleManager::GetInstance()->Update();
 	//パーティクルマネージャーの更新
 	ParticleManager::GetInstance()->Update();
 	//弾丸マネージャーの更新

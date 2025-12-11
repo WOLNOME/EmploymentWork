@@ -18,7 +18,7 @@ Particle::~Particle() {
 	GPUDescriptorManager::GetInstance()->Free(allResourceForCS_.freeListUavIndex);
 
 	//マネージャーから削除
-	ParticleManager::GetInstance()->DeleteParticle(name_);
+	ParticleManager::GetInstance()->Delete(name_);
 }
 
 void Particle::Initialize(const std::string& name, const std::string& fileName) {
@@ -52,7 +52,7 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	TraceJsonDataForCS();
 
 	//最後にマネージャーに登録
-	ParticleManager::GetInstance()->RegisterParticle(name_, this);
+	ParticleManager::GetInstance()->Regist(name_, this);
 }
 
 Particle::AllResourceForCS Particle::CreateAllResourceForCS() {

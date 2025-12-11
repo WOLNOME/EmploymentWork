@@ -152,7 +152,7 @@ void ParticleManager::Finalize() {
 	instance = nullptr;
 }
 
-void ParticleManager::RegisterParticle(const std::string& name, Particle* particle) {
+void ParticleManager::Regist(const std::string& name, Particle* particle) {
 	//重複チェック
 	if (particles.find(name) != particles.end()) {
 		return;
@@ -176,7 +176,7 @@ void ParticleManager::RegisterParticle(const std::string& name, Particle* partic
 	mainRender->GetCommandList()->Dispatch(UINT(maxGrains + 1023) / 1024, 1, 1);
 }
 
-void ParticleManager::DeleteParticle(const std::string& name) {
+void ParticleManager::Delete(const std::string& name) {
 	// 名前がコンテナ内に存在するかチェック
 	auto it = particles.find(name);
 	if (it != particles.end()) {
