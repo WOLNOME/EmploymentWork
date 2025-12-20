@@ -6,6 +6,11 @@
 #undef min
 #undef max
 
+CombinedParticle::~CombinedParticle() {
+	//マネージャーから登録解除
+	CombinedParticleManager::GetInstance()->Delete(name_);
+}
+
 void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
 	//名前をセット
 	name_ = _name;
@@ -40,7 +45,7 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		SingleParticleInfo sParticle;
 
 		sParticle.particle = std::make_unique<Particle>();
-		sParticle.particle->Initialize(ParticleManager::GetInstance()->GenerateName(fileName), relativePath);
+		sParticle.particle->Initialize(fileName, relativePath);
 		//発生開始時間&終了時間のセット
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		sParticle.startTime = data["StartTime"];
@@ -89,6 +94,11 @@ void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
 }
 
 void CombinedParticle::Update() {
+	//particlesが空なら抜ける
+	if (particles_.empty()) {
+		return;
+	}
+
 	//再生フラグがオンなら
 	if (playInfo_.isPlay) {
 		//タイマーをカウント
@@ -97,15 +107,15 @@ void CombinedParticle::Update() {
 		for (auto& sParInfo : particles_) {
 			//再生フラグがオフの時
 			if (!sParInfo.particle->emitter_.isPlay) {
-				//タイマーがstartTime~endTimeの間にある時
-				if (playInfo_.currentTime > sParInfo.startTime && playInfo_.currentTime < sParInfo.endTime) {
+				//タイマーがstartTime~にある時(loop,oneshot両対応)
+				if (playInfo_.currentTime > sParInfo.startTime) {
 					//パーティクルをオンにする
 					sParInfo.particle->emitter_.isPlay = true;
 				}
 			}
 			//再生フラグがオンの時
 			else {
-				//タイマーがstartTime~endTimeの外にある時
+				//タイマーがstartTime~endTimeの外にある時(loopのみ対応)
 				if (playInfo_.currentTime < sParInfo.startTime || playInfo_.currentTime > sParInfo.endTime) {
 					//パーティクルをオフにする
 					sParInfo.particle->emitter_.isPlay = false;

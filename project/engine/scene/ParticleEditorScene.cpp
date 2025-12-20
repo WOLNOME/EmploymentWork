@@ -92,6 +92,7 @@ void ParticleEditorScene::StartWithImGui() {
 			cEditParam_ = cParticle_->GetParams();
 			//selectedParticleHandle_に最初の要素を入れる
 			selectedParticleHandle_ = cParticle_->particles_[0].particle->name_;
+
 			//カメラの位置をセット
 			camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
 			camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
@@ -237,7 +238,7 @@ void ParticleEditorScene::OptionWithImGui() {
 		ImGui::Begin("テクスチャ一覧");
 		for (const auto& file : textureFiles_) {
 			if (ImGui::Selectable(file.c_str())) {
-				selectedTexture_ = file;  //選択したファイル名を保存
+				cEditParam_[selectedParticleHandle_]["Texture"] = file;	//変更内容を保存
 				state_.option = Option::kNone;  //ウィンドウを閉じる
 				isChangeTexture_ = true;  //テクスチャが変更された
 			}
@@ -270,8 +271,6 @@ void ParticleEditorScene::CheckWithImGui() {
 				sceneManager_->SetNextScene("PARTICLEEDITOR");
 				state_.option = Option::kNone;
 				state_.check = Check::kNone;
-				cParticle_.reset();
-				cEditParam_.clear();
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
@@ -394,7 +393,8 @@ void ParticleEditorScene::Editor() {
 		//テクスチャ
 		{
 			if (ImGui::CollapsingHeader("テクスチャの設定")) {
-				ImGui::Text("選択中のテクスチャ : %s", selectedTexture_.c_str());
+				std::string nowTexture = param["Texture"];
+				ImGui::Text("選択中のテクスチャ : %s", nowTexture.c_str());
 				//フォルダ内のテクスチャを検索
 				if (ImGui::Button("{textures}フォルダ内のテクスチャを検索")) {
 					state_.option = Option::kShowTextureFileDialog;
@@ -596,7 +596,6 @@ void ParticleEditorScene::Editor() {
 		}
 		//editParamに変更を反映
 		{
-			param["Texture"] = selectedTexture_;
 			param["StartColor"]["Max"]["x"] = startColorMax.x;
 			param["StartColor"]["Max"]["y"] = startColorMax.y;
 			param["StartColor"]["Max"]["z"] = startColorMax.z;
@@ -852,6 +851,12 @@ void ParticleEditorScene::Editor() {
 										if (particleInfo.particle->name_ == key) {
 											//変更
 											particleInfo.particle->name_ = particleName_;
+											//パーティクルマネージャーの管理名も変更
+											if (!ParticleManager::GetInstance()->Rename(key, particleName_)) {
+												//失敗したらエラーメッセージを表示
+												assert(0 && "パーティクルマネージャーの名前変更に失敗しました");
+											}
+
 											break;
 										}
 									}

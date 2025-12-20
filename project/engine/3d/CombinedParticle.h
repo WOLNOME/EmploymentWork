@@ -50,6 +50,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~CombinedParticle();
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="_name">名前</param>

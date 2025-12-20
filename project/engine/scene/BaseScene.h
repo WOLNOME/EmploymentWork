@@ -15,6 +15,7 @@
 #include "Object3dManager.h"
 #include "LineManager.h"
 #include "ParticleManager.h"
+#include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 #include "Input.h"
 #include "Audio.h"

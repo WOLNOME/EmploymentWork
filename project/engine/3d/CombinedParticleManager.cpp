@@ -1,5 +1,6 @@
 #include "CombinedParticleManager.h"
 #include "CombinedParticle.h"
+#include "ParticleManager.h"
 #include "RandomStringUtil.h"
 
 CombinedParticleManager* CombinedParticleManager::instance = nullptr;

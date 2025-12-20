@@ -176,6 +176,25 @@ void ParticleManager::Regist(const std::string& name, Particle* particle) {
 	mainRender->GetCommandList()->Dispatch(UINT(maxGrains + 1023) / 1024, 1, 1);
 }
 
+bool ParticleManager::Rename(const std::string& preName, const std::string& postName) {
+	//古い名前がコンテナ内に存在するかチェック
+	auto it = particles.find(preName);
+	if (it != particles.end()) {
+		//新しい名前がコンテナ内に存在しないかチェック
+		if (particles.find(postName) != particles.end()) {
+			return false;
+		}
+		//名前の変更
+		particles[postName] = it->second;  //新しい名前で登録
+		particles.erase(it);	//古い名前での登録を削除
+
+		return true;
+	}
+
+	return false;
+
+}
+
 void ParticleManager::Delete(const std::string& name) {
 	// 名前がコンテナ内に存在するかチェック
 	auto it = particles.find(name);

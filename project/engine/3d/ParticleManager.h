@@ -58,6 +58,12 @@ public:
 	/// <param name="particle">パーティクルのポインタ</param>
 	void Regist(const std::string& name, Particle* particle);
 	/// <summary>
+	/// 登録されたパーティクル名の変更
+	/// </summary>
+	/// <param name="preName">変更前の名前</param>
+	/// <param name="postName">変更後の名前</param>
+	bool Rename(const std::string& preName, const std::string& postName);
+	/// <summary>
 	/// 登録されたパーティクルを削除
 	/// </summary>
 	/// <param name="name">名前</param>

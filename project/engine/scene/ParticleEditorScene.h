@@ -144,7 +144,6 @@ private:
 	//状態管理用変数
 	EditorState state_;
 	//オプション処理で使う変数
-	std::string selectedTexture_;
 	bool isShapeChange_ = false;
 	bool isChangeTexture_ = false;
 	//チェック処理で使う変数
