@@ -22,7 +22,7 @@ void PlayerCannon::Initialize() {
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerCannonHit"), "hit");
 	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
@@ -78,7 +78,7 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	case CollisionAttribute::Enemy:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
@@ -90,7 +90,7 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	case CollisionAttribute::EnemyBullet:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
@@ -102,7 +102,7 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	case CollisionAttribute::EnemyCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);

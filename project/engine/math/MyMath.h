@@ -166,8 +166,6 @@ struct Capsule {
 	float radius;
 };
 
-class LineDrawer;
-
 /// <summary>
 /// 数学関数を管理するクラス
 /// </summary>
@@ -627,6 +625,19 @@ public:
 	/// <param name="t">補間係数（0～1）</param>
 	/// <returns>線形補間後の値</returns>
 	static float Lerp(float s1, float s2, float t);
+
+
+	///------------------------------------///
+	///              Transform
+	///------------------------------------///
+
+	/// <summary>
+	/// トランスフォームの合成(ワールドトランスフォーム)
+	/// </summary>
+	/// <param name="parent">親トランスフォーム</param>
+	/// <param name="child">ローカルトランスフォーム</param>
+	/// <returns>合成結果</returns>
+	static TransformEuler Combine(const TransformEuler& parent, const TransformEuler& local);
 
 	///------------------------------------///
 	///            補助関数

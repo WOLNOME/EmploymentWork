@@ -827,6 +827,34 @@ float MyMath::Lerp(float s1, float s2, float t) {
 	return s1 * (1 - t) + s2 * t;
 }
 
+TransformEuler MyMath::Combine(const TransformEuler& parent, const TransformEuler& local) {
+	TransformEuler world;
+
+	//スケール
+	world.scale.x = parent.scale.x * local.scale.x;
+	world.scale.y = parent.scale.y * local.scale.y;
+	world.scale.z = parent.scale.z * local.scale.z;
+
+	//回転 (Euler → Quaternion → 合成 → Euler)
+	Quaternion qParent = FromEulerAngles(parent.rotate);
+	Quaternion qLocal = FromEulerAngles(local.rotate);
+	Quaternion qWorld = Normalize(qParent * qLocal);
+
+	world.rotate = ToEulerAngles(qWorld);
+
+	//平行移動
+	Vector3 scaled{
+	parent.scale.x * local.translate.x,
+	parent.scale.y * local.translate.y,
+	parent.scale.z * local.translate.z
+	};
+	world.translate =
+		parent.translate +
+		MyMath::RotateVector(scaled, qParent);
+
+	return world;
+}
+
 std::pair<float, float> MyMath::ProjectOntoAxis(const Vector3* vertices, int count, const Vector3& axis) {
 	float min = Dot(vertices[0], axis);
 	float max = min;

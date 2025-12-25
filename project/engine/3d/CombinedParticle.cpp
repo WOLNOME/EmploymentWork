@@ -1,10 +1,30 @@
 #include "CombinedParticle.h"
 #include "ParticleManager.h"
 #include "CombinedParticleManager.h"
+#include "LineManager.h"
 #include <cassert>
 #include <filesystem>
 #undef min
 #undef max
+
+//単パーティクルのローカルトランスフォームをJSON情報から取得する
+auto getLocalTransformFromJson = [](const json& data) -> TransformEuler {
+	TransformEuler result;
+	//スケール
+	result.scale.x = data["Scale"]["x"];
+	result.scale.y = data["Scale"]["y"];
+	result.scale.z = data["Scale"]["z"];
+	//回転
+	result.rotate.x = data["Rotate"]["x"];
+	result.rotate.y = data["Rotate"]["y"];
+	result.rotate.z = data["Rotate"]["z"];
+	//平行移動
+	result.translate.x = data["Translate"]["x"];
+	result.translate.y = data["Translate"]["y"];
+	result.translate.z = data["Translate"]["z"];
+	return result;
+	};
+
 
 CombinedParticle::~CombinedParticle() {
 	//マネージャーから登録解除
@@ -59,6 +79,24 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 
 	//最後にマネージャーに登録
 	CombinedParticleManager::GetInstance()->Regist(name_, this);
+
+}
+
+void CombinedParticle::Debug() {
+#ifdef _DEBUG
+	//基準トランスフォームの位置を表示
+	Sphere sphere = {
+		.center = {
+			baseTransform_.translate.x,
+			baseTransform_.translate.y,
+			baseTransform_.translate.z
+		},
+		.radius = 0.4f
+	};
+	MyMath::CreateLineSphere(sphere, { 0.2f, 1.0f, 0.2f, 1.0f }, 15);
+
+#endif // _DEBUG
+
 }
 
 std::vector<std::string> CombinedParticle::GetAllHandleName() {
@@ -69,28 +107,6 @@ std::vector<std::string> CombinedParticle::GetAllHandleName() {
 		result.push_back(sParInfo.particle->name_);
 	}
 	return result;
-}
-
-void CombinedParticle::SetBaseTransform(const TransformEuler& transform) {
-	//新旧の差分を求める
-	TransformEuler diff;
-	diff.translate = transform.translate - baseTransform_.translate;
-	diff.rotate = transform.rotate - baseTransform_.rotate;
-	diff.scale.x = transform.scale.x / baseTransform_.scale.x;
-	diff.scale.y = transform.scale.y / baseTransform_.scale.y;
-	diff.scale.z = transform.scale.z / baseTransform_.scale.z;
-	//全パーティクルを走査
-	for (auto& particle : particles_) {
-		//パーティクルのエミッターに差分を加算
-		particle.particle->emitter_.transform.translate += diff.translate;
-		particle.particle->emitter_.transform.rotate += diff.rotate;
-		particle.particle->emitter_.transform.scale.x *= diff.scale.x;
-		particle.particle->emitter_.transform.scale.y *= diff.scale.y;
-		particle.particle->emitter_.transform.scale.z *= diff.scale.z;
-	}
-
-	//基準値を変更
-	baseTransform_ = transform;
 }
 
 void CombinedParticle::Update() {
@@ -137,6 +153,14 @@ void CombinedParticle::Update() {
 			}
 		}
 	}
+
+	//全パーティクルを走査
+	for (auto& particle : particles_) {
+		//各パーティクルのエミッタートランスフォームを更新（ParticleManagerのUpdate前）
+		TransformEuler local = getLocalTransformFromJson(particle.particle->param_["LocalTransform"]);
+		particle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
+	}
+
 }
 
 bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTime, float _endTime) {
@@ -149,16 +173,14 @@ bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTim
 	newParticle.startTime = _startTime;
 	newParticle.endTime = _endTime;
 	newParticle.particle = std::make_unique<Particle>();
-	newParticle.particle->emitter_.transform.translate += baseTransform_.translate;
-	newParticle.particle->emitter_.transform.rotate += baseTransform_.rotate;
-	newParticle.particle->emitter_.transform.scale.x *= baseTransform_.scale.x;
-	newParticle.particle->emitter_.transform.scale.y *= baseTransform_.scale.y;
-	newParticle.particle->emitter_.transform.scale.z *= baseTransform_.scale.z;
 	//パーティクルの名前を決める(例 : basic.json→basic)
 	std::string cutJson = _fileName.substr(0, _fileName.rfind(".json"));
 	std::string name = ParticleManager::GetInstance()->GenerateName(cutJson);
 	//パーティクルの初期化(名前はnameベースで適当に生成)
 	newParticle.particle->Initialize(name, cutJson);
+	//トランスフォームを計算
+	TransformEuler local = getLocalTransformFromJson(newParticle.particle->param_["LocalTransform"]);
+	newParticle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
 	//パーティクルをコンテナに追加
 	particles_.push_back(std::move(newParticle));
 

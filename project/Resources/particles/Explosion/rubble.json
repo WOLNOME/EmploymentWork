@@ -70,6 +70,26 @@
         "Max": 2.0,
         "Min": 1.0
     },
+    "LocalTransform": {
+        "Rotate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Scale": {
+            "w": 0.0,
+            "x": 5.0,
+            "y": 5.0,
+            "z": 5.0
+        },
+        "Translate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
     "MaxGrains": 100,
     "Primitive": 3,
     "Repulsion": 0.5,

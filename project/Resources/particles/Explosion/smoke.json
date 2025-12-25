@@ -70,7 +70,27 @@
         "Max": 2.0,
         "Min": 1.5
     },
-   "MaxGrains": 1280,
+    "LocalTransform": {
+        "Rotate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Scale": {
+            "w": 0.0,
+            "x": 12.5,
+            "y": 12.5,
+            "z": 12.5
+        },
+        "Translate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
+    "MaxGrains": 1280,
     "Primitive": 3,
     "Repulsion": 0.5,
     "StartColor": {

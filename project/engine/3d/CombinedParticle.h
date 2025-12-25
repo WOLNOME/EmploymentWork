@@ -59,6 +59,10 @@ public:
 	/// <param name="_name">名前</param>
 	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
 	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
+	/// <summary>
+	/// デバッグ処理
+	/// </summary>
+	void Debug();
 	
 	/// ============================== ///
 	///		getter
@@ -88,13 +92,12 @@ public:
 	/// 基準のトランスフォームをセットする
 	/// </summary>
 	/// <param name="transform">基準トランスフォーム</param>
-	void SetBaseTransform(const TransformEuler& transform);
+	void SetBaseTransform(const TransformEuler& transform) { baseTransform_ = transform; }
 	/// <summary>
 	/// 再生フラグのセット
 	/// </summary>
 	/// <param name="isPlay">再生するか</param>
 	void SetIsPlay(bool isPlay) { playInfo_.isPlay = isPlay; }
-
 
 private:
 	/// ============================== ///

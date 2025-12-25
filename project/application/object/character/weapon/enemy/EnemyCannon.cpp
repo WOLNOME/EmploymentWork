@@ -21,7 +21,7 @@ void EnemyCannon::Initialize() {
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "hit");
 	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -71,7 +71,7 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 	case CollisionAttribute::Player:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
@@ -85,7 +85,7 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 	case CollisionAttribute::PlayerBullet:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
@@ -97,7 +97,7 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 	case CollisionAttribute::PlayerCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		//死亡予約処理
 		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);

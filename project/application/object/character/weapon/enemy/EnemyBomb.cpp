@@ -31,13 +31,13 @@ void EnemyBomb::Initialize() {
 		particle_ = std::make_unique<Particle>();
 		particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyBombHit"), "hit");
 		particle_->emitter_.isPlay = false;
-		particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+		//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 	}
 	{
 		explosion_ = std::make_unique<Particle>();
 		explosion_->Initialize(ParticleManager::GetInstance()->GenerateName("Explosion"), "enemy_explosion");
 		explosion_->emitter_.isPlay = false;
-		explosion_->emitter_.transform.scale = { 40,20,40 };
+		//explosion_->emitter_.transform.scale = { 40,20,40 };
 	}
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -135,10 +135,10 @@ void EnemyBomb::Move() {
 	if (object3d_->worldTransform.translate.y <= 0.0f) {
 		object3d_->worldTransform.translate.y = 0.0f;
 		//パーティクルの発生
-		particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
+		/*particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
 		particle_->emitter_.isPlay = true;
 		explosion_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		explosion_->emitter_.transform.translate.y = 10.0f;
+		explosion_->emitter_.transform.translate.y = 10.0f;*/
 		explosion_->emitter_.isPlay = true;
 		//モデルを非表示に
 		object3d_->SetIsDisplay(false);

@@ -21,11 +21,11 @@ void Item::Initialize() {
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<Particle>();
 	idleParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_idle"), "item_idle");
-	idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
+	//idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
 	//ゲット時のパーティクルを生成
 	getParticle_ = std::make_unique<Particle>();
 	getParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_get"), "item_get");
-	getParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	//getParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 
 	// 確率でアイテムの種類を決定
 	std::random_device rd;
@@ -95,7 +95,7 @@ void Item::DebugWithImGui() {
 void Item::SetInitPos(const Vector3& _initPos) {
 	//座標のセット
 	object3d_->worldTransform.translate = _initPos;
-	idleParticle_->emitter_.transform.translate = _initPos;
+	//idleParticle_->emitter_.transform.translate = _initPos;
 }
 
 void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
@@ -112,8 +112,8 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 		//パーティクル
 		idleParticle_->emitter_.isPlay = false; // パーティクルを非アクティブにする
 		getParticle_->emitter_.isPlay = true; // パーティクルをアクティブにする
-		getParticle_->emitter_.transform.translate = object3d_->worldTransform.translate; // パーティクルの位置をアイテムの位置に合わせる
-		getParticle_->emitter_.transform.translate.y = 0.5f;
+		//getParticle_->emitter_.transform.translate = object3d_->worldTransform.translate; // パーティクルの位置をアイテムの位置に合わせる
+		//getParticle_->emitter_.transform.translate.y = 0.5f;
 
 		break;
 	}
@@ -165,6 +165,6 @@ void Item::UntilDeathProcess() {
 
 void Item::UpdateParticle() {
 	//パーティクルの位置をオブジェクトの位置に合わせる
-	idleParticle_->emitter_.transform.translate = object3d_->worldTransform.translate;
+	//idleParticle_->emitter_.transform.translate = object3d_->worldTransform.translate;
 
 }

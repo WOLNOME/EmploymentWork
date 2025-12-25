@@ -115,9 +115,14 @@ void ParticleEditorScene::EditWithImGui() {
 		return;
 	}
 
+	//エディターモード時の処理
 	if (state_.mode == Mode::kEdit) {
 		Editor();
 	}
+
+	//複合パーティクルのデバッグ表示
+	cParticle_->Debug();
+
 #endif //_DEBUG
 }
 
@@ -525,13 +530,141 @@ void ParticleEditorScene::Editor() {
 		//形状を写す
 		int primitive = param["Primitive"];
 		{
-			isShapeChange_ = false;
 			const char* primitiveList[] = { "Shere","Cube","SkyBox","Plane","Ring","Tube" };
 			if (ImGui::CollapsingHeader("形状")) {
 				if (ImGui::Combo("Primitive", &primitive, primitiveList, (int)Shape::ShapeKind::kMaxShapeKindNum)) {
 					//形状の変更通知
 					isShapeChange_ = true;
 				}
+			}
+		}
+		//editParamに変更を反映
+		{
+			param["StartColor"]["Max"]["x"] = startColorMax.x;
+			param["StartColor"]["Max"]["y"] = startColorMax.y;
+			param["StartColor"]["Max"]["z"] = startColorMax.z;
+			param["StartColor"]["Max"]["w"] = startColorMax.w;
+			param["StartColor"]["Min"]["x"] = startColorMin.x;
+			param["StartColor"]["Min"]["y"] = startColorMin.y;
+			param["StartColor"]["Min"]["z"] = startColorMin.z;
+			param["StartColor"]["Min"]["w"] = startColorMin.w;
+			param["EndColor"]["Max"]["x"] = endColorMax.x;
+			param["EndColor"]["Max"]["y"] = endColorMax.y;
+			param["EndColor"]["Max"]["z"] = endColorMax.z;
+			param["EndColor"]["Max"]["w"] = endColorMax.w;
+			param["EndColor"]["Min"]["x"] = endColorMin.x;
+			param["EndColor"]["Min"]["y"] = endColorMin.y;
+			param["EndColor"]["Min"]["z"] = endColorMin.z;
+			param["EndColor"]["Min"]["w"] = endColorMin.w;
+			param["GrainTransform"]["Rotate"]["Max"]["x"] = rotateMax.x;
+			param["GrainTransform"]["Rotate"]["Max"]["y"] = rotateMax.y;
+			param["GrainTransform"]["Rotate"]["Max"]["z"] = rotateMax.z;
+			param["GrainTransform"]["Rotate"]["Min"]["x"] = rotateMin.x;
+			param["GrainTransform"]["Rotate"]["Min"]["y"] = rotateMin.y;
+			param["GrainTransform"]["Rotate"]["Min"]["z"] = rotateMin.z;
+			param["GrainTransform"]["Scale"]["Max"]["x"] = scaleMax.x;
+			param["GrainTransform"]["Scale"]["Max"]["y"] = scaleMax.y;
+			param["GrainTransform"]["Scale"]["Max"]["z"] = scaleMax.z;
+			param["GrainTransform"]["Scale"]["Min"]["x"] = scaleMin.x;
+			param["GrainTransform"]["Scale"]["Min"]["y"] = scaleMin.y;
+			param["GrainTransform"]["Scale"]["Min"]["z"] = scaleMin.z;
+			param["StartRotate"]["Max"]["x"] = startRotateMax.x;
+			param["StartRotate"]["Max"]["y"] = startRotateMax.y;
+			param["StartRotate"]["Max"]["z"] = startRotateMax.z;
+			param["StartRotate"]["Min"]["x"] = startRotateMin.x;
+			param["StartRotate"]["Min"]["y"] = startRotateMin.y;
+			param["StartRotate"]["Min"]["z"] = startRotateMin.z;
+			param["EndRotate"]["Max"]["x"] = endRotateMax.x;
+			param["EndRotate"]["Max"]["y"] = endRotateMax.y;
+			param["EndRotate"]["Max"]["z"] = endRotateMax.z;
+			param["EndRotate"]["Min"]["x"] = endRotateMin.x;
+			param["EndRotate"]["Min"]["y"] = endRotateMin.y;
+			param["EndRotate"]["Min"]["z"] = endRotateMin.z;
+			param["StartSize"]["Max"] = startSizeMax;
+			param["StartSize"]["Min"] = startSizeMin;
+			param["EndSize"]["Max"] = endSizeMax;
+			param["EndSize"]["Min"] = endSizeMin;
+			param["Velocity"]["Max"]["x"] = velocityMax.x;
+			param["Velocity"]["Max"]["y"] = velocityMax.y;
+			param["Velocity"]["Max"]["z"] = velocityMax.z;
+			param["Velocity"]["Min"]["x"] = velocityMin.x;
+			param["Velocity"]["Min"]["y"] = velocityMin.y;
+			param["Velocity"]["Min"]["z"] = velocityMin.z;
+			param["LifeTime"]["Max"] = lifeTimeMax;
+			param["LifeTime"]["Min"] = lifeTimeMin;
+			param["MaxGrains"] = maxGrains;
+			param["EmitRate"] = emitRate;
+			param["BlendMode"] = blendMode;
+			param["Primitive"] = primitive;
+			//パーティクルに反映
+			cParticle_->SetParams(cEditParam_);
+			//形状の変更通知を受け取ったら
+			if (isShapeChange_) {
+				//パーティクルの形状を変更
+				particle->ShapeChange();
+				//変更通知フラグを下げる
+				isShapeChange_ = false;
+			}
+			//テクスチャの変更通知を受け取ったら
+			if (isChangeTexture_) {
+				//パーティクルのテクスチャを変更
+				particle->TextureChange();
+				//変更通知フラグを下げる
+				isChangeTexture_ = false;
+			}
+		}
+		ImGui::End();
+		};
+
+	//エミッター編集処理のラムダ式
+	auto emitterProcess = [this, index]() {
+		//エイリアス
+		auto& particle = cParticle_->particles_[index].particle;
+		auto& param = cEditParam_[selectedParticleHandle_];
+
+		//エミッター
+		ImGui::SetNextWindowPos(ImVec2(970, 80));
+		ImGui::SetNextWindowSize(ImVec2(300, 380));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove;
+		ImGui::Begin("エミッター", nullptr, flags);
+		//エミッター可視化用ライン登録処理
+		{
+			ImGui::Checkbox("エミッターの枠を表示する", &displayLineEmitter_);
+			if (displayLineEmitter_) {
+				//AABBを作成
+				AABB aabb;
+				aabb.max = particle->emitter_.worldTransform.translate + particle->emitter_.worldTransform.scale;
+				aabb.min = particle->emitter_.worldTransform.translate - particle->emitter_.worldTransform.scale;
+
+				Vector4 color = { 1,0,0,1 };
+
+				MyMath::CreateLineAABB(aabb, color);
+			}
+		}
+		//ローカルトランスフォームを写す
+		TransformEuler localTransform;
+		localTransform = {
+			.scale = {
+				param["LocalTransform"]["Scale"]["x"],
+				param["LocalTransform"]["Scale"]["y"],
+				param["LocalTransform"]["Scale"]["z"]
+				},
+			.rotate = {
+				param["LocalTransform"]["Rotate"]["x"],
+				param["LocalTransform"]["Rotate"]["y"],
+				param["LocalTransform"]["Rotate"]["z"]
+				},
+			.translate = {
+				param["LocalTransform"]["Translate"]["x"],
+				param["LocalTransform"]["Translate"]["y"],
+				param["LocalTransform"]["Translate"]["z"]
+				}
+		};
+		{
+			if (ImGui::CollapsingHeader("ローカルトランスフォーム")) {
+				ImGui::DragFloat3("平行移動(ローカル)", &localTransform.translate.x, 0.1f);
+				ImGui::DragFloat3("拡縮(ローカル)", &localTransform.scale.x, 0.1f, 0.1f, 100.0f);
 			}
 		}
 		//生成方法を写す
@@ -594,122 +727,11 @@ void ParticleEditorScene::Editor() {
 				ImGui::Checkbox("ビルボードの処理をするか", (bool*)&isBillboard);
 			}
 		}
-		//editParamに変更を反映
-		{
-			param["StartColor"]["Max"]["x"] = startColorMax.x;
-			param["StartColor"]["Max"]["y"] = startColorMax.y;
-			param["StartColor"]["Max"]["z"] = startColorMax.z;
-			param["StartColor"]["Max"]["w"] = startColorMax.w;
-			param["StartColor"]["Min"]["x"] = startColorMin.x;
-			param["StartColor"]["Min"]["y"] = startColorMin.y;
-			param["StartColor"]["Min"]["z"] = startColorMin.z;
-			param["StartColor"]["Min"]["w"] = startColorMin.w;
-			param["EndColor"]["Max"]["x"] = endColorMax.x;
-			param["EndColor"]["Max"]["y"] = endColorMax.y;
-			param["EndColor"]["Max"]["z"] = endColorMax.z;
-			param["EndColor"]["Max"]["w"] = endColorMax.w;
-			param["EndColor"]["Min"]["x"] = endColorMin.x;
-			param["EndColor"]["Min"]["y"] = endColorMin.y;
-			param["EndColor"]["Min"]["z"] = endColorMin.z;
-			param["EndColor"]["Min"]["w"] = endColorMin.w;
-			param["GrainTransform"]["Rotate"]["Max"]["x"] = rotateMax.x;
-			param["GrainTransform"]["Rotate"]["Max"]["y"] = rotateMax.y;
-			param["GrainTransform"]["Rotate"]["Max"]["z"] = rotateMax.z;
-			param["GrainTransform"]["Rotate"]["Min"]["x"] = rotateMin.x;
-			param["GrainTransform"]["Rotate"]["Min"]["y"] = rotateMin.y;
-			param["GrainTransform"]["Rotate"]["Min"]["z"] = rotateMin.z;
-			param["GrainTransform"]["Scale"]["Max"]["x"] = scaleMax.x;
-			param["GrainTransform"]["Scale"]["Max"]["y"] = scaleMax.y;
-			param["GrainTransform"]["Scale"]["Max"]["z"] = scaleMax.z;
-			param["GrainTransform"]["Scale"]["Min"]["x"] = scaleMin.x;
-			param["GrainTransform"]["Scale"]["Min"]["y"] = scaleMin.y;
-			param["GrainTransform"]["Scale"]["Min"]["z"] = scaleMin.z;
-			param["StartRotate"]["Max"]["x"] = startRotateMax.x;
-			param["StartRotate"]["Max"]["y"] = startRotateMax.y;
-			param["StartRotate"]["Max"]["z"] = startRotateMax.z;
-			param["StartRotate"]["Min"]["x"] = startRotateMin.x;
-			param["StartRotate"]["Min"]["y"] = startRotateMin.y;
-			param["StartRotate"]["Min"]["z"] = startRotateMin.z;
-			param["EndRotate"]["Max"]["x"] = endRotateMax.x;
-			param["EndRotate"]["Max"]["y"] = endRotateMax.y;
-			param["EndRotate"]["Max"]["z"] = endRotateMax.z;
-			param["EndRotate"]["Min"]["x"] = endRotateMin.x;
-			param["EndRotate"]["Min"]["y"] = endRotateMin.y;
-			param["EndRotate"]["Min"]["z"] = endRotateMin.z;
-			param["StartSize"]["Max"] = startSizeMax;
-			param["StartSize"]["Min"] = startSizeMin;
-			param["EndSize"]["Max"] = endSizeMax;
-			param["EndSize"]["Min"] = endSizeMin;
-			param["Velocity"]["Max"]["x"] = velocityMax.x;
-			param["Velocity"]["Max"]["y"] = velocityMax.y;
-			param["Velocity"]["Max"]["z"] = velocityMax.z;
-			param["Velocity"]["Min"]["x"] = velocityMin.x;
-			param["Velocity"]["Min"]["y"] = velocityMin.y;
-			param["Velocity"]["Min"]["z"] = velocityMin.z;
-			param["LifeTime"]["Max"] = lifeTimeMax;
-			param["LifeTime"]["Min"] = lifeTimeMin;
-			param["MaxGrains"] = maxGrains;
-			param["EmitRate"] = emitRate;
-			param["BlendMode"] = blendMode;
-			param["Primitive"] = primitive;
-			param["GenerateMethod"] = generateMethod;
-			param["ClumpNum"] = clumpNum;
-			param["EffectStyle"] = effectStyle;
-			param["IsGravity"] = isGravity;
-			param["Gravity"] = gravity;
-			param["IsBound"] = isBound;
-			param["Repulsion"] = repulsion;
-			param["FloorHeight"] = floorHeight;
-			param["IsBillboard"] = isBillboard;
-			//パーティクルに反映
-			cParticle_->SetParams(cEditParam_);
-			//形状の変更通知を受け取ったら
-			if (isShapeChange_) {
-				//パーティクルの形状を変更
-				particle->ShapeChange();
-			}
-			//テクスチャの変更通知を受け取ったら
-			if (isChangeTexture_) {
-				//パーティクルのテクスチャを変更
-				particle->TextureChange();
-				//変更通知フラグを下げる
-				isChangeTexture_ = false;
-			}
-		}
-		ImGui::End();
-		};
-
-	//エミッター編集処理のラムダ式
-	auto emitterProcess = [this, index]() {
-		//エイリアス
-		auto& particle = cParticle_->particles_[index].particle;
-
-		//エミッター
-		ImGui::SetNextWindowPos(ImVec2(970, 80));
-		ImGui::SetNextWindowSize(ImVec2(300, 380));
-		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize |
-			ImGuiWindowFlags_NoMove;
-		ImGui::Begin("エミッター", nullptr, flags);
-		//エミッター可視化用ライン登録処理
-		ImGui::Checkbox("エミッターの枠を表示する", &displayLineEmitter_);
-		if (displayLineEmitter_) {
-			//AABBを作成
-			AABB aabb;
-			aabb.max = particle->emitter_.transform.translate + particle->emitter_.transform.scale;
-			aabb.min = particle->emitter_.transform.translate - particle->emitter_.transform.scale;
-
-			Vector4 color = { 1,0,0,1 };
-
-			MyMath::CreateLineAABB(aabb, color);
-		}
-		//エミッターのトランスフォーム
-		if (ImGui::CollapsingHeader("エミッターのトランスフォーム")) {
-			ImGui::DragFloat3("平行移動(エミッター)", &particle->emitter_.transform.translate.x, 0.1f);
-			ImGui::DragFloat3("拡縮(エミッター)", &particle->emitter_.transform.scale.x, 0.1f, 0.1f, 100.0f);
-		}
 		//生成アルゴリズム
-		if (ImGui::CollapsingHeader("生成アルゴリズム")) {
-			ImGui::Checkbox("生成するか(isPlay)", &particle->emitter_.isPlay);
+		{
+			if (ImGui::CollapsingHeader("生成アルゴリズム")) {
+				ImGui::Checkbox("生成するか(isPlay)", &particle->emitter_.isPlay);
+			}
 		}
 		//基準のトランスフォーム
 		{
@@ -722,6 +744,31 @@ void ParticleEditorScene::Editor() {
 				ImGui::DragFloat3("拡縮(ベース)", &baseTransform.scale.x, 0.1f, 0.1f, 100.0f);
 				cParticle_->SetBaseTransform(baseTransform);
 			}
+		}
+		//editParamに変更を反映
+		{
+			//json形式に変換するラムダ式
+			auto convertVector3ToJson = [&](auto& dst, const Vector3& v) {
+				dst["x"] = v.x;
+				dst["y"] = v.y;
+				dst["z"] = v.z;
+				dst["w"] = 0.0f;
+				};
+
+			convertVector3ToJson(param["LocalTransform"]["Scale"], localTransform.scale);
+			convertVector3ToJson(param["LocalTransform"]["Rotate"], localTransform.rotate);
+			convertVector3ToJson(param["LocalTransform"]["Translate"], localTransform.translate);
+			param["GenerateMethod"] = generateMethod;
+			param["ClumpNum"] = clumpNum;
+			param["EffectStyle"] = effectStyle;
+			param["IsGravity"] = isGravity;
+			param["Gravity"] = gravity;
+			param["IsBound"] = isBound;
+			param["Repulsion"] = repulsion;
+			param["FloorHeight"] = floorHeight;
+			param["IsBillboard"] = isBillboard;
+			//パーティクルに反映
+			cParticle_->SetParams(cEditParam_);
 		}
 
 
