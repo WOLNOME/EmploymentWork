@@ -8,7 +8,7 @@ void DeathDirection::Initialize() {
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerDead"), "enemy_explosion");
 	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 }
 
 void DeathDirection::Update() {
@@ -105,9 +105,9 @@ void DeathDirection::ParticeDir() {
 	particle_->emitter_.isPlay = true;
 
 	//エミッターの座標を常にカメラへ
-	particle_->emitter_.transform.translate = camera_->worldTransform.worldTranslate;
+	//particle_->emitter_.transform.translate = camera_->worldTransform.worldTranslate;
 
 	//エミッターのサイズを少し広げる
-	particle_->emitter_.transform.scale = { 3.0f,3.0f,3.0f };
+	//particle_->emitter_.transform.scale = { 3.0f,3.0f,3.0f };
 
 }

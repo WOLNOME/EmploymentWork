@@ -12,7 +12,7 @@ TankEnemyDeadState::TankEnemyDeadState() {
 	particle_ = std::make_unique<Particle>();
 	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyDead"), "enemy_explosion");
 	particle_->emitter_.isPlay = false;
-	particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
 }
 
 void TankEnemyDeadState::Enter(IBaseTankEnemy* enemy) {
@@ -21,7 +21,7 @@ void TankEnemyDeadState::Enter(IBaseTankEnemy* enemy) {
 void TankEnemyDeadState::Update(IBaseTankEnemy* enemy) {
 	particleOnTimer_ += kDeltaTime;
 	//死亡パーティクルをオン
-	particle_->emitter_.transform.translate = enemy->GetWorldPosition();
+	//particle_->emitter_.transform.translate = enemy->GetWorldPosition();
 	particle_->emitter_.isPlay = true;
 	//時間を超えたらオフにする
 	if (particleOnTimer_ > particleOnTime_) {

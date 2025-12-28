@@ -30,9 +30,9 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	if (data) param_ = data;
 	else assert(0 && "JSONファイルが存在しません");
 	//エミッターの初期化
-	emitter_.transform.translate = { 0,0,0 };
-	emitter_.transform.rotate = { 0,0,0 };
-	emitter_.transform.scale = { 1,1,1 };
+	emitter_.worldTransform.translate = { 0,0,0 };
+	emitter_.worldTransform.rotate = { 0,0,0 };
+	emitter_.worldTransform.scale = { 1,1,1 };
 	emitter_.isAffectedField = false;
 	emitter_.isPlay = false;
 	//テクスチャハンドルの取得
@@ -133,9 +133,9 @@ void Particle::TraceEmitterForCS() {
 	auto Vec3ToVec4 = [](const Vector3& j) -> Vector4 {
 		return { j.x,j.y,j.z,0.0f };
 		};
-	allResourceForCS_.mappedEmitter[0].transform.scale = Vec3ToVec4(emitter_.transform.scale);
-	allResourceForCS_.mappedEmitter[0].transform.rotate = Vec3ToVec4(emitter_.transform.rotate);
-	allResourceForCS_.mappedEmitter[0].transform.translate = Vec3ToVec4(emitter_.transform.translate);
+	allResourceForCS_.mappedEmitter[0].worldTransform.scale = Vec3ToVec4(emitter_.worldTransform.scale);
+	allResourceForCS_.mappedEmitter[0].worldTransform.rotate = Vec3ToVec4(emitter_.worldTransform.rotate);
+	allResourceForCS_.mappedEmitter[0].worldTransform.translate = Vec3ToVec4(emitter_.worldTransform.translate);
 	allResourceForCS_.mappedEmitter[0].isAffectedField = emitter_.isAffectedField;
 	allResourceForCS_.mappedEmitter[0].isPlay = emitter_.isPlay;
 }
@@ -148,6 +148,9 @@ void Particle::TraceJsonDataForCS() {
 	auto Vec4ToVec4 = [](const auto& j) -> Vector4 {
 		return { (float)j["x"], (float)j["y"],(float)j["z"],(float)j["w"] };
 		};
+	allResourceForCS_.mappedJsonInfo[0].localTransform.scale = Vec4ToVec4(param_["LocalTransform"]["Scale"]);
+	allResourceForCS_.mappedJsonInfo[0].localTransform.rotate = Vec4ToVec4(param_["LocalTransform"]["Rotate"]);
+	allResourceForCS_.mappedJsonInfo[0].localTransform.translate = Vec4ToVec4(param_["LocalTransform"]["Translate"]);
 	allResourceForCS_.mappedJsonInfo[0].velocityMax = Vec3ToVec4(param_["Velocity"]["Max"]);
 	allResourceForCS_.mappedJsonInfo[0].velocityMin = Vec3ToVec4(param_["Velocity"]["Min"]);
 	allResourceForCS_.mappedJsonInfo[0].initRotateMax = Vec3ToVec4(param_["GrainTransform"]["Rotate"]["Max"]);

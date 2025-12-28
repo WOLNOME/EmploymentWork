@@ -106,7 +106,7 @@ void GameClearSystem::Initialize() {
 	{
 		confettiParticle_ = std::make_unique<Particle>();
 		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "confetti");
-		confettiParticle_->emitter_.transform.scale = { 15.0f,1.0f,15.0f };
+		//confettiParticle_->emitter_.transform.scale = { 15.0f,1.0f,15.0f };
 		confettiParticle_->emitter_.isPlay = true;
 	}
 }
@@ -204,6 +204,6 @@ void GameClearSystem::CameraWork() {
 
 void GameClearSystem::ConfettiParticleUpdate() {
 	//エミッターの座標をカメラの座標に合わせる
-	confettiParticle_->emitter_.transform.translate = gameCamera_->worldTransform.translate;
-	confettiParticle_->emitter_.transform.translate.y += 7.0f;
+	//confettiParticle_->emitter_.transform.translate = gameCamera_->worldTransform.translate;
+	//confettiParticle_->emitter_.transform.translate.y += 7.0f;
 }

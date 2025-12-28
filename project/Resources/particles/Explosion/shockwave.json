@@ -2,7 +2,7 @@
     "BlendMode": 2,
     "ClumpNum": 1,
     "EffectStyle": 0,
-    "EmitRate": 30,
+    "EmitRate": 10,
     "EndColor": {
         "Max": {
             "w": 0.0,
@@ -69,6 +69,26 @@
     "LifeTime": {
         "Max": 0.800000011920929,
         "Min": 0.4000000059604645
+    },
+    "LocalTransform": {
+        "Rotate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Scale": {
+            "w": 0.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "Translate": {
+            "w": 0.0,
+            "x": 0.10000000149011612,
+            "y": 0.10000000149011612,
+            "z": 0.10000000149011612
+        }
     },
     "MaxGrains": 32,
     "Primitive": 4,

@@ -106,9 +106,9 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
             {
                 uint grainIndex = gFreeList[freeListIndex];
                 //値を入れていく
-                gGrains[grainIndex].transform.translate.x = generator.GenerateInRange(gEmitterInfo.transform.translate.x - gEmitterInfo.transform.scale.x, gEmitterInfo.transform.translate.x + gEmitterInfo.transform.scale.x);
-                gGrains[grainIndex].transform.translate.y = generator.GenerateInRange(gEmitterInfo.transform.translate.y - gEmitterInfo.transform.scale.y, gEmitterInfo.transform.translate.y + gEmitterInfo.transform.scale.y);
-                gGrains[grainIndex].transform.translate.z = generator.GenerateInRange(gEmitterInfo.transform.translate.z - gEmitterInfo.transform.scale.z, gEmitterInfo.transform.translate.z + gEmitterInfo.transform.scale.z);
+                gGrains[grainIndex].transform.translate.x = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.x - gEmitterInfo.worldTransform.scale.x, gEmitterInfo.worldTransform.translate.x + gEmitterInfo.worldTransform.scale.x);
+                gGrains[grainIndex].transform.translate.y = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.y - gEmitterInfo.worldTransform.scale.y, gEmitterInfo.worldTransform.translate.y + gEmitterInfo.worldTransform.scale.y);
+                gGrains[grainIndex].transform.translate.z = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.z - gEmitterInfo.worldTransform.scale.z, gEmitterInfo.worldTransform.translate.z + gEmitterInfo.worldTransform.scale.z);
                 gGrains[grainIndex].transform.rotate.x = generator.GenerateInRange(gJsonInfo.initRotateMin.x, gJsonInfo.initRotateMax.x);
                 gGrains[grainIndex].transform.rotate.y = generator.GenerateInRange(gJsonInfo.initRotateMin.y, gJsonInfo.initRotateMax.y);
                 gGrains[grainIndex].transform.rotate.z = generator.GenerateInRange(gJsonInfo.initRotateMin.z, gJsonInfo.initRotateMax.z);
@@ -151,9 +151,9 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
             
                 //共通の値は先に決めておく
                 float4 basicTranslate = (float4) 0.0f;
-                basicTranslate.x = generator.GenerateInRange(gEmitterInfo.transform.translate.x - gEmitterInfo.transform.scale.x, gEmitterInfo.transform.translate.x + gEmitterInfo.transform.scale.x);
-                basicTranslate.y = generator.GenerateInRange(gEmitterInfo.transform.translate.y - gEmitterInfo.transform.scale.y, gEmitterInfo.transform.translate.y + gEmitterInfo.transform.scale.y);
-                basicTranslate.z = generator.GenerateInRange(gEmitterInfo.transform.translate.z - gEmitterInfo.transform.scale.z, gEmitterInfo.transform.translate.z + gEmitterInfo.transform.scale.z);
+                basicTranslate.x = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.x - gEmitterInfo.worldTransform.scale.x, gEmitterInfo.worldTransform.translate.x + gEmitterInfo.worldTransform.scale.x);
+                basicTranslate.y = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.y - gEmitterInfo.worldTransform.scale.y, gEmitterInfo.worldTransform.translate.y + gEmitterInfo.worldTransform.scale.y);
+                basicTranslate.z = generator.GenerateInRange(gEmitterInfo.worldTransform.translate.z - gEmitterInfo.worldTransform.scale.z, gEmitterInfo.worldTransform.translate.z + gEmitterInfo.worldTransform.scale.z);
                 float4 velocity = (float4) 0.0f;
                 velocity.x = generator.GenerateInRange(gJsonInfo.velocityMin.x, gJsonInfo.velocityMax.x);
                 velocity.y = generator.GenerateInRange(gJsonInfo.velocityMin.y, gJsonInfo.velocityMax.y);

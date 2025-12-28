@@ -75,7 +75,7 @@ private:
 	/// CS用エミッター情報
 	/// </summary>
 	struct EmitterForCS {
-		TransformForCS transform;
+		TransformForCS worldTransform;
 		uint32_t isAffectedField = 0u;
 		uint32_t isPlay = 0u;
 	};
@@ -83,6 +83,7 @@ private:
 	/// CS用JSON情報
 	/// </summary>
 	struct JsonInfoForCS {
+		TransformForCS localTransform;
 		Vector4 velocityMax;
 		Vector4 velocityMin;
 		Vector4 initRotateMax;
@@ -156,7 +157,7 @@ public:
 	/// エミッター情報
 	/// </summary>
 	struct Emitter {
-		TransformEuler transform;		//エミッターのトランスフォーム
+		TransformEuler worldTransform;	//エミッターのトランスフォーム
 		bool isAffectedField = false;	//フィールドに影響を受けるか
 		bool isPlay = false;			//パーティクルを生成するか
 	};

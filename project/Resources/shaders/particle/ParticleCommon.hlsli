@@ -16,13 +16,14 @@ struct Transform
 
 struct EmitterInfo
 {
-    Transform transform;
+    Transform worldTransform;
     uint isAffectedField;
     uint isPlay;
 };
 
 struct JsonInfo
 {
+    Transform localTransform;
     float4 velocityMax;
     float4 velocityMin;
     float4 initRotateMax;

@@ -1,4 +1,24 @@
 {
+    "LocalTransform":{
+        "Scale":{
+            "x":1.0,
+            "y":1.0,
+            "z":1.0,
+            "w":0.0
+        },
+        "Rotate":{
+            "x":0.0,
+            "y":0.0,
+            "z":0.0,
+            "w":0.0
+        },
+        "Translate":{
+            "x":0.0,
+            "y":0.0,
+            "z":0.0,
+            "w":0.0
+        }
+    },
     "StartTime": 3,
     "EndTime": 7,
     "BlendMode": 2,

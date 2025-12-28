@@ -629,6 +629,12 @@ public:
 	static float Lerp(float s1, float s2, float t);
 
 	///------------------------------------///
+	///         Transform     
+	///------------------------------------///
+
+	static TransformEuler Combine(const TransformEuler& parent, const TransformEuler& local);
+
+	///------------------------------------///
 	///            補助関数
 	///------------------------------------///
 
