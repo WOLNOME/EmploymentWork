@@ -2,7 +2,7 @@
     "BlendMode": 2,
     "ClumpNum": 1,
     "EffectStyle": 0,
-    "EmitRate": 10,
+    "EmitRate": 15,
     "EndColor": {
         "Max": {
             "w": 0.0,
@@ -33,7 +33,7 @@
         "Max": 400.0,
         "Min": 200.0
     },
-    "EndTime": 0.66,
+    "EndTime": 0.5400000214576721,
     "FloorHeight": 0.0,
     "GenerateMethod": 0,
     "GrainTransform": {
@@ -90,7 +90,7 @@
             "z": 0.10000000149011612
         }
     },
-    "MaxGrains": 32,
+    "MaxGrains": 12,
     "Primitive": 4,
     "Repulsion": 0.5,
     "StartColor": {
@@ -123,7 +123,7 @@
         "Max": 5.0,
         "Min": 5.0
     },
-    "StartTime": 0.2,
+    "StartTime": 0.20000000298023224,
     "Texture": "gradationLine2.png",
     "Velocity": {
         "Max": {

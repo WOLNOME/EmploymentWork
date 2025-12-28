@@ -61,13 +61,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
     
     //乱数生成機の作成
     RandomGenerator generator;
+    
     //エフェクトの生成スタイルによって分ける
     if (gJsonInfo.effectStyle == 0)      //ループ処理
     {
         //ratePerFrameの整数部分を生成数に設定
-        generateNum = (int) ratePerFrame;
+        generateNum = floor(ratePerFrame);
         //ratePerFrameの小数部分を確率として計算
-        if (generator.GenerateInRange(0.0f, 1.0f) < ratePerFrame - (float) (int) (ratePerFrame))
+        if (generator.GenerateInRange(0.0f, 1.0f) < frac(ratePerFrame))
         {
             generateNum++;
         }

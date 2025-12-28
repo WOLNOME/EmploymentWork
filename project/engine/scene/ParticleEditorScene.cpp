@@ -509,14 +509,14 @@ void ParticleEditorScene::Editor() {
 				if (ImGui::Button("推奨値を適用")) {
 					maxGrains = RecommendValue;
 				}
-				ImGui::DragInt("MaxGrains", &maxGrains, 1);
+				ImGui::DragInt("MaxGrains", &maxGrains, 1, 0);
 			}
 		}
 		//1秒あたりの粒の生成量
 		int emitRate = param["EmitRate"];
 		{
 			if (ImGui::CollapsingHeader("1秒あたりの粒の生成量")) {
-				ImGui::DragInt("EmitRate", &emitRate, 1);
+				ImGui::DragInt("EmitRate", &emitRate, 1, 0);
 			}
 		}
 		//ブレンドモード
@@ -831,7 +831,7 @@ void ParticleEditorScene::Editor() {
 
 	//各パーティクルのオプションのラムダ式
 	auto particleOption = [this]() {
-		auto& param = cEditParam_[selectedParticleHandle_];
+		auto& wParam = cEditParam_[selectedParticleHandle_];
 
 		//管理
 		ImGui::SetNextWindowPos(ImVec2(320, 470));
@@ -923,15 +923,15 @@ void ParticleEditorScene::Editor() {
 								//終了時間
 								ImGui::DragFloat("終了", &endTime, 0.01f, startTime);
 								particleInfo.endTime = endTime;
-								break;
-							}
-							//editParamに変更を反映
-							{
-								param["StartTime"] = startTime;
-								param["EndTime"] = endTime;
+								//editParamに変更を反映
+								{
+									wParam["StartTime"] = startTime;
+									wParam["EndTime"] = endTime;
 
-								//パーティクルに反映
-								cParticle_->SetParams(cEditParam_);
+									//パーティクルに反映
+									cParticle_->SetParams(cEditParam_);
+								}
+								break;
 							}
 						}
 

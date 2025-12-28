@@ -33,7 +33,7 @@
         "Max": 30.0,
         "Min": 10.0
     },
-    "EndTime": 0.66,
+    "EndTime": 0.6600000262260437,
     "FloorHeight": 0.0,
     "GenerateMethod": 1,
     "GrainTransform": {
@@ -123,7 +123,7 @@
         "Max": 0.10000000149011612,
         "Min": 0.10000000149011612
     },
-    "StartTime": 0.2,
+    "StartTime": 0.20000000298023224,
     "Texture": "grunge.png",
     "Velocity": {
         "Max": {
