@@ -1,4 +1,16 @@
 {
+    "AngularVelocity": {
+        "Max": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Min": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
     "BlendMode": 2,
     "ClumpNum": 1,
     "EffectStyle": 0,
@@ -17,23 +29,7 @@
             "z": 1.0
         }
     },
-    "EndRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "EndSize": {
-        "Max": 400.0,
-        "Min": 200.0
-    },
-    "EndTime": 0.5400000214576721,
+    "EndTime": 0.3499999940395355,
     "FloorHeight": 0.0,
     "GenerateMethod": 0,
     "GrainTransform": {
@@ -93,6 +89,10 @@
     "MaxGrains": 12,
     "Primitive": 4,
     "Repulsion": 0.5,
+    "SizeVelocity": {
+        "Max": 400.0,
+        "Min": 350.0
+    },
     "StartColor": {
         "Max": {
             "w": 1.0,
@@ -106,22 +106,6 @@
             "y": 1.0,
             "z": 1.0
         }
-    },
-    "StartRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "StartSize": {
-        "Max": 5.0,
-        "Min": 5.0
     },
     "StartTime": 0.20000000298023224,
     "Texture": "gradationLine2.png",

@@ -438,36 +438,28 @@ void ParticleEditorScene::Editor() {
 					ImGui::TreePop();
 				}
 				if (ImGui::TreeNode("Scale")) {
-					ImGui::DragFloat3("ScaleMax", &scaleMax.x, 0.1f, 0.0f, 10.0f);
-					ImGui::DragFloat3("ScaleMin", &scaleMin.x, 0.1f, 0.0f, 10.0f);
+					ImGui::DragFloat3("ScaleMax", &scaleMax.x, 0.1f, 0.0f, FLT_MAX);
+					ImGui::DragFloat3("ScaleMin", &scaleMin.x, 0.1f, 0.0f, FLT_MAX);
 					ImGui::TreePop();
 				}
 			}
 		}
-		//回転
-		Vector3 startRotateMax = { param["StartRotate"]["Max"]["x"],param["StartRotate"]["Max"]["y"],param["StartRotate"]["Max"]["z"] };
-		Vector3 startRotateMin = { param["StartRotate"]["Min"]["x"],param["StartRotate"]["Min"]["y"],param["StartRotate"]["Min"]["z"] };
-		Vector3 endRotateMax = { param["EndRotate"]["Max"]["x"],param["EndRotate"]["Max"]["y"],param["EndRotate"]["Max"]["z"] };
-		Vector3 endRotateMin = { param["EndRotate"]["Min"]["x"],param["EndRotate"]["Min"]["y"],param["EndRotate"]["Min"]["z"] };
+		//回転速度
+		Vector3 angularVelocityMax = { param["AngularVelocity"]["Max"]["x"],param["AngularVelocity"]["Max"]["y"],param["AngularVelocity"]["Max"]["z"] };
+		Vector3 angularVelocityMin = { param["AngularVelocity"]["Min"]["x"],param["AngularVelocity"]["Min"]["y"],param["AngularVelocity"]["Min"]["z"] };
 		{
-			if (ImGui::CollapsingHeader("更新回転の設定")) {
-				ImGui::DragFloat3("StartRotateMax", &startRotateMax.x, 0.1f);
-				ImGui::DragFloat3("StartRotateMin", &startRotateMin.x, 0.1f);
-				ImGui::DragFloat3("EndRotateMax", &endRotateMax.x, 0.1f);
-				ImGui::DragFloat3("EndRotateMin", &endRotateMin.x, 0.1f);
+			if (ImGui::CollapsingHeader("回転速度")) {
+				ImGui::DragFloat3("AngularVelocityMax", &angularVelocityMax.x, 0.1f);
+				ImGui::DragFloat3("AngularVelocityMin", &angularVelocityMin.x, 0.1f);
 			}
 		}
-		//サイズ
-		float startSizeMax = param["StartSize"]["Max"];
-		float startSizeMin = param["StartSize"]["Min"];
-		float endSizeMax = param["EndSize"]["Max"];
-		float endSizeMin = param["EndSize"]["Min"];
+		//サイズ速度
+		float sizeVelocityMax = param["SizeVelocity"]["Max"];
+		float sizeVelocityMin = param["SizeVelocity"]["Min"];
 		{
-			if (ImGui::CollapsingHeader("更新サイズの設定")) {
-				ImGui::DragFloat("StartSizeMax", &startSizeMax, 0.1f, startSizeMin);
-				ImGui::DragFloat("StartSizeMin", &startSizeMin, 0.1f, 0.0f, startSizeMax);
-				ImGui::DragFloat("EndSizeMax", &endSizeMax, 0.1f, endSizeMin);
-				ImGui::DragFloat("EndSizeMin", &endSizeMin, 0.1f, 0.0f, endSizeMax);
+			if (ImGui::CollapsingHeader("サイズ速度")) {
+				ImGui::DragFloat("SizeVelocityMax", &sizeVelocityMax, 0.1f, sizeVelocityMin, FLT_MAX);
+				ImGui::DragFloat("SizeVelocityMin", &sizeVelocityMin, 0.1f, -FLT_MAX, sizeVelocityMax);
 			}
 		}
 		//速度
@@ -570,22 +562,14 @@ void ParticleEditorScene::Editor() {
 			param["GrainTransform"]["Scale"]["Min"]["x"] = scaleMin.x;
 			param["GrainTransform"]["Scale"]["Min"]["y"] = scaleMin.y;
 			param["GrainTransform"]["Scale"]["Min"]["z"] = scaleMin.z;
-			param["StartRotate"]["Max"]["x"] = startRotateMax.x;
-			param["StartRotate"]["Max"]["y"] = startRotateMax.y;
-			param["StartRotate"]["Max"]["z"] = startRotateMax.z;
-			param["StartRotate"]["Min"]["x"] = startRotateMin.x;
-			param["StartRotate"]["Min"]["y"] = startRotateMin.y;
-			param["StartRotate"]["Min"]["z"] = startRotateMin.z;
-			param["EndRotate"]["Max"]["x"] = endRotateMax.x;
-			param["EndRotate"]["Max"]["y"] = endRotateMax.y;
-			param["EndRotate"]["Max"]["z"] = endRotateMax.z;
-			param["EndRotate"]["Min"]["x"] = endRotateMin.x;
-			param["EndRotate"]["Min"]["y"] = endRotateMin.y;
-			param["EndRotate"]["Min"]["z"] = endRotateMin.z;
-			param["StartSize"]["Max"] = startSizeMax;
-			param["StartSize"]["Min"] = startSizeMin;
-			param["EndSize"]["Max"] = endSizeMax;
-			param["EndSize"]["Min"] = endSizeMin;
+			param["AngularVelocity"]["Max"]["x"] = angularVelocityMax.x;
+			param["AngularVelocity"]["Max"]["y"] = angularVelocityMax.y;
+			param["AngularVelocity"]["Max"]["z"] = angularVelocityMax.z;
+			param["AngularVelocity"]["Min"]["x"] = angularVelocityMin.x;
+			param["AngularVelocity"]["Min"]["y"] = angularVelocityMin.y;
+			param["AngularVelocity"]["Min"]["z"] = angularVelocityMin.z;
+			param["SizeVelocity"]["Max"] = sizeVelocityMax;
+			param["SizeVelocity"]["Min"] = sizeVelocityMin;
 			param["Velocity"]["Max"]["x"] = velocityMax.x;
 			param["Velocity"]["Max"]["y"] = velocityMax.y;
 			param["Velocity"]["Max"]["z"] = velocityMax.z;
@@ -715,6 +699,26 @@ void ParticleEditorScene::Editor() {
 				ImGui::Checkbox("ビルボードの処理をするか", (bool*)&isBillboard);
 			}
 		}
+		//開始時間及び、終了時間の設定
+		float startTime = param["StartTime"];
+		float endTime = param["EndTime"];
+		{
+			if (ImGui::CollapsingHeader("開始時間と終了時間")) {
+				//開始時間
+				ImGui::DragFloat("開始", &startTime, 0.01f, 0.0f);
+				//終了時間
+				ImGui::DragFloat("終了", &endTime, 0.01f, startTime);
+			}
+			//反映
+			for (auto& particleInfo : cParticle_->particles_) {
+				//選択中のパーティクルに反映
+				if (particleInfo.particle->name_ == selectedParticleHandle_) {
+					particleInfo.startTime = startTime;
+					particleInfo.endTime = endTime;
+					break;
+				}
+			}
+		}
 		//生成アルゴリズム
 		{
 			if (ImGui::CollapsingHeader("生成アルゴリズム")) {
@@ -753,6 +757,8 @@ void ParticleEditorScene::Editor() {
 			param["Repulsion"] = repulsion;
 			param["FloorHeight"] = floorHeight;
 			param["IsBillboard"] = isBillboard;
+			param["StartTime"] = startTime;
+			param["EndTime"] = endTime;
 
 			//パーティクルに反映
 			cParticle_->SetParams(cEditParam_);
@@ -909,32 +915,6 @@ void ParticleEditorScene::Editor() {
 								ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "この名前は使用できません");
 							}
 						}
-						ImGui::Separator();
-					}
-					//開始時間及び、終了時間の設定
-					{
-						for (auto& particleInfo : cParticle_->particles_) {
-							float startTime = particleInfo.startTime;
-							float endTime = particleInfo.endTime;
-							if (particleInfo.particle->name_ == key) {
-								//開始時間
-								ImGui::DragFloat("開始", &startTime, 0.01f, 0.0f);
-								particleInfo.startTime = startTime;
-								//終了時間
-								ImGui::DragFloat("終了", &endTime, 0.01f, startTime);
-								particleInfo.endTime = endTime;
-								//editParamに変更を反映
-								{
-									wParam["StartTime"] = startTime;
-									wParam["EndTime"] = endTime;
-
-									//パーティクルに反映
-									cParticle_->SetParams(cEditParam_);
-								}
-								break;
-							}
-						}
-
 						ImGui::Separator();
 					}
 					//パーティクルの削除

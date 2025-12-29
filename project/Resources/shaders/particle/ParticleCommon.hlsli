@@ -34,14 +34,10 @@ struct JsonInfo
     float4 startColorMin;
     float4 endColorMax;
     float4 endColorMin;
-    float4 startRotateMax;
-    float4 startRotateMin;
-    float4 endRotateMax;
-    float4 endRotateMin;
-    float startSizeMax;
-    float startSizeMin;
-    float endSizeMax;
-    float endSizeMin;
+    float4 angularVelocityMax;
+    float4 angularVelocityMin;
+    float sizeVelocityMax;
+    float sizeVelocityMin;
     float lifeTimeMax;
     float lifeTimeMin;
     float gravity;
@@ -59,10 +55,11 @@ struct JsonInfo
 
 struct Grain
 {
+    Transform initialTransform;
     Transform transform;
     float4 velocity;
-    float4 rotateValue;
-    float sizeValue;
+    float4 angularVelocity;
+    float sizeVelocity;
     float lifeTime;
     float currentTime;
     uint startColor;

@@ -116,13 +116,11 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                 gGrains[grainIndex].transform.scale.x = generator.GenerateInRange(gJsonInfo.initScaleMin.x, gJsonInfo.initScaleMax.x);
                 gGrains[grainIndex].transform.scale.y = generator.GenerateInRange(gJsonInfo.initScaleMin.y, gJsonInfo.initScaleMax.y);
                 gGrains[grainIndex].transform.scale.z = generator.GenerateInRange(gJsonInfo.initScaleMin.z, gJsonInfo.initScaleMax.z);
-                gGrains[grainIndex].rotateValue.x = generator.GenerateInRange(gJsonInfo.endRotateMin.x, gJsonInfo.endRotateMax.x)
-                - generator.GenerateInRange(gJsonInfo.startRotateMin.x, gJsonInfo.startRotateMax.x);
-                gGrains[grainIndex].rotateValue.y = generator.GenerateInRange(gJsonInfo.endRotateMin.y, gJsonInfo.endRotateMax.y)
-                - generator.GenerateInRange(gJsonInfo.startRotateMin.y, gJsonInfo.startRotateMax.y);
-                gGrains[grainIndex].rotateValue.z = generator.GenerateInRange(gJsonInfo.endRotateMin.z, gJsonInfo.endRotateMax.z)
-                - generator.GenerateInRange(gJsonInfo.startRotateMin.z, gJsonInfo.startRotateMax.z);
-                gGrains[grainIndex].sizeValue = generator.GenerateInRange(gJsonInfo.endSizeMin, gJsonInfo.endSizeMax) - generator.GenerateInRange(gJsonInfo.startSizeMin, gJsonInfo.startSizeMax);
+                gGrains[grainIndex].initialTransform = gGrains[grainIndex].transform; //初期値保存
+                gGrains[grainIndex].angularVelocity.x = generator.GenerateInRange(gJsonInfo.angularVelocityMin.x, gJsonInfo.angularVelocityMax.x);
+                gGrains[grainIndex].angularVelocity.y = generator.GenerateInRange(gJsonInfo.angularVelocityMin.y, gJsonInfo.angularVelocityMax.y);
+                gGrains[grainIndex].angularVelocity.z = generator.GenerateInRange(gJsonInfo.angularVelocityMin.z, gJsonInfo.angularVelocityMax.z);
+                gGrains[grainIndex].sizeVelocity = generator.GenerateInRange(gJsonInfo.sizeVelocityMin, gJsonInfo.sizeVelocityMax);
                 float4 startColor = { generator.GenerateInRange(gJsonInfo.startColorMin.r, gJsonInfo.startColorMax.r), generator.GenerateInRange(gJsonInfo.startColorMin.g, gJsonInfo.startColorMax.g), generator.GenerateInRange(gJsonInfo.startColorMin.b, gJsonInfo.startColorMax.b), generator.GenerateInRange(gJsonInfo.startColorMin.a, gJsonInfo.startColorMax.a) };
                 float4 endColor = { generator.GenerateInRange(gJsonInfo.endColorMin.r, gJsonInfo.endColorMax.r), generator.GenerateInRange(gJsonInfo.endColorMin.g, gJsonInfo.endColorMax.g), generator.GenerateInRange(gJsonInfo.endColorMin.b, gJsonInfo.endColorMax.b), generator.GenerateInRange(gJsonInfo.endColorMin.a, gJsonInfo.endColorMax.a) };
                 gGrains[grainIndex].startColor = PackColor(startColor);
@@ -172,13 +170,11 @@ void GenerateGrain(int generateNum, RandomGenerator generator)
                     gGrains[grainIndex].transform.scale.x = generator.GenerateInRange(gJsonInfo.initScaleMin.x, gJsonInfo.initScaleMax.x);
                     gGrains[grainIndex].transform.scale.y = generator.GenerateInRange(gJsonInfo.initScaleMin.y, gJsonInfo.initScaleMax.y);
                     gGrains[grainIndex].transform.scale.z = generator.GenerateInRange(gJsonInfo.initScaleMin.z, gJsonInfo.initScaleMax.z);
-                    gGrains[grainIndex].rotateValue.x = generator.GenerateInRange(gJsonInfo.endRotateMin.x, gJsonInfo.endRotateMax.x)
-                    - generator.GenerateInRange(gJsonInfo.startRotateMin.x, gJsonInfo.startRotateMax.x);
-                    gGrains[grainIndex].rotateValue.y = generator.GenerateInRange(gJsonInfo.endRotateMin.y, gJsonInfo.endRotateMax.y)
-                    - generator.GenerateInRange(gJsonInfo.startRotateMin.y, gJsonInfo.startRotateMax.y);
-                    gGrains[grainIndex].rotateValue.z = generator.GenerateInRange(gJsonInfo.endRotateMin.z, gJsonInfo.endRotateMax.z)
-                    - generator.GenerateInRange(gJsonInfo.startRotateMin.z, gJsonInfo.startRotateMax.z);
-                    gGrains[grainIndex].sizeValue = generator.GenerateInRange(gJsonInfo.endSizeMin, gJsonInfo.endSizeMax) - generator.GenerateInRange(gJsonInfo.startSizeMin, gJsonInfo.startSizeMax);
+                    gGrains[grainIndex].initialTransform = gGrains[grainIndex].transform; //初期値保存
+                    gGrains[grainIndex].angularVelocity.x = generator.GenerateInRange(gJsonInfo.angularVelocityMin.x, gJsonInfo.angularVelocityMax.x);
+                    gGrains[grainIndex].angularVelocity.y = generator.GenerateInRange(gJsonInfo.angularVelocityMin.y, gJsonInfo.angularVelocityMax.y);
+                    gGrains[grainIndex].angularVelocity.z = generator.GenerateInRange(gJsonInfo.angularVelocityMin.z, gJsonInfo.angularVelocityMax.z);
+                    gGrains[grainIndex].sizeVelocity = generator.GenerateInRange(gJsonInfo.sizeVelocityMin, gJsonInfo.sizeVelocityMax);
                     float4 startColor = { generator.GenerateInRange(gJsonInfo.startColorMin.r, gJsonInfo.startColorMax.r), generator.GenerateInRange(gJsonInfo.startColorMin.g, gJsonInfo.startColorMax.g), generator.GenerateInRange(gJsonInfo.startColorMin.b, gJsonInfo.startColorMax.b), generator.GenerateInRange(gJsonInfo.startColorMin.a, gJsonInfo.startColorMax.a) };
                     float4 endColor = { generator.GenerateInRange(gJsonInfo.endColorMin.r, gJsonInfo.endColorMax.r), generator.GenerateInRange(gJsonInfo.endColorMin.g, gJsonInfo.endColorMax.g), generator.GenerateInRange(gJsonInfo.endColorMin.b, gJsonInfo.endColorMax.b), generator.GenerateInRange(gJsonInfo.endColorMin.a, gJsonInfo.endColorMax.a) };
                     gGrains[grainIndex].startColor = PackColor(startColor);

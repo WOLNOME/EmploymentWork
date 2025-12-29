@@ -60,7 +60,7 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		sParticle.startTime = data["StartTime"];
 		sParticle.endTime = data["EndTime"];
 		//全体の尺のうち長ければ更新
-		playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime+sParticle.particle->param_["LifeTime"]["Max"]);
+		playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime + sParticle.particle->param_["LifeTime"]["Max"]);
 
 		//コンテナに格納
 		particles_.push_back(std::move(sParticle));
@@ -110,8 +110,8 @@ void CombinedParticle::Update() {
 			if (!sParInfo.particle->emitter_.isPlay) {
 				//oneShotの場合
 				if (sParInfo.endTime == 0.0f) {
-					//タイマーがstartTime~にある時
-					if (playInfo_.currentTime > sParInfo.startTime) {
+					//タイマーがstartTime~にある＆現在時間-startTime<=kDeltaTimeの時
+					if (playInfo_.currentTime > sParInfo.startTime && playInfo_.currentTime - sParInfo.startTime <= kDeltaTime) {
 						//パーティクルをオンにする
 						sParInfo.particle->emitter_.isPlay = true;
 					}

@@ -1,8 +1,20 @@
 {
+    "AngularVelocity": {
+        "Max": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 6.199999809265137
+        },
+        "Min": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -6.199999809265137
+        }
+    },
     "BlendMode": 2,
-    "ClumpNum": 3,
+    "ClumpNum": 7,
     "EffectStyle": 1,
-    "EmitRate": 1,
+    "EmitRate": 0,
     "EndColor": {
         "Max": {
             "w": 0.0,
@@ -17,23 +29,7 @@
             "z": 1.0
         }
     },
-    "EndRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "EndSize": {
-        "Max": 0.800000011920929,
-        "Min": 0.699999988079071
-    },
-    "EndTime": 0.8299999833106995,
+    "EndTime": 0.0,
     "FloorHeight": 0.0,
     "GenerateMethod": 1,
     "GrainTransform": {
@@ -51,13 +47,13 @@
         },
         "Scale": {
             "Max": {
-                "x": 7.0,
-                "y": 0.15000000596046448,
+                "x": 70.0,
+                "y": 3.5,
                 "z": 1.0
             },
             "Min": {
-                "x": 4.0,
-                "y": 0.10000000149011612,
+                "x": 60.0,
+                "y": 3.5,
                 "z": 1.0
             }
         }
@@ -67,8 +63,8 @@
     "IsBound": 0,
     "IsGravity": 0,
     "LifeTime": {
-        "Max": 0.5,
-        "Min": 0.30000001192092896
+        "Max": 0.30000001192092896,
+        "Min": 0.20000000298023224
     },
     "LocalTransform": {
         "Rotate": {
@@ -90,9 +86,13 @@
             "z": 0.10000000149011612
         }
     },
-    "MaxGrains": 5,
+    "MaxGrains": 7,
     "Primitive": 3,
     "Repulsion": 0.5,
+    "SizeVelocity": {
+        "Max": -0.6000000238418579,
+        "Min": -1.100000023841858
+    },
     "StartColor": {
         "Max": {
             "w": 1.0,
@@ -107,23 +107,7 @@
             "z": 0.0
         }
     },
-    "StartRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "StartSize": {
-        "Max": 70.0,
-        "Min": 50.0
-    },
-    "StartTime": 0.33000001311302185,
+    "StartTime": 0.10000000149011612,
     "Texture": "circle2.png",
     "Velocity": {
         "Max": {
