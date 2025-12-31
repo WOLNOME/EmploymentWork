@@ -1,6 +1,6 @@
 #pragma once
 #include <Input.h>
-#include <Particle.h>
+#include <CombinedParticle.h>
 #include <GameCamera.h>
 #include <SceneManager.h>
 #include <Object3d.h>
@@ -121,7 +121,7 @@ private:
 	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
 
 	//紙吹雪パーティクル
-	std::unique_ptr<Particle> confettiParticle_ = nullptr;
+	std::unique_ptr<CombinedParticle> confettiParticle_ = nullptr;
 
 	//テキスト操作変数
 	TextDirectionParam textDirectionParam_;

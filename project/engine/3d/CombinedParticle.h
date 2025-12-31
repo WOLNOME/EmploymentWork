@@ -40,6 +40,7 @@ private:
 
 	struct PlayInfo {
 		bool isPlay = false;		//再生フラグ
+		bool isRepeat = false;		//連続再生フラグ
 		float currentTime = 0.0f;	//現在の時間
 		float duration = 0.0f;		//尺
 	};
@@ -98,6 +99,11 @@ public:
 	/// </summary>
 	/// <param name="isPlay">再生するか</param>
 	void SetIsPlay(bool isPlay) { playInfo_.isPlay = isPlay; }
+	/// <summary>
+	/// 連続再生フラグのセット
+	/// </summary>
+	/// <param name="isRepeat">連続再生するか</param>
+	void SetIsRepeat(bool isRepeat) { playInfo_.isRepeat = isRepeat; }
 
 
 private:

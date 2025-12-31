@@ -102,10 +102,18 @@ void CombinedParticle::Update() {
 	if (playInfo_.isPlay) {
 		//タイマーをカウント
 		playInfo_.currentTime += kDeltaTime;
+		//全体尺の初期化
+		playInfo_.duration = 0.0f;
 		//全てのパーティクルを走査
 		for (auto& sParInfo : particles_) {
 			//全体尺の見直し
-			playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + sParInfo.particle->param_["LifeTime"]["Max"]);
+			if (!playInfo_.isRepeat) {
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + sParInfo.particle->param_["LifeTime"]["Max"]);
+			}
+			else {
+				//最大寿命を考慮しない
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
+			}
 			//再生フラグがオフの時
 			if (!sParInfo.particle->emitter_.isPlay) {
 				//oneShotの場合
@@ -135,15 +143,18 @@ void CombinedParticle::Update() {
 		}
 		//タイマーが全体の尺を超過したら
 		if (playInfo_.currentTime > playInfo_.duration) {
-			//再生フラグをオフにする
-			playInfo_.isPlay = false;
-			//タイマーをリセット
-			playInfo_.currentTime = 0.0f;
-			//全てのパーティクルを走査
-			for (auto& sParInfo : particles_) {
-				//全てのパーティクルを停止させる
-				sParInfo.particle->emitter_.isPlay = false;
+			//連続再生しない場合
+			if (!playInfo_.isRepeat) {
+				//再生フラグをオフにする
+				playInfo_.isPlay = false;
+				//全てのパーティクルを走査
+				for (auto& sParInfo : particles_) {
+					//全てのパーティクルを停止させる
+					sParInfo.particle->emitter_.isPlay = false;
+				}
 			}
+			//タイマーをリセット(共通)
+			playInfo_.currentTime = 0.0f;
 		}
 	}
 

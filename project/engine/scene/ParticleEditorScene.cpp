@@ -797,7 +797,7 @@ void ParticleEditorScene::Editor() {
 			//全パーティクル再生ボタン
 			if (ImGui::Button("再生")) {
 				//再生状態でないなら
-				if (cParticle_->GetIsPlay()) {
+				if (!cParticle_->GetIsPlay()) {
 					cParticle_->SetIsPlay(true);
 				}
 				//再生状態なら
@@ -805,6 +805,9 @@ void ParticleEditorScene::Editor() {
 					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "すでに再生中です");
 				}
 			}
+
+			//連続再生チェックボックス
+			ImGui::Checkbox("連続再生", &cParticle_->playInfo_.isRepeat);
 
 			//ループさせるかのチェックボックス
 			ImGui::Checkbox("ループ再生", &isLoop_);
@@ -821,6 +824,7 @@ void ParticleEditorScene::Editor() {
 		{
 			float currentTime = cParticle_->GetPlayInfo().currentTime;
 			float maxTime = cParticle_->GetPlayInfo().duration;
+			ImGui::Text("再生時間 : %.2f / %.2f", currentTime, maxTime);
 			ImGui::SliderFloat(" ", &currentTime, 0.0f, maxTime);
 		}
 		//セーブボタン
