@@ -105,7 +105,7 @@ void GameClearSystem::Initialize() {
 	//紙吹雪パーティクル
 	{
 		confettiParticle_ = std::make_unique<CombinedParticle>();
-		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "confetti");
+		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "Confetti");
 		confettiParticle_->SetIsRepeat(true);
 		confettiParticle_->SetIsPlay(true);
 	}
