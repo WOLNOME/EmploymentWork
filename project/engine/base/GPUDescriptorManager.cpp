@@ -3,7 +3,7 @@
 #include <cassert>
 
 GPUDescriptorManager* GPUDescriptorManager::instance = nullptr;
-const uint32_t GPUDescriptorManager::kMaxHeapSize = 512;		//必要に応じて増やす
+const uint32_t GPUDescriptorManager::kMaxHeapSize = 2048;		//必要に応じて増やす
 
 GPUDescriptorManager* GPUDescriptorManager::GetInstance() {
 	if (instance == nullptr) {

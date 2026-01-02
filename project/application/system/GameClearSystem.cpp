@@ -106,8 +106,8 @@ void GameClearSystem::Initialize() {
 	{
 		confettiParticle_ = std::make_unique<CombinedParticle>();
 		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "Confetti");
-		confettiParticle_->SetIsRepeat(true);
 		confettiParticle_->SetIsPlay(true);
+		confettiParticle_->SetIsRepeat(true);
 	}
 }
 

@@ -3,7 +3,7 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
-#include "Particle.h"
+#include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
@@ -73,6 +73,8 @@ private:
 
 	//トレールエフェクト
 	std::unique_ptr<BulletTrail> trail_ = nullptr;
+	//衝突エフェクト
+	std::unique_ptr<CombinedParticle> hitEffect_ = nullptr;
 	
 	/// ============================== ///
 	///		メンバ変数

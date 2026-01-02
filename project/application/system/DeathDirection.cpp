@@ -1,14 +1,12 @@
 #include "DeathDirection.h"
 #include <cassert>
-#include <ParticleManager.h>
+#include <CombinedParticleManager.h>
 #include <random>
 
 void DeathDirection::Initialize() {
 	//パーティクルの初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerDead"), "enemy_explosion");
-	particle_->emitter_.isPlay = false;
-	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	particle_ = std::make_unique<CombinedParticle>();
+	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("playerDead"), "Enemy_Explosion");
 }
 
 void DeathDirection::Update() {
@@ -102,12 +100,11 @@ void DeathDirection::ParticeDir() {
 	}
 
 	//パーティクルをオン
-	particle_->emitter_.isPlay = true;
+	particle_->SetIsPlay(true);
 
 	//エミッターの座標を常にカメラへ
-	//particle_->emitter_.transform.translate = camera_->worldTransform.worldTranslate;
-
-	//エミッターのサイズを少し広げる
-	//particle_->emitter_.transform.scale = { 3.0f,3.0f,3.0f };
+	TransformEuler transform = particle_->GetBaseTransform();
+	transform.translate = camera_->worldTransform.worldTranslate;
+	particle_->SetBaseTransform(transform);
 
 }

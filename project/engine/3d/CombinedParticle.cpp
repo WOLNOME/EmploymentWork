@@ -59,7 +59,7 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		sParticle.startTime = data["StartTime"];
 		sParticle.endTime = data["EndTime"];
-		//全体の尺のうち長ければ更新
+		//全体尺のうち長ければ更新
 		playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime + sParticle.particle->param_["LifeTime"]["Max"]);
 
 		//コンテナに格納
@@ -101,14 +101,15 @@ void CombinedParticle::Update() {
 	//再生フラグがオンなら
 	if (playInfo_.isPlay) {
 		//タイマーをカウント
-		playInfo_.currentTime += kDeltaTime;
+		playInfo_.elapsedTime += kDeltaTime;
 		//全体尺の初期化
 		playInfo_.duration = 0.0f;
 		//全てのパーティクルを走査
 		for (auto& sParInfo : particles_) {
 			//全体尺の見直し
 			if (!playInfo_.isRepeat) {
-				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + sParInfo.particle->param_["LifeTime"]["Max"]);
+				float maxLifeTime = sParInfo.particle->param_["LifeTime"]["Max"];
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + maxLifeTime);
 			}
 			else {
 				//最大寿命を考慮しない
@@ -119,7 +120,7 @@ void CombinedParticle::Update() {
 				//oneShotの場合
 				if (sParInfo.endTime == 0.0f) {
 					//タイマーがstartTime~にある＆現在時間-startTime<=kDeltaTimeの時
-					if (playInfo_.currentTime > sParInfo.startTime && playInfo_.currentTime - sParInfo.startTime <= kDeltaTime) {
+					if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime - sParInfo.startTime <= kDeltaTime) {
 						//パーティクルをオンにする
 						sParInfo.particle->emitter_.isPlay = true;
 					}
@@ -127,7 +128,7 @@ void CombinedParticle::Update() {
 				}
 
 				//タイマーがstartTime~endTimeにある時
-				if (playInfo_.currentTime > sParInfo.startTime && playInfo_.currentTime < sParInfo.endTime) {
+				if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime < sParInfo.endTime) {
 					//パーティクルをオンにする
 					sParInfo.particle->emitter_.isPlay = true;
 				}
@@ -135,14 +136,14 @@ void CombinedParticle::Update() {
 			//再生フラグがオンの時
 			else {
 				//タイマーがstartTime~endTimeの外にある時
-				if (playInfo_.currentTime < sParInfo.startTime || playInfo_.currentTime > sParInfo.endTime) {
+				if (playInfo_.elapsedTime < sParInfo.startTime || playInfo_.elapsedTime > sParInfo.endTime) {
 					//パーティクルをオフにする
 					sParInfo.particle->emitter_.isPlay = false;
 				}
 			}
 		}
 		//タイマーが全体の尺を超過したら
-		if (playInfo_.currentTime > playInfo_.duration) {
+		if (playInfo_.elapsedTime > playInfo_.duration) {
 			//連続再生しない場合
 			if (!playInfo_.isRepeat) {
 				//再生フラグをオフにする
@@ -154,7 +155,7 @@ void CombinedParticle::Update() {
 				}
 			}
 			//タイマーをリセット(共通)
-			playInfo_.currentTime = 0.0f;
+			playInfo_.elapsedTime = 0.0f;
 		}
 	}
 

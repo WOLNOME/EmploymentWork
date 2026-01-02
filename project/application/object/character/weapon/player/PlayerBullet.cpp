@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "Object3dManager.h"
-#include "ParticleManager.h"
+#include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
 void PlayerBullet::Initialize() {
@@ -25,6 +25,9 @@ void PlayerBullet::Initialize() {
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	//衝突エフェクトの生成と初期化
+	hitEffect_ = std::make_unique<CombinedParticle>();
+	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerBulletHitEffect"), "Bullet_Hit");
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -141,8 +144,13 @@ void PlayerBullet::Move() {
 }
 
 void PlayerBullet::DeadProcess() {
+	//衝突エフェクトの発生
+	TransformEuler transform = hitEffect_->GetBaseTransform();
+	transform.translate = object3d_->worldTransform.translate;
+	hitEffect_->SetBaseTransform(transform);
+	hitEffect_->SetIsPlay(true);
 	//死亡予約処理
-	SetDeadTimer(0.1f);
+	SetDeadTimer(hitEffect_->GetDuration());
 	//当たり判定属性をなしに
 	SetCollisionAttribute(CollisionAttribute::Nothingness);
 

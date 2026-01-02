@@ -1,7 +1,7 @@
 #include "Item.h"
 #include <TextureManager.h>
 #include <Object3dManager.h>
-#include <ParticleManager.h>
+#include <CombinedParticleManager.h>
 #include <random>
 
 void Item::Initialize() {
@@ -19,13 +19,11 @@ void Item::Initialize() {
 	object3d_->worldTransform.translate.y = param_["initHeight"];
 
 	//アイドル状態のパーティクルを生成
-	idleParticle_ = std::make_unique<Particle>();
-	idleParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_idle"), "item_idle");
-	//idleParticle_->emitter_.transform.scale = { 1.0f, 1.0f, 1.0f };
+	idleParticle_ = std::make_unique<CombinedParticle>();
+	idleParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_idle"), "Item_Idle");
 	//ゲット時のパーティクルを生成
-	getParticle_ = std::make_unique<Particle>();
-	getParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("item_get"), "item_get");
-	//getParticle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	getParticle_ = std::make_unique<CombinedParticle>();
+	getParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_get"), "Item_Get");
 
 	// 確率でアイテムの種類を決定
 	std::random_device rd;
@@ -95,7 +93,9 @@ void Item::DebugWithImGui() {
 void Item::SetInitPos(const Vector3& _initPos) {
 	//座標のセット
 	object3d_->worldTransform.translate = _initPos;
-	//idleParticle_->emitter_.transform.translate = _initPos;
+	TransformEuler transform = idleParticle_->GetBaseTransform();
+	transform.translate = _initPos;
+	idleParticle_->SetBaseTransform(transform);
 }
 
 void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
@@ -110,10 +110,11 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 
 		//パーティクル
-		idleParticle_->emitter_.isPlay = false; // パーティクルを非アクティブにする
-		getParticle_->emitter_.isPlay = true; // パーティクルをアクティブにする
-		//getParticle_->emitter_.transform.translate = object3d_->worldTransform.translate; // パーティクルの位置をアイテムの位置に合わせる
-		//getParticle_->emitter_.transform.translate.y = 0.5f;
+		idleParticle_->SetIsPlay(false); // パーティクルを非アクティブにする
+		getParticle_->SetIsPlay(true); // パーティクルをアクティブにする
+		TransformEuler transform = getParticle_->GetBaseTransform();
+		transform.translate = object3d_->worldTransform.translate;
+		getParticle_->SetBaseTransform(transform);
 
 		break;
 	}
@@ -164,7 +165,7 @@ void Item::UntilDeathProcess() {
 }
 
 void Item::UpdateParticle() {
-	//パーティクルの位置をオブジェクトの位置に合わせる
-	//idleParticle_->emitter_.transform.translate = object3d_->worldTransform.translate;
-
+	TransformEuler transform = idleParticle_->GetBaseTransform();
+	transform.translate = object3d_->worldTransform.translate;
+	idleParticle_->SetBaseTransform(transform);
 }

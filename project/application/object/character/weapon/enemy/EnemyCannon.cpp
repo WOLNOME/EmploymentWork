@@ -1,7 +1,7 @@
 #include "EnemyCannon.h"
 #include <TextureManager.h>
 #include <ImGuiManager.h>
-#include <ParticleManager.h>
+#include <CombinedParticleManager.h>
 #include <Object3dManager.h>
 
 //アプリケーション
@@ -18,10 +18,8 @@ void EnemyCannon::Initialize() {
 	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "hit");
-	particle_->emitter_.isPlay = false;
-	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	particle_ = std::make_unique<CombinedParticle>();
+	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "Cannon_Hit");
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -65,42 +63,46 @@ void EnemyCannon::DebugWithImGui() {
 }
 
 void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	//衝突時の共通処理ラムダ式
+	auto commonCollisionProcess = [this, &subjectPos]() {
+		//デバッグ用ラインのカラーを赤にする
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		TransformEuler transform = particle_->GetBaseTransform();
+		transform.translate = object3d_->worldTransform.translate;
+		particle_->SetBaseTransform(transform);
+		particle_->SetIsPlay(true);
+		//死亡予約処理
+		SetDeadTimer(particle_->GetDuration());
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		};
+
 	//当たり判定時の処理
 	switch (attribute) {
 		//プレイヤーに当たった場合
 	case CollisionAttribute::Player:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//共通処理
+		commonCollisionProcess();
+
 		//被弾インジケーターをつける
 		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
 
 		break;
 		//プレイヤー弾に当たった場合
 	case CollisionAttribute::PlayerBullet:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//共通処理
+		commonCollisionProcess();
+
 		//当たり判定属性をなしに
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 
 		break;
 		//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
+		//共通処理
+		commonCollisionProcess();
+
 		//当たり判定属性をなしに
 		SetCollisionAttribute(CollisionAttribute::Nothingness);
 

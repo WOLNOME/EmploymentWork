@@ -822,10 +822,10 @@ void ParticleEditorScene::Editor() {
 		}
 		//シークバー
 		{
-			float currentTime = cParticle_->GetPlayInfo().currentTime;
-			float maxTime = cParticle_->GetPlayInfo().duration;
-			ImGui::Text("再生時間 : %.2f / %.2f", currentTime, maxTime);
-			ImGui::SliderFloat(" ", &currentTime, 0.0f, maxTime);
+			float elapsedTime = cParticle_->GetElapsedTime();
+			float maxTime = cParticle_->GetDuration();
+			ImGui::Text("再生時間 : %.2f / %.2f", elapsedTime, maxTime);
+			ImGui::SliderFloat(" ", &elapsedTime, 0.0f, maxTime);
 		}
 		//セーブボタン
 		{
