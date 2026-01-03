@@ -62,12 +62,13 @@ public:
 	/// </summary>
 	/// <param name="_name">名前</param>
 	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
-	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
+	/// <param name="_isEditor">エディター用かどうか</param>
+	void Initialize(const std::string& _name, const std::string& _comParticleFileName, bool _isEditor = false);
 	/// <summary>
 	/// デバッグ表示
 	/// </summary>
 	void Debug();
-	
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///

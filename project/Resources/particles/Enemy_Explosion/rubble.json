@@ -14,7 +14,7 @@
     "BlendMode": 1,
     "ClumpNum": 1,
     "EffectStyle": 0,
-    "EmitRate": 50,
+    "EmitRate": 35,
     "EndColor": {
         "Max": {
             "w": 1.0,
@@ -86,7 +86,7 @@
             "z": 0.0
         }
     },
-    "MaxGrains": 100,
+    "MaxGrains": 70,
     "Primitive": 5,
     "Repulsion": 0.30000001192092896,
     "SizeVelocity": {

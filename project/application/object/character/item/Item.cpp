@@ -21,6 +21,7 @@ void Item::Initialize() {
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<CombinedParticle>();
 	idleParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_idle"), "Item_Idle");
+	idleParticle_->SetIsRepeat(true);
 	//ゲット時のパーティクルを生成
 	getParticle_ = std::make_unique<CombinedParticle>();
 	getParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_get"), "Item_Get");
@@ -96,6 +97,8 @@ void Item::SetInitPos(const Vector3& _initPos) {
 	TransformEuler transform = idleParticle_->GetBaseTransform();
 	transform.translate = _initPos;
 	idleParticle_->SetBaseTransform(transform);
+	//パーティクルを再生
+	idleParticle_->SetIsPlay(true);
 }
 
 void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {

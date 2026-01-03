@@ -88,7 +88,7 @@ void ParticleEditorScene::StartWithImGui() {
 			//パーティクルの生成
 			cParticle_ = std::make_unique<CombinedParticle>();
 			//パーティクルの初期化
-			cParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic");
+			cParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("Sample"), "Basic", true);
 			//基準のトランスフォームを調整
 			TransformEuler baseTransform = cParticle_->GetBaseTransform();
 			baseTransform.translate.y += 3.0f;
@@ -325,7 +325,8 @@ void ParticleEditorScene::CheckWithImGui() {
 
 					cParticle_->Initialize(
 						ParticleManager::GetInstance()->GenerateName("Sample"),
-						particleFileName_
+						particleFileName_,
+						true
 					);
 					TransformEuler baseTransform = cParticle_->GetBaseTransform();
 					baseTransform.translate.y += 3.0f;

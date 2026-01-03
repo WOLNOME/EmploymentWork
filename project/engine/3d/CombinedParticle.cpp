@@ -20,7 +20,7 @@ CombinedParticle::~CombinedParticle() {
 	CombinedParticleManager::GetInstance()->Delete(name_);
 }
 
-void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
+void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName, bool _isEditor) {
 	//名前をセット
 	name_ = _name;
 	//基準のトランスフォームを初期化
@@ -54,7 +54,12 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		SingleParticleInfo sParticle;
 
 		sParticle.particle = std::make_unique<Particle>();
-		sParticle.particle->Initialize(fileName, relativePath);
+		if (_isEditor) {
+			sParticle.particle->Initialize(fileName, relativePath);
+		}
+		else {
+			sParticle.particle->Initialize(ParticleManager::GetInstance()->GenerateName(fileName), relativePath);
+		}
 		//発生開始時間&終了時間のセット
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		sParticle.startTime = data["StartTime"];
@@ -156,6 +161,12 @@ void CombinedParticle::Update() {
 			}
 			//タイマーをリセット(共通)
 			playInfo_.elapsedTime = 0.0f;
+		}
+	}
+	else {
+		//再生フラグがオフなら全てのパーティクルを停止させる
+		for (auto& sParInfo : particles_) {
+			sParInfo.particle->emitter_.isPlay = false;
 		}
 	}
 
