@@ -29,7 +29,7 @@
             "z": 1.0
         }
     },
-    "EndTime": 0.4000000059604645,
+    "EndTime": 0.30000001192092896,
     "FloorHeight": 0.0,
     "GenerateMethod": 0,
     "GrainTransform": {
@@ -107,7 +107,7 @@
             "z": 1.0
         }
     },
-    "StartTime": 0.20000000298023224,
+    "StartTime": 0.15000000596046448,
     "Texture": "black.png",
     "Velocity": {
         "Max": {

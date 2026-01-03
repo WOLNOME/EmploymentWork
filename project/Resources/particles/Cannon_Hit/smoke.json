@@ -86,7 +86,7 @@
             "z": 0.0
         }
     },
-    "MaxGrains": 100,
+    "MaxGrains": 150,
     "Primitive": 3,
     "Repulsion": 0.5,
     "SizeVelocity": {

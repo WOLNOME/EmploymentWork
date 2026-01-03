@@ -28,6 +28,7 @@ void SceneManager::Update() {
 	ChangeScene();
 	//実行中シーンを更新する
 	scene_->Update();
+	
 }
 
 void SceneManager::DebugWithImGui() {
@@ -36,6 +37,12 @@ void SceneManager::DebugWithImGui() {
 	scene_->ShowFPS();
 	//デバッグ処理
 	scene_->DebugWithImGui();
+	//ブレークポイント
+	if(Input::GetInstance()->TriggerKey(DIK_F5)){
+		int a = 0;
+		a++;
+	}
+
 #endif // _DEBUG
 
 }

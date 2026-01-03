@@ -26,7 +26,7 @@ void MyGame::Initialize() {
 	SceneManager::GetInstance()->SetNextScene("Title");
 
 	//パーティクルエディター→PARTICLEEDITOR
-	//開発用シーン→DEVELOP
+	//開発用シーン→DEVELOP Title
 }
 
 void MyGame::Finalize() {
