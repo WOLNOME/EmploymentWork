@@ -1,6 +1,7 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
 #include "JsonUtil.h"
+#include "CombinedParticle.h"
 #include <Vector3.h>
 #include <string>
 #include <memory>
@@ -130,6 +131,8 @@ protected:
 
 	Player* player_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
+	//移動パーティクル
+	std::unique_ptr<CombinedParticle> moveParticle_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(protected)

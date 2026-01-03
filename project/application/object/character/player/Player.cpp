@@ -299,9 +299,11 @@ void Player::Move() {
 	float item_moveSpeedUpValue = param_["item_moveSpeedUpValue"];
 	speed += item_moveSpeedUp_ * item_moveSpeedUpValue;
 	if (input_->PushKey(DIK_W)) {
+		//速度を加算
 		velocity_ += currentDir * speed;
 	}
 	if (input_->PushKey(DIK_S)) {
+		//速度を減算
 		velocity_ += -currentDir * speed;
 	}
 

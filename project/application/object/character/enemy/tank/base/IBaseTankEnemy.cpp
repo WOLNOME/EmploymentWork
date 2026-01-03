@@ -1,4 +1,5 @@
 #include "IBaseTankEnemy.h"
+#include "CombinedParticleManager.h"
 #include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <ParticleManager.h>
@@ -14,6 +15,11 @@ IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
 	approachState_ = std::make_unique <TankEnemyApproachState>();
 	attackState_ = std::make_unique <TankEnemyAttackState>(_isUseCannon);
 	deadState_ = std::make_unique <TankEnemyDeadState>();
+	//移動パーティクルの生成・初期化
+	moveParticle_ = std::make_unique<CombinedParticle>();
+	moveParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("TankEnemyMove"), "Tank_Move");
+	moveParticle_->SetIsRepeat(true);
+	moveParticle_->SetIsPlay(true);
 	//初期ステートを決定
 	currentStateName_ = StateName::kPatrol;
 	currentState_ = patrolState_.get();
@@ -35,6 +41,11 @@ void IBaseTankEnemy::Update() {
 
 	//現在ステートの更新
 	currentState_->Update(this);
+
+	//移動パーティクルの座標を合わせる
+	TransformEuler particleTransform = moveParticle_->GetBaseTransform();
+	particleTransform.translate = GetWorldPosition();
+	moveParticle_->SetBaseTransform(particleTransform);
 }
 
 void IBaseTankEnemy::DebugWithImGui() {
@@ -103,18 +114,26 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 	if (stateName == "Patrol") {
 		newState = patrolState_.get();
 		currentStateName_ = StateName::kPatrol;
+		//移動パーティクルをオンにする
+		moveParticle_->SetIsPlay(true);
 	}
 	else if (stateName == "Approach") {
 		newState = approachState_.get();
 		currentStateName_ = StateName::kApproach;
+		//移動パーティクルをオンにする
+		moveParticle_->SetIsPlay(true);
 	}
 	else if (stateName == "Attack") {
 		newState = attackState_.get();
 		currentStateName_ = StateName::kAttack;
+		//移動パーティクルをオフにする
+		moveParticle_->SetIsPlay(false);
 	}
 	else if (stateName == "Dead") {
 		newState = deadState_.get();
 		currentStateName_ = StateName::kDead;
+		//移動パーティクルをオフにする
+		moveParticle_->SetIsPlay(false);
 		//アイテムを生成
 		itemManager_->AddItem(GetWorldTransform().translate);
 	}
