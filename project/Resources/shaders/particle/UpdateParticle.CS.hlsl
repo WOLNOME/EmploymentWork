@@ -58,22 +58,22 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (gJsonInfo.isBound == 1)
     {
         //粒の最底辺位置の計算
-        float leg = grain.transform.translate.y - (grain.transform.scale.y + gPerFrame.deltaTime * grain.sizeValue);
+        float leg = grain.transform.translate.y - (grain.transform.scale.y + gPerFrame.deltaTime * grain.sizeVelocity);
         //床の反発処理
         if (leg > gJsonInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < gJsonInfo.floorHeight)
             grain.velocity.y *= (-1.0f) * gJsonInfo.repulsion;
     }
     //速度加算
     float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
-    //回転更新
-    float4 currentRotate = gPerFrame.deltaTime * grain.rotateValue;
-    //サイズ更新
-    float currentSize = gPerFrame.deltaTime * grain.sizeValue;
-    //各粒のトランスフォーム
     grain.transform.translate += currentVelocity;
+    //回転更新
+    float4 currentRotate = gPerFrame.deltaTime * grain.angularVelocity;
     grain.transform.rotate += currentRotate;
-    grain.transform.scale += currentSize;
-    grain.transform.scale = max(grain.transform.scale, 0.0f);
+    //サイズ更新(初期値からrateを割り出す)
+    float t = saturate(grain.currentTime / grain.lifeTime); // 0〜1
+    float rate = 1.0f + grain.sizeVelocity * t;
+    rate = max(rate, 0.0f);
+    grain.transform.scale = grain.initialTransform.scale * rate;
     
     //更新後の粒データを書き込む
     gGrains[grainIndex] = grain;

@@ -1,7 +1,7 @@
 #include "EnemyBomb.h"
 #include <TextureManager.h>
 #include <ImGuiManager.h>
-#include <ParticleManager.h>
+#include <CombinedParticleManager.h>
 #include <Object3dManager.h>
 
 //アプリケーション
@@ -28,16 +28,8 @@ void EnemyBomb::Initialize() {
 
 	//パーティクルの生成と初期化
 	{
-		particle_ = std::make_unique<Particle>();
-		particle_->Initialize(ParticleManager::GetInstance()->GenerateName("EnemyBombHit"), "hit");
-		particle_->emitter_.isPlay = false;
-		//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
-	}
-	{
-		explosion_ = std::make_unique<Particle>();
-		explosion_->Initialize(ParticleManager::GetInstance()->GenerateName("Explosion"), "enemy_explosion");
-		explosion_->emitter_.isPlay = false;
-		//explosion_->emitter_.transform.scale = { 40,20,40 };
+		explosion_ = std::make_unique<CombinedParticle>();
+		explosion_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BombExplosion"), "Explosion");
 	}
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
@@ -60,8 +52,6 @@ void EnemyBomb::Update() {
 	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 	//移動処理
 	Move();
-	//爆風処理
-	Blast();
 }
 
 void EnemyBomb::DebugWithImGui() {
@@ -114,15 +104,11 @@ void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos)
 	//死亡状態を解除
 	isDead_ = false;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-
-	//爆風
-	isBlast_ = false;
-	durationTimer_ = 0.0f;
 }
 
 void EnemyBomb::Move() {
-	//弾が爆風状態なら移動しない
-	if (isBlast_) {
+	//当たり判定が爆風になっていたら移動しない
+	if (GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
 		return;
 	}
 
@@ -135,40 +121,18 @@ void EnemyBomb::Move() {
 	if (object3d_->worldTransform.translate.y <= 0.0f) {
 		object3d_->worldTransform.translate.y = 0.0f;
 		//パーティクルの発生
-		/*particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		explosion_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		explosion_->emitter_.transform.translate.y = 10.0f;*/
-		explosion_->emitter_.isPlay = true;
+		TransformEuler transform = explosion_->GetBaseTransform();
+		transform.translate = object3d_->worldTransform.worldTranslate;
+		explosion_->SetBaseTransform(transform);
+		explosion_->SetIsPlay(true);
 		//モデルを非表示に
 		object3d_->SetIsDisplay(false);
 		warning_->SetIsDisplay(false);
 		circleShadow_->SetIsDisplay(false);
+		//死亡予約処理
+		SetDeadTimer(explosion_->GetDuration());
 
 		//当たり判定属性を爆風に
 		SetCollisionAttribute(CollisionAttribute::EnemyBlast);
-		//爆風の処理を開始
-		isBlast_ = true;
-	}
-}
-
-void EnemyBomb::Blast() {
-	//爆風の処理
-	if (!isBlast_) {
-		return;
-	}
-
-	//爆風時間の加算
-	durationTimer_ += kDeltaTime;
-	if (durationTimer_ >= kDurationTime_) {
-		//爆風時間を超えたら終了
-		isBlast_ = false;
-		durationTimer_ = 0.0f;
-		//パーティクルの発生を止める
-		particle_->emitter_.isPlay = false;
-		explosion_->emitter_.isPlay = false;
-
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
 	}
 }

@@ -1,36 +1,37 @@
 {
+    "AngularVelocity": {
+        "Max": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Min": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
     "BlendMode": 2,
-    "EmitRate": 33333,
+    "ClumpNum": 1,
+    "EffectStyle": 0,
+    "EmitRate": 200,
     "EndColor": {
         "Max": {
             "w": 0.0,
             "x": 1.0,
             "y": 1.0,
-            "z": 1.0
+            "z": 0.0
         },
         "Min": {
             "w": 0.0,
             "x": 1.0,
             "y": 1.0,
-            "z": 1.0
-        }
-    },
-    "EndRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
             "z": 0.0
         }
     },
-    "EndSize": {
-        "Max": 1.0,
-        "Min": 1.0
-    },
+    "EndTime": 1.0,
+    "FloorHeight": 0.0,
+    "GenerateMethod": 0,
     "GrainTransform": {
         "Rotate": {
             "Max": {
@@ -57,53 +58,67 @@
             }
         }
     },
+    "Gravity": 1.0,
+    "IsBillboard": 1,
+    "IsBound": 0,
+    "IsGravity": 0,
     "LifeTime": {
-        "Max": 3.0,
-        "Min": 1.0
-    },
-    "MaxGrains": 99999,
-    "Primitive": 3,
-    "StartColor": {
-        "Max": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "StartRotate": {
-        "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        }
-    },
-    "StartSize": {
         "Max": 1.0,
         "Min": 1.0
     },
-    "Texture": "circle.png",
-    "Velocity": {
-        "Max": {
+    "LocalTransform": {
+        "Rotate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "Scale": {
+            "w": 0.0,
             "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
+        "Translate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        }
+    },
+    "MaxGrains": 200,
+    "Primitive": 3,
+    "Repulsion": 0.5,
+    "SizeVelocity": {
+        "Max": 0.0,
+        "Min": 0.0
+    },
+    "StartColor": {
+        "Max": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 0.0
+        },
         "Min": {
-            "x": -1.0,
-            "y": -1.0,
-            "z": -1.0
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 0.0
+        }
+    },
+    "StartTime": 0.0,
+    "Texture": "diamond.png",
+    "Velocity": {
+        "Max": {
+            "x": 2.0,
+            "y": 2.0,
+            "z": 2.0
+        },
+        "Min": {
+            "x": -2.0,
+            "y": -2.0,
+            "z": -2.0
         }
     }
 }

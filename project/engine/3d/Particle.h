@@ -63,10 +63,11 @@ private:
 	/// CS用粒情報
 	/// </summary>
 	struct GrainForCS {
+		TransformForCS initialTransform;
 		TransformForCS transform;
 		Vector4 velocity;
-		Vector4 rotateValue;
-		float sizeValue;
+		Vector4 angularVelocity;
+		float sizeVelocity;
 		float lifeTime = 0.0f;
 		float currentTime = 0.0f;
 		uint32_t startColor;
@@ -95,14 +96,10 @@ private:
 		Vector4 startColorMin;
 		Vector4 endColorMax;
 		Vector4 endColorMin;
-		Vector4 startRotateMax;
-		Vector4 startRotateMin;
-		Vector4 endRotateMax;
-		Vector4 endRotateMin;
-		float startSizeMax = 0.0f;
-		float startSizeMin = 0.0f;
-		float endSizeMax = 0.0f;
-		float endSizeMin = 0.0f;
+		Vector4 angularVelocityMax;
+		Vector4 angularVelocityMin;
+		float sizeVelocityMax = 0.0f;
+		float sizeVelocityMin = 0.0f;
 		float lifeTimeMax = 0.0f;
 		float lifeTimeMin = 0.0f;
 		float gravity = 0.0f;
@@ -158,7 +155,7 @@ public:
 	/// エミッター情報
 	/// </summary>
 	struct Emitter {
-		TransformEuler worldTransform;	//ワールドトランスフォーム情報
+		TransformEuler worldTransform;	//エミッターのトランスフォーム
 		bool isAffectedField = false;	//フィールドに影響を受けるか
 		bool isPlay = false;			//パーティクルを生成するか
 	};

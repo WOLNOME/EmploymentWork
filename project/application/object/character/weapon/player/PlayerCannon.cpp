@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "Object3dManager.h"
-#include "ParticleManager.h"
+#include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
 void PlayerCannon::Initialize() {
@@ -19,10 +19,8 @@ void PlayerCannon::Initialize() {
 	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
-	particle_ = std::make_unique<Particle>();
-	particle_->Initialize(ParticleManager::GetInstance()->GenerateName("playerCannonHit"), "hit");
-	particle_->emitter_.isPlay = false;
-	//particle_->emitter_.transform.scale = { 0.1f,0.1f,0.1f };
+	particle_ = std::make_unique<CombinedParticle>();
+	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerCannonHit"), "Cannon_Hit");
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
@@ -72,42 +70,39 @@ void PlayerCannon::DebugWithImGui() {
 }
 
 void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	//衝突時の共通処理ラムダ式
+	auto commonCollisionProcess = [this, &subjectPos]() {
+		//デバッグ用ラインのカラーを赤にする
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//パーティクルの発生
+		TransformEuler transform = particle_->GetBaseTransform();
+		transform.translate = object3d_->worldTransform.translate;
+		particle_->SetBaseTransform(transform);
+		particle_->SetIsPlay(true);
+		//死亡予約処理
+		SetDeadTimer(particle_->GetDuration());
+		//当たり判定属性をなしに
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		};
+
 	//当たり判定時の処理
 	switch (attribute) {
 		//敵に当たった場合
 	case CollisionAttribute::Enemy:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//共通処理
+		commonCollisionProcess();
 
 		break;
 		//敵弾に当たった場合
 	case CollisionAttribute::EnemyBullet:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//共通処理
+		commonCollisionProcess();
 
 		break;
 		//敵キャノンに当たった場合
 	case CollisionAttribute::EnemyCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		//particle_->emitter_.transform.translate = object3d_->worldTransform.worldTranslate;
-		particle_->emitter_.isPlay = true;
-		//死亡予約処理
-		SetDeadTimer(particle_->GetParam()["LifeTime"]["Max"]);
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//共通処理
+		commonCollisionProcess();
 
 		break;
 	default:

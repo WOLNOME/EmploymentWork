@@ -30,6 +30,9 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	if (data) param_ = data;
 	else assert(0 && "JSONファイルが存在しません");
 	//エミッターの初期化
+	emitter_.worldTransform.translate = { 0,0,0 };
+	emitter_.worldTransform.rotate = { 0,0,0 };
+	emitter_.worldTransform.scale = { 1,1,1 };
 	emitter_.isAffectedField = false;
 	emitter_.isPlay = false;
 	//テクスチャハンドルの取得
@@ -158,14 +161,10 @@ void Particle::TraceJsonDataForCS() {
 	allResourceForCS_.mappedJsonInfo[0].startColorMin = Vec4ToVec4(param_["StartColor"]["Min"]);
 	allResourceForCS_.mappedJsonInfo[0].endColorMax = Vec4ToVec4(param_["EndColor"]["Max"]);
 	allResourceForCS_.mappedJsonInfo[0].endColorMin = Vec4ToVec4(param_["EndColor"]["Min"]);
-	allResourceForCS_.mappedJsonInfo[0].startRotateMax = Vec3ToVec4(param_["StartRotate"]["Max"]);
-	allResourceForCS_.mappedJsonInfo[0].startRotateMin = Vec3ToVec4(param_["StartRotate"]["Min"]);
-	allResourceForCS_.mappedJsonInfo[0].endRotateMax = Vec3ToVec4(param_["EndRotate"]["Max"]);
-	allResourceForCS_.mappedJsonInfo[0].endRotateMin = Vec3ToVec4(param_["EndRotate"]["Min"]);
-	allResourceForCS_.mappedJsonInfo[0].startSizeMax = param_["StartSize"]["Max"];
-	allResourceForCS_.mappedJsonInfo[0].startSizeMin = param_["StartSize"]["Min"];
-	allResourceForCS_.mappedJsonInfo[0].endSizeMax = param_["EndSize"]["Max"];
-	allResourceForCS_.mappedJsonInfo[0].endSizeMin = param_["EndSize"]["Min"];
+	allResourceForCS_.mappedJsonInfo[0].angularVelocityMax = Vec3ToVec4(param_["AngularVelocity"]["Max"]);
+	allResourceForCS_.mappedJsonInfo[0].angularVelocityMin = Vec3ToVec4(param_["AngularVelocity"]["Min"]);
+	allResourceForCS_.mappedJsonInfo[0].sizeVelocityMax = param_["SizeVelocity"]["Max"];
+	allResourceForCS_.mappedJsonInfo[0].sizeVelocityMin = param_["SizeVelocity"]["Min"];
 	allResourceForCS_.mappedJsonInfo[0].lifeTimeMax = param_["LifeTime"]["Max"];
 	allResourceForCS_.mappedJsonInfo[0].lifeTimeMin = param_["LifeTime"]["Min"];
 	allResourceForCS_.mappedJsonInfo[0].gravity = param_["Gravity"];

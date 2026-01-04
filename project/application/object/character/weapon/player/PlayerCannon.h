@@ -3,7 +3,7 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
-#include "Particle.h"
+#include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
@@ -68,7 +68,7 @@ private:
 	/// ============================== ///
 
 	//パーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
+	std::unique_ptr<CombinedParticle> particle_ = nullptr;
 	//トレールエフェクト
 	std::unique_ptr<BulletTrail> trail_ = nullptr;
 

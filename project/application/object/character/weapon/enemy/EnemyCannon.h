@@ -3,7 +3,7 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
-#include "Particle.h"
+#include "CombinedParticle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
 #include <memory>
@@ -77,7 +77,7 @@ private:
 	PlayerUI* playerUI_ = nullptr;
 
 	//パーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
+	std::unique_ptr<CombinedParticle> particle_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

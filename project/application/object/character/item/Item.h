@@ -1,6 +1,6 @@
 #pragma once
 #include <application/object/character/base/BaseCharacter.h>
-#include <Particle.h>
+#include <CombinedParticle.h>
 #include <string>
 #include <Vector3.h>
 #include <JsonUtil.h>
@@ -71,8 +71,8 @@ private:
 	json param_;
 
 	//パーティクル
-	std::unique_ptr<Particle> idleParticle_ = nullptr;
-	std::unique_ptr<Particle> getParticle_ = nullptr;
+	std::unique_ptr<CombinedParticle> idleParticle_ = nullptr;
+	std::unique_ptr<CombinedParticle> getParticle_ = nullptr;
 
 	float swingTimer_ = 0.0f; // アイテムの振り子のタイマー
 	bool isUp_ = true; // アイテムの上下移動フラグ

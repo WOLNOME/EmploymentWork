@@ -104,10 +104,10 @@ void GameClearSystem::Initialize() {
 
 	//紙吹雪パーティクル
 	{
-		confettiParticle_ = std::make_unique<Particle>();
-		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "confetti");
-		//confettiParticle_->emitter_.transform.scale = { 15.0f,1.0f,15.0f };
-		confettiParticle_->emitter_.isPlay = true;
+		confettiParticle_ = std::make_unique<CombinedParticle>();
+		confettiParticle_->Initialize(ParticleManager::GetInstance()->GenerateName("ConfettiParticle"), "Confetti");
+		confettiParticle_->SetIsPlay(true);
+		confettiParticle_->SetIsRepeat(true);
 	}
 }
 
@@ -203,7 +203,8 @@ void GameClearSystem::CameraWork() {
 }
 
 void GameClearSystem::ConfettiParticleUpdate() {
-	//エミッターの座標をカメラの座標に合わせる
-	//confettiParticle_->emitter_.transform.translate = gameCamera_->worldTransform.translate;
-	//confettiParticle_->emitter_.transform.translate.y += 7.0f;
+	//パーティクルの座標をカメラの座標に合わせる
+	TransformEuler transform = confettiParticle_->GetBaseTransform();
+	transform.translate.y = gameCamera_->worldTransform.translate.y + 7.0f;
+	confettiParticle_->SetBaseTransform(transform);
 }

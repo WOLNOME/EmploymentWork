@@ -7,31 +7,20 @@
 #undef min
 #undef max
 
-//単パーティクルのローカルトランスフォームをJSON情報から取得する
-auto getLocalTransformFromJson = [](const json& data) -> TransformEuler {
-	TransformEuler result;
-	//スケール
-	result.scale.x = data["Scale"]["x"];
-	result.scale.y = data["Scale"]["y"];
-	result.scale.z = data["Scale"]["z"];
-	//回転
-	result.rotate.x = data["Rotate"]["x"];
-	result.rotate.y = data["Rotate"]["y"];
-	result.rotate.z = data["Rotate"]["z"];
-	//平行移動
-	result.translate.x = data["Translate"]["x"];
-	result.translate.y = data["Translate"]["y"];
-	result.translate.z = data["Translate"]["z"];
-	return result;
+auto makeTransformFromJson = [](const json& t) -> TransformEuler {
+	return TransformEuler{
+		{ t["Scale"]["x"],     t["Scale"]["y"],     t["Scale"]["z"] },
+		{ t["Rotate"]["x"],    t["Rotate"]["y"],    t["Rotate"]["z"] },
+		{ t["Translate"]["x"], t["Translate"]["y"], t["Translate"]["z"] }
 	};
-
+	};
 
 CombinedParticle::~CombinedParticle() {
 	//マネージャーから登録解除
 	CombinedParticleManager::GetInstance()->Delete(name_);
 }
 
-void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName) {
+void CombinedParticle::Initialize(const std::string& _name, const std::string& _comParticleFileName, bool _isEditor) {
 	//名前をセット
 	name_ = _name;
 	//基準のトランスフォームを初期化
@@ -65,13 +54,18 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		SingleParticleInfo sParticle;
 
 		sParticle.particle = std::make_unique<Particle>();
-		sParticle.particle->Initialize(fileName, relativePath);
+		if (_isEditor) {
+			sParticle.particle->Initialize(fileName, relativePath);
+		}
+		else {
+			sParticle.particle->Initialize(ParticleManager::GetInstance()->GenerateName(fileName), relativePath);
+		}
 		//発生開始時間&終了時間のセット
 		json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 		sParticle.startTime = data["StartTime"];
 		sParticle.endTime = data["EndTime"];
-		//全体の尺のうち長ければ更新
-		playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime);
+		//全体尺のうち長ければ更新
+		playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime + sParticle.particle->param_["LifeTime"]["Max"]);
 
 		//コンテナに格納
 		particles_.push_back(std::move(sParticle));
@@ -99,6 +93,18 @@ void CombinedParticle::Debug() {
 
 }
 
+void CombinedParticle::Debug() {
+#ifdef _DEBUG
+	//基準のトランスフォームをデバッグ表示
+	Sphere baseSphere;
+	baseSphere.center = baseTransform_.translate;
+	baseSphere.radius = 0.2f;
+	MyMath::CreateLineSphere(baseSphere, { 0,1,0,1 }, 12);
+
+#endif // _DEBUG
+
+}
+
 std::vector<std::string> CombinedParticle::GetAllHandleName() {
 	std::vector<std::string> result;
 	//全てのパーティクルを走査
@@ -118,47 +124,75 @@ void CombinedParticle::Update() {
 	//再生フラグがオンなら
 	if (playInfo_.isPlay) {
 		//タイマーをカウント
-		playInfo_.currentTime += kDeltaTime;
+		playInfo_.elapsedTime += kDeltaTime;
+		//全体尺の初期化
+		playInfo_.duration = 0.0f;
 		//全てのパーティクルを走査
 		for (auto& sParInfo : particles_) {
+			//全体尺の見直し
+			if (!playInfo_.isRepeat) {
+				float maxLifeTime = sParInfo.particle->param_["LifeTime"]["Max"];
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + maxLifeTime);
+			}
+			else {
+				//最大寿命を考慮しない
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
+			}
 			//再生フラグがオフの時
 			if (!sParInfo.particle->emitter_.isPlay) {
-				//タイマーがstartTime~にある時(loop,oneshot両対応)
-				if (playInfo_.currentTime > sParInfo.startTime) {
+				//oneShotの場合
+				if (sParInfo.endTime == 0.0f) {
+					//タイマーがstartTime~にある＆現在時間-startTime<=kDeltaTimeの時
+					if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime - sParInfo.startTime <= kDeltaTime) {
+						//パーティクルをオンにする
+						sParInfo.particle->emitter_.isPlay = true;
+					}
+					continue;
+				}
+
+				//タイマーがstartTime~endTimeにある時
+				if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime < sParInfo.endTime) {
 					//パーティクルをオンにする
 					sParInfo.particle->emitter_.isPlay = true;
 				}
 			}
 			//再生フラグがオンの時
 			else {
-				//タイマーがstartTime~endTimeの外にある時(loopのみ対応)
-				if (playInfo_.currentTime < sParInfo.startTime || playInfo_.currentTime > sParInfo.endTime) {
+				//タイマーがstartTime~endTimeの外にある時
+				if (playInfo_.elapsedTime < sParInfo.startTime || playInfo_.elapsedTime > sParInfo.endTime) {
 					//パーティクルをオフにする
 					sParInfo.particle->emitter_.isPlay = false;
 				}
 			}
-			//全体尺の見直し
-			playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
 		}
 		//タイマーが全体の尺を超過したら
-		if (playInfo_.currentTime > playInfo_.duration) {
-			//再生フラグをオフにする
-			playInfo_.isPlay = false;
-			//タイマーをリセット
-			playInfo_.currentTime = 0.0f;
-			//全てのパーティクルを走査
-			for (auto& sParInfo : particles_) {
-				//全てのパーティクルを停止させる
-				sParInfo.particle->emitter_.isPlay = false;
+		if (playInfo_.elapsedTime > playInfo_.duration) {
+			//連続再生しない場合
+			if (!playInfo_.isRepeat) {
+				//再生フラグをオフにする
+				playInfo_.isPlay = false;
+				//全てのパーティクルを走査
+				for (auto& sParInfo : particles_) {
+					//全てのパーティクルを停止させる
+					sParInfo.particle->emitter_.isPlay = false;
+				}
 			}
+			//タイマーをリセット(共通)
+			playInfo_.elapsedTime = 0.0f;
+		}
+	}
+	else {
+		//再生フラグがオフなら全てのパーティクルを停止させる
+		for (auto& sParInfo : particles_) {
+			sParInfo.particle->emitter_.isPlay = false;
 		}
 	}
 
-	//全パーティクルを走査
-	for (auto& particle : particles_) {
-		//各パーティクルのエミッタートランスフォームを更新（ParticleManagerのUpdate前）
-		TransformEuler local = getLocalTransformFromJson(particle.particle->param_["LocalTransform"]);
-		particle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
+	//全パーティクルの走査
+	for (auto& sParInfo : particles_) {
+		//エミッターのトランスフォームを更新
+		TransformEuler local = makeTransformFromJson(sParInfo.particle->param_["LocalTransform"]);
+		sParInfo.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
 	}
 
 }

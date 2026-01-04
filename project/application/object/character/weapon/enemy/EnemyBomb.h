@@ -3,7 +3,7 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
-#include "Particle.h"
+#include "CombinedParticle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
 #include <memory>
@@ -68,10 +68,6 @@ private:
 	/// 移動処理を行う
 	/// </summary>
 	void Move();
-	/// <summary>
-	/// 爆風処理を行う
-	/// </summary>
-	void Blast();
 
 	/// ============================== ///
 	///		インスタンス
@@ -83,10 +79,8 @@ private:
 	//爆破範囲警告
 	std::unique_ptr<Object3d> warning_ = nullptr;
 
-	//パーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
-	//爆風
-	std::unique_ptr<Particle> explosion_ = nullptr;
+	//爆風パーティクル
+	std::unique_ptr<CombinedParticle> explosion_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -98,9 +92,5 @@ private:
 	//生成された座標
 	Vector3 generatedPosition_ = {};
 
-	//爆風
-	bool isBlast_ = false;
-	const float kDurationTime_ = 1.0f;
-	float durationTimer_ = 0.0f;
 };
 

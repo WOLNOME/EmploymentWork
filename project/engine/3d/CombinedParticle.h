@@ -38,9 +38,13 @@ private:
 	///		構造体(private)
 	/// ============================== ///
 
+	/// <summary>
+	/// 再生情報
+	/// </summary>
 	struct PlayInfo {
 		bool isPlay = false;		//再生フラグ
-		float currentTime = 0.0f;	//現在の時間
+		bool isRepeat = false;		//連続再生フラグ
+		float elapsedTime = 0.0f;	//経過時間
 		float duration = 0.0f;		//尺
 	};
 
@@ -58,12 +62,13 @@ public:
 	/// </summary>
 	/// <param name="_name">名前</param>
 	/// <param name="_comParticleFileName">複合パーティクルのファイル名</param>
-	void Initialize(const std::string& _name, const std::string& _comParticleFileName);
+	/// <param name="_isEditor">エディター用かどうか</param>
+	void Initialize(const std::string& _name, const std::string& _comParticleFileName, bool _isEditor = false);
 	/// <summary>
-	/// デバッグ処理
+	/// デバッグ表示
 	/// </summary>
 	void Debug();
-	
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -79,10 +84,25 @@ public:
 	/// <returns>全てのハンドル名</returns>
 	std::vector<std::string> GetAllHandleName();
 	/// <summary>
-	/// 再生フラグの取得
+	/// 再生フラグを取得する
 	/// </summary>
-	/// <returns>再生するか</returns>
-	bool GetIsPlay() const { return playInfo_.isPlay; }
+	/// <returns>再生フラグ</returns>
+	bool GetIsPlay() { return playInfo_.isPlay; }
+	/// <summary>
+	/// 連続再生フラグを取得する
+	/// </summary>
+	/// <returns>連続再生フラグ</returns>
+	bool GetIsRepeat() { return playInfo_.isRepeat; }
+	/// <summary>
+	/// 全体尺を取得する
+	/// </summary>
+	/// <returns>全体尺</returns>
+	float GetDuration() { return playInfo_.duration; }
+	/// <summary>
+	/// 経過時間を取得する
+	/// </summary>
+	/// <returns>経過時間</returns>
+	float GetElapsedTime() { return playInfo_.elapsedTime; }
 
 	/// ============================== ///
 	///		setter
@@ -94,10 +114,15 @@ public:
 	/// <param name="transform">基準トランスフォーム</param>
 	void SetBaseTransform(const TransformEuler& transform) { baseTransform_ = transform; }
 	/// <summary>
-	/// 再生フラグのセット
+	/// 再生フラグをセットする
 	/// </summary>
-	/// <param name="isPlay">再生するか</param>
+	/// <param name="isPlay">再生フラグ</param>
 	void SetIsPlay(bool isPlay) { playInfo_.isPlay = isPlay; }
+	/// <summary>
+	/// 連続再生フラグをセットする
+	/// </summary>
+	/// <param name="isRepeat">連続再生フラグ</param>
+	void SetIsRepeat(bool isRepeat) { playInfo_.isRepeat = isRepeat; }
 
 private:
 	/// ============================== ///
@@ -132,11 +157,6 @@ private:
 	/// </summary>
 	/// <returns>パラメーター</returns>
 	const std::unordered_map<std::string, json> GetParams();
-	/// <summary>
-	/// 再生情報の取得
-	/// </summary>
-	/// <returns>再生情報</returns>
-	const PlayInfo& GetPlayInfo() { return playInfo_; }
 
 	/// ============================== ///
 	///		setter(エディター専用)

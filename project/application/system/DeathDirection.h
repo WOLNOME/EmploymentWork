@@ -1,6 +1,6 @@
 #pragma once
 #include "GameCamera.h"
-#include "Particle.h"
+#include "CombinedParticle.h"
 #include "Vector3.h"
 #include <MyMath.h>
 #include <memory>
@@ -85,7 +85,7 @@ private:
 	/// ============================== ///
 
 	//パーティクル
-	std::unique_ptr<Particle> particle_ = nullptr;
+	std::unique_ptr<CombinedParticle> particle_ = nullptr;
 
 	//演出のフラグ
 	bool isDirection_ = false;
