@@ -640,12 +640,6 @@ public:
 	static TransformEuler Combine(const TransformEuler& parent, const TransformEuler& local);
 
 	///------------------------------------///
-	///         Transform     
-	///------------------------------------///
-
-	static TransformEuler Combine(const TransformEuler& parent, const TransformEuler& local);
-
-	///------------------------------------///
 	///            補助関数
 	///------------------------------------///
 

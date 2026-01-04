@@ -78,23 +78,6 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 
 void CombinedParticle::Debug() {
 #ifdef _DEBUG
-	//基準トランスフォームの位置を表示
-	Sphere sphere = {
-		.center = {
-			baseTransform_.translate.x,
-			baseTransform_.translate.y,
-			baseTransform_.translate.z
-		},
-		.radius = 0.4f
-	};
-	MyMath::CreateLineSphere(sphere, { 0.2f, 1.0f, 0.2f, 1.0f }, 15);
-
-#endif // _DEBUG
-
-}
-
-void CombinedParticle::Debug() {
-#ifdef _DEBUG
 	//基準のトランスフォームをデバッグ表示
 	Sphere baseSphere;
 	baseSphere.center = baseTransform_.translate;
@@ -213,7 +196,7 @@ bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTim
 	//パーティクルの初期化(名前はnameベースで適当に生成)
 	newParticle.particle->Initialize(name, cutJson);
 	//トランスフォームを計算
-	TransformEuler local = getLocalTransformFromJson(newParticle.particle->param_["LocalTransform"]);
+	TransformEuler local = makeTransformFromJson(newParticle.particle->param_["LocalTransform"]);
 	newParticle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
 	//パーティクルをコンテナに追加
 	particles_.push_back(std::move(newParticle));
