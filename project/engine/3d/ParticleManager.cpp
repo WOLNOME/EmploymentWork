@@ -35,6 +35,7 @@ void ParticleManager::Update() {
 
 	MainRender* mainRender = MainRender::GetInstance();
 	GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
+	//UAVバリア挿入用ラムダ式
 	auto InsertUAVBarriers = [&](std::vector<ID3D12Resource*>& resources) {
 		std::vector<D3D12_RESOURCE_BARRIER> barriers;
 		for (ID3D12Resource* resource : resources) {
@@ -76,7 +77,7 @@ void ParticleManager::Update() {
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(3, particle.second->allResourceForCS_.emitterResource->GetGPUVirtualAddress());
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(4, particle.second->allResourceForCS_.jsonInfoResource->GetGPUVirtualAddress());
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, particle.second->allResourceForCS_.perFrameResource->GetGPUVirtualAddress());
-
+		//生成をGPUに依頼
 		mainRender->GetCommandList()->Dispatch(1, 1, 1);
 		//OneShotスタイルの場合isPlayをfalseにする
 		int effectStyle = particle.second->param_["EffectStyle"];
@@ -104,6 +105,7 @@ void ParticleManager::Update() {
 		mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, particle.second->allResourceForCS_.perFrameResource->GetGPUVirtualAddress());
 
 		int maxGrains = particle.second->param_["MaxGrains"];
+		//更新をGPUに依頼
 		mainRender->GetCommandList()->Dispatch(UINT(maxGrains + 1023) / 1024, 1, 1);
 		//粒配列情報をSRV用にリソース遷移
 		mainRender->TransitionResource(particle.second->allResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
