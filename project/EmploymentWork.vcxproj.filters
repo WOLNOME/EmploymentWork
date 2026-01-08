@@ -805,6 +805,7 @@
     <ClInclude Include="application\system\EndDirection.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
+    <ClInclude Include="engine\3d\ParticleTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

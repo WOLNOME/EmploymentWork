@@ -359,6 +359,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\StartDirection.h" />
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
+    <ClInclude Include="engine\3d\ParticleTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

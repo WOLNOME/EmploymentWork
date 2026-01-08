@@ -64,17 +64,13 @@ struct Grain
     float currentTime;
     uint startColor;
     uint endColor;
-    uint emitterIndex;
-};
-
-struct PerFrame
-{
-    float time;
-    float deltaTime;
+    uint emitterID;
 };
 
 struct GeneralInfo
 {
+    float time;
+    float deltaTime;
     uint maxGrains;
     uint maxEmitters;
 };

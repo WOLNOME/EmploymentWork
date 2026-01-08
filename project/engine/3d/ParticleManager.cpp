@@ -8,6 +8,7 @@
 #include <numbers>
 #include <random>
 #include <algorithm>
+#include <map>
 
 #undef min
 #undef max
@@ -26,17 +27,14 @@ void ParticleManager::Initialize() {
 	GenerateGraphicsPipeline();
 	//コンピュートパイプラインの設定
 	GenerateComputePipeline();
+	//共通のCS用リソース初期化
+	CreateCommonResourceForCS();
 
 }
 
 void ParticleManager::Update() {
 	//やること
 	//GeneralInfoを更新
-
-
-	//パーティクルが一つもセットされていなかったら抜ける
-	if (particles.empty()) return;
-
 	MainRender* mainRender = MainRender::GetInstance();
 	GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
 	//UAVバリア挿入用ラムダ式
@@ -52,16 +50,24 @@ void ParticleManager::Update() {
 		mainRender->GetCommandList()->ResourceBarrier(UINT(barriers.size()), barriers.data());
 		};
 
+	//パーティクルが一つもセットされていなかったら抜ける
+	if (particles.empty()) return;
+
 	//GPUDescriptorHeapをコマンドリストにセット
 	gpuDescriptorManager->SetDescriptorHeap(mainRender->GetCommandList());
 
+
+
 	//各パーティクルの更新
 	for (const auto& particle : particles) {
-		//perFrameのタイムを更新
-		particle.second->allResourceForCS_.mappedPerFrame[0].time += kDeltaTime;
-		//エミッターとJSONデータの更新
+		//タイムを更新
+		commonResourceForCS_.mappedGeneralInfo[0].time += kDeltaTime;
+		//エミッターとJSONデータの更新（GPU送信用データに変換）
 		particle.second->TraceEmitterForCS();
-		particle.second->TraceJsonDataForCS();
+		particle.second->TraceJsonInfoForCS();
+	}
+
+	{
 		//バリア遷移(状態保証)
 		{
 			std::vector<ID3D12Resource*> uavResources = {
@@ -845,4 +851,74 @@ void ParticleManager::UpdateCPSOOption() {
 	};
 	computePipelineStateDesc.pRootSignature = cRootSignature[2].Get();
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState[2]));
+}
+
+ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS() {
+	CommonResourceForCS result;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	//粒
+	{
+		//粒の情報用のResorceを確保
+		result.grainsResource = dxCommon->CreateUAVBufferResource(sizeof(GrainForCS) * kMaxNumGrains);
+		//粒情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
+		result.grainsUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.grainsUavIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
+		//粒情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+		result.grainsSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.grainsSrvIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
+	}
+	//フリーリストインデックス
+	{
+		//フリーリストインデックス用のResourceを確保
+		result.freeListIndexResource = dxCommon->CreateUAVBufferResource(sizeof(int32_t));
+		//フリーリストインデックス用のuavを作成。RWStructuredBufferでアクセスできるようにする
+		result.freeListIndexUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.freeListIndexUavIndex, result.freeListIndexResource.Get(), 1, sizeof(int32_t));
+	}
+	//フリーリスト
+	{
+		//フリーリスト用のResourceを確保
+		result.freeListResource = dxCommon->CreateUAVBufferResource(sizeof(uint32_t) * kMaxNumGrains);
+		//フリーリスト用のuavを作成。RWStructuredBufferでアクセスできるようにする
+		result.freeListUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.freeListUavIndex, result.freeListResource.Get(),
+			UINT(kMaxNumGrains), sizeof(uint32_t));
+	}
+	//エミッター情報
+	{
+		//エミッター情報用のResorceを確保
+		result.emitterResource = dxCommon->CreateBufferResource(sizeof(EmitterForCS) * kMaxNumEmitters);
+		//マッピング
+		result.emitterResource->Map(0, nullptr, reinterpret_cast<void**>(&result.mappedEmitter));
+		//エミッター情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+		result.emitterSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.emitterSrvIndex, result.emitterResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterForCS));
+	}
+	//JSON情報
+	{
+		//JSON情報用のResorceを確保
+		result.jsonInfoResource = dxCommon->CreateBufferResource(sizeof(JsonInfoForCS) * kMaxNumEmitters);
+		//マッピング
+		result.jsonInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&result.mappedJsonInfo));
+		//JSON情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+		result.jsonInfoSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.jsonInfoSrvIndex, result.jsonInfoResource.Get(), UINT(kMaxNumEmitters), sizeof(JsonInfoForCS));
+	}
+	//総合情報
+	{
+		//総合情報用のResorceを確保
+		result.generalInfoResource = dxCommon->CreateBufferResource(sizeof(GeneralInfoForCS));
+		GeneralInfoForCS* mappedGeneralInfo = nullptr;
+		result.generalInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedGeneralInfo));
+		std::memset(mappedGeneralInfo, 0, sizeof(GeneralInfoForCS));
+		result = { mappedGeneralInfo,1 };
+		//データ入力
+		result.mappedGeneralInfo[0].time = 0.0f;
+		result.mappedGeneralInfo[0].deltaTime = kDeltaTime;
+		result.mappedGeneralInfo[0].maxGrains = kMaxNumGrains;
+		result.mappedGeneralInfo[0].maxEmitters = kMaxNumEmitters;
+	}
+
+	return result;
 }

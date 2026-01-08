@@ -8,11 +8,15 @@ struct CameraInfo
     float4x4 matProjection;
 };
 
+// 粒の配列
 StructuredBuffer<Grain> gGrains : register(t0);
+// エミッター情報
+StructuredBuffer<EmitterInfo> gEmitterInfo : register(t1);
+// JSON情報
+StructuredBuffer<JsonInfo> gJsonInfo : register(t2);
 
+// カメラ情報
 ConstantBuffer<CameraInfo> gCameraInfo : register(b0);
-ConstantBuffer<EmitterInfo> gEmitterInfo : register(b1);
-ConstantBuffer<JsonInfo> gJsonInfo : register(b2);
 
 struct VertexShaderInput
 {
@@ -112,7 +116,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     //WorldMatrixを求める
     float4x4 worldMatrix = MakeIdentity4x4();
     //billboardの計算をする
-    if (gJsonInfo.isBillboard == 1)
+    if (gJsonInfo[grain.emitterIndex].isBillboard == 1)
     {
         float4x4 backToFrontMatrix = MakeRotateZMatrix(grain.transform.rotate.z);
         float4x4 billboardMatrix = mul(backToFrontMatrix, gCameraInfo.matWorld);

@@ -10,13 +10,12 @@ RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
 //エミッター情報
-StructuredBuffer<EmitterInfo> gEmitterInfo : register(b0);
+StructuredBuffer<EmitterInfo> gEmitterInfo : register(t0);
 //JSON情報
-StructuredBuffer<JsonInfo> gJsonInfo : register(b1);
-//フレーム情報
-ConstantBuffer<PerFrame> gPerFrame : register(b2);
+StructuredBuffer<JsonInfo> gJsonInfo : register(t1);
+
 //総合情報
-ConstantBuffer<GeneralInfo> gGeneralInfo : register(b3);
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b0);
 
 //乱数ジェネレーター
 class RandomGenerator
@@ -61,7 +60,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     //生成に必要なローカル変数
     int max = gJsonInfo[emitterIndex].maxGrains;
     int rate = gJsonInfo[emitterIndex].emitRate;
-    float ratePerFrame = rate * gPerFrame.deltaTime;
+    float ratePerFrame = rate * gGeneralInfo.deltaTime;
     int generateNum = 0; //このフレームで生成する数
     
     //乱数生成機の作成
@@ -95,7 +94,7 @@ void GenerateGrain(uint emitterIndex, int generateNum, RandomGenerator generator
     for (int i = 0; i < generateNum; i++)
     {
         //乱数のシードを更新
-        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gPerFrame.time * 0.1f) * 1000.0f;
+        generator.seed = frac(float3(i * 0.1234f, i * 0.5678f, i * 0.9101f) + gGeneralInfo.time * 0.1f) * 1000.0f;
         
         int freeListIndex;
         
@@ -131,7 +130,7 @@ void GenerateGrain(uint emitterIndex, int generateNum, RandomGenerator generator
                 gGrains[grainIndex].velocity.z = generator.GenerateInRange(gJsonInfo[emitterIndex].velocityMin.z, gJsonInfo[emitterIndex].velocityMax.z);
                 gGrains[grainIndex].lifeTime = generator.GenerateInRange(gJsonInfo[emitterIndex].lifeTimeMin, gJsonInfo[emitterIndex].lifeTimeMax);
                 gGrains[grainIndex].currentTime = 0.0f;
-                gGrains[grainIndex].emitterIndex = emitterIndex;
+                gGrains[grainIndex].emitterID = emitterIndex;
             }
             else
             {
@@ -183,7 +182,7 @@ void GenerateGrain(uint emitterIndex, int generateNum, RandomGenerator generator
                     gGrains[grainIndex].velocity = velocity;
                     gGrains[grainIndex].lifeTime = lifeTime;
                     gGrains[grainIndex].currentTime = 0.0f;
-                    gGrains[grainIndex].emitterIndex = emitterIndex;
+                    gGrains[grainIndex].emitterID = emitterIndex;
                     
                     //最後の周ならここでreturn
                     if (j == gJsonInfo[emitterIndex].clumpNum - 1)

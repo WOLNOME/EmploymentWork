@@ -8,13 +8,12 @@ RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
 //エミッターの配列
-StructuredBuffer<EmitterInfo> gEmitterInfo : register(b0);
+StructuredBuffer<EmitterInfo> gEmitterInfo : register(t0);
 //JSON情報の配列
-StructuredBuffer<JsonInfo> gJsonInfo : register(b1);
-//フレーム情報
-ConstantBuffer<PerFrame> gPerFrame : register(b2);
+StructuredBuffer<JsonInfo> gJsonInfo : register(t1);
+
 //総合情報
-ConstantBuffer<GeneralInfo> gGeneralInfo : register(b3);
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b0);
 
 [numthreads(1024, 1, 1)]
 void main(uint3 DTid : SV_DispatchThreadID)
@@ -31,7 +30,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     Grain grain = gGrains[grainIndex];
     
     //現在時間の更新
-    grain.currentTime += gPerFrame.deltaTime;
+    grain.currentTime += gGeneralInfo.deltaTime;
     
     ///==================///
     /// 粒の削除処理
@@ -57,22 +56,22 @@ void main(uint3 DTid : SV_DispatchThreadID)
     ///==================///
     
     //重力処理
-    if (gJsonInfo[grain.emitterIndex].isGravity == 1)
-        grain.velocity.y += gJsonInfo[grain.emitterIndex].gravity * gPerFrame.deltaTime;
+    if (gJsonInfo[grain.emitterID].isGravity == 1)
+        grain.velocity.y += gJsonInfo[grain.emitterID].gravity * gGeneralInfo.deltaTime;
     //バウンド処理
-    if (gJsonInfo[grain.emitterIndex].isBound == 1)
+    if (gJsonInfo[grain.emitterID].isBound == 1)
     {
         //粒の最底辺位置の計算
-        float leg = grain.transform.translate.y - (grain.transform.scale.y + gPerFrame.deltaTime * grain.sizeVelocity);
+        float leg = grain.transform.translate.y - (grain.transform.scale.y + gGeneralInfo.deltaTime * grain.sizeVelocity);
         //床の反発処理
-        if (leg > gJsonInfo[grain.emitterIndex].floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < gJsonInfo[grain.emitterIndex].floorHeight)
-            grain.velocity.y *= (-1.0f) * gJsonInfo[grain.emitterIndex].repulsion;
+        if (leg > gJsonInfo[grain.emitterID].floorHeight && leg + (gGeneralInfo.deltaTime * grain.velocity.y) < gJsonInfo[grain.emitterID].floorHeight)
+            grain.velocity.y *= (-1.0f) * gJsonInfo[grain.emitterID].repulsion;
     }
     //速度加算
-    float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;
+    float4 currentVelocity = gGeneralInfo.deltaTime * grain.velocity;
     grain.transform.translate += currentVelocity;
     //回転更新
-    float4 currentRotate = gPerFrame.deltaTime * grain.angularVelocity;
+    float4 currentRotate = gGeneralInfo.deltaTime * grain.angularVelocity;
     grain.transform.rotate += currentRotate;
     //サイズ更新(初期値からrateを割り出す)
     float t = saturate(grain.currentTime / grain.lifeTime); // 0〜1

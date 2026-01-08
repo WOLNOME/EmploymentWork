@@ -1,13 +1,15 @@
 #pragma once
-#include "BaseCamera.h"
-#include "MyMath.h"
-#include "BlendMode.h"
 #include <d3d12.h>
 #include <string>
 #include <array>
 #include <list>
 #include <unordered_map>
 #include <wrl.h>
+#include <span>
+#include "BaseCamera.h"
+#include "MyMath.h"
+#include "BlendMode.h"
+#include "ParticleTypes.h"
 
 class Particle;
 
@@ -16,7 +18,39 @@ class Particle;
 /// シングルトンパターンで実装
 /// </summary>
 class ParticleManager {
-private://コンストラクタ等の隠蔽
+private:
+	/// ============================== ///
+	///		構造体(private)
+	/// ============================== ///
+
+	/// <summary>
+	/// 共通のCS用リソース
+	/// </summary>
+	struct CommonResourceForCS {
+		//粒の情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> grainsResource;
+		uint32_t grainsSrvIndex = 0u;	//VS用
+		uint32_t grainsUavIndex = 0u;	//CS用
+		//フリーリストのインデックス情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> freeListIndexResource;
+		uint32_t freeListIndexUavIndex = 0u;		//CS用
+		//フリーリストの情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> freeListResource;
+		uint32_t freeListUavIndex = 0u;		//CS用
+		//エミッター情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> emitterResource;
+		std::span<EmitterForCS> mappedEmitter;
+		uint32_t emitterSrvIndex = 0u;
+		//JSON情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> jsonInfoResource;
+		std::span<JsonInfoForCS> mappedJsonInfo;
+		uint32_t jsonInfoSrvIndex = 0u;
+		//総合情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> generalInfoResource;
+		std::span<GeneralInfoForCS> mappedGeneralInfo;
+	};
+
+private:
 	static ParticleManager* instance;
 
 	ParticleManager() = default;//コンストラクタ隠蔽
@@ -86,10 +120,9 @@ public:
 	/// <param name="camera">カメラ</param>
 	void SetCamera(BaseCamera* camera) { camera_ = camera; }
 
-
 private:
 	/// ============================== ///
-	///		非公開メンバ関数
+	///		メンバ関数(private)
 	/// ============================== ///
 
 	/// <summary>
@@ -114,6 +147,12 @@ private:
 	/// </summary>
 	void UpdateCPSOOption();
 
+	/// <summary>
+	/// 共通のCS用リソースの作成
+	/// </summary>
+	/// <returns>共通のCS用リソース</returns>
+	CommonResourceForCS CreateCommonResourceForCS();
+
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
@@ -128,13 +167,21 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> gRootSignature = nullptr;
 	//グラフィックスパイプライン
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)BlendMode::kMaxBlendModeNum> graphicsPipelineState;
-	//Cルートシグネチャ(init,emit,update分あるので3つ)
-	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, 3> cRootSignature;
+	//Cルートシグネチャ(init,emit,update,delete分あるので4つ)
+	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, 4> cRootSignature;
 	//コンピュートパイプライン
-	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, 3> computePipelineState;
+	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, 4> computePipelineState;
 
 	//パーティクルのコンテナ
 	std::unordered_map<std::string, Particle*> particles;
+
+	//粒の最大数 (必要に応じて増やす)
+	static const int kMaxNumGrains = 2000000;
+	//エミッターの最大数 (必要に応じて増やす)
+	static const int kMaxNumEmitters = 1000;
+	
+	//共通のCS用リソース
+	CommonResourceForCS commonResourceForCS_;
 
 };
 
