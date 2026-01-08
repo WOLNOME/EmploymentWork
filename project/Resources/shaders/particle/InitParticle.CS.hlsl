@@ -7,8 +7,8 @@ RWStructuredBuffer<int> gFreeListIndex : register(u1);
 //フリーリスト
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
-//JSON情報
-ConstantBuffer<JsonInfo> gJsonInfo : register(b0);
+//総合情報
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b0);
 
 [numthreads(1024, 1, 1)]
 //UAVはCPU側で初期化できないので、こちら側で初期化処理を行う。
@@ -16,7 +16,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
 {
     uint grainIndex = DTid.x;
     //稼働する必要のないスレッドでは計算処理を省く
-    if (grainIndex >= gJsonInfo.maxGrains)
+    if (grainIndex >= gGeneralInfo.maxGrains)
         return;
     
     //粒の全要素を0で埋める
@@ -26,7 +26,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     //Indexが末尾を指すようにする(ex.10個なら9を指すようにする→0から数えて10番目)
     if (grainIndex == 0)
     {
-        gFreeListIndex[0] = gJsonInfo.maxGrains - 1;
+        gFreeListIndex[0] = gGeneralInfo.maxGrains - 1;
     }
     
 }

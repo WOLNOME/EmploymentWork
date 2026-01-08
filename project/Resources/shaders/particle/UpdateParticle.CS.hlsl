@@ -8,18 +8,20 @@ RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
 //エミッターの配列
-ConstantBuffer<EmitterInfo> gEmitterInfo : register(b0);
+StructuredBuffer<EmitterInfo> gEmitterInfo : register(b0);
 //JSON情報の配列
-ConstantBuffer<JsonInfo> gJsonInfo : register(b1);
+StructuredBuffer<JsonInfo> gJsonInfo : register(b1);
 //フレーム情報
 ConstantBuffer<PerFrame> gPerFrame : register(b2);
+//総合情報
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b3);
 
 [numthreads(1024, 1, 1)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
     uint grainIndex = DTid.x;
     //稼働する必要のないスレッドでは計算処理を省く
-    if (grainIndex >= gJsonInfo.maxGrains)
+    if (grainIndex >= gGeneralInfo.maxGrains)
         return;
     // 寿命が0の粒子は死亡済みと見なして即スキップ
     if (gGrains[grainIndex].lifeTime == 0)
@@ -30,9 +32,11 @@ void main(uint3 DTid : SV_DispatchThreadID)
     
     //現在時間の更新
     grain.currentTime += gPerFrame.deltaTime;
+    
     ///==================///
     /// 粒の削除処理
     ///==================///
+    
     //寿命を迎えたら
     if (grain.currentTime > grain.lifeTime)
     {
@@ -41,27 +45,28 @@ void main(uint3 DTid : SV_DispatchThreadID)
         int freeListIndex;
         InterlockedAdd(gFreeListIndex[0], 1, freeListIndex);
         //最新のFreeListIndexの場所に死亡済みGrainのIndexを設定する。
-        if ((freeListIndex + 1) < gJsonInfo.maxGrains)
+        if ((freeListIndex + 1) < gGeneralInfo.maxGrains)
         {
             gFreeList[freeListIndex + 1] = grainIndex;
             return;
         }
     }
+    
     ///==================///
     /// 粒情報の処理
     ///==================///
     
     //重力処理
-    if (gJsonInfo.isGravity == 1)
-        grain.velocity.y += gJsonInfo.gravity * gPerFrame.deltaTime;
+    if (gJsonInfo[grain.emitterIndex].isGravity == 1)
+        grain.velocity.y += gJsonInfo[grain.emitterIndex].gravity * gPerFrame.deltaTime;
     //バウンド処理
-    if (gJsonInfo.isBound == 1)
+    if (gJsonInfo[grain.emitterIndex].isBound == 1)
     {
         //粒の最底辺位置の計算
         float leg = grain.transform.translate.y - (grain.transform.scale.y + gPerFrame.deltaTime * grain.sizeVelocity);
         //床の反発処理
-        if (leg > gJsonInfo.floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < gJsonInfo.floorHeight)
-            grain.velocity.y *= (-1.0f) * gJsonInfo.repulsion;
+        if (leg > gJsonInfo[grain.emitterIndex].floorHeight && leg + (gPerFrame.deltaTime * grain.velocity.y) < gJsonInfo[grain.emitterIndex].floorHeight)
+            grain.velocity.y *= (-1.0f) * gJsonInfo[grain.emitterIndex].repulsion;
     }
     //速度加算
     float4 currentVelocity = gPerFrame.deltaTime * grain.velocity;

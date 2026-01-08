@@ -30,6 +30,10 @@ void ParticleManager::Initialize() {
 }
 
 void ParticleManager::Update() {
+	//やること
+	//GeneralInfoを更新
+
+
 	//パーティクルが一つもセットされていなかったら抜ける
 	if (particles.empty()) return;
 
