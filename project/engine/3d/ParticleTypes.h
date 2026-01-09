@@ -32,6 +32,7 @@ struct EmitterForCS {
 	TransformForGPU worldTransform;
 	uint32_t isAffectedField = 0u;
 	uint32_t isPlay = 0u;
+	uint32_t isAlive = 0u;
 };
 /// <summary>
 /// CS用JSON情報

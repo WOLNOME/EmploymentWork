@@ -19,6 +19,7 @@ struct EmitterInfo
     Transform worldTransform;
     uint isAffectedField;
     uint isPlay;
+    uint isAlive;
 };
 
 struct JsonInfo

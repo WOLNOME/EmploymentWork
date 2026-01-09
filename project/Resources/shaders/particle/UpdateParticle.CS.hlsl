@@ -36,6 +36,21 @@ void main(uint3 DTid : SV_DispatchThreadID)
     /// 粒の削除処理
     ///==================///
     
+    //粒に対応するエミッターが既に削除されている場合
+    if(!gEmitterInfo[grain.emitterID].isAlive)
+    {
+        //全データに0を入れる
+        gGrains[grainIndex] = (Grain) 0;
+        int freeListIndex;
+        InterlockedAdd(gFreeListIndex[0], 1, freeListIndex);
+        //最新のFreeListIndexの場所に死亡済みGrainのIndexを設定する。
+        if ((freeListIndex + 1) < gGeneralInfo.maxGrains)
+        {
+            gFreeList[freeListIndex + 1] = grainIndex;
+            return;
+        }
+    }
+    
     //寿命を迎えたら
     if (grain.currentTime > grain.lifeTime)
     {
@@ -56,10 +71,10 @@ void main(uint3 DTid : SV_DispatchThreadID)
     ///==================///
     
     //重力処理
-    if (gJsonInfo[grain.emitterID].isGravity == 1)
+    if (gJsonInfo[grain.emitterID].isGravity)
         grain.velocity.y += gJsonInfo[grain.emitterID].gravity * gGeneralInfo.deltaTime;
     //バウンド処理
-    if (gJsonInfo[grain.emitterID].isBound == 1)
+    if (gJsonInfo[grain.emitterID].isBound)
     {
         //粒の最底辺位置の計算
         float leg = grain.transform.translate.y - (grain.transform.scale.y + gGeneralInfo.deltaTime * grain.sizeVelocity);

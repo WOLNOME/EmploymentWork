@@ -65,6 +65,7 @@ void Particle::TraceEmitterForCS() {
 	emitterForCS_.worldTransform.translate = Vec3ToVec4(emitter_.worldTransform.translate);
 	emitterForCS_.isAffectedField = emitter_.isAffectedField;
 	emitterForCS_.isPlay = emitter_.isPlay;
+	emitterForCS_.isAlive = 1u;
 }
 
 void Particle::TraceJsonInfoForCS() {

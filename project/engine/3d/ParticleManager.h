@@ -135,23 +135,34 @@ private:
 	void GenerateComputePipeline();
 
 	/// <summary>
-	/// CPSO(コンピュートパイプラインステートオブジェクト)の初期化
+	/// 初期化用CPSO(コンピュートパイプラインステートオブジェクト)
 	/// </summary>
 	void InitCPSOOption();
 	/// <summary>
-	/// CPSO(コンピュートパイプラインステートオブジェクト)の発行
+	/// 発行用CPSO(コンピュートパイプラインステートオブジェクト)
 	/// </summary>
 	void EmitCPSOOption();
 	/// <summary>
-	/// CPSO(コンピュートパイプラインステートオブジェクト)の更新
+	/// 更新用CPSO(コンピュートパイプラインステートオブジェクト)
 	/// </summary>
 	void UpdateCPSOOption();
-
+	
 	/// <summary>
 	/// 共通のCS用リソースの作成
 	/// </summary>
 	/// <returns>共通のCS用リソース</returns>
 	CommonResourceForCS CreateCommonResourceForCS();
+
+	/// <summary>
+	/// エミッターIDの割り当て
+	/// </summary>
+	/// <returns>エミッターID</returns>
+	uint32_t AllocateEmitterID();
+	/// <summary>
+	/// エミッターIDの破棄
+	/// </summary>
+	/// <param name="id">エミッターID</param>
+	void DiscardEmitterID(uint32_t id);
 
 	/// ============================== ///
 	///		インスタンス
@@ -182,6 +193,10 @@ private:
 	
 	//共通のCS用リソース
 	CommonResourceForCS commonResourceForCS_;
+
+	//エミッターID用カウンタ
+	uint32_t emitterIDCounter_ = 0u;
+	std::list<uint32_t> freeEmitterIDList_;
 
 };
 
