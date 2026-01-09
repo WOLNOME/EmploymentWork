@@ -17,6 +17,10 @@ StructuredBuffer<JsonInfo> gJsonInfo : register(t2);
 
 // カメラ情報
 ConstantBuffer<CameraInfo> gCameraInfo : register(b0);
+// 総合情報
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b1);
+// 対象のエミッターID
+ConstantBuffer<TargetEmitterID> gTargetEmitterID : register(b2);
 
 struct VertexShaderInput
 {
@@ -112,7 +116,30 @@ float4x4 MakeAffineMatrix(float3 scale, float3 rotate, float3 translate)
 VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID)
 {
     VertexShaderOutput output;
-    Grain grain = gGrains[instanceId];
+    //インスタンスIDをコピー
+    uint index = instanceId;
+    
+    Grain grain;
+    for (int i = 0; i < gGeneralInfo.maxGrains; i++)
+    {
+        //もし粒の対応するエミッターがターゲットのIDと一致するなら
+        if (gGrains[i].emitterID == gTargetEmitterID.id)
+        {
+            //indexが0なら
+            if (index == 0)
+            {
+                //grainに該当IDの情報を書き込む
+                grain = gGrains[i];
+                break;
+            }
+            else
+            {
+                //indexをデクリメント
+                index--;
+            }
+        }
+    }
+    
     //WorldMatrixを求める
     float4x4 worldMatrix = MakeIdentity4x4();
     //billboardの計算をする

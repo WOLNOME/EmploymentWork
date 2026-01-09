@@ -33,8 +33,6 @@ void ParticleManager::Initialize() {
 }
 
 void ParticleManager::Update() {
-	//やること
-	//GeneralInfoを更新
 	MainRender* mainRender = MainRender::GetInstance();
 	GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
 	//UAVバリア挿入用ラムダ式

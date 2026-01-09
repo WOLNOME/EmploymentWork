@@ -75,3 +75,8 @@ struct GeneralInfo
     uint maxGrains;
     uint maxEmitters;
 };
+
+struct TargetEmitterID
+{
+    uint id;
+};
