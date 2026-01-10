@@ -140,7 +140,7 @@ void ParticleManager::Update() {
 	//更新をGPUに依頼
 	mainRender->GetCommandList()->Dispatch(UINT(kMaxNumGrains + 1023) / 1024, 1, 1);
 
-	//粒配列情報をSRV用にリソース遷移
+	//粒配列情報をSRV用(描画用)にリソース遷移
 	mainRender->TransitionResource(commonResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
 
 	//形状更新
@@ -181,7 +181,7 @@ void ParticleManager::Draw() {
 		particle.second->shape_->Draw(0, 3, (uint32_t)maxNumGrains, particle.second->textureHandle_);
 	}
 
-	//粒配列情報をUAV用にリソース遷移
+	//粒配列情報をUAV用(更新用)にリソース遷移
 	mainRender->TransitionResource(commonResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 

@@ -14,6 +14,10 @@ StructuredBuffer<Grain> gGrains : register(t0);
 StructuredBuffer<EmitterInfo> gEmitterInfo : register(t1);
 // JSON情報
 StructuredBuffer<JsonInfo> gJsonInfo : register(t2);
+// 粒のIndex配列情報
+StructuredBuffer<int> gGrainIndices : register(t3);
+// エミッターの範囲情報
+StructuredBuffer<EmitterRange> gEmitterRange : register(t4);
 
 // カメラ情報
 ConstantBuffer<CameraInfo> gCameraInfo : register(b0);
@@ -116,29 +120,13 @@ float4x4 MakeAffineMatrix(float3 scale, float3 rotate, float3 translate)
 VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID)
 {
     VertexShaderOutput output;
-    //インスタンスIDをコピー
-    uint index = instanceId;
     
-    Grain grain;
-    for (int i = 0; i < gGeneralInfo.maxGrains; i++)
-    {
-        //もし粒の対応するエミッターがターゲットのIDと一致するなら
-        if (gGrains[i].emitterID == gTargetEmitterID.id)
-        {
-            //indexが0なら
-            if (index == 0)
-            {
-                //grainに該当IDの情報を書き込む
-                grain = gGrains[i];
-                break;
-            }
-            else
-            {
-                //indexをデクリメント
-                index--;
-            }
-        }
-    }
+    //粒のindex配列情報の該当要素番号を計算して出す (start+instanceId)
+    uint eleNum = gEmitterRange[gTargetEmitterID.id].start + instanceId;
+    //求めた該当要素番号から粒配列のインデックスを求める
+    uint index = gGrainIndices[eleNum];
+    //インデックスを使って粒配列にアクセスする
+    Grain grain = gGrains[index];
     
     //WorldMatrixを求める
     float4x4 worldMatrix = MakeIdentity4x4();
