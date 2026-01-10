@@ -34,6 +34,7 @@ void ParticleEditorScene::Initialize() {
 	ground_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Ground"), "ground");
 	ground_->SetTexture(textureHandleGround_);
 
+
 }
 
 void ParticleEditorScene::Finalize() {

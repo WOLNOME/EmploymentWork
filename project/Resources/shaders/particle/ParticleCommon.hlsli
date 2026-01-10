@@ -81,9 +81,8 @@ struct TargetEmitterID
     uint id;
 };
 
-
 struct EmitterRange
 {
-    uint start;
-    uint maxCount;
+    int start;
+    uint aliveCount;
 };

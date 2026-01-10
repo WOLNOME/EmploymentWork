@@ -28,7 +28,7 @@ void ParticleManager::Initialize() {
 	//コンピュートパイプラインの設定
 	GenerateComputePipeline();
 	//共通のCS用リソース初期化
-	CreateCommonResourceForCS();
+	commonResourceForCS_ = CreateCommonResourceForCS();
 
 }
 
@@ -54,24 +54,26 @@ void ParticleManager::Update() {
 	//GPUDescriptorHeapをコマンドリストにセット
 	gpuDescriptorManager->SetDescriptorHeap(mainRender->GetCommandList());
 
+	//タイムを更新
+	commonResourceForCS_.mappedGeneralInfo[0].time += kDeltaTime;
+
 	//std::mapにエミッターとJSONデータを転送（番号順になるため）
 	std::map<uint32_t, EmitterForCS> emittersForCS;
 	std::map<uint32_t, JsonInfoForCS> jsonInfosForCS;
 
 	//各パーティクルの更新
 	for (const auto& particle : particles) {
-		//タイムを更新
-		commonResourceForCS_.mappedGeneralInfo[0].time += kDeltaTime;
-		//エミッターとJSONデータの更新（GPU送信用データに変換）
+		//エミッターの更新（GPU送信用データに変換）
 		particle.second->TraceEmitterForCS();
-		particle.second->TraceJsonInfoForCS();
+		
 		//マップに格納
 		emittersForCS[particle.second->emitterID_] = particle.second->emitterForCS_;
 		jsonInfosForCS[particle.second->emitterID_] = particle.second->jsonInfoForCS_;
 	}
 
 	//送信用データの中身をクリア（データがない場所に0を入れる）
-	for (int i = 0; i < kMaxNumEmitters; i++) {
+	int size = sizeof(commonResourceForCS_.mappedEmitter);
+	for (int i = 0; i < size; i++) {
 		commonResourceForCS_.mappedEmitter[i] = {};
 		commonResourceForCS_.mappedJsonInfo[i] = {};
 	}
@@ -87,7 +89,7 @@ void ParticleManager::Update() {
 	//バリア遷移(生成前状態保証)
 	{
 		std::vector<ID3D12Resource*> uavResources = {
-			commonResourceForCS_.generalInfoResource.Get(),
+			commonResourceForCS_.grainsResource.Get(),
 			commonResourceForCS_.freeListIndexResource.Get(),
 			commonResourceForCS_.freeListResource.Get()
 		};
@@ -121,7 +123,9 @@ void ParticleManager::Update() {
 		std::vector<ID3D12Resource*> uavResources = {
 			commonResourceForCS_.grainsResource.Get(),
 			commonResourceForCS_.freeListIndexResource.Get(),
-			commonResourceForCS_.freeListResource.Get()
+			commonResourceForCS_.freeListResource.Get(),
+			commonResourceForCS_.grainIndicesResource.Get(),
+			commonResourceForCS_.emitterRangeResource.Get()
 		};
 
 		InsertUAVBarriers(uavResources);
@@ -133,15 +137,43 @@ void ParticleManager::Update() {
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(0, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainsUavIndex));
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(1, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListIndexUavIndex));
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(2, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListUavIndex));
-	mainRender->GetCommandList()->SetComputeRootDescriptorTable(3, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
-	mainRender->GetCommandList()->SetComputeRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
-	mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(3, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainIndicesUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterRangeUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(5, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(6, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootConstantBufferView(7, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
 
 	//更新をGPUに依頼
 	mainRender->GetCommandList()->Dispatch(UINT(kMaxNumGrains + 1023) / 1024, 1, 1);
 
-	//粒配列情報をSRV用(描画用)にリソース遷移
+	//バリア遷移(粒情報解析前状態保証)
+	{
+		std::vector<ID3D12Resource*> uavResources = {
+			commonResourceForCS_.grainsResource.Get(),
+			commonResourceForCS_.grainIndicesResource.Get(),
+			commonResourceForCS_.emitterRangeResource.Get()
+		};
+
+		InsertUAVBarriers(uavResources);
+	}
+
+	//粒情報解析処理
+	mainRender->GetCommandList()->SetComputeRootSignature(cRootSignature[3].Get());
+	mainRender->GetCommandList()->SetPipelineState(computePipelineState[3].Get());
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(0, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainsUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(1, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainIndicesUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(2, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterRangeUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(3, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
+
+	//粒情報解析をGPUに依頼
+	mainRender->GetCommandList()->Dispatch(UINT(kMaxNumGrains + 1023) / 1024, 1, 1);
+
+	//描画に使うUAVリソースをSRV用にリソース遷移
 	mainRender->TransitionResource(commonResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
+	mainRender->TransitionResource(commonResourceForCS_.grainIndicesResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
+	mainRender->TransitionResource(commonResourceForCS_.emitterRangeResource.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
 
 	//形状更新
 	for (auto& particle : particles) {
@@ -171,18 +203,29 @@ void ParticleManager::Draw() {
 	mainRender->GetCommandList()->SetGraphicsRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
 	//JSON情報をVSに送信
 	mainRender->GetCommandList()->SetGraphicsRootDescriptorTable(5, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
+	//粒のIndex配列情報をVSに送信
+	mainRender->GetCommandList()->SetGraphicsRootDescriptorTable(6, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainIndicesSrvIndex));
+	//エミッターの範囲情報をVSに送信
+	mainRender->GetCommandList()->SetGraphicsRootDescriptorTable(7, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterRangeSrvIndex));
+	//総合情報をVSに送信
+	mainRender->GetCommandList()->SetGraphicsRootConstantBufferView(8, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
 
 	//パーティクル個別の設定
 	for (const auto& particle : particles) {
 		//各パーティクルのブレンドモード情報からパイプラインステートを選択
 		mainRender->GetCommandList()->SetPipelineState(graphicsPipelineState[particle.second->GetParam()["BlendMode"]].Get());
+		//各パーティクルのエミッターIDをVSに送信
+		mainRender->GetCommandList()->SetGraphicsRootConstantBufferView(9, particle.second->eachResourceForCS_.emitterIDResource->GetGPUVirtualAddress());
+
 		//各パーティクル形状の描画
-		int maxNumGrains = particle.second->GetParam()["MaxNumGrains"];
+		int maxNumGrains = particle.second->GetParam()["MaxGrains"];
 		particle.second->shape_->Draw(0, 3, (uint32_t)maxNumGrains, particle.second->textureHandle_);
 	}
 
-	//粒配列情報をUAV用(更新用)にリソース遷移
+	//描画に使うUAVリソースをSRV用にリソース遷移
 	mainRender->TransitionResource(commonResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	mainRender->TransitionResource(commonResourceForCS_.grainIndicesResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	mainRender->TransitionResource(commonResourceForCS_.emitterRangeResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 
 void ParticleManager::Finalize() {
@@ -198,6 +241,7 @@ void ParticleManager::Regist(const std::string& name, Particle* particle) {
 
 	//エミッターIDを設定
 	particle->emitterID_ = AllocateEmitterID();
+	particle->eachResourceForCS_.mappedEmitterID[0].id = particle->emitterID_;
 
 	//登録
 	particles[name] = particle;
@@ -334,7 +378,7 @@ void ParticleManager::GenerateGraphicsPipeline() {
 		descriptorRange[0].NumDescriptors = numDescriptors;
 		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountPS += numDescriptors;
+		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -352,13 +396,67 @@ void ParticleManager::GenerateGraphicsPipeline() {
 		descriptorRange[0].NumDescriptors = numDescriptors;
 		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountPS += numDescriptors;
+		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 		param.DescriptorTable.pDescriptorRanges = descriptorRange;
 		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		rootParameters.push_back(param);
+	}
+	//粒のIndex情報用の設定(6)
+	{
+		//デスクリプタレンジ作成
+		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
+		numDescriptors = 1;
+		descriptorRange[0].BaseShaderRegister = registerCountVS;
+		descriptorRange[0].NumDescriptors = numDescriptors;
+		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+		registerCountVS += numDescriptors;
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+		param.DescriptorTable.pDescriptorRanges = descriptorRange;
+		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		rootParameters.push_back(param);
+	}
+	//エミッターの範囲情報用の設定(7)
+	{
+		//デスクリプタレンジ作成
+		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
+		numDescriptors = 1;
+		descriptorRange[0].BaseShaderRegister = registerCountVS;
+		descriptorRange[0].NumDescriptors = numDescriptors;
+		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+		registerCountVS += numDescriptors;
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+		param.DescriptorTable.pDescriptorRanges = descriptorRange;
+		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		rootParameters.push_back(param);
+	}
+	//総合情報用の設定(8)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+		param.Descriptor.ShaderRegister = 1;
+		rootParameters.push_back(param);
+	}
+	//エミッターID用の設定(9)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+		param.Descriptor.ShaderRegister = 2;
 		rootParameters.push_back(param);
 	}
 
@@ -523,8 +621,8 @@ void ParticleManager::GenerateComputePipeline() {
 	EmitCPSOOption();
 	//更新用CPSOの設定
 	UpdateCPSOOption();
-	//削除用CPSOの設定
-
+	//粒情報解析用CPSOの設定
+	LocksmithCPSOOption();
 }
 
 void ParticleManager::InitCPSOOption() {
@@ -650,7 +748,7 @@ void ParticleManager::EmitCPSOOption() {
 	int numDescriptors = 0;
 
 	//DescriptorRangeを作成
-	D3D12_DESCRIPTOR_RANGE descriptorRanges[3] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRanges[5] = {};
 	// 粒配列用の設定
 	numDescriptors = 1;
 	descriptorRanges[0].BaseShaderRegister = registerCountU;
@@ -794,7 +892,7 @@ void ParticleManager::UpdateCPSOOption() {
 	int numDescriptors = 0;
 
 	//DescriptorRangeを作成
-	D3D12_DESCRIPTOR_RANGE descriptorRanges[3] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRanges[7] = {};
 	// 粒配列用の設定
 	numDescriptors = 1;
 	descriptorRanges[0].BaseShaderRegister = registerCountU;
@@ -816,19 +914,33 @@ void ParticleManager::UpdateCPSOOption() {
 	descriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	descriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	registerCountU += numDescriptors;
+	// 粒のIndex配列情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[3].BaseShaderRegister = registerCountU;
+	descriptorRanges[3].NumDescriptors = numDescriptors;
+	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountU += numDescriptors;
+	// エミッターの範囲情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[4].BaseShaderRegister = registerCountU;
+	descriptorRanges[4].NumDescriptors = numDescriptors;
+	descriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountU += numDescriptors;
 	// エミッター情報用の設定
 	numDescriptors = 1;
-	descriptorRanges[3].BaseShaderRegister = registerCountT;
-	descriptorRanges[3].NumDescriptors = numDescriptors;
-	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	descriptorRanges[5].BaseShaderRegister = registerCountT;
+	descriptorRanges[5].NumDescriptors = numDescriptors;
+	descriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	registerCountT += numDescriptors;
 	// JSON情報用の設定
 	numDescriptors = 1;
-	descriptorRanges[4].BaseShaderRegister = registerCountT;
-	descriptorRanges[4].NumDescriptors = numDescriptors;
-	descriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	descriptorRanges[6].BaseShaderRegister = registerCountT;
+	descriptorRanges[6].NumDescriptors = numDescriptors;
+	descriptorRanges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	registerCountT += numDescriptors;
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
@@ -862,7 +974,7 @@ void ParticleManager::UpdateCPSOOption() {
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
-	//エミッター情報用の設定(3)
+	//粒のIndex配列情報用の設定(3)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
@@ -872,7 +984,7 @@ void ParticleManager::UpdateCPSOOption() {
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
-	//JSON情報用の設定(4)
+	//エミッターの範囲情報用の設定(4)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
@@ -882,7 +994,27 @@ void ParticleManager::UpdateCPSOOption() {
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
-	//フレーム情報用の設定(5)
+	//エミッター情報用の設定(5)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[5];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//JSON情報用の設定(6)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[6];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//総合情報用の設定(7)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
@@ -925,6 +1057,151 @@ void ParticleManager::UpdateCPSOOption() {
 	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState[2]));
 }
 
+void ParticleManager::LocksmithCPSOOption() {
+	HRESULT hr;
+	//RootSignature作成
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	//レジスタカウント
+	int registerCountT = 0;		//structuredBuffer専用
+	int registerCountU = 0;		//RWStructuredBuffer専用
+	//使用するデスクリプタの数
+	int numDescriptors = 0;
+
+	//DescriptorRangeを作成
+	D3D12_DESCRIPTOR_RANGE descriptorRanges[5] = {};
+	// 粒配列用の設定
+	numDescriptors = 1;
+	descriptorRanges[0].BaseShaderRegister = registerCountU;
+	descriptorRanges[0].NumDescriptors = numDescriptors;
+	descriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountU += numDescriptors;
+	// 粒Index配列用の設定
+	numDescriptors = 1;
+	descriptorRanges[1].BaseShaderRegister = registerCountU;
+	descriptorRanges[1].NumDescriptors = numDescriptors;
+	descriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountU += numDescriptors;
+	// エミッターの範囲配列用の設定
+	numDescriptors = 1;
+	descriptorRanges[2].BaseShaderRegister = registerCountU;
+	descriptorRanges[2].NumDescriptors = numDescriptors;
+	descriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountU += numDescriptors;
+	// エミッター情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[3].BaseShaderRegister = registerCountT;
+	descriptorRanges[3].NumDescriptors = numDescriptors;
+	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountT += numDescriptors;
+	// JSON情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[4].BaseShaderRegister = registerCountT;
+	descriptorRanges[4].NumDescriptors = numDescriptors;
+	descriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountT += numDescriptors;
+
+	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
+	//粒配列用の設定(0)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[0];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//粒Index配列用の設定(1)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[1];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//エミッターの範囲配列用の設定(2)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[2];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//エミッター情報用の設定(3)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[3];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//JSON情報用の設定(4)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[4];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//総合情報用の設定(5)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.Descriptor.ShaderRegister = 0;
+		rootParameters.push_back(param);
+	}
+
+	//Signatureに反映
+	descriptionRootSignature.pParameters = rootParameters.data();
+	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size());
+
+	//シリアライズしてバイナリにする
+	Microsoft::WRL::ComPtr<ID3D10Blob> signatireBlob = nullptr;
+	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;
+	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatireBlob, &errorBlob);
+	if (FAILED(hr)) {
+		Logger::Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
+		assert(false);
+	}
+	//バイナリをもとにコンピュートルートシグネチャを生成
+	hr = DirectXCommon::GetInstance()->GetDevice()->CreateRootSignature(0, signatireBlob->GetBufferPointer(),
+		signatireBlob->GetBufferSize(), IID_PPV_ARGS(&cRootSignature[3]));
+	assert(SUCCEEDED(hr));
+
+	//Shaderをコンパイルする
+	Microsoft::WRL::ComPtr<IDxcBlob> computeShaderBlob;
+	computeShaderBlob = DirectXCommon::GetInstance()->CompileShader(L"Resources/shaders/particle/LocksmithParticle.CS.hlsl",
+		L"cs_6_0");
+	assert(computeShaderBlob != nullptr);
+
+	//コンピュートシェーダー用のPSOの設定
+	D3D12_COMPUTE_PIPELINE_STATE_DESC computePipelineStateDesc{};
+	computePipelineStateDesc.CS = {
+		.pShaderBytecode = computeShaderBlob->GetBufferPointer(),
+		.BytecodeLength = computeShaderBlob->GetBufferSize()
+	};
+	computePipelineStateDesc.pRootSignature = cRootSignature[3].Get();
+	hr = DirectXCommon::GetInstance()->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState[3]));
+}
+
 ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS() {
 	CommonResourceForCS result;
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
@@ -939,6 +1216,28 @@ ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS(
 		//粒情報用のsrvを作成。StructuredBufferでアクセスできるようにする
 		result.grainsSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
 		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.grainsSrvIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
+	}
+	//粒のIndex
+	{
+		//粒のIndexの情報用のResorceを確保
+		result.grainIndicesResource = dxCommon->CreateUAVBufferResource(sizeof(int32_t) * kMaxNumGrains);
+		//粒のIndex情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
+		result.grainIndicesUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.grainIndicesUavIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
+		//粒のIndex情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+		result.grainIndicesSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.grainIndicesSrvIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
+	}
+	//エミッターの範囲
+	{
+		//エミッターの範囲情報用のResorceを確保
+		result.emitterRangeResource = dxCommon->CreateUAVBufferResource(sizeof(EmitterRangeForCS) * kMaxNumEmitters);
+		//エミッターの範囲情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
+		result.emitterRangeUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.emitterRangeUavIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
+		//エミッターの範囲情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+		result.emitterRangeSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
+		GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.emitterRangeSrvIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
 	}
 	//フリーリストインデックス
 	{
@@ -981,10 +1280,8 @@ ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS(
 	{
 		//総合情報用のResorceを確保
 		result.generalInfoResource = dxCommon->CreateBufferResource(sizeof(GeneralInfoForCS));
-		GeneralInfoForCS* mappedGeneralInfo = nullptr;
-		result.generalInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedGeneralInfo));
-		std::memset(mappedGeneralInfo, 0, sizeof(GeneralInfoForCS));
-		result = { mappedGeneralInfo,1 };
+		//マッピング
+		result.generalInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&result.mappedGeneralInfo));
 		//データ入力
 		result.mappedGeneralInfo[0].time = 0.0f;
 		result.mappedGeneralInfo[0].deltaTime = kDeltaTime;

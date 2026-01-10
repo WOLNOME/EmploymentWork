@@ -124,7 +124,13 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     //粒のindex配列情報の該当要素番号を計算して出す (start+instanceId)
     uint eleNum = gEmitterRange[gTargetEmitterID.id].start + instanceId;
     //求めた該当要素番号から粒配列のインデックスを求める
-    uint index = gGrainIndices[eleNum];
+    int index = gGrainIndices[eleNum];
+    //indexが-1（→粒が存在しない）場合は透明にしてPSでdiscardしてもらう
+    if (index == -1)
+    {
+        output = (VertexShaderOutput) 0;
+        return output;
+    }
     //インデックスを使って粒配列にアクセスする
     Grain grain = gGrains[index];
     

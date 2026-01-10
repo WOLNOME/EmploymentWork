@@ -18,6 +18,8 @@ class Particle;
 /// シングルトンパターンで実装
 /// </summary>
 class ParticleManager {
+	//パーティクルクリエイターシーンに公開
+	friend class ParticleEditorScene;
 private:
 	/// ============================== ///
 	///		構造体(private)
@@ -31,6 +33,14 @@ private:
 		Microsoft::WRL::ComPtr<ID3D12Resource> grainsResource;
 		uint32_t grainsSrvIndex = 0u;	//VS用
 		uint32_t grainsUavIndex = 0u;	//CS用
+		//粒のIndex情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> grainIndicesResource;
+		uint32_t grainIndicesSrvIndex = 0u;	//VS用
+		uint32_t grainIndicesUavIndex = 0u;	//CS用
+		//エミッターの範囲情報
+		Microsoft::WRL::ComPtr<ID3D12Resource> emitterRangeResource;
+		uint32_t emitterRangeSrvIndex = 0u;	//VS用
+		uint32_t emitterRangeUavIndex = 0u;	//CS用
 		//フリーリストのインデックス情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> freeListIndexResource;
 		uint32_t freeListIndexUavIndex = 0u;		//CS用
@@ -39,15 +49,15 @@ private:
 		uint32_t freeListUavIndex = 0u;		//CS用
 		//エミッター情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> emitterResource;
-		std::span<EmitterForCS> mappedEmitter;
+		EmitterForCS* mappedEmitter;
 		uint32_t emitterSrvIndex = 0u;
 		//JSON情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> jsonInfoResource;
-		std::span<JsonInfoForCS> mappedJsonInfo;
+		JsonInfoForCS* mappedJsonInfo;
 		uint32_t jsonInfoSrvIndex = 0u;
 		//総合情報
 		Microsoft::WRL::ComPtr<ID3D12Resource> generalInfoResource;
-		std::span<GeneralInfoForCS> mappedGeneralInfo;
+		GeneralInfoForCS* mappedGeneralInfo;
 	};
 
 private:
@@ -146,6 +156,10 @@ private:
 	/// 更新用CPSO(コンピュートパイプラインステートオブジェクト)
 	/// </summary>
 	void UpdateCPSOOption();
+	/// <summary>
+	/// 粒情報解析用CPSO(コンピュートパイプラインステートオブジェクト)
+	/// </summary>
+	void LocksmithCPSOOption();
 	
 	/// <summary>
 	/// 共通のCS用リソースの作成
@@ -178,7 +192,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> gRootSignature = nullptr;
 	//グラフィックスパイプライン
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, (int)BlendMode::kMaxBlendModeNum> graphicsPipelineState;
-	//Cルートシグネチャ(init,emit,update,delete分あるので4つ)
+	//Cルートシグネチャ(init,emit,update,locksmith分あるので4つ)
 	std::array<Microsoft::WRL::ComPtr<ID3D12RootSignature>, 4> cRootSignature;
 	//コンピュートパイプライン
 	std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, 4> computePipelineState;
@@ -197,6 +211,6 @@ private:
 	//エミッターID用カウンタ
 	uint32_t emitterIDCounter_ = 0u;
 	std::list<uint32_t> freeEmitterIDList_;
-
+	
 };
 

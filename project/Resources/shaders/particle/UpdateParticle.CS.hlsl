@@ -6,6 +6,10 @@ RWStructuredBuffer<Grain> gGrains : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 //フリーリスト
 RWStructuredBuffer<uint> gFreeList : register(u2);
+//粒のIndex配列情報
+RWStructuredBuffer<int> gGrainIndices : register(u3);
+//エミッターの範囲情報
+RWStructuredBuffer<EmitterRange> gEmitterRange : register(u4);
 
 //エミッターの配列
 StructuredBuffer<EmitterInfo> gEmitterInfo : register(t0);
@@ -19,6 +23,16 @@ ConstantBuffer<GeneralInfo> gGeneralInfo : register(b0);
 void main(uint3 DTid : SV_DispatchThreadID)
 {
     uint grainIndex = DTid.x;
+    
+    //粒のIndex配列情報を並列初期化
+    gGrainIndices[grainIndex] = -1;
+    //grainIndex=0の時(はじめの1回)だけエミッターの範囲情報を初期化
+    if (grainIndex < gGeneralInfo.maxEmitters)
+    {
+        gEmitterRange[grainIndex].start = -1;
+        gEmitterRange[grainIndex].aliveCount = 0;
+    }
+    
     //稼働する必要のないスレッドでは計算処理を省く
     if (grainIndex >= gGeneralInfo.maxGrains)
         return;
@@ -37,7 +51,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     ///==================///
     
     //粒に対応するエミッターが既に削除されている場合
-    if(!gEmitterInfo[grain.emitterID].isAlive)
+    if (!gEmitterInfo[grain.emitterID].isAlive)
     {
         //全データに0を入れる
         gGrains[grainIndex] = (Grain) 0;

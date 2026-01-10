@@ -76,3 +76,16 @@ struct GeneralInfoForCS {
 	uint32_t maxGrains = 0u;
 	uint32_t maxEmitters = 0u;
 };
+/// <summary>
+/// VS用対象のエミッターID情報
+/// </summary>
+struct TargetEmitterIDForVS {
+	uint32_t id = 0u;
+};
+/// <summary>
+/// CS用粒インデックス配列解析用情報
+/// </summary>
+struct EmitterRangeForCS {
+	int start = -1;
+	uint32_t aliveCount = 0u;
+};

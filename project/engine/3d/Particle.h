@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include <memory>
+#include <span>
 #include "json.hpp"
 #include "Shape.h"
 #include "MyMath.h"
@@ -22,6 +23,18 @@ class Particle {
 	friend class ParticleEditorScene;
 	//複合パーティクルに公開
 	friend class CombinedParticle;
+
+private:
+	/// ============================== ///
+	///		列挙体(private)
+	/// ============================== ///
+
+	struct EachResourceForCS {
+		//エミッターID
+		Microsoft::WRL::ComPtr<ID3D12Resource> emitterIDResource;
+		std::span<TargetEmitterIDForVS> mappedEmitterID;
+	};
+
 public:
 	/// ============================== ///
 	///		列挙体(public)
@@ -114,6 +127,12 @@ private:
 	/// </summary>
 	void TraceJsonInfoForCS();
 
+	/// <summary>
+	/// 個別のCS用リソースの作成
+	/// </summary>
+	/// <returns>個別のCS用リソース</returns>
+	EachResourceForCS CreateEachResourceForCS();
+
 private:
 	/// ============================== ///
 	///		メンバ変数(private)
@@ -133,5 +152,7 @@ private:
 	//マネージャー送信用のリソース
 	EmitterForCS emitterForCS_;
 	JsonInfoForCS jsonInfoForCS_;
+	//個別のCS用リソース
+	EachResourceForCS eachResourceForCS_;
 
 };

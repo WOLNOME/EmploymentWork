@@ -39,6 +39,9 @@ void Particle::Initialize(const std::string& name, const std::string& fileName) 
 	//JSONの情報を写す
 	TraceJsonInfoForCS();
 
+	//個別のCS用リソースの作成
+	eachResourceForCS_ = CreateEachResourceForCS();
+
 	//最後にマネージャーに登録
 	ParticleManager::GetInstance()->Regist(name_, this);
 }
@@ -106,4 +109,22 @@ void Particle::TraceJsonInfoForCS() {
 	jsonInfoForCS_.isGravity = param_["IsGravity"];
 	jsonInfoForCS_.isBound = param_["IsBound"];
 	jsonInfoForCS_.isBillboard = param_["IsBillboard"];
+}
+
+Particle::EachResourceForCS Particle::CreateEachResourceForCS() {
+	EachResourceForCS result;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	//エミッターID
+	{
+		result.emitterIDResource = dxCommon->CreateBufferResource(sizeof(TargetEmitterIDForVS));
+		TargetEmitterIDForVS* mappedEmitterID = nullptr;
+		result.emitterIDResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedEmitterID));
+		std::memset(mappedEmitterID, 0, sizeof(TargetEmitterIDForVS));
+		result.mappedEmitterID = { mappedEmitterID,1 };
+		//データ入力
+		result.mappedEmitterID[0].id = emitterID_;
+	}
+
+	return result;
 }
