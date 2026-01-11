@@ -29,6 +29,8 @@ void ParticleManager::Initialize() {
 	GenerateComputePipeline();
 	//共通のCS用リソース初期化
 	commonResourceForCS_ = CreateCommonResourceForCS();
+	//UAVバッファの初期化
+	InitUAVBuffer();
 
 }
 
@@ -108,7 +110,7 @@ void ParticleManager::Update() {
 	mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
 
 	//生成をGPUに依頼
-	mainRender->GetCommandList()->Dispatch(1, 1, 1);
+	mainRender->GetCommandList()->Dispatch(kMaxNumEmitters, 1, 1);
 
 	//生成処理が終わったのでOneShotのパーティクルを停止
 	for (auto& particle : particles) {
@@ -623,6 +625,22 @@ void ParticleManager::GenerateComputePipeline() {
 	UpdateCPSOOption();
 	//粒情報解析用CPSOの設定
 	LocksmithCPSOOption();
+}
+
+void ParticleManager::InitUAVBuffer() {
+	MainRender* mainRender = MainRender::GetInstance();
+	GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
+	//GPUDescriptorHeapをコマンドリストにセット
+	gpuDescriptorManager->SetDescriptorHeap(mainRender->GetCommandList());
+	//CSでUAVリソースの初期化処理
+	mainRender->GetCommandList()->SetComputeRootSignature(cRootSignature[0].Get());
+	mainRender->GetCommandList()->SetPipelineState(computePipelineState[0].Get());
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(0, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainsUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(1, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListIndexUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(2, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListUavIndex));
+	mainRender->GetCommandList()->SetComputeRootConstantBufferView(3, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
+
+	mainRender->GetCommandList()->Dispatch(UINT(kMaxNumGrains + 1023) / 1024, 1, 1);
 }
 
 void ParticleManager::InitCPSOOption() {

@@ -145,6 +145,11 @@ private:
 	void GenerateComputePipeline();
 
 	/// <summary>
+	/// UAVバッファの初期化
+	/// </summary>
+	void InitUAVBuffer();
+
+	/// <summary>
 	/// 初期化用CPSO(コンピュートパイプラインステートオブジェクト)
 	/// </summary>
 	void InitCPSOOption();
