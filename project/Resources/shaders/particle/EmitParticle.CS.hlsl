@@ -8,6 +8,8 @@ RWStructuredBuffer<Grain> gGrains : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 //フリーリスト
 RWStructuredBuffer<uint> gFreeList : register(u2);
+//エミッターの範囲情報
+RWStructuredBuffer<EmitterRange> gEmitterRange : register(u3);
 
 //エミッター情報
 StructuredBuffer<EmitterInfo> gEmitterInfo : register(t0);
@@ -51,11 +53,12 @@ void main(uint3 DTid : SV_DispatchThreadID)
 {
     //エミッターのインデックス取得
     uint emitterIndex = DTid.x;
+    //エミッターが生きていなければ処理を行わない
+    if(!gEmitterInfo[emitterIndex].isAlive)
+        return;
     //エミッターが稼働していなければ処理を行わない
     if (!gEmitterInfo[emitterIndex].isPlay)
-    {
         return;
-    }
     
     //生成に必要なローカル変数
     int max = gJsonInfo[emitterIndex].maxGrains;
@@ -63,11 +66,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float ratePerFrame = rate * gGeneralInfo.deltaTime;
     int generateNum = 0; //このフレームで生成する数
     
+    
     //乱数生成機の作成
     RandomGenerator generator;
+    //乱数のシードを更新
+    generator.seed = frac(float3(emitterIndex * 0.1234f, emitterIndex * 0.5678f, emitterIndex * 0.9101f) + gGeneralInfo.time * 0.1f) * 1000.0f;
     
-    //エフェクトの生成スタイルによって分ける
-    if (gJsonInfo[emitterIndex].effectStyle == 0)      //ループ処理
+    //ループ処理
+    if (gJsonInfo[emitterIndex].effectStyle == 0)      
     {
         //ratePerFrameの整数部分を生成数に設定
         generateNum = floor(ratePerFrame);
@@ -77,7 +83,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
             generateNum++;
         }
     }
-    else if (gJsonInfo[emitterIndex].effectStyle == 1)     //一度きり処理
+    //一度きり処理(OneShot)
+    else if (gJsonInfo[emitterIndex].effectStyle == 1)     
     {
         //生成数は1つだけ
         generateNum = 1;
@@ -85,6 +92,13 @@ void main(uint3 DTid : SV_DispatchThreadID)
     //粒の生成
     if (generateNum > 0)
     {
+        //生成する粒の数をクランプ
+        uint aliveGrainNum = gEmitterRange[emitterIndex].aliveCount;
+        if (generateNum + aliveGrainNum > max)
+        {
+            generateNum = max - aliveGrainNum;
+        }
+        
         GenerateGrain(emitterIndex, generateNum, generator);
     }
 }

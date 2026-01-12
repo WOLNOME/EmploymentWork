@@ -65,7 +65,7 @@ struct Grain
     float currentTime;
     uint startColor;
     uint endColor;
-    uint emitterID;
+    int emitterID;
 };
 
 struct GeneralInfo

@@ -74,11 +74,8 @@ void ParticleManager::Update() {
 	}
 
 	//送信用データの中身をクリア（データがない場所に0を入れる）
-	int size = sizeof(commonResourceForCS_.mappedEmitter);
-	for (int i = 0; i < size; i++) {
-		commonResourceForCS_.mappedEmitter[i] = {};
-		commonResourceForCS_.mappedJsonInfo[i] = {};
-	}
+	std::memset(commonResourceForCS_.mappedEmitter, 0, sizeof(EmitterForCS) * kMaxNumEmitters);
+	std::memset(commonResourceForCS_.mappedJsonInfo, 0, sizeof(JsonInfoForCS) * kMaxNumEmitters);
 
 	//マップから各リソースに転送
 	for (const auto& [id, emitter] : emittersForCS) {
@@ -105,9 +102,10 @@ void ParticleManager::Update() {
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(0, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.grainsUavIndex));
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(1, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListIndexUavIndex));
 	mainRender->GetCommandList()->SetComputeRootDescriptorTable(2, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.freeListUavIndex));
-	mainRender->GetCommandList()->SetComputeRootDescriptorTable(3, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
-	mainRender->GetCommandList()->SetComputeRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
-	mainRender->GetCommandList()->SetComputeRootConstantBufferView(5, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(3, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterRangeUavIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(4, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.emitterSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootDescriptorTable(5, gpuDescriptorManager->GetGPUDescriptorHandle(commonResourceForCS_.jsonInfoSrvIndex));
+	mainRender->GetCommandList()->SetComputeRootConstantBufferView(6, commonResourceForCS_.generalInfoResource->GetGPUVirtualAddress());
 
 	//生成をGPUに依頼
 	mainRender->GetCommandList()->Dispatch(kMaxNumEmitters, 1, 1);
@@ -766,7 +764,7 @@ void ParticleManager::EmitCPSOOption() {
 	int numDescriptors = 0;
 
 	//DescriptorRangeを作成
-	D3D12_DESCRIPTOR_RANGE descriptorRanges[5] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRanges[6] = {};
 	// 粒配列用の設定
 	numDescriptors = 1;
 	descriptorRanges[0].BaseShaderRegister = registerCountU;
@@ -788,19 +786,26 @@ void ParticleManager::EmitCPSOOption() {
 	descriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	descriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	registerCountU += numDescriptors;
-	// エミッター情報用の設定
+	// エミッターレンジ用の設定
 	numDescriptors = 1;
-	descriptorRanges[3].BaseShaderRegister = registerCountT;
+	descriptorRanges[3].BaseShaderRegister = registerCountU;
 	descriptorRanges[3].NumDescriptors = numDescriptors;
-	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	descriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	registerCountT += numDescriptors;
-	// JSON情報用の設定
+	registerCountU += numDescriptors;
+	// エミッター情報用の設定
 	numDescriptors = 1;
 	descriptorRanges[4].BaseShaderRegister = registerCountT;
 	descriptorRanges[4].NumDescriptors = numDescriptors;
 	descriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountT += numDescriptors;
+	// JSON情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[5].BaseShaderRegister = registerCountT;
+	descriptorRanges[5].NumDescriptors = numDescriptors;
+	descriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	registerCountT += numDescriptors;
 
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
@@ -834,7 +839,7 @@ void ParticleManager::EmitCPSOOption() {
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
-	//エミッター情報用の設定(3)
+	//エミッターレンジ用の設定(3)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
@@ -844,13 +849,23 @@ void ParticleManager::EmitCPSOOption() {
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
-	//JSON情報用の設定(4)
+	//エミッター情報用の設定(4)
 	{
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[4];
+		param.DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters.push_back(param);
+	}
+	//JSON情報用の設定(5)
+	{
+		//ルートパラメータ入力
+		D3D12_ROOT_PARAMETER param = {};
+		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[5];
 		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
@@ -1311,21 +1326,21 @@ ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS(
 }
 
 uint32_t ParticleManager::AllocateEmitterID() {
-	//フリーリストに空きがあればそこから割り当て
+	// まずは未使用IDを優先して割り当て
+	if (emitterIDCounter_ < kMaxNumEmitters) {
+		return emitterIDCounter_++;
+	}
+
+	// 未使用IDが尽きたらフリーリストから再利用
 	if (!freeEmitterIDList_.empty()) {
 		uint32_t result = freeEmitterIDList_.front();
 		freeEmitterIDList_.pop_front();
 		return result;
 	}
 
-	//カウンターが最大値に達していたらエラー
-	if (emitterIDCounter_ >= kMaxNumEmitters) {
-		assert(0 && "エミッターが最大数に達しました");
-		return UINT32_MAX;
-	}
-
-	//なければ新規割り当て
-	return emitterIDCounter_++;
+	// どちらもダメならエラー
+	assert(0 && "エミッターが最大数に達しました");
+	return UINT32_MAX;
 }
 
 void ParticleManager::DiscardEmitterID(uint32_t id) {

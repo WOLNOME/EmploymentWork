@@ -26,11 +26,18 @@ void main(uint3 DTid : SV_DispatchThreadID)
     
     //粒のIndex配列情報を並列初期化
     gGrainIndices[grainIndex] = -1;
-    //grainIndex=0の時(はじめの1回)だけエミッターの範囲情報を初期化
+    //エミッター数分の処理
     if (grainIndex < gGeneralInfo.maxEmitters)
     {
-        gEmitterRange[grainIndex].start = -1;
+        //生存カウントを0に
         gEmitterRange[grainIndex].aliveCount = 0;
+        //スタートはJsonInfoを参照して決める
+        gEmitterRange[grainIndex].start = 0;
+        for (int i = 0; i < grainIndex; i++)
+        {
+            //エミッター番号0~iまでのmaxGrainsの合計値とする
+            gEmitterRange[grainIndex].start += gJsonInfo[i].maxGrains;
+        }
     }
     
     //稼働する必要のないスレッドでは計算処理を省く
@@ -55,6 +62,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     {
         //全データに0を入れる
         gGrains[grainIndex] = (Grain) 0;
+        gGrains[grainIndex].emitterID = -1;
         int freeListIndex;
         InterlockedAdd(gFreeListIndex[0], 1, freeListIndex);
         //最新のFreeListIndexの場所に死亡済みGrainのIndexを設定する。
@@ -70,6 +78,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     {
         //全データに0を入れる
         gGrains[grainIndex] = (Grain) 0;
+        gGrains[grainIndex].emitterID = -1;
         int freeListIndex;
         InterlockedAdd(gFreeListIndex[0], 1, freeListIndex);
         //最新のFreeListIndexの場所に死亡済みGrainのIndexを設定する。

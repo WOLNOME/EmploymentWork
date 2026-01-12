@@ -23,7 +23,7 @@ struct GrainForCS {
 	float currentTime = 0.0f;
 	uint32_t startColor;
 	uint32_t endColor;
-	uint32_t emitterID;
+	int32_t emitterID;
 };
 /// <summary>
 /// CS用エミッター情報

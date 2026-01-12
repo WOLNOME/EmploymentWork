@@ -21,29 +21,21 @@ ConstantBuffer<GeneralInfo> gGeneralInfo : register(b0);
 void main(uint3 DTid : SV_DispatchThreadID)
 {
     uint grainIndex = DTid.x;
+    uint emitterID = gGrains[grainIndex].emitterID;
     
     //稼働する必要のないスレッドでは計算処理を省く
     if (grainIndex >= gGeneralInfo.maxGrains)
         return;
-    //粒インデックスの「生存時間」== 0.0fならこの粒は空なのでreturn
-    if (gGrains[grainIndex].lifeTime == 0.0f)
+    //粒インデックスの「エミッターID」== -1ならこの粒は空なのでreturn
+    if (emitterID == -1)
+        return;
+    //稼働していないエミッターの粒の場合return
+    if (!gEmitterInfo[emitterID].isAlive)
         return;
     
     //エミッターの範囲情報の生存カウントをインクリメント
-    uint emitterID = gGrains[grainIndex].emitterID;
     uint countValue;
     InterlockedAdd(gEmitterRange[emitterID].aliveCount, 1, countValue);
-    //エミッターの範囲情報の開始要素番号を入れる(最初の生存粒のみ)
-    if (countValue == 0)
-    {
-        int startValue = 0;
-        //for分でstartValueを計算
-        for (int i = 0; i < emitterID; i++)
-        {
-            startValue += gJsonInfo[i].maxGrains;
-        }
-        gEmitterRange[emitterID].start = startValue;
-    }
     
     //粒のIndex情報に登録
     int start = gEmitterRange[emitterID].start;

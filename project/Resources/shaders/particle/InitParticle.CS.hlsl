@@ -21,6 +21,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     
     //粒の全要素を0で埋める
     gGrains[grainIndex] = (Grain) 0;
+    gGrains[grainIndex].emitterID = -1;
     //FreeListを連番で初期化(0,1,2,3,...)
     gFreeList[grainIndex] = grainIndex;
     //Indexが末尾を指すようにする(ex.10個なら9を指すようにする→0から数えて10番目)
