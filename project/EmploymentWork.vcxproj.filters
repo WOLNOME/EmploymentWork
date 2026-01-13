@@ -88,6 +88,9 @@
     <FxCompile Include="Resources\shaders\TextTexture.VS.hlsl">
       <Filter>Resources\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\particle\LocksmithParticle.CS.hlsl">
+      <Filter>Resources\shaders\particle</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -805,6 +808,7 @@
     <ClInclude Include="application\system\EndDirection.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
+    <ClInclude Include="engine\3d\ParticleTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

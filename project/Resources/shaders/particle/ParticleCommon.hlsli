@@ -19,6 +19,7 @@ struct EmitterInfo
     Transform worldTransform;
     uint isAffectedField;
     uint isPlay;
+    uint isAlive;
 };
 
 struct JsonInfo
@@ -64,10 +65,24 @@ struct Grain
     float currentTime;
     uint startColor;
     uint endColor;
+    int emitterID;
 };
 
-struct PerFrame
+struct GeneralInfo
 {
     float time;
     float deltaTime;
+    uint maxGrains;
+    uint maxEmitters;
+};
+
+struct TargetEmitterID
+{
+    uint id;
+};
+
+struct EmitterRange
+{
+    int start;
+    uint aliveCount;
 };

@@ -8,11 +8,23 @@ struct CameraInfo
     float4x4 matProjection;
 };
 
+// 粒の配列
 StructuredBuffer<Grain> gGrains : register(t0);
+// エミッター情報
+StructuredBuffer<EmitterInfo> gEmitterInfo : register(t1);
+// JSON情報
+StructuredBuffer<JsonInfo> gJsonInfo : register(t2);
+// 粒のIndex配列情報
+StructuredBuffer<int> gGrainIndices : register(t3);
+// エミッターの範囲情報
+StructuredBuffer<EmitterRange> gEmitterRange : register(t4);
 
+// カメラ情報
 ConstantBuffer<CameraInfo> gCameraInfo : register(b0);
-ConstantBuffer<EmitterInfo> gEmitterInfo : register(b1);
-ConstantBuffer<JsonInfo> gJsonInfo : register(b2);
+// 総合情報
+ConstantBuffer<GeneralInfo> gGeneralInfo : register(b1);
+// 対象のエミッターID
+ConstantBuffer<TargetEmitterID> gTargetEmitterID : register(b2);
 
 struct VertexShaderInput
 {
@@ -108,11 +120,24 @@ float4x4 MakeAffineMatrix(float3 scale, float3 rotate, float3 translate)
 VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID)
 {
     VertexShaderOutput output;
-    Grain grain = gGrains[instanceId];
+    
+    //粒のindex配列情報の該当要素番号を計算して出す (start+instanceId)
+    uint eleNum = gEmitterRange[gTargetEmitterID.id].start + instanceId;
+    //求めた該当要素番号から粒配列のインデックスを求める
+    int index = gGrainIndices[eleNum];
+    //indexが-1（→粒が存在しない）場合は透明にしてPSでdiscardしてもらう
+    if (index == -1)
+    {
+        output = (VertexShaderOutput) 0;
+        return output;
+    }
+    //インデックスを使って粒配列にアクセスする
+    Grain grain = gGrains[index];
+    
     //WorldMatrixを求める
     float4x4 worldMatrix = MakeIdentity4x4();
     //billboardの計算をする
-    if (gJsonInfo.isBillboard == 1)
+    if (gJsonInfo[grain.emitterID].isBillboard)
     {
         float4x4 backToFrontMatrix = MakeRotateZMatrix(grain.transform.rotate.z);
         float4x4 billboardMatrix = mul(backToFrontMatrix, gCameraInfo.matWorld);

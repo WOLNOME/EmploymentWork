@@ -48,7 +48,7 @@ void LineManager::Draw() {
 			break;	//最大インスタンス数に達したらループを抜ける
 		}
 
-		//インスタンシング用データの書き
+		//インスタンシング用データを書きこむ
 		lineResource_.instancingData[instanceNum].start = (*lineIterator).start;
 		lineResource_.instancingData[instanceNum].end = (*lineIterator).end;
 		lineResource_.instancingData[instanceNum].color = (*lineIterator).color;
