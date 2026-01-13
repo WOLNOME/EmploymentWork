@@ -312,6 +312,51 @@ void ParticleManager::GenerateGraphicsPipeline() {
 	//使用するデスクリプタの数
 	int numDescriptors = 0;
 
+	//DescriptorRangeの設定
+	D3D12_DESCRIPTOR_RANGE descriptorRanges[6] = {};
+	// 粒配列用の設定
+	numDescriptors = 1;
+	descriptorRanges[0].BaseShaderRegister = registerCountVS;
+	descriptorRanges[0].NumDescriptors = numDescriptors;
+	descriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountVS += numDescriptors;
+	// テクスチャ情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[1].BaseShaderRegister = registerCountPS;
+	descriptorRanges[1].NumDescriptors = numDescriptors;
+	descriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountPS += numDescriptors;
+	// エミッター情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[2].BaseShaderRegister = registerCountVS;
+	descriptorRanges[2].NumDescriptors = numDescriptors;
+	descriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountVS += numDescriptors;
+	// JSON情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[3].BaseShaderRegister = registerCountVS;
+	descriptorRanges[3].NumDescriptors = numDescriptors;
+	descriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountVS += numDescriptors;
+	// 粒のIndex情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[4].BaseShaderRegister = registerCountVS;
+	descriptorRanges[4].NumDescriptors = numDescriptors;
+	descriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountVS += numDescriptors;
+	// エミッターの範囲情報用の設定
+	numDescriptors = 1;
+	descriptorRanges[5].BaseShaderRegister = registerCountVS;
+	descriptorRanges[5].NumDescriptors = numDescriptors;
+	descriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	registerCountVS += numDescriptors;
+
 	// RootParameter作成
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters;
 
@@ -326,20 +371,12 @@ void ParticleManager::GenerateGraphicsPipeline() {
 	}
 	// 粒配列情報用の設定(1)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[0];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	// カメラ情報用の設定(2)
@@ -353,92 +390,52 @@ void ParticleManager::GenerateGraphicsPipeline() {
 	}
 	// テクスチャ情報用の設定(3)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountPS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountPS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[1];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	//エミッター情報用の設定(4)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[2];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	//JSON情報用の設定(5)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[3];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	//粒のIndex情報用の設定(6)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[4];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	//エミッターの範囲情報用の設定(7)
 	{
-		//デスクリプタレンジ作成
-		D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-		numDescriptors = 1;
-		descriptorRange[0].BaseShaderRegister = registerCountVS;
-		descriptorRange[0].NumDescriptors = numDescriptors;
-		descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		registerCountVS += numDescriptors;
 		//ルートパラメータ入力
 		D3D12_ROOT_PARAMETER param = {};
 		param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 		param.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-		param.DescriptorTable.pDescriptorRanges = descriptorRange;
-		param.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+		param.DescriptorTable.pDescriptorRanges = &descriptorRanges[5];
+		param.DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters.push_back(param);
 	}
 	//総合情報用の設定(8)
