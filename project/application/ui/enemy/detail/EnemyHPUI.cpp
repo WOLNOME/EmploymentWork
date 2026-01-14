@@ -90,7 +90,7 @@ void EnemyHPUI::Update() {
 	}
 
 	//ボス
-	for (const auto& boss : enemyManager_->GetBosses()) {
+	for (const auto& boss : enemyManager_->GetKeyCanotas()) {
 		//死亡していたら描画しない
 		if (boss->GetDeadTimer() > 0.0f || boss->GetIsDead()) return;
 

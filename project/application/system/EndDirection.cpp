@@ -59,7 +59,7 @@ void EndDirection::SceneChange() {
 void EndDirection::AllBossDefeated() {
 	//ボスを全て倒したかをチェック
 	bool allBossDead = true;
-	for (auto& boss : enemyManager_->GetBosses()) {
+	for (auto& boss : enemyManager_->GetKeyCanotas()) {
 		if (boss->GetCurrentStateName() != IBaseTankEnemy::StateName::kDead) {
 			allBossDead = false;
 			break;

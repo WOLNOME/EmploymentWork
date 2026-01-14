@@ -20,10 +20,10 @@ void EnemyManager::Update() {
 			++it;
 		}
 	}
-	//全ボスの死亡時処理
-	for (auto it = bosses_.begin(); it != bosses_.end();) {
+	//全キーキャノ太の死亡時処理
+	for (auto it = keyCanotas_.begin(); it != keyCanotas_.end();) {
 		if ((*it)->GetIsDead()) {
-			it = bosses_.erase(it);
+			it = keyCanotas_.erase(it);
 		}
 		else {
 			++it;
@@ -43,9 +43,9 @@ void EnemyManager::Update() {
 	for (const auto& canota : canotas_) {
 		canota->Update();
 	}
-	//全ボスの更新
-	for (const auto& boss : bosses_) {
-		boss->Update();
+	//全キーキャノ太の更新
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->Update();
 	}
 	//全ジェットの更新
 	for (const auto& jet : jets_) {
@@ -59,9 +59,9 @@ void EnemyManager::DebugWithImGui() {
 	for (const auto& canota : canotas_) {
 		canota->DebugWithImGui();
 	}
-	//全ボスのデバッグ処理
-	for (const auto& boss : bosses_) {
-		boss->DebugWithImGui();
+	//全キーキャノ太のデバッグ処理
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->DebugWithImGui();
 	}
 	//全ジェットのデバッグ処理
 	for (const auto& jet : jets_) {
@@ -84,18 +84,18 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 		canota->SetRotate(data.rotation);
 		canotas_.push_back(std::move(canota));
 	}
-	//レベルローダーからボスのスポーンデータを取得
-	const auto& bossSpawnData = _levelLoader->GetEnemySpawnData();
-	for (const auto& data : bossSpawnData) {
-		if (data.fileName != "boss") {
+	//レベルローダーからキーキャノ太のスポーンデータを取得
+	const auto& keyCanotaSpawnData = _levelLoader->GetEnemySpawnData();
+	for (const auto& data : keyCanotaSpawnData) {
+		if (data.fileName != "keyCanota") {
 			continue; // ファイル名が"canota"でない場合はスキップ
 		}
-		std::unique_ptr<Boss> boss = nullptr;
-		boss = std::make_unique<Boss>(true);
-		boss->Initialize();
-		boss->SetTranslate(data.translation);
-		boss->SetRotate(data.rotation);
-		bosses_.push_back(std::move(boss));
+		std::unique_ptr<KeyCanota> keyCanota = nullptr;
+		keyCanota = std::make_unique<KeyCanota>(true);
+		keyCanota->Initialize();
+		keyCanota->SetTranslate(data.translation);
+		keyCanota->SetRotate(data.rotation);
+		keyCanotas_.push_back(std::move(keyCanota));
 	}
 	//レベルローダーからジェットのスポーンデータを取得
 	std::unique_ptr<Jet> jet = nullptr;
@@ -114,8 +114,8 @@ void EnemyManager::SetPlayer(Player* _player) {
 	for (const auto& canota : canotas_) {
 		canota->SetPlayer(player_);
 	}
-	for (const auto& boss : bosses_) {
-		boss->SetPlayer(player_);
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetPlayer(player_);
 	}
 	for (const auto& jet : jets_) {
 		jet->SetPlayer(player_);
@@ -128,8 +128,8 @@ void EnemyManager::SetItemManager(ItemManager* _itemManager) {
 	for (const auto& canota : canotas_) {
 		canota->SetItemManager(itemManager_);
 	}
-	for (const auto& boss : bosses_) {
-		boss->SetItemManager(itemManager_);
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetItemManager(itemManager_);
 	}
 	for (const auto& jet : jets_) {
 		jet->SetItemManager(itemManager_);

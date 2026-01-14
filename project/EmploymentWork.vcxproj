@@ -115,7 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\tank\Canota.cpp" />
     <ClCompile Include="application\object\character\base\BaseCharacter.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\EnemyCannon.cpp" />
-    <ClCompile Include="application\object\character\enemy\tank\Boss.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\KeyCanota.cpp" />
     <ClCompile Include="application\ui\enemy\EnemyUI.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.cpp" />
@@ -235,7 +235,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\tank\Canota.h" />
     <ClInclude Include="application\object\character\base\BaseCharacter.h" />
     <ClInclude Include="application\object\character\weapon\enemy\EnemyCannon.h" />
-    <ClInclude Include="application\object\character\enemy\tank\Boss.h" />
+    <ClInclude Include="application\object\character\enemy\tank\KeyCanota.h" />
     <ClInclude Include="application\ui\enemy\EnemyUI.h" />
     <ClInclude Include="application\object\character\weapon\enemy\manager\EnemyWeaponManager.h" />
     <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.h" />

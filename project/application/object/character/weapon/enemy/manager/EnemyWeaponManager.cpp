@@ -90,7 +90,7 @@ void EnemyWeaponManager::CreateCannon() {
 	}
 
 	//全てのボスを回す
-	for (auto& boss : enemyManager_->GetBosses()) {
+	for (auto& boss : enemyManager_->GetKeyCanotas()) {
 		//ボスから発射フラグを取得
 		if (!boss->GetAttackState()->GetIsCannonFire()) {
 			continue;

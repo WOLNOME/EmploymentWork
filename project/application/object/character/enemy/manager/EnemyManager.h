@@ -4,7 +4,7 @@
 
 //アプリケーション
 #include "application/object/character/enemy/tank/Canota.h"
-#include "application/object/character/enemy/tank/Boss.h"
+#include "application/object/character/enemy/tank/KeyCanota.h"
 #include "application/object/character/enemy/jet/Jet.h"
 
 class LevelLoader;
@@ -44,10 +44,10 @@ public:
 	/// <returns>キャノ太のコンテナ</returns>
 	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
 	/// <summary>
-	/// ボスのコンテナ取得
+	/// キーキャノ太のコンテナ取得
 	/// </summary>
-	/// <returns>ボスのコンテナ</returns>
-	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
+	/// <returns>キーキャノ太のコンテナ</returns>
+	const std::list<std::unique_ptr<KeyCanota>>& GetKeyCanotas() const { return keyCanotas_; }
 	/// <summary>
 	/// ジェットのコンテナ取得
 	/// </summary>
@@ -95,8 +95,8 @@ private:
 
 	//キャノ太のコンテナ
 	std::list<std::unique_ptr<Canota>> canotas_;
-	//ボスのコンテナ
-	std::list<std::unique_ptr<Boss>> bosses_;
+	//キーキャノ太のコンテナ
+	std::list<std::unique_ptr<KeyCanota>> keyCanotas_;
 	//ジェットのコンテナ
 	std::list<std::unique_ptr<Jet>> jets_;
 

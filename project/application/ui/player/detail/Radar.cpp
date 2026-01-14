@@ -176,7 +176,7 @@ void Radar::UpdateEnemyMark() {
 	}
 
 	//ボス処理（紫）
-	for (const auto& boss : enemyManager_->GetBosses()) {
+	for (const auto& boss : enemyManager_->GetKeyCanotas()) {
 		processEnemy(boss.get(), { 1, 0, 1, 1 }, spriteIndex);
 	}
 

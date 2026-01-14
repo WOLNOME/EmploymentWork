@@ -1,4 +1,4 @@
-#include "Boss.h"
+#include "KeyCanota.h"
 #include <ImGuiManager.h>
 #include <TextureManager.h>
 #include <Object3dManager.h>
@@ -6,7 +6,7 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
-void Boss::Initialize() {
+void KeyCanota::Initialize() {
 	//ベースキャラクターの初期化
 	IBaseTankEnemy::Initialize();
 	//テクスチャ
@@ -33,20 +33,20 @@ void Boss::Initialize() {
 	circleShadow_->worldTransform.scale = { 8.0f,8.0f,8.0f };
 }
 
-void Boss::Update() {
+void KeyCanota::Update() {
 	//ベースエネミーの更新
 	IBaseTankEnemy::Update();
 
 }
 
-void Boss::DebugWithImGui() {
+void KeyCanota::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースエネミーのデバッグ処理
 	IBaseTankEnemy::DebugWithImGui();
 #endif // _DEBUG
 }
 
-void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+void KeyCanota::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//ベースエネミーの当たり判定処理
 	IBaseTankEnemy::OnCollision(attribute, subjectPos);
 }

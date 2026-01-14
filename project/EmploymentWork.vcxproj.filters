@@ -176,7 +176,7 @@
     <ClCompile Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.cpp">
       <Filter>application\object\character\enemy\tank\state</Filter>
     </ClCompile>
-    <ClCompile Include="application\object\character\enemy\tank\Boss.cpp">
+    <ClCompile Include="application\object\character\enemy\tank\KeyCanota.cpp">
       <Filter>application\object\character\enemy\tank</Filter>
     </ClCompile>
     <ClCompile Include="application\object\character\enemy\tank\Canota.cpp">
@@ -516,7 +516,7 @@
     <ClInclude Include="application\object\character\enemy\tank\state\TankEnemyPatrolState.h">
       <Filter>application\object\character\enemy\tank\state</Filter>
     </ClInclude>
-    <ClInclude Include="application\object\character\enemy\tank\Boss.h">
+    <ClInclude Include="application\object\character\enemy\tank\KeyCanota.h">
       <Filter>application\object\character\enemy\tank</Filter>
     </ClInclude>
     <ClInclude Include="application\object\character\enemy\tank\Canota.h">
