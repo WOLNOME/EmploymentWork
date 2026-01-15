@@ -129,6 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
     <ClCompile Include="application\system\EndDirection.cpp" />
+    <ClCompile Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.cpp" />
     <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
     <ClCompile Include="engine\3d\BulletTrail.cpp" />
     <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
@@ -190,6 +191,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyAttackState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyDeadState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
+    <ClCompile Include="application\behaiviorTree\interface\INode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
@@ -229,6 +231,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\StartDirection.cpp" />
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
+    <ClCompile Include="application\behaiviorTree\allNodeBase\NodeBase.cpp" />
+    <ClCompile Include="application\behaiviorTree\rollNode\Sequence.cpp" />
+    <ClCompile Include="application\behaiviorTree\rollNode\Selector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
@@ -249,6 +254,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
     <ClInclude Include="application\system\EndDirection.h" />
+    <ClInclude Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\BulletTrail.h" />
     <ClInclude Include="engine\3d\BulletTrailManager.h" />
@@ -330,6 +336,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyDeadState.h" />
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.h" />
     <ClInclude Include="application\ui\player\detail\MoveLever.h" />
+    <ClInclude Include="application\behaiviorTree\interface\INode.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
@@ -360,6 +367,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
+    <ClInclude Include="application\behaiviorTree\allNodeBase\NodeBase.h" />
+    <ClInclude Include="application\behaiviorTree\rollNode\Sequence.h" />
+    <ClInclude Include="application\behaiviorTree\rollNode\Selector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

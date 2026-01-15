@@ -435,6 +435,21 @@
     <ClCompile Include="application\system\EndDirection.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
     <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
+    <ClCompile Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.cpp">
+      <Filter>application\behaiviorTree\rollNodeBase</Filter>
+    </ClCompile>
+    <ClCompile Include="application\behaiviorTree\allNodeBase\NodeBase.cpp">
+      <Filter>application\behaiviorTree\allNodeBase</Filter>
+    </ClCompile>
+    <ClCompile Include="application\behaiviorTree\interface\INode.cpp">
+      <Filter>application\behaiviorTree\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="application\behaiviorTree\rollNode\Selector.cpp">
+      <Filter>application\behaiviorTree\rollNode</Filter>
+    </ClCompile>
+    <ClCompile Include="application\behaiviorTree\rollNode\Sequence.cpp">
+      <Filter>application\behaiviorTree\rollNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -468,9 +483,6 @@
     <ClInclude Include="engine\base\DirectXCommon.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\Collider.h" />
-    <ClInclude Include="engine\collision\CollisionConfig.h" />
-    <ClInclude Include="engine\collision\CollisionManager.h" />
     <ClInclude Include="application\object\character\base\BaseCharacter.h">
       <Filter>application\object\character\base</Filter>
     </ClInclude>
@@ -809,6 +821,30 @@
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
+    <ClInclude Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.h">
+      <Filter>application\behaiviorTree\rollNodeBase</Filter>
+    </ClInclude>
+    <ClInclude Include="application\behaiviorTree\allNodeBase\NodeBase.h">
+      <Filter>application\behaiviorTree\allNodeBase</Filter>
+    </ClInclude>
+    <ClInclude Include="application\behaiviorTree\interface\INode.h">
+      <Filter>application\behaiviorTree\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="application\behaiviorTree\rollNode\Sequence.h">
+      <Filter>application\behaiviorTree\rollNode</Filter>
+    </ClInclude>
+    <ClInclude Include="application\behaiviorTree\rollNode\Selector.h">
+      <Filter>application\behaiviorTree\rollNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\Collider.h">
+      <Filter>engine\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\CollisionConfig.h">
+      <Filter>engine\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\CollisionManager.h">
+      <Filter>engine\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
@@ -998,6 +1034,21 @@
     </Filter>
     <Filter Include="application\scene">
       <UniqueIdentifier>{e02dbacf-5660-4d4f-a256-7b35be3057e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaiviorTree">
+      <UniqueIdentifier>{60ec14c8-ecb0-4c4f-b436-d7d3cc861029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaiviorTree\interface">
+      <UniqueIdentifier>{017c8e14-58a7-4f19-af4f-2c69e712edf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaiviorTree\allNodeBase">
+      <UniqueIdentifier>{d63b5551-c6dc-4a5c-a68f-14f12ff66f34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaiviorTree\rollNodeBase">
+      <UniqueIdentifier>{e5facc36-a1cf-457a-9d7f-9362b52b5c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaiviorTree\rollNode">
+      <UniqueIdentifier>{4d0b5194-a899-41e2-a2ee-5418dc84c443}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

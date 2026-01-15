@@ -105,7 +105,6 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 	jet->SetRotate({ 0.0f,0.0f,0.0f });
 	jets_.push_back(std::move(jet));
 
-
 }
 
 void EnemyManager::SetPlayer(Player* _player) {
