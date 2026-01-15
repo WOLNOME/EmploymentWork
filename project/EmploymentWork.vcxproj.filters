@@ -1050,6 +1050,21 @@
     <Filter Include="application\behaiviorTree\rollNode">
       <UniqueIdentifier>{4d0b5194-a899-41e2-a2ee-5418dc84c443}</UniqueIdentifier>
     </Filter>
+    <Filter Include="application\behaviorTree">
+      <UniqueIdentifier>{c2f1cf31-da2a-4f79-8c23-5cbf65cf2293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaviorTree\allNodeBase">
+      <UniqueIdentifier>{c38e1a9c-4051-46d4-a3b0-dd29f0e4e8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaviorTree\interface">
+      <UniqueIdentifier>{242c7b7a-23b9-427f-9e95-109f355d7426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaviorTree\rollNodeBase">
+      <UniqueIdentifier>{f596ce67-4d2d-4ed5-bbd0-78a44dab5a6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\behaviorTree\rollNode">
+      <UniqueIdentifier>{e5d82476-94f6-4f31-bd52-091df0e38ec6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
