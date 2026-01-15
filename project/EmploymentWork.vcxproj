@@ -108,6 +108,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\behaviorTree\allNodeBase\NodeBase.cpp" />
+    <ClCompile Include="application\behaviorTree\interface\INode.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNodeBase\CompositeNodeBase.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNode\Selector.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNode\Sequence.cpp" />
     <ClCompile Include="application\object\character\enemy\manager\EnemyManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -129,7 +134,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
     <ClCompile Include="application\system\EndDirection.cpp" />
-    <ClCompile Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNodeBase\BranchNodeBase.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNodeBase\DecoratorNodeBase.cpp" />
+    <ClCompile Include="application\behaviorTree\blackBoard\BlackBoard.cpp" />
     <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
     <ClCompile Include="engine\3d\BulletTrail.cpp" />
     <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
@@ -191,7 +198,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyAttackState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyDeadState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
-    <ClCompile Include="application\behaiviorTree\interface\INode.cpp" />
+    <ClCompile Include="application\behaviorTree\rollNodeBase\LeafNodeBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
@@ -231,11 +238,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\StartDirection.cpp" />
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
-    <ClCompile Include="application\behaiviorTree\allNodeBase\NodeBase.cpp" />
-    <ClCompile Include="application\behaiviorTree\rollNode\Sequence.cpp" />
-    <ClCompile Include="application\behaiviorTree\rollNode\Selector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\behaviorTree\allNodeBase\NodeBase.h" />
+    <ClInclude Include="application\behaviorTree\interface\INode.h" />
+    <ClInclude Include="application\behaviorTree\rollNodeBase\CompositeNodeBase.h" />
+    <ClInclude Include="application\behaviorTree\rollNode\Selector.h" />
+    <ClInclude Include="application\behaviorTree\rollNode\Sequence.h" />
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
     <ClInclude Include="application\object\character\enemy\tank\Canota.h" />
     <ClInclude Include="application\object\character\base\BaseCharacter.h" />
@@ -254,7 +263,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
     <ClInclude Include="application\system\EndDirection.h" />
-    <ClInclude Include="application\behaiviorTree\rollNodeBase\CompositeNodeBase.h" />
+    <ClInclude Include="application\behaviorTree\rollNodeBase\BranchNodeBase.h" />
+    <ClInclude Include="application\behaviorTree\rollNodeBase\DecoratorNodeBase.h" />
+    <ClInclude Include="application\behaviorTree\blackBoard\BlackBoard.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\BulletTrail.h" />
     <ClInclude Include="engine\3d\BulletTrailManager.h" />
@@ -336,7 +347,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyDeadState.h" />
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.h" />
     <ClInclude Include="application\ui\player\detail\MoveLever.h" />
-    <ClInclude Include="application\behaiviorTree\interface\INode.h" />
+    <ClInclude Include="application\behaviorTree\rollNodeBase\LeafNodeBase.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
@@ -367,9 +378,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
-    <ClInclude Include="application\behaiviorTree\allNodeBase\NodeBase.h" />
-    <ClInclude Include="application\behaiviorTree\rollNode\Sequence.h" />
-    <ClInclude Include="application\behaiviorTree\rollNode\Selector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
@@ -411,7 +419,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Resources\shaders\TextTexture.hlsli">
+    <None Include="Resources\shaders\textTeture\TextTexture.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -541,11 +549,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\TextTexture.PS.hlsl">
+    <FxCompile Include="Resources\shaders\textTeture\TextTexture.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\TextTexture.VS.hlsl">
+    <FxCompile Include="Resources\shaders\textTeture\TextTexture.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -1,40 +1,21 @@
 #pragma once
-#include "application/behaiviorTree/interface/INode.h"
-#include "Vector3.h"
-
-/// <summary>
-/// ブラックボード
-/// </summary>
-struct BlackBoard {
-	// 共通情報
-	Vector3 selfPosition;
-	Vector3 targetPosition;
-	float   distanceToTarget;
-
-	// 状態
-	float   hp;
-	bool    isTargetVisible;
-	bool    isInFront;
-
-	// クールタイム
-	float   gunCooldown;
-	float   bombCooldown;
-	float   barrierCooldown;
-
-	// フラグ
-	bool    isAlert;
-	bool    isPhase2;
-};
+#include "application/behaviorTree/interface/INode.h"
+#include "application/behaviorTree/blackBoard/BlackBoard.h"
 
 /// <summary>
 /// 全てのノードの基底クラス
 /// </summary>
 class NodeBase : public INode {
 protected:
+	//コンストラクタ
 	explicit NodeBase(BlackBoard* _blackBoard) : mpBlackBoard(_blackBoard) {}
+	//仮想デストラクタ
 	virtual ~NodeBase() = default;
+	//初期化
 	virtual void Initialize() override { mNodeResult = NodeResult::Running; }
+	//更新
 	virtual void Update() override {}
+	//終了
 	virtual void Finalize() override {}
 
 	NodeResult mNodeResult = NodeResult::Idle;  //ノードの状態

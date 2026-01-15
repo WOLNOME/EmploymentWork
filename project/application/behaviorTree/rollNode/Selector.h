@@ -1,7 +1,12 @@
 #pragma once
-#include "application/behaiviorTree/rollNodeBase/CompositeNodeBase.h"
+#include "application/behaviorTree/rollNodeBase/CompositeNodeBase.h"
+
+/// <summary>
+/// セレクターノード
+/// </summary>
 class Selector : public CompositeNodeBase {
 public:
+	//コンストラクタ
 	explicit Selector(BlackBoard* _blackBoard) : CompositeNodeBase(_blackBoard) {}
 
 	//初期化
@@ -12,6 +17,7 @@ public:
 	void Finalize() override;
 
 private:
+	//次のインデックスの取得
 	const int GetNextIndex() const override { return mRunningNodeIndex + 1; }
 };
 
