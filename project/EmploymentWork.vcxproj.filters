@@ -85,10 +85,10 @@
     <FxCompile Include="Resources\shaders\particle\LocksmithParticle.CS.hlsl">
       <Filter>Resources\shaders\particle</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\textTeture\TextTexture.VS.hlsl">
+    <FxCompile Include="Resources\shaders\textTexture\TextTexture.VS.hlsl">
       <Filter>Resources\shaders\textTexture</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\textTeture\TextTexture.PS.hlsl">
+    <FxCompile Include="Resources\shaders\textTexture\TextTexture.PS.hlsl">
       <Filter>Resources\shaders\textTexture</Filter>
     </FxCompile>
   </ItemGroup>
@@ -928,7 +928,7 @@
     <None Include="Resources\shaders\util\RandomUtility.hlsli">
       <Filter>Resources\shaders\util</Filter>
     </None>
-    <None Include="Resources\shaders\textTeture\TextTexture.hlsli">
+    <None Include="Resources\shaders\textTexture\TextTexture.hlsli">
       <Filter>Resources\shaders\textTexture</Filter>
     </None>
   </ItemGroup>

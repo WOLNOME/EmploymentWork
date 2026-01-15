@@ -2,6 +2,7 @@
 #include <any>
 #include <string>
 #include <unordered_map>
+#include <stdexcept>
 
 /// <summary>
 /// ブラックボード
