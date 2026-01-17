@@ -1,5 +1,5 @@
 #pragma once
-#include "application/behaviorTree/rollNodeBase/CompositeNodeBase.h"
+#include "compositeNode/CompositeNodeBase.h"
 
 /// <summary>
 /// シークエンスノード
@@ -7,7 +7,9 @@
 class Sequence : public CompositeNodeBase {
 public:
 	//コンストラクタ
-	explicit Sequence(BlackBoard* _blackBoard) : CompositeNodeBase(_blackBoard) {}
+	explicit Sequence(BlackBoard* _blackBoard);
+	//デストラクタ
+	~Sequence();
 
 	//初期化
 	void Initialize() override;
@@ -18,6 +20,8 @@ public:
 
 private:
 	//次のインデックスの取得
-	const int GetNextIndex() const override { return mRunningNodeIndex + 1; }
+	const int GetNextIndex() const override;
+	//ノードのインクリメント
+	void NodeIncrement() override;
 };
 

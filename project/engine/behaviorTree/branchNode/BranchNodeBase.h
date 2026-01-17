@@ -1,5 +1,7 @@
 #pragma once
-#include "application/behaviorTree/allNodeBase/NodeBase.h"
+#include "nodeBase/NodeBase.h"
+#include <memory>
+#include <array>
 
 /// <summary>
 /// 条件に応じてTrue/Falseのいずれかの子を実行するためのノード
@@ -7,10 +9,7 @@
 class BranchNodeBase : public NodeBase {
 public:
 	//コンストラクタ
-	explicit BranchNodeBase(BlackBoard* black_board, INode* true_node, INode* false_node) : NodeBase(black_board) {
-		mpBranchNodes[0] = true_node;
-		mpBranchNodes[1] = false_node;
-	}
+	explicit BranchNodeBase(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
 	//デストラクタ
 	virtual ~BranchNodeBase();
 	//初期化
@@ -20,12 +19,15 @@ public:
 	//終了
 	virtual void Finalize() override;
 
+	//実行中のノードIDの取得
+	int GetRunningNodeID() const override;
+
 protected:
 	//状態フラグの取得
 	virtual const bool IsCondition() = 0;
 
 protected:
-	INode* mpBranchNodes[2] = { nullptr, nullptr }; // True,Falseそれぞれのノード
+	std::array<std::unique_ptr<INode>, 2> mpBranchNodes = { nullptr, nullptr }; // True,Falseそれぞれのノード
 	int mSatisfyIndex = -1; // 条件を満たしているノードのインデックス
 };
 

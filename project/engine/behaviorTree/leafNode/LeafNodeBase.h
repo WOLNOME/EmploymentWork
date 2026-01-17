@@ -1,5 +1,5 @@
 #pragma once
-#include "application/behaviorTree/allNodeBase/NodeBase.h"
+#include "nodeBase/NodeBase.h"
 
 /// <summary>
 /// 葉ノード（Actionノード）の基底クラス
@@ -7,7 +7,7 @@
 class LeafNodeBase : public NodeBase {
 protected:
 	//コンストラクタ
-	explicit LeafNodeBase(BlackBoard* black_board) : NodeBase{ black_board } {}
+	explicit LeafNodeBase(BlackBoard* _blackBoard);
 	//デストラクタ
 	virtual ~LeafNodeBase() = default;
 };

@@ -1,5 +1,6 @@
 #pragma once
-#include "application/behaviorTree/allNodeBase/NodeBase.h"
+#include "nodeBase/NodeBase.h"
+#include <memory>
 
 /// <summary>
 /// 条件分岐ノードの基底クラス
@@ -7,7 +8,7 @@
 class DecoratorNodeBase : public NodeBase {
 public:
     //コンストラクタ
-    explicit DecoratorNodeBase(BlackBoard* black_board) : NodeBase(black_board) {}
+    explicit DecoratorNodeBase(BlackBoard* _blackBoard);
     //デストラクタ
     virtual ~DecoratorNodeBase();
 
@@ -17,9 +18,11 @@ public:
     virtual void Finalize() override;
 
     //子ノードのセット
-    void SetNode(INode* node) { mChildNode = node; }
+    void SetNode(std::unique_ptr<INode> _node);
+	//実行中のノードIDの取得
+	int GetRunningNodeID() const override;
 
 protected:
-    INode* mChildNode = nullptr;
+    std::unique_ptr<INode> mChildNode = nullptr;
 };
 

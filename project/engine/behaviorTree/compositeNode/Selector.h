@@ -1,5 +1,5 @@
 #pragma once
-#include "application/behaviorTree/rollNodeBase/CompositeNodeBase.h"
+#include "compositeNode/CompositeNodeBase.h"
 
 /// <summary>
 /// セレクターノード
@@ -18,6 +18,8 @@ public:
 
 private:
 	//次のインデックスの取得
-	const int GetNextIndex() const override { return mRunningNodeIndex + 1; }
+	const int GetNextIndex() const override;
+	//ノードのインクリメント
+	void NodeIncrement() override;
 };
 

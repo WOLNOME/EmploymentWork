@@ -63,7 +63,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -108,11 +108,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="application\behaviorTree\allNodeBase\NodeBase.cpp" />
-    <ClCompile Include="application\behaviorTree\interface\INode.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNodeBase\CompositeNodeBase.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNode\Selector.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNode\Sequence.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
+    <ClCompile Include="engine\behaviorTree\nodeBase\NodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\interface\INode.cpp" />
+    <ClCompile Include="engine\behaviorTree\compositeNode\CompositeNodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\compositeNode\Selector.cpp" />
+    <ClCompile Include="engine\behaviorTree\compositeNode\Sequence.cpp" />
     <ClCompile Include="application\object\character\enemy\manager\EnemyManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -134,15 +135,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
     <ClCompile Include="application\system\EndDirection.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNodeBase\BranchNodeBase.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNodeBase\DecoratorNodeBase.cpp" />
-    <ClCompile Include="application\behaviorTree\blackBoard\BlackBoard.cpp" />
-    <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
-    <ClCompile Include="engine\3d\BulletTrail.cpp" />
-    <ClCompile Include="engine\3d\BulletTrailManager.cpp" />
-    <ClCompile Include="engine\3d\AnimationModel.cpp" />
-    <ClCompile Include="engine\3d\CombinedParticle.cpp" />
-    <ClCompile Include="engine\3d\LevelLoader.cpp" />
+    <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\blackBoard\BlackBoard.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\Boss.cpp" />
+    <ClCompile Include="engine\3d\particle\CombinedParticleManager.cpp" />
+    <ClCompile Include="engine\3d\direction\BulletTrail.cpp" />
+    <ClCompile Include="engine\3d\direction\BulletTrailManager.cpp" />
+    <ClCompile Include="engine\3d\object\AnimationModel.cpp" />
+    <ClCompile Include="engine\3d\particle\CombinedParticle.cpp" />
+    <ClCompile Include="engine\3d\level\LevelLoader.cpp" />
     <ClCompile Include="engine\base\D2DRender.cpp" />
     <ClCompile Include="engine\base\DSVManager.cpp" />
     <ClCompile Include="engine\base\GPUDescriptorManager.cpp" />
@@ -152,14 +154,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\base\TextTextureRender.cpp" />
     <ClCompile Include="engine\collision\Collider.cpp" />
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
-    <ClCompile Include="engine\3d\DirectionalLight.cpp" />
-    <ClCompile Include="engine\3d\DevelopCamera.cpp" />
+    <ClCompile Include="engine\3d\light\DirectionalLight.cpp" />
+    <ClCompile Include="engine\3d\camera\DevelopCamera.cpp" />
     <ClCompile Include="engine\scene\DevelopScene.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\BaseScene.cpp" />
     <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\audio\AudioCommon.cpp" />
-    <ClCompile Include="engine\3d\BaseCamera.cpp" />
+    <ClCompile Include="engine\3d\camera\BaseCamera.cpp" />
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\util\RandomStringUtil.cpp" />
@@ -178,16 +180,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\util\JsonUtil.cpp" />
     <ClCompile Include="application\scene\GamePlayScene.cpp" />
     <ClCompile Include="application\object\environment\Ground.cpp" />
-    <ClCompile Include="engine\3d\GameCamera.cpp" />
+    <ClCompile Include="engine\3d\camera\GameCamera.cpp" />
     <ClCompile Include="application\scene\GameOverScene.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\base\IBaseTankEnemy.cpp" />
-    <ClCompile Include="engine\3d\LineManager.cpp" />
+    <ClCompile Include="engine\3d\line\LineManager.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\state\ITankEnemyState.cpp" />
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp" />
     <ClCompile Include="application\object\character\item\Item.cpp" />
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
     <ClCompile Include="application\ui\player\detail\ItemUI.cpp" />
-    <ClCompile Include="engine\3d\LevelObject.cpp" />
+    <ClCompile Include="engine\3d\level\LevelObject.cpp" />
     <ClCompile Include="application\scene\GameClearScene.cpp" />
     <ClCompile Include="application\system\GameClearSystem.cpp" />
     <ClCompile Include="application\system\GameOverSystem.cpp" />
@@ -198,11 +200,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyAttackState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyDeadState.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
-    <ClCompile Include="application\behaviorTree\rollNodeBase\LeafNodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\leafNode\LeafNodeBase.cpp" />
+    <ClCompile Include="engine\behaviorTree\decoratorNode\Inverter.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="engine\3d\Model.cpp" />
-    <ClCompile Include="engine\3d\ModelManager.cpp" />
-    <ClCompile Include="engine\3d\Object3d.cpp" />
+    <ClCompile Include="engine\3d\object\Model.cpp" />
+    <ClCompile Include="engine\3d\object\ModelManager.cpp" />
+    <ClCompile Include="engine\3d\object\Object3d.cpp" />
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\base\TextureManager.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
@@ -213,15 +216,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="MyGame.cpp" />
     <ClCompile Include="engine\scenebase\SceneFactory.cpp" />
     <ClCompile Include="engine\scenebase\SceneManager.cpp" />
-    <ClCompile Include="engine\3d\Particle.cpp" />
-    <ClCompile Include="engine\3d\WorldTransform.cpp" />
-    <ClCompile Include="engine\3d\PointLight.cpp" />
-    <ClCompile Include="engine\3d\SceneLight.cpp" />
-    <ClCompile Include="engine\3d\SpotLight.cpp" />
-    <ClCompile Include="engine\3d\Shape.cpp" />
+    <ClCompile Include="engine\3d\particle\Particle.cpp" />
+    <ClCompile Include="engine\3d\worldTransform\WorldTransform.cpp" />
+    <ClCompile Include="engine\3d\light\PointLight.cpp" />
+    <ClCompile Include="engine\3d\light\SceneLight.cpp" />
+    <ClCompile Include="engine\3d\light\SpotLight.cpp" />
+    <ClCompile Include="engine\3d\object\Shape.cpp" />
     <ClCompile Include="engine\scenebase\SceneTransitionAnimation.cpp" />
     <ClCompile Include="engine\scene\ParticleEditorScene.cpp" />
-    <ClCompile Include="engine\3d\ParticleManager.cpp" />
+    <ClCompile Include="engine\3d\particle\ParticleManager.cpp" />
     <ClCompile Include="application\object\environment\Skydome.cpp" />
     <ClCompile Include="application\object\character\player\Player.cpp" />
     <ClCompile Include="application\object\character\weapon\player\PlayerBullet.cpp" />
@@ -229,7 +232,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\player\PlayerCannon.cpp" />
     <ClCompile Include="application\object\character\weapon\player\manager\PlayerWeaponManager.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
-    <ClCompile Include="engine\3d\Object3dManager.cpp" />
+    <ClCompile Include="engine\3d\object\Object3dManager.cpp" />
     <ClCompile Include="application\ui\player\detail\Radar.cpp" />
     <ClCompile Include="application\ui\player\detail\ReticleUI.cpp" />
     <ClCompile Include="application\ui\player\detail\PlayerHPUI.cpp" />
@@ -240,11 +243,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="application\behaviorTree\allNodeBase\NodeBase.h" />
-    <ClInclude Include="application\behaviorTree\interface\INode.h" />
-    <ClInclude Include="application\behaviorTree\rollNodeBase\CompositeNodeBase.h" />
-    <ClInclude Include="application\behaviorTree\rollNode\Selector.h" />
-    <ClInclude Include="application\behaviorTree\rollNode\Sequence.h" />
+    <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
+    <ClInclude Include="engine\behaviorTree\nodeBase\NodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\interface\INode.h" />
+    <ClInclude Include="engine\behaviorTree\compositeNode\CompositeNodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\compositeNode\Selector.h" />
+    <ClInclude Include="engine\behaviorTree\compositeNode\Sequence.h" />
     <ClInclude Include="application\object\character\enemy\manager\EnemyManager.h" />
     <ClInclude Include="application\object\character\enemy\tank\Canota.h" />
     <ClInclude Include="application\object\character\base\BaseCharacter.h" />
@@ -263,15 +267,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
     <ClInclude Include="application\system\EndDirection.h" />
-    <ClInclude Include="application\behaviorTree\rollNodeBase\BranchNodeBase.h" />
-    <ClInclude Include="application\behaviorTree\rollNodeBase\DecoratorNodeBase.h" />
-    <ClInclude Include="application\behaviorTree\blackBoard\BlackBoard.h" />
-    <ClInclude Include="engine\3d\CombinedParticleManager.h" />
-    <ClInclude Include="engine\3d\BulletTrail.h" />
-    <ClInclude Include="engine\3d\BulletTrailManager.h" />
-    <ClInclude Include="engine\3d\AnimationModel.h" />
-    <ClInclude Include="engine\3d\CombinedParticle.h" />
-    <ClInclude Include="engine\3d\LevelLoader.h" />
+    <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\blackBoard\BlackBoard.h" />
+    <ClInclude Include="application\object\character\enemy\boss\Boss.h" />
+    <ClInclude Include="engine\3d\particle\CombinedParticleManager.h" />
+    <ClInclude Include="engine\3d\direction\BulletTrail.h" />
+    <ClInclude Include="engine\3d\direction\BulletTrailManager.h" />
+    <ClInclude Include="engine\3d\object\AnimationModel.h" />
+    <ClInclude Include="engine\3d\particle\CombinedParticle.h" />
+    <ClInclude Include="engine\3d\level\LevelLoader.h" />
     <ClInclude Include="engine\base\D2DRender.h" />
     <ClInclude Include="engine\base\DSVManager.h" />
     <ClInclude Include="engine\base\GPUDescriptorManager.h" />
@@ -282,15 +287,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\collision\Collider.h" />
     <ClInclude Include="engine\collision\CollisionConfig.h" />
     <ClInclude Include="engine\collision\CollisionManager.h" />
-    <ClInclude Include="engine\3d\DirectionalLight.h" />
-    <ClInclude Include="engine\3d\DevelopCamera.h" />
+    <ClInclude Include="engine\3d\light\DirectionalLight.h" />
+    <ClInclude Include="engine\3d\camera\DevelopCamera.h" />
     <ClInclude Include="engine\math\BlendMode.h" />
     <ClInclude Include="engine\scene\DevelopScene.h" />
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\BaseScene.h" />
     <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\audio\AudioCommon.h" />
-    <ClInclude Include="engine\3d\BaseCamera.h" />
+    <ClInclude Include="engine\3d\camera\BaseCamera.h" />
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\util\Handle.h" />
@@ -309,9 +314,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\Logger.h" />
     <ClInclude Include="engine\math\Matrix3x3.h" />
     <ClInclude Include="engine\math\Matrix4x4.h" />
-    <ClInclude Include="engine\3d\Model.h" />
-    <ClInclude Include="engine\3d\ModelManager.h" />
-    <ClInclude Include="engine\3d\Object3d.h" />
+    <ClInclude Include="engine\3d\object\Model.h" />
+    <ClInclude Include="engine\3d\object\ModelManager.h" />
+    <ClInclude Include="engine\3d\object\Object3d.h" />
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\base\TextureManager.h" />
     <ClInclude Include="engine\math\Vector2.h" />
@@ -322,20 +327,20 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\Framework.h" />
     <ClInclude Include="engine\math\MyMath.h" />
     <ClInclude Include="engine\base\MainRender.h" />
-    <ClInclude Include="engine\3d\ModelFormat.h" />
+    <ClInclude Include="engine\3d\object\ModelFormat.h" />
     <ClInclude Include="application\scene\GamePlayScene.h" />
     <ClInclude Include="application\object\environment\Ground.h" />
-    <ClInclude Include="engine\3d\GameCamera.h" />
+    <ClInclude Include="engine\3d\camera\GameCamera.h" />
     <ClInclude Include="application\scene\GameOverScene.h" />
     <ClInclude Include="application\object\character\enemy\tank\base\IBaseTankEnemy.h" />
-    <ClInclude Include="engine\3d\LineManager.h" />
+    <ClInclude Include="engine\3d\line\LineManager.h" />
     <ClInclude Include="application\object\character\enemy\tank\state\ITankEnemyState.h" />
     <ClInclude Include="application\ui\player\detail\HitIndicator.h" />
     <ClInclude Include="application\object\character\item\Item.h" />
     <ClInclude Include="application\object\character\item\manager\ItemManager.h" />
     <ClInclude Include="application\ui\message\MessageUI.h" />
     <ClInclude Include="application\ui\player\detail\ItemUI.h" />
-    <ClInclude Include="engine\3d\LevelObject.h" />
+    <ClInclude Include="engine\3d\level\LevelObject.h" />
     <ClInclude Include="application\scene\GameClearScene.h" />
     <ClInclude Include="application\system\GameClearSystem.h" />
     <ClInclude Include="application\system\GameOverSystem.h" />
@@ -347,20 +352,21 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyDeadState.h" />
     <ClInclude Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.h" />
     <ClInclude Include="application\ui\player\detail\MoveLever.h" />
-    <ClInclude Include="application\behaviorTree\rollNodeBase\LeafNodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\leafNode\LeafNodeBase.h" />
+    <ClInclude Include="engine\behaviorTree\decoratorNode\Inverter.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
-    <ClInclude Include="engine\3d\Particle.h" />
-    <ClInclude Include="engine\3d\WorldTransform.h" />
-    <ClInclude Include="engine\3d\PointLight.h" />
+    <ClInclude Include="engine\3d\particle\Particle.h" />
+    <ClInclude Include="engine\3d\worldTransform\WorldTransform.h" />
+    <ClInclude Include="engine\3d\light\PointLight.h" />
     <ClInclude Include="engine\math\Quaternion.h" />
-    <ClInclude Include="engine\3d\SceneLight.h" />
-    <ClInclude Include="engine\3d\SpotLight.h" />
-    <ClInclude Include="engine\3d\Shape.h" />
+    <ClInclude Include="engine\3d\light\SceneLight.h" />
+    <ClInclude Include="engine\3d\light\SpotLight.h" />
+    <ClInclude Include="engine\3d\object\Shape.h" />
     <ClInclude Include="engine\scenebase\SceneTransitionAnimation.h" />
     <ClInclude Include="engine\scene\ParticleEditorScene.h" />
-    <ClInclude Include="engine\3d\ParticleManager.h" />
+    <ClInclude Include="engine\3d\particle\ParticleManager.h" />
     <ClInclude Include="application\object\environment\Skydome.h" />
     <ClInclude Include="application\object\character\player\Player.h" />
     <ClInclude Include="application\object\character\weapon\player\PlayerBullet.h" />
@@ -368,7 +374,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\player\PlayerCannon.h" />
     <ClInclude Include="application\object\character\weapon\player\manager\PlayerWeaponManager.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
-    <ClInclude Include="engine\3d\Object3dManager.h" />
+    <ClInclude Include="engine\3d\object\Object3dManager.h" />
     <ClInclude Include="application\ui\player\detail\Radar.h" />
     <ClInclude Include="application\ui\player\detail\ReticleUI.h" />
     <ClInclude Include="application\ui\player\detail\PlayerHPUI.h" />
@@ -377,7 +383,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\StartDirection.h" />
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
-    <ClInclude Include="engine\3d\ParticleTypes.h" />
+    <ClInclude Include="engine\3d\particle\ParticleTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

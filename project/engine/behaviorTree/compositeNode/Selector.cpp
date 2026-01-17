@@ -28,3 +28,22 @@ void Selector::Finalize() {
 	//基底クラスの終了処理
 	CompositeNodeBase::Finalize();
 }
+
+const int Selector::GetNextIndex() const {
+	return mRunningNodeIndex + 1;
+}
+
+void Selector::NodeIncrement() {
+	// 現在のノードの後始末
+	mChildNodes[mRunningNodeIndex]->Finalize();
+	// インデックスを進める
+	mRunningNodeIndex = GetNextIndex();
+	// もしすべての子ノードを試しても失敗したら
+	if (mRunningNodeIndex > mChildNodes.size() - 1) {
+		mNodeResult = NodeResult::Fail;
+		Finalize();
+		return;
+	}
+	// 次に回すノードの初期化
+	mChildNodes[mRunningNodeIndex]->Initialize();
+}

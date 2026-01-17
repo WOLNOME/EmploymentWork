@@ -1,13 +1,11 @@
 #include "BranchNodeBase.h"
 
+BranchNodeBase::BranchNodeBase(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode) : NodeBase(_blackBoard) {
+	mpBranchNodes[0] = std::move(_trueNode);
+	mpBranchNodes[1] = std::move(_falseNode);
+}
+
 BranchNodeBase::~BranchNodeBase() {
-	// ブランチノードの配列を解放
-	for (int i = 0; i < 2; ++i) {
-		if (mpBranchNodes[i] != nullptr) {
-			delete mpBranchNodes[i];
-			mpBranchNodes[i] = nullptr;
-		}
-	}
 }
 
 void BranchNodeBase::Initialize() {
@@ -31,4 +29,8 @@ void BranchNodeBase::Finalize() {
 	NodeBase::Finalize();
 	mpBranchNodes[mSatisfyIndex]->Finalize();
 	mSatisfyIndex = -1;
+}
+
+int BranchNodeBase::GetRunningNodeID() const {
+	return mpBranchNodes[mSatisfyIndex]->GetRunningNodeID();
 }

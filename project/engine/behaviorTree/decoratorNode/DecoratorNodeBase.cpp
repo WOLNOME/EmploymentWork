@@ -1,5 +1,8 @@
 #include "DecoratorNodeBase.h"
 
+DecoratorNodeBase::DecoratorNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {
+}
+
 DecoratorNodeBase::~DecoratorNodeBase() {
 }
 
@@ -15,4 +18,13 @@ void DecoratorNodeBase::Finalize() {
 	NodeBase::Finalize();
 	//子ノードの終了
 	mChildNode->Finalize();
+}
+
+void DecoratorNodeBase::SetNode(std::unique_ptr<INode> _node) {
+	mChildNode = std::move(_node);
+}
+
+int DecoratorNodeBase::GetRunningNodeID() const {
+	// 子ノードの実行中ノードIDを返す
+	return mChildNode->GetRunningNodeID();
 }

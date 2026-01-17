@@ -1,11 +1,15 @@
 #pragma once
-#include "application/behaviorTree/interface/INode.h"
-#include "application/behaviorTree/blackBoard/BlackBoard.h"
+#include "interface/INode.h"
+#include "blackBoard/BlackBoard.h"
 
 /// <summary>
-/// 全てのノードの基底クラス
+/// 各ノードが継承する基底クラス
 /// </summary>
 class NodeBase : public INode {
+public: 
+	//ノードIDのセット
+	void SetNodeID(const int id) override { mNodeID = id; }
+
 protected:
 	//コンストラクタ
 	explicit NodeBase(BlackBoard* _blackBoard) : mpBlackBoard(_blackBoard) {}
@@ -18,7 +22,15 @@ protected:
 	//終了
 	virtual void Finalize() override {}
 
+	//実行中のノードIDの取得
+	virtual NodeResult GetNodeResult() const override { return mNodeResult; }
+	//実行中のノードIDの取得
+	virtual int GetRunningNodeID() const override { return mNodeID; }
+
 	NodeResult mNodeResult = NodeResult::Idle;  //ノードの状態
 	BlackBoard* mpBlackBoard = nullptr; //ブラックボード
+
+private:
+	int mNodeID = -1; //ノードID
 };
 

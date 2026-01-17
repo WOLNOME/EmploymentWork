@@ -2,16 +2,12 @@
 
 CompositeNodeBase::~CompositeNodeBase() {
 	//子ノードを削除する
-	for (auto node : mChildNodes) {
-		delete node;
-	}
 	mChildNodes.clear();
 }
 
 void CompositeNodeBase::Initialize() {
 	//基底クラスの初期化
 	NodeBase::Initialize();
-
 	mRunningNodeIndex = 0;
 
 	// 最初のノードを初期化
@@ -24,7 +20,22 @@ void CompositeNodeBase::Initialize() {
 }
 
 void CompositeNodeBase::Finalize() {
-	//終了時に追加したい処理があったらここに書く
+	//基底クラスの終了処理
+	NodeBase::Finalize();
+
+	//最初のノードを初期化
+	mRunningNodeIndex = 0;
+	mChildNodes[mRunningNodeIndex]->Initialize();
+}
+
+void CompositeNodeBase::AddNode(std::unique_ptr<INode> _node) {
+	//子ノードを追加
+	mChildNodes.push_back(std::move(_node));
+}
+
+int CompositeNodeBase::GetRunningNodeID() const {
+	// 現在動かしているノードのIDを返す
+	return mChildNodes[mRunningNodeIndex]->GetRunningNodeID();
 }
 
 void CompositeNodeBase::NodeIncrement() {

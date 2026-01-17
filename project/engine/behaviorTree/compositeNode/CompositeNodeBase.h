@@ -1,6 +1,7 @@
 #pragma once
-#include "application/behaviorTree/allNodeBase/NodeBase.h"
+#include "nodeBase/NodeBase.h"
 #include <vector>
+#include <memory>
 
 /// <summary>
 /// Compositeノードの基底クラス
@@ -18,17 +19,20 @@ public:
 	virtual void Finalize() override;
 
 	//ノードの追加
-	void AddNode(INode* _node) { mChildNodes.push_back(_node); }
+	void AddNode(std::unique_ptr<INode> _node);
+
+	//実行中のノードIDの取得
+	virtual int GetRunningNodeID() const override;
 
 protected:
 	//ノードのインクリメント
-	void NodeIncrement();
+	virtual void NodeIncrement();
 	//次のインデックスの取得
 	virtual const int GetNextIndex() const = 0;
 
 protected:
 	// 子ノード群
-	std::vector<INode*> mChildNodes;
+	std::vector<std::unique_ptr<INode>> mChildNodes;
 	// 現在動かしているノードのインデックス
 	int mRunningNodeIndex{ 0 };
 };
