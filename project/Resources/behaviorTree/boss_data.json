@@ -21,8 +21,9 @@
         "false_child":9,
         "true_child":45,
         "id":3,
-        "name":"CheckPlayerDistance400",
-        "parent":1
+        "name":"CheckPlayerDistance",
+        "parent":1,
+        "distance":400
     },
     {
         "id":4,
@@ -31,7 +32,7 @@
     },
     {
         "id":5,
-        "name":"DirectionConfusion",
+        "name":"DirectionConfusionLeaf",
         "parent":2
     },
     {
@@ -70,8 +71,9 @@
     },
     {
         "id":10,
-        "name":"JudgePlayerPreFrame400Leaf",
-        "parent":6
+        "name":"JudgePlayerPreDistanceLeaf",
+        "parent":6,
+        "distance":400
     },
     {
         "id":11,
@@ -217,8 +219,9 @@
     },
     {
         "id":31,
-        "name":"JudgePlayerDistance50Leaf",
-        "parent":20
+        "name":"JudgePlayerDistanceLeaf",
+        "parent":20,
+        "distance":50
     },
     {
         "false_child":40,
@@ -229,8 +232,9 @@
     },
     {
         "id":33,
-        "name":"JudgePlayerDistance200Leaf",
-        "parent":21
+        "name":"JudgePlayerDistanceLeaf",
+        "parent":21,
+        "distance":200
     },
     {
         "false_child":42,
@@ -241,8 +245,9 @@
     },
     {
         "id":35,
-        "name":"JudgePlayerDistance150Leaf",
-        "parent":22
+        "name":"JudgePlayerDistanceLeaf",
+        "parent":22,
+        "distance":150
     },
     {
         "id":36,
@@ -251,8 +256,9 @@
     },
     {
         "id":37,
-        "name":"JudgePlayerDistance300Leaf",
-        "parent":23
+        "name":"JudgePlayerDistanceLeaf",
+        "parent":23,
+        "distance":300
     },
     {
         "false_child":44,
@@ -293,7 +299,8 @@
     },
     {
         "id":46,
-        "name":"JudgePlayerPreFrame400Leaf",
-        "parent":25
+        "name":"JudgePlayerPreDistanceLeaf",
+        "parent":25,
+        "distance" :400
     }
 ]

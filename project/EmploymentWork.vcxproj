@@ -109,6 +109,23 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBombReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp" />
     <ClCompile Include="engine\behaviorTree\nodeBase\NodeBase.cpp" />
     <ClCompile Include="engine\behaviorTree\interface\INode.cpp" />
     <ClCompile Include="engine\behaviorTree\compositeNode\CompositeNodeBase.cpp" />
@@ -202,6 +219,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\jet\state\JetEnemyPatrolState.cpp" />
     <ClCompile Include="engine\behaviorTree\leafNode\LeafNodeBase.cpp" />
     <ClCompile Include="engine\behaviorTree\decoratorNode\Inverter.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\object\Model.cpp" />
     <ClCompile Include="engine\3d\object\ModelManager.cpp" />
@@ -241,9 +263,28 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\StartDirection.cpp" />
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBombReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h" />
     <ClInclude Include="engine\behaviorTree\nodeBase\NodeBase.h" />
     <ClInclude Include="engine\behaviorTree\interface\INode.h" />
     <ClInclude Include="engine\behaviorTree\compositeNode\CompositeNodeBase.h" />
@@ -354,6 +395,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\MoveLever.h" />
     <ClInclude Include="engine\behaviorTree\leafNode\LeafNodeBase.h" />
     <ClInclude Include="engine\behaviorTree\decoratorNode\Inverter.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
@@ -384,6 +430,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\particle\ParticleTypes.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -479,6 +479,30 @@
     <ClCompile Include="application\object\character\enemy\boss\Boss.cpp" />
     <ClCompile Include="engine\behaviorTree\decoratorNode\Inverter.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBombReload.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -905,6 +929,30 @@
     <ClInclude Include="application\object\character\enemy\boss\Boss.h" />
     <ClInclude Include="engine\behaviorTree\decoratorNode\Inverter.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBombReload.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
