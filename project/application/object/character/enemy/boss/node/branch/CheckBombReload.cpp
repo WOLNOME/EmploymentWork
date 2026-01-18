@@ -7,5 +7,14 @@ CheckBombReload::~CheckBombReload() {
 }
 
 const bool CheckBombReload::IsCondition() {
-    return false;
+	bool result = false;
+	// ブラックボードからボムのクールタイムを取得
+	const float bombCoolTime = mpBlackBoard->GetValue<float>("BombCoolTime");
+
+	// ボムのクールタイムが0ならリロード可能
+	if (bombCoolTime == 0.0f) {
+		result = true;
+	}
+
+    return result;
 }

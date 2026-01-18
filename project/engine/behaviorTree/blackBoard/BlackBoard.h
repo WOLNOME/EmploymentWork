@@ -3,11 +3,13 @@
 #include <string>
 #include <unordered_map>
 #include <stdexcept>
+#include <MyMath.h>
 
 /// <summary>
 /// ブラックボード
 /// </summary>
 class BlackBoard {
+public:
 	// 要素をセット
 	template<typename T>
 	void SetValue(const std::string& key, const T& value) {

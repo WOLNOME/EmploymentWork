@@ -261,6 +261,20 @@ Vector3 MyMath::DirectionToRotation(const Vector3& dir) {
 	return { pitch, yaw, roll };
 }
 
+Vector3 MyMath::RotationToDirection(const Vector3& rot) {
+	// 各軸の回転角度のsin, cosを求める
+	float sinPitch = std::sin(rot.x);
+	float cosPitch = std::cos(rot.x);
+	float sinYaw = std::sin(rot.y);
+	float cosYaw = std::cos(rot.y);
+	// 回転行列を使って方向ベクトルを求める
+	Vector3 dir;
+	dir.x = cosPitch * sinYaw;          // x成分
+	dir.y = -sinPitch;                  // y成分
+	dir.z = cosPitch * cosYaw;          // z成分
+	return dir.Normalized();
+}
+
 Vector4 MyMath::Lerp(const Vector4& v1, const Vector4& v2, float t) {
 	Vector4 result;
 	result.x = Lerp(v1.x, v2.x, t);

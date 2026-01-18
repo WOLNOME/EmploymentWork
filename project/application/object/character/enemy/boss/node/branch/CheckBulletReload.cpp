@@ -7,5 +7,14 @@ CheckBulletReload::~CheckBulletReload() {
 }
 
 const bool CheckBulletReload::IsCondition() {
-	return false;
+	bool result = false;
+	// ブラックボードから機関銃弾クールタイム取得
+	float bulletCoolTime = mpBlackBoard->GetValue<float>("BulletCoolTime");
+
+	// クールタイムが0ならリロード可能
+	if (bulletCoolTime == 0.0f) {
+		result = true;
+	}
+
+	return result;
 }
