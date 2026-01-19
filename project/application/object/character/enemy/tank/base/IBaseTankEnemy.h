@@ -13,6 +13,7 @@
 #include "../state/TankEnemyAttackState.h"
 #include "../state/TankEnemyDeadState.h"
 
+//前方宣言
 class Player;
 class ItemManager;
 

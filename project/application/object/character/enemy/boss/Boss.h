@@ -1,6 +1,16 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include "JsonUtil.h"
+#include "interface/INode.h"
+#include "blackBoard/BlackBoard.h"
+#include <memory>
 
+//前方宣言
+class Player;
+
+/// <summary>
+/// ボスクラス
+/// </summary>
 class Boss : public BaseCharacter {
 public:
 	/// ============================== ///
@@ -27,6 +37,26 @@ public:
 	/// デバッグ用パラメータ調整
 	/// </summary>
 	void DebugWithImGui() override;
+
+private:
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
+
+
+	/// ============================== ///
+	///		メンバ変数(private)
+	/// ============================== ///
+	
+	//パラメーター
+	json param_;
+
+	//ビヘイビアツリー
+	std::unique_ptr<INode> behaviorTreeRoot_ = nullptr;
+	//ブラックボード
+	std::unique_ptr<BlackBoard> blackBoard_ = nullptr;
+
 
 };
 

@@ -1,0 +1,29 @@
+{
+    "collisionCenterOffsetOBB":{
+        "x":0.0,
+        "y":-1.0,
+        "z":0.0
+    },
+    "collisionSizeOBB":{
+        "x":6.0,
+        "y":3.5,
+        "z":6.0
+    },
+    "speed":6.0,
+    "turnSpeed":1.6,
+    "maxSpeed":40.0,
+    "barrierCoolTime":15.0,
+    "barrierDirTime":3.0,
+    "barrierMaxHP":100,
+    "bombReloadTime":3.0,
+    "cannonReloadTime":3.0,
+    "bulletReloadTime":3.0,
+    "bulletMaxMagazine":30,
+    "maxHP":300,
+    "summonCoolTime":20.0,
+    "summonDirTime":5.0,
+    "keepDistanceTime":5.0,
+    "confusionTime":6.0,
+    "missingTime":2,
+    "sensingTime":2
+}

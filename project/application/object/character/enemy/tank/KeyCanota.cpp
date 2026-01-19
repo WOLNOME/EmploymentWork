@@ -10,16 +10,16 @@ void KeyCanota::Initialize() {
 	//ベースキャラクターの初期化
 	IBaseTankEnemy::Initialize();
 	//テクスチャ
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("boss.png");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("keyCanota.png");
 
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Boss"), "enemy");
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("KeyCanota"), "enemy");
 	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
 	object3d_->SetTexture(textureHandle_);
 
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
+	param_ = JsonUtil::GetJsonData("Resources/parameters/keyCanota");
 
 	//当たり判定のパラメーター入力
 	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
