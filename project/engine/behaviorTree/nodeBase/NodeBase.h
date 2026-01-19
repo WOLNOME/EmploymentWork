@@ -21,6 +21,8 @@ protected:
 	virtual void Update() override {}
 	//終了
 	virtual void Finalize() override {}
+	//デバッグ
+	virtual void Debug() override {}
 
 	//実行中のノードIDの取得
 	virtual NodeResult GetNodeResult() const override { return mNodeResult; }

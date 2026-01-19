@@ -21,10 +21,10 @@
 #include "../node/leaf/BulletReloadLeaf.h"
 #include "../node/leaf/CannonAttackLeaf.h"
 #include "../node/leaf/CannonReloadLeaf.h"
-#include "../node/leaf/CompareBarrierStateLeaf.h"
 #include "../node/leaf/DirectionConfusionLeaf.h"
 #include "../node/leaf/DirectionMissingLeaf.h"
 #include "../node/leaf/DirectionSensingLeaf.h"
+#include "../node/leaf/JudgeBarrierCoolTimeLeaf.h"
 #include "../node/leaf/JudgeHPHalfLeaf.h"
 #include "../node/leaf/JudgePlayerDistanceLeaf.h"
 #include "../node/leaf/JudgePlayerPreDistanceLeaf.h"
@@ -136,9 +136,6 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 		else if (name == "CannonReloadLeaf") {
 			node = std::make_unique<CannonReloadLeaf>(_blackBoard);
 		}
-		else if (name == "CompareBarrierStateLeaf") {
-			node = std::make_unique<CompareBarrierStateLeaf>(_blackBoard);
-		}
 		else if (name == "DirectionConfusionLeaf") {
 			node = std::make_unique<DirectionConfusionLeaf>(_blackBoard);
 		}
@@ -147,6 +144,9 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 		}
 		else if (name == "DirectionSensingLeaf") {
 			node = std::make_unique<DirectionSensingLeaf>(_blackBoard);
+		}
+		else if (name == "JudgeBarrierCoolTimeLeaf") {
+			node = std::make_unique<JudgeBarrierCoolTimeLeaf>(_blackBoard);
 		}
 		else if (name == "JudgeHPHalfLeaf") {
 			node = std::make_unique<JudgeHPHalfLeaf>(_blackBoard);

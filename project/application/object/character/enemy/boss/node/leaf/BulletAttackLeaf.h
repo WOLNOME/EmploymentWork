@@ -14,6 +14,9 @@ public:
 	// 更新
 	void Update() override;
 
+	// デバッグ
+	void Debug() override;
+
 	// ノードの状態を取得
 	NodeResult GetNodeResult() const override;
 };

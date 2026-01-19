@@ -20,6 +20,8 @@ public:
 	virtual void Update() = 0;
 	//終了時
 	virtual void Finalize() = 0;
+	//デバッグ
+	virtual void Debug() = 0;
 	//ノードの状態を取得
 	virtual NodeResult GetNodeResult() const = 0;
 	//ノードIDのセット

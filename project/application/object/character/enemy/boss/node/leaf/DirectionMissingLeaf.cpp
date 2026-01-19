@@ -1,4 +1,5 @@
 #include "DirectionMissingLeaf.h"
+#include <ImGuiManager.h>
 
 DirectionMissingLeaf::DirectionMissingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
@@ -6,9 +7,46 @@ DirectionMissingLeaf::DirectionMissingLeaf(BlackBoard* _blackBoard) : LeafNodeBa
 DirectionMissingLeaf::~DirectionMissingLeaf() {
 }
 
+void DirectionMissingLeaf::Initialize() {
+	//基底クラスの初期化
+	LeafNodeBase::Initialize();
+
+	//ブラックボードの情報を初期化
+	float missingTime = mpBlackBoard->GetValue<float>("MissingTime");
+	mpBlackBoard->SetValue<float>("MissingTimer", missingTime);
+}
+
 void DirectionMissingLeaf::Update() {
+	//ブラックボードから必要な情報を取得
+	float missingTimer = mpBlackBoard->GetValue<float>("MissingTimer");
+
+	//見失うタイマーをデクリメント
+	missingTimer -= kDeltaTime;
+	if (missingTimer < 0.0f) {
+		missingTimer = 0.0f;
+	}
+
+	//ブラックボードに更新した情報を保存
+	mpBlackBoard->SetValue<float>("MissingTimer", missingTimer);
+}
+
+void DirectionMissingLeaf::Debug() {
+#ifdef _DEBUG
+	//現在処理中のノード名を表示
+	ImGui::Begin("ボスの稼働中ノード");
+	ImGui::Text("方向見失い演出");
+	ImGui::End();
+#endif // _DEBUG
 }
 
 NodeResult DirectionMissingLeaf::GetNodeResult() const {
-    return NodeResult();
+	//ブラックボードから必要な情報を取得
+	float missingTimer = mpBlackBoard->GetValue<float>("MissingTimer");
+
+	//もし見失うタイマーが0以下ならsuccessを返す
+	if (missingTimer <= 0.0f) {
+		return NodeResult::Success;
+	}
+	//見失うタイマーが0より大きいならrunningを返す
+	return NodeResult::Running;
 }

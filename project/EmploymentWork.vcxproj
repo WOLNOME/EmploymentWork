@@ -122,7 +122,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp" />
@@ -281,7 +281,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CompareBarrierStateLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h" />
