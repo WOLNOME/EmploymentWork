@@ -8,11 +8,11 @@ CheckCannonReload::~CheckCannonReload() {
 
 const bool CheckCannonReload::IsCondition() {
 	bool result = false;
-	//ブラックボードからキャノンのクールタイムを取得
-	float cannonCoolTime = mpBlackBoard->GetValue<float>("CannonCoolTime");
+	//ブラックボードからキャノンのリロードタイムを取得
+	float cannonReloadTime = mpBlackBoard->GetValue<float>("CannonReloadTime");
 
-	//クールタイムが0ならリロード完了
-	if (cannonCoolTime == 0.0f) {
+	//リロードタイムが0ならリロード完了
+	if (cannonReloadTime == 0.0f) {
 		result = true;
 	}
 

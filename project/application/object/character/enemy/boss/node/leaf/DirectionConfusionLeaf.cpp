@@ -12,13 +12,13 @@ void DirectionConfusionLeaf::Initialize() {
 	LeafNodeBase::Initialize();
 
 	//ブラックボードの情報を初期化
-	float confusionTime = mpBlackBoard->GetValue<float>("ConfusionTime");
-	mpBlackBoard->SetValue<float>("ConfusionTimer", confusionTime);
+	float confusionTime = mpBlackBoard->GetValue<float>("ConfusionDirTime");
+	mpBlackBoard->SetValue<float>("ConfusionDirTimer", confusionTime);
 }
 
 void DirectionConfusionLeaf::Update() {
 	//ブラックボードから必要な情報を取得
-	float confusionTimer = mpBlackBoard->GetValue<float>("ConfusionTimer");
+	float confusionTimer = mpBlackBoard->GetValue<float>("ConfusionDirTimer");
 
 	//混乱タイマーをデクリメント
 	confusionTimer -= kDeltaTime;
@@ -27,7 +27,7 @@ void DirectionConfusionLeaf::Update() {
 	}
 
 	//ブラックボードに更新した情報を保存
-	mpBlackBoard->SetValue<float>("ConfusionTimer", confusionTimer);
+	mpBlackBoard->SetValue<float>("ConfusionDirTimer", confusionTimer);
 }
 
 void DirectionConfusionLeaf::Debug() {
@@ -41,7 +41,7 @@ void DirectionConfusionLeaf::Debug() {
 
 NodeResult DirectionConfusionLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
-	float confusionTimer = mpBlackBoard->GetValue<float>("ConfusionTimer");
+	float confusionTimer = mpBlackBoard->GetValue<float>("ConfusionDirTimer");
 
 	//もし混乱タイマーが0以下ならsuccessを返す
 	if (confusionTimer <= 0.0f) {

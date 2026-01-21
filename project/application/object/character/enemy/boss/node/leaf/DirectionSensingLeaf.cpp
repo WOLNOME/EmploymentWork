@@ -12,13 +12,13 @@ void DirectionSensingLeaf::Initialize() {
 	LeafNodeBase::Initialize();
 
 	//ブラックボードの情報を初期化
-	float sensingTime = mpBlackBoard->GetValue<float>("SensingTime");
-	mpBlackBoard->SetValue<float>("SensingTimer", sensingTime);
+	float sensingTime = mpBlackBoard->GetValue<float>("SensingDirTime");
+	mpBlackBoard->SetValue<float>("SensingDirTimer", sensingTime);
 }
 
 void DirectionSensingLeaf::Update() {
 	//ブラックボードから必要な情報を取得
-	float sensingTimer = mpBlackBoard->GetValue<float>("SensingTimer");
+	float sensingTimer = mpBlackBoard->GetValue<float>("SensingDirTimer");
 
 	//発見演出タイマーをデクリメント
 	sensingTimer -= kDeltaTime;
@@ -27,7 +27,7 @@ void DirectionSensingLeaf::Update() {
 	}
 
 	//ブラックボードに更新した情報を保存
-	mpBlackBoard->SetValue<float>("SensingTimer", sensingTimer);
+	mpBlackBoard->SetValue<float>("SensingDirTimer", sensingTimer);
 }
 
 void DirectionSensingLeaf::Debug() {
@@ -41,7 +41,7 @@ void DirectionSensingLeaf::Debug() {
 
 NodeResult DirectionSensingLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
-	float sensingTimer = mpBlackBoard->GetValue<float>("SensingTimer");
+	float sensingTimer = mpBlackBoard->GetValue<float>("SensingDirTimer");
 
 	//もし発見演出タイマーが0以下ならsuccessを返す
 	if (sensingTimer <= 0.0f) {

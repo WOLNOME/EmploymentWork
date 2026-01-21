@@ -8,11 +8,11 @@ CheckBombReload::~CheckBombReload() {
 
 const bool CheckBombReload::IsCondition() {
 	bool result = false;
-	// ブラックボードからボムのクールタイムを取得
-	const float bombCoolTime = mpBlackBoard->GetValue<float>("BombCoolTime");
+	// ブラックボードからボムのリロードタイムを取得
+	const float bombReloadTime = mpBlackBoard->GetValue<float>("BombReloadTime");
 
-	// ボムのクールタイムが0ならリロード可能
-	if (bombCoolTime == 0.0f) {
+	// ボムのリロードタイムが0ならリロード可能
+	if (bombReloadTime == 0.0f) {
 		result = true;
 	}
 

@@ -8,11 +8,11 @@ CheckBulletReload::~CheckBulletReload() {
 
 const bool CheckBulletReload::IsCondition() {
 	bool result = false;
-	// ブラックボードから機関銃弾クールタイム取得
-	float bulletCoolTime = mpBlackBoard->GetValue<float>("BulletCoolTime");
+	// ブラックボードから機関銃弾リロードタイム取得
+	float bulletReloadTime = mpBlackBoard->GetValue<float>("BulletReloadTime");
 
-	// クールタイムが0ならリロード可能
-	if (bulletCoolTime == 0.0f) {
+	// リロードタイムが0ならリロード可能
+	if (bulletReloadTime == 0.0f) {
 		result = true;
 	}
 

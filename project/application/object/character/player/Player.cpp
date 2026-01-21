@@ -56,9 +56,9 @@ void Player::Initialize() {
 
 void Player::Update() {
 	//カメラがセットされていなかったら警告
-	assert(camera_ != nullptr && "カメラがセットされていません。");
+	assert(camera_ && "カメラがセットされていません。");
 	//メッセージUIがセットされていなかったら警告
-	assert(messageUI_ != nullptr && "メッセージUIがセットされていません。");
+	assert(messageUI_ && "メッセージUIがセットされていません。");
 
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
@@ -286,6 +286,9 @@ void Player::Move() {
 	if (deathDirection_->GetIsDirection()) return;
 	//死亡していたら処理をしない
 	if (isDead_ && GetDeadTimer() > 0.0f) return;
+
+	//移動前に前フレームの座標を保存
+	prePosition_ = object3d_->worldTransform.worldTranslate;
 
 	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
