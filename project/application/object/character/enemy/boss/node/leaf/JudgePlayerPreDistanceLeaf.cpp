@@ -1,4 +1,4 @@
-#include "JudgePlayerPreDistanceLeaf.h"]
+#include "JudgePlayerPreDistanceLeaf.h"
 #include <ImGuiManager.h>
 
 JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard, float _preDistance) : LeafNodeBase(_blackBoard), preDistance_(_preDistance) {
@@ -21,9 +21,9 @@ void JudgePlayerPreDistanceLeaf::Debug() {
 
 NodeResult JudgePlayerPreDistanceLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
-	Vector3 bossPrePos = mpBlackBoard->GetValue<float>("BossPrePos");
+	Vector3 bossPrePos = mpBlackBoard->GetValue<Vector3>("BossPrePos");
 	bossPrePos.y = 0.0f;
-	Vector3 playerPrePos = mpBlackBoard->GetValue<float>("PlayerPrePos");
+	Vector3 playerPrePos = mpBlackBoard->GetValue<Vector3>("PlayerPrePos");
 	playerPrePos.y = 0.0f;
 
 	//前フレームの距離を計算

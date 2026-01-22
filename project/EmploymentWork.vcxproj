@@ -224,6 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\object\Model.cpp" />
     <ClCompile Include="engine\3d\object\ModelManager.cpp" />
@@ -400,6 +401,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />

@@ -38,20 +38,49 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
+	/// <summary>
+	/// スポーン処理
+	/// </summary>
+	/// <param name="_position">座標</param>
+	void Spawn(const Vector3& _position);
+
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーのセット
+	/// </summary>
+	/// <param name="_player">プレイヤーのポインタ</param>
+	void SetPlayer(Player* _player) { player_ = _player; }
+
 private:
 	/// ============================== ///
 	///		メンバ関数（private）
 	/// ============================== ///
 
 	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="attribute">相手の属性</param>
+	/// <param name="subjectPos">相手の座標</param>
+	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+
+	/// <summary>
 	/// 定数情報のブラックボードへの登録
 	/// </summary>
 	void ConstantInfoToBlackBoard();
+	
 	/// <summary>
 	/// 変数情報のブラックボードへの登録
 	/// </summary>
-	void VariableInfoToBlackBoard();
-
+	/// <param name="_isInit">初期化時か？</param>
+	void VariableInfoToBlackBoard(bool _isInit);
+	/// <summary>
+	/// ブラックボードから変数情報の取得
+	/// </summary>
+	void BlackBoardToVariableInfo();
 
 	/// ============================== ///
 	///		インスタンス
@@ -59,7 +88,6 @@ private:
 
 	//プレイヤー
 	Player* player_ = nullptr;
-
 
 	/// ============================== ///
 	///		メンバ変数(private)
@@ -73,6 +101,10 @@ private:
 	//ブラックボード
 	std::unique_ptr<BlackBoard> blackBoard_ = nullptr;
 
+	//HP
+	int hp_ = 0;
+	//生きているか
+	bool isAlive_ = false;
 
 };
 

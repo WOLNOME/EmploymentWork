@@ -22,7 +22,7 @@ void JudgeHPHalfLeaf::Debug() {
 NodeResult JudgeHPHalfLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
 	int bossMaxHP = mpBlackBoard->GetValue<int>("BossMaxHP");
-	int bossHP = mpBlackBoard->GetValue<float>("BossHP");
+	int bossHP = mpBlackBoard->GetValue<int>("BossHP");
 
 	//もしHPが半分以下ならsuccessを返す
 	if (bossHP <= float(bossMaxHP) / 2.0f) {

@@ -6,6 +6,7 @@
 #include "application/object/character/enemy/tank/Canota.h"
 #include "application/object/character/enemy/tank/KeyCanota.h"
 #include "application/object/character/enemy/jet/Jet.h"
+#include "application/object/character/enemy/boss/Boss.h"
 
 class LevelLoader;
 class Player;
@@ -99,7 +100,8 @@ private:
 	std::list<std::unique_ptr<KeyCanota>> keyCanotas_;
 	//ジェットのコンテナ
 	std::list<std::unique_ptr<Jet>> jets_;
-
+	//ボスのインスタンス
+	std::unique_ptr<Boss> boss_ = nullptr;
 
 };
 

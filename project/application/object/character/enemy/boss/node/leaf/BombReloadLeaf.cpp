@@ -58,7 +58,6 @@ NodeResult BombReloadLeaf::GetNodeResult() const {
 		return NodeResult::Running;
 	}
 	//弾倉が満タンならsuccessを返す
-	if (bombMagazine >= kBombMaxMagazine_) {
-		return NodeResult::Success;
-	}
+	return NodeResult::Success;
+
 }

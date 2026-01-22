@@ -24,7 +24,7 @@ protected:
 	//デバッグ
 	virtual void Debug() override {}
 
-	//実行中のノードIDの取得
+	//結果を取得
 	virtual NodeResult GetNodeResult() const override { return mNodeResult; }
 	//実行中のノードIDの取得
 	virtual int GetRunningNodeID() const override { return mNodeID; }

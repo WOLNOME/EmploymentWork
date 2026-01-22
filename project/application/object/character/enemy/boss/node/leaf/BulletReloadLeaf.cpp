@@ -57,7 +57,5 @@ NodeResult BulletReloadLeaf::GetNodeResult() const {
 		return NodeResult::Running;
 	}
 	//弾倉が満タンならsuccessを返す
-	if (bulletMagazine >= bulletMaxMagazine) {
-		return NodeResult::Success;
-	}
+	return NodeResult::Success;
 }

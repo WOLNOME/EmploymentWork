@@ -25,6 +25,7 @@
 #include "../node/leaf/DirectionMissingLeaf.h"
 #include "../node/leaf/DirectionSensingLeaf.h"
 #include "../node/leaf/JudgeBarrierCoolTimeLeaf.h"
+#include "../node/leaf/JudgeBarrierStateLeaf.h"
 #include "../node/leaf/JudgeHPHalfLeaf.h"
 #include "../node/leaf/JudgePlayerDistanceLeaf.h"
 #include "../node/leaf/JudgePlayerPreDistanceLeaf.h"
@@ -37,9 +38,6 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 	//JSONファイルを読み込む
 	json jsonData;
 	jsonData = JsonUtil::GetJsonData("Resources/behaviorTree/boss_data");
-	if (!jsonData) {
-		assert(false && "JSONデータの読み込みに失敗しました");
-	}
 
 	//IDからJSON要素へのマッピングを構築する
 	std::unordered_map<int, json> nodeMap;
@@ -77,7 +75,7 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 
 		// --- Decoratorノード ---
 		else if (name == "Inverter") {
-			int childId = nodeJson["children"][0].get<int>();
+			int childId = nodeJson["children"].get<int>();
 			node = std::make_unique<Inverter>(_blackBoard, buildNode(childId));
 		}
 
@@ -147,6 +145,9 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 		}
 		else if (name == "JudgeBarrierCoolTimeLeaf") {
 			node = std::make_unique<JudgeBarrierCoolTimeLeaf>(_blackBoard);
+		}
+		else if(name=="JudgeBarrierStateLeaf"){
+			node = std::make_unique<JudgeBarrierStateLeaf>(_blackBoard);
 		}
 		else if (name == "JudgeHPHalfLeaf") {
 			node = std::make_unique<JudgeHPHalfLeaf>(_blackBoard);

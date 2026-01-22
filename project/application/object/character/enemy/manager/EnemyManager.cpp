@@ -8,6 +8,12 @@
 #include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
+	//ボスの初期化
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize();
+
+	//ボスをスポーンさせる
+	boss_->Spawn({ 0.0f,0.0f,-1000.0f });
 }
 
 void EnemyManager::Update() {
@@ -51,6 +57,8 @@ void EnemyManager::Update() {
 	for (const auto& jet : jets_) {
 		jet->Update();
 	}
+	//ボスの更新
+	boss_->Update();
 }
 
 void EnemyManager::DebugWithImGui() {
@@ -67,6 +75,8 @@ void EnemyManager::DebugWithImGui() {
 	for (const auto& jet : jets_) {
 		jet->DebugWithImGui();
 	}
+	//ボスのデバッグ処理
+	boss_->DebugWithImGui();
 #endif // _DEBUG
 }
 
@@ -119,6 +129,7 @@ void EnemyManager::SetPlayer(Player* _player) {
 	for (const auto& jet : jets_) {
 		jet->SetPlayer(player_);
 	}
+	boss_->SetPlayer(_player);
 }
 
 void EnemyManager::SetItemManager(ItemManager* _itemManager) {

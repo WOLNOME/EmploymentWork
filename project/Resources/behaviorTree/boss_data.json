@@ -27,7 +27,7 @@
     },
     {
         "id":4,
-        "name":"CompareBarrierStateLeaf",
+        "name":"JudgeBarrierStateLeaf",
         "parent":2
     },
     {
@@ -296,6 +296,16 @@
         "id":44,
         "name":"BombReloadLeaf",
         "parent":38
+    },
+    {
+         "children" : [
+            6,
+            7,
+            8
+        ],
+        "id":45,
+        "name":"Selector",
+        "parent":3
     },
     {
         "id":46,
