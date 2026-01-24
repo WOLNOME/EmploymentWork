@@ -67,7 +67,6 @@ void Boss::Update() {
 	//プレイヤーがセットされていなかったら警告
 	assert(player_ && "プレイヤーがセットされていません。");
 
-
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
@@ -159,9 +158,11 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		}
 		//武器の情報を入れる
 		blackBoard_->SetValue<float>("BombReloadTimer", 0.0f);
+		blackBoard_->SetValue<int>("BombMagazine", 1);
 		blackBoard_->SetValue<float>("CannonReloadTimer", 0.0f);
+		blackBoard_->SetValue<int>("CannonMagazine", 1);
 		blackBoard_->SetValue<float>("BulletReloadTimer", 0.0f);
-		blackBoard_->SetValue<int>("BulletMaxMagazine", param_["bulletMaxMagazine"]);
+		blackBoard_->SetValue<int>("BulletMagazine", param_["bulletMaxMagazine"]);
 		//特殊攻撃の情報を入れる
 		blackBoard_->SetValue<bool>("IsBarrier", false);
 		blackBoard_->SetValue<bool>("IsPreBarrier", false);

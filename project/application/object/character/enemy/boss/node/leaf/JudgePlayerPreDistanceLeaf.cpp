@@ -29,8 +29,8 @@ NodeResult JudgePlayerPreDistanceLeaf::GetNodeResult() const {
 	//前フレームの距離を計算
 	float dist = (bossPrePos - playerPrePos).Length();
 
-	//もし前フレームの距離が設定距離以下ならsuccessを返す
-	if (dist <= preDistance_) {
+	//もし前フレームの距離が設定距離より大きいならsuccessを返す
+	if (dist > preDistance_) {
 		return NodeResult::Success;
 	}
 
