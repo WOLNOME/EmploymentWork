@@ -632,6 +632,12 @@ public:
 	/// <param name="t">補間係数（0～1）</param>
 	/// <returns>線形補間後の値</returns>
 	static float Lerp(float s1, float s2, float t);
+	/// <summary>
+	/// 角度を-π~πの間に収める
+	/// </summary>
+	/// <param name="angle"></param>
+	/// <returns></returns>
+	static float NormalizeAngle(float angle);
 
 
 	///------------------------------------///

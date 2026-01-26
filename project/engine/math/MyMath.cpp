@@ -841,14 +841,30 @@ float MyMath::Lerp(float s1, float s2, float t) {
 	return s1 * (1 - t) + s2 * t;
 }
 
+float MyMath::NormalizeAngle(float angle) {
+
+	// -2π～2π くらいに収める
+	angle = std::fmod(angle, pi * 2.0f);
+
+	// -π～π に収める
+	if (angle > pi) {
+		angle -= pi * 2.0f;
+	}
+	else if (angle < -pi) {
+		angle += pi * 2.0f;
+	}
+
+	return angle;
+}
+
 TransformEuler MyMath::Combine(const TransformEuler& parent, const TransformEuler& local) {
 	TransformEuler world;
 	//スケール 
-	world.scale.x = parent.scale.x * local.scale.x; world.scale.y = parent.scale.y * local.scale.y; world.scale.z = parent.scale.z * local.scale.z; 
+	world.scale.x = parent.scale.x * local.scale.x; world.scale.y = parent.scale.y * local.scale.y; world.scale.z = parent.scale.z * local.scale.z;
 	//回転 (Euler → Quaternion → 合成 → Euler) 
-	Quaternion qParent = FromEulerAngles(parent.rotate); Quaternion qLocal = FromEulerAngles(local.rotate); Quaternion qWorld = qParent * qLocal; world.rotate = ToEulerAngles(qWorld); 
+	Quaternion qParent = FromEulerAngles(parent.rotate); Quaternion qLocal = FromEulerAngles(local.rotate); Quaternion qWorld = qParent * qLocal; world.rotate = ToEulerAngles(qWorld);
 	//平行移動 
-	Vector3 scaled{ parent.scale.x * local.translate.x, parent.scale.y * local.translate.y, parent.scale.z * local.translate.z }; world.translate = parent.translate + MyMath::RotateVector(scaled, qParent); 
+	Vector3 scaled{ parent.scale.x * local.translate.x, parent.scale.y * local.translate.y, parent.scale.z * local.translate.z }; world.translate = parent.translate + MyMath::RotateVector(scaled, qParent);
 
 	return world;
 }

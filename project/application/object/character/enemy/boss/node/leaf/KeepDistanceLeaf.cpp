@@ -1,5 +1,6 @@
 #include "KeepDistanceLeaf.h"
 #include <ImGuiManager.h>
+#include <algorithm>
 
 KeepDistanceLeaf::KeepDistanceLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
@@ -34,56 +35,86 @@ void KeepDistanceLeaf::Update() {
 	if (keepDistanceTimer <= 0.0f) {
 		//タイマーをリセット
 		keepDistanceTimer = 0.0f;
+		//タイマーの情報をブラックボードに送信
+		mpBlackBoard->SetValue<float>("KeepDistanceTimer", keepDistanceTimer);
 
 		return;
 	}
 
-	//ボスの前方向ベクトルを計算
-	Vector3 bossForward;
-	bossForward.x = std::cos(bossRotate.y);
-	bossForward.y = 0.0f;
-	bossForward.z = std::sin(bossRotate.y);
-
-	//プレイヤーへの方向ベクトルを計算
-	Vector3 toPlayer = playerPos - bossPos;
-	toPlayer.y = 0.0f;
-	toPlayer.Normalize();
-
-	//2つのベクトルのなす角を計算
-	float angle = MyMath::AngleOf2VectorY(bossForward, toPlayer);
-
-	//回転方向を決定
-	float turnDirection = (angle > 0.0f) ? 1.0f : -1.0f;
-	//回転量を計算
-	float turnAmount = bossTurnSpeed * turnDirection * kDeltaTime;
-	//回転量をクランプ
-	if (std::abs(turnAmount) > std::abs(angle)) {
-		turnAmount = angle;
+	//回転処理
+	{
+		//現在のボスの向きを求める
+		Vector3 currentBossDir = {
+			std::sinf(bossRotate.y),
+			0.0f,
+			std::cosf(bossRotate.y)
+		};
+		currentBossDir.Normalize();
+		//目標ポイント（プレイヤーの位置）への方向を求める
+		Vector3 targetDir = playerPos - bossPos;
+		targetDir.Normalize();
+		//回転の差を求める
+		float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentBossDir.x, currentBossDir.z);
+		//angleを-pi~piでクランプする
+		if (angle > pi) {
+			angle -= 2 * pi;
+		}
+		else if (angle < -pi) {
+			angle += 2 * pi;
+		}
+		//angle<回転速度の場合
+		float usingRotateSpeed = 0.0f;
+		if (std::abs(angle) < bossTurnSpeed * kDeltaTime) {
+			//仕上げの角度加算
+			usingRotateSpeed = angle;
+		}
+		else {
+			//回転速度を使う場合、符号を揃える
+			usingRotateSpeed = (angle > 0) ? bossTurnSpeed * kDeltaTime : -bossTurnSpeed * kDeltaTime;
+		}
+		//回転加算
+		bossRotate.y += usingRotateSpeed;
+		//-π~πにクランプ
+		if (bossRotate.y > pi) {
+			bossRotate.y -= 2.0f * pi;
+		}
+		else if (bossRotate.y < -pi) {
+			bossRotate.y += 2.0f * pi;
+		}
 	}
-	//回転を更新
-	bossRotate.y += turnAmount;
+	//移動処理
+	{
+		//現在のボスの向きを求める
+		Vector3 currentBossDir = {
+			std::sinf(bossRotate.y),
+			0.0f,
+			std::cosf(bossRotate.y)
+		};
+		currentBossDir.Normalize();
 
-	//移動量を求める
-	Vector3 bossBackward = -bossForward;
-	bossVelocity += bossBackward * bossSpeed * kDeltaTime;
+		//移動量を求める
+		Vector3 bossBackward = -currentBossDir;
+		bossBackward.Normalize();
+		bossVelocity += bossBackward * bossSpeed;
 
-	//摩擦力をかける
-	Vector3 frictionDir = -bossVelocity.Normalized();
-	Vector3 frictionAccel = frictionDir * floorFriction;
-	bossVelocity += frictionAccel * kDeltaTime;
+		//摩擦力をかける
+		Vector3 frictionDir = -bossVelocity.Normalized();
+		Vector3 frictionAccel = frictionDir * floorFriction;
+		bossVelocity += frictionAccel * kDeltaTime;
 
-	//移動量の大きさを制限
-	if (bossVelocity.Length() > bossMaxSpeed) {
-		bossVelocity.Normalize();
-		bossVelocity *= bossMaxSpeed;
+		//移動量の大きさを制限
+		if (bossVelocity.Length() > bossMaxSpeed) {
+			bossVelocity.Normalize();
+			bossVelocity *= bossMaxSpeed;
+		}
+		//移動量の小ささを制限
+		if (Vector3(bossVelocity * kDeltaTime).Length() < 0.01f) {
+			bossVelocity = { 0.0f,0.0f,0.0f };
+		}
+
+		//速度を加算
+		bossPos += bossVelocity * kDeltaTime;
 	}
-	//移動量の小ささを制限
-	if (Vector3(bossVelocity * kDeltaTime).Length() < 0.01f) {
-		bossVelocity = { 0.0f,0.0f,0.0f };
-	}
-
-	//速度を加算
-	bossPos += bossVelocity * kDeltaTime;
 
 	//ブラックボードに更新した情報を保存
 	mpBlackBoard->SetValue<float>("KeepDistanceTimer", keepDistanceTimer);
