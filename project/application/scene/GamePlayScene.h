@@ -16,6 +16,7 @@
 #include <application/system/StartDirection.h>
 #include <application/system/EndDirection.h>
 #include <application/system/TimeScaleManager.h>
+#include <application/system/PauseSystem.h>
 
 /// <summary>
 /// ゲームプレイシーン全般を管理するクラス
@@ -91,6 +92,9 @@ private:
 	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
 	//メッセージUI
 	std::unique_ptr<MessageUI> messageUI_ = nullptr;
+
+	//ポーズ
+	std::unique_ptr<PauseSystem> pauseSystem_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

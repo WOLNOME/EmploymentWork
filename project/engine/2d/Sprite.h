@@ -22,10 +22,14 @@ enum class Order {
 	Back1,
 	Back2,
 	Back3,
+	Back4,
+	Back5,
 	Front0,
 	Front1,
 	Front2,
 	Front3,
+	Front4,
+	Front5,
 
 	SceneTransition,	//シーン遷移用のタグ
 

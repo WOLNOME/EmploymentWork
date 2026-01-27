@@ -435,6 +435,7 @@
     <ClCompile Include="application\system\EndDirection.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
     <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
+    <ClCompile Include="application\system\PauseSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -809,6 +810,7 @@
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
+    <ClInclude Include="application\system\PauseSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

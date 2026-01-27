@@ -49,6 +49,7 @@ void GamePlayScene::Initialize() {
 	playerUI_ = std::make_unique<PlayerUI>();
 	enemyUI_ = std::make_unique<EnemyUI>();
 	messageUI_ = std::make_unique<MessageUI>();
+	pauseSystem_ = std::make_unique<PauseSystem>();
 
 	//インスタンスの初期化
 	skydome_->Initialize();
@@ -63,6 +64,7 @@ void GamePlayScene::Initialize() {
 	playerUI_->Initialize();
 	enemyUI_->Initialize();
 	messageUI_->Initialize();
+	pauseSystem_->Initialize();
 
 	//カメラのセット
 	Object3dManager::GetInstance()->SetCamera(camera_.get());
@@ -142,6 +144,8 @@ void GamePlayScene::Update() {
 
 	//タイムスケールマネージャーの更新
 	timeScaleManager_->Update();
+	//ポーズシステムの更新
+	pauseSystem_->Update();
 
 	//スタート演出の更新
 	startDirection_->Update();
@@ -150,6 +154,10 @@ void GamePlayScene::Update() {
 
 	//タイムスケールマネージャーによる再生速度の管理
 	if(!timeScaleManager_->GetIsPlay()){
+		return;
+	}
+	//ポーズ画面による再生の管理
+	if (pauseSystem_->GetIsPause()) {
 		return;
 	}
 
@@ -199,6 +207,8 @@ void GamePlayScene::DebugWithImGui() {
 	itemManager_->DebugWithImGui();
 	//メッセージUIのImGui
 	messageUI_->DebugWithImGui();
+	//ポーズシステムのImGui
+	pauseSystem_->Debug();
 
 #endif // _DEBUG
 }
