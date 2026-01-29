@@ -9,7 +9,7 @@ void ItemManager::Initialize() {
 void ItemManager::Update() {
 	//死亡したアイテムを削除
 	for (auto it = items_.begin(); it != items_.end();) {
-		if ((*it)->GetIsDead()) {
+		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
 			it = items_.erase(it); // アイテムを削除
 		}
 		else {

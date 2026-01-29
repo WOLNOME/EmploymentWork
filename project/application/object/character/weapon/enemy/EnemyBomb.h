@@ -37,6 +37,13 @@ public:
 	void DebugWithImGui() override;
 
 	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
+	void Spawn(const Vector3& _initPos, const Vector3& _targetPos);
+
+	/// <summary>
 	/// 当たり判定処理
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
@@ -47,12 +54,6 @@ public:
 	///		setter
 	/// ============================== ///
 
-	/// <summary>
-	/// 初期パラメーターを設定する
-	/// </summary>
-	/// <param name="_initPos">初期位置</param>
-	/// <param name="_targetPos">目標位置</param>
-	void SetInitParam(const Vector3& _initPos, const Vector3& _targetPos);
 	/// <summary>
 	/// プレイヤーUIを設定する
 	/// </summary>

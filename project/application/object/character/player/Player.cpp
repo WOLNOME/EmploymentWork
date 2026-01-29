@@ -38,6 +38,9 @@ void Player::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
+	//アクティブ状態として初期化
+	SetState(State::kActive);
+
 	//パラメータのセット
 	int maxHP = param_["maxHP"];
 	hp_ = maxHP;
@@ -240,9 +243,11 @@ void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 
 void Player::Rotate() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	auto ShortestAngleDiff = [=](float from, float to) -> float {
 		float diff = to - from;
@@ -283,9 +288,11 @@ void Player::Rotate() {
 
 void Player::Move() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//移動前に前フレームの座標を保存
 	prePosition_ = object3d_->worldTransform.worldTranslate;
@@ -344,14 +351,15 @@ void Player::Move() {
 
 	//速度を加算
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
-
 }
 
 void Player::CannonAttack() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//リロードタイムの計算
 	if (cannonReloadTimer_ > 0.0f) {
@@ -380,9 +388,11 @@ void Player::CannonAttack() {
 
 void Player::BulletAttack() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection()) 
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//発射間隔の計算
 	bool isInterval = false;
@@ -444,16 +454,18 @@ void Player::DeadProcess() {
 	}
 	//死亡演出が終了したら死亡
 	if (deathDirection_->GetIsDirFinished()) {
-		//死亡予約
-		SetDeadTimer(0.1f);
+		//アイドル状態にする
+		SetState(State::kIdle);
 	}
 }
 
 void Player::CameraAlgorithm() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue = input_->GetMousePosition();

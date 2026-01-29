@@ -10,14 +10,14 @@ void PlayerWeaponManager::Initialize() {
 	//砲弾の生成と初期化
 	int cannonNum = param_["maxCannonNum"];
 	for (int i = 0; i < cannonNum; i++) {
-		cannons_.emplace_back(std::make_unique<PlayerCannon>());
+		cannons_.push_back(std::make_unique<PlayerCannon>());
 		cannons_[i]->Initialize();
 	}
 
 	//銃弾の生成と初期化
 	int bulletNum = param_["maxBulletNum"];
 	for (int i = 0; i < bulletNum; i++) {
-		bullets_.emplace_back(std::make_unique<PlayerBullet>());
+		bullets_.push_back(std::make_unique<PlayerBullet>());
 		bullets_[i]->Initialize();
 	}
 }
@@ -56,8 +56,9 @@ void PlayerWeaponManager::CreateCannon() {
 	if (!player_->GetIsCannonFire()) return;
 	//砲弾の追加位置を探す
 	for (auto& cannon : cannons_) {
-		//砲弾が生きていたら次へ
-		if (!cannon->GetIsDead()) continue;
+		//砲弾がアイドル状態なら次へ
+		if (cannon->GetState() == BaseCharacter::State::kIdle)
+			continue;
 		//砲弾の初期位置と初速度をセット
 		float orx = camera_->worldTransform.rotate.x;
 		float ory = camera_->worldTransform.rotate.y;
@@ -70,12 +71,13 @@ void PlayerWeaponManager::CreateCannon() {
 		Vector3 cannonPos = player_->GetWorldTransform().translate;
 		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
 		Vector3 cannonDirection = currentDir;
-		cannon->SetInitParam(cannonPos, cannonDirection);
+		//スポーン
+		cannon->Spawn(cannonPos, cannonDirection);
 		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.15f);
 		break;
 	}
-	
+
 }
 
 void PlayerWeaponManager::CreateBullet() {
@@ -83,8 +85,9 @@ void PlayerWeaponManager::CreateBullet() {
 	if (!player_->GetIsBulletFire()) return;
 	//銃弾の追加位置を探す
 	for (auto& bullet : bullets_) {
-		//銃弾が生きていたら次へ
-		if (!bullet->GetIsDead()) continue;
+		//銃弾がアイドル状態なら次へ
+		if (bullet->GetState() == BaseCharacter::State::kIdle)
+			continue;
 		//銃弾の初期位置と初速度をセット
 		float orx = camera_->worldTransform.rotate.x;
 		float ory = camera_->worldTransform.rotate.y;
@@ -96,7 +99,9 @@ void PlayerWeaponManager::CreateBullet() {
 		currentDir.Normalize();
 		Vector3 bulletPos = camera_->worldTransform.translate;
 		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
-		bullet->SetInitParam(bulletPos, currentDir);
+
+		//スポーン
+		bullet->Spawn(bulletPos, currentDir);
 		break;
 	}
 }

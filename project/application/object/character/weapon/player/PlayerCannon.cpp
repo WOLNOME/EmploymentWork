@@ -31,9 +31,6 @@ void PlayerCannon::Initialize() {
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
 
-	//初期化時点では死亡状態
-	isDead_ = true;
-
 	//影の大きさを調整
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 
@@ -42,9 +39,15 @@ void PlayerCannon::Initialize() {
 void PlayerCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
-	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
 
+	//死亡演出が終了していたらアイドル状態にする
+	if (state_ == State::kAsphyxia && !particle_->GetIsPlay()) {
+		SetState(State::kIdle);
+	}
+
+	//弾がアクティブでないなら更新しない
+	if (state_ != State::kActive)
+		return;
 
 	//移動処理
 	Move();
@@ -69,6 +72,24 @@ void PlayerCannon::DebugWithImGui() {
 
 }
 
+void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+	//初期位置を保存
+	object3d_->worldTransform.translate = _initPos;
+	//表示する
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
+	//速度を算出
+	float speed = param_["speed"];
+	//速度を決める
+	velocity_ = _initDirection * speed;
+	//当たり判定の属性を決める
+	SetCollisionAttribute(CollisionAttribute::PlayerCannon);
+	//アクティブ状態にする
+	SetState(State::kActive);
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	trail_->ClearPositions();
+}
+
 void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//衝突時の共通処理ラムダ式
 	auto commonCollisionProcess = [this, &subjectPos]() {
@@ -79,10 +100,8 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 		transform.translate = object3d_->worldTransform.translate;
 		particle_->SetBaseTransform(transform);
 		particle_->SetIsPlay(true);
-		//死亡予約処理
-		SetDeadTimer(particle_->GetDuration());
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//仮死状態にする
+		SetState(State::kAsphyxia);
 		};
 
 	//当たり判定時の処理
@@ -110,21 +129,6 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	}
 }
 
-void PlayerCannon::SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
-	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
-	//表示する
-	object3d_->SetIsDisplay(true);
-	circleShadow_->SetIsDisplay(true);
-	//速度を算出
-	float speed = param_["speed"];
-	velocity_ = _initDirection * speed;
-	SetCollisionAttribute(CollisionAttribute::PlayerCannon);
-	isDead_ = false;
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-	trail_->ClearPositions();
-}
-
 void PlayerCannon::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
@@ -141,14 +145,10 @@ void PlayerCannon::Move() {
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
-	if (GetDeadTimer() == 0.0f) {
-		if (object3d_->worldTransform.translate.y < 0.0f) {
-			object3d_->worldTransform.translate.y = 0.0f;
-			//死亡予約処理
-			SetDeadTimer(0.1f);
-			//当たり判定属性をなしに
-			SetCollisionAttribute(CollisionAttribute::Nothingness);
-		}
+	if (object3d_->worldTransform.translate.y < 0.0f) {
+		object3d_->worldTransform.translate.y = 0.0f;
+		//アイドル状態にする
+		SetState(State::kIdle);
 	}
 
 }

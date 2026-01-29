@@ -9,6 +9,7 @@ void BaseCharacter::Initialize() {
 	circleShadow_ = std::make_unique<Object3d>();
 	circleShadow_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("CircleShadow"), "circleShadow");
 	circleShadow_->SetIsLightProcess(false);
+	circleShadow_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	circleShadow_->worldTransform.scale = { 5.0f,5.0f,5.0f };
 }
 
@@ -24,44 +25,51 @@ void BaseCharacter::Update() {
 
 	//当たり判定を登録
 	CollisionManager::GetInstance()->SetColliders(this);
-
-	//死亡予約時の処理
-	if (deadTimer_ > 0.0f) {
-		//死亡予約時間を減算
-		deadTimer_ -= kDeltaTime;
-		//死亡予約時間が0以下になったら死亡フラグを立てる
-		if (deadTimer_ <= 0.0f) {
-			isDead_ = true;
-			deadTimer_ = 0.0f;
-			object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
-		}
-	}
 }
 
 void BaseCharacter::DebugWithImGui() {
 #ifdef _DEBUG
-	//死亡していたらreturn
-	if (isDead_ || deadTimer_ > 0.0f) return;
+	//アクティブでないなら
+	if (state_!=State::kActive)
+		return;
 
 	Collider::DebugWithImGui();
 #endif //_DEBUG
 }
 
-void BaseCharacter::SetDeadTimer(float remainingSeconds) {
-	//もし予約時間が決まっていたらreturn
-	if (deadTimer_ > 0.0f) return;
-
-	//不可視にする
-	object3d_->SetIsDisplay(false);
-	if (circleShadow_) {
-		circleShadow_->SetIsDisplay(false);
+void BaseCharacter::SetState(const State& _state) {
+	//値のセット
+	state_ = _state;
+	//状態ごとの処理
+	switch (state_) {
+	case BaseCharacter::State::kIdle:
+		//座標を遥か遠くにセット
+		object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+		if (circleShadow_) {
+			circleShadow_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+		}
+		//不可視にする
+		object3d_->SetIsDisplay(false);
+		if (circleShadow_) {
+			circleShadow_->SetIsDisplay(false);
+		}
+		//当たり判定を消滅
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		break;
+	case BaseCharacter::State::kActive:
+		//特に何もしない
+		break;
+	case BaseCharacter::State::kAsphyxia:
+		//不可視にする
+		object3d_->SetIsDisplay(false);
+		if (circleShadow_) {
+			circleShadow_->SetIsDisplay(false);
+		}
+		//当たり判定を消滅
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		break;
+	default:
+		break;
 	}
 
-	//死亡予約時間をセット
-	deadTimer_ = remainingSeconds;
-
-	//当たり判定を消滅させる
-	SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-	return;
 }

@@ -29,9 +29,6 @@ void EnemyCannon::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
 
-	//初期化時点では死亡状態
-	isDead_ = true;
-
 	//影の大きさを調整
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 }
@@ -39,8 +36,15 @@ void EnemyCannon::Initialize() {
 void EnemyCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
-	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
+
+	//死亡演出が終わったらアイドル状態にする
+	if (state_ == State::kAsphyxia && !particle_->GetIsPlay()) {
+		SetState(State::kIdle);
+	}
+
+	//弾がアクティブでないなら更新しない
+	if (GetState() != State::kActive)
+		return;
 
 	//移動処理
 	Move();
@@ -59,8 +63,51 @@ void EnemyCannon::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
-
 }
+
+void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
+	//初期位置を保存
+	object3d_->worldTransform.translate = _initPos;
+	generatedPosition_ = _initPos;
+	//表示する
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
+	//向きベクトルを算出
+	Vector3 targetVec = _targetPos - _initPos;
+	//XZ方向の速度を算出
+	float hitTime = param_["hitTime"];
+	velocity_.x = targetVec.x / hitTime;
+	velocity_.z = targetVec.z / hitTime;
+
+	//最大高度から重力を求める
+	float maxHeight = param_["maxHeight"];
+	//もしinitPosのy座標がmaxHeightより大きい場合
+	if (_initPos.y > maxHeight) {
+		//最大高度をinitPosのy座標にする
+		maxHeight = _initPos.y;
+		gravity_ = 2.0f * (_initPos.y - _targetPos.y) / std::powf(hitTime, 2);
+		//y方向の上昇速度は0
+		velocity_.y = 0.0f;
+		//当たり判定属性をセット
+		SetCollisionAttribute(CollisionAttribute::EnemyCannon);
+		//アクティブ状態にする
+		SetState(State::kActive);
+		prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+
+		return;
+	}
+
+	gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
+	//y方向の上昇速度を算出
+	velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
+
+	//当たり判定属性をセット
+	SetCollisionAttribute(CollisionAttribute::EnemyCannon);
+	//アクティブ状態にする
+	SetState(State::kActive);
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+}
+
 
 void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//衝突時の共通処理ラムダ式
@@ -72,10 +119,8 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 		transform.translate = object3d_->worldTransform.translate;
 		particle_->SetBaseTransform(transform);
 		particle_->SetIsPlay(true);
-		//死亡予約処理
-		SetDeadTimer(particle_->GetDuration());
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//仮死状態にする
+		SetState(State::kAsphyxia);
 		};
 
 	//当たり判定時の処理
@@ -112,63 +157,16 @@ void EnemyCannon::OnCollision(CollisionAttribute attribute, const Vector3& subje
 	}
 }
 
-void EnemyCannon::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
-	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
-	generatedPosition_ = _initPos;
-	//表示する
-	object3d_->SetIsDisplay(true);
-	circleShadow_->SetIsDisplay(true);
-	//向きベクトルを算出
-	Vector3 targetVec = _targetPos - _initPos;
-	//XZ方向の速度を算出
-	float hitTime = param_["hitTime"];
-	velocity_.x = targetVec.x / hitTime;
-	velocity_.z = targetVec.z / hitTime;
-
-	//最大高度から重力を求める
-	float maxHeight = param_["maxHeight"];
-	//もしinitPosのy座標がmaxHeightより大きい場合
-	if (_initPos.y > maxHeight) {
-		//最大高度をinitPosのy座標にする
-		maxHeight = _initPos.y;
-		gravity_ = 2.0f * (_initPos.y - _targetPos.y) / std::powf(hitTime, 2);
-		//y方向の上昇速度は0
-		velocity_.y = 0.0f;
-		//当たり判定属性をセット
-		SetCollisionAttribute(CollisionAttribute::EnemyCannon);
-		//死亡状態を解除
-		isDead_ = false;
-		prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-		return;
-	}
-
-	gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
-	//y方向の上昇速度を算出
-	velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
-
-	//当たり判定属性をセット
-	SetCollisionAttribute(CollisionAttribute::EnemyCannon);
-	//死亡状態を解除
-	isDead_ = false;
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-}
-
 void EnemyCannon::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
 
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
-	//弾が地面に当たったら死亡
-	if (GetDeadTimer() == 0.0f) {
-		if (object3d_->worldTransform.translate.y < 0.0f) {
-			object3d_->worldTransform.translate.y = 0.0f;
-			//死亡予約処理
-			SetDeadTimer(0.1f);
-			//当たり判定属性をなしに
-			SetCollisionAttribute(CollisionAttribute::Nothingness);
-		}
+	//弾が地面に当たったら
+	if (object3d_->worldTransform.translate.y < 0.0f) {
+		object3d_->worldTransform.translate.y = 0.0f;
+		//アイドル状態にする
+		SetState(State::kIdle);
 	}
-
 }

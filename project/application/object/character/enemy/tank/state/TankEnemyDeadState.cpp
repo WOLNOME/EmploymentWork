@@ -20,11 +20,15 @@ void TankEnemyDeadState::Enter(IBaseTankEnemy* enemy) {
 	TransformEuler transform = particle_->GetBaseTransform();
 	transform.translate = enemy->GetWorldPosition();
 	particle_->SetBaseTransform(transform);
-	//死亡タイマーをセット(設計上上書きされることはない)
-	enemy->SetDeadTimer(particle_->GetDuration());
+	//仮死状態にする
+	enemy->SetState(BaseCharacter::State::kAsphyxia);
 }
 
 void TankEnemyDeadState::Update(IBaseTankEnemy* enemy) {
+	//パーティクルが終了したらアイドル状態にする
+	if (!particle_->GetIsPlay()) {
+		enemy->SetState(BaseCharacter::State::kIdle);
+	}
 }
 
 void TankEnemyDeadState::Exit(IBaseTankEnemy* enemy) {

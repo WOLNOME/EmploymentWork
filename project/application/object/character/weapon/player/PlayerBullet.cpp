@@ -34,9 +34,6 @@ void PlayerBullet::Initialize() {
 	//当たり判定の半径を設定
 	collisionRadius_ = 0.01f;
 
-	//初期化時点では死亡状態
-	isDead_ = true;
-
 	//影の大きさを調整
 	circleShadow_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 
@@ -45,8 +42,15 @@ void PlayerBullet::Initialize() {
 void PlayerBullet::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
-	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
+
+	//死亡演出が終了したらアイドル状態にする
+	if (state_ == State::kAsphyxia && !hitEffect_->GetIsPlay()) {
+		SetState(State::kIdle);
+	}
+
+	//アクティブでないなら更新しない
+	if (state_ != State::kActive)
+		return;
 
 	//移動処理
 	Move();
@@ -68,6 +72,26 @@ void PlayerBullet::DebugWithImGui() {
 	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 #endif // _DEBUG
+}
+
+void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+	//初期位置を保存
+	object3d_->worldTransform.translate = _initPos;
+	//表示する
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
+	//速度を算出
+	float speed = param_["speed"];
+	//速度を更新
+	velocity_ = _initDirection * speed;
+	//重力は計算しない
+	gravity_ = 0.0f;
+	//当たり判定を入力
+	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+	//アクティブ状態に変更
+	state_ = State::kActive;
+	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	trail_->ClearPositions();
 }
 
 void PlayerBullet::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
@@ -99,22 +123,6 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	}
 }
 
-void PlayerBullet::SetInitParam(const Vector3& _initPos, const Vector3& _initDirection) {
-	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
-	//表示する
-	object3d_->SetIsDisplay(true);
-	circleShadow_->SetIsDisplay(true);
-	//速度を算出
-	float speed = param_["speed"];
-	velocity_ = _initDirection * speed;
-	gravity_ = 0.0f;
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
-	isDead_ = false;
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-	trail_->ClearPositions();
-}
-
 void PlayerBullet::Move() {
 	//移動量の大きさを制限
 	float maxSpeed = param_["maxSpeed"];
@@ -125,21 +133,19 @@ void PlayerBullet::Move() {
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
-	if (GetDeadTimer() == 0.0f && !isDead_) {
-		if (object3d_->worldTransform.translate.y < 0.0f) {
-			object3d_->worldTransform.translate.y = 0.0f;
-			//死亡処理
-			DeadProcess();
-		}
+	if (object3d_->worldTransform.translate.y < 0.0f) {
+		object3d_->worldTransform.translate.y = 0.0f;
+		//死亡処理
+		DeadProcess();
 	}
 
 	//弾が寿命を迎えたら死亡
 	lifeTimer_ += kDeltaTime;
 	if (lifeTimer_ >= lifeTime_) {
-		if (GetDeadTimer() == 0.0f && !isDead_) {
-			//死亡処理
-			DeadProcess();
-		}
+		//アイドル状態にする
+		SetState(State::kIdle);
+		//寿命タイマーをリセット
+		lifeTimer_ = 0.0f;
 	}
 }
 
@@ -149,10 +155,8 @@ void PlayerBullet::DeadProcess() {
 	transform.translate = object3d_->worldTransform.translate;
 	hitEffect_->SetBaseTransform(transform);
 	hitEffect_->SetIsPlay(true);
-	//死亡予約処理
-	SetDeadTimer(hitEffect_->GetDuration());
-	//当たり判定属性をなしに
-	SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-	lifeTimer_ = 0.0f;	//寿命タイマーをリセット
+	//仮死状態にする
+	SetState(State::kAsphyxia);
+	//寿命タイマーをリセット
+	lifeTimer_ = 0.0f;
 }

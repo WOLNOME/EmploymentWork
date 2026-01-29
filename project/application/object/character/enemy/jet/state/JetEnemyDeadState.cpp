@@ -19,11 +19,15 @@ void JetEnemyDeadState::Enter(IBaseJetEnemy* enemy) {
 	TransformEuler transform = particle_->GetBaseTransform();
 	transform.translate = enemy->GetWorldPosition();
 	particle_->SetBaseTransform(transform);
-	//死亡タイマーをセット(設計上上書きされることはない)
-	enemy->SetDeadTimer(particle_->GetDuration());
+	//仮死状態にする
+	enemy->SetState(BaseCharacter::State::kAsphyxia);
 }
 
 void JetEnemyDeadState::Update(IBaseJetEnemy* enemy) {
+	//パーティクルが終了したらアイドル状態にする
+	if (!particle_->GetIsPlay()) {
+		enemy->SetState(BaseCharacter::State::kIdle);
+	}
 }
 
 void JetEnemyDeadState::Exit(IBaseJetEnemy* enemy) {

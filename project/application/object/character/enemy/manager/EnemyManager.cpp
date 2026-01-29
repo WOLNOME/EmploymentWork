@@ -8,6 +8,8 @@
 #include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
+	//↓仮処理
+
 	//ボスの初期化
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
@@ -19,7 +21,7 @@ void EnemyManager::Initialize() {
 void EnemyManager::Update() {
 	//全キャノ太の死亡時処理
 	for (auto it = canotas_.begin(); it != canotas_.end();) {
-		if ((*it)->GetIsDead()) {
+		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
 			it = canotas_.erase(it);
 		}
 		else {
@@ -28,7 +30,7 @@ void EnemyManager::Update() {
 	}
 	//全キーキャノ太の死亡時処理
 	for (auto it = keyCanotas_.begin(); it != keyCanotas_.end();) {
-		if ((*it)->GetIsDead()) {
+		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
 			it = keyCanotas_.erase(it);
 		}
 		else {
@@ -37,7 +39,7 @@ void EnemyManager::Update() {
 	}
 	//全ジェットの死亡時処理
 	for (auto it = jets_.begin(); it != jets_.end();) {
-		if ((*it)->GetIsDead()) {
+		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
 			it = jets_.erase(it);
 		}
 		else {

@@ -54,6 +54,11 @@ public:
 	/// </summary>
 	/// <returns>ジェットのコンテナ</returns>
 	const std::list<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
+	/// <summary>
+	/// ボスのコンテナ取得
+	/// </summary>
+	/// <returns></returns>
+	const std::unique_ptr<Boss>& GetBoss() const { return boss_; }
 
 	/// ============================== ///
 	///		setter

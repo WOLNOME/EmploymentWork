@@ -34,7 +34,6 @@ void EndDirection::Update() {
 	//全ボス撃破処理
 	AllBossDefeated();
 
-
 }
 
 void EndDirection::SceneChange() {
@@ -44,7 +43,7 @@ void EndDirection::SceneChange() {
 		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}
 	//プレイヤーが死亡したらゲームオーバー
-	if (player_->GetIsDead()) {
+	if (player_->GetState() == BaseCharacter::State::kIdle) {
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
 		sceneManager_->SetNextScene("GameOver", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);
 	}

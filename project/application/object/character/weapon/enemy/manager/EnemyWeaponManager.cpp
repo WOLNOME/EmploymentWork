@@ -77,38 +77,42 @@ void EnemyWeaponManager::CreateCannon() {
 		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
-			//砲弾が生きていたら次へ
-			if (!cannon->GetIsDead()) continue;
+			//砲弾がアクティブなら次へ
+			if (cannon->GetState() == BaseCharacter::State::kActive)
+				continue;
 			//砲弾の初期位置と目標位置をセット
 			Vector3 cannonPos = canota->GetWorldTransform().translate;
 			cannonPos.y += 2.0f;	//←高さ
 			cannonPos.x += std::sinf(canota->GetWorldTransform().rotate.y) * 10.0f;
 			cannonPos.z += std::cosf(canota->GetWorldTransform().rotate.y) * 10.0f;
-			cannon->SetInitParam(cannonPos, player_->GetWorldTransform().translate);
+			//スポーン
+			cannon->Spawn(cannonPos, player_->GetWorldTransform().translate);
 			break;
 		}
 	}
 
-	//全てのボスを回す
-	for (auto& boss : enemyManager_->GetKeyCanotas()) {
-		//ボスから発射フラグを取得
-		if (!boss->GetAttackState()->GetIsCannonFire()) {
+	//全てのキーキャノ太を回す
+	for (auto& keyCanota : enemyManager_->GetKeyCanotas()) {
+		//キーキャノ太から発射フラグを取得
+		if (!keyCanota->GetAttackState()->GetIsCannonFire()) {
 			continue;
 		}
 		else {
 			//砲弾発射フラグを下げる
-			boss->GetAttackState()->SetIsCannonFire(false);
+			keyCanota->GetAttackState()->SetIsCannonFire(false);
 		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
-			//砲弾が生きていたら次へ
-			if (!cannon->GetIsDead()) continue;
+			//砲弾がアクティブなら次へ
+			if (cannon->GetState()==BaseCharacter::State::kActive) 
+				continue;
 			//砲弾の初期位置と目標位置をセット
-			Vector3 cannonPos = boss->GetWorldTransform().translate;
+			Vector3 cannonPos = keyCanota->GetWorldTransform().translate;
 			cannonPos.y += 2.0f;	//←高さ
-			cannonPos.x += std::sinf(boss->GetWorldTransform().rotate.y) * 10.0f;
-			cannonPos.z += std::cosf(boss->GetWorldTransform().rotate.y) * 10.0f;
-			cannon->SetInitParam(cannonPos, player_->GetWorldTransform().translate);
+			cannonPos.x += std::sinf(keyCanota->GetWorldTransform().rotate.y) * 10.0f;
+			cannonPos.z += std::cosf(keyCanota->GetWorldTransform().rotate.y) * 10.0f;
+			//スポーン
+			cannon->Spawn(cannonPos, player_->GetWorldTransform().translate);
 			break;
 		}
 	}
@@ -123,11 +127,14 @@ void EnemyWeaponManager::CreateBomb() {
 		}
 		//爆弾の追加位置を探す
 		for (auto& bomb : bombs_) {
-			//爆弾が生きていたら次へ
-			if (!bomb->GetIsDead()) continue;
+			//爆弾がアクティブなら次へ
+			if (bomb->GetState()==BaseCharacter::State::kActive)
+				continue;
 			//爆弾の初期位置と目標位置をセット
 			Vector3 bombPos = jet->GetWorldTransform().worldTranslate;
-			bomb->SetInitParam(bombPos, { 0.0f,0.0f,0.0f });
+
+			//スポーン
+			bomb->Spawn(bombPos, { 0.0f,0.0f,0.0f });
 			//投下不可能状態に移行
 			jet->GetAttackState()->SetIsCanBombFire(false);
 			break;

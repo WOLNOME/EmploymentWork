@@ -106,11 +106,8 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 	switch (attribute) {
 		//プレイヤーに当たった場合
 	case CollisionAttribute::Player: {
-		//死ぬ
-		float deadTime = param_["deadTime"];
-		SetDeadTimer(deadTime);
-		//当たり判定属性を消す
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		//仮死状態にする
+		SetState(State::kAsphyxia);
 
 		//パーティクル
 		idleParticle_->SetIsPlay(false); // パーティクルを非アクティブにする
@@ -150,15 +147,19 @@ void Item::UntilDeathProcess() {
 		}
 	}
 
-	// アイテムが消えるまでの処理
-	if (GetDeadTimer() > 0.0f) {
+	// アイテムが消えるまでの処理(仮死状態の時)
+	if (state_ == State::kAsphyxia) {
+		//演出が終了したらアイドル状態にする
+		if (!getParticle_->GetIsPlay()) {
+			SetState(State::kIdle);
+		}
+
 		//表示
 		object3d_->SetIsDisplay(true);
-		//回転させる
+		//回転させる(めちゃ速く)
 		object3d_->worldTransform.rotate.y += 0.3f;
 		//縮小
-		float deadTime = param_["deadTime"];
-		float scale = MyMath::Lerp(0.0f, 1.0f, GetDeadTimer() / deadTime);
+		float scale = MyMath::Lerp(1.0f, 0.0f, getParticle_->GetElapsedTime() / getParticle_->GetDuration());
 		object3d_->worldTransform.scale = { scale, scale, scale };
 	}
 	else {
