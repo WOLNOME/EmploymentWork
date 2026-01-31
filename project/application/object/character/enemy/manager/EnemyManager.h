@@ -1,5 +1,6 @@
 #pragma once
-#include <list>
+#include "JsonUtil.h"
+#include <vector>
 #include <memory>
 
 //アプリケーション
@@ -43,17 +44,17 @@ public:
 	/// キャノ太のコンテナ取得
 	/// </summary>
 	/// <returns>キャノ太のコンテナ</returns>
-	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
+	const std::vector<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
 	/// <summary>
 	/// キーキャノ太のコンテナ取得
 	/// </summary>
 	/// <returns>キーキャノ太のコンテナ</returns>
-	const std::list<std::unique_ptr<KeyCanota>>& GetKeyCanotas() const { return keyCanotas_; }
+	const std::vector<std::unique_ptr<KeyCanota>>& GetKeyCanotas() const { return keyCanotas_; }
 	/// <summary>
 	/// ジェットのコンテナ取得
 	/// </summary>
 	/// <returns>ジェットのコンテナ</returns>
-	const std::list<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
+	const std::vector<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
 	/// <summary>
 	/// ボスのコンテナ取得
 	/// </summary>
@@ -98,13 +99,16 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+	
+	//パラメーター
+	json param_;
 
 	//キャノ太のコンテナ
-	std::list<std::unique_ptr<Canota>> canotas_;
+	std::vector<std::unique_ptr<Canota>> canotas_;
 	//キーキャノ太のコンテナ
-	std::list<std::unique_ptr<KeyCanota>> keyCanotas_;
+	std::vector<std::unique_ptr<KeyCanota>> keyCanotas_;
 	//ジェットのコンテナ
-	std::list<std::unique_ptr<Jet>> jets_;
+	std::vector<std::unique_ptr<Jet>> jets_;
 	//ボスのインスタンス
 	std::unique_ptr<Boss> boss_ = nullptr;
 

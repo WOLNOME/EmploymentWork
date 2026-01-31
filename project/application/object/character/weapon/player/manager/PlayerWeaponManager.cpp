@@ -56,8 +56,8 @@ void PlayerWeaponManager::CreateCannon() {
 	if (!player_->GetIsCannonFire()) return;
 	//砲弾の追加位置を探す
 	for (auto& cannon : cannons_) {
-		//砲弾がアイドル状態なら次へ
-		if (cannon->GetState() == BaseCharacter::State::kIdle)
+		//砲弾がアイドル状態でないなら次へ
+		if (cannon->GetState() != BaseCharacter::State::kIdle)
 			continue;
 		//砲弾の初期位置と初速度をセット
 		float orx = camera_->worldTransform.rotate.x;
@@ -85,8 +85,8 @@ void PlayerWeaponManager::CreateBullet() {
 	if (!player_->GetIsBulletFire()) return;
 	//銃弾の追加位置を探す
 	for (auto& bullet : bullets_) {
-		//銃弾がアイドル状態なら次へ
-		if (bullet->GetState() == BaseCharacter::State::kIdle)
+		//銃弾がアイドル状態でないなら次へ
+		if (bullet->GetState() != BaseCharacter::State::kIdle)
 			continue;
 		//銃弾の初期位置と初速度をセット
 		float orx = camera_->worldTransform.rotate.x;

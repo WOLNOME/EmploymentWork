@@ -21,17 +21,19 @@ void PlayerCannon::Initialize() {
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<CombinedParticle>();
 	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerCannonHit"), "Cannon_Hit");
+	particle_->SetIsPlay(false);
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	trail_->SetIsDisplay(false);
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = Collider::CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
 
-	//影の大きさを調整
+	//影の初期化
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 
 }

@@ -219,6 +219,11 @@ void Radar::UpdateItemMark() {
 	int spriteIndex = 0;
 	//アイテムマークの更新（白）
 	for (const auto& item : itemManager_->GetItems()) {
+		//アイテムがアイドル状態なら次へ
+		if (item->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		processItem(item->GetWorldPosition(), { 1, 1, 1, 1 }, spriteIndex);
 	}
 }

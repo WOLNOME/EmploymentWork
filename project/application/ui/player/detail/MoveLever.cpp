@@ -26,7 +26,7 @@ void MoveLever::Update() {
 	const float minHeight = 700.0f;
 
 	//W,Sに対してゲージを変動させる
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_W) || (input_->GetLStickDir().y > 0.0f)) {
 		//半分より小さいなら
 		if (gauge_ < kMaxGauge_ / 2.0f) {
 			gauge_ += 2;
@@ -35,7 +35,7 @@ void MoveLever::Update() {
 			gauge_++;
 		}
 	}
-	if (input_->PushKey(DIK_S)) {
+	if (input_->PushKey(DIK_S) || (input_->GetLStickDir().y < 0.0f)) {
 		//半分より大きいなら
 		if (gauge_ > kMaxGauge_ / 2.0f) {
 			gauge_ -= 2;
@@ -46,7 +46,9 @@ void MoveLever::Update() {
 	}
 
 	//何も入力されていない場合は1500になるようにする
-	if (!input_->PushKey(DIK_W) && !input_->PushKey(DIK_S)) {
+	if (!input_->PushKey(DIK_W) &&
+		!input_->PushKey(DIK_S) &&
+		(input_->GetLStickDir().y == 0.0f)) {
 		//半分より大きいなら
 		if (gauge_ > kMaxGauge_ / 2.0f) {
 			gauge_ -= 2;

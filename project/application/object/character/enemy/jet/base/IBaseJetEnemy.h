@@ -47,6 +47,13 @@ public:
 	void DebugWithImGui() override;
 
 	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	virtual void Spawn(const Vector3& _initPos, const Vector3& _initRotate) = 0;
+
+	/// <summary>
 	/// 状態変更用関数
 	/// </summary>
 	/// <param name="stateName">状態名</param>

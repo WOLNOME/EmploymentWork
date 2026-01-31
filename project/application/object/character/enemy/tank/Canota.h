@@ -36,6 +36,13 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
+	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void Spawn(const Vector3& _initPos, const Vector3& _initRotate) override;
+
 private:
 	/// ============================== ///
 	///		非公開メンバ関数

@@ -53,8 +53,6 @@ void Player::Initialize() {
 	item_moveSpeedUp_ = 0;
 	item_turnSpeedUp_ = 0;
 
-	circleShadow_->SetIsDisplay(false);
-
 }
 
 void Player::Update() {
@@ -308,11 +306,11 @@ void Player::Move() {
 	float speed = param_["speed"];
 	float item_moveSpeedUpValue = param_["item_moveSpeedUpValue"];
 	speed += item_moveSpeedUp_ * item_moveSpeedUpValue;
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_W) || (input_->GetLStickDir().y > 0.0f)) {
 		//速度を加算
 		velocity_ += currentDir * speed;
 	}
-	if (input_->PushKey(DIK_S)) {
+	if (input_->PushKey(DIK_S) || (input_->GetLStickDir().y < 0.0f)) {
 		//速度を減算
 		velocity_ += -currentDir * speed;
 	}
@@ -375,7 +373,7 @@ void Player::CannonAttack() {
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		//砲弾を発射したフラグをオン
 		isCannonFire_ = true;
 		//リロードタイムをセット
@@ -388,7 +386,7 @@ void Player::CannonAttack() {
 
 void Player::BulletAttack() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) 
+	if (deathDirection_->GetIsDirection())
 		return;
 	//アクティブでないなら処理をしない
 	if (state_ != State::kActive)
@@ -428,7 +426,7 @@ void Player::BulletAttack() {
 	}
 
 	//左クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::LeftButton)) {
+	if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
 		//銃弾を発射したフラグをオン
 		isBulletFire_ = true;
 		//間隔計測用タイマーをセット
@@ -468,7 +466,11 @@ void Player::CameraAlgorithm() {
 		return;
 
 	//カメラの操作にオブジェクトの回転を合わせる
-	Vector2 moveValue = input_->GetMousePosition();
+	Vector2 moveValue;
+	Vector2 mouseMoveValue = input_->GetMousePosition();
+	Vector2 padMoveValue = input_->GetRStickDir() * 40.0f;
+	padMoveValue.y *= -1.0f;
+	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
 	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {

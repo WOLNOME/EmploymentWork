@@ -12,13 +12,13 @@ void EnemyWeaponManager::Initialize() {
 	//砲弾の生成と初期化
 	int cannonNum = param_["maxCannonNum"];
 	for (int i = 0; i < cannonNum; i++) {
-		cannons_.emplace_back(std::make_unique<EnemyCannon>());
+		cannons_.push_back(std::make_unique<EnemyCannon>());
 		cannons_[i]->Initialize();
 	}
 	//爆弾の生成と初期化
 	int bombNum = param_["maxBombNum"];
 	for (int i = 0; i < bombNum; i++) {
-		bombs_.emplace_back(std::make_unique<EnemyBomb>());
+		bombs_.push_back(std::make_unique<EnemyBomb>());
 		bombs_[i]->Initialize();
 	}
 
@@ -77,8 +77,8 @@ void EnemyWeaponManager::CreateCannon() {
 		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
-			//砲弾がアクティブなら次へ
-			if (cannon->GetState() == BaseCharacter::State::kActive)
+			//砲弾がアイドル状態でないなら次へ
+			if (cannon->GetState() != BaseCharacter::State::kIdle)
 				continue;
 			//砲弾の初期位置と目標位置をセット
 			Vector3 cannonPos = canota->GetWorldTransform().translate;
@@ -103,8 +103,8 @@ void EnemyWeaponManager::CreateCannon() {
 		}
 		//砲弾の追加位置を探す
 		for (auto& cannon : cannons_) {
-			//砲弾がアクティブなら次へ
-			if (cannon->GetState()==BaseCharacter::State::kActive) 
+			//砲弾がアイドル状態でないなら次へ
+			if (cannon->GetState() != BaseCharacter::State::kIdle)
 				continue;
 			//砲弾の初期位置と目標位置をセット
 			Vector3 cannonPos = keyCanota->GetWorldTransform().translate;
@@ -127,8 +127,8 @@ void EnemyWeaponManager::CreateBomb() {
 		}
 		//爆弾の追加位置を探す
 		for (auto& bomb : bombs_) {
-			//爆弾がアクティブなら次へ
-			if (bomb->GetState()==BaseCharacter::State::kActive)
+			//爆弾がアイドル状態でないなら次へ
+			if (bomb->GetState() != BaseCharacter::State::kIdle)
 				continue;
 			//爆弾の初期位置と目標位置をセット
 			Vector3 bombPos = jet->GetWorldTransform().worldTranslate;

@@ -1,4 +1,5 @@
 {
+    "maxItemNum":10,
     "initHeight":1.7,
     "swingWidth":2.0,
     "swingTime":1.0,

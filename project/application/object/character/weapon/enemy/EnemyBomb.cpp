@@ -38,7 +38,7 @@ void EnemyBomb::Initialize() {
 	//パラメータの読み込み
 	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
 
-	//影の大きさを調整
+	//影の初期化
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 
 }

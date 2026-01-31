@@ -99,7 +99,7 @@ void TitleSystem::DebugWithImGui() {
 
 void TitleSystem::Operate() {
 	//Spaceキーで開始
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"));
 	}
 

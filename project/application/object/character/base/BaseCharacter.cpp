@@ -11,6 +11,7 @@ void BaseCharacter::Initialize() {
 	circleShadow_->SetIsLightProcess(false);
 	circleShadow_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	circleShadow_->worldTransform.scale = { 5.0f,5.0f,5.0f };
+	circleShadow_->SetIsDisplay(false);
 }
 
 void BaseCharacter::Update() {
@@ -18,10 +19,9 @@ void BaseCharacter::Update() {
 	prePosition_ = object3d_->worldTransform.translate;
 
 	//丸影の更新処理
-	if (circleShadow_) {
-		circleShadow_->worldTransform.translate = object3d_->worldTransform.worldTranslate;
-		circleShadow_->worldTransform.translate.y = 0.01f;
-	}
+	circleShadow_->worldTransform.translate = object3d_->worldTransform.worldTranslate;
+	circleShadow_->worldTransform.translate.y = 0.01f;
+
 
 	//当たり判定を登録
 	CollisionManager::GetInstance()->SetColliders(this);
@@ -30,7 +30,7 @@ void BaseCharacter::Update() {
 void BaseCharacter::DebugWithImGui() {
 #ifdef _DEBUG
 	//アクティブでないなら
-	if (state_!=State::kActive)
+	if (state_ != State::kActive)
 		return;
 
 	Collider::DebugWithImGui();

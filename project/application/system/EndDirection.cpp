@@ -37,11 +37,6 @@ void EndDirection::Update() {
 }
 
 void EndDirection::SceneChange() {
-	//シーンリセット
-	if (input_->TriggerKey(DIK_R)) {
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
-	}
 	//プレイヤーが死亡したらゲームオーバー
 	if (player_->GetState() == BaseCharacter::State::kIdle) {
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");

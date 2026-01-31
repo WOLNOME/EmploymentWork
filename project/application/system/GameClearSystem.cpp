@@ -131,7 +131,7 @@ void GameClearSystem::DebugWithImGui() {
 
 void GameClearSystem::Operate() {
 	//Spaceキーで開始
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)||input_->TriggerPadButton(GamePadButton::A)) {
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
 		sceneManager_->SetNextScene("Title", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
 	}

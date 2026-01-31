@@ -29,6 +29,14 @@ void CombinedParticle::Initialize(const std::string& _name, const std::string& _
 		.rotate = {0,0,0},
 		.translate = {0,0,0}
 	};
+	//再生情報を初期化
+	playInfo_ = {
+		.isPlay = false,
+		.isRepeat = false,
+		.elapsedTime = 0.0f,
+		.duration = 0.0f
+	};
+
 	//フォルダパス
 	std::string folderPath = "Resources/particles/" + _comParticleFileName;
 	std::vector<std::string> dataFiles;

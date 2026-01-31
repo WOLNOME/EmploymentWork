@@ -34,9 +34,6 @@ void PlayerBullet::Initialize() {
 	//当たり判定の半径を設定
 	collisionRadius_ = 0.01f;
 
-	//影の大きさを調整
-	circleShadow_->worldTransform.scale = { 0.01f,0.01f,0.01f };
-
 }
 
 void PlayerBullet::Update() {
@@ -79,7 +76,6 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	object3d_->worldTransform.translate = _initPos;
 	//表示する
 	object3d_->SetIsDisplay(true);
-	circleShadow_->SetIsDisplay(true);
 	//速度を算出
 	float speed = param_["speed"];
 	//速度を更新

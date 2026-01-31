@@ -11,13 +11,12 @@ void Item::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//オブジェクトを生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item"), Shape::ShapeKind::kCube);
-	object3d_->worldTransform.translate.y = param_["initHeight"];
-
+	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	object3d_->SetIsDisplay(false);
+	
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<CombinedParticle>();
 	idleParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_idle"), "Item_Idle");
@@ -26,12 +25,53 @@ void Item::Initialize() {
 	getParticle_ = std::make_unique<CombinedParticle>();
 	getParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_get"), "Item_Get");
 
+	//当たり判定の形状を設定
+	collisionShapeKind_ = CollisionShapeKind::OBB;
+
+	//影の大きさを調整
+	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
+}
+
+void Item::Update() {
+	//ベースキャラクターの更新
+	BaseCharacter::Update();
+
+	//死ぬまでの処理
+	UntilDeathProcess();
+
+	//パーティクルの更新
+	UpdateParticle();
+
+}
+
+void Item::DebugWithImGui() {
+#ifdef _DEBUG
+	//ベースキャラクターのデバッグ処理
+	BaseCharacter::DebugWithImGui();
+
+	//デバッグ用ラインのカラー
+	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
+#endif // _DEBUG
+}
+
+void Item::Spawn(const Vector3& _initPos) {
+	//初期座標を保存
+	object3d_->worldTransform.translate = _initPos;
+	object3d_->worldTransform.translate.y = param_["initHeight"];
+	//表示する
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
+	//静止パーティクルの設定
+	TransformEuler transform = idleParticle_->GetBaseTransform();
+	transform.translate = _initPos;
+	idleParticle_->SetBaseTransform(transform);
+	idleParticle_->SetIsPlay(true);
 	// 確率でアイテムの種類を決定
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(0, 4);
 	int itemType = dist(mt);
-
 	// アイテムの種類を設定
 	uint32_t textureHandle = 0u;
 	switch (itemType) {
@@ -63,42 +103,10 @@ void Item::Initialize() {
 	default:
 		break;
 	}
+	//アクティブ状態にする
+	SetState(State::kActive);
 
-	//影の大きさを調整
-	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
-}
 
-void Item::Update() {
-	//ベースキャラクターの更新
-	BaseCharacter::Update();
-
-	//死ぬまでの処理
-	UntilDeathProcess();
-
-	//パーティクルの更新
-	UpdateParticle();
-
-}
-
-void Item::DebugWithImGui() {
-#ifdef _DEBUG
-	//ベースキャラクターのデバッグ処理
-	BaseCharacter::DebugWithImGui();
-
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
-#endif // _DEBUG
-}
-
-void Item::SetInitPos(const Vector3& _initPos) {
-	//座標のセット
-	object3d_->worldTransform.translate = _initPos;
-	TransformEuler transform = idleParticle_->GetBaseTransform();
-	transform.translate = _initPos;
-	idleParticle_->SetBaseTransform(transform);
-	//パーティクルを再生
-	idleParticle_->SetIsPlay(true);
 }
 
 void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {

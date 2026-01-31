@@ -15,7 +15,8 @@ void EnemyCannon::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Cannon"), Shape::kSphere);
-	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
+	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	object3d_->SetIsDisplay(false);
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<CombinedParticle>();
@@ -29,7 +30,7 @@ void EnemyCannon::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
 
-	//影の大きさを調整
+	//影の初期化
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 }
 
@@ -105,6 +106,7 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	SetCollisionAttribute(CollisionAttribute::EnemyCannon);
 	//アクティブ状態にする
 	SetState(State::kActive);
+	//前フレーム座標を初期化
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 

@@ -8,6 +8,28 @@
 #include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
+	//パラメーターの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyManager");
+
+	//キャノ太の生成と初期化
+	int canotaNum = param_["maxCanotaNum"];
+	for (int i = 0; i < canotaNum; i++) {
+		canotas_.push_back(std::make_unique<Canota>(true));
+		canotas_[i]->Initialize();
+	}
+	//キーキャノ太の生成と初期化
+	int keyCanotaNum = param_["maxKeyCanotaNum"];
+	for (int i = 0; i < keyCanotaNum; i++) {
+		keyCanotas_.push_back(std::make_unique<KeyCanota>(true));
+		keyCanotas_[i]->Initialize();
+	}
+	//ジェットの生成と初期化
+	int jetNum = param_["maxJetNum"];
+	for (int i = 0; i < jetNum; i++) {
+		jets_.push_back(std::make_unique<Jet>());
+		jets_[i]->Initialize();
+	}
+
 	//↓仮処理
 
 	//ボスの初期化
@@ -19,48 +41,41 @@ void EnemyManager::Initialize() {
 }
 
 void EnemyManager::Update() {
-	//全キャノ太の死亡時処理
-	for (auto it = canotas_.begin(); it != canotas_.end();) {
-		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
-			it = canotas_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//全キーキャノ太の死亡時処理
-	for (auto it = keyCanotas_.begin(); it != keyCanotas_.end();) {
-		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
-			it = keyCanotas_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//全ジェットの死亡時処理
-	for (auto it = jets_.begin(); it != jets_.end();) {
-		if ((*it)->GetState() == BaseCharacter::State::kIdle) {
-			it = jets_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-
 	//全キャノ太の更新
 	for (const auto& canota : canotas_) {
+		//アイドル状態なら次へ
+		if (canota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		canota->Update();
 	}
 	//全キーキャノ太の更新
 	for (const auto& keyCanota : keyCanotas_) {
+		//アイドル状態なら次へ
+		if (keyCanota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		keyCanota->Update();
 	}
 	//全ジェットの更新
 	for (const auto& jet : jets_) {
+		//アイドル状態なら次へ
+		if (jet->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		jet->Update();
 	}
 	//ボスの更新
-	boss_->Update();
+	{
+		//アイドル状態なら次へ
+		if (boss_->GetState() == BaseCharacter::State::kIdle) {
+			return;
+		}
+		boss_->Update();
+	}
 }
 
 void EnemyManager::DebugWithImGui() {
@@ -89,12 +104,16 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 		if (data.fileName != "canota") {
 			continue; // ファイル名が"canota"でない場合はスキップ
 		}
-		std::unique_ptr<Canota> canota = nullptr;
-		canota = std::make_unique<Canota>(true);
-		canota->Initialize();
-		canota->SetTranslate(data.translation);
-		canota->SetRotate(data.rotation);
-		canotas_.push_back(std::move(canota));
+		//コンテナを走査
+		for (int i = 0; i < param_["maxCanotaNum"]; i++) {
+			//アイドル状態の要素を見つけたら
+			if (canotas_[i]->GetState() == BaseCharacter::State::kIdle) {
+				//スポーンさせる
+				canotas_[i]->Spawn(data.translation, data.rotation);
+
+				break;
+			}
+		}
 	}
 	//レベルローダーからキーキャノ太のスポーンデータを取得
 	const auto& keyCanotaSpawnData = _levelLoader->GetEnemySpawnData();
@@ -102,20 +121,29 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 		if (data.fileName != "keyCanota") {
 			continue; // ファイル名が"canota"でない場合はスキップ
 		}
-		std::unique_ptr<KeyCanota> keyCanota = nullptr;
-		keyCanota = std::make_unique<KeyCanota>(true);
-		keyCanota->Initialize();
-		keyCanota->SetTranslate(data.translation);
-		keyCanota->SetRotate(data.rotation);
-		keyCanotas_.push_back(std::move(keyCanota));
+		//コンテナを走査
+		for (int i = 0; i < param_["maxKeyCanotaNum"]; i++) {
+			//アイドル状態の要素を見つけたら
+			if (keyCanotas_[i]->GetState() == BaseCharacter::State::kIdle) {
+				//スポーンさせる
+				keyCanotas_[i]->Spawn(data.translation, data.rotation);
+
+				break;
+			}
+		}
 	}
 	//レベルローダーからジェットのスポーンデータを取得
-	std::unique_ptr<Jet> jet = nullptr;
-	jet = std::make_unique<Jet>();
-	jet->Initialize();
-	jet->SetTranslate({ 0.0f,40.0f,400.0f });
-	jet->SetRotate({ 0.0f,0.0f,0.0f });
-	jets_.push_back(std::move(jet));
+
+	//コンテナを走査
+	for (int i = 0; i < param_["maxJetNum"]; i++) {
+		//アイドル状態の要素を見つけたら
+		if (jets_[i]->GetState() == BaseCharacter::State::kIdle) {
+			//スポーンさせる
+			jets_[i]->Spawn({ 0.0f,40.0f,400.0f }, { 0.0f,0.0f,0.0f });
+
+			break;
+		}
+	}
 
 }
 
