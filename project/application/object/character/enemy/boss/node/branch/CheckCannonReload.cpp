@@ -8,13 +8,13 @@ CheckCannonReload::~CheckCannonReload() {
 
 const bool CheckCannonReload::IsCondition() {
 	bool result = false;
-	//ブラックボードからキャノンのリロードタイムを取得
-	float cannonReloadTime = mpBlackBoard->GetValue<float>("CannonReloadTime");
+	//ブラックボードから砲弾の弾倉を取得
+	int cannonMagazine = mpBlackBoard->GetValue<int>("CannonMagazine");
 
-	//リロードタイムが0ならリロード完了
-	if (cannonReloadTime == 0.0f) {
+	//弾倉が1ならリロード完了
+	if (cannonMagazine == 1) {
 		result = true;
 	}
 
-    return result;
+	return result;
 }

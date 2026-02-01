@@ -15,7 +15,6 @@ void BulletReloadLeaf::Initialize() {
 	float bulletReloadTime = mpBlackBoard->GetValue<float>("BulletReloadTime");
 	mpBlackBoard->SetValue<float>("BulletReloadTimer", bulletReloadTime);
 }
-
 void BulletReloadLeaf::Update() {
 	//ブラックボードから必要な情報を取得
 	float bulletReloadTime = mpBlackBoard->GetValue<float>("BulletReloadTime");

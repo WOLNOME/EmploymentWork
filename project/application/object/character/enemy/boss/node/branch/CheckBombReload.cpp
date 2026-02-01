@@ -8,13 +8,13 @@ CheckBombReload::~CheckBombReload() {
 
 const bool CheckBombReload::IsCondition() {
 	bool result = false;
-	// ブラックボードからボムのリロードタイムを取得
-	const float bombReloadTime = mpBlackBoard->GetValue<float>("BombReloadTime");
+	//ブラックボードから爆弾の弾倉を取得
+	int bombMagazine = mpBlackBoard->GetValue<int>("BombMagazine");
 
-	// ボムのリロードタイムが0ならリロード可能
-	if (bombReloadTime == 0.0f) {
+	//弾倉が1ならリロード完了
+	if (bombMagazine == 1) {
 		result = true;
 	}
 
-    return result;
+	return result;
 }

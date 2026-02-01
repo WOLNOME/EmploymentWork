@@ -202,5 +202,11 @@ void GamePlayScene::DebugWithImGui() {
 	//メッセージUIのImGui
 	messageUI_->DebugWithImGui();
 
+	ImGui::Begin("距離");
+	float distance = Vector3(player_->GetWorldTransform().translate - enemyManager_->GetBoss()->GetWorldTransform().translate).Length();
+	ImGui::Text("%f", distance);
+	ImGui::End();
+
+
 #endif // _DEBUG
 }

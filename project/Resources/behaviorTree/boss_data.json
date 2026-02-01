@@ -23,7 +23,7 @@
         "id":3,
         "name":"CheckPlayerDistance",
         "parent":1,
-        "distance":400
+        "distance":450
     },
     {
         "id":4,
@@ -73,7 +73,7 @@
         "id":10,
         "name":"JudgePlayerPreDistanceLeaf",
         "parent":6,
-        "distance":400
+        "distance":450
     },
     {
         "id":11,
@@ -221,7 +221,7 @@
         "id":31,
         "name":"JudgePlayerDistanceLeaf",
         "parent":20,
-        "distance":50
+        "distance":150
     },
     {
         "false_child":40,
@@ -234,7 +234,7 @@
         "id":33,
         "name":"JudgePlayerDistanceLeaf",
         "parent":21,
-        "distance":200
+        "distance":250
     },
     {
         "false_child":42,
@@ -258,7 +258,7 @@
         "id":37,
         "name":"JudgePlayerDistanceLeaf",
         "parent":23,
-        "distance":300
+        "distance":350
     },
     {
         "false_child":44,
@@ -311,6 +311,6 @@
         "id":46,
         "name":"JudgePlayerPreDistanceLeaf",
         "parent":25,
-        "distance" :400
+        "distance" :450
     }
 ]

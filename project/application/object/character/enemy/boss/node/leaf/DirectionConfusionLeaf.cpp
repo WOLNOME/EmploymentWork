@@ -43,10 +43,10 @@ NodeResult DirectionConfusionLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
 	float confusionTimer = mpBlackBoard->GetValue<float>("ConfusionDirTimer");
 
-	//もし混乱タイマーが0以下ならsuccessを返す
+	//もし混乱タイマーが0より大きいならrunningを返す
 	if (confusionTimer <= 0.0f) {
-		return NodeResult::Success;
+		return NodeResult::Running;
 	}
-	//混乱タイマーが0より大きいならrunningを返す
-	return NodeResult::Running;
+	//混乱タイマーが0以下ならsuccessを返す
+	return NodeResult::Success;
 }

@@ -10,9 +10,9 @@
 class PlayerUI;
 
 /// <summary>
-/// 敵の使う砲弾の処理全般を管理するクラス
+/// 敵の使う機関銃弾単体の処理全般を管理するクラス
 /// </summary>
-class EnemyCannon : public BaseCharacter {
+class EnemyBullet : public BaseCharacter {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~EnemyCannon() override {};
+	~EnemyBullet() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -68,6 +68,10 @@ private:
 	/// 移動処理を行う
 	/// </summary>
 	void Move();
+	/// <summary>
+	/// 死亡処理を行う
+	/// </summary>
+	void DeadProcess();
 
 	/// ============================== ///
 	///		インスタンス
@@ -77,18 +81,18 @@ private:
 	PlayerUI* playerUI_ = nullptr;
 	//トレールエフェクト
 	std::unique_ptr<BulletTrail> trail_ = nullptr;
-	//パーティクル
-	std::unique_ptr<CombinedParticle> particle_ = nullptr;
+	//衝突エフェクト
+	std::unique_ptr<CombinedParticle> hitEffect_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
-	//パラメータ-
+	//パラメータ
 	json param_;
 
-	//生成された座標
-	Vector3 generatedPosition_ = {};
+	Vector3 generatedPosition_{};	//生成された座標
+	float lifeTimer_;		//寿命タイマー
 
 };
 

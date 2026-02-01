@@ -43,10 +43,10 @@ NodeResult DirectionMissingLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
 	float missingTimer = mpBlackBoard->GetValue<float>("MissingDirTimer");
 
-	//もし見失うタイマーが0以下ならsuccessを返す
-	if (missingTimer <= 0.0f) {
-		return NodeResult::Success;
+	//もし見失うタイマーが0より大きいならrunningを返す
+	if (missingTimer > 0.0f) {
+		return NodeResult::Running;
 	}
-	//見失うタイマーが0より大きいならrunningを返す
-	return NodeResult::Running;
+	//見失うタイマーが0以下ならsuccessを返す
+	return NodeResult::Success;
 }

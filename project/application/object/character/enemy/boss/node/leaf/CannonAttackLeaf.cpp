@@ -28,16 +28,23 @@ NodeResult CannonAttackLeaf::GetNodeResult() const {
 	Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
 	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
 	Vector3 bossRotate = mpBlackBoard->GetValue<Vector3>("BossRotate");
+	int cannonMagazine = mpBlackBoard->GetValue<int>("CannonMagazine");
 
 	//初期位置を計算
 	Vector3 initPos = bossPos;
-	initPos.y += 8.25f;
+	initPos.y += -7.5f;
 	initPos.x += std::sinf(bossRotate.y) * 35.0f;
 	initPos.z += std::cosf(bossRotate.y) * 35.0f;
 
 	//スポーン
 	enemyWeaponManager->SpawnCannon(initPos, playerPos);
 
-	//常に成功を返す
+	//弾倉をデクリメント
+	cannonMagazine--;
+
+	//ブラックボードの情報を送信
+	mpBlackBoard->SetValue<int>("CannonMagazine", cannonMagazine);
+
+	//成功を返す
 	return NodeResult::Success;
 }

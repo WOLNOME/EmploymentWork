@@ -26,8 +26,8 @@ const bool CheckPlayerFront::IsCondition() {
 	).Normalized();
 	// 内積を計算
 	float dotProduct = MyMath::Dot(bossForward, toPlayer);
-	// 内積が0.866以上(およそ±30°)なら前方にいると判断
-	if (dotProduct >= 0.866f) {
+	// 内積が0.984以上(およそ±10°)なら前方にいると判断
+	if (dotProduct >= 0.984f) {
 		result = true;
 	}
 

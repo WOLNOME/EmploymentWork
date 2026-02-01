@@ -126,6 +126,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp" />
     <ClCompile Include="engine\behaviorTree\nodeBase\NodeBase.cpp" />
     <ClCompile Include="engine\behaviorTree\interface\INode.cpp" />
     <ClCompile Include="engine\behaviorTree\compositeNode\CompositeNodeBase.cpp" />
@@ -286,6 +287,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyBullet.h" />
     <ClInclude Include="engine\behaviorTree\nodeBase\NodeBase.h" />
     <ClInclude Include="engine\behaviorTree\interface\INode.h" />
     <ClInclude Include="engine\behaviorTree\compositeNode\CompositeNodeBase.h" />

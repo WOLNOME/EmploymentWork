@@ -5,6 +5,7 @@
 
 //アプリケーション
 #include "application/object/character/weapon/enemy/EnemyCannon.h"
+#include "application/object/character/weapon/enemy/EnemyBullet.h"
 #include "application/object/character/weapon/enemy/EnemyBomb.h"
 
 
@@ -42,6 +43,12 @@ public:
 	/// <param name="_targetPos">目標位置</param>
 	void SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos);
 	/// <summary>
+	/// 銃弾のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
+	void SpawnBullet(const Vector3& _initPos, const Vector3& _targetPos);
+	/// <summary>
 	/// 爆弾のスポーン
 	/// </summary>
 	/// <param name="_bombMethod">爆弾の撃ち方</param>
@@ -59,14 +66,15 @@ public:
 	/// <returns>砲弾のコンテナ</returns>
 	const std::vector<std::unique_ptr<EnemyCannon>>& GetCannons() const { return cannons_; }
 	/// <summary>
+	/// 銃弾のコンテナを取得する
+	/// </summary>
+	/// <returns>銃弾のコンテナ</returns>
+	const std::vector<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
+	/// <summary>
 	/// 爆弾のコンテナを取得する
 	/// </summary>
 	/// <returns>爆弾のコンテナ</returns>
 	const std::vector<std::unique_ptr<EnemyBomb>>& GetBombs() const { return bombs_; }
-
-	////銃弾のコンテナ
-	//const std::vector<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
-
 
 	/// ============================== ///
 	///		setter
@@ -107,11 +115,11 @@ private:
 
 	//砲弾のコンテナ
 	std::vector<std::unique_ptr<EnemyCannon>> cannons_;
+	//銃弾のコンテナ
+	std::vector<std::unique_ptr<EnemyBullet>> bullets_;
 	//爆弾のコンテナ
 	std::vector<std::unique_ptr<EnemyBomb>> bombs_;
 
-	////銃弾のコンテナ
-	//std::vector<std::unique_ptr<EnemyBullet>> bullets_;
 
 };
 

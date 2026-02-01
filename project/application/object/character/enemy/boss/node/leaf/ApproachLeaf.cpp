@@ -8,101 +8,83 @@ ApproachLeaf::ApproachLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) 
 ApproachLeaf::~ApproachLeaf() {
 }
 
-void ApproachLeaf::Initialize() {
-	//基底クラスの初期化
-	LeafNodeBase::Initialize();
-
-}
-
 void ApproachLeaf::Update() {
-	//ブラックボードから必要な情報を取得
-	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
-	Vector3 bossVelocity = mpBlackBoard->GetValue<Vector3>("BossVelocity");
-	float bossMaxSpeed = mpBlackBoard->GetValue<float>("BossMaxSpeed");
-	float bossSpeed = mpBlackBoard->GetValue<float>("BossSpeed");
-	Vector3 bossRotate = mpBlackBoard->GetValue<Vector3>("BossRotate");
-	float bossTurnSpeed = mpBlackBoard->GetValue<float>("BossTurnSpeed");
-	Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
-	float floorFriction = mpBlackBoard->GetValue<float>("FloorFriction");
+    // === BlackBoard取得 ===
+    Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
+    Vector3 bossVelocity = mpBlackBoard->GetValue<Vector3>("BossVelocity");
+    float   bossMaxSpeed = mpBlackBoard->GetValue<float>("BossMaxSpeed");
+    float   bossSpeed = mpBlackBoard->GetValue<float>("BossSpeed");
+    Vector3 bossRotate = mpBlackBoard->GetValue<Vector3>("BossRotate");
+    float   bossTurnSpeed = mpBlackBoard->GetValue<float>("BossTurnSpeed");
+    Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
+    float   floorFriction = mpBlackBoard->GetValue<float>("FloorFriction");
 
+    // === 向き・角度計算===
+    Vector3 currentDir = {
+        std::sinf(bossRotate.y),
+        0.0f,
+        std::cosf(bossRotate.y)
+    };
+    currentDir.Normalize();
 
-	//ボスの前方向ベクトルを計算
-	Vector3 bossForward;
-	bossForward.x = std::cos(bossRotate.y);
-	bossForward.y = 0.0f;
-	bossForward.z = std::sin(bossRotate.y);
+    Vector3 targetDir = playerPos - bossPos;
+    targetDir.Normalize();
 
-	//プレイヤーへの方向ベクトルを計算
-	Vector3 toPlayer = playerPos - bossPos;
-	toPlayer.y = 0.0f;
-	toPlayer.Normalize();
+    float angle = std::atan2f(targetDir.x, targetDir.z)
+        - std::atan2f(currentDir.x, currentDir.z);
 
-	//2つのベクトルのなす角を計算
-	float angle = MyMath::AngleOf2VectorY(bossForward, toPlayer);
+    if (angle > pi) angle -= 2 * pi;
+    else if (angle < -pi) angle += 2 * pi;
 
-	//angleの絶対値が90°を超えていたらプレイヤーは後ろにいると判断
-	bool playerBehind = false;
-	if (std::abs(angle) > 1.0f / 2.0f * pi) {
-		playerBehind = true;
-	}
+    bool playerBehind = std::abs(angle) > (0.5f * pi);
 
-	//もしプレイヤーが後ろにいるならボスはただ回転させる
-	if (playerBehind) {
-		//回転方向を決定
-		float turnDirection = (angle > 0.0f) ? 1.0f : -1.0f;
-		//回転量を計算
-		float turnAmount = bossTurnSpeed * turnDirection * kDeltaTime;
-		//回転量をクランプ
-		if (std::abs(turnAmount) > std::abs(angle)) {
-			turnAmount = angle;
-		}
-		//回転を更新
-		bossRotate.y += turnAmount;
-		//ブラックボードに更新した回転を保存
-		mpBlackBoard->SetValue<Vector3>("BossRotate", bossRotate);
-		return;
-	}
-	else {
-		//回転方向を決定
-		float turnDirection = (angle > 0.0f) ? 1.0f : -1.0f;
-		//回転量を計算
-		float turnAmount = bossTurnSpeed * turnDirection * kDeltaTime;
-		//回転量をクランプ
-		if (std::abs(turnAmount) > std::abs(angle)) {
-			turnAmount = angle;
-		}
-		//回転を更新
-		bossRotate.y += turnAmount;
+    // === 回転処理（共通）===
+    float maxRotate = bossTurnSpeed * kDeltaTime;
+    float rotateAmount =
+        (std::abs(angle) < maxRotate)
+        ? angle
+        : (angle > 0 ? maxRotate : -maxRotate);
 
-		//移動量を求める
-		bossVelocity += bossForward * bossSpeed * kDeltaTime;
+    bossRotate.y += rotateAmount;
 
-		//摩擦力をかける
-		Vector3 frictionDir = -bossVelocity.Normalized();
-		Vector3 frictionAccel = frictionDir * floorFriction;
-		bossVelocity += frictionAccel * kDeltaTime;
+    if (bossRotate.y > pi) bossRotate.y -= 2.0f * pi;
+    else if (bossRotate.y < -pi) bossRotate.y += 2.0f * pi;
 
-		//移動量の大きさを制限
-		if (bossVelocity.Length() > bossMaxSpeed) {
-			bossVelocity.Normalize();
-			bossVelocity *= bossMaxSpeed;
-		}
-		//移動量の小ささを制限
-		if (Vector3(bossVelocity * kDeltaTime).Length() < 0.01f) {
-			bossVelocity = { 0.0f,0.0f,0.0f };
-		}
+    // === 移動処理（前にいる時だけ）===
+    if (!playerBehind) {
+        Vector3 forward = {
+            std::sinf(bossRotate.y),
+            0.0f,
+            std::cosf(bossRotate.y)
+        };
+        forward.Normalize();
 
-		//速度を加算
-		bossPos += bossVelocity * kDeltaTime;
+        //速度加算
+        bossVelocity += forward * bossSpeed;
 
-		//ブラックボードに更新した値を保存
-		mpBlackBoard->SetValue<Vector3>("BossRotate", bossRotate);
-		mpBlackBoard->SetValue<Vector3>("BossPos", bossPos);
-		mpBlackBoard->SetValue<Vector3>("BossVelocity", bossVelocity);
+        // 摩擦
+        if (bossVelocity.Length() > 0.0f) {
+            Vector3 friction = -bossVelocity.Normalized() * floorFriction;
+            bossVelocity += friction * kDeltaTime;
+        }
 
-		return;
-	}
+        // 速度制限
+        if (bossVelocity.Length() > bossMaxSpeed) {
+            bossVelocity.Normalize();
+            bossVelocity *= bossMaxSpeed;
+        }
 
+        if ((bossVelocity * kDeltaTime).Length() < 0.01f) {
+            bossVelocity = { 0.0f, 0.0f, 0.0f };
+        }
+
+        bossPos += bossVelocity * kDeltaTime;
+    }
+
+    // === BlackBoard反映 ===
+    mpBlackBoard->SetValue("BossRotate", bossRotate);
+    mpBlackBoard->SetValue("BossPos", bossPos);
+    mpBlackBoard->SetValue("BossVelocity", bossVelocity);
 }
 
 void ApproachLeaf::Debug() {
@@ -115,6 +97,16 @@ void ApproachLeaf::Debug() {
 }
 
 NodeResult ApproachLeaf::GetNodeResult() const {
-	//常に成功を返す
+    // === BlackBoard取得 ===
+    Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
+    Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
+
+    //距離を求めて350~450ならrunning、それ以外ならsuccess
+    float distance = Vector3(bossPos - playerPos).Length();
+    if (distance > 350.0f && distance <= 450.0f) {
+        return NodeResult::Running;
+    }
+
+	//成功を返す
 	return NodeResult::Success;
 }

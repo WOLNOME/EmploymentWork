@@ -3,6 +3,7 @@
 #include <ImGuiManager.h>
 #include <CombinedParticleManager.h>
 #include <Object3dManager.h>
+#include "BulletTrailManager.h"
 
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
@@ -11,6 +12,9 @@ void EnemyCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
+
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
@@ -18,6 +22,10 @@ void EnemyCannon::Initialize() {
 	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	object3d_->SetIsDisplay(false);
 	object3d_->SetTexture(textureHandle_);
+	//トレールエフェクトの生成と初期化
+	trail_ = std::make_unique<BulletTrail>();
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<CombinedParticle>();
 	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "Cannon_Hit");
@@ -26,9 +34,6 @@ void EnemyCannon::Initialize() {
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
-
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
 
 	//影の初期化
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
@@ -49,6 +54,9 @@ void EnemyCannon::Update() {
 
 	//移動処理
 	Move();
+
+	//トレールポジションの設定
+	trail_->SetPosition(object3d_->worldTransform.translate);
 }
 
 void EnemyCannon::DebugWithImGui() {
@@ -79,6 +87,8 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	float hitTime = param_["hitTime"];
 	velocity_.x = targetVec.x / hitTime;
 	velocity_.z = targetVec.z / hitTime;
+	//トレールエフェクトをクリア
+	trail_->ClearPositions();
 
 	//最大高度から重力を求める
 	float maxHeight = param_["maxHeight"];

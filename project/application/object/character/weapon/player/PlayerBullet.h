@@ -1,8 +1,5 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
-#include "BaseCamera.h"
-#include "SceneLight.h"
-#include "Object3d.h"
 #include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
@@ -39,7 +36,7 @@ public:
 	/// スポーン
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
-	/// <param name="_targetPos">目標位置</param>
+	/// <param name="_initDirection">初期方向</param>
 	void Spawn(const Vector3& _initPos, const Vector3& _initDirection);
 
 	/// <summary>
@@ -80,7 +77,6 @@ private:
 	//パラメータ
 	json param_;
 
-	float lifeTime_;		//寿命
 	float lifeTimer_;		//寿命タイマー
 
 };

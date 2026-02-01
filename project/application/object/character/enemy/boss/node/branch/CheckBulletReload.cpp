@@ -8,11 +8,12 @@ CheckBulletReload::~CheckBulletReload() {
 
 const bool CheckBulletReload::IsCondition() {
 	bool result = false;
-	// ブラックボードから機関銃弾リロードタイム取得
-	float bulletReloadTime = mpBlackBoard->GetValue<float>("BulletReloadTime");
+	//ブラックボードから銃弾の弾倉を取得
+	int bulletMagazine = mpBlackBoard->GetValue<int>("BulletMagazine");
+	int bulletMaxMagazine = mpBlackBoard->GetValue<int>("BulletMaxMagazine");
 
-	// リロードタイムが0ならリロード可能
-	if (bulletReloadTime == 0.0f) {
+	//弾倉が空でなければ撃つ
+	if (bulletMagazine != 0) {
 		result = true;
 	}
 

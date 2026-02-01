@@ -16,7 +16,6 @@ void BarrierLeaf::Initialize() {
 	float barrierDirTime = mpBlackBoard->GetValue<float>("BarrierDirTime");
 	mpBlackBoard->SetValue<float>("BarrierDirTimer", barrierDirTime);
 }
-
 void BarrierLeaf::Update() {
 	//ブラックボードから必要な情報を取得
 	bool isBarrier = mpBlackBoard->GetValue<bool>("IsBarrier");

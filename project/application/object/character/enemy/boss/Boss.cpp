@@ -127,6 +127,7 @@ void Boss::ConstantInfoToBlackBoard() {
 	blackBoard_->SetValue<float>("BombReloadTime", param_["bombReloadTime"]);
 	blackBoard_->SetValue<float>("CannonReloadTime", param_["cannonReloadTime"]);
 	blackBoard_->SetValue<float>("BulletReloadTime", param_["bulletReloadTime"]);
+	blackBoard_->SetValue<float>("BulletIntervalTime", param_["bulletIntervalTime"]);
 	blackBoard_->SetValue<int>("BulletMaxMagazine", param_["bulletMaxMagazine"]);
 	//特殊攻撃の情報
 	blackBoard_->SetValue<float>("BarrierCoolTime", param_["barrierCoolTime"]);
@@ -171,6 +172,7 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		blackBoard_->SetValue<float>("CannonReloadTimer", 0.0f);
 		blackBoard_->SetValue<int>("CannonMagazine", 1);
 		blackBoard_->SetValue<float>("BulletReloadTimer", 0.0f);
+		blackBoard_->SetValue<float>("BulletIntervalTimer", 0.0f);
 		blackBoard_->SetValue<int>("BulletMagazine", param_["bulletMaxMagazine"]);
 		//特殊攻撃の情報を入れる
 		blackBoard_->SetValue<bool>("IsBarrier", false);

@@ -504,6 +504,7 @@
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h" />
@@ -955,6 +956,7 @@
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

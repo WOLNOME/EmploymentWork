@@ -136,12 +136,10 @@ NodeResult KeepDistanceLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
 	float keepDistanceTimer = mpBlackBoard->GetValue<float>("KeepDistanceTimer");
 
-	//もしタイマーが0以下ならsuccessを返す
-	if (keepDistanceTimer <= 0.0f) {
-		return NodeResult::Success;
+	//もしタイマーが0より大きかったらrunningを返す
+	if (keepDistanceTimer > 0.0f) {
+		return NodeResult::Running;
 	}
-
-	//タイマーが0より大きいならrunningを返す
-	return NodeResult::Running;
-
+	//タイマーが0以下ならsuccessを返す
+	return NodeResult::Success;
 }

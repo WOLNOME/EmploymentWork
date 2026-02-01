@@ -43,10 +43,10 @@ NodeResult DirectionSensingLeaf::GetNodeResult() const {
 	//ブラックボードから必要な情報を取得
 	float sensingTimer = mpBlackBoard->GetValue<float>("SensingDirTimer");
 
-	//もし発見演出タイマーが0以下ならsuccessを返す
-	if (sensingTimer <= 0.0f) {
-		return NodeResult::Success;
+	//もし発見演出タイマーが0より大きいならrunningを返す
+	if (sensingTimer > 0.0f) {
+		return NodeResult::Running;
 	}
-	//発見演出タイマーが0より大きいならrunningを返す
-	return NodeResult::Running;
+	//発見演出タイマーが0以下ならrunningを返す
+	return NodeResult::Success;
 }

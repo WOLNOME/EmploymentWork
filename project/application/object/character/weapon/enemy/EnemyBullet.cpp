@@ -1,42 +1,44 @@
-#include "PlayerBullet.h"
+#include "EnemyBullet.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "Object3dManager.h"
 #include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
-void PlayerBullet::Initialize() {
+//アプリケーション
+#include <application/ui/player/PlayerUI.h>
+
+void EnemyBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
 	lifeTimer_ = 0.0f;
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Bullet"), Shape::kSphere);
+	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bullet"), Shape::kSphere);
 	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX,FLT_MAX };
 	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
 	//トレールエフェクトの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
-	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
 	//衝突エフェクトの生成と初期化
 	hitEffect_ = std::make_unique<CombinedParticle>();
-	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerBulletHitEffect"), "Bullet_Hit");
+	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyBulletHitEffect"), "Bullet_Hit");
 
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 0.01f;
-
 }
 
-void PlayerBullet::Update() {
+void EnemyBullet::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
@@ -56,12 +58,12 @@ void PlayerBullet::Update() {
 	trail_->SetPosition(object3d_->worldTransform.translate);
 }
 
-void PlayerBullet::DebugWithImGui() {
+void EnemyBullet::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
 
-	ImGui::Begin("プレイヤー銃弾");
+	ImGui::Begin("敵銃弾");
 	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
@@ -71,35 +73,41 @@ void PlayerBullet::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
+	generatedPosition_ = _initPos;
 	//速度を算出
 	float speed = param_["speed"];
+	//向きを算出
+	Vector3 direction = _targetPos - _initPos;
 	//速度を更新
-	velocity_ = _initDirection * speed;
+	velocity_ = direction * speed;
 	//重力は計算しない
 	gravity_ = 0.0f;
 	//当たり判定を入力
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 	//アクティブ状態に変更
 	state_ = State::kActive;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	trail_->ClearPositions();
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+void EnemyBullet::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 	//当たり判定時の処理
 	switch (attribute) {
-		//敵に当たった場合
-	case CollisionAttribute::Enemy:
+		//プレイヤーに当たった場合
+	case CollisionAttribute::Player:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//死亡処理
 		DeadProcess();
 
+		//被弾インジケーターをつける
+		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
+
 		break;
-		//敵キャノンに当たった場合
-	case CollisionAttribute::EnemyCannon:
+		//プレイヤー砲弾に当たった場合
+	case CollisionAttribute::PlayerCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//死亡処理
 		DeadProcess();
@@ -110,7 +118,7 @@ void PlayerBullet::OnCollision(CollisionAttribute attribute, const Vector3& subj
 	}
 }
 
-void PlayerBullet::Move() {
+void EnemyBullet::Move() {
 	//移動量の大きさを制限
 	float maxSpeed = param_["maxSpeed"];
 	if (velocity_.Length() > maxSpeed) {
@@ -137,7 +145,7 @@ void PlayerBullet::Move() {
 	}
 }
 
-void PlayerBullet::DeadProcess() {
+void EnemyBullet::DeadProcess() {
 	//衝突エフェクトの発生
 	TransformEuler transform = hitEffect_->GetBaseTransform();
 	transform.translate = object3d_->worldTransform.translate;
