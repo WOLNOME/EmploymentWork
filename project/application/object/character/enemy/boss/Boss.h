@@ -7,6 +7,7 @@
 
 //前方宣言
 class Player;
+class EnemyWeaponManager;
 
 /// <summary>
 /// ボスクラス
@@ -54,6 +55,11 @@ public:
 	/// </summary>
 	/// <param name="_player">プレイヤーのポインタ</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
+	/// <summary>
+	/// 敵武器マネージャーのセット
+	/// </summary>
+	/// <param name="_enemyWeaponManager">敵武器マネージャーのポインタ</param>
+	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager);
 
 private:
 	/// ============================== ///
@@ -88,6 +94,8 @@ private:
 
 	//プレイヤー
 	Player* player_ = nullptr;
+	//敵武器マネージャー
+	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(private)

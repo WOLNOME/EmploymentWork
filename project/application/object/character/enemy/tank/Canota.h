@@ -16,8 +16,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="_isUseCannon">砲弾可能フラグ</param>
-	Canota(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
+	Canota() {};
 	/// <summary>
 	/// デストラクタ
 	/// </summary>

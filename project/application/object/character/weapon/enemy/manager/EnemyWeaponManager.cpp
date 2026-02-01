@@ -25,11 +25,6 @@ void EnemyWeaponManager::Initialize() {
 }
 
 void EnemyWeaponManager::Update() {
-	//砲弾の生成
-	CreateCannon();
-	//爆弾の生成
-	CreateBomb();
-
 	//砲弾の更新
 	for (auto& cannon : cannons_) {
 		cannon->Update();
@@ -53,6 +48,32 @@ void EnemyWeaponManager::DebugWithImGui() {
 #endif // _DEBUG
 }
 
+void EnemyWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos) {
+	//砲弾のコンテナを走査
+	for (auto& cannon : cannons_) {
+		//砲弾がアイドル状態でないなら次へ
+		if (cannon->GetState() != BaseCharacter::State::kIdle)
+			continue;
+		//スポーン
+		cannon->Spawn(_initPos, _targetPos);
+
+		break;
+	}
+}
+
+void EnemyWeaponManager::SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos) {
+	//爆弾の追加位置を探す
+	for (auto& bomb : bombs_) {
+		//爆弾がアイドル状態でないなら次へ
+		if (bomb->GetState() != BaseCharacter::State::kIdle)
+			continue;
+		//スポーン
+		bomb->Spawn(_initPos, _targetPos);
+
+		break;
+	}
+}
+
 void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {
 	//砲弾全てに渡す
 	for (auto& cannon : cannons_) {
@@ -61,83 +82,5 @@ void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {
 	//爆弾全てに渡す
 	for (auto& bomb : bombs_) {
 		bomb->SetPlayerUI(_playerUI);
-	}
-}
-
-void EnemyWeaponManager::CreateCannon() {
-	//全てのキャノ太を回す
-	for (auto& canota : enemyManager_->GetCanotas()) {
-		//キャノ太から発射フラグを取得
-		if (!canota->GetAttackState()->GetIsCannonFire()) {
-			continue;
-		}
-		else {
-			//砲弾発射フラグを下げる
-			canota->GetAttackState()->SetIsCannonFire(false);
-		}
-		//砲弾の追加位置を探す
-		for (auto& cannon : cannons_) {
-			//砲弾がアイドル状態でないなら次へ
-			if (cannon->GetState() != BaseCharacter::State::kIdle)
-				continue;
-			//砲弾の初期位置と目標位置をセット
-			Vector3 cannonPos = canota->GetWorldTransform().translate;
-			cannonPos.y += 2.0f;	//←高さ
-			cannonPos.x += std::sinf(canota->GetWorldTransform().rotate.y) * 10.0f;
-			cannonPos.z += std::cosf(canota->GetWorldTransform().rotate.y) * 10.0f;
-			//スポーン
-			cannon->Spawn(cannonPos, player_->GetWorldTransform().translate);
-			break;
-		}
-	}
-
-	//全てのキーキャノ太を回す
-	for (auto& keyCanota : enemyManager_->GetKeyCanotas()) {
-		//キーキャノ太から発射フラグを取得
-		if (!keyCanota->GetAttackState()->GetIsCannonFire()) {
-			continue;
-		}
-		else {
-			//砲弾発射フラグを下げる
-			keyCanota->GetAttackState()->SetIsCannonFire(false);
-		}
-		//砲弾の追加位置を探す
-		for (auto& cannon : cannons_) {
-			//砲弾がアイドル状態でないなら次へ
-			if (cannon->GetState() != BaseCharacter::State::kIdle)
-				continue;
-			//砲弾の初期位置と目標位置をセット
-			Vector3 cannonPos = keyCanota->GetWorldTransform().translate;
-			cannonPos.y += 2.0f;	//←高さ
-			cannonPos.x += std::sinf(keyCanota->GetWorldTransform().rotate.y) * 10.0f;
-			cannonPos.z += std::cosf(keyCanota->GetWorldTransform().rotate.y) * 10.0f;
-			//スポーン
-			cannon->Spawn(cannonPos, player_->GetWorldTransform().translate);
-			break;
-		}
-	}
-}
-
-void EnemyWeaponManager::CreateBomb() {
-	//全てのジェットを回す
-	for (auto& jet : enemyManager_->GetJets()) {
-		//ジェットから発射フラグを取得(投下不可能なら次のjetへ)
-		if (!jet->GetAttackState()->GetIsCanBombFire()) {
-			continue;
-		}
-		//爆弾の追加位置を探す
-		for (auto& bomb : bombs_) {
-			//爆弾がアイドル状態でないなら次へ
-			if (bomb->GetState() != BaseCharacter::State::kIdle)
-				continue;
-			//爆弾の初期位置と目標位置をセット
-			Vector3 bombPos = jet->GetWorldTransform().worldTranslate;
-
-			//スポーン
-			bomb->Spawn(bombPos, { 0.0f,0.0f,0.0f });
-			//投下不可能状態に移行
-			jet->GetAttackState()->SetIsCanBombFire(false);
-			break;
-		}
 	}
 }

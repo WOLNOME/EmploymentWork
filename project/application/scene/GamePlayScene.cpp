@@ -82,11 +82,13 @@ void GamePlayScene::Initialize() {
 	endDirection_->SetTimeScaleManager(timeScaleManager_.get());
 	endDirection_->SetPlayer(player_.get());
 	endDirection_->SetEnemyManager(enemyManager_.get());
+	player_->SetPlayerWeaponManager(playerWeaponManager_.get());
 	player_->SetLevelLoader(levelLoader_.get());
 	player_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetLevelLoader(levelLoader_.get());
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->SetItemManager(itemManager_.get());
+	enemyManager_->SetEnemyWeaponManager(enemyWeaponManager_.get());
 	enemyManager_->SetMessageUI(messageUI_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
@@ -149,7 +151,7 @@ void GamePlayScene::Update() {
 	endDirection_->Update();
 
 	//タイムスケールマネージャーによる再生速度の管理
-	if(!timeScaleManager_->GetIsPlay()){
+	if (!timeScaleManager_->GetIsPlay()) {
 		return;
 	}
 

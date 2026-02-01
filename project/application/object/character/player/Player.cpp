@@ -8,6 +8,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 #include <application/ui/player/PlayerUI.h>
 #include <application/ui/message/MessageUI.h>
 
@@ -366,21 +367,31 @@ void Player::CannonAttack() {
 		if (cannonReloadTimer_ < 0.0f) {
 			cannonReloadTimer_ = 0.0f;
 		}
-		//砲弾を発射したフラグをオフ
-		isCannonFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
 
 	//スペースキーで砲弾を発射
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-		//砲弾を発射したフラグをオン
-		isCannonFire_ = true;
 		//リロードタイムをセット
 		float cannonReloadTime = param_["cannonReloadTime"];
 		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
 		cannonReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
 		cannonReloadTimer_ = cannonReloadTime;
+		//初期位置と発射方向の計算
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 cannonPos = object3d_->worldTransform.translate;
+		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
+		Vector3 cannonDirection = currentDir;
+		//スポーン
+		playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
 	}
 }
 
@@ -419,16 +430,12 @@ void Player::BulletAttack() {
 
 	//インターバルおよびリロード中は発射しない
 	if (isInterval || isReload) {
-		//銃弾を発射したフラグをオフ
-		isBulletFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
 
 	//左クリックで銃弾を発射
 	if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
-		//銃弾を発射したフラグをオン
-		isBulletFire_ = true;
 		//間隔計測用タイマーをセット
 		float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
 		bulletFireIntervalTimer_ = bulletFireIntervalTime;
@@ -441,6 +448,19 @@ void Player::BulletAttack() {
 			bulletReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
 			bulletReloadTimer_ = bulletReloadTime;
 		}
+		//初期位置と発射方向を計算
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 bulletPos = camera_->worldTransform.translate;
+		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+		//スポーン
+		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 	}
 }
 

@@ -8,6 +8,15 @@
 #include <Vector3.h>
 #include <memory>
 
+/// <summary>
+/// 爆弾の撃ち方
+/// </summary>
+enum class BombMethod {
+	Launch,		//打ち上げ
+	Fall		//落下
+};
+
+//前方宣言
 class PlayerUI;
 
 /// <summary>

@@ -12,6 +12,7 @@
 class LevelLoader;
 class Player;
 class ItemManager;
+class EnemyWeaponManager;
 class MessageUI;
 
 /// <summary>
@@ -81,6 +82,11 @@ public:
 	/// <param name="_itemManager">アイテムマネージャーのポインタ</param>
 	void SetItemManager(ItemManager* _itemManager);
 	/// <summary>
+	/// 敵武器マネージャーのセット
+	/// </summary>
+	/// <param name="_enemyWeaponManager">敵武器マネージャーのポインタ</param>
+	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager);
+	/// <summary>
 	/// メッセージUIのセット
 	/// </summary>
 	/// <param name="_messageUI">メッセージUIのポインタ</param>
@@ -95,6 +101,8 @@ private:
 	Player* player_ = nullptr;
 	//アイテムマネージャー
 	ItemManager* itemManager_ = nullptr;
+	//敵武器マネージャー
+	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

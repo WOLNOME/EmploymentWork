@@ -6,23 +6,59 @@
 /// </summary>
 class CannonReloadLeaf : public LeafNodeBase {
 public:
-	// コンストラクタ
+	/// ============================== ///
+	///		メンバ関数（public）
+	/// ============================== ///
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="_blackBoard">ブラックボード</param>
 	explicit CannonReloadLeaf(BlackBoard* _blackBoard);
-	// デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~CannonReloadLeaf();
 
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize() override;
-	// 更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update() override;
 
-	// デバッグ
+	/// <summary>
+	/// デバッグ
+	/// </summary>
 	void Debug() override;
 
-	// ノードの状態を取得
+	/// <summary>
+	/// ノードの状態を取得
+	/// </summary>
+	/// <returns></returns>
 	NodeResult GetNodeResult() const override;
 
 private:
+	/// ============================== ///
+	///		メンバ関数（private）
+	/// ============================== ///
+
+	/// <summary>
+	/// リロード
+	/// </summary>
+	void Reload();
+	/// <summary>
+	/// 回転
+	/// </summary>
+	void Rotate();
+
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
 	// 最大弾倉数
 	const int kCannonMaxMagazine_ = 1;
 };

@@ -9,11 +9,11 @@
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
 
-IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
+IBaseTankEnemy::IBaseTankEnemy() {
 	//状態管理用変数の初期化
 	patrolState_ = std::make_unique<TankEnemyPatrolState>();
 	approachState_ = std::make_unique <TankEnemyApproachState>();
-	attackState_ = std::make_unique <TankEnemyAttackState>(_isUseCannon);
+	attackState_ = std::make_unique <TankEnemyAttackState>();
 	deadState_ = std::make_unique <TankEnemyDeadState>();
 	//移動パーティクルの生成・初期化
 	moveParticle_ = std::make_unique<CombinedParticle>();

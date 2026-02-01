@@ -7,6 +7,8 @@
 #include "application/object/character/weapon/enemy/EnemyCannon.h"
 #include "application/object/character/weapon/enemy/EnemyBomb.h"
 
+
+//前方宣言
 class EnemyManager;
 class Player;
 class PlayerUI;
@@ -32,6 +34,20 @@ public:
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui();
+
+	/// <summary>
+	/// 砲弾のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
+	void SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos);
+	/// <summary>
+	/// 爆弾のスポーン
+	/// </summary>
+	/// <param name="_bombMethod">爆弾の撃ち方</param>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
+	void SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos);
 
 	/// ============================== ///
 	///		getter
@@ -73,19 +89,6 @@ public:
 	void SetPlayerUI(PlayerUI* _playerUI);
 
 private:
-	/// ============================== ///
-	///		非公開メンバ関数
-	/// ============================== ///
-
-	/// <summary>
-	/// 砲弾を生成する
-	/// </summary>
-	void CreateCannon();
-	/// <summary>
-	/// 爆弾を生成する
-	/// </summary>
-	void CreateBomb();
-
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///

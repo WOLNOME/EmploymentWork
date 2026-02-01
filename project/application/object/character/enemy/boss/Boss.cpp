@@ -103,6 +103,15 @@ void Boss::Spawn(const Vector3& _position) {
 	//指定座標に出現
 	object3d_->worldTransform.translate = _position;
 	object3d_->worldTransform.translate.y = 16.0f;	//高さを設定
+	//ステートをアクティブに変更する
+	SetState(State::kActive);
+}
+
+void Boss::SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) {
+	//インスタンスをセット
+	enemyWeaponManager_ = _enemyWeaponManager;
+	//ブラックボードに書き込む
+	blackBoard_->SetValue<EnemyWeaponManager*>("EnemyWeaponManager", enemyWeaponManager_);
 }
 
 void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {

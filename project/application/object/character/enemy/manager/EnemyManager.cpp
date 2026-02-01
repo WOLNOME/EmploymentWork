@@ -14,13 +14,13 @@ void EnemyManager::Initialize() {
 	//キャノ太の生成と初期化
 	int canotaNum = param_["maxCanotaNum"];
 	for (int i = 0; i < canotaNum; i++) {
-		canotas_.push_back(std::make_unique<Canota>(true));
+		canotas_.push_back(std::make_unique<Canota>());
 		canotas_[i]->Initialize();
 	}
 	//キーキャノ太の生成と初期化
 	int keyCanotaNum = param_["maxKeyCanotaNum"];
 	for (int i = 0; i < keyCanotaNum; i++) {
-		keyCanotas_.push_back(std::make_unique<KeyCanota>(true));
+		keyCanotas_.push_back(std::make_unique<KeyCanota>());
 		keyCanotas_[i]->Initialize();
 	}
 	//ジェットの生成と初期化
@@ -37,7 +37,7 @@ void EnemyManager::Initialize() {
 	boss_->Initialize();
 
 	//ボスをスポーンさせる
-	boss_->Spawn({ 0.0f,0.0f,-1000.0f });
+	boss_->Spawn({ 0.0f,0.0f,-500.0f });
 }
 
 void EnemyManager::Update() {
@@ -174,6 +174,21 @@ void EnemyManager::SetItemManager(ItemManager* _itemManager) {
 	for (const auto& jet : jets_) {
 		jet->SetItemManager(itemManager_);
 	}
+}
+
+void EnemyManager::SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) {
+	//全敵に敵武器マネージャーをセットする
+	enemyWeaponManager_ = _enemyWeaponManager;
+	for (const auto& canota : canotas_) {
+		canota->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	for (const auto& jet : jets_) {
+		jet->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	boss_->SetEnemyWeaponManager(_enemyWeaponManager);
 }
 
 void EnemyManager::SetMessageUI(MessageUI* _messageUI) {

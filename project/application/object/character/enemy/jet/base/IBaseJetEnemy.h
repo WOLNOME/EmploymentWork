@@ -14,6 +14,7 @@
 
 class Player;
 class ItemManager;
+class EnemyWeaponManager;
 class MessageUI;
 
 /// <summary>
@@ -69,6 +70,11 @@ public:
 	/// <returns>プレイヤーオブジェクト</returns>
 	Player* GetPlayer() { return player_; }
 	/// <summary>
+	/// 敵武器マネージャーを取得する
+	/// </summary>
+	/// <returns>敵武器マネージャー</returns>
+	EnemyWeaponManager* GetEnemyWeaponManager() { return enemyWeaponManager_; }
+	/// <summary>
 	/// 敵パラメータ(json)を取得する
 	/// </summary>
 	/// <returns>敵パラメータ(json)</returns>
@@ -104,6 +110,11 @@ public:
 	/// <param name="_itemManager">設定するアイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
 	/// <summary>
+	/// 敵武器マネージャーを設定する
+	/// </summary>
+	/// <param name="_enemyWeaponManager">設定する敵武器マネージャー</param>
+	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) { enemyWeaponManager_ = _enemyWeaponManager; }
+	/// <summary>
 	/// メッセージUIを設定する
 	/// </summary>
 	/// <param name="messageUI">設定するメッセージUI</param>
@@ -128,6 +139,7 @@ protected:
 
 	Player* player_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
+	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(protected)
