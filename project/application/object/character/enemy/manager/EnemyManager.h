@@ -1,15 +1,18 @@
 #pragma once
-#include <list>
+#include "JsonUtil.h"
+#include <vector>
 #include <memory>
 
 //アプリケーション
 #include "application/object/character/enemy/tank/Canota.h"
-#include "application/object/character/enemy/tank/Boss.h"
+#include "application/object/character/enemy/tank/KeyCanota.h"
 #include "application/object/character/enemy/jet/Jet.h"
+#include "application/object/character/enemy/boss/Boss.h"
 
 class LevelLoader;
 class Player;
 class ItemManager;
+class EnemyWeaponManager;
 class MessageUI;
 
 /// <summary>
@@ -42,17 +45,22 @@ public:
 	/// キャノ太のコンテナ取得
 	/// </summary>
 	/// <returns>キャノ太のコンテナ</returns>
-	const std::list<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
+	const std::vector<std::unique_ptr<Canota>>& GetCanotas() const { return canotas_; }
 	/// <summary>
-	/// ボスのコンテナ取得
+	/// キーキャノ太のコンテナ取得
 	/// </summary>
-	/// <returns>ボスのコンテナ</returns>
-	const std::list<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
+	/// <returns>キーキャノ太のコンテナ</returns>
+	const std::vector<std::unique_ptr<KeyCanota>>& GetKeyCanotas() const { return keyCanotas_; }
 	/// <summary>
 	/// ジェットのコンテナ取得
 	/// </summary>
 	/// <returns>ジェットのコンテナ</returns>
-	const std::list<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
+	const std::vector<std::unique_ptr<Jet>>& GetJets() const { return jets_; }
+	/// <summary>
+	/// ボスのコンテナ取得
+	/// </summary>
+	/// <returns></returns>
+	const std::unique_ptr<Boss>& GetBoss() const { return boss_; }
 
 	/// ============================== ///
 	///		setter
@@ -74,6 +82,11 @@ public:
 	/// <param name="_itemManager">アイテムマネージャーのポインタ</param>
 	void SetItemManager(ItemManager* _itemManager);
 	/// <summary>
+	/// 敵武器マネージャーのセット
+	/// </summary>
+	/// <param name="_enemyWeaponManager">敵武器マネージャーのポインタ</param>
+	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager);
+	/// <summary>
 	/// メッセージUIのセット
 	/// </summary>
 	/// <param name="_messageUI">メッセージUIのポインタ</param>
@@ -88,18 +101,24 @@ private:
 	Player* player_ = nullptr;
 	//アイテムマネージャー
 	ItemManager* itemManager_ = nullptr;
+	//敵武器マネージャー
+	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+	
+	//パラメーター
+	json param_;
 
 	//キャノ太のコンテナ
-	std::list<std::unique_ptr<Canota>> canotas_;
-	//ボスのコンテナ
-	std::list<std::unique_ptr<Boss>> bosses_;
+	std::vector<std::unique_ptr<Canota>> canotas_;
+	//キーキャノ太のコンテナ
+	std::vector<std::unique_ptr<KeyCanota>> keyCanotas_;
 	//ジェットのコンテナ
-	std::list<std::unique_ptr<Jet>> jets_;
-
+	std::vector<std::unique_ptr<Jet>> jets_;
+	//ボスのインスタンス
+	std::unique_ptr<Boss> boss_ = nullptr;
 
 };
 

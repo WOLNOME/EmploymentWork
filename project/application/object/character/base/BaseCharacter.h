@@ -8,6 +8,20 @@
 class BaseCharacter : public Collider {
 public:
 	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// 状態
+	/// </summary>
+	enum class State {
+		kIdle,		//待機中（スポーン待ち）
+		kActive,	//稼働中
+		kAsphyxia,	//仮死中（演出等）
+	};
+
+public:
+	/// ============================== ///
 	///		メンバ関数
 	/// ============================== ///
 
@@ -63,15 +77,10 @@ public:
 	Vector3 GetPreWorldPosition() override { return prePosition_; }
 
 	/// <summary>
-	/// 死亡フラグの取得
+	/// 状態の取得
 	/// </summary>
-	/// <returns>死亡フラグ</returns>
-	bool GetIsDead() const { return isDead_; }
-	/// <summary>
-	/// 死亡タイマーの取得
-	/// </summary>
-	/// <returns>死亡タイマー</returns>
-	float GetDeadTimer() const { return deadTimer_; }
+	/// <returns>状態</returns>
+	State GetState() const { return state_; }
 
 	/// <summary>
 	/// 速度の取得
@@ -105,10 +114,10 @@ public:
 	void SetTranslate(const Vector3& translate) { object3d_->worldTransform.translate = translate; }
 
 	/// <summary>
-	/// 死亡予約関数
+	/// 状態のセット
 	/// </summary>
-	/// <param name="remainingSeconds">死亡までの時間</param>
-	void SetDeadTimer(float remainingSeconds);
+	/// <param name="_state">状態</param>
+	void SetState(const State& _state);
 
 	/// <summary>
 	/// 速度のセット
@@ -128,13 +137,14 @@ protected:
 	//丸影
 	std::unique_ptr<Object3d> circleShadow_ = nullptr;
 
+	//状態
+	State state_ = State::kIdle;
+
 	//前フレームの座標
 	Vector3 prePosition_ = {};
 
 	//速度
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
-	//死亡フラグ
-	bool isDead_ = false;
 
 	//重力値
 	float gravity_ = 33.0f;
@@ -148,7 +158,5 @@ private:
 	///		メンバ変数(private)
 	/// ============================== ///
 	
-	//死亡までの時間
-	float deadTimer_ = 0.0f;
 };
 

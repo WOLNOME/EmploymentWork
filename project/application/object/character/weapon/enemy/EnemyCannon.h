@@ -1,13 +1,12 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
-#include "BaseCamera.h"
-#include "SceneLight.h"
-#include "Object3d.h"
 #include "CombinedParticle.h"
+#include "BulletTrail.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
 #include <memory>
 
+//前方宣言
 class PlayerUI;
 
 /// <summary>
@@ -37,6 +36,13 @@ public:
 	void DebugWithImGui() override;
 
 	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_targetPos">目標位置</param>
+	void Spawn(const Vector3& _initPos, const Vector3& _targetPos);
+
+	/// <summary>
 	/// 当たり判定処理
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
@@ -47,12 +53,6 @@ public:
 	///		setter
 	/// ============================== ///
 
-	/// <summary>
-	/// 初期パラメーターを設定する
-	/// </summary>
-	/// <param name="_initPos">初期位置</param>
-	/// <param name="_targetPos">目標位置</param>
-	void SetInitParam(const Vector3& _initPos, const Vector3& _targetPos);
 	/// <summary>
 	/// プレイヤーUIを設定する
 	/// </summary>
@@ -75,7 +75,8 @@ private:
 
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
-
+	//トレールエフェクト
+	std::unique_ptr<BulletTrail> trail_ = nullptr;
 	//パーティクル
 	std::unique_ptr<CombinedParticle> particle_ = nullptr;
 
@@ -83,7 +84,7 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	//パラメータ
+	//パラメータ-
 	json param_;
 
 	//生成された座標

@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include <vector>
 #include <string>
 #include <Vector3.h>
 #include <memory>
@@ -52,7 +52,7 @@ public:
 	/// アイテムのコンテナを取得
 	/// </summary>
 	/// <returns>アイテムのコンテナ</returns>
-	const std::list<std::unique_ptr<Item>>& GetItems() const { return items_; }
+	const std::vector<std::unique_ptr<Item>>& GetItems() const { return items_; }
 
 private:
 	/// ============================== ///
@@ -63,6 +63,6 @@ private:
 	json param_;
 
 	//アイテムのコンテナ
-	std::list<std::unique_ptr<Item>> items_;
+	std::vector<std::unique_ptr<Item>> items_;
 };
 

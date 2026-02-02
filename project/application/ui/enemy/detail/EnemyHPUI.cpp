@@ -19,9 +19,9 @@ void EnemyHPUI::Initialize() {
 		for (int j = 0; j < 2; j++) {
 			sprites_[i][j] = std::make_unique<Sprite>();
 			if (j == 0)
-				sprites_[i][j]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back1, textureHandles_[j]);
+				sprites_[i][j]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back1, textureHandles_[j]);
 			else
-				sprites_[i][j]->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back2, textureHandles_[j]);
+				sprites_[i][j]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back2, textureHandles_[j]);
 			sprites_[i][j]->SetSize({
 				sprites_[i][j]->GetSize().x * hpBarSizeRatio,
 				sprites_[i][j]->GetSize().y * hpBarSizeRatio
@@ -80,8 +80,8 @@ void EnemyHPUI::Update() {
 
 	//キャノ太
 	for (const auto& canota : enemyManager_->GetCanotas()) {
-		//死亡していたら描画しない
-		if (canota->GetDeadTimer() > 0.0f || canota->GetIsDead()) return;
+		//アクティブでないなら描画しない
+		if (canota->GetState() != BaseCharacter::State::kActive) return;
 
 		Vector3 pos = canota->GetWorldTransform().worldTranslate;
 		pos.y += normalEnemyHPBarHeight;
@@ -90,9 +90,9 @@ void EnemyHPUI::Update() {
 	}
 
 	//ボス
-	for (const auto& boss : enemyManager_->GetBosses()) {
+	for (const auto& boss : enemyManager_->GetKeyCanotas()) {
 		//死亡していたら描画しない
-		if (boss->GetDeadTimer() > 0.0f || boss->GetIsDead()) return;
+		if (boss->GetState() != BaseCharacter::State::kActive) return;
 
 		Vector3 pos = boss->GetWorldTransform().worldTranslate;
 		pos.y += bossEnemyHPBarHeight;
@@ -103,7 +103,7 @@ void EnemyHPUI::Update() {
 	//ジェット
 	for (const auto& jet : enemyManager_->GetJets()) {
 		//死亡していたら描画しない
-		if (jet->GetDeadTimer() > 0.0f || jet->GetIsDead())
+		if (jet->GetState() != BaseCharacter::State::kActive)
 			return;
 
 		Vector3 pos = jet->GetWorldTransform().worldTranslate;

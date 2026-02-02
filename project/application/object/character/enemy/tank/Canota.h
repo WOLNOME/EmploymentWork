@@ -16,8 +16,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="_isUseCannon">砲弾可能フラグ</param>
-	Canota(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
+	Canota() {};
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -35,6 +34,13 @@ public:
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
+
+	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void Spawn(const Vector3& _initPos, const Vector3& _initRotate) override;
 
 private:
 	/// ============================== ///

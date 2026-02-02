@@ -31,17 +31,12 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
-	/// ============================== ///
-	///		settter
-	/// ============================== ///
-
 	/// <summary>
-	/// 初期ポジションの設定
+	/// スポーン
 	/// </summary>
-	/// <param name="initPos_">初期ポジション</param>
-	void SetInitPos(const Vector3& _initPos);
+	/// <param name="initPos_">初期位置</param>
+	void Spawn(const Vector3& _initPos);
 	
-
 private:
 	/// ============================== ///
 	///		非公開メンバ関数

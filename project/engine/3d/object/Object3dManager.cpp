@@ -40,13 +40,10 @@ void Object3dManager::Draw() {
 	auto mainRender = MainRender::GetInstance();
 
 	//カメラチェック
-	if (!camera_) {
-		assert(0 && "カメラがセットされていません");
-	}
+	assert(camera_ && "カメラがセットされていません");
 	//シーンライトチェック
-	if (!light_) {
-		assert(0 && "シーンライトがセットされていません");
-	}
+	assert(light_ && "シーンライトがセットされていません");
+
 
 	//全オブジェクトの描画
 	for (const auto& object : objects_) {
@@ -57,7 +54,6 @@ void Object3dManager::Draw() {
 
 		object.second->Draw(camera_, light_);
 	}
-
 
 }
 

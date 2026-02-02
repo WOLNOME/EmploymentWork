@@ -9,17 +9,17 @@
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
 
-IBaseTankEnemy::IBaseTankEnemy(bool _isUseCannon) {
+IBaseTankEnemy::IBaseTankEnemy() {
 	//状態管理用変数の初期化
 	patrolState_ = std::make_unique<TankEnemyPatrolState>();
 	approachState_ = std::make_unique <TankEnemyApproachState>();
-	attackState_ = std::make_unique <TankEnemyAttackState>(_isUseCannon);
+	attackState_ = std::make_unique <TankEnemyAttackState>();
 	deadState_ = std::make_unique <TankEnemyDeadState>();
 	//移動パーティクルの生成・初期化
 	moveParticle_ = std::make_unique<CombinedParticle>();
 	moveParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("TankEnemyMove"), "Tank_Move");
+	//moveParticle_->SetBaseTransform()
 	moveParticle_->SetIsRepeat(true);
-	moveParticle_->SetIsPlay(true);
 	//初期ステートを決定
 	currentStateName_ = StateName::kPatrol;
 	currentState_ = patrolState_.get();
@@ -32,7 +32,7 @@ void IBaseTankEnemy::Initialize() {
 	//当たり判定の形状を設定
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::Enemy);
+	SetCollisionAttribute(CollisionAttribute::Nothingness);
 }
 
 void IBaseTankEnemy::Update() {
@@ -44,7 +44,7 @@ void IBaseTankEnemy::Update() {
 
 	//移動パーティクルの座標を合わせる
 	TransformEuler particleTransform = moveParticle_->GetBaseTransform();
-	particleTransform.translate = GetWorldPosition();
+	particleTransform.translate = object3d_->worldTransform.translate;
 	moveParticle_->SetBaseTransform(particleTransform);
 }
 

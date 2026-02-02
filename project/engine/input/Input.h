@@ -2,35 +2,58 @@
 #include <wrl.h>
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>
+#include <Xinput.h>
 #include "Vector2.h"
 
 /// <summary>
 /// マウスのコマンド
 /// </summary>
-enum MouseButton {
+enum class MouseButton {
 	LeftButton,    // 左ボタン
 	RightButton,   // 右ボタン
 	MiddleButton   // 中央ボタン
 };
 
 /// <summary>
-/// ゲームパッドのコマンド
+/// XInputの各種ボタンマスク
 /// </summary>
-enum GamepadButton {
-	ButtonA,		// Aボタン
-	ButtonB,		// Bボタン
-	ButtonX,		// Xボタン
-	ButtonY,		// Yボタン
-	LeftShoulder,	// LBボタン
-	RightShoulder,	// RBボタン
-	Back,			// BACKボタン
-	Start,			// STARTボタン
-	LeftThumb,		// 左スティック押し込み
-	RightThumb,		// 右スティック押し込み
-	DPadUp,			// 十字キー 上
-	DPadDown,		// 十字キー 下
-	DPadLeft,		// 十字キー 左
-	DPadRight		// 十字キー 右
+static const WORD kXInputButtonMasks[] = {
+	XINPUT_GAMEPAD_A,				//Aボタン
+	XINPUT_GAMEPAD_B,				//Bボタン
+	XINPUT_GAMEPAD_X,				//Xボタン
+	XINPUT_GAMEPAD_Y,				//Yボタン
+	XINPUT_GAMEPAD_DPAD_UP,			//十字上ボタン
+	XINPUT_GAMEPAD_DPAD_DOWN,		//十字下ボタン
+	XINPUT_GAMEPAD_DPAD_LEFT,		//十字左ボタン
+	XINPUT_GAMEPAD_DPAD_RIGHT,		//十字右ボタン
+	XINPUT_GAMEPAD_LEFT_SHOULDER,	//LBボタン
+	XINPUT_GAMEPAD_RIGHT_SHOULDER,	//RBボタン
+	XINPUT_GAMEPAD_LEFT_THUMB,		//左スティック押し込み
+	XINPUT_GAMEPAD_RIGHT_THUMB,		//右スティック押し込み
+	XINPUT_GAMEPAD_START,			//スタートボタン（+）
+	XINPUT_GAMEPAD_BACK				//バックボタン（-）
+};
+
+/// <summary>
+/// ゲームパッドのボタン
+/// </summary>
+enum class GamePadButton {
+	A,				  // Aボタン
+	B,                // Bボタン
+	X,                // Xボタン
+	Y,                // Yボタン
+	DPAD_UP,          // 十字キー 上
+	DPAD_DOWN,        // 十字キー 下
+	DPAD_LEFT,        // 十字キー 左
+	DPAD_RIGHT,       // 十字キー 右
+	LB,               // 左ショルダー
+	RB,               // 右ショルダー
+	L_STICK_PUSH,     // 左スティック押し込み
+	R_STICK_PUSH,     // 右スティック押し込み
+	START,            // Start
+	BACK,             // Back
+
+	COUNT             // 総数（配列サイズ用）
 };
 
 /// <summary>
@@ -38,6 +61,11 @@ enum GamepadButton {
 /// シングルトンパターンで実装
 /// </summary>
 class Input {
+private:
+	/// ============================== ///
+	///		
+	/// ============================== ///
+
 private://コンストラクタ等の隠蔽
 	static Input* instance;
 
@@ -105,13 +133,13 @@ public:
 	/// </summary>
 	/// <param name="button">判定対象のゲームパッドボタン</param>
 	/// <returns>押されていれば true、押されていなければ false</returns>
-	bool PushPadButton(GamepadButton button);
+	bool PushPadButton(GamePadButton button);
 	/// <summary>
 	/// 指定したゲームパッドボタンが「このフレームで押された瞬間」であるかを判定する
 	/// </summary>
 	/// <param name="button">判定対象のゲームパッドボタン</param>
 	/// <returns>押された瞬間であれば true、そうでなければ false</returns>
-	bool TriggerPadButton(GamepadButton button);
+	bool TriggerPadButton(GamePadButton button);
 	/// <summary>
 	/// 現在のマウス座標を取得する
 	/// </summary>
@@ -128,12 +156,22 @@ public:
 	/// ゲームパッドの左スティックの入力方向を取得する
 	/// </summary>
 	/// <returns>左スティックの入力方向（正規化済みベクトル）</returns>
-	Vector2 GetLeftStickDir();
+	Vector2 GetLStickDir();
 	/// <summary>
 	/// ゲームパッドの右スティックの入力方向を取得する
 	/// </summary>
 	/// <returns>右スティックの入力方向（正規化済みベクトル）</returns>
-	Vector2 GetRightStickDir();
+	Vector2 GetRStickDir();
+	/// <summary>
+	/// LTの取得
+	/// </summary>
+	/// <returns>LTの値(0.0~1.0)</returns>
+	float GetLT();
+	/// <summary>
+	/// RTの取得
+	/// </summary>
+	/// <returns>RTの値(0.0~1.0)</returns>
+	float GetRT();
 	/// <summary>
 	/// マウスカーソルの表示／非表示を設定する
 	/// </summary>
@@ -162,6 +200,13 @@ private:
 	/// キーボードデバイスを生成する
 	/// </summary>
 	void GenerateKeyboard();
+
+	/// <summary>
+	/// ゲームパッドの状態を取得
+	/// </summary>
+	/// <returns></returns>
+	XINPUT_STATE GetGamePadState();
+
 	/// <summary>
 	/// ゲームパッドデバイスを生成する
 	/// </summary>
@@ -172,21 +217,21 @@ private:
 	/// ============================== ///
 
 	//DiretInput
-	ComPtr<IDirectInput8> directInput;
+	ComPtr<IDirectInput8> directInput_;
 
 	//マウスデバイス
-	ComPtr<IDirectInputDevice8> mouse;
-	DIMOUSESTATE mouseData;
-	DIMOUSESTATE preMouseData;
+	ComPtr<IDirectInputDevice8> mouseDevice_;
+	DIMOUSESTATE mouseState_;	//マウスの状態
+	DIMOUSESTATE preMouseState_;	//前フレームのマウスの状態
+
 	//キーボードデバイス
-	ComPtr<IDirectInputDevice8> keyboard;
-	//全キーの状態
-	BYTE key[256] = {};
-	//前回の全キーの状態
-	BYTE preKey[256] = {};
+	ComPtr<IDirectInputDevice8> keyboardDevice_;
+	BYTE keys_[256] = {};	//全キーの状態
+	BYTE preKeys_[256] = {};	//前フレームの全キーの状態
+
 	//ゲームパッドデバイス
-	ComPtr<IDirectInputDevice8> gamepad;
-	DIJOYSTATE padData;
-	DIJOYSTATE prePadData;
-	
+	XINPUT_STATE gamePadState_;	//ゲームパッドの状態
+	static const int kGamePadButtonNum_ = 14;	//ゲームパッドのボタンの数
+	bool buttonStates_[kGamePadButtonNum_];	//ゲームパッドのボタンの状態
+	bool preButtonStates_[kGamePadButtonNum_];	//前フレームのゲームパッドのボタンの状態
 };

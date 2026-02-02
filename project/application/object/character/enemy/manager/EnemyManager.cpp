@@ -8,48 +8,73 @@
 #include "application/object/character/item/manager/ItemManager.h"
 
 void EnemyManager::Initialize() {
+	//パラメーターの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyManager");
+
+	//キャノ太の生成と初期化
+	int canotaNum = param_["maxCanotaNum"];
+	for (int i = 0; i < canotaNum; i++) {
+		canotas_.push_back(std::make_unique<Canota>());
+		canotas_[i]->Initialize();
+	}
+	//キーキャノ太の生成と初期化
+	int keyCanotaNum = param_["maxKeyCanotaNum"];
+	for (int i = 0; i < keyCanotaNum; i++) {
+		keyCanotas_.push_back(std::make_unique<KeyCanota>());
+		keyCanotas_[i]->Initialize();
+	}
+	//ジェットの生成と初期化
+	int jetNum = param_["maxJetNum"];
+	for (int i = 0; i < jetNum; i++) {
+		jets_.push_back(std::make_unique<Jet>());
+		jets_[i]->Initialize();
+	}
+
+	//↓仮処理
+
+	//ボスの初期化
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize();
+
+	//ボスをスポーンさせる
+	boss_->Spawn({ 0.0f,0.0f,-500.0f });
 }
 
 void EnemyManager::Update() {
-	//全キャノ太の死亡時処理
-	for (auto it = canotas_.begin(); it != canotas_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = canotas_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//全ボスの死亡時処理
-	for (auto it = bosses_.begin(); it != bosses_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = bosses_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	//全ジェットの死亡時処理
-	for (auto it = jets_.begin(); it != jets_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = jets_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-
 	//全キャノ太の更新
 	for (const auto& canota : canotas_) {
+		//アイドル状態なら次へ
+		if (canota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		canota->Update();
 	}
-	//全ボスの更新
-	for (const auto& boss : bosses_) {
-		boss->Update();
+	//全キーキャノ太の更新
+	for (const auto& keyCanota : keyCanotas_) {
+		//アイドル状態なら次へ
+		if (keyCanota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
+		keyCanota->Update();
 	}
 	//全ジェットの更新
 	for (const auto& jet : jets_) {
+		//アイドル状態なら次へ
+		if (jet->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		jet->Update();
+	}
+	//ボスの更新
+	{
+		//アイドル状態なら次へ
+		if (boss_->GetState() == BaseCharacter::State::kIdle) {
+			return;
+		}
+		boss_->Update();
 	}
 }
 
@@ -59,14 +84,16 @@ void EnemyManager::DebugWithImGui() {
 	for (const auto& canota : canotas_) {
 		canota->DebugWithImGui();
 	}
-	//全ボスのデバッグ処理
-	for (const auto& boss : bosses_) {
-		boss->DebugWithImGui();
+	//全キーキャノ太のデバッグ処理
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->DebugWithImGui();
 	}
 	//全ジェットのデバッグ処理
 	for (const auto& jet : jets_) {
 		jet->DebugWithImGui();
 	}
+	//ボスのデバッグ処理
+	boss_->DebugWithImGui();
 #endif // _DEBUG
 }
 
@@ -77,34 +104,46 @@ void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
 		if (data.fileName != "canota") {
 			continue; // ファイル名が"canota"でない場合はスキップ
 		}
-		std::unique_ptr<Canota> canota = nullptr;
-		canota = std::make_unique<Canota>(true);
-		canota->Initialize();
-		canota->SetTranslate(data.translation);
-		canota->SetRotate(data.rotation);
-		canotas_.push_back(std::move(canota));
+		//コンテナを走査
+		for (int i = 0; i < param_["maxCanotaNum"]; i++) {
+			//アイドル状態の要素を見つけたら
+			if (canotas_[i]->GetState() == BaseCharacter::State::kIdle) {
+				//スポーンさせる
+				canotas_[i]->Spawn(data.translation, data.rotation);
+
+				break;
+			}
+		}
 	}
-	//レベルローダーからボスのスポーンデータを取得
-	const auto& bossSpawnData = _levelLoader->GetEnemySpawnData();
-	for (const auto& data : bossSpawnData) {
-		if (data.fileName != "boss") {
+	//レベルローダーからキーキャノ太のスポーンデータを取得
+	const auto& keyCanotaSpawnData = _levelLoader->GetEnemySpawnData();
+	for (const auto& data : keyCanotaSpawnData) {
+		if (data.fileName != "keyCanota") {
 			continue; // ファイル名が"canota"でない場合はスキップ
 		}
-		std::unique_ptr<Boss> boss = nullptr;
-		boss = std::make_unique<Boss>(true);
-		boss->Initialize();
-		boss->SetTranslate(data.translation);
-		boss->SetRotate(data.rotation);
-		bosses_.push_back(std::move(boss));
+		//コンテナを走査
+		for (int i = 0; i < param_["maxKeyCanotaNum"]; i++) {
+			//アイドル状態の要素を見つけたら
+			if (keyCanotas_[i]->GetState() == BaseCharacter::State::kIdle) {
+				//スポーンさせる
+				keyCanotas_[i]->Spawn(data.translation, data.rotation);
+
+				break;
+			}
+		}
 	}
 	//レベルローダーからジェットのスポーンデータを取得
-	std::unique_ptr<Jet> jet = nullptr;
-	jet = std::make_unique<Jet>();
-	jet->Initialize();
-	jet->SetTranslate({ 0.0f,40.0f,400.0f });
-	jet->SetRotate({ 0.0f,0.0f,0.0f });
-	jets_.push_back(std::move(jet));
 
+	//コンテナを走査
+	for (int i = 0; i < param_["maxJetNum"]; i++) {
+		//アイドル状態の要素を見つけたら
+		if (jets_[i]->GetState() == BaseCharacter::State::kIdle) {
+			//スポーンさせる
+			jets_[i]->Spawn({ 0.0f,40.0f,400.0f }, { 0.0f,0.0f,0.0f });
+
+			break;
+		}
+	}
 
 }
 
@@ -114,12 +153,13 @@ void EnemyManager::SetPlayer(Player* _player) {
 	for (const auto& canota : canotas_) {
 		canota->SetPlayer(player_);
 	}
-	for (const auto& boss : bosses_) {
-		boss->SetPlayer(player_);
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetPlayer(player_);
 	}
 	for (const auto& jet : jets_) {
 		jet->SetPlayer(player_);
 	}
+	boss_->SetPlayer(_player);
 }
 
 void EnemyManager::SetItemManager(ItemManager* _itemManager) {
@@ -128,12 +168,27 @@ void EnemyManager::SetItemManager(ItemManager* _itemManager) {
 	for (const auto& canota : canotas_) {
 		canota->SetItemManager(itemManager_);
 	}
-	for (const auto& boss : bosses_) {
-		boss->SetItemManager(itemManager_);
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetItemManager(itemManager_);
 	}
 	for (const auto& jet : jets_) {
 		jet->SetItemManager(itemManager_);
 	}
+}
+
+void EnemyManager::SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) {
+	//全敵に敵武器マネージャーをセットする
+	enemyWeaponManager_ = _enemyWeaponManager;
+	for (const auto& canota : canotas_) {
+		canota->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	for (const auto& jet : jets_) {
+		jet->SetEnemyWeaponManager(_enemyWeaponManager);
+	}
+	boss_->SetEnemyWeaponManager(_enemyWeaponManager);
 }
 
 void EnemyManager::SetMessageUI(MessageUI* _messageUI) {

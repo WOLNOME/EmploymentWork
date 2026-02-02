@@ -13,6 +13,7 @@
 //アプリケーション
 #include <application/system/DeathDirection.h>
 
+class PlayerWeaponManager;
 class LevelLoader;
 class MessageUI;
 
@@ -64,11 +65,6 @@ public:
 	/// <returns>砲弾リロードタイムタイマー</returns>
 	float GetCannonReloadTimer() const { return cannonReloadTimer_; }
 	/// <summary>
-	/// 砲弾を発射したかどうかを取得する
-	/// </summary>
-	/// <returns>発射していればtrue</returns>
-	bool GetIsCannonFire() const { return isCannonFire_; }
-	/// <summary>
 	/// 銃弾のリロードタイムタイマーを取得する
 	/// </summary>
 	/// <returns>銃弾リロードタイムタイマー</returns>
@@ -83,11 +79,6 @@ public:
 	/// </summary>
 	/// <returns>発射間隔タイマー</returns>
 	float GetBulletFireIntervalTimer() const { return bulletFireIntervalTimer_; }
-	/// <summary>
-	/// 銃弾を発射したかどうかを取得する
-	/// </summary>
-	/// <returns>発射していればtrue</returns>
-	bool GetIsBulletFire() const { return isBulletFire_; }
 	/// <summary>
 	/// ダメージを受けたかどうかを取得する
 	/// </summary>
@@ -118,6 +109,11 @@ public:
 	///		setter
 	/// ============================== ///
 
+	/// <summary>
+	/// プレイヤー武器マネージャーを設定する
+	/// </summary>
+	/// <param name="_playerWeaponManager">設定するプレイヤー武器マネージャー</param>
+	void SetPlayerWeaponManager(PlayerWeaponManager* _playerWeaponManager) { playerWeaponManager_ = _playerWeaponManager; }
 	/// <summary>
 	/// レベルローダーを設定する
 	/// </summary>
@@ -164,10 +160,10 @@ private:
 	Input* input_ = nullptr;
 	//カメラ
 	GameCamera* camera_ = nullptr;
+	//プレイヤー武器マネージャー
+	PlayerWeaponManager* playerWeaponManager_ = nullptr;
 	//メッセージUI
 	MessageUI* messageUI_ = nullptr;
-	//死亡演出
-	std::unique_ptr<DeathDirection> deathDirection_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -175,17 +171,18 @@ private:
 
 	//パラメータ
 	json param_;
+	//死亡演出
+	std::unique_ptr<DeathDirection> deathDirection_ = nullptr;
+
 
 	//変数
 	int hp_;	//現在のHP
 
 	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
-	bool isCannonFire_ = false;		//砲弾を発射したかどうか
 
 	float bulletReloadTimer_;		//銃弾リロードタイム計測用タイマー
 	int bulletNum_;					//現在の銃弾の数
 	float bulletFireIntervalTimer_;	//銃弾の発射間隔タイマー
-	bool isBulletFire_ = false;		//銃弾を発射したかどうか
 
 	bool isDamage_ = false;			//ダメージを受けたか
 

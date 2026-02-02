@@ -1,4 +1,6 @@
 {
     "maxHeight": 3.0,
-    "hitTime": 0.9
+    "hitTime": 0.9,
+    "trailMaxLength":0.6,
+    "trailLengthDecayValue":0.016
 }

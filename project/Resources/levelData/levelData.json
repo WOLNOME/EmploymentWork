@@ -90,7 +90,7 @@
         },
         {
             "type": "EnemySpawn",
-            "name": "Boss",
+            "name": "KeyCanota",
             "transform": {
                 "translation": [
                     50.0,
@@ -108,7 +108,7 @@
                     1.5
                 ]
             },
-            "file_name": "boss"
+            "file_name": "keyCanota"
         },
         {
             "type": "EnemySpawn",

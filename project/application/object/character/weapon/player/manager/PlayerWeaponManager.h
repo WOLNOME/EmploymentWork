@@ -32,6 +32,19 @@ public:
 	/// </summary>
 	void DebugWithImGui();
 
+	/// <summary>
+	/// 砲弾のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initDirection">初期方向</param>
+	void SpawnCannon(const Vector3& _initPos, const Vector3& _initDirection);
+	/// <summary>
+	/// 銃弾のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initDirection">初期方向</param>
+	void SpawnBullet(const Vector3& _initPos, const Vector3& _initDirection);
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -61,19 +74,6 @@ public:
 	void SetPlayer(Player* _player) { player_ = _player; }
 
 private:
-	/// ============================== ///
-	///		非公開メンバ関数
-	/// ============================== ///
-
-	/// <summary>
-	/// 砲弾を生成する
-	/// </summary>
-	void CreateCannon();
-	/// <summary>
-	/// 銃弾を生成する
-	/// </summary>
-	void CreateBullet();
-
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///

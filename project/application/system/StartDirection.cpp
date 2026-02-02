@@ -30,7 +30,7 @@ void StartDirection::Update() {
 
 
 	//TABキーでスタート演出終了
-	if (Input::GetInstance()->TriggerKey(DIK_TAB)) {
+	if (input_->TriggerKey(DIK_TAB) || input_->TriggerPadButton(GamePadButton::A)) {
 		isStartDirection_ = false;
 		isMaskDisappear_ = true;
 

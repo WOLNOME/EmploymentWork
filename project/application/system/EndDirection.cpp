@@ -34,17 +34,11 @@ void EndDirection::Update() {
 	//全ボス撃破処理
 	AllBossDefeated();
 
-
 }
 
 void EndDirection::SceneChange() {
-	//シーンリセット
-	if (input_->TriggerKey(DIK_R)) {
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
-		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, textureHandle);
-	}
 	//プレイヤーが死亡したらゲームオーバー
-	if (player_->GetIsDead()) {
+	if (player_->GetState() == BaseCharacter::State::kIdle) {
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
 		sceneManager_->SetNextScene("GameOver", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);
 	}
@@ -59,11 +53,12 @@ void EndDirection::SceneChange() {
 void EndDirection::AllBossDefeated() {
 	//ボスを全て倒したかをチェック
 	bool allBossDead = true;
-	for (auto& boss : enemyManager_->GetBosses()) {
-		if (boss->GetCurrentStateName() != IBaseTankEnemy::StateName::kDead) {
-			allBossDead = false;
+	for (auto& keyCanota : enemyManager_->GetKeyCanotas()) {
+		if (keyCanota->GetCurrentStateName() == IBaseTankEnemy::StateName::kDead) {
+			allBossDead = true;
 			break;
 		}
+		allBossDead = false;
 	}
 	//もし全てのボスが死亡していたら
 	if (allBossDead) {

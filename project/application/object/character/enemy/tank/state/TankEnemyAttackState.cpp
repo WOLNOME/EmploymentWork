@@ -1,11 +1,12 @@
 #include "TankEnemyAttackState.h"
+#include <cassert>
 
 //アプリケーション
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
+#include <application/object/character/weapon/enemy/manager/EnemyWeaponManager.h>
 
-TankEnemyAttackState::TankEnemyAttackState(bool _isUseCannon) {
-	isUseCannon_ = _isUseCannon;
+TankEnemyAttackState::TankEnemyAttackState() {
 }
 
 void TankEnemyAttackState::Enter(IBaseTankEnemy* enemy) {
@@ -33,11 +34,11 @@ void TankEnemyAttackState::Exit(IBaseTankEnemy* enemy) {
 
 void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 	//クールタイム処理
-	if (cannonCoolTimer_ > 0.0f) {
-		cannonCoolTimer_ -= kDeltaTime;
+	if (coolTimer_ > 0.0f) {
+		coolTimer_ -= kDeltaTime;
 		//クールタイムがマイナスになったら0にする
-		if (cannonCoolTimer_ < 0.0f) {
-			cannonCoolTimer_ = 0.0f;
+		if (coolTimer_ < 0.0f) {
+			coolTimer_ = 0.0f;
 		}
 		//クールタイム処理を終えたら関数を抜ける
 		return;
@@ -70,12 +71,30 @@ void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 		}
 	}
 
-	//未攻撃状態なら攻撃処理
-	if (!isCannonFire_ && isUseCannon_) {
-		//砲弾を発射したフラグをオン
-		isCannonFire_ = true;
+	//攻撃処理
+	if (coolTimer_ == 0.0f) {
 		//クールタイムをセット
 		float cannonCoolTime = enemy->GetParam()["cannonCoolTime"];
-		cannonCoolTimer_ = cannonCoolTime;
+		coolTimer_ = cannonCoolTime;
+		//初期位置を計算
+		Vector3 initPos = enemy->GetWorldTransform().translate;
+		std::string tag = enemy->GetParam()["tag"];
+		if (tag == "canota") {
+			initPos.y += 1.5f;
+			initPos.x += std::sinf(enemy->GetWorldTransform().rotate.y) * 7.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().rotate.y) * 7.0f;
+		}
+		else if (tag == "keyCanota") {
+			initPos.y += 2.0f;	//←高さ
+			initPos.x += std::sinf(enemy->GetWorldTransform().rotate.y) * 10.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().rotate.y) * 10.0f;
+		}
+		else {
+			//そのタグは存在しない
+			assert(false && "そのようなタグは存在しません");
+		}
+		//スポーン
+		enemy->GetEnemyWeaponManager()->SpawnCannon(initPos, enemy->GetPlayer()->GetWorldTransform().translate);
 	}
+
 }

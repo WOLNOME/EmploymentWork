@@ -10,7 +10,7 @@ class Player;
 /// <summary>
 /// ボスエネミー単体の処理全般を管理するクラス
 /// </summary>
-class Boss : public IBaseTankEnemy {
+class KeyCanota : public IBaseTankEnemy {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -19,12 +19,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="_isUseCannon">砲弾可能フラグ</param>
-	Boss(bool _isUseCannon) : IBaseTankEnemy(_isUseCannon) {}
+	KeyCanota() {};
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Boss() override {};
+	~KeyCanota() override {};
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -37,6 +36,13 @@ public:
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui() override;
+
+	/// <summary>
+	/// スポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void Spawn(const Vector3& _initPos, const Vector3& _initRotate) override;
 
 private:
 	/// ============================== ///

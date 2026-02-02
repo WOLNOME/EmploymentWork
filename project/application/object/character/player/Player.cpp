@@ -8,6 +8,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 #include <application/ui/player/PlayerUI.h>
 #include <application/ui/message/MessageUI.h>
 
@@ -38,6 +39,9 @@ void Player::Initialize() {
 	//当たり判定の属性を設定
 	SetCollisionAttribute(CollisionAttribute::Player);
 
+	//アクティブ状態として初期化
+	SetState(State::kActive);
+
 	//パラメータのセット
 	int maxHP = param_["maxHP"];
 	hp_ = maxHP;
@@ -50,15 +54,13 @@ void Player::Initialize() {
 	item_moveSpeedUp_ = 0;
 	item_turnSpeedUp_ = 0;
 
-	circleShadow_->SetIsDisplay(false);
-
 }
 
 void Player::Update() {
 	//カメラがセットされていなかったら警告
-	assert(camera_ != nullptr && "カメラがセットされていません。");
+	assert(camera_ && "カメラがセットされていません。");
 	//メッセージUIがセットされていなかったら警告
-	assert(messageUI_ != nullptr && "メッセージUIがセットされていません。");
+	assert(messageUI_ && "メッセージUIがセットされていません。");
 
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
@@ -240,9 +242,11 @@ void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 
 void Player::Rotate() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	auto ShortestAngleDiff = [=](float from, float to) -> float {
 		float diff = to - from;
@@ -283,9 +287,14 @@ void Player::Rotate() {
 
 void Player::Move() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
+
+	//移動前に前フレームの座標を保存
+	prePosition_ = object3d_->worldTransform.worldTranslate;
 
 	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
@@ -298,11 +307,11 @@ void Player::Move() {
 	float speed = param_["speed"];
 	float item_moveSpeedUpValue = param_["item_moveSpeedUpValue"];
 	speed += item_moveSpeedUp_ * item_moveSpeedUpValue;
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_W) || (input_->GetLStickDir().y > 0.0f)) {
 		//速度を加算
 		velocity_ += currentDir * speed;
 	}
-	if (input_->PushKey(DIK_S)) {
+	if (input_->PushKey(DIK_S) || (input_->GetLStickDir().y < 0.0f)) {
 		//速度を減算
 		velocity_ += -currentDir * speed;
 	}
@@ -341,14 +350,15 @@ void Player::Move() {
 
 	//速度を加算
 	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
-
 }
 
 void Player::CannonAttack() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//リロードタイムの計算
 	if (cannonReloadTimer_ > 0.0f) {
@@ -357,29 +367,41 @@ void Player::CannonAttack() {
 		if (cannonReloadTimer_ < 0.0f) {
 			cannonReloadTimer_ = 0.0f;
 		}
-		//砲弾を発射したフラグをオフ
-		isCannonFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//砲弾を発射したフラグをオン
-		isCannonFire_ = true;
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		//リロードタイムをセット
 		float cannonReloadTime = param_["cannonReloadTime"];
 		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
 		cannonReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
 		cannonReloadTimer_ = cannonReloadTime;
+		//初期位置と発射方向の計算
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 cannonPos = object3d_->worldTransform.translate;
+		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
+		Vector3 cannonDirection = currentDir;
+		//スポーン
+		playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
 	}
 }
 
 void Player::BulletAttack() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//発射間隔の計算
 	bool isInterval = false;
@@ -408,16 +430,12 @@ void Player::BulletAttack() {
 
 	//インターバルおよびリロード中は発射しない
 	if (isInterval || isReload) {
-		//銃弾を発射したフラグをオフ
-		isBulletFire_ = false;
 		//計算後はこの関数を抜ける
 		return;
 	}
 
 	//左クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::LeftButton)) {
-		//銃弾を発射したフラグをオン
-		isBulletFire_ = true;
+	if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
 		//間隔計測用タイマーをセット
 		float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
 		bulletFireIntervalTimer_ = bulletFireIntervalTime;
@@ -430,6 +448,19 @@ void Player::BulletAttack() {
 			bulletReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
 			bulletReloadTimer_ = bulletReloadTime;
 		}
+		//初期位置と発射方向を計算
+		float orx = camera_->worldTransform.rotate.x;
+		float ory = camera_->worldTransform.rotate.y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 bulletPos = camera_->worldTransform.translate;
+		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+		//スポーン
+		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 	}
 }
 
@@ -441,19 +472,25 @@ void Player::DeadProcess() {
 	}
 	//死亡演出が終了したら死亡
 	if (deathDirection_->GetIsDirFinished()) {
-		//死亡予約
-		SetDeadTimer(0.1f);
+		//アイドル状態にする
+		SetState(State::kIdle);
 	}
 }
 
 void Player::CameraAlgorithm() {
 	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection()) return;
-	//死亡していたら処理をしない
-	if (isDead_ && GetDeadTimer() > 0.0f) return;
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
 
 	//カメラの操作にオブジェクトの回転を合わせる
-	Vector2 moveValue = input_->GetMousePosition();
+	Vector2 moveValue;
+	Vector2 mouseMoveValue = input_->GetMousePosition();
+	Vector2 padMoveValue = input_->GetRStickDir() * 40.0f;
+	padMoveValue.y *= -1.0f;
+	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
 	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {

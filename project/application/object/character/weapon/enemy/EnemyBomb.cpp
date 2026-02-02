@@ -37,10 +37,8 @@ void EnemyBomb::Initialize() {
 	collisionRadius_ = 40.0f;
 	//パラメータの読み込み
 	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
-	//初期化時点では死亡状態
-	isDead_ = true;
 
-	//影の大きさを調整
+	//影の初期化
 	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
 
 }
@@ -48,8 +46,16 @@ void EnemyBomb::Initialize() {
 void EnemyBomb::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
-	//弾が死亡していたら更新しない
-	if (GetDeadTimer() > 0.0f || GetIsDead()) return;
+
+	//爆発演出が終了したらアイドル状態にする
+	if (state_ == State::kAsphyxia && !explosion_->GetIsPlay()) {
+		SetState(State::kIdle);
+	}
+
+	//弾がアクティブでないなら更新しない
+	if (GetState() != State::kActive)
+		return;
+
 	//移動処理
 	Move();
 }
@@ -69,23 +75,7 @@ void EnemyBomb::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void EnemyBomb::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	switch (attribute) {
-	case CollisionAttribute::Player:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//当たり判定を無しにする
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-		//被弾インジケーターをつける
-		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
-
-		break;
-	default:
-		break;
-	}
-}
-
-void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyBomb::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	_targetPos;
 	//初期位置を保存
 	object3d_->worldTransform.translate = _initPos;
@@ -101,9 +91,25 @@ void EnemyBomb::SetInitParam(const Vector3& _initPos, const Vector3& _targetPos)
 
 	//当たり判定属性をセット
 	SetCollisionAttribute(CollisionAttribute::Nothingness);
-	//死亡状態を解除
-	isDead_ = false;
+	//アクティブ状態に切り替え
+	SetState(State::kActive);
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+}
+
+void EnemyBomb::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
+	switch (attribute) {
+	case CollisionAttribute::Player:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//当たり判定を無しにする
+		SetCollisionAttribute(CollisionAttribute::Nothingness);
+
+		//被弾インジケーターをつける
+		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
+
+		break;
+	default:
+		break;
+	}
 }
 
 void EnemyBomb::Move() {
@@ -129,8 +135,8 @@ void EnemyBomb::Move() {
 		object3d_->SetIsDisplay(false);
 		warning_->SetIsDisplay(false);
 		circleShadow_->SetIsDisplay(false);
-		//死亡予約処理
-		SetDeadTimer(explosion_->GetDuration());
+		//仮死状態にする
+		SetState(State::kAsphyxia);
 
 		//当たり判定属性を爆風に
 		SetCollisionAttribute(CollisionAttribute::EnemyBlast);

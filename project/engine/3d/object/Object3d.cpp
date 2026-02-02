@@ -77,6 +77,7 @@ void Object3d::Initialize(ShapeTag, const std::string& name, Shape::ShapeKind ki
 void Object3d::Update() {
 	//ワールドトランスフォームの更新
 	worldTransform.UpdateMatrix();
+
 	//オブジェクトの種類ごとの処理
 	switch (objKind_) {
 	case Object3d::ObjectKind::Model:

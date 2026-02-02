@@ -330,10 +330,17 @@ public:
 	static float AngleOf2VectorY(const Vector3& v1, const Vector3& v2);
 	/// <summary>
 	/// 向きベクトルから回転を求める関数(Z回転は考慮しない)
+	/// 範囲は(-90°~90°)
 	/// </summary>
 	/// <param name="dir">向きベクトル</param>
 	/// <returns>回転</returns>
 	static Vector3 DirectionToRotation(const Vector3& dir);
+	/// <summary>
+	/// 回転から向きベクトルを求める関数(Z回転は考慮しない)
+	/// </summary>
+	/// <param name="rot">回転</param>
+	/// <returns>向きベクトル</returns>
+	static Vector3 RotationToDirection(const Vector3& rot);
 
 	///------------------------------------///
 	///            Vector4
@@ -625,6 +632,12 @@ public:
 	/// <param name="t">補間係数（0～1）</param>
 	/// <returns>線形補間後の値</returns>
 	static float Lerp(float s1, float s2, float t);
+	/// <summary>
+	/// 角度を-π~πの間に収める
+	/// </summary>
+	/// <param name="angle"></param>
+	/// <returns></returns>
+	static float NormalizeAngle(float angle);
 
 
 	///------------------------------------///

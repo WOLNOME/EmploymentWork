@@ -4,21 +4,24 @@
 void ItemManager::Initialize() {
 	//アイテムのパラメーターを読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
+
+	//アイテムコンテナの生成・初期化
+	int itemNum = param_["maxItemNum"];
+	for (int i = 0; i < itemNum; i++) {
+		items_.push_back(std::make_unique<Item>());
+		items_[i]->Initialize();
+	}
+
 }
 
 void ItemManager::Update() {
-	//死亡したアイテムを削除
-	for (auto it = items_.begin(); it != items_.end();) {
-		if ((*it)->GetIsDead()) {
-			it = items_.erase(it); // アイテムを削除
-		}
-		else {
-			++it; // 次のアイテムへ
-		}
-	}
-
 	// アイテムの更新
 	for (const auto& item : items_) {
+		//アイドル状態の要素はスキップ
+		if (item->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
 		item->Update();
 	}
 }
@@ -27,6 +30,10 @@ void ItemManager::DebugWithImGui() {
 #ifdef _DEBUG
 	// 各アイテムのデバッグ情報を表示
 	for (const auto& item : items_) {
+		//アイドル状態の要素はスキップ
+		if (item->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
 		item->DebugWithImGui();
 	}
 #endif // _DEBUG
@@ -42,9 +49,15 @@ void ItemManager::AddItem(const Vector3& _initPos) {
 		return;
 	}
 
-	// アイテムの生成
-	std::unique_ptr<Item> item = std::make_unique<Item>();
-	item->Initialize();
-	item->SetInitPos(_initPos);
-	items_.push_back(std::move(item)); // アイテムをコンテナに追加
+	//アイテムコンテナを走査
+	for (auto& item : items_) {
+		//アイテムがアイドル状態でなければ次へ
+		if (item->GetState() != BaseCharacter::State::kIdle) {
+			continue;
+		}
+		//アイテムをスポーン
+		item->Spawn(_initPos);
+
+		break;
+	}
 }
