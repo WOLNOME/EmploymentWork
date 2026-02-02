@@ -116,7 +116,7 @@ void PauseSystem::Initialize() {
 
 void PauseSystem::Update() {
 	//ポーズ切り替え処理
-	if (input_->TriggerKey(DIK_ESCAPE)) {
+	if (input_->TriggerKey(DIK_ESCAPE) || input_->TriggerPadButton(GamePadButton::START)) {
 		isPause_ = !isPause_;
 		isOperationGuideDisplay_ = false;
 	}
@@ -133,12 +133,12 @@ void PauseSystem::Update() {
 		switch (selectMenu_) {
 		case PauseSystem::Menu::kContinue: {
 			//決定
-			if (input_->TriggerKey(DIK_SPACE)) {
+			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 				//ポーズ画面を終了
 				isPause_ = false;
 			}
 			//下
-			if (input_->TriggerKey(DIK_S)) {
+			if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN)) {
 				//メニューを操作ガイドに切り替え
 				selectMenu_ = Menu::kOperationGuide;
 			}
@@ -153,17 +153,17 @@ void PauseSystem::Update() {
 		}
 		case PauseSystem::Menu::kOperationGuide: {
 			//決定
-			if (input_->TriggerKey(DIK_SPACE)) {
+			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 				//操作ガイドを表示
 				isOperationGuideDisplay_ = true;
 			}
 			//上
-			if (input_->TriggerKey(DIK_W)) {
+			if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP)) {
 				//メニューを続行に切り替え
 				selectMenu_ = Menu::kContinue;
 			}
 			//下
-			if (input_->TriggerKey(DIK_S)) {
+			if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN)) {
 				//メニューをタイトルに切り替え
 				selectMenu_ = Menu::kTItle;
 			}
@@ -178,13 +178,13 @@ void PauseSystem::Update() {
 		}
 		case PauseSystem::Menu::kTItle: {
 			//決定
-			if (input_->TriggerKey(DIK_SPACE)) {
+			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 				//タイトルシーンへ
 				uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
 				SceneManager::GetInstance()->SetNextScene("Title", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 1.0f, textureHandle);
 			}
 			//上
-			if (input_->TriggerKey(DIK_W)) {
+			if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP)) {
 				//メニューを操作ガイドに切り替え
 				selectMenu_ = Menu::kOperationGuide;
 			}
@@ -218,8 +218,8 @@ void PauseSystem::Update() {
 		for (int i = 0; i < kMaxStringNum_; i++) {
 			stringMenuSprite_[i]->SetIsDisplay(false);
 		}
-		//スペースキーで終了
-		if (input_->TriggerKey(DIK_TAB)) {
+		//Bボタンで終了
+		if (input_->TriggerKey(DIK_TAB) || input_->TriggerPadButton(GamePadButton::B)) {
 			//フラグを取り下げる
 			isOperationGuideDisplay_ = false;
 		}
