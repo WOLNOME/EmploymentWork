@@ -2,13 +2,17 @@
 #include <windows.h>
 #include <string>
 
-/// <summary>
-/// ログ出力
-/// </summary>
-namespace Logger {
+namespace Norm {
+
 	/// <summary>
 	/// ログ出力
 	/// </summary>
-	/// <param name="message">ログ内容</param>
-	void Log(const std::string& message);
+	namespace Logger {
+		/// <summary>
+		/// ログ出力
+		/// </summary>
+		/// <param name="message">ログ内容</param>
+		void Log(const std::string& message);
+	}
+
 }

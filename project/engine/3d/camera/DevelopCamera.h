@@ -3,43 +3,47 @@
 #include "Input.h"
 #include "Vector2.h"
 
-/// <summary>
-/// 開発用カメラの管理を行うクラス
-/// </summary>
-class DevelopCamera : public BaseCamera {
-public:
-	/// ============================== ///
-	///		メンバ関数
-	/// ============================== ///
+namespace Norm {
 
 	/// <summary>
-	/// コンストラクタ
+	/// 開発用カメラの管理を行うクラス
 	/// </summary>
-	DevelopCamera() : BaseCamera() {}
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	virtual ~DevelopCamera() = default;
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize() override;
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// ImGui操作
-	/// </summary>
-	void DebugWithImGui();
+	class DevelopCamera : public BaseCamera {
+	public:
+		/// ============================== ///
+		///		メンバ関数
+		/// ============================== ///
 
-private:
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		DevelopCamera() : BaseCamera() {}
+		/// <summary>
+		/// デストラクタ
+		/// </summary>
+		virtual ~DevelopCamera() = default;
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		void Initialize() override;
+		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update() override;
+		/// <summary>
+		/// ImGui操作
+		/// </summary>
+		void DebugWithImGui();
 
-	Input* input_ = nullptr;
+	private:
+		/// ============================== ///
+		///		メンバ変数
+		/// ============================== ///
 
-	Vector2 start = { 0.0f,0.0f };
+		Input* input_ = nullptr;
 
-};
+		Vector2 start = { 0.0f,0.0f };
+
+	};
+
+}

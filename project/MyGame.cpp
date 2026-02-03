@@ -18,6 +18,8 @@
 #include "CollisionManager.h"
 #include "SceneManager.h"
 
+using namespace Norm;
+
 void MyGame::Initialize() {
 	//ゲーム基盤部の初期化
 	Framework::Initialize();

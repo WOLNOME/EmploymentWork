@@ -23,129 +23,133 @@
 #include "SceneManager.h"
 #include "CollisionManager.h"
 
-void Framework::Initialize() {
-	//WindowsAPIの初期化
-	WinApp::GetInstance()->Initialize();
+namespace Norm {
 
-	//DirectX12
-	DirectXCommon::GetInstance()->Initialize();
+	void Framework::Initialize() {
+		//WindowsAPIの初期化
+		WinApp::GetInstance()->Initialize();
 
-	//GPUDescriptorマネージャー
-	GPUDescriptorManager::GetInstance()->Initialize();
+		//DirectX12
+		DirectXCommon::GetInstance()->Initialize();
 
-	//RTVマネージャー
-	RTVManager::GetInstance()->Initialize();
+		//GPUDescriptorマネージャー
+		GPUDescriptorManager::GetInstance()->Initialize();
 
-	//DSVマネージャー
-	DSVManager::GetInstance()->Initialize();
+		//RTVマネージャー
+		RTVManager::GetInstance()->Initialize();
 
-	//テキストテクスチャレンダー
-	TextTextureRender::GetInstance()->Initialize();
+		//DSVマネージャー
+		DSVManager::GetInstance()->Initialize();
 
-	//メインレンダー
-	MainRender::GetInstance()->Initialize();
+		//テキストテクスチャレンダー
+		TextTextureRender::GetInstance()->Initialize();
 
-	//D2Dレンダー
-	D2DRender::GetInstance()->Initialize();
+		//メインレンダー
+		MainRender::GetInstance()->Initialize();
 
-	//ImGuiマネージャー
-	ImGuiManager::GetInstance()->Initialize();
+		//D2Dレンダー
+		D2DRender::GetInstance()->Initialize();
 
-	//テクスチャマネージャー
-	TextureManager::GetInstance()->Initialize();
+		//ImGuiマネージャー
+		ImGuiManager::GetInstance()->Initialize();
 
-	//テキストテクスチャマネージャー
-	TextTextureManager::GetInstance()->Initialize();
+		//テクスチャマネージャー
+		TextureManager::GetInstance()->Initialize();
 
-	//ポストエフェクトマネージャー
-	PostEffectManager::GetInstance()->Initialize();
+		//テキストテクスチャマネージャー
+		TextTextureManager::GetInstance()->Initialize();
 
-	//モデルマネージャー
-	ModelManager::GetInstance()->Initialize();
+		//ポストエフェクトマネージャー
+		PostEffectManager::GetInstance()->Initialize();
 
-	//パーティクルマネージャー
-	ParticleManager::GetInstance()->Initialize();
+		//モデルマネージャー
+		ModelManager::GetInstance()->Initialize();
 
-	//複合パーティクルマネージャー
-	CombinedParticleManager::GetInstance()->Initialize();
+		//パーティクルマネージャー
+		ParticleManager::GetInstance()->Initialize();
 
-	//弾丸トレールマネージャー
-	BulletTrailManager::GetInstance()->Initialize();
+		//複合パーティクルマネージャー
+		CombinedParticleManager::GetInstance()->Initialize();
 
-	//インプット
-	Input::GetInstance()->Initialize();
+		//弾丸トレールマネージャー
+		BulletTrailManager::GetInstance()->Initialize();
 
-	//オーディオ共通部
-	AudioCommon::GetInstance()->Initialize();
+		//インプット
+		Input::GetInstance()->Initialize();
 
-	//スプライトマネージャー
-	SpriteManager::GetInstance()->Initialize();
+		//オーディオ共通部
+		AudioCommon::GetInstance()->Initialize();
 
-	//オブジェクト3Dマネージャー
-	Object3dManager::GetInstance()->Initialize();
+		//スプライトマネージャー
+		SpriteManager::GetInstance()->Initialize();
 
-	//線描画共通部
-	LineManager::GetInstance()->Initialize();
+		//オブジェクト3Dマネージャー
+		Object3dManager::GetInstance()->Initialize();
 
-	//シーンマネージャーの生成
-	SceneManager::GetInstance()->Initialize();
+		//線描画共通部
+		LineManager::GetInstance()->Initialize();
 
-	//当たり判定マネージャーの生成
-	CollisionManager::GetInstance()->Initialize();
+		//シーンマネージャーの生成
+		SceneManager::GetInstance()->Initialize();
 
-}
+		//当たり判定マネージャーの生成
+		CollisionManager::GetInstance()->Initialize();
 
-void Framework::Finalize() {
-	CollisionManager::GetInstance()->Finalize();
-	SceneManager::GetInstance()->Finalize();
-	LineManager::GetInstance()->Finalize();
-	Object3dManager::GetInstance()->Finalize();
-	SpriteManager::GetInstance()->Finalize();
-	AudioCommon::GetInstance()->Finalize();
-	Input::GetInstance()->Finalize();
-	BulletTrailManager::GetInstance()->Finalize();
-	CombinedParticleManager::GetInstance()->Finalize();
-	ParticleManager::GetInstance()->Finalize();
-	ModelManager::GetInstance()->Finalize();
-	PostEffectManager::GetInstance()->Finalize();
-	TextTextureManager::GetInstance()->Finalize();
-	TextureManager::GetInstance()->Finalize();
-	ImGuiManager::GetInstance()->Finalize();
-	D2DRender::GetInstance()->Finalize();
-	MainRender::GetInstance()->Finalize();
-	TextTextureRender::GetInstance()->Finalize();
-	DSVManager::GetInstance()->Finalize();
-	RTVManager::GetInstance()->Finalize();
-	GPUDescriptorManager::GetInstance()->Finalize();
-	DirectXCommon::GetInstance()->Finalize();
-	WinApp::GetInstance()->Finalize();
-}
-
-void Framework::Update() {
-	//インプット更新
-	Input::GetInstance()->Update();
-	
-	//メッセージ処理
-	if (WinApp::GetInstance()->ProcessMessage()) {
-		isOver = true;
 	}
-	//シーンマネージャー更新
-	SceneManager::GetInstance()->Update();
-}
 
-void Framework::Run() {
-	//ゲームの初期化
-	Initialize();
-	while (true) {
-		//終了リクエストが来たら抜ける
-		if (GetOver()) {
-			break;
+	void Framework::Finalize() {
+		CollisionManager::GetInstance()->Finalize();
+		SceneManager::GetInstance()->Finalize();
+		LineManager::GetInstance()->Finalize();
+		Object3dManager::GetInstance()->Finalize();
+		SpriteManager::GetInstance()->Finalize();
+		AudioCommon::GetInstance()->Finalize();
+		Input::GetInstance()->Finalize();
+		BulletTrailManager::GetInstance()->Finalize();
+		CombinedParticleManager::GetInstance()->Finalize();
+		ParticleManager::GetInstance()->Finalize();
+		ModelManager::GetInstance()->Finalize();
+		PostEffectManager::GetInstance()->Finalize();
+		TextTextureManager::GetInstance()->Finalize();
+		TextureManager::GetInstance()->Finalize();
+		ImGuiManager::GetInstance()->Finalize();
+		D2DRender::GetInstance()->Finalize();
+		MainRender::GetInstance()->Finalize();
+		TextTextureRender::GetInstance()->Finalize();
+		DSVManager::GetInstance()->Finalize();
+		RTVManager::GetInstance()->Finalize();
+		GPUDescriptorManager::GetInstance()->Finalize();
+		DirectXCommon::GetInstance()->Finalize();
+		WinApp::GetInstance()->Finalize();
+	}
+
+	void Framework::Update() {
+		//インプット更新
+		Input::GetInstance()->Update();
+
+		//メッセージ処理
+		if (WinApp::GetInstance()->ProcessMessage()) {
+			isOver = true;
 		}
-		//毎フレーム更新
-		Update();
-		//描画
-		Draw();
+		//シーンマネージャー更新
+		SceneManager::GetInstance()->Update();
 	}
-	//ゲームの終了
-	Finalize();
+
+	void Framework::Run() {
+		//ゲームの初期化
+		Initialize();
+		while (true) {
+			//終了リクエストが来たら抜ける
+			if (GetOver()) {
+				break;
+			}
+			//毎フレーム更新
+			Update();
+			//描画
+			Draw();
+		}
+		//ゲームの終了
+		Finalize();
+	}
+
 }

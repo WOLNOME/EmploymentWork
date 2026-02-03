@@ -5,35 +5,38 @@
 #include <stdexcept>
 #include <MyMath.h>
 
-/// <summary>
-/// ブラックボード
-/// </summary>
-class BlackBoard {
-public:
-	// 要素をセット
-	template<typename T>
-	void SetValue(const std::string& key, const T& value) {
-		mData[key] = value;
-	}
+namespace Norm {
 
-	// 要素を取得
-	template<typename T>
-	T GetValue(const std::string& key) const {
-		auto it = mData.find(key);
-		if (it != mData.end()) {
-			return std::any_cast<T>(it->second);
+	/// <summary>
+	/// ブラックボード
+	/// </summary>
+	class BlackBoard {
+	public:
+		// 要素をセット
+		template<typename T>
+		void SetValue(const std::string& key, const T& value) {
+			mData[key] = value;
 		}
 
-		throw std::runtime_error("キーが見つかりませんでした： " + key);
-	}
+		// 要素を取得
+		template<typename T>
+		T GetValue(const std::string& key) const {
+			auto it = mData.find(key);
+			if (it != mData.end()) {
+				return std::any_cast<T>(it->second);
+			}
 
-	// キーがあるかチェック
-	bool HasKey(const std::string& key) const {
-		return mData.find(key) != mData.end();
-	}
+			throw std::runtime_error("キーが見つかりませんでした： " + key);
+		}
 
-private:
-	//データのコンテナ
-	std::unordered_map<std::string, std::any> mData;
-};
+		// キーがあるかチェック
+		bool HasKey(const std::string& key) const {
+			return mData.find(key) != mData.end();
+		}
 
+	private:
+		//データのコンテナ
+		std::unordered_map<std::string, std::any> mData;
+	};
+
+}

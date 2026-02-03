@@ -3,53 +3,57 @@
 #include <d3d12.h>
 #include "imgui.h"
 
-/// <summary>
-/// ImGuiを管理するクラス
-/// シングルトンパターンで実装
-/// </summary>
-class ImGuiManager {
-private://コンストラクタ等の隠蔽
-	static ImGuiManager* instance;
-
-	ImGuiManager() = default;//コンストラクタ隠蔽
-	~ImGuiManager() = default;//デストラクタ隠蔽
-	ImGuiManager(ImGuiManager&) = delete;//コピーコンストラクタ封印
-	ImGuiManager& operator=(ImGuiManager&) = delete;//コピー代入演算子封印
-public:
-	/// ============================== ///
-	///		メンバ関数
-	/// ============================== ///
+namespace Norm {
 
 	/// <summary>
-	/// シングルトンインスタンスの取得
+	/// ImGuiを管理するクラス
+	/// シングルトンパターンで実装
 	/// </summary>
-	/// <returns>シングルトンインスタンス</returns>
-	static ImGuiManager* GetInstance();
+	class ImGuiManager {
+	private://コンストラクタ等の隠蔽
+		static ImGuiManager* instance;
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
+		ImGuiManager() = default;//コンストラクタ隠蔽
+		~ImGuiManager() = default;//デストラクタ隠蔽
+		ImGuiManager(ImGuiManager&) = delete;//コピーコンストラクタ封印
+		ImGuiManager& operator=(ImGuiManager&) = delete;//コピー代入演算子封印
+	public:
+		/// ============================== ///
+		///		メンバ関数
+		/// ============================== ///
 
-	/// <summary>
-	/// 終了
-	/// </summary>
-	void Finalize();
+		/// <summary>
+		/// シングルトンインスタンスの取得
+		/// </summary>
+		/// <returns>シングルトンインスタンス</returns>
+		static ImGuiManager* GetInstance();
 
-	/// <summary>
-	/// ImGui受付開始
-	/// </summary>
-	void Begin();
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		void Initialize();
 
-	/// <summary>
-	/// ImGui受付終了
-	/// </summary>
-	void End();
+		/// <summary>
+		/// 終了
+		/// </summary>
+		void Finalize();
 
-	/// <summary>
-	/// 画面への描画
-	/// </summary>
-	void Draw();
+		/// <summary>
+		/// ImGui受付開始
+		/// </summary>
+		void Begin();
 
-};
+		/// <summary>
+		/// ImGui受付終了
+		/// </summary>
+		void End();
+
+		/// <summary>
+		/// 画面への描画
+		/// </summary>
+		void Draw();
+
+	};
+
+}	// namespace Norm
 

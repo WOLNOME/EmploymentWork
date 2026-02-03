@@ -7,26 +7,30 @@
 #include <application/scene/GameClearScene.h>
 #include <application/scene/GameOverScene.h>
 
-BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
-	//次のシーンを生成
-	BaseScene* newScene = nullptr;
+namespace Norm {
 
-	if (sceneName == "Title") {
-		newScene = new TitleScene();
-	}
-	else if (sceneName == "GamePlay") {
-		newScene = new GamePlayScene();
-	}
-	else if (sceneName == "GameClear") {
-		newScene = new GameClearScene();
-	}
-	else if (sceneName == "GameOver") {
-		newScene = new GameOverScene();
-	}
-	//パーティクルエディター
-	else if (sceneName == "PARTICLEEDITOR") {
-		newScene = new ParticleEditorScene();
+	BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
+		//次のシーンを生成
+		BaseScene* newScene = nullptr;
+
+		if (sceneName == "Title") {
+			newScene = new TitleScene();
+		}
+		else if (sceneName == "GamePlay") {
+			newScene = new GamePlayScene();
+		}
+		else if (sceneName == "GameClear") {
+			newScene = new GameClearScene();
+		}
+		else if (sceneName == "GameOver") {
+			newScene = new GameOverScene();
+		}
+		//パーティクルエディター
+		else if (sceneName == "PARTICLEEDITOR") {
+			newScene = new ParticleEditorScene();
+		}
+
+		return newScene;
 	}
 
-	return newScene;
 }

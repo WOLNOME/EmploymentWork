@@ -4,6 +4,8 @@
 #include <Object3dManager.h>
 #include <cassert>
 
+using namespace Norm;
+
 void BaseCharacter::Initialize() {
 	//丸影の生成
 	circleShadow_ = std::make_unique<Object3d>();

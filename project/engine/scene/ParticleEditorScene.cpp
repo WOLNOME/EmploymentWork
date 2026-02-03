@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <iostream>
 
+namespace Norm {
+
 void ParticleEditorScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
@@ -1010,4 +1012,7 @@ void ParticleEditorScene::Editor() {
 	particleManagement();
 
 #endif //_DEBUG
+}
+
+
 }

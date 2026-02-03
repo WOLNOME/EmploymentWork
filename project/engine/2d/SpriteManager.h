@@ -4,96 +4,99 @@
 #include <unordered_map>
 #include <string>
 
-class Sprite;
+namespace Norm {
 
-/// <summary>
-/// 全てのスプライトを管理するクラス
-/// シングルトンパターンで実装
-/// </summary>
-class SpriteManager {
-private://コンストラクタ等の隠蔽
-	static SpriteManager* instance;
-
-	SpriteManager() = default;//コンストラクタ隠蔽
-	~SpriteManager() = default;//デストラクタ隠蔽
-	SpriteManager(SpriteManager&) = delete;//コピーコンストラクタ封印
-	SpriteManager& operator=(SpriteManager&) = delete;//コピー代入演算子封印
-public:
-	/// ============================== ///
-	///		メンバ関数
-	/// ============================== ///
+	class Sprite;
 
 	/// <summary>
-	/// シングルトンインスタンスの取得
+	/// 全てのスプライトを管理するクラス
+	/// シングルトンパターンで実装
 	/// </summary>
-	/// <returns>シングルトンインスタンス</returns>
-	static SpriteManager* GetInstance();
+	class SpriteManager {
+	private://コンストラクタ等の隠蔽
+		static SpriteManager* instance;
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
-	/// <summary>
-	/// バック描画
-	/// </summary>
-	void BackDraw();
-	/// <summary>
-	/// フロント描画
-	/// </summary>
-	void FrontDraw();
-	/// <summary>
-	/// 終了
-	/// </summary>
-	void Finalize();
+		SpriteManager() = default;//コンストラクタ隠蔽
+		~SpriteManager() = default;//デストラクタ隠蔽
+		SpriteManager(SpriteManager&) = delete;//コピーコンストラクタ封印
+		SpriteManager& operator=(SpriteManager&) = delete;//コピー代入演算子封印
+	public:
+		/// ============================== ///
+		///		メンバ関数
+		/// ============================== ///
 
-	/// <summary>
-	/// ImGuiデバッグ表示
-	/// </summary>
-	void DebugWithImGui();
+		/// <summary>
+		/// シングルトンインスタンスの取得
+		/// </summary>
+		/// <returns>シングルトンインスタンス</returns>
+		static SpriteManager* GetInstance();
 
-	/// <summary>
-	/// スプライトをコンテナに登録
-	/// </summary>
-	/// <param name="name">名前</param>
-	/// <param name="sprite">スプライトのポインタ</param>
-	void RegisterSprite(const std::string& name, Sprite* sprite);
-	/// <summary>
-	/// 登録されたスプライトを削除
-	/// </summary>
-	/// <param name="name">名前</param>
-	void DeleteSprite(const std::string& name);
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		void Initialize();
+		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update();
+		/// <summary>
+		/// バック描画
+		/// </summary>
+		void BackDraw();
+		/// <summary>
+		/// フロント描画
+		/// </summary>
+		void FrontDraw();
+		/// <summary>
+		/// 終了
+		/// </summary>
+		void Finalize();
 
-	/// <summary>
-	/// 名前を決める関数
-	/// </summary>
-	/// <param name="name">名前</param>
-	/// <returns>重複しない名前</returns>
-	std::string GenerateName(const std::string& name);
+		/// <summary>
+		/// ImGuiデバッグ表示
+		/// </summary>
+		void DebugWithImGui();
 
-private:
-	/// ============================== ///
-	///		非公開メンバ関数
-	/// ============================== ///
+		/// <summary>
+		/// スプライトをコンテナに登録
+		/// </summary>
+		/// <param name="name">名前</param>
+		/// <param name="sprite">スプライトのポインタ</param>
+		void RegisterSprite(const std::string& name, Sprite* sprite);
+		/// <summary>
+		/// 登録されたスプライトを削除
+		/// </summary>
+		/// <param name="name">名前</param>
+		void DeleteSprite(const std::string& name);
 
-	/// <summary>
-	/// グラフィックスパイプラインの生成
-	/// </summary>
-	void GenerateGraphicsPipeline();
+		/// <summary>
+		/// 名前を決める関数
+		/// </summary>
+		/// <param name="name">名前</param>
+		/// <returns>重複しない名前</returns>
+		std::string GenerateName(const std::string& name);
 
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
+	private:
+		/// ============================== ///
+		///		非公開メンバ関数
+		/// ============================== ///
 
-	//ルートシグネチャ
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
-	//グラフィックスパイプライン
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
+		/// <summary>
+		/// グラフィックスパイプラインの生成
+		/// </summary>
+		void GenerateGraphicsPipeline();
 
-	//スプライトのコンテナ
-	std::unordered_map<std::string, Sprite*> sprites_;
-};
+		/// ============================== ///
+		///		メンバ変数
+		/// ============================== ///
 
+		//ルートシグネチャ
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+		//グラフィックスパイプライン
+		Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
+
+		//スプライトのコンテナ
+		std::unordered_map<std::string, Sprite*> sprites_;
+	};
+
+}

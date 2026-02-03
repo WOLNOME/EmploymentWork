@@ -1,7 +1,7 @@
 #pragma once
 #include "Framework.h"
 
-class MyGame : public Framework
+class MyGame : public Norm::Framework
 {
 public:
 	/// <summary>

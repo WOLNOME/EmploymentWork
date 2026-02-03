@@ -3,37 +3,40 @@
 #include <vector>
 #include <memory>
 
-/// <summary>
-/// Compositeノードの基底クラス
-/// </summary>
-class CompositeNodeBase : public NodeBase {
-public:
-	//コンストラクタ
-	explicit CompositeNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {}
-	//デストラクタ
-	virtual ~CompositeNodeBase();
+namespace Norm {
 
-	//初期化
-	virtual void Initialize() override;
-	//終了
-	virtual void Finalize() override;
+	/// <summary>
+	/// Compositeノードの基底クラス
+	/// </summary>
+	class CompositeNodeBase : public NodeBase {
+	public:
+		//コンストラクタ
+		explicit CompositeNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {}
+		//デストラクタ
+		virtual ~CompositeNodeBase();
 
-	//ノードの追加
-	void AddNode(std::unique_ptr<INode> _node);
+		//初期化
+		virtual void Initialize() override;
+		//終了
+		virtual void Finalize() override;
 
-	//実行中のノードIDの取得
-	virtual int GetRunningNodeID() const override;
+		//ノードの追加
+		void AddNode(std::unique_ptr<INode> _node);
 
-protected:
-	//ノードのインクリメント
-	virtual void NodeIncrement();
-	//次のインデックスの取得
-	virtual const int GetNextIndex() const = 0;
+		//実行中のノードIDの取得
+		virtual int GetRunningNodeID() const override;
 
-protected:
-	// 子ノード群
-	std::vector<std::unique_ptr<INode>> mChildNodes;
-	// 現在動かしているノードのインデックス
-	int mRunningNodeIndex{ 0 };
-};
+	protected:
+		//ノードのインクリメント
+		virtual void NodeIncrement();
+		//次のインデックスの取得
+		virtual const int GetNextIndex() const = 0;
 
+	protected:
+		// 子ノード群
+		std::vector<std::unique_ptr<INode>> mChildNodes;
+		// 現在動かしているノードのインデックス
+		int mRunningNodeIndex{ 0 };
+	};
+
+}

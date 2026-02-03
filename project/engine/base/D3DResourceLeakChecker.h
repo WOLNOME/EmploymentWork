@@ -1,17 +1,20 @@
 #pragma once
 
-/// <summary>
-/// リソースの解放漏れをチェックするためのクラス
-/// </summary>
-class D3DResourceLeakChecker {
-public:
-	/// ============================== ///
-	///		メンバ関数
-	/// ============================== ///
+namespace Norm {
 
 	/// <summary>
-	/// デストラクタ
+	/// リソースの解放漏れをチェックするためのクラス
 	/// </summary>
-	~D3DResourceLeakChecker();
-};
+	class D3DResourceLeakChecker {
+	public:
+		/// ============================== ///
+		///		メンバ関数
+		/// ============================== ///
 
+		/// <summary>
+		/// デストラクタ
+		/// </summary>
+		~D3DResourceLeakChecker();
+	};
+
+}

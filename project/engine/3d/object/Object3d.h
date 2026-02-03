@@ -12,195 +12,198 @@
 #include "ModelFormat.h"
 #include "WorldTransform.h"
 
+namespace Norm {
 
-//初期化用のタグ
-struct ModelTag {};
-struct AnimationModelTag {};
-struct ShapeTag {};
 
-class BaseCamera;
-class SceneLight;
+	//初期化用のタグ
+	struct ModelTag {};
+	struct AnimationModelTag {};
+	struct ShapeTag {};
 
-/// <summary>
-/// 3Dオブジェクト単体の処理を行うクラス
-/// </summary>
-class Object3d {
-	//オブジェクト3dマネージャーに公開
-	friend class Object3dManager;
-
-public:
-	/// ============================== ///
-	///		列挙体
-	/// ============================== ///
+	class BaseCamera;
+	class SceneLight;
 
 	/// <summary>
-	/// オブジェクトの種類
+	/// 3Dオブジェクト単体の処理を行うクラス
 	/// </summary>
-	enum class ObjectKind {
-		Model,				//通常モデル
-		AnimationModel,		//アニメーションモデル
-		Shape,				//単純形状
+	class Object3d {
+		//オブジェクト3dマネージャーに公開
+		friend class Object3dManager;
 
-		kMaxNumObjectKind,
+	public:
+		/// ============================== ///
+		///		列挙体
+		/// ============================== ///
+
+		/// <summary>
+		/// オブジェクトの種類
+		/// </summary>
+		enum class ObjectKind {
+			Model,				//通常モデル
+			AnimationModel,		//アニメーションモデル
+			Shape,				//単純形状
+
+			kMaxNumObjectKind,
+		};
+
+		/// ============================== ///
+		///		構造体
+		/// ============================== ///
+
+		/// <summary>
+		/// ライト用フラグ(GPU用)
+		/// </summary>
+		struct FlagForGPU {
+			uint32_t isActiveLights;
+			uint32_t isActiveEnvironment;
+		};
+		/// <summary>
+		/// ライト用リソース
+		/// </summary>
+		struct FlagResource {
+			Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+			FlagForGPU* data;
+		};
+
+		/// ============================== ///
+		///		メンバ関数
+		/// ============================== ///
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		Object3d();
+		/// <summary>
+		/// デストラクタ
+		/// </summary>
+		~Object3d();
+
+		/// <summary>
+		/// 通常モデル初期化
+		/// </summary>
+		/// <param name="">ModelTag{}と入力</param>
+		/// <param name="name">名前</param>
+		/// <param name="filePath">ファイルパス</param>
+		void Initialize(ModelTag, const std::string& name, const std::string& filePath);
+		/// <summary>
+		/// アニメーションモデル初期化
+		/// </summary>
+		/// <param name="">AnimationModeltag{}と入力</param>
+		/// <param name="name">名前</param>
+		/// <param name="filePath">ファイルパス</param>
+		void Initialize(AnimationModelTag, const std::string& name, const std::string& filePath);
+		/// <summary>
+		/// 形状初期化
+		/// </summary>
+		/// <param name="">ShapeTag{}と入力</param>
+		/// <param name="name">名前</param>
+		/// <param name="kind">形状の種類</param>
+		void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
+
+		/// ============================== ///
+		///		setter
+		/// ============================== ///
+
+		/// <summary>
+		/// テクスチャのセット
+		/// </summary>
+		/// <param name="_textureHandle">テクスチャハンドル</param>
+		void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
+		/// <summary>
+		/// 環境光用テクスチャのセット
+		/// </summary>
+		/// <param name="_textureHandle">テクスチャハンドル</param>
+		void SetEnvironmentLightTextureHandle(int32_t _textureHandle) { environmentLightTextureHandle_ = _textureHandle; }
+		/// <summary>
+		///	表示するか
+		/// </summary>
+		/// <param name="_isDisplay">表示するか</param>
+		void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; };
+		/// <summary>
+		///	ライトの処理をするか
+		/// </summary>
+		/// <param name="_isLightProcess">ライトの処理をするか</param>
+		void SetIsLightProcess(bool _isLightProcess) { isLightProcess_ = _isLightProcess; }
+
+		/// <summary>
+		/// 新しいアニメーションを追加
+		/// </summary>
+		/// <param name="_name">名前</param>
+		/// <param name="_filePath">ファイルパス</param>
+		void SetNewAnimation(const std::string& _name, const std::string& _filePath);
+		/// <summary>
+		/// 現在のアニメーションを設定
+		/// </summary>
+		/// <param name="_name">名前</param>
+		void SetCurrentAnimation(const std::string& _name);
+
+		/// ============================== ///
+		///		メンバ変数(public)
+		/// ============================== ///
+
+		//ワールドトランスフォーム
+		WorldTransform worldTransform;
+
+	private:
+		/// ============================== ///
+		///		マネージャーへの委託処理用
+		/// ============================== ///
+
+		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update();
+		/// <summary>
+		/// 描画
+		/// </summary>
+		/// <param name="_camera">カメラ</param>
+		/// <param name="_sceneLight">シーンライト</param>
+		void Draw(BaseCamera* _camera, SceneLight* _sceneLight);
+
+		/// ============================== ///
+		///		非公開メンバ関数
+		/// ============================== ///
+
+		/// <summary>
+		/// ライト用フラグリソースの作成
+		/// </summary>
+		/// <returns>ライト用フラグリソース</returns>
+		FlagResource CreateFlagResource();
+
+		/// ============================== ///
+		///		描画に利用するメンバ変数
+		/// ============================== ///
+
+		//テクスチャ
+		int32_t textureHandle_ = EOF;
+		//環境光用のテクスチャ
+		int32_t environmentLightTextureHandle_ = EOF;
+
+		/// ============================== ///
+		///		メンバ変数
+		/// ============================== ///
+
+		//名前
+		std::string name_;
+
+		//モデル
+		Model* model_ = nullptr;
+		//アニメーションモデル
+		std::unique_ptr<AnimationModel> animationModel_ = nullptr;
+		//形状
+		std::unique_ptr<Shape> shape_ = nullptr;
+
+		//オブジェクトの種類
+		ObjectKind objKind_;
+
+		//ライト有無用リソース
+		FlagResource flagResource_;
+
+		//描画するか
+		bool isDisplay_ = true;
+		//ライトの処理をするか
+		bool isLightProcess_ = true;
+
 	};
 
-	/// ============================== ///
-	///		構造体
-	/// ============================== ///
-
-	/// <summary>
-	/// ライト用フラグ(GPU用)
-	/// </summary>
-	struct FlagForGPU {
-		uint32_t isActiveLights;
-		uint32_t isActiveEnvironment;
-	};
-	/// <summary>
-	/// ライト用リソース
-	/// </summary>
-	struct FlagResource {
-		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-		FlagForGPU* data;
-	};
-
-	/// ============================== ///
-	///		メンバ関数
-	/// ============================== ///
-
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Object3d();
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Object3d();
-
-	/// <summary>
-	/// 通常モデル初期化
-	/// </summary>
-	/// <param name="">ModelTag{}と入力</param>
-	/// <param name="name">名前</param>
-	/// <param name="filePath">ファイルパス</param>
-	void Initialize(ModelTag, const std::string& name, const std::string& filePath);
-	/// <summary>
-	/// アニメーションモデル初期化
-	/// </summary>
-	/// <param name="">AnimationModeltag{}と入力</param>
-	/// <param name="name">名前</param>
-	/// <param name="filePath">ファイルパス</param>
-	void Initialize(AnimationModelTag, const std::string& name, const std::string& filePath);
-	/// <summary>
-	/// 形状初期化
-	/// </summary>
-	/// <param name="">ShapeTag{}と入力</param>
-	/// <param name="name">名前</param>
-	/// <param name="kind">形状の種類</param>
-	void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
-
-	/// ============================== ///
-	///		setter
-	/// ============================== ///
-
-	/// <summary>
-	/// テクスチャのセット
-	/// </summary>
-	/// <param name="_textureHandle">テクスチャハンドル</param>
-	void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
-	/// <summary>
-	/// 環境光用テクスチャのセット
-	/// </summary>
-	/// <param name="_textureHandle">テクスチャハンドル</param>
-	void SetEnvironmentLightTextureHandle(int32_t _textureHandle) { environmentLightTextureHandle_ = _textureHandle; }
-	/// <summary>
-	///	表示するか
-	/// </summary>
-	/// <param name="_isDisplay">表示するか</param>
-	void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; };
-	/// <summary>
-	///	ライトの処理をするか
-	/// </summary>
-	/// <param name="_isLightProcess">ライトの処理をするか</param>
-	void SetIsLightProcess(bool _isLightProcess) { isLightProcess_ = _isLightProcess; }
-
-	/// <summary>
-	/// 新しいアニメーションを追加
-	/// </summary>
-	/// <param name="_name">名前</param>
-	/// <param name="_filePath">ファイルパス</param>
-	void SetNewAnimation(const std::string& _name, const std::string& _filePath);
-	/// <summary>
-	/// 現在のアニメーションを設定
-	/// </summary>
-	/// <param name="_name">名前</param>
-	void SetCurrentAnimation(const std::string& _name);
-
-	/// ============================== ///
-	///		メンバ変数(public)
-	/// ============================== ///
-
-	//ワールドトランスフォーム
-	WorldTransform worldTransform;
-
-private:
-	/// ============================== ///
-	///		マネージャーへの委託処理用
-	/// ============================== ///
-
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
-	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="_camera">カメラ</param>
-	/// <param name="_sceneLight">シーンライト</param>
-	void Draw(BaseCamera* _camera, SceneLight* _sceneLight);
-
-	/// ============================== ///
-	///		非公開メンバ関数
-	/// ============================== ///
-
-	/// <summary>
-	/// ライト用フラグリソースの作成
-	/// </summary>
-	/// <returns>ライト用フラグリソース</returns>
-	FlagResource CreateFlagResource();
-
-	/// ============================== ///
-	///		描画に利用するメンバ変数
-	/// ============================== ///
-
-	//テクスチャ
-	int32_t textureHandle_ = EOF;
-	//環境光用のテクスチャ
-	int32_t environmentLightTextureHandle_ = EOF;
-
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
-
-	//名前
-	std::string name_;
-
-	//モデル
-	Model* model_ = nullptr;
-	//アニメーションモデル
-	std::unique_ptr<AnimationModel> animationModel_ = nullptr;
-	//形状
-	std::unique_ptr<Shape> shape_ = nullptr;
-
-	//オブジェクトの種類
-	ObjectKind objKind_;
-
-	//ライト有無用リソース
-	FlagResource flagResource_;
-
-	//描画するか
-	bool isDisplay_ = true;
-	//ライトの処理をするか
-	bool isLightProcess_ = true;
-
-};
-
+}

@@ -1,25 +1,28 @@
 #pragma once
 #include "compositeNode/CompositeNodeBase.h"
 
-/// <summary>
-/// セレクターノード
-/// </summary>
-class Selector : public CompositeNodeBase {
-public:
-	//コンストラクタ
-	explicit Selector(BlackBoard* _blackBoard) : CompositeNodeBase(_blackBoard) {}
+namespace Norm {
 
-	//初期化
-	void Initialize() override;
-	//更新
-	void Update() override;
-	//終了
-	void Finalize() override;
+	/// <summary>
+	/// セレクターノード
+	/// </summary>
+	class Selector : public CompositeNodeBase {
+	public:
+		//コンストラクタ
+		explicit Selector(BlackBoard* _blackBoard) : CompositeNodeBase(_blackBoard) {}
 
-private:
-	//次のインデックスの取得
-	const int GetNextIndex() const override;
-	//ノードのインクリメント
-	void NodeIncrement() override;
-};
+		//初期化
+		void Initialize() override;
+		//更新
+		void Update() override;
+		//終了
+		void Finalize() override;
 
+	private:
+		//次のインデックスの取得
+		const int GetNextIndex() const override;
+		//ノードのインクリメント
+		void NodeIncrement() override;
+	};
+
+}

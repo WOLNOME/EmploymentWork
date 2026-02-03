@@ -34,6 +34,8 @@
 #include "../node/leaf/PatrolLeaf.h"
 #include "../node/leaf/SummonLeaf.h"
 
+using namespace Norm;
+
 std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _blackBoard) {
 	//JSONファイルを読み込む
 	json jsonData;

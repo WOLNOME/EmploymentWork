@@ -30,56 +30,59 @@
 #include <chrono>
 #include <memory>
 
-class SceneManager;
+namespace Norm {
 
-/// <summary>
-/// シーンの基底クラス
-/// </summary>
-class BaseScene {
-public:
-	/// ============================== ///
-	///		メンバ関数
-	///	============================== ///
+	class SceneManager;
 
 	/// <summary>
-	/// デストラクタ
+	/// シーンの基底クラス
 	/// </summary>
-	virtual ~BaseScene();
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	virtual void Initialize();
-	/// <summary>
-	/// 終了時
-	/// </summary>
-	virtual void Finalize();
-	/// <summary>
-	/// 更新
-	/// </summary>
-	virtual void Update();
-	/// <summary>
-	/// デバッグ処理
-	/// </summary>
-	virtual void DebugWithImGui() = 0;
+	class BaseScene {
+	public:
+		/// ============================== ///
+		///		メンバ関数
+		///	============================== ///
 
-	/// <summary>
-	/// FPS表示
-	/// </summary>
-	void ShowFPS();
+		/// <summary>
+		/// デストラクタ
+		/// </summary>
+		virtual ~BaseScene();
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		virtual void Initialize();
+		/// <summary>
+		/// 終了時
+		/// </summary>
+		virtual void Finalize();
+		/// <summary>
+		/// 更新
+		/// </summary>
+		virtual void Update();
+		/// <summary>
+		/// デバッグ処理
+		/// </summary>
+		virtual void DebugWithImGui() = 0;
 
-protected:
-	/// ============================== ///
-	///		メンバ変数
-	///	============================== ///
+		/// <summary>
+		/// FPS表示
+		/// </summary>
+		void ShowFPS();
 
-	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
-	//シーンライト
-	std::unique_ptr<SceneLight> sceneLight_ = nullptr;
+	protected:
+		/// ============================== ///
+		///		メンバ変数
+		///	============================== ///
 
-	//fps計測用変数
-	std::chrono::steady_clock::time_point lastFrameTime_ = std::chrono::steady_clock::now();
-	float fps_ = 0.0f;
+		//シーンマネージャー
+		SceneManager* sceneManager_ = nullptr;
+		//シーンライト
+		std::unique_ptr<SceneLight> sceneLight_ = nullptr;
 
-};
+		//fps計測用変数
+		std::chrono::steady_clock::time_point lastFrameTime_ = std::chrono::steady_clock::now();
+		float fps_ = 0.0f;
 
+	};
+
+}

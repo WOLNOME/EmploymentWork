@@ -4,55 +4,59 @@
 #include "ImGuiManager.h"
 #include <vector>
 
-BaseCamera::BaseCamera()
-	: fovY(0.45f)
-	, aspectRatio(float(WinApp::kClientWidth) / float(WinApp::kClientHeight))
-	, nearClip(0.1f)
-	, farClip(100.0f){
-	worldTransform.Initialize();
-	viewMatrix = MyMath::Inverse(worldTransform.GetWorldMatrix());
-	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
-	viewProjectionMatrix = MyMath::Multiply(viewMatrix, projectionMatrix);
-}
+namespace Norm {
 
-void BaseCamera::Initialize() {
-	//座標変換用リソース
-	viewProjectionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
-	viewProjectionResource_->Map(0, nullptr, reinterpret_cast<void**>(&viewProjectionData_));
-	viewProjectionData_->matWorld = worldTransform.GetWorldMatrix();
-	viewProjectionData_->matView = viewMatrix;
-	viewProjectionData_->matProjection = projectionMatrix;
-	//カメラ座標リソース
-	cameraPositionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
-	cameraPositionResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPositionData_));
-	cameraPositionData_->worldPosition = worldTransform.GetWorldTranslate();
-}
+	BaseCamera::BaseCamera()
+		: fovY(0.45f)
+		, aspectRatio(float(WinApp::kClientWidth) / float(WinApp::kClientHeight))
+		, nearClip(0.1f)
+		, farClip(100.0f) {
+		worldTransform.Initialize();
+		viewMatrix = MyMath::Inverse(worldTransform.GetWorldMatrix());
+		projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
+		viewProjectionMatrix = MyMath::Multiply(viewMatrix, projectionMatrix);
+	}
 
-void BaseCamera::Update() {
-	//カメラの更新
-	UpdateMatrix();
-}
+	void BaseCamera::Initialize() {
+		//座標変換用リソース
+		viewProjectionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
+		viewProjectionResource_->Map(0, nullptr, reinterpret_cast<void**>(&viewProjectionData_));
+		viewProjectionData_->matWorld = worldTransform.GetWorldMatrix();
+		viewProjectionData_->matView = viewMatrix;
+		viewProjectionData_->matProjection = projectionMatrix;
+		//カメラ座標リソース
+		cameraPositionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ViewProjectionTransformationMatrixForVS));
+		cameraPositionResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPositionData_));
+		cameraPositionData_->worldPosition = worldTransform.GetWorldTranslate();
+	}
 
-void BaseCamera::UpdateMatrix() {
-	//ワールドトランスフォームの更新
-	worldTransform.UpdateMatrix();
+	void BaseCamera::Update() {
+		//カメラの更新
+		UpdateMatrix();
+	}
 
-	viewMatrix = MyMath::Inverse(worldTransform.GetWorldMatrix());
-	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
-	viewProjectionMatrix = MyMath::Multiply(viewMatrix, projectionMatrix);
+	void BaseCamera::UpdateMatrix() {
+		//ワールドトランスフォームの更新
+		worldTransform.UpdateMatrix();
 
-	viewProjectionData_->matWorld = worldTransform.GetWorldMatrix();
-	viewProjectionData_->matView = viewMatrix;
-	viewProjectionData_->matProjection = projectionMatrix;
+		viewMatrix = MyMath::Inverse(worldTransform.GetWorldMatrix());
+		projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
+		viewProjectionMatrix = MyMath::Multiply(viewMatrix, projectionMatrix);
 
-	cameraPositionData_->worldPosition = worldTransform.GetWorldTranslate();
-}
+		viewProjectionData_->matWorld = worldTransform.GetWorldMatrix();
+		viewProjectionData_->matView = viewMatrix;
+		viewProjectionData_->matProjection = projectionMatrix;
 
-void BaseCamera::DebugWithImGui() {
+		cameraPositionData_->worldPosition = worldTransform.GetWorldTranslate();
+	}
+
+	void BaseCamera::DebugWithImGui() {
 #ifdef _DEBUG
 
-	ImGui::Begin("Camera");
-	ImGui::End();
+		ImGui::Begin("Camera");
+		ImGui::End();
 
 #endif // _DEBUG
+	}
+
 }
