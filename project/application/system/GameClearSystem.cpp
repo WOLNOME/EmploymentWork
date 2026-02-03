@@ -25,7 +25,7 @@ void GameClearSystem::Initialize() {
 		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
 		tank_->SetTexture(textureHandle);
 		tank_->SetIsDisplay(true);
-		tank_->worldTransform.translate = { 0.0f,3.0f,0.0f };
+		tank_->worldTransform.SetTranslate({ 0.0f,3.0f,0.0f });
 	}
 
 	//クリアテキスト
@@ -193,18 +193,18 @@ void GameClearSystem::CameraWork() {
 		//カメラ位置更新
 		float t = (float)cameraWorkParam_.timer / cameraWorkParam_.moveDuration;
 		Vector3 cameraPos = MyMath::Lerp(cameraWorkParam_.startPos, cameraWorkParam_.endPos, MyMath::EaseOutQuad(t));
-		gameCamera_->worldTransform.translate = cameraPos;
+		gameCamera_->worldTransform.SetTranslate(cameraPos);
 		//カメラの回転更新
-		Vector3 targetPos = tank_->worldTransform.translate;
+		Vector3 targetPos = tank_->worldTransform.GetTranslate();
 		targetPos.y += 2.5f;	//少し上を見る
-		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.translate));
-		gameCamera_->worldTransform.rotate = cameraRotate;
+		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.GetTranslate()));
+		gameCamera_->worldTransform.SetRotate(cameraRotate);
 	}
 }
 
 void GameClearSystem::ConfettiParticleUpdate() {
 	//パーティクルの座標をカメラの座標に合わせる
 	TransformEuler transform = confettiParticle_->GetBaseTransform();
-	transform.translate.y = gameCamera_->worldTransform.translate.y + 7.0f;
+	transform.translate.y = gameCamera_->worldTransform.GetTranslate().y + 7.0f;
 	confettiParticle_->SetBaseTransform(transform);
 }

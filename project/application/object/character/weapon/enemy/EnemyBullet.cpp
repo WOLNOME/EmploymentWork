@@ -20,8 +20,8 @@ void EnemyBullet::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bullet"), Shape::kSphere);
-	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX,FLT_MAX };
-	object3d_->worldTransform.scale = { 0.01f,0.01f,0.01f };
+	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
+	object3d_->worldTransform.SetScale({ 0.01f,0.01f,0.01f });
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
 	//トレールエフェクトの生成と初期化
@@ -55,7 +55,7 @@ void EnemyBullet::Update() {
 	Move();
 
 	//トレールポジションの設定
-	trail_->SetPosition(object3d_->worldTransform.translate);
+	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
 }
 
 void EnemyBullet::DebugWithImGui() {
@@ -64,7 +64,6 @@ void EnemyBullet::DebugWithImGui() {
 	BaseCharacter::DebugWithImGui();
 
 	ImGui::Begin("敵銃弾");
-	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 	//デバッグ用ラインのカラー
@@ -75,7 +74,7 @@ void EnemyBullet::DebugWithImGui() {
 
 void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
+	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
 	//速度を算出
 	float speed = param_["speed"];
@@ -125,14 +124,20 @@ void EnemyBullet::Move() {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed;
 	}
-	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
+
+	//新座標を定義
+	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
-	if (object3d_->worldTransform.translate.y < 0.0f) {
-		object3d_->worldTransform.translate.y = 0.0f;
+	if (newTranslate.y < 0.0f) {
+		newTranslate.y = 0.0f;
 		//死亡処理
 		DeadProcess();
 	}
+
+	//座標をセット
+	object3d_->worldTransform.SetTranslate(newTranslate);
 
 	//弾が寿命を迎えたら死亡
 	float lifeTime = param_["lifeTime"];
@@ -148,7 +153,7 @@ void EnemyBullet::Move() {
 void EnemyBullet::DeadProcess() {
 	//衝突エフェクトの発生
 	TransformEuler transform = hitEffect_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.translate;
+	transform.translate = object3d_->worldTransform.GetTranslate();
 	hitEffect_->SetBaseTransform(transform);
 	hitEffect_->SetIsPlay(true);
 	//仮死状態にする

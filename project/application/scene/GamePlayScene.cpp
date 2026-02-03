@@ -15,13 +15,13 @@ void GamePlayScene::Initialize() {
 	camera_ = std::make_unique<GameCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(2000.0f);
-	camera_->worldTransform.rotate = { 0.15f,0.0f,0.0f };
-	camera_->worldTransform.translate = { 0.0f,20.0f,-80.0f };
+	camera_->worldTransform.SetRotate({ 0.15f,0.0f,0.0f });
+	camera_->worldTransform.SetTranslate({ 0.0f,20.0f,-80.0f });
 
 	//ライトの生成・初期化＆登録
 	dirLight_ = std::make_unique<DirectionalLight>();
 	dirLight_->Initialize();
-	dirLight_->direction_ = { 1.0f,-1.0f,1.0f };
+	dirLight_->SetDirection({ 1.0f,-1.0f,1.0f });
 	sceneLight_->SetLight(dirLight_.get());
 
 	//タイムスケールマネージャーの生成・初期化
@@ -213,7 +213,7 @@ void GamePlayScene::DebugWithImGui() {
 	pauseSystem_->Debug();
 
 	ImGui::Begin("距離");
-	float distance = Vector3(player_->GetWorldTransform().translate - enemyManager_->GetBoss()->GetWorldTransform().translate).Length();
+	float distance = Vector3(player_->GetWorldTransform().GetTranslate() - enemyManager_->GetBoss()->GetWorldTransform().GetTranslate()).Length();
 	ImGui::Text("%f", distance);
 	ImGui::End();
 

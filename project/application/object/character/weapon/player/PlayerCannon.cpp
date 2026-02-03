@@ -16,7 +16,7 @@ void PlayerCannon::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
-	object3d_->worldTransform.translate = { 0.0f,-10000.0f,0.0f };
+	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	particle_ = std::make_unique<CombinedParticle>();
@@ -34,7 +34,7 @@ void PlayerCannon::Initialize() {
 	collisionRadius_ = 1.0f;
 
 	//影の初期化
-	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
+	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
 
 }
 
@@ -55,7 +55,7 @@ void PlayerCannon::Update() {
 	Move();
 
 	//トレール座標設定
-	trail_->SetPosition(object3d_->worldTransform.translate);
+	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
 }
 
 void PlayerCannon::DebugWithImGui() {
@@ -64,7 +64,6 @@ void PlayerCannon::DebugWithImGui() {
 	BaseCharacter::DebugWithImGui();
 
 	ImGui::Begin("プレイヤーキャノン");
-	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 	//デバッグ用ラインのカラー
@@ -76,7 +75,7 @@ void PlayerCannon::DebugWithImGui() {
 
 void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
 	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
+	object3d_->worldTransform.SetTranslate(_initPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -99,7 +98,7 @@ void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subj
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//パーティクルの発生
 		TransformEuler transform = particle_->GetBaseTransform();
-		transform.translate = object3d_->worldTransform.translate;
+		transform.translate = object3d_->worldTransform.GetTranslate();
 		particle_->SetBaseTransform(transform);
 		particle_->SetIsPlay(true);
 		//仮死状態にする
@@ -144,13 +143,15 @@ void PlayerCannon::Move() {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed;
 	}
-	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
+	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
-	if (object3d_->worldTransform.translate.y < 0.0f) {
-		object3d_->worldTransform.translate.y = 0.0f;
+	if (newTranslate.y < 0.0f) {
+		newTranslate.y = 0.0f;
 		//アイドル状態にする
 		SetState(State::kIdle);
 	}
-
+	//オブジェクトに反映
+	object3d_->worldTransform.SetTranslate(newTranslate);
 }

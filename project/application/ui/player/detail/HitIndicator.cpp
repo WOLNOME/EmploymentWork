@@ -68,11 +68,11 @@ void HitIndicator::Update() {
 		indicators_[i].sprite->SetColor({ 1,1,1,alpha });
 
 		//使用する変数
-		Vector3 p = player_->GetWorldTransform().translate;	//プレイヤーの座標
+		Vector3 p = player_->GetWorldTransform().GetTranslate();	//プレイヤーの座標
 		Vector3 v1 = {
-			std::sinf(gameCamera_->worldTransform.rotate.y),
+			std::sinf(gameCamera_->worldTransform.GetRotate().y),
 			0.0f,
-			std::cosf(gameCamera_->worldTransform.rotate.y)
+			std::cosf(gameCamera_->worldTransform.GetRotate().y)
 		};	//カメラの向き
 		Vector3 v2 = indicators_[i].hitPosition - p;	//目標位置への方向
 		v2.y = 0.0f;

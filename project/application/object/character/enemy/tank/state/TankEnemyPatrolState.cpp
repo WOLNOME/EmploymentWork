@@ -47,13 +47,13 @@ void TankEnemyPatrolState::UpdatePatrol(IBaseTankEnemy* enemy) {
 	if (isRotation_) {
 		//現在の向きを求める
 		Vector3 currentDir = {
-			std::sinf(enemy->GetWorldTransform().rotate.y),
+			std::sinf(enemy->GetWorldTransform().GetRotate().y),
 			0.0f,
-			std::cosf(enemy->GetWorldTransform().rotate.y)
+			std::cosf(enemy->GetWorldTransform().GetRotate().y)
 		};
 		currentDir.Normalize();
 		//目標ポイントへの方向を求める
-		Vector3 targetDir = targetPosition_ - enemy->GetWorldTransform().translate;
+		Vector3 targetDir = targetPosition_ - enemy->GetWorldTransform().GetTranslate();
 		targetDir.Normalize();
 		//回転の差を求める
 		float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentDir.x, currentDir.z);
@@ -79,7 +79,7 @@ void TankEnemyPatrolState::UpdatePatrol(IBaseTankEnemy* enemy) {
 			usingRotateSpeed = (angle > 0) ? rotateSpeed * kDeltaTime : -rotateSpeed * kDeltaTime;
 		}
 		//現在の回転取得
-		Vector3 currentRotate = enemy->GetWorldTransform().rotate;
+		Vector3 currentRotate = enemy->GetWorldTransform().GetRotate();
 		//回転加算
 		currentRotate.y += usingRotateSpeed;
 		//-π~πにクランプ
@@ -99,7 +99,7 @@ void TankEnemyPatrolState::UpdatePatrol(IBaseTankEnemy* enemy) {
 		float speed = enemy->GetParam()["speed"];
 		speed *= 1.5f;
 		//目標までのベクトルを求める
-		Vector3 toTargetVec = targetPosition_ - enemy->GetWorldTransform().translate;
+		Vector3 toTargetVec = targetPosition_ - enemy->GetWorldTransform().GetTranslate();
 		if (toTargetVec.Length() < 10.0f) {
 			//移動処理を終えて新たな目標地点を見つける
 			isMoving_ = false;
@@ -109,7 +109,7 @@ void TankEnemyPatrolState::UpdatePatrol(IBaseTankEnemy* enemy) {
 		currentVelocity = toTargetVec.Normalized() * speed;
 
 		//速度を加算
-		Vector3 currentTranslate = enemy->GetWorldTransform().translate;
+		Vector3 currentTranslate = enemy->GetWorldTransform().GetTranslate();
 		currentTranslate.x += currentVelocity.x * kDeltaTime;
 		currentTranslate.z += currentVelocity.z * kDeltaTime;
 

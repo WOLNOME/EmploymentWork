@@ -50,7 +50,7 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void Spawn(const Vector3& _initPos, const Vector3& _targetPos);
+	void Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos);
 
 	/// <summary>
 	/// 当たり判定処理

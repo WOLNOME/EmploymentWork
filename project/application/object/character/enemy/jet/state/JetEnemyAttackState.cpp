@@ -12,9 +12,9 @@ void JetEnemyAttackState::Enter(IBaseJetEnemy* enemy) {
 	//クールタイマーの初期化
 	coolTimer_ = 0.0f;
 	//攻撃処理の通知
-	Vector3 targetPos = enemy->GetWorldTransform().translate;
+	Vector3 targetPos = enemy->GetWorldTransform().GetTranslate();
 	targetPos.y = 0.0f;
-	enemy->GetEnemyWeaponManager()->SpawnBomb(BombMethod::Fall, enemy->GetWorldTransform().translate, targetPos);
+	enemy->GetEnemyWeaponManager()->SpawnBomb(BombMethod::Fall, enemy->GetWorldTransform().GetTranslate(), targetPos);
 }
 
 void JetEnemyAttackState::Update(IBaseJetEnemy* enemy) {
@@ -28,7 +28,7 @@ void JetEnemyAttackState::Update(IBaseJetEnemy* enemy) {
 	}
 
 	//移動の更新処理(既存の速度を参照して直進)
-	Vector3 currentPosition = enemy->GetWorldTransform().translate;
+	Vector3 currentPosition = enemy->GetWorldTransform().GetTranslate();
 	Vector3 velocity = enemy->GetVelocity();
 	currentPosition += velocity * kDeltaTime;
 	enemy->SetTranslate(currentPosition);

@@ -21,7 +21,7 @@ void DevelopCamera::Update() {
 
 	auto GetDirection = [&](Direction dir) -> Vector3 {
 		Matrix4x4 rot = MyMath::CreateRotationFromEulerAngles(
-			worldTransform.rotate.x, worldTransform.rotate.y, worldTransform.rotate.z);
+			worldTransform.GetRotate());
 
 		switch (dir) {
 		case Direction::Forward: return rot * Vector3(0, 0, 1);
@@ -32,9 +32,12 @@ void DevelopCamera::Update() {
 
 		return Vector3();
 		};
-	
+	//新座標を定義
+	Vector3 newTranslate = worldTransform.GetTranslate();
+	Vector3 newRotate = worldTransform.GetRotate();
+
 	//スクロールで前進後退
-	worldTransform.translate += GetDirection(Direction::Forward) * (input_->GetMouseScrollCount() * 1.3f);
+	newTranslate += GetDirection(Direction::Forward) * (input_->GetMouseScrollCount() * 1.3f);
 	//ドラッグアンドドロップでカメラの向きを変える
 	if (input_->PushMouseButton(MouseButton::RightButton)) {
 		//マウスの移動幅
@@ -42,28 +45,32 @@ void DevelopCamera::Update() {
 		//デッドゾーン
 		float deadZone = 2.0f;
 		if (moveValue.Length() > deadZone) {
-			worldTransform.rotate.x += moveValue.y * 0.001f;
-			worldTransform.rotate.y += moveValue.x * 0.001f;
+			newRotate.x += moveValue.y * 0.001f;
+			newRotate.y += moveValue.x * 0.001f;
 		}
 
 		//WASDでカメラ移動
 		if (input_->PushKey(DIK_W)) {
-			worldTransform.translate += GetDirection(Direction::Forward) * 0.1f;
+			newTranslate += GetDirection(Direction::Forward) * 0.1f;
 		}
 		if (input_->PushKey(DIK_A)) {
-			worldTransform.translate += GetDirection(Direction::Left) * 0.1f;
+			newTranslate += GetDirection(Direction::Left) * 0.1f;
 		}
 		if (input_->PushKey(DIK_S)) {
-			worldTransform.translate += GetDirection(Direction::Back) * 0.1f;
+			newTranslate += GetDirection(Direction::Back) * 0.1f;
 		}
 		if (input_->PushKey(DIK_D)) {
-			worldTransform.translate += GetDirection(Direction::Right) * 0.1f;
+			newTranslate += GetDirection(Direction::Right) * 0.1f;
 		}
 
 	}
 	//カメラの回転制限
 	const float maxPitch = (std::numbers::pi_v<float> / 2.0f) - 0.01f;
-	worldTransform.rotate.x = std::clamp(worldTransform.rotate.x, -maxPitch, maxPitch);
+	newRotate.x = std::clamp(newRotate.x, -maxPitch, maxPitch);
+
+	//新トランスフォームをセット
+	worldTransform.SetTranslate(newTranslate);
+	worldTransform.SetRotate(newRotate);
 
 	//ベースの更新
 	BaseCamera::Update();
@@ -74,8 +81,6 @@ void DevelopCamera::DebugWithImGui() {
 #ifdef _DEBUG
 
 	ImGui::Begin("DevelopCamera");
-	ImGui::DragFloat3("Translate", &worldTransform.translate.x, 0.01f);
-	ImGui::DragFloat3("Rotate", &worldTransform.rotate.x, 0.01f);
 	ImGui::End();
 
 	ImGui::Begin("mouse");

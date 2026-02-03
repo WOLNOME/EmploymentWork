@@ -13,14 +13,27 @@ void GameCamera::Update() {
 	//シェイクの更新
 	UpdateShake();
 
+
 	//オフセットを考慮した座標を求める
-	worldTransform.translate += shakeOffset_;
+	{
+		//新座標を定義
+		Vector3 newTranslate = worldTransform.GetTranslate();
+		newTranslate += shakeOffset_;
+		//新座標をセット
+		worldTransform.SetTranslate(newTranslate);
+	}
 
 	//ベースの更新
 	BaseCamera::Update();
 
 	//更新が終わったのでオフセット分を元に戻す
-	worldTransform.translate -= shakeOffset_;
+	{
+		//新座標を定義
+		Vector3 newTranslate = worldTransform.GetTranslate();
+		newTranslate -= shakeOffset_;
+		//新座標をセット
+		worldTransform.SetTranslate(newTranslate);
+	}
 }
 
 void GameCamera::DebugWithImGui() {

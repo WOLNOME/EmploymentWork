@@ -604,14 +604,14 @@ Matrix4x4 MyMath::MakeViewportMatrix(float left, float top, float width, float h
 	return c;
 }
 
-Matrix4x4 MyMath::CreateRotationFromEulerAngles(float pitch, float yaw, float roll) {
+Matrix4x4 MyMath::CreateRotationFromEulerAngles(const Vector3& rotate) {
 	//ピッチ（X軸回転）、ヨー（Y軸回転）、ロール（Z軸回転）の角度をラジアンに変換
-	float cosPitch = cosf(pitch);
-	float sinPitch = sinf(pitch);
-	float cosYaw = cosf(yaw);
-	float sinYaw = sinf(yaw);
-	float cosRoll = cosf(roll);
-	float sinRoll = sinf(roll);
+	float cosPitch = cosf(rotate.x);
+	float sinPitch = sinf(rotate.x);
+	float cosYaw = cosf(rotate.y);
+	float sinYaw = sinf(rotate.y);
+	float cosRoll = cosf(rotate.z);
+	float sinRoll = sinf(rotate.z);
 
 	//X軸回転行列
 	Matrix4x4 rotationX = {

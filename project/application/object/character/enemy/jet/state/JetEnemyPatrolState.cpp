@@ -32,9 +32,9 @@ void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
 	//プレイヤーが近づいたら接近状態に切り替え(状態継続最低時間を超えているときのみ)
 	if (stateContinueTimer_ > kStateContinueTime_) {
 		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
-		Vector3 playerPos = enemy->GetPlayer()->GetWorldTransform().translate;
+		Vector3 playerPos = enemy->GetPlayer()->GetWorldTransform().GetTranslate();
 		playerPos.y = enemy->GetParam()["height"];
-		Vector3 enemyPos = enemy->GetWorldTransform().translate;
+		Vector3 enemyPos = enemy->GetWorldTransform().GetTranslate();
 		float length = Vector3(playerPos - enemyPos).Length();
 		if (length < searchPlayerDistanceApproach) {
 			enemy->ChangeState("Approach");
@@ -63,7 +63,7 @@ void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 
 	//目標ポイントとジェットの距離が近づいたら目標ポイントを更新
 	float updateTargetPointDistance = enemy->GetParam()["updateTargetPointDistance"];
-	if (Vector3(targetPosition_ - enemy->GetWorldTransform().translate).Length() < updateTargetPointDistance) {
+	if (Vector3(targetPosition_ - enemy->GetWorldTransform().GetTranslate()).Length() < updateTargetPointDistance) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<float> dist(-500.0f, 500.0f);
@@ -75,13 +75,13 @@ void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 	{
 		//現在の向きを求める
 		Vector3 currentDir = {
-			std::sinf(enemy->GetWorldTransform().rotate.y),
+			std::sinf(enemy->GetWorldTransform().GetRotate().y),
 			0.0f,
-			std::cosf(enemy->GetWorldTransform().rotate.y)
+			std::cosf(enemy->GetWorldTransform().GetRotate().y)
 		};
 		currentDir.Normalize();
 		//目標ポイントへの方向を求める
-		Vector3 targetDir = targetPosition_ - enemy->GetWorldTransform().translate;
+		Vector3 targetDir = targetPosition_ - enemy->GetWorldTransform().GetTranslate();
 		targetDir.Normalize();
 		//回転の差を求める
 		float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentDir.x, currentDir.z);
@@ -104,7 +104,7 @@ void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 			usingRotateSpeed = (angle > 0) ? rotateSpeed * kDeltaTime : -rotateSpeed * kDeltaTime;
 		}
 		//現在の回転取得
-		Vector3 currentRotate = enemy->GetWorldTransform().rotate;
+		Vector3 currentRotate = enemy->GetWorldTransform().GetRotate();
 		//回転加算
 		currentRotate.y += usingRotateSpeed;
 		//-π~πにクランプ
@@ -122,9 +122,9 @@ void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 	{
 		//現在の向きを求める
 		Vector3 currentDir = {
-			std::sinf(enemy->GetWorldTransform().rotate.y),
+			std::sinf(enemy->GetWorldTransform().GetRotate().y),
 			0.0f,
-			std::cosf(enemy->GetWorldTransform().rotate.y)
+			std::cosf(enemy->GetWorldTransform().GetRotate().y)
 		};
 		currentDir.Normalize();
 		//スピードを求める
@@ -133,7 +133,7 @@ void JetEnemyPatrolState::UpdatePatrol(IBaseJetEnemy* enemy) {
 		Vector3 currentVelocity = currentDir * speed;
 
 		//速度を加算
-		Vector3 currentTranslate = enemy->GetWorldTransform().translate;
+		Vector3 currentTranslate = enemy->GetWorldTransform().GetTranslate();
 		currentTranslate.x += currentVelocity.x * kDeltaTime;
 		currentTranslate.z += currentVelocity.z * kDeltaTime;
 

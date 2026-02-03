@@ -483,11 +483,9 @@ public:
 	/// <summary>
 	/// オイラー角から回転行列を作成する
 	/// </summary>
-	/// <param name="pitch">X軸回転（ラジアン）</param>
-	/// <param name="yaw">Y軸回転（ラジアン）</param>
-	/// <param name="roll">Z軸回転（ラジアン）</param>
+	/// <param name="rotate">回転（オイラー）</param>
 	/// <returns>回転行列</returns>
-	static Matrix4x4 CreateRotationFromEulerAngles(float pitch, float yaw, float roll);
+	static Matrix4x4 CreateRotationFromEulerAngles(const Vector3& rotate);
 	
 
 	///------------------------------------///

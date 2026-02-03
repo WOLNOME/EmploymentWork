@@ -50,7 +50,7 @@ void IBaseJetEnemy::OnCollision(CollisionAttribute attribute, const Vector3& sub
 	case CollisionAttribute::PlayerCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
-		hp_ -= 10;
+		hp_ -= param_["cannonDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		break;
@@ -58,7 +58,7 @@ void IBaseJetEnemy::OnCollision(CollisionAttribute attribute, const Vector3& sub
 	case CollisionAttribute::PlayerBullet:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
-		hp_ -= 1;
+		hp_ -= param_["bulletDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP_);
 		break;

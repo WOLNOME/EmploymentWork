@@ -14,7 +14,7 @@ void Item::Initialize() {
 	//オブジェクトを生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item"), Shape::ShapeKind::kCube);
-	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetIsDisplay(false);
 	
 	//アイドル状態のパーティクルを生成
@@ -29,7 +29,7 @@ void Item::Initialize() {
 	collisionShapeKind_ = CollisionShapeKind::OBB;
 
 	//影の大きさを調整
-	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
+	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
 }
 
 void Item::Update() {
@@ -57,8 +57,9 @@ void Item::DebugWithImGui() {
 
 void Item::Spawn(const Vector3& _initPos) {
 	//初期座標を保存
-	object3d_->worldTransform.translate = _initPos;
-	object3d_->worldTransform.translate.y = param_["initHeight"];
+	Vector3 initPos = _initPos;
+	initPos.y = param_["initHeight"];
+	object3d_->worldTransform.SetTranslate(initPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -121,7 +122,7 @@ void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) 
 		idleParticle_->SetIsPlay(false); // パーティクルを非アクティブにする
 		getParticle_->SetIsPlay(true); // パーティクルをアクティブにする
 		TransformEuler transform = getParticle_->GetBaseTransform();
-		transform.translate = object3d_->worldTransform.translate;
+		transform.translate = object3d_->worldTransform.GetTranslate();
 		getParticle_->SetBaseTransform(transform);
 
 		break;
@@ -146,7 +147,9 @@ void Item::UntilDeathProcess() {
 		float swingWidth = param_["swingWidth"];
 		float from = isUp_ ? initHeight : initHeight + swingWidth;
 		float to = isUp_ ? initHeight + swingWidth : initHeight;
-		object3d_->worldTransform.translate.y = MyMath::Lerp(from, to, MyMath::EaseInOutSine(t));
+		Vector3 pos = object3d_->worldTransform.GetTranslate();
+		pos.y= MyMath::Lerp(from, to, MyMath::EaseInOutSine(t));
+		object3d_->worldTransform.SetTranslate(pos);
 
 		// 状態遷移
 		if (swingTimer_ >= swingTime) {
@@ -154,6 +157,10 @@ void Item::UntilDeathProcess() {
 			isUp_ = !isUp_; // 上昇/下降切り替え
 		}
 	}
+
+	//新トランスフォーム
+	Vector3 newRotate = object3d_->worldTransform.GetRotate();
+	Vector3 newScale = object3d_->worldTransform.GetScale();
 
 	// アイテムが消えるまでの処理(仮死状態の時)
 	if (state_ == State::kAsphyxia) {
@@ -165,19 +172,23 @@ void Item::UntilDeathProcess() {
 		//表示
 		object3d_->SetIsDisplay(true);
 		//回転させる(めちゃ速く)
-		object3d_->worldTransform.rotate.y += 0.3f;
+		newRotate.y += 0.3f;
 		//縮小
 		float scale = MyMath::Lerp(1.0f, 0.0f, getParticle_->GetElapsedTime() / getParticle_->GetDuration());
-		object3d_->worldTransform.scale = { scale, scale, scale };
+		newScale = { scale, scale, scale };
 	}
 	else {
 		//回転させる
-		object3d_->worldTransform.rotate.y += 0.03f;
+		newRotate.y += 0.03f;
 	}
+
+	//新トランスフォームのセット
+	object3d_->worldTransform.SetRotate(newRotate);
+	object3d_->worldTransform.SetScale(newScale);
 }
 
 void Item::UpdateParticle() {
 	TransformEuler transform = idleParticle_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.translate;
+	transform.translate = object3d_->worldTransform.GetTranslate();
 	idleParticle_->SetBaseTransform(transform);
 }

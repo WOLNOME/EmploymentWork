@@ -122,9 +122,6 @@
     <ClCompile Include="engine\3d\camera\DevelopCamera.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\DevelopScene.cpp">
-      <Filter>engine\scene</Filter>
-    </ClCompile>
     <ClCompile Include="engine\3d\light\DirectionalLight.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
@@ -434,7 +431,6 @@
     <ClCompile Include="application\ui\player\detail\MoveLever.cpp" />
     <ClCompile Include="application\system\EndDirection.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
-    <ClCompile Include="engine\3d\CombinedParticleManager.cpp" />
     <ClCompile Include="application\system\PauseSystem.cpp" />
     <ClCompile Include="engine\behaviorTree\interface\INode.cpp">
       <Filter>application\behaviorTree\interface</Filter>
@@ -536,9 +532,6 @@
     </ClInclude>
     <ClInclude Include="engine\3d\camera\DevelopCamera.h">
       <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\DevelopScene.h">
-      <Filter>engine\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\light\DirectionalLight.h">
       <Filter>engine\3d</Filter>
@@ -891,7 +884,6 @@
     <ClInclude Include="application\ui\player\detail\MoveLever.h" />
     <ClInclude Include="application\system\EndDirection.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
-    <ClInclude Include="engine\3d\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
     <ClInclude Include="application\system\PauseSystem.h" />
     <ClInclude Include="engine\behaviorTree\interface\INode.h">

@@ -48,13 +48,13 @@ void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 	{
 		//現在の向きを求める
 		Vector3 currentDir = {
-			std::sinf(enemy->GetWorldTransform().rotate.y),
+			std::sinf(enemy->GetWorldTransform().GetRotate().y),
 			0.0f,
-			std::cosf(enemy->GetWorldTransform().rotate.y)
+			std::cosf(enemy->GetWorldTransform().GetRotate().y)
 		};
 		currentDir.Normalize();
 		//目標ポイントへの方向を求める
-		Vector3 targetDir = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
+		Vector3 targetDir = enemy->GetPlayer()->GetWorldTransform().GetTranslate() - enemy->GetWorldTransform().GetTranslate();
 		targetDir.Normalize();
 		//回転の差を求める
 		float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentDir.x, currentDir.z);
@@ -77,24 +77,24 @@ void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 		float cannonCoolTime = enemy->GetParam()["cannonCoolTime"];
 		coolTimer_ = cannonCoolTime;
 		//初期位置を計算
-		Vector3 initPos = enemy->GetWorldTransform().translate;
+		Vector3 initPos = enemy->GetWorldTransform().GetTranslate();
 		std::string tag = enemy->GetParam()["tag"];
 		if (tag == "canota") {
 			initPos.y += 1.5f;
-			initPos.x += std::sinf(enemy->GetWorldTransform().rotate.y) * 7.0f;
-			initPos.z += std::cosf(enemy->GetWorldTransform().rotate.y) * 7.0f;
+			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 7.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 7.0f;
 		}
 		else if (tag == "keyCanota") {
 			initPos.y += 2.0f;	//←高さ
-			initPos.x += std::sinf(enemy->GetWorldTransform().rotate.y) * 10.0f;
-			initPos.z += std::cosf(enemy->GetWorldTransform().rotate.y) * 10.0f;
+			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 10.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 10.0f;
 		}
 		else {
 			//そのタグは存在しない
 			assert(false && "そのようなタグは存在しません");
 		}
 		//スポーン
-		enemy->GetEnemyWeaponManager()->SpawnCannon(initPos, enemy->GetPlayer()->GetWorldTransform().translate);
+		enemy->GetEnemyWeaponManager()->SpawnCannon(initPos, enemy->GetPlayer()->GetWorldTransform().GetTranslate());
 	}
 
 }

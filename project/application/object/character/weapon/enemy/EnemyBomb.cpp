@@ -15,7 +15,7 @@ void EnemyBomb::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bomb"), Shape::kSphere);
-	object3d_->worldTransform.translate = { 0.0f,10000.0f,0.0f };
+	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
 
 	uint32_t thWarning = TextureManager::GetInstance()->LoadTexture("red.png");
@@ -24,7 +24,7 @@ void EnemyBomb::Initialize() {
 	warning_->SetIsDisplay(false);
 	warning_->SetTexture(thWarning);
 	warning_->SetIsLightProcess(false);
-	warning_->worldTransform.scale = { 40.0f,1.0f,40.0f };
+	warning_->worldTransform.SetScale({40.0f,1.0f,40.0f});
 
 	//パーティクルの生成と初期化
 	{
@@ -35,11 +35,9 @@ void EnemyBomb::Initialize() {
 	collisionShapeKind_ = CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 40.0f;
-	//パラメータの読み込み
-	//param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyBomb");
 
 	//影の初期化
-	circleShadow_->worldTransform.scale = { 1.0f,1.0f,1.0f };
+	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
 
 }
 
@@ -66,7 +64,6 @@ void EnemyBomb::DebugWithImGui() {
 	BaseCharacter::DebugWithImGui();
 
 	ImGui::Begin("敵ボム");
-	ImGui::DragFloat3("座標", &object3d_->worldTransform.translate.x, 0.01f);
 	ImGui::End();
 
 	//デバッグ用ラインのカラー
@@ -75,13 +72,15 @@ void EnemyBomb::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void EnemyBomb::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos) {
+	_method;
 	_targetPos;
 	//初期位置を保存
-	object3d_->worldTransform.translate = _initPos;
+	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
-	warning_->worldTransform.translate = _initPos;
-	warning_->worldTransform.translate.y = 0.005f;
+	Vector3 warningPos = _initPos;
+	warningPos.y = 0.005f;
+	warning_->worldTransform.SetTranslate(warningPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -118,17 +117,20 @@ void EnemyBomb::Move() {
 		return;
 	}
 
+	//新座標を定義
+	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+
 	//重力の影響を加算
 	velocity_.y -= gravity_ * kDeltaTime;
 	//速度を加算
-	object3d_->worldTransform.translate.y += velocity_.y * kDeltaTime;
+	newTranslate.y += velocity_.y * kDeltaTime;
 
 	//弾が地面に達したら
-	if (object3d_->worldTransform.translate.y <= 0.0f) {
-		object3d_->worldTransform.translate.y = 0.0f;
+	if (newTranslate.y <= 0.0f) {
+		newTranslate.y = 0.0f;
 		//パーティクルの発生
 		TransformEuler transform = explosion_->GetBaseTransform();
-		transform.translate = object3d_->worldTransform.worldTranslate;
+		transform.translate = newTranslate;
 		explosion_->SetBaseTransform(transform);
 		explosion_->SetIsPlay(true);
 		//モデルを非表示に
@@ -141,4 +143,7 @@ void EnemyBomb::Move() {
 		//当たり判定属性を爆風に
 		SetCollisionAttribute(CollisionAttribute::EnemyBlast);
 	}
+
+	//座標をセット
+	object3d_->worldTransform.SetTranslate(newTranslate);
 }

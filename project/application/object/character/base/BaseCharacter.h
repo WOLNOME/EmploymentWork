@@ -59,17 +59,17 @@ public:
 	/// コライダー用のワールド座標を取得
 	/// </summary>
 	/// <returns>コライダー用のワールド座標</returns>
-	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	Vector3 GetWorldPosition() override { return object3d_->worldTransform.GetWorldTranslate(); }
 	/// <summary>
 	/// コライダー用回転を取得
 	/// </summary>
 	/// <returns>コライダー用回転</returns>
-	Vector3 GetRotate() override { return object3d_->worldTransform.rotate; }
+	Vector3 GetRotate() override { return object3d_->worldTransform.GetRotate(); }
 	/// <summary>
 	/// コライダー用スケールを取得
 	/// </summary>
 	/// <returns>コライダー用スケール</returns>
-	Vector3 GetScale() override { return object3d_->worldTransform.scale; }
+	Vector3 GetScale() override { return object3d_->worldTransform.GetScale(); }
 	/// <summary>
 	/// コライダー用前フレーム座標を取得
 	/// </summary>
@@ -101,17 +101,17 @@ public:
 	/// スケールのセット
 	/// </summary>
 	/// <param name="scale">スケール</param>
-	void SetScale(const Vector3& scale) { object3d_->worldTransform.scale = scale; }
+	void SetScale(const Vector3& scale) { object3d_->worldTransform.SetScale(scale); }
 	/// <summary>
 	/// 回転のセット
 	/// </summary>
 	/// <param name="rotate">回転</param>
-	void SetRotate(const Vector3& rotate) { object3d_->worldTransform.rotate = rotate; }
+	void SetRotate(const Vector3& rotate) { object3d_->worldTransform.SetRotate(rotate); }
 	/// <summary>
 	/// 平行移動のセット
 	/// </summary>
 	/// <param name="translate">平行移動</param>
-	void SetTranslate(const Vector3& translate) { object3d_->worldTransform.translate = translate; }
+	void SetTranslate(const Vector3& translate) { object3d_->worldTransform.SetTranslate(translate); }
 
 	/// <summary>
 	/// 状態のセット

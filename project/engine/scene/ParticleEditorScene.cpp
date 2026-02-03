@@ -17,8 +17,8 @@ void ParticleEditorScene::Initialize() {
 	camera_ = std::make_unique<DevelopCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(1000.0f);
-	camera_->worldTransform.translate = { 0.0f,50.0f,0.0f };
-	camera_->worldTransform.rotate = { 0.2f,0.0f,0.0f };
+	camera_->worldTransform.SetTranslate({ 0.0f,50.0f,0.0f });
+	camera_->worldTransform.SetRotate({ 0.2f,0.0f,0.0f });
 	//カメラをセット
 	Object3dManager::GetInstance()->SetCamera(camera_.get());
 	LineManager::GetInstance()->SetCamera(camera_.get());
@@ -100,8 +100,8 @@ void ParticleEditorScene::StartWithImGui() {
 			selectedParticleHandle_ = cParticle_->particles_[0].particle->name_;
 
 			//カメラの位置をセット
-			camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
-			camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
+			camera_->worldTransform.SetTranslate({ 0.0f,4.0f,-20.0f });
+			camera_->worldTransform.SetRotate({ 0.03f,0.0f,0.0f });
 		}
 		if (ImGui::Button("パーティクルを編集する")) {
 			state_.check = Check::kEditName;
@@ -338,8 +338,8 @@ void ParticleEditorScene::CheckWithImGui() {
 					baseTransform.translate.y += 3.0f;
 					cParticle_->SetBaseTransform(baseTransform);
 					cEditParam_ = cParticle_->GetParams();
-					camera_->worldTransform.translate = { 0.0f,4.0f,-20.0f };
-					camera_->worldTransform.rotate = { 0.03f,0.0f,0.0f };
+					camera_->worldTransform.SetTranslate({ 0.0f,4.0f,-20.0f });
+					camera_->worldTransform.SetRotate({ 0.03f,0.0f,0.0f });
 					//selectedParticleHandle_に最初の要素を入れる
 					selectedParticleHandle_ = cParticle_->particles_[0].particle->name_;
 

@@ -9,18 +9,20 @@ void BaseCharacter::Initialize() {
 	circleShadow_ = std::make_unique<Object3d>();
 	circleShadow_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("CircleShadow"), "circleShadow");
 	circleShadow_->SetIsLightProcess(false);
-	circleShadow_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
-	circleShadow_->worldTransform.scale = { 5.0f,5.0f,5.0f };
+	circleShadow_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+	circleShadow_->worldTransform.SetScale({ 5.0f,5.0f,5.0f });
 	circleShadow_->SetIsDisplay(false);
 }
 
 void BaseCharacter::Update() {
 	//前フレーム座標の更新
-	prePosition_ = object3d_->worldTransform.translate;
+	prePosition_ = object3d_->worldTransform.GetTranslate();
 
 	//丸影の更新処理
-	circleShadow_->worldTransform.translate = object3d_->worldTransform.worldTranslate;
-	circleShadow_->worldTransform.translate.y = 0.01f;
+	circleShadow_->worldTransform.SetTranslate(object3d_->worldTransform.GetTranslate());
+	Vector3 translate = circleShadow_->worldTransform.GetTranslate();
+	translate.y = 0.01f;
+	circleShadow_->worldTransform.SetTranslate(translate);
 
 
 	//当たり判定を登録
@@ -44,9 +46,9 @@ void BaseCharacter::SetState(const State& _state) {
 	switch (state_) {
 	case BaseCharacter::State::kIdle:
 		//座標を遥か遠くにセット
-		object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+		object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		if (circleShadow_) {
-			circleShadow_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
+			circleShadow_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		}
 		//不可視にする
 		object3d_->SetIsDisplay(false);

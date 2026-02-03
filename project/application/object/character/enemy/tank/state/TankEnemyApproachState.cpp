@@ -35,7 +35,7 @@ void TankEnemyApproachState::Exit(IBaseTankEnemy* enemy) {
 
 void TankEnemyApproachState::UpdateApproach(IBaseTankEnemy* enemy) {
 	//プレイヤーへの方向を求める
-	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
+	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().GetTranslate() - enemy->GetWorldTransform().GetTranslate();
 	//y座標は考慮しない
 	dirToPlayer.y = 0.0f;
 	//正規化
@@ -63,7 +63,7 @@ void TankEnemyApproachState::UpdateApproach(IBaseTankEnemy* enemy) {
 	}
 
 	//速度を加算
-	Vector3 currentTranslate = enemy->GetWorldTransform().translate;
+	Vector3 currentTranslate = enemy->GetWorldTransform().GetTranslate();
 	currentTranslate += currentVelocity * kDeltaTime;
 
 	//速度と平行移動成分をセット

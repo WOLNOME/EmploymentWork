@@ -11,7 +11,7 @@ void SpotLight::Update() {
 
 	data_.color = color_;
 	data_.position = position_;
-	data_.intensity = intencity_;
+	data_.intensity = intensity_;
 	data_.direction = direction_.Normalized();
 	data_.distance = distance_;
 	data_.decay = decay_;
@@ -25,7 +25,7 @@ void SpotLight::DebugWithImGui(const std::wstring& _name) {
 	if (ImGui::CollapsingHeader(StringUtility::ConvertString(_name).c_str())) {
 		ImGui::ColorEdit4("色", &color_.x);
 		ImGui::DragFloat3("座標", &position_.x, 0.01f);
-		ImGui::DragFloat("輝度", &intencity_, 0.01f, 0.0f, 100.0f);
+		ImGui::DragFloat("輝度", &intensity_, 0.01f, 0.0f, 100.0f);
 		ImGui::DragFloat3("向き", &direction_.x, 0.01f, -1.0f, 1.0f);
 		ImGui::DragFloat("距離", &distance_, 0.01f, 0.0f, 100.0f);
 		ImGui::DragFloat("減衰率", &decay_, 0.01f, 0.0f, 100.0f);

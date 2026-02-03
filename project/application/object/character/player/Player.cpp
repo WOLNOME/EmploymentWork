@@ -91,8 +91,6 @@ void Player::DebugWithImGui() {
 	deathDirection_->DebugWithImGui();
 
 	ImGui::Begin("プレイヤー");
-	ImGui::DragFloat3("平行移動", &object3d_->worldTransform.translate.x, 0.01f);
-	ImGui::DragFloat3("回転", &object3d_->worldTransform.rotate.x, 0.01f);
 	//HP
 	int maxHP = param_["maxHP"];
 	ImGui::DragInt("HP", &hp_, 1, 0, maxHP);
@@ -120,7 +118,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 	case CollisionAttribute::Enemy:
 	{
 		//HPを減らす
-		hp_ -= 10;
+		hp_ -= param_["tackleDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れるmaxHP
@@ -138,7 +136,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 	}
 	case CollisionAttribute::EnemyCannon:
 		//HPを減らす
-		hp_ -= 10;
+		hp_ -= param_["cannonDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れる
@@ -150,7 +148,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 		break;
 	case CollisionAttribute::EnemyBullet:
 		//HPを減らす
-		hp_ -= 1;
+		hp_ -= param_["bulletDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れる
@@ -163,7 +161,7 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 	case CollisionAttribute::EnemyBlast:
 	{
 		//HPを減らす
-		hp_ -= 30;
+		hp_ -= param_["bombDamage"];
 		//0~MaxHPの範囲に収める
 		hp_ = std::clamp(hp_, 0, maxHP);
 		//カメラシェイクを入れるmaxHP
@@ -232,8 +230,8 @@ void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 	//プレイヤーの座標を読み込む
 	for (const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
-		object3d_->worldTransform.translate = playerSpawnData.translation;
-		object3d_->worldTransform.rotate = playerSpawnData.rotation;
+		object3d_->worldTransform.SetTranslate(playerSpawnData.translation);
+		object3d_->worldTransform.SetRotate(playerSpawnData.rotation);
 
 		//最初のデータのみを読み込む
 		break;
@@ -255,8 +253,8 @@ void Player::Rotate() {
 		return diff;
 		};
 
-	float cameraRotateY = camera_->worldTransform.rotate.y;
-	float vehicleRotateY = object3d_->worldTransform.rotate.y;
+	float cameraRotateY = camera_->worldTransform.GetRotate().y;
+	float vehicleRotateY = object3d_->worldTransform.GetRotate().y;
 
 	//最短角度差を求める
 	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
@@ -281,7 +279,9 @@ void Player::Rotate() {
 	}
 
 	//オブジェクトの水平回転量に代入
-	object3d_->worldTransform.rotate.y = vehicleRotateY;
+	Vector3 rotate = object3d_->worldTransform.GetRotate();
+	rotate.y = vehicleRotateY;
+	object3d_->worldTransform.SetRotate(rotate);
 
 }
 
@@ -294,13 +294,13 @@ void Player::Move() {
 		return;
 
 	//移動前に前フレームの座標を保存
-	prePosition_ = object3d_->worldTransform.worldTranslate;
+	prePosition_ = object3d_->worldTransform.GetWorldTranslate();
 
 	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
-		std::sinf(object3d_->worldTransform.rotate.y),
+		std::sinf(object3d_->worldTransform.GetRotate().y),
 		0.0f,
-		std::cosf(object3d_->worldTransform.rotate.y)
+		std::cosf(object3d_->worldTransform.GetRotate().y)
 	};
 	currentDir.Normalize();
 	//WSキー入力で前後移動
@@ -349,7 +349,9 @@ void Player::Move() {
 	}
 
 	//速度を加算
-	object3d_->worldTransform.translate += velocity_ * kDeltaTime;
+	Vector3 newTranslate = object3d_->worldTransform.GetTranslate() + velocity_ * kDeltaTime;
+	object3d_->worldTransform.SetTranslate(newTranslate);
+	object3d_->worldTransform.SetTranslate(newTranslate);
 }
 
 void Player::CannonAttack() {
@@ -379,15 +381,15 @@ void Player::CannonAttack() {
 		cannonReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
 		cannonReloadTimer_ = cannonReloadTime;
 		//初期位置と発射方向の計算
-		float orx = camera_->worldTransform.rotate.x;
-		float ory = camera_->worldTransform.rotate.y;
+		float orx = camera_->worldTransform.GetRotate().x;
+		float ory = camera_->worldTransform.GetRotate().y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 cannonPos = object3d_->worldTransform.translate;
+		Vector3 cannonPos = object3d_->worldTransform.GetTranslate();
 		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
 		Vector3 cannonDirection = currentDir;
 		//スポーン
@@ -449,15 +451,15 @@ void Player::BulletAttack() {
 			bulletReloadTimer_ = bulletReloadTime;
 		}
 		//初期位置と発射方向を計算
-		float orx = camera_->worldTransform.rotate.x;
-		float ory = camera_->worldTransform.rotate.y;
+		float orx = camera_->worldTransform.GetRotate().x;
+		float ory = camera_->worldTransform.GetRotate().y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 bulletPos = camera_->worldTransform.translate;
+		Vector3 bulletPos = camera_->worldTransform.GetTranslate();
 		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
@@ -494,20 +496,25 @@ void Player::CameraAlgorithm() {
 	//デッドゾーン
 	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {
-		camera_->worldTransform.rotate.x += moveValue.y * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
-		camera_->worldTransform.rotate.y += moveValue.x * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
+		Vector3 newRotate = camera_->worldTransform.GetRotate();
+		newRotate.x += moveValue.y * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
+		newRotate.y += moveValue.x * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
+		camera_->worldTransform.SetRotate(newRotate);
 	}
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
 	const float minPitch = -(pi / 9.0f);		//上向き制限
-	camera_->worldTransform.rotate.x = std::clamp(camera_->worldTransform.rotate.x, minPitch, maxPitch);
+	Vector3 newRotate = camera_->worldTransform.GetRotate();
+	newRotate.x = std::clamp(camera_->worldTransform.GetRotate().x, minPitch, maxPitch);
 	//水平回転をπ~-πの間に収める
-	if (camera_->worldTransform.rotate.y > pi)
-		camera_->worldTransform.rotate.y -= pi * 2.0f;
-	else if (camera_->worldTransform.rotate.y < -pi)
-		camera_->worldTransform.rotate.y += pi * 2.0f;
+	if (camera_->worldTransform.GetRotate().y > pi)
+		newRotate.y -= pi * 2.0f;
+	else if (camera_->worldTransform.GetRotate().y < -pi)
+		newRotate.y += pi * 2.0f;
+	camera_->worldTransform.SetRotate(newRotate);
 
 	//カメラの座標を決める
-	camera_->worldTransform.translate = object3d_->worldTransform.translate;
-	camera_->worldTransform.translate.y += 0.5f;
+	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	newTranslate.y += 0.5f;
+	camera_->worldTransform.SetTranslate(newTranslate);
 }

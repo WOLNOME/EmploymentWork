@@ -76,7 +76,7 @@ void TitleSystem::Initialize() {
 			auto tank = std::make_unique<Object3d>();
 			tank->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
 			tank->SetTexture(textureHandle);
-			tank->worldTransform.translate = { -60.0f + (30.0f * i),3.1f,0.0f };
+			tank->worldTransform.SetTranslate({ -60.0f + (30.0f * i),3.1f,0.0f });
 			tanks_.push_back(std::move(tank));
 		}
 
@@ -157,19 +157,19 @@ void TitleSystem::OperateCamera() {
 		//前周期
 		if (!isHalfPeriodCamera_) {
 			Vector3 position = MyMath::Lerp(cameraStartPos_, cameraEndPos_, MyMath::EaseInOutSine(cameraTimer_ / kCameraMoveTime_));
-			camera_->worldTransform.translate = position;
+			camera_->worldTransform.SetTranslate(position);
 		}
 		//後周期
 		else {
 			Vector3 position = MyMath::Lerp(cameraEndPos_, cameraStartPos_, MyMath::EaseInOutSine(cameraTimer_ / kCameraMoveTime_));
-			camera_->worldTransform.translate = position;
+			camera_->worldTransform.SetTranslate(position);
 		}
 	}
 
 	//回転
 	{
 		// カメラからターゲットへの方向ベクトル
-		Vector3 diff = cameraTargetPos_ - camera_->worldTransform.translate;
+		Vector3 diff = cameraTargetPos_ - camera_->worldTransform.GetTranslate();
 		diff.Normalize();
 
 		// Y軸（水平面）上の角度（ヨー / azimuth）
@@ -179,6 +179,6 @@ void TitleSystem::OperateCamera() {
 		float elevation = std::atan2(-diff.y, std::sqrt(diff.x * diff.x + diff.z * diff.z));
 
 		// 回転をセット
-		camera_->worldTransform.rotate = { elevation, azimuth, 0.0f };
+		camera_->worldTransform.SetRotate({ elevation, azimuth, 0.0f });
 	}
 }

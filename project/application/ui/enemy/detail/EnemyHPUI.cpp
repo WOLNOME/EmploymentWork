@@ -83,7 +83,7 @@ void EnemyHPUI::Update() {
 		//アクティブでないなら描画しない
 		if (canota->GetState() != BaseCharacter::State::kActive) return;
 
-		Vector3 pos = canota->GetWorldTransform().worldTranslate;
+		Vector3 pos = canota->GetWorldTransform().GetWorldTranslate();
 		pos.y += normalEnemyHPBarHeight;
 		float rate = (float)canota->GetHP() / (float)canota->GetMaxHP();
 		drawHPBar(pos, rate);
@@ -94,7 +94,7 @@ void EnemyHPUI::Update() {
 		//死亡していたら描画しない
 		if (boss->GetState() != BaseCharacter::State::kActive) return;
 
-		Vector3 pos = boss->GetWorldTransform().worldTranslate;
+		Vector3 pos = boss->GetWorldTransform().GetWorldTranslate();
 		pos.y += bossEnemyHPBarHeight;
 		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
 		drawHPBar(pos, rate);
@@ -106,7 +106,7 @@ void EnemyHPUI::Update() {
 		if (jet->GetState() != BaseCharacter::State::kActive)
 			return;
 
-		Vector3 pos = jet->GetWorldTransform().worldTranslate;
+		Vector3 pos = jet->GetWorldTransform().GetWorldTranslate();
 		pos.y += normalEnemyHPBarHeight;
 		float rate = (float)jet->GetHP() / (float)jet->GetMaxHP();
 		drawHPBar(pos, rate);

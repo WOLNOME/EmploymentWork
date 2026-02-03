@@ -7,7 +7,7 @@ void Ground::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("ground.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{},Object3dManager::GetInstance()->GenerateName("Ground"), "ground");
-	object3d_->worldTransform.scale = { 3.0f, 1.0f, 3.0f };
+	object3d_->worldTransform.SetScale({ 3.0f, 1.0f, 3.0f });
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsLightProcess(false);
 

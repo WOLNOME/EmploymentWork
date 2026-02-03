@@ -63,17 +63,17 @@ public:
 	///	オブジェクトの現在のワールド座標を取得する
 	/// </summary>
 	/// <returns>オブジェクトの現在のワールド座標</returns>
-	Vector3 GetWorldPosition() override { return object3d_->worldTransform.worldTranslate; }
+	Vector3 GetWorldPosition() override { return object3d_->worldTransform.GetWorldTranslate(); }
 	/// <summary>
 	/// オブジェクトの回転量を取得する
 	/// </summary>
 	/// <returns>オブジェクトの回転量</returns>
-	Vector3 GetRotate() override { return object3d_->worldTransform.rotate; }
+	Vector3 GetRotate() override { return object3d_->worldTransform.GetRotate(); }
 	/// <summary>
 	/// オブジェクトのスケールを取得する
 	/// </summary>
 	/// <returns>オブジェクトのスケール</returns>
-	Vector3 GetScale() override { return object3d_->worldTransform.scale; }
+	Vector3 GetScale() override { return object3d_->worldTransform.GetScale(); }
 	/// <summary>
 	/// 前フレーム時点のワールド座標を取得する
 	/// </summary>

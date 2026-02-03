@@ -64,42 +64,24 @@ void EnemyWeaponManager::DebugWithImGui() {
 }
 
 void EnemyWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos) {
-	//砲弾のコンテナを走査
-	for (auto& cannon : cannons_) {
-		//砲弾がアイドル状態でないなら次へ
-		if (cannon->GetState() != BaseCharacter::State::kIdle)
-			continue;
-		//スポーン
+	//スポーン
+	SpawnFromPool(cannons_, [&](EnemyCannon* cannon) {
 		cannon->Spawn(_initPos, _targetPos);
-
-		break;
-	}
+		});
 }
 
 void EnemyWeaponManager::SpawnBullet(const Vector3& _initPos, const Vector3& _targetPos) {
-	//銃弾のコンテナを走査
-	for (auto& bullet : bullets_) {
-		//銃弾がアイドル状態でないなら次へ
-		if (bullet->GetState() != BaseCharacter::State::kIdle)
-			continue;
-		//スポーン
+	//スポーン
+	SpawnFromPool(bullets_, [&](EnemyBullet* bullet) {
 		bullet->Spawn(_initPos, _targetPos);
-
-		break;
-	}
+		});
 }
 
 void EnemyWeaponManager::SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos) {
-	//爆弾の追加位置を探す
-	for (auto& bomb : bombs_) {
-		//爆弾がアイドル状態でないなら次へ
-		if (bomb->GetState() != BaseCharacter::State::kIdle)
-			continue;
-		//スポーン
-		bomb->Spawn(_initPos, _targetPos);
-
-		break;
-	}
+	//スポーン
+	SpawnFromPool(bombs_, [&](EnemyBomb* bomb) {
+		bomb->Spawn(_bombMethod, _initPos, _targetPos);
+		});
 }
 
 void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {

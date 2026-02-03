@@ -41,7 +41,7 @@ void Boss::Initialize() {
 	object3d_->SetIsDisplay(false);
 
 	//影の大きさを調整
-	circleShadow_->worldTransform.scale = { 16.0f,1.0f,16.0f };
+	circleShadow_->worldTransform.SetScale({ 16.0f,1.0f,16.0f });
 	circleShadow_->SetIsDisplay(false);
 
 	//ブラックボードの生成
@@ -101,8 +101,9 @@ void Boss::Spawn(const Vector3& _position) {
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
 	//指定座標に出現
-	object3d_->worldTransform.translate = _position;
-	object3d_->worldTransform.translate.y = 16.0f;	//高さを設定
+	Vector3 position = _position;
+	position.y = 16.0f;
+	object3d_->worldTransform.SetTranslate(position);
 	//ステートをアクティブに変更する
 	SetState(State::kActive);
 }
@@ -147,13 +148,13 @@ void Boss::ConstantInfoToBlackBoard() {
 void Boss::VariableInfoToBlackBoard(bool _isInit) {
 	//初期化・更新共通処理
 	//ボスの情報を入れる
-	blackBoard_->SetValue<Vector3>("BossPos", object3d_->worldTransform.translate);
-	blackBoard_->SetValue<Vector3>("BossRotate", object3d_->worldTransform.rotate);
+	blackBoard_->SetValue<Vector3>("BossPos", object3d_->worldTransform.GetTranslate());
+	blackBoard_->SetValue<Vector3>("BossRotate", object3d_->worldTransform.GetRotate());
 	blackBoard_->SetValue<Vector3>("BossVelocity", velocity_);
 	blackBoard_->SetValue<Vector3>("BossPrePos", GetPreWorldPosition());
 	//プレイヤーの情報を入れる
 	if (player_) {
-		blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().translate);
+		blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
 		blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
 	}
 
@@ -163,7 +164,7 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		blackBoard_->SetValue<int>("BossHP", param_["maxHP"]);
 		//プレイヤーの情報を入れる
 		if (player_) {
-			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().translate);
+			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
 			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
 		}
 		//武器の情報を入れる
@@ -195,7 +196,7 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		blackBoard_->SetValue<int>("BossHP", hp_);
 		//プレイヤーの情報を入れる
 		if (player_) {
-			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().translate);
+			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
 			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
 		}
 		//その他ノード以外でいじった情報はここに記入
@@ -204,8 +205,8 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 
 void Boss::BlackBoardToVariableInfo() {
 	//ボスの情報を取得
-	object3d_->worldTransform.translate = blackBoard_->GetValue<Vector3>("BossPos");
-	object3d_->worldTransform.rotate = blackBoard_->GetValue<Vector3>("BossRotate");
+	object3d_->worldTransform.SetTranslate(blackBoard_->GetValue<Vector3>("BossPos"));
+	object3d_->worldTransform.SetRotate(blackBoard_->GetValue<Vector3>("BossRotate"));
 	velocity_ = blackBoard_->GetValue<Vector3>("BossVelocity");
 	hp_ = blackBoard_->GetValue<int>("BossHP");
 }

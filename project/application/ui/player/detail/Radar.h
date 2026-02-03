@@ -52,8 +52,8 @@ public:
 	/// <summary>
 	/// ゲームカメラを設定する
 	/// </summary>
-	/// <param name="_caemra">ゲームカメラ</param>
-	void SetGameCamera(BaseCamera* _caemra) { camera_ = _caemra; }
+	/// <param name="_camera">ゲームカメラ</param>
+	void SetGameCamera(BaseCamera* _camera) { camera_ = _camera; }
 	/// <summary>
 	/// プレイヤーを設定する
 	/// </summary>

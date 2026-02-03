@@ -9,16 +9,16 @@ void LevelObject::Initialize(const std::string& _name, const std::string& _fileP
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName(_name), _filePath);
 	//トランスフォームパラメータのセット
-	object3d_->worldTransform.translate = _transform.translate;
-	object3d_->worldTransform.rotate = _transform.rotate;
-	object3d_->worldTransform.scale = _transform.scale;
+	object3d_->worldTransform.SetTranslate(_transform.translate);
+	object3d_->worldTransform.SetRotate(_transform.rotate);
+	object3d_->worldTransform.SetScale(_transform.scale);
 }
 
 void LevelObject::Update() {
 	//コリジョンが有効なら
 	if (isCollisionEnabled_) {
 		//前フレーム座標の更新
-		prePosition_ = object3d_->worldTransform.translate;
+		prePosition_ = object3d_->worldTransform.GetTranslate();
 		//当たり判定を登録
 		CollisionManager::GetInstance()->SetColliders(this);
 	}
@@ -91,9 +91,15 @@ void LevelObject::TreeInvertProcess() {
 		timer_ += kDeltaTime;
 		timer_ = std::min(timer_, time_);
 
+		//新回転
+		Vector3 newRotate = object3d_->worldTransform.GetRotate();
+
 		//Lerpで倒れる方向に回転
-		object3d_->worldTransform.rotate.x = MyMath::Lerp(0.0f, invertDirection_.z * -(pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
-		object3d_->worldTransform.rotate.z = MyMath::Lerp(0.0f, invertDirection_.x * (pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
+		newRotate.x = MyMath::Lerp(0.0f, invertDirection_.z * -(pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
+		newRotate.z = MyMath::Lerp(0.0f, invertDirection_.x * (pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
+
+		//新回転をセット
+		object3d_->worldTransform.SetRotate(newRotate);
 
 		//タイマーが経過したらアクションを終了
 		if (timer_ >= time_) {

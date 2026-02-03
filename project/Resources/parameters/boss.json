@@ -27,5 +27,7 @@
     "keepDistanceTime":5.0,
     "confusionDirTime":6.0,
     "missingDirTime":2.0,
-    "sensingDirTime":2.0
+    "sensingDirTime":2.0,
+    "cannonDamage":10,
+    "bulletDamage":1
 }

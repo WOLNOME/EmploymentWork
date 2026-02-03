@@ -1,5 +1,4 @@
 #include "SceneFactory.h"
-#include "DevelopScene.h"
 #include "ParticleEditorScene.h"
 
 //アプリケーション
@@ -12,10 +11,7 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	//次のシーンを生成
 	BaseScene* newScene = nullptr;
 
-	if (sceneName == "DEVELOP") {
-		newScene = new DevelopScene();
-	}
-	else if (sceneName == "Title") {
+	if (sceneName == "Title") {
 		newScene = new TitleScene();
 	}
 	else if (sceneName == "GamePlay") {

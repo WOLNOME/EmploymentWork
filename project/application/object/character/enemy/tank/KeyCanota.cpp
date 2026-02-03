@@ -15,8 +15,8 @@ void KeyCanota::Initialize() {
 	//インスタンスの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("KeyCanota"), "enemy");
-	object3d_->worldTransform.translate = { FLT_MAX,FLT_MAX ,FLT_MAX };
-	object3d_->worldTransform.scale = { 1.5f,1.5f,1.5f };
+	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+	object3d_->worldTransform.SetScale({ 1.5f,1.5f,1.5f });
 	object3d_->SetIsDisplay(false);
 	object3d_->SetTexture(textureHandle_);
 
@@ -31,7 +31,7 @@ void KeyCanota::Initialize() {
 	maxHP_ = param_["maxHP"];
 
 	//影の大きさを調整
-	circleShadow_->worldTransform.scale = { 8.0f,8.0f,8.0f };
+	circleShadow_->worldTransform.SetScale({ 8.0f,8.0f,8.0f });
 }
 
 void KeyCanota::Update() {
@@ -49,10 +49,11 @@ void KeyCanota::DebugWithImGui() {
 
 void KeyCanota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 	//初期位置を保存（高さはそろえる）
-	object3d_->worldTransform.translate = _initPos;
-	object3d_->worldTransform.translate.y = 4.5f;
+	Vector3 initPos = _initPos;
+	initPos.y = 4.5f;
+	object3d_->worldTransform.SetTranslate(initPos);
 	//初期回転を保存
-	object3d_->worldTransform.rotate = _initRotate;
+	object3d_->worldTransform.SetRotate(_initRotate);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);

@@ -62,15 +62,19 @@ void DeathDirection::CameraControl() {
 		isDirFinished_ = true;
 	}
 
+	//新トランスフォームを定義
+	Vector3 newTranslate = camera_->worldTransform.GetTranslate();
+	Vector3 newRotate = camera_->worldTransform.GetRotate();
+
 	//カメラの移動処理
 	{
 		//重力の加算
 		velocity_.y += -kGravity_ * kDeltaTime;
 		//速度の加算
-		camera_->worldTransform.translate += velocity_ * kDeltaTime;
+		newTranslate += velocity_ * kDeltaTime;
 
 		//床との当たり判定
-		if (camera_->worldTransform.translate.y <= kFloorHeight_) {
+		if (newTranslate.y <= kFloorHeight_) {
 			//速度を反転(上向きになるように)
 			if (velocity_.y < 0.0f) {
 				//速度反転
@@ -88,8 +92,12 @@ void DeathDirection::CameraControl() {
 	//カメラの回転処理
 	{
 		//回転加算
-		camera_->worldTransform.rotate += rotateVelocity_ * kDeltaTime;
+		newRotate += rotateVelocity_ * kDeltaTime;
 	}
+
+	//新トランスフォームをセット
+	camera_->worldTransform.SetTranslate(newTranslate);
+	camera_->worldTransform.SetRotate(newRotate);
 
 }
 
@@ -104,7 +112,7 @@ void DeathDirection::ParticeDir() {
 
 	//エミッターの座標を常にカメラへ
 	TransformEuler transform = particle_->GetBaseTransform();
-	transform.translate = camera_->worldTransform.worldTranslate;
+	transform.translate = camera_->worldTransform.GetWorldTranslate();
 	particle_->SetBaseTransform(transform);
 
 }

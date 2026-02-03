@@ -197,7 +197,7 @@ private:
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResource;
 		std::vector<Material*> materialData;
 		std::vector<TransformEuler> uvTransform;
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> textureResorce;
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> textureResource;
 		std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> textureSrvHandleCPU;
 		std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandleGPU;
 	};
@@ -276,6 +276,38 @@ private:
 	/// </summary>
 	/// <returns>モデルデータの配列</returns>
 	std::vector<ModelData> LoadModelFile();
+	/// <summary>
+	/// マテリアル解析（LoadModelFileで使用）
+	/// </summary>
+	/// <param name="scene"></param>
+	/// <param name="mesh"></param>
+	/// <param name="model"></param>
+	void LoadMaterial(const aiScene* scene, const aiMesh* mesh, ModelData& model);
+	/// <summary>
+	/// 頂点解析（LoadModelFileで使用）
+	/// </summary>
+	/// <param name="mesh"></param>
+	/// <param name="model"></param>
+	void LoadVertices(const aiMesh* mesh, ModelData& model);
+	/// <summary>
+	/// インデックス解析（LoadModelFileで使用）
+	/// </summary>
+	/// <param name="mesh"></param>
+	/// <param name="model"></param>
+	void LoadIndices(const aiMesh* mesh, ModelData& model);
+	/// <summary>
+	/// スキニング情報解析（LoadModelFileで使用）
+	/// </summary>
+	/// <param name="mesh"></param>
+	/// <param name="model"></param>
+	void LoadSkinningData(const aiMesh* mesh, ModelData& model);
+	/// <summary>
+	/// スケルトン解析（LoadModelFileで使用）
+	/// </summary>
+	/// <param name="scene"></param>
+	/// <param name="model"></param>
+	void LoadSkeletonIfNeeded(const aiScene* scene, ModelData& model);
+
 	/// <summary>
 	/// アニメーションファイルを読み込む
 	/// </summary>

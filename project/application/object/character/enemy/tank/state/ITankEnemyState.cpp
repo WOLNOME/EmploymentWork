@@ -14,13 +14,13 @@ void ITankEnemyState::TransitionDeadState(IBaseTankEnemy* enemy) {
 void ITankEnemyState::UpdateRotate(IBaseTankEnemy* enemy) {
 	//移動方向に向かって回転->現在の向きを求める
 	Vector3 currentDir = {
-		std::sinf(enemy->GetWorldTransform().rotate.y),
+		std::sinf(enemy->GetWorldTransform().GetRotate().y),
 		0.0f,
-		std::cosf(enemy->GetWorldTransform().rotate.y)
+		std::cosf(enemy->GetWorldTransform().GetRotate().y)
 	};
 	currentDir.Normalize();
 	//プレイヤーへの方向を求める
-	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().translate - enemy->GetWorldTransform().translate;
+	Vector3 dirToPlayer = enemy->GetPlayer()->GetWorldTransform().GetTranslate() - enemy->GetWorldTransform().GetTranslate();
 	//目標の向きを求める
 	Vector3 targetDir = dirToPlayer.Normalized();
 	//回転の差を求める(float型)
@@ -43,7 +43,7 @@ void ITankEnemyState::UpdateRotate(IBaseTankEnemy* enemy) {
 		usingRotateSpeed = (angle > 0) ? rotateSpeed * kDeltaTime : -rotateSpeed * kDeltaTime;
 	}
 	//現在の回転取得
-	Vector3 currentRotate = enemy->GetWorldTransform().rotate;
+	Vector3 currentRotate = enemy->GetWorldTransform().GetRotate();
 	//回転加算
 	currentRotate.y += usingRotateSpeed;
 	//-π ～ π に正規化

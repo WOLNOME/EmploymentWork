@@ -148,6 +148,7 @@ std::vector<AnimationModel::ModelData> AnimationModel::LoadModelFile() {
 
 	// メッシュを解析してモデルデータに格納
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+		//メッシュ情報
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());      // 法線がない場合はエラー
 		assert(mesh->HasTextureCoords(0)); // TexCoordがない場合はエラー
@@ -155,94 +156,16 @@ std::vector<AnimationModel::ModelData> AnimationModel::LoadModelFile() {
 		// モデルデータを準備
 		ModelData model;
 
-		// メッシュが使用するマテリアルのインデックスを取得
-		uint32_t materialIndex = mesh->mMaterialIndex;
-		aiMaterial* material = scene->mMaterials[materialIndex];
-
-		// マテリアル名を取得
-		aiString materialName;
-		if (material->Get(AI_MATKEY_NAME, materialName) == AI_SUCCESS) {
-			model.material.materialName = materialName.C_Str();
-		}
-
-		// Kd (拡散色) を取得
-		aiColor3D kd(0.8f, 0.8f, 0.8f); // デフォルト値
-		if (material->Get(AI_MATKEY_COLOR_DIFFUSE, kd) == AI_SUCCESS) {
-			model.material.colorData = { kd.r, kd.g, kd.b, 1.0f };
-		}
-		else {
-			model.material.colorData = { 0.8f, 0.8f, 0.8f, 1.0f };
-		}
-
-		// テクスチャパスを取得
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
-			aiString textureFilePath;
-			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath) == AI_SUCCESS) {
-				std::string fullPath = textureFilePath.C_Str();
-				model.material.textureFilePath = std::filesystem::path(fullPath).filename().string();
-			}
-		}
-		else {
-			model.material.textureFilePath = ""; // テクスチャがない場合は空文字列
-		}
-
-		//メッシュ内の頂点データを解析
-		model.vertices.resize(mesh->mNumVertices);
-		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
-			aiVector3D& position = mesh->mVertices[vertexIndex];
-			aiVector3D& normal = mesh->mNormals[vertexIndex];
-			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-
-			model.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
-			model.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
-			model.vertices[vertexIndex].texcoord = { texcoord.x, texcoord.y };
-		}
-
-		// メッシュ内のフェイスを解析
-		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
-			aiFace& face = mesh->mFaces[faceIndex];
-			assert(face.mNumIndices == 3); // 三角形のみサポート
-			//フェイス内のインデックスデータの解析
-			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
-				uint32_t vertexIndex = face.mIndices[element];
-				//インデックス
-				model.indices.push_back(vertexIndex);
-			}
-		}
-
-		//スキニングに必要なデータを抽出
-		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
-			aiBone* bone = mesh->mBones[boneIndex];
-			std::string jointName = bone->mName.C_Str();
-			JointWeightData& jointWeightData = model.skinClusterData[jointName];
-
-			aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
-			aiVector3D scale, translate;
-			aiQuaternion rotate;
-			bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
-			Matrix4x4 bindPoseMatrix = MyMath::MakeAffineMatrix(
-				{ scale.x,scale.y,scale.z }, { rotate.x,-rotate.y,-rotate.z,rotate.w }, { -translate.x,translate.y,translate.z }
-			);
-			jointWeightData.inverseBindPoseMatrix = MyMath::Inverse(bindPoseMatrix);
-
-			for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
-				jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight,bone->mWeights[weightIndex].mVertexId });
-			}
-		}
-
-		// 構築したモデルデータにルートノードを設定
-		switch (mf_) {
-		case OBJ:
-			break;
-		case GLTF:
-			model.rootNode = ReadNode(scene->mRootNode);
-			//スケルトン生成
-			skeleton_ = CreateSkeleton(model.rootNode);
-			isSkeleton_ = true;
-			break;
-		default:
-			break;
-		}
+		//マテリアル解析
+		LoadMaterial(scene, mesh, model);
+		//頂点解析
+		LoadVertices(mesh, model);
+		//インデックス解析
+		LoadIndices(mesh, model);
+		//スキニング情報解析
+		LoadSkinningData(mesh, model);
+		//スケルトン解析
+		LoadSkeletonIfNeeded(scene, model);
 
 		// 構築したモデルデータを格納
 		modelData[meshIndex] = model;
@@ -250,6 +173,105 @@ std::vector<AnimationModel::ModelData> AnimationModel::LoadModelFile() {
 
 	//ModelDataを返す
 	return modelData;
+}
+
+void AnimationModel::LoadMaterial(const aiScene* scene, const aiMesh* mesh, ModelData& model) {
+	// メッシュが使用するマテリアルのインデックスを取得
+	uint32_t materialIndex = mesh->mMaterialIndex;
+	aiMaterial* material = scene->mMaterials[materialIndex];
+
+	// マテリアル名を取得
+	aiString materialName;
+	if (material->Get(AI_MATKEY_NAME, materialName) == AI_SUCCESS) {
+		model.material.materialName = materialName.C_Str();
+	}
+
+	// Kd (拡散色) を取得
+	aiColor3D kd(0.8f, 0.8f, 0.8f); // デフォルト値
+	if (material->Get(AI_MATKEY_COLOR_DIFFUSE, kd) == AI_SUCCESS) {
+		model.material.colorData = { kd.r, kd.g, kd.b, 1.0f };
+	}
+	else {
+		model.material.colorData = { 0.8f, 0.8f, 0.8f, 1.0f };
+	}
+
+	// テクスチャパスを取得
+	if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
+		aiString textureFilePath;
+		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath) == AI_SUCCESS) {
+			std::string fullPath = textureFilePath.C_Str();
+			model.material.textureFilePath = std::filesystem::path(fullPath).filename().string();
+		}
+	}
+	else {
+		model.material.textureFilePath = ""; // テクスチャがない場合は空文字列
+	}
+}
+
+void AnimationModel::LoadVertices(const aiMesh* mesh, ModelData& model) {
+	//メッシュ内の頂点データを解析
+	model.vertices.resize(mesh->mNumVertices);
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+		aiVector3D& position = mesh->mVertices[vertexIndex];
+		aiVector3D& normal = mesh->mNormals[vertexIndex];
+		aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+
+		model.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+		model.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
+		model.vertices[vertexIndex].texcoord = { texcoord.x, texcoord.y };
+	}
+}
+
+void AnimationModel::LoadIndices(const aiMesh* mesh, ModelData& model) {
+	// メッシュ内のフェイスを解析
+	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+		aiFace& face = mesh->mFaces[faceIndex];
+		assert(face.mNumIndices == 3); // 三角形のみサポート
+		//フェイス内のインデックスデータの解析
+		for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+			uint32_t vertexIndex = face.mIndices[element];
+			//インデックス
+			model.indices.push_back(vertexIndex);
+		}
+	}
+}
+
+void AnimationModel::LoadSkinningData(const aiMesh* mesh, ModelData& model) {
+	//スキニングに必要なデータを抽出
+	for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+		aiBone* bone = mesh->mBones[boneIndex];
+		std::string jointName = bone->mName.C_Str();
+		JointWeightData& jointWeightData = model.skinClusterData[jointName];
+
+		aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+		aiVector3D scale, translate;
+		aiQuaternion rotate;
+		bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+		Matrix4x4 bindPoseMatrix = MyMath::MakeAffineMatrix(
+			{ scale.x,scale.y,scale.z }, { rotate.x,-rotate.y,-rotate.z,rotate.w }, { -translate.x,translate.y,translate.z }
+		);
+		jointWeightData.inverseBindPoseMatrix = MyMath::Inverse(bindPoseMatrix);
+
+		for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
+			jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight,bone->mWeights[weightIndex].mVertexId });
+		}
+	}
+}
+
+void AnimationModel::LoadSkeletonIfNeeded(const aiScene* scene, ModelData& model) {
+	// 構築したモデルデータにルートノードを設定
+	switch (mf_) {
+	case OBJ:
+		break;
+	case GLTF:
+		model.rootNode = ReadNode(scene->mRootNode);
+		//スケルトン生成
+		skeleton_ = CreateSkeleton(model.rootNode);
+		isSkeleton_ = true;
+		break;
+	default:
+		break;
+	}
 }
 
 AnimationModel::Animation AnimationModel::LoadAnimationFile(const std::string& fileName) {
@@ -334,7 +356,7 @@ AnimationModel::ModelResource AnimationModel::MakeModelResource() {
 	modelResource_.indexData.resize(modelNum_);
 	modelResource_.materialResource.resize(modelNum_);
 	modelResource_.materialData.resize(modelNum_);
-	modelResource_.textureResorce.resize(modelNum_);
+	modelResource_.textureResource.resize(modelNum_);
 	modelResource_.textureSrvHandleCPU.resize(modelNum_);
 	modelResource_.textureSrvHandleGPU.resize(modelNum_);
 	modelResource_.uvTransform.resize(modelNum_);

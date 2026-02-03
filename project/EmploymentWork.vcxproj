@@ -174,7 +174,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
     <ClCompile Include="engine\3d\light\DirectionalLight.cpp" />
     <ClCompile Include="engine\3d\camera\DevelopCamera.cpp" />
-    <ClCompile Include="engine\scene\DevelopScene.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\BaseScene.cpp" />
     <ClCompile Include="engine\audio\Audio.cpp" />
@@ -335,7 +334,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\light\DirectionalLight.h" />
     <ClInclude Include="engine\3d\camera\DevelopCamera.h" />
     <ClInclude Include="engine\math\BlendMode.h" />
-    <ClInclude Include="engine\scene\DevelopScene.h" />
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\BaseScene.h" />
     <ClInclude Include="engine\audio\Audio.h" />
