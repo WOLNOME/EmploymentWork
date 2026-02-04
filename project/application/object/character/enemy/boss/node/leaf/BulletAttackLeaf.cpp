@@ -4,6 +4,8 @@
 //アプリケーション
 #include <application/object/character/weapon/enemy/manager/EnemyWeaponManager.h>
 
+using namespace Norm;
+
 BulletAttackLeaf::BulletAttackLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

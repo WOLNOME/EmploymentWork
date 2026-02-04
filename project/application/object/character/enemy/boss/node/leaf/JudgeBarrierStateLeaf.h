@@ -4,10 +4,10 @@
 /// <summary>
 /// 前フレームと現フレームのバリア状態を比較して、現フレームで壊れていたら成功を返すノード
 /// </summary>
-class JudgeBarrierStateLeaf : public LeafNodeBase {
+class JudgeBarrierStateLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeBarrierStateLeaf(BlackBoard* _blackBoard);
+	explicit JudgeBarrierStateLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeBarrierStateLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

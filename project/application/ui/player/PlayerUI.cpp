@@ -7,6 +7,8 @@
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 
+using namespace Norm;
+
 void PlayerUI::Initialize() {
 	//パラメータ読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");

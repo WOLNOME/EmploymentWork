@@ -4,10 +4,10 @@
 /// <summary>
 /// 召喚ノード
 /// </summary>
-class SummonLeaf : public LeafNodeBase {
+class SummonLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit SummonLeaf(BlackBoard* _blackBoard);
+	explicit SummonLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~SummonLeaf();
 
@@ -22,6 +22,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

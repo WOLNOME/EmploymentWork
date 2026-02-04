@@ -1,6 +1,8 @@
 #include "DirectionMissingLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 DirectionMissingLeaf::DirectionMissingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

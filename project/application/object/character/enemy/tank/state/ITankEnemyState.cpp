@@ -4,6 +4,8 @@
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void ITankEnemyState::TransitionDeadState(IBaseTankEnemy* enemy) {
 	//HPが0になったら死亡
 	if (enemy->GetHP() <= 0) {

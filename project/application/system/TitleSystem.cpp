@@ -7,6 +7,8 @@
 #include <MyMath.h>
 #include <cassert>
 
+using namespace Norm;
+
 void TitleSystem::Initialize() {
 	//インプット
 	input_ = Input::GetInstance();

@@ -1,6 +1,8 @@
 #include "JudgePlayerPreDistanceLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard, float _preDistance) : LeafNodeBase(_blackBoard), preDistance_(_preDistance) {
 }
 

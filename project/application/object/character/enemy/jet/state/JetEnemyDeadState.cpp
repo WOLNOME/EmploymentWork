@@ -6,6 +6,8 @@
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 JetEnemyDeadState::JetEnemyDeadState() {
 	//パーティクルの生成・初期化
 	particle_ = std::make_unique<CombinedParticle>();

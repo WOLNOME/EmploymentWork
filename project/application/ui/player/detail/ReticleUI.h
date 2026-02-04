@@ -22,6 +22,6 @@ private:
 	/// ============================== ///
 
 	uint32_t textureHandle_ = 0u;
-	std::unique_ptr<Sprite> sprite_ = nullptr;
+	std::unique_ptr<Norm::Sprite> sprite_ = nullptr;
 };
 

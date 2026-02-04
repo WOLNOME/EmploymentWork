@@ -23,7 +23,7 @@ private:
 	/// ============================== ///
 
 	int32_t textureHandle_ = EOF;
-	std::unique_ptr<Object3d> object3d_ = nullptr;
+	std::unique_ptr<Norm::Object3d> object3d_ = nullptr;
 
 };
 

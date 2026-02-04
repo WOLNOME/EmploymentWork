@@ -3,6 +3,8 @@
 #include <SpriteManager.h>
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 void OperationUI::Initialize() {
 	//砲弾攻撃UIスプライトの初期化
 	textureHandles_[(int)Type::kCannon] = TextureManager::GetInstance()->LoadTexture("space.png");

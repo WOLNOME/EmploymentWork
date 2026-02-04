@@ -8,6 +8,8 @@
 #include <application/object/character/enemy/boss/builder/BossBehaivorTreeBuilder.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 Boss::~Boss() {
 }
 

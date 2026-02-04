@@ -50,7 +50,7 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 
 	//メッセージUI
 	MessageUI* messageUI_ = nullptr;
@@ -64,7 +64,7 @@ private:
 	bool isMaskDisappear_ = false;
 
 	//マスク
-	std::unique_ptr<Sprite> maskSprite_ = nullptr;
+	std::unique_ptr<Norm::Sprite> maskSprite_ = nullptr;
 
 	bool isFirstFrame_ = true;
 	uint32_t messageId_ = 0u;

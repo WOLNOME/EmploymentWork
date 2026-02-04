@@ -1,6 +1,8 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 
+using namespace Norm;
+
 void TitleScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();

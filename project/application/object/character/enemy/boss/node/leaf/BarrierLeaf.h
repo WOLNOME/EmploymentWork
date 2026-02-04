@@ -4,10 +4,10 @@
 /// <summary>
 /// バリアノード
 /// </summary>
-class BarrierLeaf : public LeafNodeBase {
+class BarrierLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BarrierLeaf(BlackBoard* _blackBoard);
+	explicit BarrierLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BarrierLeaf();
 
@@ -22,7 +22,7 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 };
 

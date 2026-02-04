@@ -5,6 +5,8 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void MoveLever::Initialize() {
 	//制御目盛りUIのスプライトの初期化
 	textureHandles_[(int)Type::kControlScale] = TextureManager::GetInstance()->LoadTexture("controlScale.png");

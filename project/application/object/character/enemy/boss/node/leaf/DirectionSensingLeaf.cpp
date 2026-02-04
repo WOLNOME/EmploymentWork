@@ -1,6 +1,8 @@
 #include "DirectionSensingLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 DirectionSensingLeaf::DirectionSensingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

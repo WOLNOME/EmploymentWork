@@ -8,6 +8,8 @@
 //アプリケーション
 #include <application/object/character/enemy/manager/EnemyManager.h>
 
+using namespace Norm;
+
 void EnemyHPUI::Initialize() {
 	//パラメータ読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyUI");

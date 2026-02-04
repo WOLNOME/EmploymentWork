@@ -1,5 +1,7 @@
 #include "EnemyUI.h"
 
+using namespace Norm;
+
 void EnemyUI::Initialize() {
 	//パラメータ読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyUI");

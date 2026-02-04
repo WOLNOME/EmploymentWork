@@ -5,6 +5,8 @@
 #include <application/object/character/player/Player.h>
 #include <application/object/character/weapon/enemy/manager/EnemyWeaponManager.h>
 
+using namespace Norm;
+
 JetEnemyAttackState::JetEnemyAttackState() {
 }
 

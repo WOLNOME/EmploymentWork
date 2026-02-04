@@ -43,7 +43,7 @@ private:
 	/// ============================== ///
 
 	//目標ポイント
-	Vector3 targetPosition_ = {};
+	Norm::Vector3 targetPosition_ = {};
 	//回転中か
 	bool isRotation_ = false;
 	//移動中か

@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include <TextureManager.h>
 
+using namespace Norm;
+
 void GamePlayScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();

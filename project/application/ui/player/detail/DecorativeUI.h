@@ -31,12 +31,12 @@ public:
 	/// シェイクの適用
 	/// </summary>
 	/// <param name="_shakeOffset">シェイクオフセット</param>
-	void AttachShake(const Vector2& _shakeOffset);
+	void AttachShake(const Norm::Vector2& _shakeOffset);
 	/// <summary>
 	/// 点滅の適用
 	/// </summary>
 	/// <param name="_color">色</param>
-	void AttachBlinking(const Vector4& _color);
+	void AttachBlinking(const Norm::Vector4& _color);
 
 	/// ============================== ///
 	///		setter
@@ -63,10 +63,10 @@ private:
 	//スプライト
 	uint32_t textureHandleN_ = 0u;
 	uint32_t textureHandleD_ = 0u;
-	std::unique_ptr<Sprite> sprite_ = nullptr;
+	std::unique_ptr<Norm::Sprite> sprite_ = nullptr;
 
 	//通常状態→ダメージ状態UVスクロール
 	uint32_t textureHandleND_ = 0u;
-	std::unique_ptr<Sprite> uvScroll_ = nullptr;
+	std::unique_ptr<Norm::Sprite> uvScroll_ = nullptr;
 };
 

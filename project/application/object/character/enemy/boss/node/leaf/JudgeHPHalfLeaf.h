@@ -4,10 +4,10 @@
 /// <summary>
 /// HPが半分以下か判定するノード
 /// </summary>
-class JudgeHPHalfLeaf : public LeafNodeBase {
+class JudgeHPHalfLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeHPHalfLeaf(BlackBoard* _blackBoard);
+	explicit JudgeHPHalfLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeHPHalfLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

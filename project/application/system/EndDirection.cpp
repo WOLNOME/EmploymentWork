@@ -9,6 +9,8 @@
 #include "application/object/character/player/Player.h"
 #include "application/object/character/enemy/manager/EnemyManager.h"
 
+using namespace Norm;
+
 void EndDirection::Initialize() {
 	//インプットの取得
 	input_ = Input::GetInstance();

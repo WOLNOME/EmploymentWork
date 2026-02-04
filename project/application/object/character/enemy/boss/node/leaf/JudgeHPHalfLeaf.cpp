@@ -1,6 +1,8 @@
 #include "JudgeHPHalfLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 JudgeHPHalfLeaf::JudgeHPHalfLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

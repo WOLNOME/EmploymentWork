@@ -11,6 +11,7 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 
+using namespace Norm;
 
 void Radar::Initialize() {
 	//スプライトの生成・初期化

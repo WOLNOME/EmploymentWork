@@ -1,6 +1,8 @@
 #include "JudgeSummonCoolTimeLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 JudgeSummonCoolTimeLeaf::JudgeSummonCoolTimeLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

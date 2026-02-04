@@ -9,7 +9,7 @@
 #include "application/object/character/weapon/enemy/EnemyBomb.h"
 
 
-//前方宣言
+//前方宣言（アプリケーション）
 class EnemyManager;
 class Player;
 class PlayerUI;
@@ -41,20 +41,20 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos);
+	void SpawnCannon(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 	/// <summary>
 	/// 銃弾のスポーン
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void SpawnBullet(const Vector3& _initPos, const Vector3& _targetPos);
+	void SpawnBullet(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 	/// <summary>
 	/// 爆弾のスポーン
 	/// </summary>
 	/// <param name="_bombMethod">爆弾の撃ち方</param>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos);
+	void SpawnBomb(const BombMethod& _bombMethod, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 
 	/// ============================== ///
 	///		getter

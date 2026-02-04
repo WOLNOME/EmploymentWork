@@ -1,6 +1,8 @@
 #include "BombAttackLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 BombAttackLeaf::BombAttackLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

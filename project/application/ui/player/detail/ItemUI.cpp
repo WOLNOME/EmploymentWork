@@ -7,6 +7,8 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void ItemUI::Initialize() {
 	//パラメーターの初期化
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");

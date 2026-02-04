@@ -1,6 +1,8 @@
 #include "BulletReloadLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 BulletReloadLeaf::BulletReloadLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

@@ -4,10 +4,10 @@
 /// <summary>
 /// プレイヤーとの距離をチェックするノード
 /// </summary>
-class CheckPlayerDistance : public BranchNodeBase {
+class CheckPlayerDistance : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckPlayerDistance(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode,float _distance);
+	explicit CheckPlayerDistance(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode,float _distance);
 	// デストラクタ
 	~CheckPlayerDistance();
 

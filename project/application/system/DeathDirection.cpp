@@ -3,6 +3,8 @@
 #include <CombinedParticleManager.h>
 #include <random>
 
+using namespace Norm;
+
 void DeathDirection::Initialize() {
 	//パーティクルの初期化
 	particle_ = std::make_unique<CombinedParticle>();

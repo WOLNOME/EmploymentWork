@@ -2,6 +2,8 @@
 #include <MyMath.h>
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 ApproachLeaf::ApproachLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

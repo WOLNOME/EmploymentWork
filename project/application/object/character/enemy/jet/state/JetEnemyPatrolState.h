@@ -59,7 +59,7 @@ private:
 	MessageUI* messageUI_ = nullptr;
 
 	//目標ポイント
-	Vector3 targetPosition_ = {};
+	Norm::Vector3 targetPosition_ = {};
 	bool isDecidedTargetPoint_ = false;
 
 	//状態継続最低時間

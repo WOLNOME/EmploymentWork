@@ -37,7 +37,7 @@ private:
 		uint32_t id;				// メッセージのID
 		std::wstring text;			// 全文テキスト
 		std::wstring currentText;	// 現在の入力中のテキスト
-		Handle textHandle;			// テキストのハンドル
+		Norm::Handle textHandle;			// テキストのハンドル
 		float inputTimer;			// 入力タイマー
 		float displayTimer;			// 表示タイマー
 		float disappearTimer;		// 消滅タイマー
@@ -120,10 +120,10 @@ private:
 
 	//スプライト
 	static const int kMaxSpriteNum_ = 5;	//最大スプライト数
-	std::array<Sprite, kMaxSpriteNum_> sprites_;
+	std::array<Norm::Sprite, kMaxSpriteNum_> sprites_;
 
 	//基本のテキストパラメーター
-	TextParam baseTextParam_;
-	EdgeParam baseEdgeParam_;
+	Norm::TextParam baseTextParam_;
+	Norm::EdgeParam baseEdgeParam_;
 };
 

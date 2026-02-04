@@ -12,10 +12,14 @@
 #include "detail/OperationUI.h"
 #include "detail/MoveLever.h"
 
+//前方宣言（エンジン）
+namespace Norm {
+	class GameCamera;
+}
+//前方宣言（アプリケーション）
 class Player;
 class EnemyManager;
 class ItemManager;
-class GameCamera;
 
 /// <summary>
 /// プレイヤーに関するUI全てを管理するクラス
@@ -72,7 +76,7 @@ public:
 	/// ゲームカメラの設定
 	/// </summary>
 	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(GameCamera* _camera);
+	void SetGameCamera(Norm::GameCamera* _camera);
 
 private:
 	/// ============================== ///
@@ -95,7 +99,7 @@ private:
 	//プレイヤー
 	Player* player_ = nullptr;
 	//カメラ
-	GameCamera* camera_ = nullptr;
+	Norm::GameCamera* camera_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

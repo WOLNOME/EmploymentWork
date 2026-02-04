@@ -5,6 +5,8 @@
 #include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
+using namespace Norm;
+
 void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();

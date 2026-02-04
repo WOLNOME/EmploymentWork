@@ -5,6 +5,8 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void Canota::Initialize() {
 	//ベースエネミーの初期化
 	IBaseTankEnemy::Initialize();

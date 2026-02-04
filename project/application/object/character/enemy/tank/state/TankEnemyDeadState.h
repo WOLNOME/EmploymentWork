@@ -39,6 +39,6 @@ private:
 	///		メンバ関数
 	/// ============================== ///
 
-	std::unique_ptr<CombinedParticle> particle_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> particle_ = nullptr;
 };
 

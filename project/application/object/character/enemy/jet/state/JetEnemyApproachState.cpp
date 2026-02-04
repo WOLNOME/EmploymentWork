@@ -6,6 +6,8 @@
 #include <application/object/character/player/Player.h>
 #include <application/ui/message/MessageUI.h>
 
+using namespace Norm;
+
 void JetEnemyApproachState::Enter(IBaseJetEnemy* enemy) {
 	//目標点を更新(プレイヤーの座標)
 	targetPosition_ = enemy->GetPlayer()->GetWorldTransform().GetTranslate();

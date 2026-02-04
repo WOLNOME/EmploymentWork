@@ -1,6 +1,8 @@
 #include "JudgeBarrierStateLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 JudgeBarrierStateLeaf::JudgeBarrierStateLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

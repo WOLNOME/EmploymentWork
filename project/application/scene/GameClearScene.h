@@ -10,7 +10,7 @@
 /// <summary>
 /// ゲームクリアシーン全般を管理するクラス
 /// </summary>
-class GameClearScene : public BaseScene {
+class GameClearScene : public Norm::BaseScene {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -39,10 +39,10 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	std::unique_ptr<GameCamera> camera_ = nullptr;
+	std::unique_ptr<Norm::GameCamera> camera_ = nullptr;
 
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;

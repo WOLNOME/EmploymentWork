@@ -7,6 +7,8 @@
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
 
+using namespace Norm;
+
 void EnemyBomb::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();

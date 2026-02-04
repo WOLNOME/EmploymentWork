@@ -13,8 +13,13 @@
 //アプリケーション
 #include <application/system/DeathDirection.h>
 
+//前方宣言（エンジン）
+namespace Norm {
+	class LevelLoader;
+}
+
+//前方宣言（アプリケーション）
 class PlayerWeaponManager;
-class LevelLoader;
 class MessageUI;
 
 /// <summary>
@@ -48,8 +53,8 @@ public:
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
-	
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -118,12 +123,12 @@ public:
 	/// レベルローダーを設定する
 	/// </summary>
 	/// <param name="_levelLoader">設定するレベルローダー</param>
-	void SetLevelLoader(LevelLoader* _levelLoader);
+	void SetLevelLoader(Norm::LevelLoader* _levelLoader);
 	/// <summary>
 	/// ゲームカメラを設定する
 	/// </summary>
 	/// <param name="_camera">設定するゲームカメラ</param>
-	void SetGameCamera(GameCamera* _camera) {
+	void SetGameCamera(Norm::GameCamera* _camera) {
 		camera_ = _camera;
 		deathDirection_->SetGameCamera(_camera);
 	}
@@ -157,9 +162,9 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 	//カメラ
-	GameCamera* camera_ = nullptr;
+	Norm::GameCamera* camera_ = nullptr;
 	//プレイヤー武器マネージャー
 	PlayerWeaponManager* playerWeaponManager_ = nullptr;
 	//メッセージUI
@@ -186,7 +191,7 @@ private:
 
 	bool isDamage_ = false;			//ダメージを受けたか
 
-	Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
+	Norm::Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
 
 	//アイテム
 	uint32_t item_reloadSpeedUp_;

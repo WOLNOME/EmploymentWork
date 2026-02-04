@@ -2,6 +2,8 @@
 #include "TextureManager.h"
 #include "Object3dManager.h"
 
+using namespace Norm;
+
 void Ground::Initialize() {
 	//変数の初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("ground.png");

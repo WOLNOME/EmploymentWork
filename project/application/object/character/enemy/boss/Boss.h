@@ -43,7 +43,7 @@ public:
 	/// スポーン処理
 	/// </summary>
 	/// <param name="_position">座標</param>
-	void Spawn(const Vector3& _position);
+	void Spawn(const Norm::Vector3& _position);
 
 
 	/// ============================== ///
@@ -71,7 +71,7 @@ private:
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 	/// <summary>
 	/// 定数情報のブラックボードへの登録
@@ -105,9 +105,9 @@ private:
 	json param_;
 
 	//ビヘイビアツリー
-	std::unique_ptr<INode> behaviorTreeRoot_ = nullptr;
+	std::unique_ptr<Norm::INode> behaviorTreeRoot_ = nullptr;
 	//ブラックボード
-	std::unique_ptr<BlackBoard> blackBoard_ = nullptr;
+	std::unique_ptr<Norm::BlackBoard> blackBoard_ = nullptr;
 
 	//HP
 	int hp_ = 0;

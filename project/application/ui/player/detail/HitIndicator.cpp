@@ -9,6 +9,8 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void HitIndicator::Initialize() {
 	//メンバ変数の初期化
 	for (int i = 0; i < kNumIndicators_; i++) {

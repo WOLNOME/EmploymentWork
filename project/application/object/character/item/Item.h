@@ -35,7 +35,7 @@ public:
 	/// スポーン
 	/// </summary>
 	/// <param name="initPos_">初期位置</param>
-	void Spawn(const Vector3& _initPos);
+	void Spawn(const Norm::Vector3& _initPos);
 	
 private:
 	/// ============================== ///
@@ -47,7 +47,7 @@ private:
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 	/// <summary>
 	/// 死亡までの処理
@@ -66,8 +66,8 @@ private:
 	json param_;
 
 	//パーティクル
-	std::unique_ptr<CombinedParticle> idleParticle_ = nullptr;
-	std::unique_ptr<CombinedParticle> getParticle_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> idleParticle_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> getParticle_ = nullptr;
 
 	float swingTimer_ = 0.0f; // アイテムの振り子のタイマー
 	bool isUp_ = true; // アイテムの上下移動フラグ

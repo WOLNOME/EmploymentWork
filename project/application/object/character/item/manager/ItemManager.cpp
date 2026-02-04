@@ -1,6 +1,8 @@
 #include "ItemManager.h"
 #include <random>
 
+using namespace Norm;
+
 void ItemManager::Initialize() {
 	//アイテムのパラメーターを読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");

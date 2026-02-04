@@ -16,7 +16,7 @@ enum class BombMethod {
 	Fall		//落下
 };
 
-//前方宣言
+//前方宣言（アプリケーション）
 class PlayerUI;
 
 /// <summary>
@@ -50,14 +50,14 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos);
+	void Spawn(const BombMethod& _method, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 
 	/// <summary>
 	/// 当たり判定処理
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 	/// ============================== ///
 	///		setter
@@ -87,10 +87,10 @@ private:
 	PlayerUI* playerUI_ = nullptr;
 
 	//爆破範囲警告
-	std::unique_ptr<Object3d> warning_ = nullptr;
+	std::unique_ptr<Norm::Object3d> warning_ = nullptr;
 
 	//爆風パーティクル
-	std::unique_ptr<CombinedParticle> explosion_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> explosion_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -100,7 +100,7 @@ private:
 	json param_;
 
 	//生成された座標
-	Vector3 generatedPosition_ = {};
+	Norm::Vector3 generatedPosition_ = {};
 
 };
 

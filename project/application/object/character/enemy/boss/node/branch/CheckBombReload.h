@@ -4,10 +4,10 @@
 /// <summary>
 /// ボムのリロードをチェックするノード
 /// </summary>
-class CheckBombReload : public BranchNodeBase {
+class CheckBombReload : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckBombReload(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
+	explicit CheckBombReload(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckBombReload();
 

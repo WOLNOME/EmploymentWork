@@ -4,10 +4,10 @@
 /// <summary>
 /// バリアの状態を比較するノード
 /// </summary>
-class JudgeBarrierCoolTimeLeaf : public LeafNodeBase {
+class JudgeBarrierCoolTimeLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeBarrierCoolTimeLeaf(BlackBoard* _blackBoard);
+	explicit JudgeBarrierCoolTimeLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeBarrierCoolTimeLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult () const override;
+	Norm::NodeResult GetNodeResult () const override;
 };
 

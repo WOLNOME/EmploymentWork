@@ -5,6 +5,8 @@
 #include "application/object/character/player/Player.h"
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 
+using namespace Norm;
+
 void EnemyWeaponManager::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyWeaponManager");

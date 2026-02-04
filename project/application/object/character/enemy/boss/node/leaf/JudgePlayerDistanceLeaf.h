@@ -4,10 +4,10 @@
 /// <summary>
 /// プレイヤーとの距離を判定するノード
 /// </summary>
-class JudgePlayerDistanceLeaf : public LeafNodeBase {
+class JudgePlayerDistanceLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgePlayerDistanceLeaf(BlackBoard* _blackBoard, float _distance);
+	explicit JudgePlayerDistanceLeaf(Norm::BlackBoard* _blackBoard, float _distance);
 	// デストラクタ
 	~JudgePlayerDistanceLeaf();
 
@@ -18,7 +18,7 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 private:
 	// 判定距離

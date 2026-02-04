@@ -8,6 +8,8 @@
 #include <MyMath.h>
 #include <cassert>
 
+using namespace Norm;
+
 void GameClearSystem::Initialize() {
 	//インプット
 	input_ = Input::GetInstance();

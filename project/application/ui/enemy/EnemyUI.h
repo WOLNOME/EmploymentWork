@@ -4,8 +4,13 @@
 //アプリケーション
 #include "detail/EnemyHPUI.h"
 
-class GameCamera;
+//前方宣言（エンジン）
+namespace Norm {
+	class GameCamera;
+}
+//前方宣言（アプリケーション）
 class EnemyManager;
+
 
 /// <summary>
 /// 敵に関するUI全てを管理するクラス
@@ -42,7 +47,7 @@ public:
 	/// ゲームカメラのセット
 	/// </summary>
 	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(GameCamera* _camera);
+	void SetGameCamera(Norm::GameCamera* _camera);
 private:
 	/// ============================== ///
 	///		インスタンス

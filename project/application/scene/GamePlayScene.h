@@ -21,7 +21,7 @@
 /// <summary>
 /// ゲームプレイシーン全般を管理するクラス
 /// </summary>
-class GamePlayScene : public BaseScene {
+class GamePlayScene : public Norm::BaseScene {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -50,10 +50,10 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	std::unique_ptr<GameCamera> camera_ = nullptr;
+	std::unique_ptr<Norm::GameCamera> camera_ = nullptr;
 
 	//タイムスケールマネージャー
 	std::unique_ptr<TimeScaleManager> timeScaleManager_ = nullptr;
@@ -65,14 +65,14 @@ private:
 	std::unique_ptr<EndDirection> endDirection_ = nullptr;
 
 	//平行光源
-	std::unique_ptr<DirectionalLight> dirLight_;
+	std::unique_ptr<Norm::DirectionalLight> dirLight_;
 
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
 	//レベルローダー
-	std::unique_ptr<LevelLoader> levelLoader_ = nullptr;
+	std::unique_ptr<Norm::LevelLoader> levelLoader_ = nullptr;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;

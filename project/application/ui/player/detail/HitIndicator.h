@@ -3,9 +3,12 @@
 #include <Vector3.h>
 #include <memory>
 #include <array>
-
+//前方宣言（エンジン）
+namespace Norm {
+	class GameCamera;
+}
+//前方宣言（アプリケーション）
 class Player;
-class GameCamera;
 
 /// <summary>
 /// ヒットインジケーターを管理するクラス
@@ -21,9 +24,9 @@ private:
 	/// </summary>
 	struct IndicatorInfo {
 		uint32_t textureHandle = 0u;
-		std::unique_ptr<Sprite> sprite = nullptr;
+		std::unique_ptr<Norm::Sprite> sprite = nullptr;
 		float currentTime;
-		Vector3 hitPosition;
+		Norm::Vector3 hitPosition;
 		bool isActive;
 	};
 
@@ -45,7 +48,7 @@ public:
 	/// ヒットインジケーター登録
 	/// </summary>
 	/// <param name="_hitPosition">衝突点</param>
-	void RegistIndicator(const Vector3& _hitPosition);
+	void RegistIndicator(const Norm::Vector3& _hitPosition);
 
 	/// ============================== ///
 	///		setter
@@ -60,7 +63,7 @@ public:
 	/// ゲームカメラの設定
 	/// </summary>
 	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
+	void SetGameCamera(Norm::GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
 
 private:
 	/// ============================== ///
@@ -68,7 +71,7 @@ private:
 	/// ============================== ///
 
 	Player* player_ = nullptr;
-	GameCamera* gameCamera_ = nullptr;
+	Norm::GameCamera* gameCamera_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

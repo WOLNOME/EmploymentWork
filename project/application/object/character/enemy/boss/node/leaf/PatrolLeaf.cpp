@@ -1,6 +1,8 @@
 #include "PatrolLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 PatrolLeaf::PatrolLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

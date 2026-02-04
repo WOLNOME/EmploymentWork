@@ -6,6 +6,8 @@
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void TankEnemyPatrolState::Enter(IBaseTankEnemy* enemy) {
 	//メンバ変数のリセット
 	isRotation_ = false;

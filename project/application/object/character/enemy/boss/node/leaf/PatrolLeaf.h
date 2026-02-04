@@ -4,10 +4,10 @@
 /// <summary>
 /// パトロールノード
 /// </summary>
-class PatrolLeaf : public LeafNodeBase {
+class PatrolLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit PatrolLeaf(BlackBoard* _blackBoard);
+	explicit PatrolLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~PatrolLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

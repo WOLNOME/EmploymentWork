@@ -9,6 +9,8 @@
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
 
+using namespace Norm;
+
 IBaseTankEnemy::IBaseTankEnemy() {
 	//状態管理用変数の初期化
 	patrolState_ = std::make_unique<TankEnemyPatrolState>();

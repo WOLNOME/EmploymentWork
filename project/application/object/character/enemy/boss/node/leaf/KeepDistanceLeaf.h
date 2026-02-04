@@ -1,9 +1,9 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
-class KeepDistanceLeaf : public LeafNodeBase {
+class KeepDistanceLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit KeepDistanceLeaf(BlackBoard* _blackBoard);
+	explicit KeepDistanceLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~KeepDistanceLeaf();
 
@@ -16,6 +16,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

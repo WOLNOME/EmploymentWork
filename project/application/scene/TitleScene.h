@@ -10,7 +10,7 @@
 /// <summary>
 /// タイトルシーン全般を管理するクラス
 /// </summary>
-class TitleScene : public BaseScene {
+class TitleScene : public Norm::BaseScene {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -39,10 +39,10 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 
 	//ゲーム用カメラ
-	std::unique_ptr<DevelopCamera> camera_ = nullptr;
+	std::unique_ptr<Norm::DevelopCamera> camera_ = nullptr;
 
 	std::unique_ptr<TitleSystem> titleSystem_ = nullptr;
 

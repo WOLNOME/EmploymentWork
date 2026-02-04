@@ -37,14 +37,14 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_initDirection">初期方向</param>
-	void Spawn(const Vector3& _initPos, const Vector3& _initDirection);
+	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection);
 
 	/// <summary>
 	/// 当たり判定処理
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 
 private:
@@ -66,9 +66,9 @@ private:
 	/// ============================== ///
 
 	//トレールエフェクト
-	std::unique_ptr<BulletTrail> trail_ = nullptr;
+	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
 	//衝突エフェクト
-	std::unique_ptr<CombinedParticle> hitEffect_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
 	
 	/// ============================== ///
 	///		メンバ変数

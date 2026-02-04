@@ -4,10 +4,10 @@
 /// <summary>
 /// 接近ノード
 /// </summary>
-class ApproachLeaf : public LeafNodeBase {
+class ApproachLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit ApproachLeaf(BlackBoard* _blackBoard);
+	explicit ApproachLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~ApproachLeaf();
 
@@ -18,7 +18,7 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 };
 

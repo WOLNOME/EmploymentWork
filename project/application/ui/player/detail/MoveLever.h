@@ -39,12 +39,12 @@ public:
 	/// シェイクの適用
 	/// </summary>
 	/// <param name="_shakeOffset">シェイクオフセット</param>
-	void AttachShake(const Vector2& _shakeOffset);
+	void AttachShake(const Norm::Vector2& _shakeOffset);
 	/// <summary>
 	/// 点滅エフェクトの適用
 	/// </summary>
 	/// <param name="_color">色</param>
-	void AttachBlinking(const Vector4& _color);
+	void AttachBlinking(const Norm::Vector4& _color);
 
 private:
 	/// ============================== ///
@@ -52,14 +52,14 @@ private:
 	/// ============================== ///
 
 	//入力
-	Input* input_ = Input::GetInstance();
+	Norm::Input* input_ = Norm::Input::GetInstance();
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
 	std::array<uint32_t, (int)Type::kMaxTypeNum> textureHandles_;
-	std::array<std::unique_ptr<Sprite>, (int)Type::kMaxTypeNum> sprites_;
+	std::array<std::unique_ptr<Norm::Sprite>, (int)Type::kMaxTypeNum> sprites_;
 
 	//ゲージ(0~500)
 	const int kMaxGauge_ = 250;

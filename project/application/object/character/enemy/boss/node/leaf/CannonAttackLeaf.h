@@ -4,10 +4,10 @@
 /// <summary>
 /// キャノン攻撃ノード
 /// </summary>
-class CannonAttackLeaf : public LeafNodeBase {
+class CannonAttackLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit CannonAttackLeaf(BlackBoard* _blackBoard);
+	explicit CannonAttackLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~CannonAttackLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

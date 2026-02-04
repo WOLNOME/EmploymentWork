@@ -1,6 +1,8 @@
 #include "DirectionConfusionLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 DirectionConfusionLeaf::DirectionConfusionLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

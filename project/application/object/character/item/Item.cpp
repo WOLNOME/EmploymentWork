@@ -4,6 +4,8 @@
 #include <CombinedParticleManager.h>
 #include <random>
 
+using namespace Norm;
+
 void Item::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();

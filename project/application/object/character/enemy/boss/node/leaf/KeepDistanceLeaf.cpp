@@ -2,6 +2,8 @@
 #include <ImGuiManager.h>
 #include <algorithm>
 
+using namespace Norm;
+
 KeepDistanceLeaf::KeepDistanceLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

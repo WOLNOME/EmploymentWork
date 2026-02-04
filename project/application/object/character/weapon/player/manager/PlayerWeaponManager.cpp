@@ -3,6 +3,8 @@
 //アプリケーション
 #include "application/object/character/player/Player.h"
 
+using namespace Norm;
+
 void PlayerWeaponManager::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerWeaponManager");

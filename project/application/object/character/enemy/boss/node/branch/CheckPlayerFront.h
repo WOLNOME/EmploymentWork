@@ -5,10 +5,10 @@
 /// プレイヤーが前方にいるかチェックするノード
 /// </summary>
 class CheckPlayerFront :
-    public BranchNodeBase {
+    public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckPlayerFront(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
+	explicit CheckPlayerFront(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckPlayerFront();
 

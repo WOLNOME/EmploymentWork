@@ -4,10 +4,10 @@
 /// <summary>
 /// 混乱演出ノード
 /// </summary>
-class DirectionConfusionLeaf : public LeafNodeBase {
+class DirectionConfusionLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit DirectionConfusionLeaf(BlackBoard* _blackBoard);
+	explicit DirectionConfusionLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~DirectionConfusionLeaf();
 
@@ -20,6 +20,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

@@ -1,6 +1,8 @@
 #include "BarrierLeaf.h"
 #include "ImGuiManager.h"
 
+using namespace Norm;
+
 BarrierLeaf::BarrierLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

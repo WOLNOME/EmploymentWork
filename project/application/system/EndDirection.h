@@ -2,8 +2,12 @@
 #include <Sprite.h>
 #include <memory>
 
-class Input;
-class SceneManager;
+//前方宣言（エンジン）
+namespace Norm {
+	class Input;
+	class SceneManager;
+}
+//前方宣言（アプリケーション）
 class TimeScaleManager;
 class Player;
 class EnemyManager;
@@ -70,9 +74,9 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
+	Norm::SceneManager* sceneManager_ = nullptr;
 	//タイムスケールマネージャー
 	TimeScaleManager* timeScaleManager_ = nullptr;
 	//プレイヤーのインスタンス

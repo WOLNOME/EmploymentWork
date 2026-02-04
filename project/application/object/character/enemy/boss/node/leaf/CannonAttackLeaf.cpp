@@ -4,6 +4,8 @@
 //アプリケーション
 #include <application/object/character/weapon/enemy/manager/EnemyWeaponManager.h>
 
+using namespace Norm;
+
 CannonAttackLeaf::CannonAttackLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

@@ -12,6 +12,8 @@
 #include <application/ui/player/PlayerUI.h>
 #include <application/ui/message/MessageUI.h>
 
+using namespace Norm;
+
 void Player::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();

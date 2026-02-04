@@ -4,10 +4,10 @@
 /// <summary>
 /// ボムリロードノード
 /// </summary>
-class BombReloadLeaf : public LeafNodeBase {
+class BombReloadLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BombReloadLeaf(BlackBoard* _blackBoard);
+	explicit BombReloadLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BombReloadLeaf();
 
@@ -20,7 +20,7 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 private:
 	// 最大弾倉数

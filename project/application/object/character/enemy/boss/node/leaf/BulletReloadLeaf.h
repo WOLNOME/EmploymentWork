@@ -4,10 +4,10 @@
 /// <summary>
 /// 機関銃弾リロードノード
 /// </summary>
-class BulletReloadLeaf : public LeafNodeBase {
+class BulletReloadLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BulletReloadLeaf(BlackBoard* _blackBoard);
+	explicit BulletReloadLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BulletReloadLeaf();
 
@@ -20,6 +20,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

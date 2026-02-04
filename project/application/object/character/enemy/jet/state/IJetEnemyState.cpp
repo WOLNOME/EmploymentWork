@@ -4,6 +4,8 @@
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void IJetEnemyState::TransitionDeadState(IBaseJetEnemy* enemy) {
 	//HPが0になったら死亡する
 	if (enemy->GetHP() <= 0) {

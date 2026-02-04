@@ -28,12 +28,12 @@ public:
 	/// シェイクの適用
 	/// </summary>
 	/// <param name="_shakeOffset">シェイクオフセット</param>
-	void AttachShake(const Vector2& _shakeOffset);
+	void AttachShake(const Norm::Vector2& _shakeOffset);
 	/// <summary>
 	/// 点滅の適用
 	/// </summary>
 	/// <param name="_color">色</param>
-	void AttachBlinking(const Vector4& _color);
+	void AttachBlinking(const Norm::Vector4& _color);
 
 	/// ============================== ///
 	///		setter
@@ -60,6 +60,6 @@ private:
 	json param_;
 
 	std::array<uint32_t, 2> textureHandles_;
-	std::array<std::unique_ptr<Sprite>, 2> sprites_;
+	std::array<std::unique_ptr<Norm::Sprite>, 2> sprites_;
 };
 

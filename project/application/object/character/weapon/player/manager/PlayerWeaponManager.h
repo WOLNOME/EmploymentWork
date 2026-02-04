@@ -7,8 +7,14 @@
 #include "application/object/character/weapon/player/PlayerBullet.h"
 #include "application/object/character/weapon/player/PlayerCannon.h"
 
-class GameCamera;
+//前方宣言（エンジン）
+namespace Norm {
+	class GameCamera;
+}
+
+//前方宣言（アプリケーション）
 class Player;
+
 
 /// <summary>
 /// プレイヤーの武器（砲弾・銃弾）の管理を行うクラスです。
@@ -37,13 +43,13 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_initDirection">初期方向</param>
-	void SpawnCannon(const Vector3& _initPos, const Vector3& _initDirection);
+	void SpawnCannon(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection);
 	/// <summary>
 	/// 銃弾のスポーン
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_initDirection">初期方向</param>
-	void SpawnBullet(const Vector3& _initPos, const Vector3& _initDirection);
+	void SpawnBullet(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection);
 
 	/// ============================== ///
 	///		getter
@@ -66,7 +72,7 @@ public:
 	/// ゲームカメラを設定する
 	/// </summary>
 	/// <param name="_camera">設定するゲームカメラ</param>
-	void SetGameCamera(GameCamera* _camera) { camera_ = _camera; };
+	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; };
 	/// <summary>
 	/// プレイヤーを設定する
 	/// </summary>
@@ -79,7 +85,7 @@ private:
 	/// ============================== ///
 
 	//カメラ
-	GameCamera* camera_ = nullptr;
+	Norm::GameCamera* camera_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 

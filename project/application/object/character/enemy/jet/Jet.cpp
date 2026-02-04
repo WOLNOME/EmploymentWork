@@ -6,6 +6,8 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 void Jet::Initialize() {
 	//ベースエネミーの初期化
 	IBaseJetEnemy::Initialize();

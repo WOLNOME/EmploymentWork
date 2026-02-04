@@ -57,7 +57,7 @@ private:
 	MessageUI* messageUI_ = nullptr;
 
 	//目標点
-	Vector3 targetPosition_ = {0.0f,0.0f,0.0f};
+	Norm::Vector3 targetPosition_ = {0.0f,0.0f,0.0f};
 
 	//状態継続最低時間
 	const float kStateContinueTime_ = 2.0f;

@@ -4,10 +4,10 @@
 /// <summary>
 /// 感知演出ノード
 /// </summary>
-class DirectionSensingLeaf : public LeafNodeBase {
+class DirectionSensingLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit DirectionSensingLeaf(BlackBoard* _blackBoard);
+	explicit DirectionSensingLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~DirectionSensingLeaf();
 
@@ -20,6 +20,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

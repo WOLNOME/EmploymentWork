@@ -4,7 +4,7 @@
 /// <summary>
 /// キャノン再装填ノード
 /// </summary>
-class CannonReloadLeaf : public LeafNodeBase {
+class CannonReloadLeaf : public Norm::LeafNodeBase {
 public:
 	/// ============================== ///
 	///		メンバ関数（public）
@@ -14,7 +14,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="_blackBoard">ブラックボード</param>
-	explicit CannonReloadLeaf(BlackBoard* _blackBoard);
+	explicit CannonReloadLeaf(Norm::BlackBoard* _blackBoard);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -38,7 +38,7 @@ public:
 	/// ノードの状態を取得
 	/// </summary>
 	/// <returns></returns>
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 private:
 	/// ============================== ///

@@ -42,7 +42,7 @@ public:
 	/// アイテムの追加
 	/// </summary>
 	/// <param name="_initPos">初期化用座標</param>
-	void AddItem(const Vector3& _initPos);
+	void AddItem(const Norm::Vector3& _initPos);
 
 	/// ============================== ///
 	///		getter

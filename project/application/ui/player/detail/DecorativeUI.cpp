@@ -5,6 +5,8 @@
 #include <cassert>
 #include <PostEffectManager.h>
 
+using namespace Norm;
+
 DecorativeUI::~DecorativeUI() {
 	//ポストエフェクトを基に戻す
 	PostEffectManager::GetInstance()->SetPostEffect(PostEffectKind::None);

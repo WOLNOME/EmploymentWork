@@ -3,6 +3,8 @@
 #include <SpriteManager.h>
 #include <MyMath.h>
 
+using namespace Norm;
+
 void MessageUI::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/messageUI");

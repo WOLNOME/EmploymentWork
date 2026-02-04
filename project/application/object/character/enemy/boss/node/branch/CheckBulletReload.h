@@ -4,10 +4,10 @@
 /// <summary>
 /// 弾薬がリロード可能かチェックするノード
 /// </summary>
-class CheckBulletReload : public BranchNodeBase {
+class CheckBulletReload : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckBulletReload(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
+	explicit CheckBulletReload(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckBulletReload();
 

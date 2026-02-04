@@ -52,7 +52,7 @@ public:
 	/// ゲームカメラの設定
 	/// </summary>
 	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(GameCamera* _gameCamera) { camera_ = _gameCamera; }
+	void SetGameCamera(Norm::GameCamera* _gameCamera) { camera_ = _gameCamera; }
 	/// <summary>
 	/// 演出フラグの設定
 	/// </summary>
@@ -78,14 +78,14 @@ private:
 	/// ============================== ///
 
 	//ゲームカメラ
-	GameCamera* camera_ = nullptr;
+	Norm::GameCamera* camera_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
 	//パーティクル
-	std::unique_ptr<CombinedParticle> particle_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> particle_ = nullptr;
 
 	//演出のフラグ
 	bool isDirection_ = false;
@@ -94,9 +94,9 @@ private:
 	float timer_ = 0.0f;
 
 	//カメラの速度
-	Vector3 velocity_ = {};
+	Norm::Vector3 velocity_ = {};
 	//カメラの回転速度
-	Vector3 rotateVelocity_ = {};
+	Norm::Vector3 rotateVelocity_ = {};
 
 	//定数グループ
 	const float kTime_ = 3.0f;	//演出の時間

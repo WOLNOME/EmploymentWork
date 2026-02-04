@@ -4,10 +4,10 @@
 /// <summary>
 /// 召喚のクールタイムを判定するノード
 /// </summary>
-class JudgeSummonCoolTimeLeaf : public LeafNodeBase {
+class JudgeSummonCoolTimeLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeSummonCoolTimeLeaf(BlackBoard* _blackBoard);
+	explicit JudgeSummonCoolTimeLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeSummonCoolTimeLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

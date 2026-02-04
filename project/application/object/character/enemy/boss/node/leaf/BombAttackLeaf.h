@@ -4,10 +4,10 @@
 /// <summary>
 /// 爆弾攻撃ノード
 /// </summary>
-class BombAttackLeaf : public LeafNodeBase {
+class BombAttackLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BombAttackLeaf(BlackBoard* _blackBoard);
+	explicit BombAttackLeaf(Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BombAttackLeaf();
 
@@ -18,6 +18,6 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 };
 

@@ -5,10 +5,10 @@
 /// プレイヤーの前フレームとの距離を判定するノード
 /// </summary>
 class JudgePlayerPreDistanceLeaf :
-    public LeafNodeBase {
+    public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard,float _preDistance);
+	explicit JudgePlayerPreDistanceLeaf(Norm::BlackBoard* _blackBoard,float _preDistance);
 	// デストラクタ
 	~JudgePlayerPreDistanceLeaf();
 
@@ -19,7 +19,7 @@ public:
 	void Debug() override;
 
 	// ノードの状態を取得
-	NodeResult GetNodeResult() const override;
+	Norm::NodeResult GetNodeResult() const override;
 
 private:
 	float preDistance_ = 0.0f;		// プレイヤーの前フレームとの距離

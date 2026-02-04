@@ -8,6 +8,8 @@
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
 
+using namespace Norm;
+
 void EnemyBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();

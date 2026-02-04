@@ -52,7 +52,7 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_initRotate">初期回転</param>
-	virtual void Spawn(const Vector3& _initPos, const Vector3& _initRotate) = 0;
+	virtual void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate) = 0;
 
 	/// <summary>
 	/// 状態変更用関数
@@ -130,7 +130,7 @@ protected:
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 
 	/// ============================== ///

@@ -6,6 +6,8 @@
 #include <TextTextureManager.h>
 #include <WinApp.h>
 
+using namespace Norm;
+
 PauseSystem::PauseSystem() {
 }
 

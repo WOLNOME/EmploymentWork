@@ -1,9 +1,9 @@
 #include "WinApp.h"
 #include "imgui_impl_win32.h"
 
-namespace Norm {
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+namespace Norm {
 
 	WinApp* WinApp::instance = nullptr;
 

@@ -6,7 +6,7 @@
 #include <Vector3.h>
 #include <memory>
 
-//前方宣言
+//前方宣言（アプリケーション）
 class PlayerUI;
 
 /// <summary>
@@ -40,14 +40,14 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void Spawn(const Vector3& _initPos, const Vector3& _targetPos);
+	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 
 	/// <summary>
 	/// 当たり判定処理
 	/// </summary>
 	/// <param name="attribute">相手の属性</param>
 	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
+	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 
 	/// ============================== ///
 	///		setter
@@ -80,9 +80,9 @@ private:
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
 	//トレールエフェクト
-	std::unique_ptr<BulletTrail> trail_ = nullptr;
+	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
 	//衝突エフェクト
-	std::unique_ptr<CombinedParticle> hitEffect_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -91,7 +91,7 @@ private:
 	//パラメータ
 	json param_;
 
-	Vector3 generatedPosition_{};	//生成された座標
+	Norm::Vector3 generatedPosition_{};	//生成された座標
 	float lifeTimer_;		//寿命タイマー
 
 };

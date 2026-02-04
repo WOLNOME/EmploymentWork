@@ -1,6 +1,8 @@
 #include "JudgeBarrierCoolTimeLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 JudgeBarrierCoolTimeLeaf::JudgeBarrierCoolTimeLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

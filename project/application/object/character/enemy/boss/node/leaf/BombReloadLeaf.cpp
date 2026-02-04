@@ -2,6 +2,8 @@
 #include <MyMath.h>
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 BombReloadLeaf::BombReloadLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

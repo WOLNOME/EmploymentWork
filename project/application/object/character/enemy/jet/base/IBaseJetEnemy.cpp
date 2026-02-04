@@ -1,5 +1,7 @@
 #include "IBaseJetEnemy.h"
 
+using namespace Norm;
+
 IBaseJetEnemy::IBaseJetEnemy() {
 	//状態管理用変数の初期化
 	patrolState_ = std::make_unique<JetEnemyPatrolState>();

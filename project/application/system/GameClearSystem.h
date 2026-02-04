@@ -31,8 +31,8 @@ private:
 	/// カメラワーク用パラメーター構造体
 	/// </summary>
 	struct CameraWorkParam {
-		Vector3 startPos = { -5.0f,4.0f,-5.0f };		//カメラ開始位置
-		Vector3 endPos = { -20.0f,1.0f,-20.0f };		//カメラ終了位置
+		Norm::Vector3 startPos = { -5.0f,4.0f,-5.0f };		//カメラ開始位置
+		Norm::Vector3 endPos = { -20.0f,1.0f,-20.0f };		//カメラ終了位置
 		float moveDuration = 2.0f;					//移動にかかる時間
 		float timer = 0.0f;							//タイマー
 		bool isEnd = false;						//カメラワーク終了フラグ
@@ -64,7 +64,7 @@ public:
 	/// ゲームカメラのセット
 	/// </summary>
 	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
+	void SetGameCamera(Norm::GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
 
 private:
 	/// ============================== ///
@@ -93,11 +93,11 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
+	Norm::SceneManager* sceneManager_ = nullptr;
 	//ゲームカメラ
-	GameCamera* gameCamera_ = nullptr;
+	Norm::GameCamera* gameCamera_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -107,21 +107,21 @@ private:
 	std::mt19937 engine{ std::random_device{}() };
 
 	//戦車オブジェクト
-	std::unique_ptr<Object3d> tank_ = nullptr;
+	std::unique_ptr<Norm::Object3d> tank_ = nullptr;
 
 	//クリアテキスト
-	std::vector<Handle> clearTextHandles_;
-	std::vector<std::unique_ptr<Sprite>> clearTextSprites_;
+	std::vector<Norm::Handle> clearTextHandles_;
+	std::vector<std::unique_ptr<Norm::Sprite>> clearTextSprites_;
 
 	//クリアテキスト背景
-	std::vector<std::unique_ptr<Sprite>> clearTextBack_;
+	std::vector<std::unique_ptr<Norm::Sprite>> clearTextBack_;
 
 	//タイトルに戻るテキスト
-	Handle titleTextHandle_;
-	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+	Norm::Handle titleTextHandle_;
+	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 	//紙吹雪パーティクル
-	std::unique_ptr<CombinedParticle> confettiParticle_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> confettiParticle_ = nullptr;
 
 	//テキスト操作変数
 	TextDirectionParam textDirectionParam_;

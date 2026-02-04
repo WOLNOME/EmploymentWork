@@ -7,6 +7,8 @@
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
 
+using namespace Norm;
+
 TankEnemyDeadState::TankEnemyDeadState() {
 	//パーティクルの生成・初期化
 	particle_ = std::make_unique<CombinedParticle>();

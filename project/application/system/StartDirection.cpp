@@ -2,6 +2,8 @@
 #include <TextureManager.h>
 #include <SpriteManager.h>
 
+using namespace Norm;
+
 void StartDirection::Initialize() {
 	//インスタンスの初期化
 	input_ = Input::GetInstance();

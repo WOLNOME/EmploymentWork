@@ -1,6 +1,8 @@
 #include "GameClearScene.h"
 #include "SceneManager.h"
 
+using namespace Norm;
+
 void GameClearScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();

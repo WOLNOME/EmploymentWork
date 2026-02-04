@@ -8,6 +8,8 @@
 #include <application/object/character/player/Player.h>
 #include <application/ui/message/MessageUI.h>
 
+using namespace Norm;
+
 void JetEnemyPatrolState::Enter(IBaseJetEnemy* enemy) {
 	//目標ポイントをランダムに決定
 	std::random_device rd;

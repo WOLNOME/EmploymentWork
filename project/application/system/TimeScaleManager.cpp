@@ -1,6 +1,8 @@
 #include "TimeScaleManager.h"
 #include <MyMath.h>
 
+using namespace Norm;
+
 void TimeScaleManager::Initialize() {
 	//メンバ変数の初期化
 	isPlay_ = true;

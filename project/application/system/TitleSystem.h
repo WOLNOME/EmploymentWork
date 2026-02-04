@@ -59,7 +59,7 @@ public:
 	/// カメラセット
 	/// </summary>
 	/// <param name="_camera">カメラのポインタ</param>
-	void SetCamera(BaseCamera* _camera) { camera_ = _camera; }
+	void SetCamera(Norm::BaseCamera* _camera) { camera_ = _camera; }
 
 private:
 	/// ============================== ///
@@ -84,11 +84,11 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 	//カメラ
-	BaseCamera* camera_ = nullptr;
+	Norm::BaseCamera* camera_ = nullptr;
 	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
+	Norm::SceneManager* sceneManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -103,26 +103,26 @@ private:
 	const float kTime_ = 2.0f;
 
 	//タイトルテキスト
-	Handle titleTextHandle_;
-	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+	Norm::Handle titleTextHandle_;
+	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 	//スタートテキスト
-	Handle startTextHandle_;
-	std::unique_ptr<Sprite> startTextSprite_ = nullptr;
+	Norm::Handle startTextHandle_;
+	std::unique_ptr<Norm::Sprite> startTextSprite_ = nullptr;
 
 	//ガレージ
-	std::unique_ptr<Object3d> garage_ = nullptr;
+	std::unique_ptr<Norm::Object3d> garage_ = nullptr;
 
 	//戦車
-	std::vector<std::unique_ptr<Object3d>> tanks_;
+	std::vector<std::unique_ptr<Norm::Object3d>> tanks_;
 
 	//カメラ操作
-	Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };
-	Vector3 cameraEndPos_ = { 60.0f,12.0f,-17.0f };
+	Norm::Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };
+	Norm::Vector3 cameraEndPos_ = { 60.0f,12.0f,-17.0f };
 	const float kCameraMoveTime_ = 30.0f;
 	float cameraTimer_ = 0.0f;
 	bool isHalfPeriodCamera_ = false;
 
-	Vector3 cameraTargetPos_ = { 0.0,1.0f,0.0f };
+	Norm::Vector3 cameraTargetPos_ = { 0.0,1.0f,0.0f };
 };
 

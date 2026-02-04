@@ -1,6 +1,8 @@
 #include "SummonLeaf.h"
 #include <ImGuiManager.h>
 
+using namespace Norm;
+
 SummonLeaf::SummonLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 }
 

@@ -47,9 +47,9 @@ private:
 	/// ============================== ///
 
 	//インプット
-	Input* input_ = nullptr;
+	Norm::Input* input_ = nullptr;
 	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
+	Norm::SceneManager* sceneManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -61,12 +61,12 @@ private:
 	const float kTime_ = 2.0f;
 
 	//ゲームオーバーテキスト
-	Handle gameOverTextHandle_;
-	std::unique_ptr<Sprite> gameOverTextSprite_ = nullptr;
+	Norm::Handle gameOverTextHandle_;
+	std::unique_ptr<Norm::Sprite> gameOverTextSprite_ = nullptr;
 
 	//タイトルに戻るテキスト
-	Handle titleTextHandle_;
-	std::unique_ptr<Sprite> titleTextSprite_ = nullptr;
+	Norm::Handle titleTextHandle_;
+	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 };
 

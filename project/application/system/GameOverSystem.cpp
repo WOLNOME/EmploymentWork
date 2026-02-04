@@ -6,6 +6,8 @@
 #include <SpriteManager.h>
 #include <MyMath.h>
 
+using namespace Norm;
+
 void GameOverSystem::Initialize() {
 	//インプット
 	input_ = Input::GetInstance();

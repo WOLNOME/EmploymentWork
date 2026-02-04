@@ -3,6 +3,8 @@
 #include <TextureManager.h>
 #include <SpriteManager.h>
 
+using namespace Norm;
+
 void ReticleUI::Initialize() {
 	//スプライトの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("reticle.png");
