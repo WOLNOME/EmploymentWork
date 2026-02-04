@@ -116,7 +116,7 @@
     <ClCompile Include="engine\collision\CollisionManager.cpp">
       <Filter>engine\collision</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp">
+    <ClCompile Include="engine\base\directx\D3DResourceLeakChecker.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\3d\camera\DevelopCamera.cpp">
@@ -125,7 +125,7 @@
     <ClCompile Include="engine\3d\light\DirectionalLight.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\DirectXCommon.cpp">
+    <ClCompile Include="engine\base\directx\DirectXCommon.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="application\object\character\base\BaseCharacter.cpp">
@@ -335,40 +335,40 @@
     <ClCompile Include="engine\2d\SpriteManager.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\TextTextureManager.cpp">
+    <ClCompile Include="engine\base\texture\TextTextureManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\DSVManager.cpp">
+    <ClCompile Include="engine\base\view\DSVManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\D2DRender.cpp">
+    <ClCompile Include="engine\base\render\D2DRender.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\Framework.cpp">
+    <ClCompile Include="engine\base\framework\Framework.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\GPUDescriptorManager.cpp">
+    <ClCompile Include="engine\base\view\GPUDescriptorManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\Logger.cpp">
+    <ClCompile Include="engine\base\logger\Logger.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\MainRender.cpp">
+    <ClCompile Include="engine\base\render\MainRender.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\PostEffectManager.cpp">
+    <ClCompile Include="engine\base\postEffect\PostEffectManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\RTVManager.cpp">
+    <ClCompile Include="engine\base\view\RTVManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\TextTextureRender.cpp">
+    <ClCompile Include="engine\base\texture\TextTextureRender.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\TextureManager.cpp">
+    <ClCompile Include="engine\base\texture\TextureManager.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\WinApp.cpp">
+    <ClCompile Include="engine\base\windows\WinApp.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\collision\Collider.cpp">
@@ -527,7 +527,7 @@
     <ClInclude Include="engine\scene\BaseScene.h">
       <Filter>engine\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\D3DResourceLeakChecker.h">
+    <ClInclude Include="engine\base\directx\D3DResourceLeakChecker.h">
       <Filter>engine\base</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\camera\DevelopCamera.h">
@@ -536,7 +536,7 @@
     <ClInclude Include="engine\3d\light\DirectionalLight.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\DirectXCommon.h">
+    <ClInclude Include="engine\base\directx\DirectXCommon.h">
       <Filter>engine\base</Filter>
     </ClInclude>
     <ClInclude Include="application\object\character\base\BaseCharacter.h">
@@ -752,40 +752,40 @@
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
       <Filter>externals\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\TextTextureManager.h">
+    <ClInclude Include="engine\base\texture\TextTextureManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\DSVManager.h">
+    <ClInclude Include="engine\base\view\DSVManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\D2DRender.h">
+    <ClInclude Include="engine\base\render\D2DRender.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\Framework.h">
+    <ClInclude Include="engine\base\framework\Framework.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\GPUDescriptorManager.h">
+    <ClInclude Include="engine\base\view\GPUDescriptorManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\Logger.h">
+    <ClInclude Include="engine\base\logger\Logger.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\MainRender.h">
+    <ClInclude Include="engine\base\render\MainRender.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\PostEffectManager.h">
+    <ClInclude Include="engine\base\postEffect\PostEffectManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\RTVManager.h">
+    <ClInclude Include="engine\base\view\RTVManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\TextTextureRender.h">
+    <ClInclude Include="engine\base\texture\TextTextureRender.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\TextureManager.h">
+    <ClInclude Include="engine\base\texture\TextureManager.h">
       <Filter>engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\WinApp.h">
+    <ClInclude Include="engine\base\windows\WinApp.h">
       <Filter>engine\base</Filter>
     </ClInclude>
     <ClInclude Include="engine\input\Input.h">
