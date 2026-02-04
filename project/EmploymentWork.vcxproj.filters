@@ -93,8 +93,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="engine\base\main.cpp" />
+    <ClCompile Include="engine\base\myGame\MyGame.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp">
       <Filter>engine\scenebase</Filter>
     </ClCompile>
@@ -511,7 +511,7 @@
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyGame.h" />
+    <ClInclude Include="engine\base\myGame\MyGame.h" />
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
       <Filter>engine\scenebase</Filter>
     </ClInclude>

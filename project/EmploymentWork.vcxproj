@@ -63,7 +63,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -225,7 +225,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="engine\base\main.cpp" />
     <ClCompile Include="engine\3d\object\Model.cpp" />
     <ClCompile Include="engine\3d\object\ModelManager.cpp" />
     <ClCompile Include="engine\3d\object\Object3d.cpp" />
@@ -236,7 +236,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\base\render\MainRender.cpp" />
     <ClCompile Include="application\ui\message\MessageUI.cpp" />
     <ClCompile Include="application\ui\player\detail\MoveLever.cpp" />
-    <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="engine\base\myGame\MyGame.cpp" />
     <ClCompile Include="engine\scenebase\SceneFactory.cpp" />
     <ClCompile Include="engine\scenebase\SceneManager.cpp" />
     <ClCompile Include="engine\3d\particle\Particle.cpp" />
@@ -403,7 +403,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h" />
-    <ClInclude Include="MyGame.h" />
+    <ClInclude Include="engine\base\myGame\MyGame.h" />
     <ClInclude Include="engine\scenebase\SceneFactory.h" />
     <ClInclude Include="engine\scenebase\SceneManager.h" />
     <ClInclude Include="engine\3d\particle\Particle.h" />

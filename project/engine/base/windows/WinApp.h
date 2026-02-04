@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <wrl.h>
 #include <cstdint>
+#include <memory>
 
 namespace Norm {
 
