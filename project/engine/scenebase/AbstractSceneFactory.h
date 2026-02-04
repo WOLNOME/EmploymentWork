@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include <string>
+#include <memory>
 
 namespace Norm {
 
@@ -22,7 +23,7 @@ namespace Norm {
 		/// </summary>
 		/// <param name="sceneName">シーン名</param>
 		/// <returns>シーンクラスのポインタ</returns>
-		virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
+		virtual std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) = 0;
 	};
 
 }

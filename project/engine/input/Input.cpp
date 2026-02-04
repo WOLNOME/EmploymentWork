@@ -10,13 +10,13 @@
 
 namespace Norm {
 
-	Input* Input::instance = nullptr;
+	std::unique_ptr<Input> Input::instance_ = nullptr;
 
 	Input* Input::GetInstance() {
-		if (instance == nullptr) {
-			instance = new Input;
+		if (!instance_) {
+			instance_ = std::unique_ptr<Input>(new Input());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void Input::Initialize() {
@@ -54,8 +54,8 @@ namespace Norm {
 	}
 
 	void Input::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void Input::InitDirectInput() {

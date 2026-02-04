@@ -5,18 +5,18 @@
 
 namespace Norm {
 
-	SceneManager* SceneManager::instance = nullptr;
+	std::unique_ptr<SceneManager> SceneManager::instance_ = nullptr;
 
 	SceneManager* SceneManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new SceneManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<SceneManager>(new SceneManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void SceneManager::Initialize() {
 		//シーンファクトリーの生成
-		sceneFactory_ = new SceneFactory();
+		sceneFactory_ = std::make_unique<SceneFactory>();
 		//シーン遷移アニメーションの生成
 		sceneTransitionAnimation_ = std::make_unique<SceneTransitionAnimation>();
 		sceneTransitionAnimation_->Initialize();
@@ -52,12 +52,11 @@ namespace Norm {
 	void SceneManager::Finalize() {
 		//最後のシーンの終了と解放
 		scene_->Finalize();
-		delete scene_;
+		scene_.reset();
 		//シーンファクトリー解放
-		delete sceneFactory_;
-		//インスタンスの削除
-		delete instance;
-		instance = nullptr;
+		sceneFactory_.reset();
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void SceneManager::ChangeScene() {
@@ -77,11 +76,11 @@ namespace Norm {
 			//旧シーンの終了
 			if (scene_) {
 				scene_->Finalize();
-				delete scene_;
+				scene_.reset();
 			}
 			//シーンの切り替え
-			scene_ = nextScene_;
-			nextScene_ = nullptr;
+			scene_ = std::move(nextScene_);
+			nextScene_.reset();
 			//次のシーンを初期化する
 			scene_->Initialize();
 		}
@@ -105,12 +104,12 @@ namespace Norm {
 
 		//警告
 		assert(sceneFactory_);
-		assert(nextScene_ == nullptr);
+		assert(!nextScene_);
 
 		//もし最初のシーンだったらここで生成＆初期化
-		if (scene_ == nullptr) {
+		if (!scene_) {
 			scene_ = sceneFactory_->CreateScene(nextSceneName);
-			nextScene_ = nullptr;
+			nextScene_.reset();
 			scene_->Initialize();
 			return;
 		}

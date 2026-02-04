@@ -7,17 +7,17 @@
 #include "Logger.h"
 #include <cassert>
 
+using namespace Microsoft::WRL;
+
 namespace Norm {
 
-	MainRender* MainRender::instance = nullptr;
-
-	using namespace Microsoft::WRL;
+	std::unique_ptr<MainRender> MainRender::instance_ = nullptr;
 
 	MainRender* MainRender::GetInstance() {
-		if (instance == nullptr) {
-			instance = new MainRender;
+		if (!instance_) {
+			instance_ = std::unique_ptr<MainRender>(new MainRender());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void MainRender::Initialize() {
@@ -38,8 +38,8 @@ namespace Norm {
 	}
 
 	void MainRender::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void MainRender::PreObjectDraw() {

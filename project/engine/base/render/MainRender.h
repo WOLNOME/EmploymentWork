@@ -4,6 +4,7 @@
 #include <wrl.h>
 #include <cstdint>
 #include <array>
+#include <memory>
 
 namespace Norm {
 
@@ -13,12 +14,14 @@ namespace Norm {
 	/// </summary>
 	class MainRender {
 	private://コンストラクタ等の隠蔽
-		static MainRender* instance;
+		static std::unique_ptr<MainRender> instance_;
 
 		MainRender() = default;//コンストラクタ隠蔽
 		~MainRender() = default;//デストラクタ隠蔽
 		MainRender(MainRender&) = delete;//コピーコンストラクタ封印
 		MainRender& operator=(MainRender&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<MainRender>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

@@ -4,16 +4,16 @@
 
 namespace Norm {
 
-	AudioCommon* AudioCommon::instance = nullptr;
-
 	//サウンドデータコンテナの開始位置
 	const uint32_t kStartSoundDataIndex = 1;
 
+	std::unique_ptr<AudioCommon> AudioCommon::instance_ = nullptr;
+
 	AudioCommon* AudioCommon::GetInstance() {
-		if (instance == nullptr) {
-			instance = new AudioCommon;
+		if (!instance_) {
+			instance_ = std::unique_ptr<AudioCommon>(new AudioCommon());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void AudioCommon::Initialize() {
@@ -29,10 +29,8 @@ namespace Norm {
 	void AudioCommon::Finalize() {
 		//コンテナの全開放
 		ShutdownContainer();
-		//XAudio2の解放
-		xAudio2_.Reset();
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 

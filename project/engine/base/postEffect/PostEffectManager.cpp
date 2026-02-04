@@ -10,17 +10,17 @@
 #include "Logger.h"
 #include <random>
 
+using namespace Microsoft::WRL;
+
 namespace Norm {
 
-	PostEffectManager* PostEffectManager::instance = nullptr;
-
-	using namespace Microsoft::WRL;
+	std::unique_ptr<PostEffectManager> PostEffectManager::instance_ = nullptr;
 
 	PostEffectManager* PostEffectManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new PostEffectManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<PostEffectManager>(new PostEffectManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void PostEffectManager::Initialize() {
@@ -33,8 +33,8 @@ namespace Norm {
 	}
 
 	void PostEffectManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void PostEffectManager::PreObjectDraw() {

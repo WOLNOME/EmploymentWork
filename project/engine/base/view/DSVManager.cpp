@@ -4,14 +4,15 @@
 
 namespace Norm {
 
-    DSVManager* DSVManager::instance = nullptr;
     const uint32_t DSVManager::kMaxHeapSize = 16;		//必要に応じて増やす
 
+    std::unique_ptr<DSVManager> DSVManager::instance_ = nullptr;
+
     DSVManager* DSVManager::GetInstance() {
-        if (instance == nullptr) {
-            instance = new DSVManager;
+        if (!instance_) {
+            instance_ = std::unique_ptr<DSVManager>(new DSVManager());
         }
-        return instance;
+        return instance_.get();
     }
 
     void DSVManager::Initialize() {
@@ -23,8 +24,8 @@ namespace Norm {
     }
 
     void DSVManager::Finalize() {
-        delete instance;
-        instance = nullptr;
+        //インスタンスを削除
+        instance_.reset();
     }
 
     uint32_t DSVManager::Allocate() {

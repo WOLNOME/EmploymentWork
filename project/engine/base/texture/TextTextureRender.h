@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <cstdint>
 #include <array>
+#include <memory>
 
 namespace Norm {
 
@@ -12,12 +13,14 @@ namespace Norm {
 	/// </summary>
 	class TextTextureRender {
 	private://コンストラクタ等の隠蔽
-		static TextTextureRender* instance;
+		static std::unique_ptr<TextTextureRender> instance_;
 
 		TextTextureRender() = default;//コンストラクタ隠蔽
 		~TextTextureRender() = default;//デストラクタ隠蔽
 		TextTextureRender(TextTextureRender&) = delete;//コピーコンストラクタ封印
 		TextTextureRender& operator=(TextTextureRender&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<TextTextureRender>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

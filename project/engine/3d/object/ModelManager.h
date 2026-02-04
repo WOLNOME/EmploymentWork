@@ -13,12 +13,14 @@ namespace Norm {
 	/// </summary>
 	class ModelManager {
 	private://コンストラクタ等の隠蔽
-		static ModelManager* instance;
+		static std::unique_ptr<ModelManager> instance_;
 
 		ModelManager() = default;//コンストラクタ隠蔽
 		~ModelManager() = default;//デストラクタ隠蔽
 		ModelManager(ModelManager&) = delete;//コピーコンストラクタ封印
 		ModelManager& operator=(ModelManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<ModelManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

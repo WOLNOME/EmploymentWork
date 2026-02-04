@@ -4,6 +4,7 @@
 #include <dxgi1_6.h>
 #include <cstdint>
 #include <queue>
+#include <memory>
 
 namespace Norm {
 
@@ -13,12 +14,14 @@ namespace Norm {
 	/// </summary>
 	class GPUDescriptorManager {
 	private:
-		static GPUDescriptorManager* instance;
+		static std::unique_ptr<GPUDescriptorManager> instance_;
 
-		GPUDescriptorManager() = default;
-		~GPUDescriptorManager() = default;
-		GPUDescriptorManager(GPUDescriptorManager&) = delete;
-		GPUDescriptorManager& operator=(GPUDescriptorManager&) = delete;
+		GPUDescriptorManager() = default;//コンストラクタ隠蔽
+		~GPUDescriptorManager() = default;//デストラクタ隠蔽
+		GPUDescriptorManager(GPUDescriptorManager&) = delete;//コピーコンストラクタ封印
+		GPUDescriptorManager& operator=(GPUDescriptorManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<GPUDescriptorManager>;
 
 	public:
 		/// ============================== ///

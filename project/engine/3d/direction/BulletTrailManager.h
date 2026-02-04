@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <unordered_map>
+#include <memory>
 #include "BlendMode.h"
 
 namespace Norm {
@@ -17,12 +18,14 @@ namespace Norm {
 	/// </summary>
 	class BulletTrailManager {
 	private://シングルトン
-		static BulletTrailManager* instance;
+		static std::unique_ptr<BulletTrailManager> instance_;
 
 		BulletTrailManager() = default;//コンストラクタ隠蔽
 		~BulletTrailManager() = default;//デストラクタ隠蔽
 		BulletTrailManager(BulletTrailManager&) = delete;//コピーコンストラクタ封印
 		BulletTrailManager& operator=(BulletTrailManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<BulletTrailManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

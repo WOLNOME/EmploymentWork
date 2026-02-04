@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 #include <optional>
+#include <memory>
 //DirectXTex
 #include "DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
@@ -30,12 +31,14 @@ namespace Norm {
 		};
 
 	private://コンストラクタ等の隠蔽
-		static TextureManager* instance;
+		static std::unique_ptr<TextureManager> instance_;
 
-		TextureManager() = default;
-		~TextureManager() = default;
-		TextureManager(TextureManager&) = delete;
-		TextureManager& operator=(TextureManager&) = delete;
+		TextureManager() = default;//コンストラクタ隠蔽
+		~TextureManager() = default;//デストラクタ隠蔽
+		TextureManager(TextureManager&) = delete;//コピーコンストラクタ封印
+		TextureManager& operator=(TextureManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<TextureManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

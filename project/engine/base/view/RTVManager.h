@@ -4,6 +4,7 @@
 #include <dxgi1_6.h>
 #include <cstdint>
 #include <queue>
+#include <memory>
 
 namespace Norm {
 
@@ -13,12 +14,14 @@ namespace Norm {
 	/// </summary>
 	class RTVManager {
 	private:
-		static RTVManager* instance;
+		static std::unique_ptr<RTVManager> instance_;
 
-		RTVManager() = default;
-		~RTVManager() = default;
-		RTVManager(RTVManager&) = delete;
-		RTVManager& operator=(RTVManager&) = delete;
+		RTVManager() = default;//コンストラクタ隠蔽
+		~RTVManager() = default;//デストラクタ隠蔽
+		RTVManager(RTVManager&) = delete;//コピーコンストラクタ封印
+		RTVManager& operator=(RTVManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<RTVManager>;
 
 	public:
 		/// ============================== ///

@@ -19,12 +19,15 @@ namespace Norm {
 	/// </summary>
 	class DirectXCommon {
 	private://コンストラクタ等の隠蔽
-		static DirectXCommon* instance;
+		static std::unique_ptr<DirectXCommon> instance_;
 
 		DirectXCommon() = default;//コンストラクタ隠蔽
 		~DirectXCommon() = default;//デストラクタ隠蔽
 		DirectXCommon(DirectXCommon&) = delete;//コピーコンストラクタ封印
 		DirectXCommon& operator=(DirectXCommon&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<DirectXCommon>;
+
 	public:
 		/// ============================== ///
 		///		メンバ関数

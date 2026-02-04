@@ -1,6 +1,7 @@
 #pragma once
 #include <wrl.h>
 #include <d3d12.h>
+#include <memory>
 #include "imgui.h"
 
 namespace Norm {
@@ -11,12 +12,14 @@ namespace Norm {
 	/// </summary>
 	class ImGuiManager {
 	private://コンストラクタ等の隠蔽
-		static ImGuiManager* instance;
+		static std::unique_ptr<ImGuiManager> instance_;
 
 		ImGuiManager() = default;//コンストラクタ隠蔽
 		~ImGuiManager() = default;//デストラクタ隠蔽
 		ImGuiManager(ImGuiManager&) = delete;//コピーコンストラクタ封印
 		ImGuiManager& operator=(ImGuiManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<ImGuiManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

@@ -5,13 +5,13 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 namespace Norm {
 
-	WinApp* WinApp::instance = nullptr;
+	std::unique_ptr<WinApp> WinApp::instance_ = nullptr;
 
 	WinApp* WinApp::GetInstance() {
-		if (instance == nullptr) {
-			instance = new WinApp;
+		if (!instance_) {
+			instance_ = std::unique_ptr<WinApp>(new WinApp());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -58,7 +58,7 @@ namespace Norm {
 		//ウィンドウの生成
 		hwnd = CreateWindow(
 			wc.lpszClassName,		//利用するクラス名
-			L"タンク決戦",				//タイトルバーの文字(何でもいい)
+			L"タンク決戦",				//タイトルバーの文字
 			WS_OVERLAPPEDWINDOW,	//よく見るウィンドウスタイル
 			CW_USEDEFAULT,			//表示X座標(Windowsに任せる)
 			CW_USEDEFAULT,			//表示Y座標(Windowsに任せる)
@@ -76,8 +76,8 @@ namespace Norm {
 	void WinApp::Finalize() {
 		CloseWindow(hwnd);
 		CoUninitialize();
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	bool  WinApp::ProcessMessage() {

@@ -4,15 +4,17 @@
 
 namespace Norm {
 
-	GPUDescriptorManager* GPUDescriptorManager::instance = nullptr;
 	const uint32_t GPUDescriptorManager::kMaxHeapSize = 2048;		//必要に応じて増やす
 
+	std::unique_ptr<GPUDescriptorManager> GPUDescriptorManager::instance_ = nullptr;
+
 	GPUDescriptorManager* GPUDescriptorManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new GPUDescriptorManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<GPUDescriptorManager>(new GPUDescriptorManager());
 		}
-		return instance;
+		return instance_.get();
 	}
+
 
 	void GPUDescriptorManager::Initialize() {
 		descriptorHeap = DirectXCommon::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxHeapSize, true);
@@ -20,8 +22,8 @@ namespace Norm {
 	}
 
 	void GPUDescriptorManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void GPUDescriptorManager::SetDescriptorHeap(ID3D12GraphicsCommandList* pCommandList) {

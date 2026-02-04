@@ -7,17 +7,17 @@
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"winmm.lib")
 
+using namespace Microsoft::WRL;
+
 namespace Norm {
 
-	DirectXCommon* DirectXCommon::instance = nullptr;
-
-	using namespace Microsoft::WRL;
+	std::unique_ptr<DirectXCommon> DirectXCommon::instance_ = nullptr;
 
 	DirectXCommon* DirectXCommon::GetInstance() {
-		if (instance == nullptr) {
-			instance = new DirectXCommon;
+		if (!instance_) {
+			instance_ = std::unique_ptr<DirectXCommon>(new DirectXCommon());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void DirectXCommon::Initialize() {
@@ -37,8 +37,8 @@ namespace Norm {
 	void DirectXCommon::Finalize() {
 		//イベント
 		CloseHandle(fenceEvent);
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void DirectXCommon::PostEachRender() {

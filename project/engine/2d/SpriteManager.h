@@ -3,6 +3,7 @@
 #include <d3d12.h>
 #include <unordered_map>
 #include <string>
+#include <memory>
 
 namespace Norm {
 
@@ -14,12 +15,15 @@ namespace Norm {
 	/// </summary>
 	class SpriteManager {
 	private://コンストラクタ等の隠蔽
-		static SpriteManager* instance;
+		static std::unique_ptr<SpriteManager> instance_;
 
 		SpriteManager() = default;//コンストラクタ隠蔽
 		~SpriteManager() = default;//デストラクタ隠蔽
 		SpriteManager(SpriteManager&) = delete;//コピーコンストラクタ封印
 		SpriteManager& operator=(SpriteManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<SpriteManager>;
+
 	public:
 		/// ============================== ///
 		///		メンバ関数

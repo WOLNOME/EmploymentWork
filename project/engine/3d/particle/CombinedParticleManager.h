@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace Norm {
 
@@ -13,12 +14,14 @@ namespace Norm {
 	/// </summary>
 	class CombinedParticleManager {
 	private://コンストラクタ等の隠蔽
-		static CombinedParticleManager* instance;
+		static std::unique_ptr<CombinedParticleManager> instance_;
 
 		CombinedParticleManager() = default;//コンストラクタ隠蔽
 		~CombinedParticleManager() = default;//デストラクタ隠蔽
 		CombinedParticleManager(CombinedParticleManager&) = delete;//コピーコンストラクタ封印
 		CombinedParticleManager& operator=(CombinedParticleManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<CombinedParticleManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

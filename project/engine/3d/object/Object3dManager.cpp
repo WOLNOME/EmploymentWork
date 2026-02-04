@@ -9,13 +9,13 @@
 
 namespace Norm {
 
-	Object3dManager* Object3dManager::instance = nullptr;
+	std::unique_ptr<Object3dManager> Object3dManager::instance_ = nullptr;
 
 	Object3dManager* Object3dManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new Object3dManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<Object3dManager>(new Object3dManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void Object3dManager::Initialize() {
@@ -60,8 +60,8 @@ namespace Norm {
 	}
 
 	void Object3dManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void Object3dManager::RegisterObject(const std::string& name, Object3d* object) {

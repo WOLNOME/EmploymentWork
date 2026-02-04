@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include <list>
+#include <memory>
 
 namespace Norm {
 
@@ -52,12 +53,14 @@ namespace Norm {
 			Vector4 color;
 		};
 	private://コンストラクタ等の隠蔽
-		static LineManager* instance;
+		static std::unique_ptr<LineManager> instance_;
 
 		LineManager() = default;//コンストラクタ隠蔽
 		~LineManager() = default;//デストラクタ隠蔽
 		LineManager(LineManager&) = delete;//コピーコンストラクタ封印
 		LineManager& operator=(LineManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<LineManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

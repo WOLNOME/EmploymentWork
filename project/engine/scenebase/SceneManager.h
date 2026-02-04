@@ -14,12 +14,15 @@ namespace Norm {
 	/// </summary>
 	class SceneManager {
 	private://コンストラクタ等の隠蔽
-		static SceneManager* instance;
+		static std::unique_ptr<SceneManager> instance_;
 
 		SceneManager() = default;//コンストラクタ隠蔽
 		~SceneManager() = default;//デストラクタ隠蔽
 		SceneManager(SceneManager&) = delete;//コピーコンストラクタ封印
 		SceneManager& operator=(SceneManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<SceneManager>;
+
 	public:
 		/// ============================== ///
 		///		メンバ関数
@@ -74,11 +77,11 @@ namespace Norm {
 		///	============================== ///
 
 		//今のシーン
-		BaseScene* scene_ = nullptr;
+		std::unique_ptr<BaseScene> scene_ = nullptr;
 		//次のシーン
-		BaseScene* nextScene_ = nullptr;
+		std::unique_ptr<BaseScene> nextScene_ = nullptr;
 		//シーンファクトリー
-		AbstractSceneFactory* sceneFactory_ = nullptr;
+		std::unique_ptr<AbstractSceneFactory> sceneFactory_ = nullptr;
 		//シーン遷移アニメーション
 		std::unique_ptr<SceneTransitionAnimation> sceneTransitionAnimation_ = nullptr;
 

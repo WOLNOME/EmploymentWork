@@ -7,13 +7,13 @@
 
 namespace Norm {
 
-	SpriteManager* SpriteManager::instance = nullptr;
+	std::unique_ptr<SpriteManager> SpriteManager::instance_ = nullptr;
 
 	SpriteManager* SpriteManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new SpriteManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<SpriteManager>(new SpriteManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void SpriteManager::Initialize() {
@@ -179,8 +179,8 @@ namespace Norm {
 	}
 
 	void SpriteManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void SpriteManager::DebugWithImGui() {

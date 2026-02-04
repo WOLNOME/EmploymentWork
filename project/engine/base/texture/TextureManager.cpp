@@ -8,13 +8,13 @@
 
 namespace Norm {
 
-	TextureManager* TextureManager::instance = nullptr;
+	std::unique_ptr<TextureManager> TextureManager::instance_ = nullptr;
 
 	TextureManager* TextureManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new TextureManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<TextureManager>(new TextureManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void TextureManager::Initialize() {
@@ -28,8 +28,8 @@ namespace Norm {
 				textureData->resource.Reset();
 			}
 		}
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	uint32_t TextureManager::LoadTexture(const std::string& filePath) {

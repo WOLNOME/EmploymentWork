@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <unordered_map>
+#include <memory>
 
 namespace Norm {
 
@@ -33,12 +34,14 @@ namespace Norm {
 		};
 
 	private:
-		static Object3dManager* instance;
+		static std::unique_ptr<Object3dManager> instance_;
 
 		Object3dManager() = default;//コンストラクタ隠蔽
 		~Object3dManager() = default;//デストラクタ隠蔽
 		Object3dManager(Object3dManager&) = delete;//コピーコンストラクタ封印
 		Object3dManager& operator=(Object3dManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<Object3dManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

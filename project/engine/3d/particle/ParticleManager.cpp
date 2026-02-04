@@ -15,13 +15,13 @@
 
 namespace Norm {
 
-	ParticleManager* ParticleManager::instance = nullptr;
+	std::unique_ptr<ParticleManager> ParticleManager::instance_ = nullptr;
 
 	ParticleManager* ParticleManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new ParticleManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<ParticleManager>(new ParticleManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void ParticleManager::Initialize() {
@@ -231,8 +231,8 @@ namespace Norm {
 	}
 
 	void ParticleManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void ParticleManager::Regist(const std::string& name, Particle* particle) {

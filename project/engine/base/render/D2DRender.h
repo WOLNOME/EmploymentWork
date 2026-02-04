@@ -6,6 +6,7 @@
 #include <d3d11on12.h>
 #include <wrl.h>
 #include <vector>
+#include <memory>
 
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -21,11 +22,14 @@ namespace Norm {
 	/// </summary>
 	class D2DRender {
 	private://コンストラクタ等の隠蔽
-		static D2DRender* instance;
+		static std::unique_ptr<D2DRender> instance_;
+
 		D2DRender() = default;//コンストラクタ隠蔽
 		~D2DRender() = default;//デストラクタ隠蔽
 		D2DRender(D2DRender&) = delete;//コピーコンストラクタ封印
 		D2DRender& operator=(D2DRender&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<D2DRender>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

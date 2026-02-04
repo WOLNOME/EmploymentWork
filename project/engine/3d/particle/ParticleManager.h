@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <wrl.h>
 #include <span>
+#include <memory>
 #include "BaseCamera.h"
 #include "MyMath.h"
 #include "BlendMode.h"
@@ -63,12 +64,14 @@ namespace Norm {
 		};
 
 	private:
-		static ParticleManager* instance;
+		static std::unique_ptr<ParticleManager> instance_;
 
 		ParticleManager() = default;//コンストラクタ隠蔽
 		~ParticleManager() = default;//デストラクタ隠蔽
 		ParticleManager(ParticleManager&) = delete;//コピーコンストラクタ封印
 		ParticleManager& operator=(ParticleManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<ParticleManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

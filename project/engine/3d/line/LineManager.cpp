@@ -1,5 +1,4 @@
 #include "LineManager.h"
-#include "WinApp.h"
 #include "DirectXCommon.h"
 #include "MainRender.h"
 #include "GPUDescriptorManager.h"
@@ -9,16 +8,16 @@
 
 namespace Norm {
 
-	LineManager* LineManager::instance = nullptr;
-
 	//ラインの最大数
 	const int kMaxLineNum_ = 8192;
 
+	std::unique_ptr<LineManager> LineManager::instance_ = nullptr;
+
 	LineManager* LineManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new LineManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<LineManager>(new LineManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void LineManager::Initialize() {
@@ -83,8 +82,8 @@ namespace Norm {
 	}
 
 	void LineManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void LineManager::CreateLine(Vector3 start, Vector3 end, Vector4 color) {

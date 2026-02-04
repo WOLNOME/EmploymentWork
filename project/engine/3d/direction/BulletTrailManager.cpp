@@ -8,13 +8,13 @@
 
 namespace Norm {
 
-	BulletTrailManager* BulletTrailManager::instance = nullptr;
+	std::unique_ptr<BulletTrailManager> BulletTrailManager::instance_ = nullptr;
 
 	BulletTrailManager* BulletTrailManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new BulletTrailManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<BulletTrailManager>(new BulletTrailManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void BulletTrailManager::Initialize() {
@@ -65,8 +65,8 @@ namespace Norm {
 	}
 
 	void BulletTrailManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void BulletTrailManager::RegisterBulletTrail(const std::string& name, BulletTrail* bulletTrail) {

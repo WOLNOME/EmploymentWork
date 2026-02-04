@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <memory>
 #include "Collider.h"
 
 namespace Norm {
@@ -10,11 +11,15 @@ namespace Norm {
 	/// </summary>
 	class CollisionManager {
 	private://コンストラクタ等の隠蔽
-		static CollisionManager* instance;
+		static std::unique_ptr<CollisionManager> instance_;
+
 		CollisionManager() = default;//コンストラクタ隠蔽
 		~CollisionManager() = default;//デストラクタ隠蔽
 		CollisionManager(CollisionManager&) = delete;//コピーコンストラクタ封印
 		CollisionManager& operator=(CollisionManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<CollisionManager>;
+
 	public:
 		/// ============================== ///
 		///		メンバ関数

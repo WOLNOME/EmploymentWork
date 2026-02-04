@@ -4,14 +4,15 @@
 
 namespace Norm {
 
-	RTVManager* RTVManager::instance = nullptr;
 	const uint32_t RTVManager::kMaxHeapSize = 256;		//必要に応じて増やす
 
+	std::unique_ptr<RTVManager> RTVManager::instance_ = nullptr;
+
 	RTVManager* RTVManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new RTVManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<RTVManager>(new RTVManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void RTVManager::Initialize() {
@@ -22,8 +23,8 @@ namespace Norm {
 	}
 
 	void RTVManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	uint32_t RTVManager::Allocate() {

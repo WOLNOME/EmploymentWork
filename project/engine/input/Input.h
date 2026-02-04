@@ -1,5 +1,6 @@
 #pragma once
 #include <wrl.h>
+#include <memory>
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>
 #include <Xinput.h>
@@ -63,18 +64,15 @@ namespace Norm {
 	/// シングルトンパターンで実装
 	/// </summary>
 	class Input {
-	private:
-		/// ============================== ///
-		///		
-		/// ============================== ///
-
 	private://コンストラクタ等の隠蔽
-		static Input* instance;
+		static std::unique_ptr<Input> instance_;
 
 		Input() = default;//コンストラクタ隠蔽
 		~Input() = default;//デストラクタ隠蔽
 		Input(Input&) = delete;//コピーコンストラクタ封印
 		Input& operator=(Input&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<Input>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 #include <vector>
+#include <memory>
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -96,12 +97,14 @@ namespace Norm {
 		};
 
 	private://コンストラクタ等の隠蔽
-		static PostEffectManager* instance;
+		static std::unique_ptr<PostEffectManager> instance_;
 
 		PostEffectManager() = default;//コンストラクタ隠蔽
 		~PostEffectManager() = default;//デストラクタ隠蔽
 		PostEffectManager(PostEffectManager&) = delete;//コピーコンストラクタ封印
 		PostEffectManager& operator=(PostEffectManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<PostEffectManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

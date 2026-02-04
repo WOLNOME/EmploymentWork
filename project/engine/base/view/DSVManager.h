@@ -4,6 +4,7 @@
 #include <dxgi1_6.h>
 #include <cstdint>
 #include <queue>
+#include <memory>
 
 namespace Norm {
 
@@ -13,12 +14,14 @@ namespace Norm {
 	/// </summary>
 	class DSVManager {
 	private:
-		static DSVManager* instance;
+		static std::unique_ptr<DSVManager> instance_;
 
-		DSVManager() = default;
-		~DSVManager() = default;
-		DSVManager(DSVManager&) = delete;
-		DSVManager& operator=(DSVManager&) = delete;
+		DSVManager() = default;//コンストラクタ隠蔽
+		~DSVManager() = default;//デストラクタ隠蔽
+		DSVManager(DSVManager&) = delete;//コピーコンストラクタ封印
+		DSVManager& operator=(DSVManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<DSVManager>;
 
 	public:
 		/// ============================== ///

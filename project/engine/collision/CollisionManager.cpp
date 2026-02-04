@@ -4,21 +4,21 @@
 
 namespace Norm {
 
-	CollisionManager* CollisionManager::instance = nullptr;
+	std::unique_ptr<CollisionManager> CollisionManager::instance_ = nullptr;
 
 	CollisionManager* CollisionManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new CollisionManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<CollisionManager>(new CollisionManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void CollisionManager::Initialize() {
 	}
 
 	void CollisionManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void CollisionManager::CheckCollision() {

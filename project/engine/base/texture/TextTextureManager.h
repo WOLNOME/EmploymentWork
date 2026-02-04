@@ -129,12 +129,14 @@ namespace Norm {
 		};
 
 	private://コンストラクタ等の隠蔽
-		static TextTextureManager* instance;
+		static std::unique_ptr<TextTextureManager> instance_;
 
 		TextTextureManager() = default;//コンストラクタ隠蔽
 		~TextTextureManager() = default;//デストラクタ隠蔽
 		TextTextureManager(TextTextureManager&) = delete;//コピーコンストラクタ封印
 		TextTextureManager& operator=(TextTextureManager&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<TextTextureManager>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

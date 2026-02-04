@@ -10,13 +10,13 @@
 
 namespace Norm {
 
-	ImGuiManager* ImGuiManager::instance = nullptr;
+	std::unique_ptr<ImGuiManager> ImGuiManager::instance_ = nullptr;
 
 	ImGuiManager* ImGuiManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new ImGuiManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<ImGuiManager>(new ImGuiManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void ImGuiManager::Initialize() {
@@ -52,9 +52,8 @@ namespace Norm {
 		ImGui_ImplDX12_Shutdown();
 		ImGui_ImplWin32_Shutdown();
 		ImGui::DestroyContext();
-		//シングルトン解放
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void ImGuiManager::Begin() {

@@ -3,21 +3,21 @@
 
 namespace Norm {
 
-	ModelManager* ModelManager::instance = nullptr;
+	std::unique_ptr<ModelManager> ModelManager::instance_ = nullptr;
 
 	ModelManager* ModelManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new ModelManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<ModelManager>(new ModelManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void ModelManager::Initialize() {
 	}
 
 	void ModelManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void ModelManager::LoadModel(const std::string& filePath, ModelFormat format) {

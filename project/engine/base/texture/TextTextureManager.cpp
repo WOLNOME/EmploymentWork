@@ -14,13 +14,13 @@ namespace fs = std::filesystem;
 
 namespace Norm {
 
-	TextTextureManager* TextTextureManager::instance = nullptr;
+	std::unique_ptr<TextTextureManager> TextTextureManager::instance_ = nullptr;
 
 	TextTextureManager* TextTextureManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new TextTextureManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<TextTextureManager>(new TextTextureManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void TextTextureManager::Initialize() {
@@ -33,8 +33,8 @@ namespace Norm {
 	}
 
 	void TextTextureManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void TextTextureManager::DebugWithImGui(Handle _handle) {

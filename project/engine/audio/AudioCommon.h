@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <set>
+#include <memory>
 
 #pragma comment(lib,"xaudio2.lib")
 
@@ -72,12 +73,14 @@ namespace Norm {
 		};
 
 	private://シングルトン
-		static AudioCommon* instance;
+		static std::unique_ptr<AudioCommon> instance_;
 
 		AudioCommon() = default;//コンストラクタ隠蔽
 		~AudioCommon() = default;//デストラクタ隠蔽
 		AudioCommon(AudioCommon&) = delete;//コピーコンストラクタ封印
 		AudioCommon& operator=(AudioCommon&) = delete;//コピー代入演算子封印
+
+		friend struct std::default_delete<AudioCommon>;
 	public:
 		/// ============================== ///
 		///		メンバ関数

@@ -5,17 +5,17 @@
 #include "RTVManager.h"
 #include <cassert>
 
+using namespace Microsoft::WRL;
+
 namespace Norm {
 
-	TextTextureRender* TextTextureRender::instance = nullptr;
-
-	using namespace Microsoft::WRL;
+	std::unique_ptr<TextTextureRender> TextTextureRender::instance_ = nullptr;
 
 	TextTextureRender* TextTextureRender::GetInstance() {
-		if (instance == nullptr) {
-			instance = new TextTextureRender;
+		if (!instance_) {
+			instance_ = std::unique_ptr<TextTextureRender>(new TextTextureRender());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void TextTextureRender::Initialize() {
@@ -28,8 +28,8 @@ namespace Norm {
 	}
 
 	void TextTextureRender::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void TextTextureRender::SettingViewPort(UINT _width, UINT _height) {

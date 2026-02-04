@@ -12,12 +12,15 @@ namespace Norm {
 	/// </summary>
 	class WinApp {
 	private://コンストラクタ等の隠蔽
-		static WinApp* instance;
+		static std::unique_ptr<WinApp> instance_;
 
 		WinApp() = default;//コンストラクタ隠蔽
 		~WinApp() = default;//デストラクタ隠蔽
 		WinApp(WinApp&) = delete;//コピーコンストラクタ封印
 		WinApp& operator=(WinApp&) = delete;//コピー代入演算子封印
+		
+		friend struct std::default_delete<WinApp>;
+
 	public:
 		/// ============================== ///
 		///		公開定数

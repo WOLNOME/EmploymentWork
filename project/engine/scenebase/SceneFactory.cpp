@@ -9,25 +9,25 @@
 
 namespace Norm {
 
-	BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
+	std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName) {
 		//次のシーンを生成
-		BaseScene* newScene = nullptr;
+		std::unique_ptr<BaseScene> newScene = nullptr;
 
 		if (sceneName == "Title") {
-			newScene = new TitleScene();
+			newScene = std::make_unique<TitleScene>();
 		}
 		else if (sceneName == "GamePlay") {
-			newScene = new GamePlayScene();
+			newScene = std::make_unique<GamePlayScene>();
 		}
 		else if (sceneName == "GameClear") {
-			newScene = new GameClearScene();
+			newScene = std::make_unique<GameClearScene>();
 		}
 		else if (sceneName == "GameOver") {
-			newScene = new GameOverScene();
+			newScene = std::make_unique<GameOverScene>();
 		}
-		//パーティクルエディター
+		// パーティクルエディター
 		else if (sceneName == "PARTICLEEDITOR") {
-			newScene = new ParticleEditorScene();
+			newScene = std::make_unique<ParticleEditorScene>();
 		}
 
 		return newScene;

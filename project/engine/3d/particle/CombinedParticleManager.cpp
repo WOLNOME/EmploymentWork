@@ -5,13 +5,13 @@
 
 namespace Norm {
 
-	CombinedParticleManager* CombinedParticleManager::instance = nullptr;
+	std::unique_ptr<CombinedParticleManager> CombinedParticleManager::instance_ = nullptr;
 
 	CombinedParticleManager* CombinedParticleManager::GetInstance() {
-		if (instance == nullptr) {
-			instance = new CombinedParticleManager;
+		if (!instance_) {
+			instance_ = std::unique_ptr<CombinedParticleManager>(new CombinedParticleManager());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void CombinedParticleManager::Initialize() {
@@ -29,8 +29,8 @@ namespace Norm {
 	}
 
 	void CombinedParticleManager::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void CombinedParticleManager::Regist(const std::string& name, CombinedParticle* particle) {

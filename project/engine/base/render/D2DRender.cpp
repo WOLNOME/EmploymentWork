@@ -3,13 +3,13 @@
 
 namespace Norm {
 
-	D2DRender* D2DRender::instance = nullptr;
+	std::unique_ptr<D2DRender> D2DRender::instance_ = nullptr;
 
 	D2DRender* D2DRender::GetInstance() {
-		if (instance == nullptr) {
-			instance = new D2DRender;
+		if (!instance_) {
+			instance_ = std::unique_ptr<D2DRender>(new D2DRender());
 		}
-		return instance;
+		return instance_.get();
 	}
 
 	void D2DRender::Initialize() {
@@ -18,8 +18,8 @@ namespace Norm {
 	}
 
 	void D2DRender::Finalize() {
-		delete instance;
-		instance = nullptr;
+		//インスタンスを削除
+		instance_.reset();
 	}
 
 	void D2DRender::PreDraw() {
