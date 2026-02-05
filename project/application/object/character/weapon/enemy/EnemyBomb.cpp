@@ -13,6 +13,9 @@ void EnemyBomb::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//パラメーターの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBomb");
+
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
@@ -75,26 +78,52 @@ void EnemyBomb::DebugWithImGui() {
 }
 
 void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos) {
-	_method;
-	_targetPos;
+	///共通処理
+
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
-	Vector3 warningPos = _initPos;
-	warningPos.y = 0.005f;
-	warning_->worldTransform.SetTranslate(warningPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
 	warning_->SetIsDisplay(true);
-	//速度は0(自由落下)
-	velocity_ = { 0.0f,0.0f,0.0f };
-
 	//当たり判定属性をセット
 	SetCollisionAttribute(CollisionAttribute::Nothingness);
 	//アクティブ状態に切り替え
 	SetState(State::kActive);
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+
+	///別処理
+	switch (_method) {
+	case BombMethod::Launch:
+		//初期位置を保存
+		Vector3 warningPos = _targetPos;
+		warningPos.y = 0.005f;
+		warning_->worldTransform.SetTranslate(warningPos);
+
+		//速度
+		Vector3 targetVec = _targetPos - _initPos;
+		float hitTime = param_["hitTime"];
+		float maxHeight = param_["maxHeight"];
+		velocity_.x = targetVec.x / hitTime;
+		velocity_.z = targetVec.z / hitTime;
+		gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
+		velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
+
+		break;
+	case BombMethod::Fall:
+		//初期位置を保存
+		Vector3 warningPos = _initPos;
+		warningPos.y = 0.005f;
+		warning_->worldTransform.SetTranslate(warningPos);
+		
+		//速度は0(自由落下)
+		velocity_ = { 0.0f,0.0f,0.0f };
+
+		break;
+	default:
+		break;
+	}
 }
 
 void EnemyBomb::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
