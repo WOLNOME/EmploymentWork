@@ -31,7 +31,7 @@ void PlayerCannon::Initialize() {
 	trail_->SetIsDisplay(false);
 
 	//当たり判定の形状を設定
-	collisionShapeKind_ = Collider::CollisionShapeKind::Sphere;
+	collisionShapeKind_ = ColliderBase::CollisionShapeKind::Sphere;
 	//当たり判定の半径を設定
 	collisionRadius_ = 1.0f;
 

@@ -5,7 +5,7 @@
 /// <summary>
 /// キャラクター全般の基底クラス
 /// </summary>
-class BaseCharacter : public Norm::Collider {
+class BaseCharacter : public Norm::ColliderBase {
 public:
 	/// ============================== ///
 	///		列挙体

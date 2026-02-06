@@ -58,7 +58,7 @@ NodeResult BulletAttackLeaf::GetNodeResult() const {
 	// ローカルオフセット（右・下・前）
 	Vector3 localOffset{
 		14.0f * sideSign,
-	   -4.0f,
+	   -3.5f,
 		31.0f
 	};
 	// 初期位置

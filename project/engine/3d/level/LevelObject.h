@@ -10,7 +10,7 @@ namespace Norm {
 	/// <summary>
 	/// レベルオブジェクト単体の処理全般を管理するクラス
 	/// </summary>
-	class LevelObject : public Collider {
+	class LevelObject : public ColliderBase {
 	public:
 		/// ============================== ///
 		///		メンバ関数

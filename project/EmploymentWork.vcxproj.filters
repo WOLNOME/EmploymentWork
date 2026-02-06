@@ -110,10 +110,10 @@
     <ClCompile Include="engine\scene\BaseScene.cpp">
       <Filter>engine\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\collision\Collider.cpp">
+    <ClCompile Include="engine\collision\interface\ICollider.cpp">
       <Filter>engine\collision</Filter>
     </ClCompile>
-    <ClCompile Include="engine\collision\CollisionManager.cpp">
+    <ClCompile Include="engine\collision\manager\CollisionManager.cpp">
       <Filter>engine\collision</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\directx\D3DResourceLeakChecker.cpp">
@@ -509,6 +509,9 @@
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp" />
+    <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
+    <ClCompile Include="engine\collision\base\OBBColliderBase.cpp" />
+    <ClCompile Include="engine\collision\base\SphereColliderBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -860,13 +863,13 @@
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>externals\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\Collider.h">
+    <ClInclude Include="engine\collision\interface\ICollider.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionConfig.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\CollisionManager.h">
+    <ClInclude Include="engine\collision\manager\CollisionManager.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\Collider.h">
@@ -966,6 +969,9 @@
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h" />
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBullet.h" />
+    <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
+    <ClInclude Include="engine\collision\base\OBBColliderBase.h" />
+    <ClInclude Include="engine\collision\base\SphereColliderBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

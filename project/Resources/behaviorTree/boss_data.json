@@ -97,7 +97,8 @@
     {
         "children" : [
             20,
-            21
+            21,
+            47
         ],
         "id":14,
         "name":"Selector",
@@ -312,5 +313,37 @@
         "name":"JudgePlayerPreDistanceLeaf",
         "parent":25,
         "distance" :450
+    },
+    {
+        "children" : [
+            48,
+            49
+        ],
+        "id":47,
+        "name":"Sequence",
+        "parent":14
+    },
+     {
+        "id":48,
+        "name":"JudgePlayerDistanceLeaf",
+        "parent":47,
+        "distance":350
+    },
+    {
+        "false_child":51,
+        "true_child":50,
+        "id":49,
+        "name":"CheckBombReload",
+        "parent":47
+    },
+    {
+        "id":50,
+        "name":"BombAttackLeaf",
+        "parent":49
+    },
+    {
+        "id":51,
+        "name":"BombReloadLeaf",
+        "parent":49
     }
 ]

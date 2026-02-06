@@ -63,7 +63,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.cpp" />
@@ -170,8 +171,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\base\view\RTVManager.cpp" />
     <ClCompile Include="engine\base\texture\TextTextureManager.cpp" />
     <ClCompile Include="engine\base\texture\TextTextureRender.cpp" />
-    <ClCompile Include="engine\collision\Collider.cpp" />
-    <ClCompile Include="engine\collision\CollisionManager.cpp" />
+    <ClCompile Include="engine\collision\interface\ICollider.cpp" />
+    <ClCompile Include="engine\collision\manager\CollisionManager.cpp" />
     <ClCompile Include="engine\3d\light\DirectionalLight.cpp" />
     <ClCompile Include="engine\3d\camera\DevelopCamera.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp" />
@@ -267,8 +268,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\PauseSystem.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp" />
+    <ClCompile Include="engine\collision\base\OBBColliderBase.cpp" />
+    <ClCompile Include="engine\collision\base\SphereColliderBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.h" />
@@ -328,9 +332,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\view\RTVManager.h" />
     <ClInclude Include="engine\base\texture\TextTextureManager.h" />
     <ClInclude Include="engine\base\texture\TextTextureRender.h" />
-    <ClInclude Include="engine\collision\Collider.h" />
+    <ClInclude Include="engine\collision\interface\ICollider.h" />
     <ClInclude Include="engine\collision\CollisionConfig.h" />
-    <ClInclude Include="engine\collision\CollisionManager.h" />
+    <ClInclude Include="engine\collision\manager\CollisionManager.h" />
     <ClInclude Include="engine\3d\light\DirectionalLight.h" />
     <ClInclude Include="engine\3d\camera\DevelopCamera.h" />
     <ClInclude Include="engine\math\BlendMode.h" />
@@ -437,6 +441,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\particle\ParticleTypes.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h" />
+    <ClInclude Include="engine\collision\base\OBBColliderBase.h" />
+    <ClInclude Include="engine\collision\base\SphereColliderBase.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

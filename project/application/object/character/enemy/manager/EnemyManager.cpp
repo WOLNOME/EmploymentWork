@@ -40,6 +40,7 @@ void EnemyManager::Initialize() {
 
 	//ボスをスポーンさせる
 	boss_->Spawn({ 0.0f,0.0f,-500.0f });
+	boss_->SetRotate({ 0.0f,3.14f,0.0f });
 }
 
 void EnemyManager::Update() {

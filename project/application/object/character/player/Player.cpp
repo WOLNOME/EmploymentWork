@@ -33,7 +33,7 @@ void Player::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
 
 	//当たり判定の形状を設定
-	collisionShapeKind_ = Collider::CollisionShapeKind::OBB;
+	collisionShapeKind_ = ColliderBase::CollisionShapeKind::OBB;
 	//当たり判定のパラメーター入力
 	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
 	collisionSizeOBB_ = { param_["collisionSizeOBB"]["x"],param_["collisionSizeOBB"]["y"] ,param_["collisionSizeOBB"]["z"] };

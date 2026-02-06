@@ -95,7 +95,7 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 
 	///別処理
 	switch (_method) {
-	case BombMethod::Launch:
+	case BombMethod::Launch: {
 		//初期位置を保存
 		Vector3 warningPos = _targetPos;
 		warningPos.y = 0.005f;
@@ -111,16 +111,18 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 		velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
 
 		break;
-	case BombMethod::Fall:
+	}
+	case BombMethod::Fall: {
 		//初期位置を保存
 		Vector3 warningPos = _initPos;
 		warningPos.y = 0.005f;
 		warning_->worldTransform.SetTranslate(warningPos);
-		
+
 		//速度は0(自由落下)
 		velocity_ = { 0.0f,0.0f,0.0f };
 
 		break;
+	}
 	default:
 		break;
 	}
@@ -154,7 +156,7 @@ void EnemyBomb::Move() {
 	//重力の影響を加算
 	velocity_.y -= gravity_ * kDeltaTime;
 	//速度を加算
-	newTranslate.y += velocity_.y * kDeltaTime;
+	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に達したら
 	if (newTranslate.y <= 0.0f) {

@@ -1,9 +1,13 @@
 #pragma once
 #include <list>
 #include <memory>
-#include "Collider.h"
+#include "ICollider.h"
 
 namespace Norm {
+
+	class SphereColliderBase;
+	class AABBColliderBase;
+	class OBBColliderBase;
 
 	/// <summary>
 	/// 全ての当たり判定処理を行うクラス
@@ -44,15 +48,18 @@ namespace Norm {
 		/// 当たり判定チェック
 		/// </summary>
 		void CheckCollision();
+
 		/// <summary>
-		/// コライダーのセット
+		/// コライダーの登録
 		/// </summary>
-		/// <param name="colliders">コライダーのポインタ</param>
-		void SetColliders(Collider* colliders);
+		/// <param name="collider">コライダーのポインタ</param>
+		void RegistCollider(ICollider* _collider);
 		/// <summary>
-		/// コライダーリストクリア関数
+		/// コライダーの削除
 		/// </summary>
-		void ClearColliders() { colliders_.clear(); }
+		/// <param name="_collider">コライダーのポインタ</param>
+		void DeleteCollider(ICollider* _collider);
+
 
 	private:
 		/// ============================== ///
@@ -62,16 +69,16 @@ namespace Norm {
 		/// <summary>
 		/// 当たり判定演算
 		/// </summary>
-		/// <param name="colliderA">コライダー1のポインタ</param>
-		/// <param name="colliderB">コライダー2のポインタ</param>
-		void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
+		/// <param name="colliderA">コライダーAのポインタ</param>
+		/// <param name="colliderB">コライダーBのポインタ</param>
+		void CheckCollisionPair(ICollider* colliderA, ICollider* colliderB);
 
 		/// ============================== ///
 		///		メンバ変数
 		/// ============================== ///
 
 		// コライダーリスト
-		std::list<Collider*> colliders_;
+		std::list<ICollider*> colliders_;
 	};
 
 }

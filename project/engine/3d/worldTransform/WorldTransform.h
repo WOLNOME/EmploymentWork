@@ -76,6 +76,11 @@ namespace Norm {
 		/// </summary>
 		/// <returns>ワールド変換行列</returns>
 		const Matrix4x4& GetWorldMatrix() const { return matWorld_; }
+		/// <summary>
+		/// 親となるワールドトランスフォームを取得する
+		/// </summary>
+		/// <returns>親となるワールドトランスフォーム</returns>
+		WorldTransform* GetParent() { return parent_; }
 
 		/// ============================== ///
 		///		setter
