@@ -22,6 +22,11 @@ namespace Norm {
 		/// </summary>
 		virtual ~SphereColliderBase() = default;
 
+		/// <summary>
+		/// デバッグ
+		/// </summary>
+		void Debug() override;
+
 		/// ============================== ///
 		///		getter
 		/// ============================== ///
@@ -30,7 +35,7 @@ namespace Norm {
 		/// カプセルの取得
 		/// </summary>
 		/// <returns>カプセル</returns>
-		const Capsule& GetCapsule();
+		Capsule GetCapsule();
 
 		/// <summary>
 		/// 球体の半径を取得する
@@ -38,11 +43,15 @@ namespace Norm {
 		/// <returns>コリジョン球の半径</returns>
 		float GetRadius() { return radius_; }
 
+		/// ============================== ///
+		///		setter
+		/// ============================== ///
+
 		/// <summary>
-		/// 前フレーム時点のワールド座標を取得する
+		/// 球体の半径をセット
 		/// </summary>
-		/// <returns>1フレーム前のワールド座標</returns>
-		virtual Vector3 GetPreWorldTranslate() = 0;
+		/// <param name="_radius">球体の半径</param>
+		void SetRadius(float _radius) { radius_ = _radius; }
 
 	protected:
 		/// ============================== ///

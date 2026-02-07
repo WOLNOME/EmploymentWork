@@ -6,6 +6,7 @@
 
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
+#include <application/object/character/weapon/enemy/collision/EnemyBombCollider.h>
 
 using namespace Norm;
 
@@ -16,13 +17,14 @@ void EnemyBomb::Initialize() {
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBomb");
 
-	//インスタンスの生成と初期化
+	//オブジェクトの生成・初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bomb"), Shape::kSphere);
 	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
 
+	//危険地帯の生成・初期化
 	uint32_t thWarning = TextureManager::GetInstance()->LoadTexture("red.png");
 	warning_ = std::make_unique<Object3d>();
 	warning_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("warning"), "circleShadow");
@@ -36,10 +38,13 @@ void EnemyBomb::Initialize() {
 		explosion_ = std::make_unique<CombinedParticle>();
 		explosion_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BombExplosion"), "Explosion");
 	}
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::Sphere;
-	//当たり判定の半径を設定
-	collisionRadius_ = 40.0f;
+
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<EnemyBombCollider>(this);
+	auto* enemyBombCollider = dynamic_cast<EnemyBombCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	enemyBombCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
 	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
@@ -71,9 +76,6 @@ void EnemyBomb::DebugWithImGui() {
 	ImGui::Begin("敵ボム");
 	ImGui::End();
 
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 }
 
@@ -88,7 +90,7 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	circleShadow_->SetIsDisplay(true);
 	warning_->SetIsDisplay(true);
 	//当たり判定属性をセット
-	SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	//アクティブ状態に切り替え
 	SetState(State::kActive);
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
@@ -128,25 +130,9 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	}
 }
 
-void EnemyBomb::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	switch (attribute) {
-	case CollisionAttribute::Player:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//当たり判定を無しにする
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-		//被弾インジケーターをつける
-		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
-
-		break;
-	default:
-		break;
-	}
-}
-
 void EnemyBomb::Move() {
 	//当たり判定が爆風になっていたら移動しない
-	if (GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
+	if (collider_->GetCollisionAttribute() == CollisionAttribute::EnemyBlast) {
 		return;
 	}
 
@@ -174,7 +160,7 @@ void EnemyBomb::Move() {
 		SetState(State::kAsphyxia);
 
 		//当たり判定属性を爆風に
-		SetCollisionAttribute(CollisionAttribute::EnemyBlast);
+		collider_->SetCollisionAttribute(CollisionAttribute::EnemyBlast);
 	}
 
 	//座標をセット

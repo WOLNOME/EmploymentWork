@@ -52,12 +52,20 @@ public:
 	/// <param name="_targetPos">目標位置</param>
 	void Spawn(const BombMethod& _method, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
 	/// <summary>
-	/// 当たり判定処理
+	/// プレイヤーUIを取得する
 	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
+	/// <returns>プレイヤーUI</returns>
+	PlayerUI* GetPlayerUI() { return playerUI_; }
+	/// <summary>
+	/// 生成された場所を取得する
+	/// </summary>
+	/// <returns>生成された場所</returns>
+	const Norm::Vector3& GetGeneratedPosition() { return generatedPosition_; }
 
 	/// ============================== ///
 	///		setter

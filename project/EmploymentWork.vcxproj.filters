@@ -371,12 +371,6 @@
     <ClCompile Include="engine\base\windows\WinApp.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\collision\Collider.cpp">
-      <Filter>engine\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\collision\CollisionManager.cpp">
-      <Filter>engine\collision</Filter>
-    </ClCompile>
     <ClCompile Include="engine\input\Input.cpp">
       <Filter>engine\input</Filter>
     </ClCompile>
@@ -512,6 +506,17 @@
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="engine\collision\base\OBBColliderBase.cpp" />
     <ClCompile Include="engine\collision\base\SphereColliderBase.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\collision\BossCollider.cpp" />
+    <ClCompile Include="application\object\character\enemy\jet\collision\JetCollider.cpp" />
+    <ClCompile Include="application\object\character\enemy\tank\collision\TankCollider.cpp" />
+    <ClCompile Include="application\object\character\item\collision\ItemCollider.cpp" />
+    <ClCompile Include="application\object\character\player\collision\PlayerCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp" />
+    <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -872,13 +877,7 @@
     <ClInclude Include="engine\collision\manager\CollisionManager.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\Collider.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
     <ClInclude Include="engine\collision\CollisionConfig.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collision\CollisionManager.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
     <ClInclude Include="application\system\StartDirection.h" />
@@ -972,6 +971,17 @@
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="engine\collision\base\OBBColliderBase.h" />
     <ClInclude Include="engine\collision\base\SphereColliderBase.h" />
+    <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
+    <ClInclude Include="application\object\character\enemy\jet\collision\JetCollider.h" />
+    <ClInclude Include="application\object\character\enemy\tank\collision\TankCollider.h" />
+    <ClInclude Include="application\object\character\item\collision\ItemCollider.h" />
+    <ClInclude Include="application\object\character\player\collision\PlayerCollider.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.h" />
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.h" />
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h" />
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h" />
+    <ClInclude Include="application\object\level\collision\LevelObjectCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

@@ -20,7 +20,7 @@ void TankEnemyAttackState::Update(IBaseTankEnemy* enemy) {
 
 	//攻撃範囲から外れたら接近状態に切り替え
 	float searchPlayerDistanceAttack = enemy->GetParam()["searchPlayerDistanceAttack"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() > searchPlayerDistanceAttack) {
+	if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetPreWorldTranslate() - enemy->GetWorldTransform().GetPreWorldTranslate()).Length() > searchPlayerDistanceAttack) {
 		enemy->ChangeState("Approach");
 	}
 

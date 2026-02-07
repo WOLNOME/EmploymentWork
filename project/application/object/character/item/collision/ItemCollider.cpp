@@ -1,0 +1,43 @@
+#include "ItemCollider.h"
+
+//アプリケーション
+#include <application/object/character/item/Item.h>
+
+using namespace Norm;
+
+ItemCollider::ItemCollider(Item* _holder) : holder_(_holder) {
+}
+
+void ItemCollider::Debug() {
+#ifdef _DEBUG
+	//基底クラスのデバッグ処理
+	OBBColliderBase::Debug();
+
+	//debugLineColorを元に戻す
+	debugLineColor_ = { 1,1,1,1 };
+
+#endif // _DEBUG
+
+}
+
+void ItemCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) {
+	//当たり判定時の処理
+	switch (_attribute) {
+		//プレイヤーに当たった場合
+	case CollisionAttribute::Player: {
+		//仮死状態にする
+		holder_->SetState(BaseCharacter::State::kAsphyxia);
+
+		//パーティクル
+		holder_->GetIdleParticle()->SetIsPlay(false); // パーティクルを非アクティブにする
+		holder_->GetGetParticle()->SetIsPlay(true); // パーティクルをアクティブにする
+		TransformEuler transform = holder_->GetGetParticle()->GetBaseTransform();
+		transform.translate = holder_->GetWorldTransform().GetTranslate();
+		holder_->GetGetParticle()->SetBaseTransform(transform);
+
+		break;
+	}
+	default:
+		break;
+	}
+}

@@ -1,16 +1,18 @@
 #pragma once
-#include "Collider.h"
 #include <Object3d.h>
 #include <MyMath.h>
 #include <string>
 #include <memory>
+
+//アプリケーション
+#include <application/object/level/collision/LevelObjectCollider.h>
 
 namespace Norm {
 
 	/// <summary>
 	/// レベルオブジェクト単体の処理全般を管理するクラス
 	/// </summary>
-	class LevelObject : public ColliderBase {
+	class LevelObject {
 	public:
 		/// ============================== ///
 		///		メンバ関数
@@ -23,7 +25,7 @@ namespace Norm {
 		/// <summary>
 		/// デストラクタ
 		/// </summary>
-		~LevelObject() override = default;
+		~LevelObject() = default;
 		/// <summary>
 		/// 初期化
 		/// </summary>
@@ -40,13 +42,6 @@ namespace Norm {
 		/// </summary>
 		void DebugWithImGui();
 
-		/// <summary>
-		/// 当たり判定時の処理
-		/// </summary>
-		/// <param name="attribute">相手の属性</param>
-		/// <param name="subjectPos">相手の座標</param>
-		void OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) override;
-
 		/// ============================== ///
 		///		getter
 		/// ============================== ///
@@ -61,30 +56,32 @@ namespace Norm {
 		/// </summary>
 		/// <returns>ワールド変換情報</returns>
 		const WorldTransform& GetWorldTransform() const { return object3d_->worldTransform; }
+
 		/// <summary>
-		///	オブジェクトの現在のワールド座標を取得する
+		/// アクションフラグの取得
 		/// </summary>
-		/// <returns>オブジェクトの現在のワールド座標</returns>
-		Vector3 GetWorldPosition() override { return object3d_->worldTransform.GetWorldTranslate(); }
+		/// <returns>アクションフラグ</returns>
+		bool GetIsAction() { return isAction_; }
 		/// <summary>
-		/// オブジェクトの回転量を取得する
+		/// 倒れる方向の取得
 		/// </summary>
-		/// <returns>オブジェクトの回転量</returns>
-		Vector3 GetRotate() override { return object3d_->worldTransform.GetRotate(); }
-		/// <summary>
-		/// オブジェクトのスケールを取得する
-		/// </summary>
-		/// <returns>オブジェクトのスケール</returns>
-		Vector3 GetScale() override { return object3d_->worldTransform.GetScale(); }
-		/// <summary>
-		/// 前フレーム時点のワールド座標を取得する
-		/// </summary>
-		/// <returns>前フレーム時点のワールド座標</returns>
-		Vector3 GetPreWorldPosition() override { return prePosition_; }
+		/// <returns>倒れる方向</returns>
+		const Vector3& GetInvertDirection() { return invertDirection_; }
 
 		/// ============================== ///
 		///		setter
 		/// ============================== ///
+
+		/// <summary>
+		/// アクションフラグの設定
+		/// </summary>
+		/// <param name="_isAction">アクション中かどうか</param>
+		void SetIsAction(bool _isAction) { isAction_ = _isAction; }
+		/// <summary>
+		/// 倒れる方向の設定
+		/// </summary>
+		/// <param name="_direction">倒れる方向</param>
+		void SetInvertDirection(const Vector3& _direction) {invertDirection_ = _direction;}
 
 		/// <summary>
 		/// コリジョン情報の設定
@@ -122,9 +119,8 @@ namespace Norm {
 		//名前
 		std::string name_;
 
-		//コリジョンが有効か
-		bool isCollisionEnabled_ = false;
-
+		//コライダー
+		std::unique_ptr<LevelObjectCollider> collider_ = nullptr;
 
 		//ツリーオブジェクト限定変数
 		bool isAction_ = false;		// 倒れるアクションをするかどうか

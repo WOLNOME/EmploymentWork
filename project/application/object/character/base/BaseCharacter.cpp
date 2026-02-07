@@ -1,10 +1,16 @@
 #include "BaseCharacter.h"
-#include "CollisionManager.h"
 #include "LineManager.h"
+#include "ICollider.h"
 #include <Object3dManager.h>
 #include <cassert>
 
 using namespace Norm;
+
+BaseCharacter::BaseCharacter() {
+}
+
+BaseCharacter::~BaseCharacter() {
+}
 
 void BaseCharacter::Initialize() {
 	//丸影の生成
@@ -25,19 +31,17 @@ void BaseCharacter::Update() {
 	Vector3 translate = circleShadow_->worldTransform.GetTranslate();
 	translate.y = 0.01f;
 	circleShadow_->worldTransform.SetTranslate(translate);
-
-
-	//当たり判定を登録
-	CollisionManager::GetInstance()->SetColliders(this);
 }
 
 void BaseCharacter::DebugWithImGui() {
 #ifdef _DEBUG
-	//アクティブでないなら
+	//アクティブでないならreturn
 	if (state_ != State::kActive)
 		return;
 
-	Collider::DebugWithImGui();
+	if (collider_) {
+		collider_->Debug();
+	}
 #endif //_DEBUG
 }
 
@@ -58,7 +62,9 @@ void BaseCharacter::SetState(const State& _state) {
 			circleShadow_->SetIsDisplay(false);
 		}
 		//当たり判定を消滅
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		if (collider_) {
+			collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+		}
 		break;
 	case BaseCharacter::State::kActive:
 		//特に何もしない
@@ -70,7 +76,9 @@ void BaseCharacter::SetState(const State& _state) {
 			circleShadow_->SetIsDisplay(false);
 		}
 		//当たり判定を消滅
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		if (collider_) {
+			collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+		}
 		break;
 	default:
 		break;

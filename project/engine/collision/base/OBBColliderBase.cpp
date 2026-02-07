@@ -1,14 +1,33 @@
 #include "OBBColliderBase.h"
 #include <MyMath.h>
+#ifdef _DEBUG
+#include <ImGuiManager.h>
+#endif // _DEBUG
 
 using namespace Norm;
 
-Norm::OBBColliderBase::OBBColliderBase() {
+OBBColliderBase::OBBColliderBase() : ICollider() {
 	//コライダーの形状を設定
 	colliderShape_ = ColliderShape::OBB;
 }
 
-const OBB& OBBColliderBase::GetOBB() {
+void OBBColliderBase::Debug() {
+#ifdef _DEBUG
+	//回転行列
+	Matrix4x4 matRotate = MyMath::MakeRotateMatrix(GetWorldTransform().GetRotate());
+	//OBBを定義
+	OBB obb = {
+		.center = GetWorldTransform().GetWorldTranslate() + offset_,
+		.orientations = {MyMath::TransformNormal(Vector3(1,0,0),matRotate),MyMath::TransformNormal(Vector3(0,1,0),matRotate),MyMath::TransformNormal(Vector3(0,0,1),matRotate)},
+		.size = size_
+	};
+	//線を登録
+	MyMath::CreateLineOBB(obb, debugLineColor_);
+
+#endif // _DEBUG
+}
+
+OBB OBBColliderBase::GetOBB() {
 	//回転行列
 	Matrix4x4 matRotate = MyMath::MakeRotateMatrix(worldTransform_->GetRotate());
 

@@ -26,7 +26,6 @@ namespace Norm {
 		{ OBBXSphere , OBBXAABB , OBBXOBB }
 	};
 
-
 	std::unique_ptr<CollisionManager> CollisionManager::instance_ = nullptr;
 
 	CollisionManager* CollisionManager::GetInstance() {
@@ -116,14 +115,14 @@ namespace Norm {
 				CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 
 				// 衝突時コールバックを呼び出す
-				colliderA->OnCollision(colliderB);
-				colliderB->OnCollision(colliderA);
+				colliderA->OnCollision(colliderB, attrB);
+				colliderB->OnCollision(colliderA, attrA);
 			}
 			};
 
 		//形状種別取得
-		const auto shapeA = colliderA->GetCollderShape();
-		const auto shapeB = colliderB->GetCollderShape();
+		const auto shapeA = colliderA->GetColliderShape();
+		const auto shapeB = colliderB->GetColliderShape();
 
 		//関数テーブルから衝突関数取得
 		CollisionFunc func = kCollisionTable

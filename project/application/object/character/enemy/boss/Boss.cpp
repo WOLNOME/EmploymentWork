@@ -7,6 +7,7 @@
 //アプリケーション
 #include <application/object/character/enemy/boss/builder/BossBehaivorTreeBuilder.h>
 #include <application/object/character/player/Player.h>
+#include <application/object/character/enemy/boss/collision/BossCollider.h>
 
 using namespace Norm;
 
@@ -20,27 +21,27 @@ void Boss::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::OBB;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::Nothingness);
-	//当たり判定のパラメーター入力
-	collisionCenterOffsetOBB_ = {
-		param_["collisionCenterOffsetOBB"]["x"],
-		param_["collisionCenterOffsetOBB"]["y"],
-		param_["collisionCenterOffsetOBB"]["z"]
-	};
-	collisionSizeOBB_ = {
-		param_["collisionSizeOBB"]["x"],
-		param_["collisionSizeOBB"]["y"],
-		param_["collisionSizeOBB"]["z"]
-	};
-
 	//モデルの生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Boss"), "boss");
 	object3d_->SetIsLightProcess(true);
 	object3d_->SetIsDisplay(false);
+
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<BossCollider>(this);
+	auto* bossCollider = dynamic_cast<BossCollider*>(collider_.get());
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetOffset({
+		param_["collisionCenterOffsetOBB"]["x"],
+		param_["collisionCenterOffsetOBB"]["y"],
+		param_["collisionCenterOffsetOBB"]["z"]
+		});
+	bossCollider->SetOBBSize({
+		param_["collisionSizeOBB"]["x"],
+		param_["collisionSizeOBB"]["y"],
+		param_["collisionSizeOBB"]["z"]
+		});
 
 	//影の大きさを調整
 	circleShadow_->worldTransform.SetScale({ 16.0f,1.0f,16.0f });
@@ -98,7 +99,7 @@ void Boss::Spawn(const Vector3& _position) {
 	//生存状態に変更
 	isAlive_ = true;
 	//当たり判定を有効化
-	SetCollisionAttribute(CollisionAttribute::Enemy);
+	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	//モデルを表示
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -115,9 +116,6 @@ void Boss::SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) {
 	enemyWeaponManager_ = _enemyWeaponManager;
 	//ブラックボードに書き込む
 	blackBoard_->SetValue<EnemyWeaponManager*>("EnemyWeaponManager", enemyWeaponManager_);
-}
-
-void Boss::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
 }
 
 void Boss::ConstantInfoToBlackBoard() {
@@ -153,11 +151,11 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 	blackBoard_->SetValue<Vector3>("BossPos", object3d_->worldTransform.GetTranslate());
 	blackBoard_->SetValue<Vector3>("BossRotate", object3d_->worldTransform.GetRotate());
 	blackBoard_->SetValue<Vector3>("BossVelocity", velocity_);
-	blackBoard_->SetValue<Vector3>("BossPrePos", GetPreWorldPosition());
+	blackBoard_->SetValue<Vector3>("BossPrePos", GetWorldTransform().GetPreWorldTranslate());
 	//プレイヤーの情報を入れる
 	if (player_) {
 		blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
-		blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
+		blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetWorldTransform().GetPreWorldTranslate());
 	}
 
 	//初期化時なら
@@ -167,7 +165,7 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		//プレイヤーの情報を入れる
 		if (player_) {
 			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
-			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
+			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetWorldTransform().GetPreWorldTranslate());
 		}
 		//武器の情報を入れる
 		blackBoard_->SetValue<float>("BombReloadTimer", 0.0f);
@@ -199,7 +197,7 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		//プレイヤーの情報を入れる
 		if (player_) {
 			blackBoard_->SetValue<Vector3>("PlayerPos", player_->GetWorldTransform().GetTranslate());
-			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetPreWorldPosition());
+			blackBoard_->SetValue<Vector3>("PlayerPrePos", player_->GetWorldTransform().GetPreWorldTranslate());
 		}
 		//その他ノード以外でいじった情報はここに記入
 	}

@@ -1,4 +1,5 @@
 {
+    "collisionRadiusSphere":40.0,
     "maxHeight": 50.0,
     "hitTime": 3.0,
     "trailMaxLength":0.6,

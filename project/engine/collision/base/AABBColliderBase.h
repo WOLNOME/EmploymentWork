@@ -23,6 +23,11 @@ namespace Norm {
 		/// </summary>
 		virtual ~AABBColliderBase() = default;
 
+		/// <summary>
+		/// デバッグ
+		/// </summary>
+		void Debug() override;
+
 		/// ============================== ///
 		///		getter
 		/// ============================== ///

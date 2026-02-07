@@ -14,8 +14,6 @@ namespace Norm {
 		Sphere,
 		AABB,
 		OBB,
-
-		ShapeCount,
 	};
 
 	/// <summary>
@@ -28,20 +26,25 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		ICollider();
+		/// <summary>
 		/// 仮想デストラクタ
 		/// </summary>
-		virtual ~ICollider() = default;
+		virtual ~ICollider();
 
 		/// <summary>
 		/// デバッグ
 		/// </summary>
-		virtual void Debug();
+		virtual void Debug() = 0;
 
 		/// <summary>
 		/// 衝突時のコールバック
 		/// </summary>
-		/// <param name="_other">相手</param>
-		virtual void OnCollision([[maybe_unused]] ICollider* _other) = 0;
+		/// <param name="_other">衝突相手のポインタ</param>
+		/// <param name="_attribute">衝突時の相手の属性</param>
+		virtual void OnCollision([[maybe_unused]] ICollider* _other, CollisionAttribute _attribute) = 0;
 
 		/// ============================== ///
 		///		getter
@@ -57,7 +60,13 @@ namespace Norm {
 		/// コライダーの形状を取得する
 		/// </summary>
 		/// <returns>コライダーの形状</returns>
-		ColliderShape GetCollderShape() { return colliderShape_; }
+		ColliderShape GetColliderShape() { return colliderShape_; }
+
+		/// <summary>
+		/// このコライダーを保持者のポインタを取得する
+		/// </summary>
+		/// <returns>このコライダーを保持者のポインタ</returns>
+		void* GetHolder() const { return holder_; }
 
 		/// <summary>
 		/// ワールドトランスフォームを取得する
@@ -69,7 +78,7 @@ namespace Norm {
 		/// 中心座標の取得
 		/// </summary>
 		/// <returns>中心座標</returns>
-		const Vector3& GetCenter();
+		Vector3 GetCenter();
 
 		/// <summary>
 		/// オフセットの取得
@@ -86,6 +95,12 @@ namespace Norm {
 		/// </summary>
 		/// <param name="collisionAttribute">設定するコリジョン属性</param>
 		void SetCollisionAttribute(const CollisionAttribute collisionAttribute) { collisionAttribute_ = collisionAttribute; }
+
+		/// <summary>
+		/// このコライダーの保持者をセット
+		/// </summary>
+		/// <param name="_holder">このコライダーの保持者</param>
+		void SetHolder(void* _holder) { holder_ = _holder; }
 
 		/// <summary>
 		/// ワールドトランスフォームを設定する
@@ -110,6 +125,9 @@ namespace Norm {
 		//コライダーの形状
 		ColliderShape colliderShape_;
 
+		//このコライダーの保持者のポインタ
+		void* holder_ = nullptr;
+
 		//対象のワールドトランスフォーム
 		WorldTransform* worldTransform_ = nullptr;
 
@@ -117,6 +135,9 @@ namespace Norm {
 		Vector3 center_ = { 0,0,0 };
 		//オフセット
 		Vector3 offset_ = { 0,0,0 };
+
+		//デバッグ用変数
+		Vector4 debugLineColor_ = { 1,1,1,1 };
 
 	};
 

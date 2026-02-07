@@ -19,7 +19,7 @@ void JetEnemyDeadState::Enter(IBaseJetEnemy* enemy) {
 	particle_->SetIsPlay(true);
 	//基準トランスフォームのセット
 	TransformEuler transform = particle_->GetBaseTransform();
-	transform.translate = enemy->GetWorldPosition();
+	transform.translate = enemy->GetWorldTransform().GetTranslate();
 	particle_->SetBaseTransform(transform);
 	//仮死状態にする
 	enemy->SetState(BaseCharacter::State::kAsphyxia);

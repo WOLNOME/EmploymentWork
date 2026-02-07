@@ -20,7 +20,7 @@ void TankEnemyPatrolState::Update(IBaseTankEnemy* enemy) {
 
 	//プレイヤーが近づいたら接近状態に切り替え
 	float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() < searchPlayerDistanceApproach) {
+	if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetWorldTranslate() - enemy->GetWorldTransform().GetWorldTranslate()).Length() < searchPlayerDistanceApproach) {
 		enemy->ChangeState("Approach");
 	}
 

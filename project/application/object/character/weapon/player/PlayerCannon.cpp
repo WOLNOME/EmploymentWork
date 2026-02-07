@@ -5,6 +5,9 @@
 #include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
+//アプリケーション
+#include <application/object/character/weapon/player/collision/PlayerCannonCollider.h>
+
 using namespace Norm;
 
 void PlayerCannon::Initialize() {
@@ -21,19 +24,21 @@ void PlayerCannon::Initialize() {
 	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
-	particle_ = std::make_unique<CombinedParticle>();
-	particle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerCannonHit"), "Cannon_Hit");
-	particle_->SetIsPlay(false);
+	explosionParticle_ = std::make_unique<CombinedParticle>();
+	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerCannonHit"), "Cannon_Hit");
+	explosionParticle_->SetIsPlay(false);
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 	trail_->SetIsDisplay(false);
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = ColliderBase::CollisionShapeKind::Sphere;
-	//当たり判定の半径を設定
-	collisionRadius_ = 1.0f;
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<PlayerCannonCollider>(this);
+	auto* playerCannonCollider = dynamic_cast<PlayerCannonCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	playerCannonCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
 	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
@@ -45,7 +50,7 @@ void PlayerCannon::Update() {
 	BaseCharacter::Update();
 
 	//死亡演出が終了していたらアイドル状態にする
-	if (state_ == State::kAsphyxia && !particle_->GetIsPlay()) {
+	if (state_ == State::kAsphyxia && !explosionParticle_->GetIsPlay()) {
 		SetState(State::kIdle);
 	}
 
@@ -68,9 +73,6 @@ void PlayerCannon::DebugWithImGui() {
 	ImGui::Begin("プレイヤーキャノン");
 	ImGui::End();
 
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 
 }
@@ -86,50 +88,11 @@ void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	//速度を決める
 	velocity_ = _initDirection * speed;
 	//当たり判定の属性を決める
-	SetCollisionAttribute(CollisionAttribute::PlayerCannon);
+	collider_->SetCollisionAttribute(CollisionAttribute::PlayerCannon);
 	//アクティブ状態にする
 	SetState(State::kActive);
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	trail_->ClearPositions();
-}
-
-void PlayerCannon::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//衝突時の共通処理ラムダ式
-	auto commonCollisionProcess = [this, &subjectPos]() {
-		//デバッグ用ラインのカラーを赤にする
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		TransformEuler transform = particle_->GetBaseTransform();
-		transform.translate = object3d_->worldTransform.GetTranslate();
-		particle_->SetBaseTransform(transform);
-		particle_->SetIsPlay(true);
-		//仮死状態にする
-		SetState(State::kAsphyxia);
-		};
-
-	//当たり判定時の処理
-	switch (attribute) {
-		//敵に当たった場合
-	case CollisionAttribute::Enemy:
-		//共通処理
-		commonCollisionProcess();
-
-		break;
-		//敵弾に当たった場合
-	case CollisionAttribute::EnemyBullet:
-		//共通処理
-		commonCollisionProcess();
-
-		break;
-		//敵キャノンに当たった場合
-	case CollisionAttribute::EnemyCannon:
-		//共通処理
-		commonCollisionProcess();
-
-		break;
-	default:
-		break;
-	}
 }
 
 void PlayerCannon::Move() {

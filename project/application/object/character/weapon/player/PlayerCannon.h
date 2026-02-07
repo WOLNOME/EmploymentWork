@@ -42,12 +42,15 @@ public:
 	/// <param name="_targetPos">目標位置</param>
 	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection);
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
 	/// <summary>
-	/// 当たり判定処理
+	/// 爆発パーティクルを取得する
 	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
+	/// <returns>爆発パーティクル</returns>
+	Norm::CombinedParticle* GetExplosionParticle() { return explosionParticle_.get(); }
 
 private:
 	/// ============================== ///
@@ -63,8 +66,8 @@ private:
 	///		インスタンス
 	/// ============================== ///
 
-	//パーティクル
-	std::unique_ptr<Norm::CombinedParticle> particle_ = nullptr;
+	//爆発パーティクル
+	std::unique_ptr<Norm::CombinedParticle> explosionParticle_ = nullptr;
 	//トレールエフェクト
 	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
 

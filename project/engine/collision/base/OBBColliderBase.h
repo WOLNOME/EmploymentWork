@@ -22,6 +22,11 @@ namespace Norm {
 		/// </summary>
 		virtual ~OBBColliderBase() = default;
 
+		/// <summary>
+		/// デバッグ
+		/// </summary>
+		void Debug() override;
+
 		/// ============================== ///
 		///		getter
 		/// ============================== ///
@@ -30,7 +35,7 @@ namespace Norm {
 		/// OBB（有向境界ボックス）を取得する
 		/// </summary>
 		/// <returns>OBB</returns>
-		const OBB& GetOBB();
+		OBB GetOBB();
 
 		/// ============================== ///
 		///		setter

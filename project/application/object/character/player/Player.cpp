@@ -8,6 +8,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/object/character/player/collision/PlayerCollider.h>
 #include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 #include <application/ui/player/PlayerUI.h>
 #include <application/ui/message/MessageUI.h>
@@ -18,28 +19,36 @@ void Player::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
 	//インプットの初期化
 	input_ = Input::GetInstance();
 	input_->SetIsMouseDisplay(false);
 	input_->SetIsMouseFixed(true);
-	//インスタンスの生成と初期化
+	//オブジェクトの生成・初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Player"), "player");
 
+	//死亡演出の生成・初期化
 	deathDirection_ = std::make_unique<DeathDirection>();
 	deathDirection_->Initialize();
 
-	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
-
-	//当たり判定の形状を設定
-	collisionShapeKind_ = ColliderBase::CollisionShapeKind::OBB;
-	//当たり判定のパラメーター入力
-	collisionCenterOffsetOBB_ = { param_["collisionCenterOffsetOBB"]["x"],param_["collisionCenterOffsetOBB"]["y"] ,param_["collisionCenterOffsetOBB"]["z"] };
-	collisionSizeOBB_ = { param_["collisionSizeOBB"]["x"],param_["collisionSizeOBB"]["y"] ,param_["collisionSizeOBB"]["z"] };
-
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::Player);
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<PlayerCollider>(this);
+	auto* playerCollider = dynamic_cast<PlayerCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Player);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetOffset({
+		param_["collisionCenterOffsetOBB"]["x"],
+		param_["collisionCenterOffsetOBB"]["y"],
+		param_["collisionCenterOffsetOBB"]["z"]
+		});
+	playerCollider->SetOBBSize({
+		param_["collisionSizeOBB"]["x"],
+		param_["collisionSizeOBB"]["y"],
+		param_["collisionSizeOBB"]["z"]
+		});
 
 	//アクティブ状態として初期化
 	SetState(State::kActive);
@@ -104,129 +113,8 @@ void Player::DebugWithImGui() {
 
 	ImGui::End();
 
-	//当たり判定可視化用ラインの色を変更
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 
-}
-
-void Player::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//ローカル変数
-	int maxHP = param_["maxHP"];
-	int item_maxNum = param_["item_maxNum"];
-	//当たり判定時の処理
-	switch (attribute) {
-	case CollisionAttribute::Enemy:
-	{
-		//HPを減らす
-		hp_ -= param_["tackleDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP);
-		//カメラシェイクを入れるmaxHP
-		camera_->RegistShake(0.4f, 0.8f);
-
-		//ダメージヒット
-		isDamage_ = true;
-
-		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized() * 10.0f;
-		reflectVelocity_.x = reflectVec.x;
-		reflectVelocity_.z = reflectVec.z;
-
-		break;
-	}
-	case CollisionAttribute::EnemyCannon:
-		//HPを減らす
-		hp_ -= param_["cannonDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP);
-		//カメラシェイクを入れる
-		camera_->RegistShake(0.4f, 0.8f);
-
-		//ダメージヒット
-		isDamage_ = true;
-
-		break;
-	case CollisionAttribute::EnemyBullet:
-		//HPを減らす
-		hp_ -= param_["bulletDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP);
-		//カメラシェイクを入れる
-		camera_->RegistShake(0.2f, 0.3f);
-
-		//ダメージヒット
-		isDamage_ = true;
-
-		break;
-	case CollisionAttribute::EnemyBlast:
-	{
-		//HPを減らす
-		hp_ -= param_["bombDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP);
-		//カメラシェイクを入れるmaxHP
-		camera_->RegistShake(0.4f, 0.8f);
-
-		//ダメージヒット
-		isDamage_ = true;
-
-		//相手の座標の方向と反対方向のベクトルを速度に加算(大きく)
-		Vector3 reflectVec = -(subjectPos - GetWorldPosition()).Normalized() * 40.0f;
-		reflectVelocity_.x = reflectVec.x;
-		reflectVelocity_.z = reflectVec.z;
-
-		break;
-	}
-	case CollisionAttribute::Item_Heal:
-	{
-		//HPを回復
-		int healValue = param_["item_healValue"];
-		hp_ += healValue;
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP);
-		//メッセージUIにアイテム取得を通知
-		std::wstring message = L"HPを" + std::to_wstring(healValue) + L"回復！";
-		messageUI_->AddMessage(message);
-		break;
-	}
-	case CollisionAttribute::Item_ReloadSpeedUp:
-		//アイテムが制限を超えていなければ取得
-		if (item_reloadSpeedUp_ < (uint32_t)item_maxNum) {
-			//アイテム取得
-			item_reloadSpeedUp_++;
-			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"リロード速度UP！";
-			messageUI_->AddMessage(message);
-		}
-
-		break;
-	case CollisionAttribute::Item_MoveSpeedUp:
-		//アイテムが制限を超えていなければ取得
-		if (item_moveSpeedUp_ < (uint32_t)item_maxNum) {
-			//アイテム取得
-			item_moveSpeedUp_++;
-			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"移動速度UP！";
-			messageUI_->AddMessage(message);
-		}
-
-		break;
-	case CollisionAttribute::Item_TurnSpeedUp:
-		//アイテムが制限を超えていなければ取得
-		if (item_turnSpeedUp_ < (uint32_t)item_maxNum) {
-			//アイテム取得
-			item_turnSpeedUp_++;
-			//メッセージUIにアイテム取得を通知
-			std::wstring message = L"回転速度UP！";
-			messageUI_->AddMessage(message);
-		}
-
-		break;
-	default:
-		break;
-	}
 }
 
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {

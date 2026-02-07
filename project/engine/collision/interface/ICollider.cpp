@@ -1,8 +1,19 @@
 #include "ICollider.h"
+#include "CollisionManager.h"
 
 using namespace Norm;
 
-const Vector3& ICollider::GetCenter() {
+ICollider::ICollider() {
+	//当たり判定マネージャーに登録
+	CollisionManager::GetInstance()->RegistCollider(this);
+}
+
+ICollider::~ICollider() {
+	//当たり判定マネージャーの登録を解除
+	CollisionManager::GetInstance()->DeleteCollider(this);
+}
+
+Vector3 ICollider::GetCenter() {
 	//オフセットをワールド空間に（平行移動・スケールは考慮しない）
 	Matrix4x4 rotateMat = MyMath::MakeRotateMatrix(worldTransform_->GetRotate());
 	Vector3 worldOffset = MyMath::TransformNormal(offset_, rotateMat);

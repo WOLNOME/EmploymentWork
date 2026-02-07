@@ -1,11 +1,15 @@
 #pragma once
-#include "Collider.h"
 #include "Object3d.h"
+
+//前方宣言（エンジン）
+namespace Norm {
+	class ICollider;
+};
 
 /// <summary>
 /// キャラクター全般の基底クラス
 /// </summary>
-class BaseCharacter : public Norm::ColliderBase {
+class BaseCharacter{
 public:
 	/// ============================== ///
 	///		列挙体
@@ -28,11 +32,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	BaseCharacter() = default;
+	BaseCharacter();
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~BaseCharacter() = default;
+	virtual ~BaseCharacter();
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -55,27 +59,7 @@ public:
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
 	const Norm::WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
-	/// <summary>
-	/// コライダー用のワールド座標を取得
-	/// </summary>
-	/// <returns>コライダー用のワールド座標</returns>
-	Norm::Vector3 GetWorldPosition() override { return object3d_->worldTransform.GetWorldTranslate(); }
-	/// <summary>
-	/// コライダー用回転を取得
-	/// </summary>
-	/// <returns>コライダー用回転</returns>
-	Norm::Vector3 GetRotate() override { return object3d_->worldTransform.GetRotate(); }
-	/// <summary>
-	/// コライダー用スケールを取得
-	/// </summary>
-	/// <returns>コライダー用スケール</returns>
-	Norm::Vector3 GetScale() override { return object3d_->worldTransform.GetScale(); }
-	/// <summary>
-	/// コライダー用前フレーム座標を取得
-	/// </summary>
-	/// <returns>コライダー用前フレーム座標</returns>
-	Norm::Vector3 GetPreWorldPosition() override { return prePosition_; }
-
+	
 	/// <summary>
 	/// 状態の取得
 	/// </summary>
@@ -136,6 +120,9 @@ protected:
 	std::unique_ptr<Norm::Object3d> object3d_ = nullptr;
 	//丸影
 	std::unique_ptr<Norm::Object3d> circleShadow_ = nullptr;
+
+	//当たり判定
+	std::unique_ptr<Norm::ICollider> collider_ = nullptr;
 
 	//状態
 	State state_ = State::kIdle;

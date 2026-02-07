@@ -37,18 +37,22 @@ public:
 	/// <param name="initPos_">初期位置</param>
 	void Spawn(const Norm::Vector3& _initPos);
 	
-private:
 	/// ============================== ///
-	///		非公開メンバ関数
+	///		getter
 	/// ============================== ///
 
 	/// <summary>
-	/// 当たり判定処理
+	/// 静止パーティクルの取得
 	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
+	/// <returns>静止パーティクル</returns>
+	Norm::CombinedParticle* GetIdleParticle() { return idleParticle_.get(); }
+	/// <summary>
+	/// 取得パーティクルの取得
+	/// </summary>
+	/// <returns>取得パーティクル</returns>
+	Norm::CombinedParticle* GetGetParticle() { return getParticle_.get(); }
 
+private:
 	/// <summary>
 	/// 死亡までの処理
 	/// </summary>

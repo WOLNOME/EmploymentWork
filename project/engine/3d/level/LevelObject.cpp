@@ -14,16 +14,15 @@ namespace Norm {
 		object3d_->worldTransform.SetTranslate(_transform.translate);
 		object3d_->worldTransform.SetRotate(_transform.rotate);
 		object3d_->worldTransform.SetScale(_transform.scale);
+
+		//当たり判定の生成・初期化
+		collider_ = std::make_unique<LevelObjectCollider>(this);
+		collider_->SetWorldTransform(&object3d_->worldTransform);
+		collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 	}
 
 	void LevelObject::Update() {
-		//コリジョンが有効なら
-		if (isCollisionEnabled_) {
-			//前フレーム座標の更新
-			prePosition_ = object3d_->worldTransform.GetTranslate();
-			//当たり判定を登録
-			CollisionManager::GetInstance()->SetColliders(this);
-		}
 
 		//ツリーオブジェクトの転倒アクション
 		TreeInvertProcess();
@@ -32,59 +31,21 @@ namespace Norm {
 
 	void LevelObject::DebugWithImGui() {
 #ifdef _DEBUG
-		//コリジョンが有効でなければreturn
-		if (!isCollisionEnabled_) {
-			return;
-		}
 
 		//コライダーのデバッグ処理
-		Collider::DebugWithImGui();
-		//当たり判定可視化用ラインの色を変更
-		debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
+		if (collider_) {
+			collider_->Debug();
+		}
 
 #endif // _DEBUG
 	}
 
-	void LevelObject::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-		//当たり判定の属性によって分岐
-		switch (attribute) {
-		case CollisionAttribute::Player:
-			//ツリーオブジェクトに当たった場合
-			if (name_ == "TreeObject") {
-				//当たり判定可視化用ラインの色を変更
-				debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-				//倒れる処理
-				isAction_ = true;
-				invertDirection_ = (subjectPos - GetWorldPosition());
-				invertDirection_.y = 0.0f;
-				invertDirection_.Normalize();
-				//当たり判定を無効化
-				isCollisionEnabled_ = false;
-				//属性を変更
-				SetCollisionAttribute(CollisionAttribute::Nothingness);
-
-			}
-
-			break;
-		case CollisionAttribute::Enemy:
-			break;
-		case CollisionAttribute::PlayerBullet:
-			break;
-		case CollisionAttribute::EnemyBullet:
-			break;
-		default:
-			break;
-		}
-	}
-
 	void LevelObject::SetCollisionInfo(const Vector3& _center, const Vector3& _size) {
 		//コリジョンの有効化
-		isCollisionEnabled_ = true;
-		collisionShapeKind_ = CollisionShapeKind::OBB;
-		collisionCenterOffsetOBB_ = _center / 2.0f;
-		collisionSizeOBB_ = _size / 2.0f;
+		collider_->SetOffset(_center / 2.0f);
+		collider_->SetOBBSize(_size / 2.0f);
 		//当たり判定の属性を設定
-		SetCollisionAttribute(CollisionAttribute::Wall);
+		collider_->SetCollisionAttribute(CollisionAttribute::Wall);
 	}
 
 	void LevelObject::TreeInvertProcess() {

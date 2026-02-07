@@ -40,12 +40,9 @@ public:
 	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection);
 
 	/// <summary>
-	/// 当たり判定処理
+	/// 死亡処理を行う
 	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
-
+	void DeadProcess();
 
 private:
 	/// ============================== ///
@@ -56,10 +53,6 @@ private:
 	/// 移動処理を行う
 	/// </summary>
 	void Move();
-	/// <summary>
-	/// 死亡処理を行う
-	/// </summary>
-	void DeadProcess();
 
 	/// ============================== ///
 	///		インスタンス
@@ -69,7 +62,7 @@ private:
 	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
 	//衝突エフェクト
 	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
-	
+
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
@@ -77,7 +70,7 @@ private:
 	//パラメータ
 	json param_;
 
-	float lifeTimer_;		//寿命タイマー
+	float lifeTimer_ = 0.0f;		//寿命タイマー
 
 };
 

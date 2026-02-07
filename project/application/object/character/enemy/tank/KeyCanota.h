@@ -45,15 +45,6 @@ public:
 	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate) override;
 
 private:
-	/// ============================== ///
-	///		非公開メンバ関数
-	/// ============================== ///
 
-	/// <summary>
-	/// 当たり判定処理
-	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
 };
 

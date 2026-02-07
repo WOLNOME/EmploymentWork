@@ -67,13 +67,6 @@ private:
 	/// ============================== ///
 
 	/// <summary>
-	/// 当たり判定処理
-	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
-
-	/// <summary>
 	/// 定数情報のブラックボードへの登録
 	/// </summary>
 	void ConstantInfoToBlackBoard();

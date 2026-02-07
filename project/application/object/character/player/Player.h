@@ -48,17 +48,15 @@ public:
 	/// </summary>
 	void DebugWithImGui() override;
 
-	/// <summary>
-	/// 当たり判定処理
-	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
-
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
 
+	/// <summary>
+	/// パラメータ(json)を取得する
+	/// </summary>
+	/// <returns>パラメータ(json)</returns>
+	const json& GetParam() { return param_; }
 	/// <summary>
 	/// 現在のHPを取得する
 	/// </summary>
@@ -109,10 +107,49 @@ public:
 	/// </summary>
 	/// <returns>回転速度アップ数</returns>
 	uint32_t GetItemTurnSpeedUp() const { return item_turnSpeedUp_; }
+	/// <summary>
+	/// 反射速度を取得する
+	/// </summary>
+	/// <returns>反射速度</returns>
+	const Norm::Vector3& GetReflectVelocity() { return reflectVelocity_; }
+	/// <summary>
+	/// カメラを取得する
+	/// </summary>
+	/// <returns>カメラ</returns>
+	Norm::GameCamera* GetCamera()  { return camera_; }
+	/// <summary>
+	/// メッセージUIを取得する
+	/// </summary>
+	/// <returns>メッセージUI</returns>
+	MessageUI* GetMessageUI()  { return messageUI_; }
 
 	/// ============================== ///
 	///		setter
 	/// ============================== ///
+
+	/// <summary>
+	/// HPのセット
+	/// </summary>
+	/// <param name="_hp">HP</param>
+	void SetHP(int _hp) { hp_ = _hp; }
+
+	void SetItemReloadSpeedUp(uint32_t _num) { item_reloadSpeedUp_ = _num; }
+
+	void SetItemMoveSpeedUp(uint32_t _num) { item_moveSpeedUp_ = _num; }
+
+	void SetItemTurnSpeedUp(uint32_t _num) { item_turnSpeedUp_ = _num; }
+
+	/// <summary>
+	/// ダメージフラグのセット
+	/// </summary>
+	/// <param name="_isDamage"></param>
+	void SetIsDamage(bool _isDamage) { isDamage_ = _isDamage; }
+
+	/// <summary>
+	/// 反射速度のセット
+	/// </summary>
+	/// <param name="_reflectVelocity">反射速度</param>
+	void SetReflectVelocity(const Norm::Vector3& _reflectVelocity) { reflectVelocity_ = _reflectVelocity; }
 
 	/// <summary>
 	/// プレイヤー武器マネージャーを設定する
@@ -190,6 +227,8 @@ private:
 	float bulletFireIntervalTimer_;	//銃弾の発射間隔タイマー
 
 	bool isDamage_ = false;			//ダメージを受けたか
+
+	Norm::Vector3 prePosition_ = { 0,0,0 };	//前フレームのポジション
 
 	Norm::Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
 

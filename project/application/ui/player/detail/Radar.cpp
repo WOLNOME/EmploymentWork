@@ -131,7 +131,7 @@ void Radar::UpdateEnemyMark() {
 	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex) {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
-		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();
+		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
@@ -150,7 +150,7 @@ void Radar::UpdateEnemyMark() {
 	auto processJetEnemy = [&](IBaseJetEnemy* enemy, const Vector4& color, int& spriteIndex) {
 		if (!enemy || enemy->GetHP() == 0) return;
 		//プレイヤー→敵のベクトルを作る
-		Vector3 playerToEnemy = enemy->GetWorldPosition() - player_->GetWorldPosition();
+		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
@@ -202,7 +202,7 @@ void Radar::UpdateItemMark() {
 	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
 		if (itemPos.Length() > kSearchLength_) return;
 		//プレイヤー→アイテムのベクトルを作る
-		Vector3 playerToItem = itemPos - player_->GetWorldPosition();
+		Vector3 playerToItem = itemPos - player_->GetWorldTransform().GetWorldTranslate();
 		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
 			kCenterPosition_.x + (rotated.x * kUnitLength_),
@@ -225,7 +225,7 @@ void Radar::UpdateItemMark() {
 			continue;
 		}
 
-		processItem(item->GetWorldPosition(), { 1, 1, 1, 1 }, spriteIndex);
+		processItem(item->GetWorldTransform().GetWorldTranslate(), { 1, 1, 1, 1 }, spriteIndex);
 	}
 }
 

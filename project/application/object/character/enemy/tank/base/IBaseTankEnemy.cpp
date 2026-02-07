@@ -8,6 +8,7 @@
 //アプリケーション
 #include "application/object/character/player/Player.h"
 #include "application/object/character/item/manager/ItemManager.h"
+#include <application/object/character/enemy/tank/collision/TankCollider.h>
 
 using namespace Norm;
 
@@ -31,10 +32,10 @@ void IBaseTankEnemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::OBB;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::Nothingness);
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<TankCollider>(this);
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+
 }
 
 void IBaseTankEnemy::Update() {
@@ -54,60 +55,7 @@ void IBaseTankEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
-
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
-}
-
-void IBaseTankEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//当たり判定時の処理
-	switch (attribute) {
-		//プレイヤーに当たった場合
-	case CollisionAttribute::Player: {
-		//HPを減らす
-		hp_ -= 1;
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-
-		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldTransform().GetTranslate()).Normalized();
-		velocity_.x += reflectVec.x * 50.0f;
-		velocity_.z += reflectVec.z * 50.0f;
-
-		break;
-	}
-								   //エネミーに当たった場合
-	case CollisionAttribute::Enemy: {
-		//相手の座標と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(subjectPos - GetWorldTransform().GetTranslate()).Normalized();
-		velocity_.x += reflectVec.x * 30.0f;
-		velocity_.z += reflectVec.z * 30.0f;
-
-		break;
-	}
-								  //プレイヤーキャノンに当たった場合
-	case CollisionAttribute::PlayerCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//HPを減らす
-		hp_ -= param_["cannonDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-
-		break;
-		//プレイヤー弾に当たった場合
-	case CollisionAttribute::PlayerBullet:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//HPを減らす
-		hp_ -= param_["bulletDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-
-		break;
-	default:
-		break;
-	}
 }
 
 void IBaseTankEnemy::ChangeState(const std::string& stateName) {

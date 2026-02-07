@@ -15,13 +15,13 @@ void TankEnemyApproachState::Update(IBaseTankEnemy* enemy) {
 
 	//攻撃範囲に入ったら攻撃状態に切り替え
 	float searchPlayerDistanceAttack = enemy->GetParam()["searchPlayerDistanceAttack"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() < searchPlayerDistanceAttack) {
+	if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetWorldTranslate() - enemy->GetWorldTransform().GetWorldTranslate()).Length() < searchPlayerDistanceAttack) {
 		enemy->ChangeState("Attack");
 	}
 
 	//接近範囲から外れたらパトロール状態に切り替え
 	float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
-	if (Vector3(enemy->GetPlayer()->GetWorldPosition() - enemy->GetWorldPosition()).Length() > searchPlayerDistanceApproach) {
+	if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetWorldTranslate() - enemy->GetWorldTransform().GetWorldTranslate()).Length() > searchPlayerDistanceApproach) {
 		enemy->ChangeState("Patrol");
 	}
 

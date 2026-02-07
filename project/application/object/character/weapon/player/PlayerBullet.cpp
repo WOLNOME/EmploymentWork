@@ -5,6 +5,9 @@
 #include "CombinedParticleManager.h"
 #include "BulletTrailManager.h"
 
+//アプリケーション
+#include <application/object/character/weapon/player/collision/PlayerBulletCollider.h>
+
 using namespace Norm;
 
 void PlayerBullet::Initialize() {
@@ -13,7 +16,6 @@ void PlayerBullet::Initialize() {
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
-	lifeTimer_ = 0.0f;
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
@@ -31,10 +33,12 @@ void PlayerBullet::Initialize() {
 	hitEffect_ = std::make_unique<CombinedParticle>();
 	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerBulletHitEffect"), "Bullet_Hit");
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::Sphere;
-	//当たり判定の半径を設定
-	collisionRadius_ = 0.01f;
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<PlayerBulletCollider>(this);
+	auto* playerBulletCollider = dynamic_cast<PlayerBulletCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	playerBulletCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 }
 
@@ -66,9 +70,6 @@ void PlayerBullet::DebugWithImGui() {
 	ImGui::Begin("プレイヤー銃弾");
 	ImGui::End();
 
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 }
 
@@ -82,33 +83,23 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	//重力は計算しない
 	gravity_ = 0.0f;
 	//当たり判定を入力
-	SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+	collider_->SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	//アクティブ状態に変更
 	state_ = State::kActive;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	trail_->ClearPositions();
 }
 
-void PlayerBullet::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//当たり判定時の処理
-	switch (attribute) {
-		//敵に当たった場合
-	case CollisionAttribute::Enemy:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//死亡処理
-		DeadProcess();
-
-		break;
-		//敵キャノンに当たった場合
-	case CollisionAttribute::EnemyCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//死亡処理
-		DeadProcess();
-
-		break;
-	default:
-		break;
-	}
+void PlayerBullet::DeadProcess() {
+	//衝突エフェクトの発生
+	TransformEuler transform = hitEffect_->GetBaseTransform();
+	transform.translate = object3d_->worldTransform.GetTranslate();
+	hitEffect_->SetBaseTransform(transform);
+	hitEffect_->SetIsPlay(true);
+	//仮死状態にする
+	SetState(State::kAsphyxia);
+	//寿命タイマーをリセット
+	lifeTimer_ = 0.0f;
 }
 
 void PlayerBullet::Move() {
@@ -144,16 +135,4 @@ void PlayerBullet::Move() {
 	//新トランスフォームをセット
 	object3d_->worldTransform.SetTranslate(newTranslate);
 
-}
-
-void PlayerBullet::DeadProcess() {
-	//衝突エフェクトの発生
-	TransformEuler transform = hitEffect_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.GetTranslate();
-	hitEffect_->SetBaseTransform(transform);
-	hitEffect_->SetIsPlay(true);
-	//仮死状態にする
-	SetState(State::kAsphyxia);
-	//寿命タイマーをリセット
-	lifeTimer_ = 0.0f;
 }

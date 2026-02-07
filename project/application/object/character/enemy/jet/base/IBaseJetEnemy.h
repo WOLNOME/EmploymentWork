@@ -119,20 +119,13 @@ public:
 	/// </summary>
 	/// <param name="messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* messageUI);
+	/// <summary>
+	/// HPをセット
+	/// </summary>
+	/// <param name="_hp">HP</param>
+	void SetHP(int _hp) { hp_ = _hp; }
 
 protected:
-	/// ============================== ///
-	///		非公開メンバ関数
-	///	============================== ///
-
-	/// <summary>
-	/// 当たり判定処理
-	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
-
-
 	/// ============================== ///
 	///		インスタンス
 	///	============================== ///

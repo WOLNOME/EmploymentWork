@@ -4,6 +4,9 @@
 #include <CombinedParticleManager.h>
 #include <random>
 
+//アプリケーション
+#include <application/object/character/item/collision/ItemCollider.h>
+
 using namespace Norm;
 
 void Item::Initialize() {
@@ -27,8 +30,11 @@ void Item::Initialize() {
 	getParticle_ = std::make_unique<CombinedParticle>();
 	getParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_get"), "Item_Get");
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::OBB;
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<ItemCollider>(this);
+	auto* itemCollider = dynamic_cast<ItemCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
 
 	//影の大きさを調整
 	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
@@ -50,10 +56,6 @@ void Item::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
-
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 }
 
@@ -80,25 +82,25 @@ void Item::Spawn(const Vector3& _initPos) {
 	switch (itemType) {
 	case 0:
 	case 1: // 40%の確率（回復）
-		SetCollisionAttribute(CollisionAttribute::Item_Heal);
+		collider_->SetCollisionAttribute(CollisionAttribute::Item_Heal);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("green.png");
 		object3d_->SetTexture(textureHandle);
 		break;
 
 	case 2: // 20%：リロード速度アップ
-		SetCollisionAttribute(CollisionAttribute::Item_ReloadSpeedUp);
+		collider_->SetCollisionAttribute(CollisionAttribute::Item_ReloadSpeedUp);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("red.png");
 		object3d_->SetTexture(textureHandle);
 		break;
 
 	case 3: // 20%：移動速度アップ
-		SetCollisionAttribute(CollisionAttribute::Item_MoveSpeedUp);
+		collider_->SetCollisionAttribute(CollisionAttribute::Item_MoveSpeedUp);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("blue.png");
 		object3d_->SetTexture(textureHandle);
 		break;
 
 	case 4: // 20%：回転速度アップ
-		SetCollisionAttribute(CollisionAttribute::Item_TurnSpeedUp);
+		collider_->SetCollisionAttribute(CollisionAttribute::Item_TurnSpeedUp);
 		textureHandle = TextureManager::GetInstance()->LoadTexture("yellow.png");
 		object3d_->SetTexture(textureHandle);
 		break;
@@ -110,28 +112,6 @@ void Item::Spawn(const Vector3& _initPos) {
 	SetState(State::kActive);
 
 
-}
-
-void Item::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//当たり判定時の処理
-	switch (attribute) {
-		//プレイヤーに当たった場合
-	case CollisionAttribute::Player: {
-		//仮死状態にする
-		SetState(State::kAsphyxia);
-
-		//パーティクル
-		idleParticle_->SetIsPlay(false); // パーティクルを非アクティブにする
-		getParticle_->SetIsPlay(true); // パーティクルをアクティブにする
-		TransformEuler transform = getParticle_->GetBaseTransform();
-		transform.translate = object3d_->worldTransform.GetTranslate();
-		getParticle_->SetBaseTransform(transform);
-
-		break;
-	}
-	default:
-		break;
-	}
 }
 
 void Item::UntilDeathProcess() {

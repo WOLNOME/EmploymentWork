@@ -40,9 +40,6 @@ void MyGame::Update() {
 	//ImGui受付開始
 	ImGuiManager::GetInstance()->Begin();
 
-	//当たり判定のクリア
-	CollisionManager::GetInstance()->ClearColliders();
-
 	//ゲーム基盤更新
 	Framework::Update();
 
@@ -62,7 +59,6 @@ void MyGame::Update() {
 
 	//当たり判定のチェック
 	CollisionManager::GetInstance()->CheckCollision();
-
 
 	//ImGuiの内部コマンドを生成する
 	ImGuiManager::GetInstance()->End();

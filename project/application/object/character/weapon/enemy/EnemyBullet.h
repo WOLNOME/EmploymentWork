@@ -43,11 +43,24 @@ public:
 	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
 
 	/// <summary>
-	/// 当たり判定処理
+	/// 死亡処理を行う
 	/// </summary>
-	/// <param name="attribute">相手の属性</param>
-	/// <param name="subjectPos">相手の座標</param>
-	void OnCollision(Norm::CollisionAttribute attribute, const Norm::Vector3& subjectPos) override;
+	void DeadProcess();
+
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーUIを取得する
+	/// </summary>
+	/// <returns>プレイヤーUI</returns>
+	PlayerUI* GetPlayerUI() { return playerUI_; }
+	/// <summary>
+	/// 生成された場所を取得する
+	/// </summary>
+	/// <returns>生成された場所</returns>
+	const Norm::Vector3& GetGeneratedPosition() { return generatedPosition_; }
 
 	/// ============================== ///
 	///		setter
@@ -68,11 +81,7 @@ private:
 	/// 移動処理を行う
 	/// </summary>
 	void Move();
-	/// <summary>
-	/// 死亡処理を行う
-	/// </summary>
-	void DeadProcess();
-
+	
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///

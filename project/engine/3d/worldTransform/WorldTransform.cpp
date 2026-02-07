@@ -15,6 +15,11 @@ namespace Norm {
 	}
 
 	void WorldTransform::UpdateMatrix() {
+		//前フレームのワールド座標を更新
+		preWorldTranslate_.x = matWorld_.m[3][0];
+		preWorldTranslate_.y = matWorld_.m[3][1];
+		preWorldTranslate_.z = matWorld_.m[3][2];
+
 		// スケール、回転、平行移動を合成して行列を計算する
 		matWorld_ = MyMath::MakeAffineMatrix(scale_, rotate_, translate_);
 

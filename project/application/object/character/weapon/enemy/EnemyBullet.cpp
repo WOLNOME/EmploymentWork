@@ -7,6 +7,7 @@
 
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
+#include <application/object/character/weapon/enemy/collision/EnemyBulletCollider.h>
 
 using namespace Norm;
 
@@ -18,7 +19,7 @@ void EnemyBullet::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
 	lifeTimer_ = 0.0f;
 
-	//インスタンスの生成と初期化
+	//オブジェクトの生成・初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bullet"), Shape::kSphere);
@@ -26,18 +27,23 @@ void EnemyBullet::Initialize() {
 	object3d_->worldTransform.SetScale({ 0.01f,0.01f,0.01f });
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
-	//トレールエフェクトの生成と初期化
+
+	//トレールエフェクトの生成・初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
-	//衝突エフェクトの生成と初期化
+
+	//衝突エフェクトの生成・初期化
 	hitEffect_ = std::make_unique<CombinedParticle>();
 	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyBulletHitEffect"), "Bullet_Hit");
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::Sphere;
-	//当たり判定の半径を設定
-	collisionRadius_ = 0.01f;
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<EnemyBulletCollider>(this);
+	auto* enemyBulletCollider = dynamic_cast<EnemyBulletCollider*>(collider_.get());
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&object3d_->worldTransform);
+	enemyBulletCollider->SetRadius(param_["collisionRadiusSphere"]);
+
 }
 
 void EnemyBullet::Update() {
@@ -68,9 +74,6 @@ void EnemyBullet::DebugWithImGui() {
 	ImGui::Begin("敵銃弾");
 	ImGui::End();
 
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
 #endif // _DEBUG
 }
 
@@ -87,36 +90,23 @@ void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//重力は計算しない
 	gravity_ = 0.0f;
 	//当たり判定を入力
-	SetCollisionAttribute(CollisionAttribute::EnemyBullet);
+	collider_->SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 	//アクティブ状態に変更
 	state_ = State::kActive;
 	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 	trail_->ClearPositions();
 }
 
-void EnemyBullet::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//当たり判定時の処理
-	switch (attribute) {
-		//プレイヤーに当たった場合
-	case CollisionAttribute::Player:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//死亡処理
-		DeadProcess();
-
-		//被弾インジケーターをつける
-		playerUI_->GetHitIndicator()->RegistIndicator(generatedPosition_);
-
-		break;
-		//プレイヤー砲弾に当たった場合
-	case CollisionAttribute::PlayerCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//死亡処理
-		DeadProcess();
-
-		break;
-	default:
-		break;
-	}
+void EnemyBullet::DeadProcess() {
+	//衝突エフェクトの発生
+	TransformEuler transform = hitEffect_->GetBaseTransform();
+	transform.translate = object3d_->worldTransform.GetTranslate();
+	hitEffect_->SetBaseTransform(transform);
+	hitEffect_->SetIsPlay(true);
+	//仮死状態にする
+	SetState(State::kAsphyxia);
+	//寿命タイマーをリセット
+	lifeTimer_ = 0.0f;
 }
 
 void EnemyBullet::Move() {
@@ -150,16 +140,4 @@ void EnemyBullet::Move() {
 		//寿命タイマーをリセット
 		lifeTimer_ = 0.0f;
 	}
-}
-
-void EnemyBullet::DeadProcess() {
-	//衝突エフェクトの発生
-	TransformEuler transform = hitEffect_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.GetTranslate();
-	hitEffect_->SetBaseTransform(transform);
-	hitEffect_->SetIsPlay(true);
-	//仮死状態にする
-	SetState(State::kAsphyxia);
-	//寿命タイマーをリセット
-	lifeTimer_ = 0.0f;
 }

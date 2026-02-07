@@ -1,5 +1,9 @@
 #include "IBaseJetEnemy.h"
 
+//アプリケーション
+#include <application/object/character/enemy/jet/collision/JetCollider.h>
+
+
 using namespace Norm;
 
 IBaseJetEnemy::IBaseJetEnemy() {
@@ -16,10 +20,9 @@ void IBaseJetEnemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
-	//当たり判定の形状を設定
-	collisionShapeKind_ = CollisionShapeKind::OBB;
-	//当たり判定の属性を設定
-	SetCollisionAttribute(CollisionAttribute::Enemy);
+	//当たり判定の生成・初期化
+	collider_ = std::make_unique<JetCollider>(this);
+	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 }
 
 void IBaseJetEnemy::Update() {
@@ -34,39 +37,12 @@ void IBaseJetEnemy::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
-
-	//デバッグ用ラインのカラー
-	debugLineColor_ = { 1.0f,1.0f,1.0f,1.0f };
 #endif // _DEBUG
 }
 
 void IBaseJetEnemy::SetMessageUI(MessageUI* messageUI) {
 	patrolState_->SetMessageUI(messageUI);
 	approachState_->SetMessageUI(messageUI);
-}
-
-void IBaseJetEnemy::OnCollision(CollisionAttribute attribute, const Vector3& subjectPos) {
-	//当たり判定時の処理
-	switch (attribute) {
-		//プレイヤーキャノンに当たった場合
-	case CollisionAttribute::PlayerCannon:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//HPを減らす
-		hp_ -= param_["cannonDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-		break;
-		//プレイヤー弾に当たった場合
-	case CollisionAttribute::PlayerBullet:
-		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//HPを減らす
-		hp_ -= param_["bulletDamage"];
-		//0~MaxHPの範囲に収める
-		hp_ = std::clamp(hp_, 0, maxHP_);
-		break;
-	default:
-		break;
-	}
 }
 
 void IBaseJetEnemy::ChangeState(const std::string& stateName) {

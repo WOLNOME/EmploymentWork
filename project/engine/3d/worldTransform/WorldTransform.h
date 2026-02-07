@@ -72,15 +72,16 @@ namespace Norm {
 		/// <returns>ワールド座標</returns>
 		const Vector3& GetWorldTranslate() const { return worldTranslate_; }
 		/// <summary>
+		/// 前フレームのワールド座標を取得する
+		/// </summary>
+		/// <returns>前フレームのワールド座標</returns>
+		const Vector3& GetPreWorldTranslate() const { return preWorldTranslate_; }
+
+		/// <summary>
 		/// ワールド変換行列を取得する
 		/// </summary>
 		/// <returns>ワールド変換行列</returns>
 		const Matrix4x4& GetWorldMatrix() const { return matWorld_; }
-		/// <summary>
-		/// 親となるワールドトランスフォームを取得する
-		/// </summary>
-		/// <returns>親となるワールドトランスフォーム</returns>
-		WorldTransform* GetParent() { return parent_; }
 
 		/// ============================== ///
 		///		setter
@@ -125,6 +126,9 @@ namespace Norm {
 		Vector3 translate_ = { 0, 0, 0 };
 		//ワールド座標
 		Vector3 worldTranslate_ = { 0, 0, 0 };
+		//前フレームのワールド座標
+		Vector3 preWorldTranslate_ = { 0,0,0 };
+
 		// ローカル → ワールド変換行列
 		Matrix4x4 matWorld_;
 		// 親となるワールド変換へのポインタ
