@@ -38,7 +38,7 @@ namespace Norm {
 		//読み込み済みモデルを検索
 		if (models_.contains(filePath)) {
 			//読み込みモデルを戻り値としてreturn
-			return models_.at(filePath).get();
+			return models_[filePath].get();
 		}
 		//ファイル名一致なし
 		return nullptr;

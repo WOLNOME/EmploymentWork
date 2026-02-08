@@ -32,16 +32,14 @@ namespace Norm {
 		SettingTexture();
 	}
 
-	void Model::Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum, int32_t textureHandle) {
+	void Model::Draw(Vector4 color,uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum, int32_t textureHandle) {
 		for (size_t index = 0; index < modelResource_.modelData.size(); index++) {
 			//頂点バッファービューを設定
 			MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelResource_.vertexBufferView[index]);
 			//インデックスバッファビューを設定
 			MainRender::GetInstance()->GetCommandList()->IASetIndexBuffer(&modelResource_.indexBufferView[index]);
 			//マテリアルCBufferの場所を設定
-			if (color_) {
-				modelResource_.materialData[index]->color = *color_;
-			}
+				modelResource_.materialData[index]->color = color;
 			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(materialRootParameterIndex, modelResource_.materialResource[index]->GetGPUVirtualAddress());
 			//テクスチャが外部から設定されている場合
 			if (textureHandle != -1) {

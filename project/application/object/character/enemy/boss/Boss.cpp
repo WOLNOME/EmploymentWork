@@ -236,6 +236,12 @@ void Boss::VariableUpdate() {
 	float barrierCoolTimer = blackBoard_->GetValue<float>("BarrierCoolTimer");
 	float summonCoolTimer = blackBoard_->GetValue<float>("SummonCoolTimer");
 
+	//バリアの状態がIdleなら
+	if (barrier_->GetState() == State::kIdle) {
+		//isBarrierをfalseにする
+		isBarrier = false;
+	}
+
 	//バリアのクールタイムが0より大きい＆バリアが展開されていないなら
 	if (barrierCoolTimer > 0.0f && !isBarrier) {
 		//時間を減らす
@@ -259,6 +265,7 @@ void Boss::VariableUpdate() {
 	}
 
 	//設定した情報をブラックボードにセット
+	blackBoard_->SetValue<bool>("IsBarrier", isBarrier);
 	blackBoard_->SetValue<float>("BarrierCoolTimer", barrierCoolTimer);
 	blackBoard_->SetValue<float>("SummonCoolTimer", summonCoolTimer);
 

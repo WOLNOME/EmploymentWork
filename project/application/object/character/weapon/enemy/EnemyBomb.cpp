@@ -32,7 +32,7 @@ void EnemyBomb::Initialize() {
 	warning_->SetTexture(thWarning);
 	warning_->SetIsLightProcess(false);
 	warning_->worldTransform.SetScale({40.0f,1.0f,40.0f});
-	warning_->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+	warning_->SetColor({ 1.0f,1.0f,1.0f,0.8f });
 
 	//パーティクルの生成と初期化
 	{
@@ -102,24 +102,30 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 
 	///別処理
 	switch (_method) {
-	case BombMethod::Launch: {
+	case BombMethod::Launch:
+	{
+		//正確な落下地点
+		Vector3 fallingPoint = _targetPos;
+		fallingPoint.y = 0.0f;
+
 		//初期位置を保存
 		Vector3 warningPos = _targetPos;
 		warningPos.y = 0.005f;
 		warning_->worldTransform.SetTranslate(warningPos);
 
 		//速度
-		Vector3 targetVec = _targetPos - _initPos;
+		Vector3 targetVec = fallingPoint - _initPos;
 		float hitTime = param_["hitTime"];
 		float maxHeight = param_["maxHeight"];
 		velocity_.x = targetVec.x / hitTime;
 		velocity_.z = targetVec.z / hitTime;
-		gravity_ = 2.0f * (maxHeight - _targetPos.y) / std::powf((hitTime / 2.0f), 2);
-		velocity_.y = 4.0f * (_initPos.y - _targetPos.y) / hitTime;
+		gravity_ = 2.0f * (maxHeight - fallingPoint.y) / std::powf((hitTime / 2.0f), 2);
+		velocity_.y = 4.0f * (_initPos.y - fallingPoint.y) / hitTime;
 
 		break;
 	}
-	case BombMethod::Fall: {
+	case BombMethod::Fall: 
+	{
 		//初期位置を保存
 		Vector3 warningPos = _initPos;
 		warningPos.y = 0.005f;

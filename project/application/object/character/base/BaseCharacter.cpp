@@ -20,6 +20,7 @@ void BaseCharacter::Initialize() {
 	circleShadow_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	circleShadow_->worldTransform.SetScale({ 5.0f,5.0f,5.0f });
 	circleShadow_->SetIsDisplay(false);
+	circleShadow_->SetColor({ 1,1,1,0.8f });
 }
 
 void BaseCharacter::Update() {

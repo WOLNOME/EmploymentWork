@@ -138,7 +138,7 @@ namespace Norm {
 			}
 
 			//モデルを描画する
-			model_->Draw(0, 3, 1, textureHandle_);
+			model_->Draw(color_, 0, 3, 1, textureHandle_);
 			break;
 		}
 		case ObjectKind::AnimationModel:
@@ -256,19 +256,18 @@ namespace Norm {
 
 		//オブジェクトの種類ごとに分けてセット
 		switch (objKind_) {
-		case Norm::Object3d::ObjectKind::Model:
+		case Object3d::ObjectKind::Model:
 		{
-			//色をセット
-			model_->SetColor(color_);
+			//モデルは個別で色を持たないためDrawでセットする
 			break;
 		}
-		case Norm::Object3d::ObjectKind::AnimationModel:
+		case Object3d::ObjectKind::AnimationModel:
 		{
 			//色をセット
 			animationModel_->SetColor(color_);
 			break;
 		}
-		case Norm::Object3d::ObjectKind::Shape:
+		case Object3d::ObjectKind::Shape:
 		{
 			//色をセット
 			shape_->SetColor(color_);

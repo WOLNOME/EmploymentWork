@@ -26,6 +26,7 @@ void Barrier::Initialize() {
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
 	object3d_->SetIsLightProcess(false);
+	object3d_->SetColor({ 1,1,1,0.6f });
 	object3d_->worldTransform.SetScale({
 		param_["collisionRadiusSphere"],
 		param_["collisionRadiusSphere"],

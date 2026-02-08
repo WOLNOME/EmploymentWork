@@ -102,7 +102,7 @@ namespace Norm {
 		/// <param name="textureRootParameterIndex"テクスチャのルートパラメータ番号></param>
 		/// <param name="instancingNum">インスタンシング描画数</param>
 		/// <param name="textureHandle">テクスチャハンドル</param>
-		void Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
+		void Draw(Vector4 color, uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum = 1, int32_t textureHandle = EOF);
 
 		/// ============================== ///
 		///		getter
@@ -113,16 +113,6 @@ namespace Norm {
 		/// </summary>
 		/// <returns>モデルリソース</returns>
 		const ModelResource& GetModelResource() { return modelResource_; }
-
-		/// ============================== ///
-		///		setter
-		/// ============================== ///
-
-		/// <summary>
-		/// 色のセット
-		/// </summary>
-		/// <param name="color">色</param>
-		void SetColor(Vector4& color) { color_ = &color; }
 
 	private:
 		/// ============================== ///
@@ -158,8 +148,6 @@ namespace Norm {
 		ModelResource modelResource_;
 		//モデル数
 		size_t modelNum_;
-		//色
-		Vector4* color_ = nullptr;
 
 		//ディレクトリパス
 		std::string directoryPath_;

@@ -18,6 +18,7 @@ BarrierLeaf::BarrierLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
 	dirObject_->SetTexture(textureHandle);
 	dirObject_->SetIsDisplay(false);
 	dirObject_->SetIsLightProcess(false);
+	dirObject_->SetColor({ 1,1,1,0.6f });
 
 }
 
