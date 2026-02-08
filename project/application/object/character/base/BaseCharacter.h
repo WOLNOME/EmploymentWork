@@ -127,9 +127,6 @@ protected:
 	//状態
 	State state_ = State::kIdle;
 
-	//前フレームの座標
-	Norm::Vector3 prePosition_ = {};
-
 	//速度
 	Norm::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 

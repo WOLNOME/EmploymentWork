@@ -26,7 +26,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     
     //粒のIndex配列情報を並列初期化
     gGrainIndices[grainIndex] = -1;
-    //エミッター数分の処理
+    //エミッター数分の処理(grainIndex→emitterIndexとして扱う)
     if (grainIndex < gGeneralInfo.maxEmitters)
     {
         //生存カウントを0に

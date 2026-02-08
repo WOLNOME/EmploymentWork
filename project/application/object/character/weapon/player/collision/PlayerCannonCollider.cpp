@@ -53,6 +53,12 @@ void PlayerCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 		commonCollisionProcess();
 
 		break;
+		//バリアに当たった場合
+	case CollisionAttribute::Barrier:
+		//共通処理
+		commonCollisionProcess();
+
+		break;
 	default:
 		break;
 	}

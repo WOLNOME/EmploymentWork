@@ -76,6 +76,11 @@ void EnemyCannon::DebugWithImGui() {
 }
 
 void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
@@ -104,7 +109,6 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 		collider_->SetCollisionAttribute(CollisionAttribute::EnemyCannon);
 		//アクティブ状態にする
 		SetState(State::kActive);
-		prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 
 		return;
 	}
@@ -117,8 +121,6 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	collider_->SetCollisionAttribute(CollisionAttribute::EnemyCannon);
 	//アクティブ状態にする
 	SetState(State::kActive);
-	//前フレーム座標を初期化
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 }
 
 void EnemyCannon::Move() {

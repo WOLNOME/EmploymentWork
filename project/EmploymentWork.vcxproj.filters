@@ -517,6 +517,8 @@
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp" />
     <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\Barrier.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -982,6 +984,8 @@
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h" />
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h" />
     <ClInclude Include="application\object\level\collision\LevelObjectCollider.h" />
+    <ClInclude Include="application\object\character\enemy\boss\Barrier.h" />
+    <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

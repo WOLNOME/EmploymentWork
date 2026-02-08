@@ -27,7 +27,8 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 	//当たり判定時の処理
 	switch (_attribute) {
 		//プレイヤーに当たった場合
-	case CollisionAttribute::Player: {
+	case CollisionAttribute::Player:
+	{
 		//HPを減らす
 		hp -= 1;
 		//0~MaxHPの範囲に収める
@@ -40,8 +41,9 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 
 		break;
 	}
-								   //エネミーに当たった場合
-	case CollisionAttribute::Enemy: {
+	//エネミーに当たった場合
+	case CollisionAttribute::Enemy:
+	{
 		//相手の座標と反対方向のベクトルを速度に加算
 		Vector3 reflectVec = -(_other->GetWorldTransform().GetTranslate() - GetWorldTransform().GetTranslate()).Normalized();
 		velocity.x += reflectVec.x * 30.0f;
@@ -49,7 +51,7 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 
 		break;
 	}
-								  //プレイヤーキャノンに当たった場合
+	//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす

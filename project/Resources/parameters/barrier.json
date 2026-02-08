@@ -1,0 +1,7 @@
+{
+    "collisionRadiusSphere":40.0,
+    "maxHP":100,
+    "specialDamage":50,
+    "cannonDamage":10,
+    "bulletDamage":1
+}

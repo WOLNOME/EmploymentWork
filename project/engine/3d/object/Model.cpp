@@ -35,14 +35,14 @@ namespace Norm {
 	void Model::Draw(uint32_t materialRootParameterIndex, uint32_t textureRootParameterIndex, uint32_t instancingNum, int32_t textureHandle) {
 		for (size_t index = 0; index < modelResource_.modelData.size(); index++) {
 			//頂点バッファービューを設定
-			MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelResource_.vertexBufferView.at(index));
+			MainRender::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelResource_.vertexBufferView[index]);
 			//インデックスバッファビューを設定
-			MainRender::GetInstance()->GetCommandList()->IASetIndexBuffer(&modelResource_.indexBufferView.at(index));
+			MainRender::GetInstance()->GetCommandList()->IASetIndexBuffer(&modelResource_.indexBufferView[index]);
 			//マテリアルCBufferの場所を設定
 			if (color_) {
-				modelResource_.materialData.at(index)->color = *color_;
+				modelResource_.materialData[index]->color = *color_;
 			}
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(materialRootParameterIndex, modelResource_.materialResource.at(index)->GetGPUVirtualAddress());
+			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(materialRootParameterIndex, modelResource_.materialResource[index]->GetGPUVirtualAddress());
 			//テクスチャが外部から設定されている場合
 			if (textureHandle != -1) {
 				//SRVのDescriptorTableの先頭を設定。
@@ -50,14 +50,14 @@ namespace Norm {
 			}
 			else {
 				//モデルにテクスチャがない場合、スキップ
-				if (modelResource_.modelData.at(index).material.textureFilePath.size() != 0) {
+				if (modelResource_.modelData[index].material.textureFilePath.size() != 0) {
 					//SRVのDescriptorTableの先頭を設定。
-					MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(textureRootParameterIndex, TextureManager::GetInstance()->GetSrvHandleGPU(modelResource_.modelData.at(index).material.textureHandle));
+					MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(textureRootParameterIndex, TextureManager::GetInstance()->GetSrvHandleGPU(modelResource_.modelData[index].material.textureHandle));
 				}
 			}
 
 			//描画
-			MainRender::GetInstance()->GetCommandList()->DrawIndexedInstanced(UINT(modelResource_.modelData.at(index).indices.size()), instancingNum, 0, 0, 0);
+			MainRender::GetInstance()->GetCommandList()->DrawIndexedInstanced(UINT(modelResource_.modelData[index].indices.size()), instancingNum, 0, 0, 0);
 		}
 	}
 
@@ -203,39 +203,39 @@ namespace Norm {
 		modelResource_.uvTransform.resize(modelNum_);
 		for (size_t index = 0; index < modelNum_; index++) {
 			//頂点用リソースを作る
-			modelResource_.vertexResource.at(index) = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * modelResource_.modelData.at(index).vertices.size());
+			modelResource_.vertexResource[index] = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * modelResource_.modelData[index].vertices.size());
 			//インデックス描画用のリソースを作る
-			modelResource_.indexResource.at(index) = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * modelResource_.modelData.at(index).indices.size());
+			modelResource_.indexResource[index] = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * modelResource_.modelData[index].indices.size());
 			//マテリアル用のリソースを作る。
-			modelResource_.materialResource.at(index) = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(Material));
+			modelResource_.materialResource[index] = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(Material));
 			//頂点バッファービューを作成
-			modelResource_.vertexBufferView.at(index).BufferLocation = modelResource_.vertexResource.at(index)->GetGPUVirtualAddress();
-			modelResource_.vertexBufferView.at(index).SizeInBytes = UINT(sizeof(VertexData) * modelResource_.modelData.at(index).vertices.size());
-			modelResource_.vertexBufferView.at(index).StrideInBytes = sizeof(VertexData);
+			modelResource_.vertexBufferView[index].BufferLocation = modelResource_.vertexResource[index]->GetGPUVirtualAddress();
+			modelResource_.vertexBufferView[index].SizeInBytes = UINT(sizeof(VertexData) * modelResource_.modelData[index].vertices.size());
+			modelResource_.vertexBufferView[index].StrideInBytes = sizeof(VertexData);
 			//インデックスバッファビューを作成
-			modelResource_.indexBufferView.at(index).BufferLocation = modelResource_.indexResource.at(index)->GetGPUVirtualAddress();
-			modelResource_.indexBufferView.at(index).SizeInBytes = UINT(sizeof(uint32_t) * modelResource_.modelData.at(index).indices.size());
-			modelResource_.indexBufferView.at(index).Format = DXGI_FORMAT_R32_UINT;
+			modelResource_.indexBufferView[index].BufferLocation = modelResource_.indexResource[index]->GetGPUVirtualAddress();
+			modelResource_.indexBufferView[index].SizeInBytes = UINT(sizeof(uint32_t) * modelResource_.modelData[index].indices.size());
+			modelResource_.indexBufferView[index].Format = DXGI_FORMAT_R32_UINT;
 			//リソースにデータを書き込む
-			modelResource_.vertexResource.at(index)->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.vertexData.at(index)));
-			std::memcpy(modelResource_.vertexData.at(index), modelResource_.modelData.at(index).vertices.data(), sizeof(VertexData) * modelResource_.modelData.at(index).vertices.size());
-			modelResource_.indexResource.at(index)->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.indexData.at(index)));
-			std::memcpy(modelResource_.indexData.at(index), modelResource_.modelData.at(index).indices.data(), sizeof(uint32_t) * modelResource_.modelData.at(index).indices.size());
-			modelResource_.materialResource.at(index)->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.materialData.at(index)));
+			modelResource_.vertexResource[index]->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.vertexData[index]));
+			std::memcpy(modelResource_.vertexData[index], modelResource_.modelData[index].vertices.data(), sizeof(VertexData) * modelResource_.modelData[index].vertices.size());
+			modelResource_.indexResource[index]->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.indexData[index]));
+			std::memcpy(modelResource_.indexData[index], modelResource_.modelData[index].indices.data(), sizeof(uint32_t) * modelResource_.modelData[index].indices.size());
+			modelResource_.materialResource[index]->Map(0, nullptr, reinterpret_cast<void**>(&modelResource_.materialData[index]));
 			//白を書き込んでおく
-			modelResource_.materialData.at(index)->color = modelResource_.modelData.at(index).material.colorData;
+			modelResource_.materialData[index]->color = modelResource_.modelData[index].material.colorData;
 			//uvTransform
-			modelResource_.materialData.at(index)->uvTransform = MyMath::MakeIdentity4x4();
+			modelResource_.materialData[index]->uvTransform = MyMath::MakeIdentity4x4();
 			//テクスチャを持っているか
 			bool isTexture = true;
-			if (modelResource_.modelData.at(index).material.textureFilePath.size() == 0) {
+			if (modelResource_.modelData[index].material.textureFilePath.size() == 0) {
 				//テクスチャファイルパスに書き込まれていない→テクスチャがない
 				isTexture = false;
 			}
-			modelResource_.materialData.at(index)->isTexture = isTexture;
-			modelResource_.materialData.at(index)->shininess = 20.0f;
+			modelResource_.materialData[index]->isTexture = isTexture;
+			modelResource_.materialData[index]->shininess = 20.0f;
 			//UVトランスフォーム
-			modelResource_.uvTransform.at(index) = {
+			modelResource_.uvTransform[index] = {
 				{1.0f,1.0f,1.0f},
 				{0.0f,0.0f,0.0f},
 				{0.0f,0.0f,0.0f}
@@ -252,7 +252,7 @@ namespace Norm {
 				continue;
 			}
 			//.objの参照しているテクスチャファイル読み込み(TextureManagerはResources/をカットできるので)
-			modelResource_.modelData.at(index).material.textureHandle = TextureManager::GetInstance()->LoadTexture("../models/" + fileName_ + "/" + modelResource_.modelData.at(index).material.textureFilePath);
+			modelResource_.modelData[index].material.textureHandle = TextureManager::GetInstance()->LoadTexture("../models/" + fileName_ + "/" + modelResource_.modelData[index].material.textureFilePath);
 		}
 	}
 

@@ -101,6 +101,16 @@ namespace Norm {
 		void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
 
 		/// ============================== ///
+		///		getter
+		/// ============================== ///
+
+		/// <summary>
+		/// カラーの取得
+		/// </summary>
+		/// <returns>カラー</returns>
+		const Vector4& GetColor() { return color_; }
+
+		/// ============================== ///
 		///		setter
 		/// ============================== ///
 
@@ -124,6 +134,11 @@ namespace Norm {
 		/// </summary>
 		/// <param name="_isLightProcess">ライトの処理をするか</param>
 		void SetIsLightProcess(bool _isLightProcess) { isLightProcess_ = _isLightProcess; }
+		/// <summary>
+		/// カラーのセット
+		/// </summary>
+		/// <param name="_color">カラー</param>
+		void SetColor(const Vector4& _color);
 
 		/// <summary>
 		/// 新しいアニメーションを追加
@@ -203,6 +218,9 @@ namespace Norm {
 		bool isDisplay_ = true;
 		//ライトの処理をするか
 		bool isLightProcess_ = true;
+
+		//色
+		Vector4 color_ = { 1,1,1,1 };
 
 	};
 

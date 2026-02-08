@@ -112,6 +112,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\Barrier.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -287,6 +289,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.h" />
     <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.h" />
     <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.h" />
+    <ClInclude Include="application\object\character\enemy\boss\Barrier.h" />
+    <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />

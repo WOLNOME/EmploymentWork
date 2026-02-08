@@ -1,5 +1,7 @@
 {
     "hpBarSizeRatio":0.15,
-    "normalEnemyHPBarHeight":3.0,
-    "bossEnemyHPBarHeight":4.0
+    "canotaHPBarHeight":3.0,
+    "keyCanotaHPBarHeight":4.0,
+    "jetHPBarHeight":3.0,
+    "bossHPBarHeight":10.0
 }

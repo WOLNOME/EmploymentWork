@@ -1,5 +1,7 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
+#include "Object3d.h"
+#include <memory>
 
 /// <summary>
 /// バリアノード
@@ -23,6 +25,10 @@ public:
 
 	// ノードの状態を取得
 	Norm::NodeResult GetNodeResult() const override;
+
+private:
+	//バリア演出オブジェクト
+	std::unique_ptr<Norm::Object3d> dirObject_ = nullptr;
 
 };
 

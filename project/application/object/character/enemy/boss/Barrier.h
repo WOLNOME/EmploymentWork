@@ -1,34 +1,28 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
 #include "JsonUtil.h"
-#include "interface/INode.h"
-#include "blackBoard/BlackBoard.h"
 #include <memory>
 
-//アプリケーション
-#include <application/object/character/enemy/boss/Barrier.h>
-
 //前方宣言
-class Player;
-class EnemyWeaponManager;
+class Boss;
 
 /// <summary>
-/// ボスクラス
+/// バリアクラス
 /// </summary>
-class Boss : public BaseCharacter {
+class Barrier : public BaseCharacter {
 public:
 	/// ============================== ///
 	///		メンバ関数（public）
 	/// ============================== ///
-	
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Boss() = default;
+	Barrier() = default;
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Boss() override;
+	~Barrier() override;
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -75,15 +69,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// プレイヤーのセット
+	/// ボスのセット
 	/// </summary>
-	/// <param name="_player">プレイヤーのポインタ</param>
-	void SetPlayer(Player* _player) { player_ = _player; }
-	/// <summary>
-	/// 敵武器マネージャーのセット
-	/// </summary>
-	/// <param name="_enemyWeaponManager">敵武器マネージャーのポインタ</param>
-	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager);
+	/// <param name="_boss">ボスのポインタ</param>
+	void SetBoss(Boss* _boss) { boss_ = _boss; }
 
 	/// <summary>
 	/// HPのセット
@@ -97,47 +86,27 @@ private:
 	/// ============================== ///
 
 	/// <summary>
-	/// 定数情報のブラックボードへの登録
+	/// 移動
 	/// </summary>
-	void ConstantInfoToBlackBoard();
-	
-	/// <summary>
-	/// 変数情報のブラックボードへの登録
-	/// </summary>
-	/// <param name="_isInit">初期化時か？</param>
-	void VariableInfoToBlackBoard(bool _isInit);
-	/// <summary>
-	/// ブラックボードから変数情報の取得
-	/// </summary>
-	void BlackBoardToVariableInfo();
+	void Move();
 
 	/// <summary>
-	/// 変数の更新
+	/// 死亡処理
 	/// </summary>
-	void VariableUpdate();
+	void DeadProcess();
 
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	//プレイヤー
-	Player* player_ = nullptr;
-	//敵武器マネージャー
-	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
-	//バリア
-	std::unique_ptr<Barrier> barrier_ = nullptr;
+	Boss* boss_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(private)
 	/// ============================== ///
-	
+
 	//パラメーター
 	json param_;
-
-	//ビヘイビアツリー
-	std::unique_ptr<Norm::INode> behaviorTreeRoot_ = nullptr;
-	//ブラックボード
-	std::unique_ptr<Norm::BlackBoard> blackBoard_ = nullptr;
 
 	//HP
 	int hp_ = 0;

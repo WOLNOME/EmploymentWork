@@ -112,6 +112,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		break;
 	}
 	case CollisionAttribute::Item_ReloadSpeedUp:
+	{
 		//アイテムが制限を超えていなければ取得
 		if (item_reloadSpeedUp < (uint32_t)item_maxNum) {
 			//アイテム取得
@@ -122,7 +123,9 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		}
 
 		break;
+	}
 	case CollisionAttribute::Item_MoveSpeedUp:
+	{
 		//アイテムが制限を超えていなければ取得
 		if (item_moveSpeedUp < (uint32_t)item_maxNum) {
 			//アイテム取得
@@ -133,7 +136,9 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		}
 
 		break;
+	}
 	case CollisionAttribute::Item_TurnSpeedUp:
+	{
 		//アイテムが制限を超えていなければ取得
 		if (item_turnSpeedUp < (uint32_t)item_maxNum) {
 			//アイテム取得
@@ -144,6 +149,16 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		}
 
 		break;
+	}
+	case CollisionAttribute::Barrier:
+	{
+		//相手の座標の方向と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		reflectVelocity.x = reflectVec.x;
+		reflectVelocity.z = reflectVec.z;
+
+		break;
+	}
 	default:
 		break;
 	}

@@ -180,11 +180,13 @@ void GamePlayScene::Update() {
 	enemyManager_->Update();
 	playerWeaponManager_->Update();
 	enemyWeaponManager_->Update();
-	enemyUI_->Update();
 	itemManager_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	camera_->Update();
+
+	//カメラの更新後の処理（スクリーン座標を参照したいインスタンスの更新）
+	enemyUI_->Update();
 
 }
 void GamePlayScene::DebugWithImGui() {

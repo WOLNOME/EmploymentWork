@@ -104,6 +104,7 @@ namespace Norm {
 		//オブジェクトの種類ごとの処理
 		switch (objKind_) {
 		case ObjectKind::Model:
+		{
 			//通常モデル用共通描画の設定
 			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::None);
 			//シーンライト有無設定
@@ -139,7 +140,9 @@ namespace Norm {
 			//モデルを描画する
 			model_->Draw(0, 3, 1, textureHandle_);
 			break;
+		}
 		case ObjectKind::AnimationModel:
+		{
 			//アニメーションモデル用共通描画の設定
 			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::Animation);
 
@@ -180,7 +183,9 @@ namespace Norm {
 			animationModel_->SettingCSPostDraw();
 
 			break;
+		}
 		case ObjectKind::Shape:
+		{
 			//描画前設定
 			if (shape_->GetShapeKind() == Shape::kSkyBox) {
 				//SkyBoxの描画設定
@@ -219,6 +224,7 @@ namespace Norm {
 			shape_->Draw(0, 3, 1, textureHandle_);
 
 			break;
+		}
 		default:
 			break;
 		}
@@ -242,6 +248,35 @@ namespace Norm {
 		}
 		//AnimationModelに通達
 		animationModel_->SetCurrentAnimation(_name);
+	}
+
+	void Object3d::SetColor(const Vector4& _color) {
+		//色をセット
+		color_ = _color;
+
+		//オブジェクトの種類ごとに分けてセット
+		switch (objKind_) {
+		case Norm::Object3d::ObjectKind::Model:
+		{
+			//色をセット
+			model_->SetColor(color_);
+			break;
+		}
+		case Norm::Object3d::ObjectKind::AnimationModel:
+		{
+			//色をセット
+			animationModel_->SetColor(color_);
+			break;
+		}
+		case Norm::Object3d::ObjectKind::Shape:
+		{
+			//色をセット
+			shape_->SetColor(color_);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 
 	Object3d::FlagResource Object3d::CreateFlagResource() {

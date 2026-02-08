@@ -41,8 +41,10 @@ void EnemyHPUI::Update() {
 	assert(enemyManager_ != nullptr && "エネミーマネージャーをセットしてください");
 
 	//パラメータのローカル変数
-	float normalEnemyHPBarHeight = param_["normalEnemyHPBarHeight"];
-	float bossEnemyHPBarHeight = param_["bossEnemyHPBarHeight"];
+	float canotaHPBarHeight = param_["canotaHPBarHeight"];
+	float keyCanotaHPBarHeight = param_["keyCanotaHPBarHeight"];
+	float jetHPBarHeight= param_["jetHPBarHeight"];
+	float bossHPBarHeight = param_["bossHPBarHeight"];
 
 	int hpBarIndex = 0;
 	for (int i = 0; i < kNumHPBar; i++) {
@@ -83,22 +85,22 @@ void EnemyHPUI::Update() {
 	//キャノ太
 	for (const auto& canota : enemyManager_->GetCanotas()) {
 		//アクティブでないなら描画しない
-		if (canota->GetState() != BaseCharacter::State::kActive) return;
+		if (canota->GetState() != BaseCharacter::State::kActive) continue;
 
 		Vector3 pos = canota->GetWorldTransform().GetWorldTranslate();
-		pos.y += normalEnemyHPBarHeight;
+		pos.y += canotaHPBarHeight;
 		float rate = (float)canota->GetHP() / (float)canota->GetMaxHP();
 		drawHPBar(pos, rate);
 	}
 
-	//ボス
-	for (const auto& boss : enemyManager_->GetKeyCanotas()) {
+	//キーキャノ太
+	for (const auto& keyCanota : enemyManager_->GetKeyCanotas()) {
 		//死亡していたら描画しない
-		if (boss->GetState() != BaseCharacter::State::kActive) return;
+		if (keyCanota->GetState() != BaseCharacter::State::kActive) continue;
 
-		Vector3 pos = boss->GetWorldTransform().GetWorldTranslate();
-		pos.y += bossEnemyHPBarHeight;
-		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
+		Vector3 pos = keyCanota->GetWorldTransform().GetWorldTranslate();
+		pos.y += keyCanotaHPBarHeight;
+		float rate = (float)keyCanota->GetHP() / (float)keyCanota->GetMaxHP();
 		drawHPBar(pos, rate);
 	}
 
@@ -106,11 +108,23 @@ void EnemyHPUI::Update() {
 	for (const auto& jet : enemyManager_->GetJets()) {
 		//死亡していたら描画しない
 		if (jet->GetState() != BaseCharacter::State::kActive)
-			return;
+			continue;
 
 		Vector3 pos = jet->GetWorldTransform().GetWorldTranslate();
-		pos.y += normalEnemyHPBarHeight;
+		pos.y += jetHPBarHeight;
 		float rate = (float)jet->GetHP() / (float)jet->GetMaxHP();
 		drawHPBar(pos, rate);
+	}
+
+	//ボス
+	{
+		//死亡していたら描画しない
+		if (enemyManager_->GetBoss()->GetState() == BaseCharacter::State::kActive) {
+
+			Vector3 pos = enemyManager_->GetBoss()->GetWorldTransform().GetWorldTranslate();
+			pos.y += bossHPBarHeight;
+			float rate = (float)enemyManager_->GetBoss()->GetHP() / (float)enemyManager_->GetBoss()->GetMaxHP();
+			drawHPBar(pos, rate);
+		}
 	}
 }

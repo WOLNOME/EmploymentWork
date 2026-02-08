@@ -93,7 +93,7 @@ void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	collider_->SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 	//アクティブ状態に変更
 	state_ = State::kActive;
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	//トレールの座標をクリア
 	trail_->ClearPositions();
 }
 

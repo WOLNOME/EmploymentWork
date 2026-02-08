@@ -210,6 +210,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     //α値の計算
     output.color.a = gMaterial.color.a * textureColor.a;
-
+    
+    //α値が0なら表示しない
+    if (output.color.a == 0.0)
+    {
+        discard;
+    }
+    
     return output;
 }

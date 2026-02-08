@@ -8,6 +8,7 @@ namespace Norm {
 	enum class CollisionAttribute {
 		Player,				//プレイヤー
 		Enemy,				//敵	
+		PlayerSpecial,		//プレイヤー必殺弾
 		PlayerCannon,		//プレイヤー砲弾
 		PlayerBullet,		//プレイヤー弾
 		EnemyCannon,		//敵砲弾
@@ -18,6 +19,7 @@ namespace Norm {
 		Item_MoveSpeedUp,	//移動速度アップアイテム
 		Item_TurnSpeedUp,	//回転速度アップアイテム
 		Wall,				//壁
+		Barrier,			//バリア
 
 		Nothingness,		//虚無オブジェクト
 	};

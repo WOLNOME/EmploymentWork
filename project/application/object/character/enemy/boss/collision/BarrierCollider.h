@@ -1,12 +1,12 @@
 #pragma once
-#include "OBBColliderBase.h"
+#include "SphereColliderBase.h"
 
-class Boss;
+class Barrier;
 
 /// <summary>
-/// ボスの当たり判定
+/// バリアの当たり判定
 /// </summary>
-class BossCollider : public Norm::OBBColliderBase {
+class BarrierCollider : public Norm::SphereColliderBase {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -15,11 +15,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	BossCollider(Boss* _holder);
+	BarrierCollider(Barrier* _holder);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~BossCollider() override = default;
+	~BarrierCollider() override = default;
 
 	/// <summary>
 	/// デバッグ
@@ -34,7 +34,7 @@ public:
 
 private:
 	//所有者のポインタ
-	Boss* holder_ = nullptr;
+	Barrier* holder_ = nullptr;
 
 };
 

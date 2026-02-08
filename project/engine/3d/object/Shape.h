@@ -95,6 +95,16 @@ namespace Norm {
 		/// <returns>形状の種類</returns>
 		ShapeKind GetShapeKind() const { return shapeKind_; }
 
+		/// ============================== ///
+		///		setter
+		/// ============================== ///
+
+		/// <summary>
+		/// 色のセット
+		/// </summary>
+		/// <param name="_color">色</param>
+		void SetColor(Vector4& _color) { color_ = &_color; }
+
 	private:
 		/// ============================== ///
 		///		非公開メンバ関数
@@ -147,6 +157,9 @@ namespace Norm {
 		ShapeResource shapeResource_;
 		//球体の分割数
 		const uint32_t kSubdivision = 15;
+
+		//色
+		Vector4* color_ = nullptr;
 
 	};
 

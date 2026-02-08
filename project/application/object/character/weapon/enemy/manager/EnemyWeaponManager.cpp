@@ -57,7 +57,6 @@ void EnemyWeaponManager::DebugWithImGui() {
 	for (const auto& bullet : bullets_) {
 		bullet->DebugWithImGui();
 	}
-
 	//爆弾のデバッグ
 	for (const auto& bomb : bombs_) {
 		bomb->DebugWithImGui();
@@ -95,7 +94,6 @@ void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {
 	for (auto& bullet : bullets_) {
 		bullet->SetPlayerUI(_playerUI);
 	}
-
 	//爆弾全てに渡す
 	for (auto& bomb : bombs_) {
 		bomb->SetPlayerUI(_playerUI);

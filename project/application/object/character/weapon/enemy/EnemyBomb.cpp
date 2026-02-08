@@ -27,11 +27,12 @@ void EnemyBomb::Initialize() {
 	//危険地帯の生成・初期化
 	uint32_t thWarning = TextureManager::GetInstance()->LoadTexture("red.png");
 	warning_ = std::make_unique<Object3d>();
-	warning_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("warning"), "circleShadow");
+	warning_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Warning"), "circleShadow");
 	warning_->SetIsDisplay(false);
 	warning_->SetTexture(thWarning);
 	warning_->SetIsLightProcess(false);
 	warning_->worldTransform.SetScale({40.0f,1.0f,40.0f});
+	warning_->SetColor({ 1.0f,1.0f,1.0f,0.5f });
 
 	//パーティクルの生成と初期化
 	{
@@ -80,6 +81,11 @@ void EnemyBomb::DebugWithImGui() {
 }
 
 void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos) {
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
 	///共通処理
 
 	//初期位置を保存
@@ -93,7 +99,6 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	//アクティブ状態に切り替え
 	SetState(State::kActive);
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
 
 	///別処理
 	switch (_method) {

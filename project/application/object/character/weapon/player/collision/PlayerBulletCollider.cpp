@@ -36,6 +36,11 @@ void PlayerBulletCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 		holder_->DeadProcess();
 
 		break;
+	case CollisionAttribute::Barrier:
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//死亡処理
+		holder_->DeadProcess();
+
 	default:
 		break;
 	}

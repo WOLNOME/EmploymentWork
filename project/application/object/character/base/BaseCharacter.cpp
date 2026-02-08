@@ -23,9 +23,6 @@ void BaseCharacter::Initialize() {
 }
 
 void BaseCharacter::Update() {
-	//前フレーム座標の更新
-	prePosition_ = object3d_->worldTransform.GetTranslate();
-
 	//丸影の更新処理
 	circleShadow_->worldTransform.SetTranslate(object3d_->worldTransform.GetTranslate());
 	Vector3 translate = circleShadow_->worldTransform.GetTranslate();

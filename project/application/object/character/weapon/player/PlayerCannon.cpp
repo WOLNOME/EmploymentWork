@@ -78,6 +78,11 @@ void PlayerCannon::DebugWithImGui() {
 }
 
 void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	//表示する
@@ -91,7 +96,7 @@ void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	collider_->SetCollisionAttribute(CollisionAttribute::PlayerCannon);
 	//アクティブ状態にする
 	SetState(State::kActive);
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	//トレールの座標をクリア
 	trail_->ClearPositions();
 }
 

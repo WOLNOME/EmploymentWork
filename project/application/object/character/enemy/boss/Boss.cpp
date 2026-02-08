@@ -1,5 +1,4 @@
 #include "Boss.h"
-#include <ImGuiManager.h>
 #include <TextureManager.h>
 #include <Object3dManager.h>
 #include <cassert>
@@ -26,6 +25,11 @@ void Boss::Initialize() {
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Boss"), "boss");
 	object3d_->SetIsLightProcess(true);
 	object3d_->SetIsDisplay(false);
+
+	//バリアの生成・初期化
+	barrier_ = std::make_unique<Barrier>();
+	barrier_->Initialize();
+	barrier_->SetBoss(this);
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<BossCollider>(this);
@@ -62,8 +66,8 @@ void Boss::Initialize() {
 	behaviorTreeRoot_->Initialize();
 
 	//メンバ変数の初期化
-	hp_ = param_["maxHP"];
-	isAlive_ = false;
+	maxHP_ = param_["maxHP"];
+	hp_ = maxHP_;
 }
 
 void Boss::Update() {
@@ -72,15 +76,21 @@ void Boss::Update() {
 
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
-
 	//変数情報をブラックボードに転送
 	VariableInfoToBlackBoard(false);
+
+	//ノードで行わない変数の更新
+	VariableUpdate();
 
 	//ビヘイビアツリーの更新
 	behaviorTreeRoot_->Update();
 
 	//ブラックボードから変数情報を取得
 	BlackBoardToVariableInfo();
+
+	//バリアの更新
+	barrier_->Update();
+
 
 }
 
@@ -89,6 +99,9 @@ void Boss::DebugWithImGui() {
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
 
+	//バリアのデバッグ処理
+	barrier_->DebugWithImGui();
+
 	//ビヘイビアツリーのデバッグ処理
 	behaviorTreeRoot_->Debug();
 
@@ -96,8 +109,13 @@ void Boss::DebugWithImGui() {
 }
 
 void Boss::Spawn(const Vector3& _position) {
-	//生存状態に変更
-	isAlive_ = true;
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
+	//HPをセット
+	hp_ = maxHP_;
 	//当たり判定を有効化
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	//モデルを表示
@@ -131,6 +149,7 @@ void Boss::ConstantInfoToBlackBoard() {
 	blackBoard_->SetValue<float>("BulletIntervalTime", param_["bulletIntervalTime"]);
 	blackBoard_->SetValue<int>("BulletMaxMagazine", param_["bulletMaxMagazine"]);
 	//特殊攻撃の情報
+	blackBoard_->SetValue<Barrier*>("Barrier", barrier_.get());
 	blackBoard_->SetValue<float>("BarrierCoolTime", param_["barrierCoolTime"]);
 	blackBoard_->SetValue<float>("BarrierDirTime", param_["barrierDirTime"]);
 	blackBoard_->SetValue<int>("BarrierMaxHP", param_["barrierMaxHP"]);
@@ -209,5 +228,40 @@ void Boss::BlackBoardToVariableInfo() {
 	object3d_->worldTransform.SetRotate(blackBoard_->GetValue<Vector3>("BossRotate"));
 	velocity_ = blackBoard_->GetValue<Vector3>("BossVelocity");
 	hp_ = blackBoard_->GetValue<int>("BossHP");
+}
+
+void Boss::VariableUpdate() {
+	//必要な情報をブラックボードから取得
+	bool isBarrier = blackBoard_->GetValue<bool>("IsBarrier");
+	float barrierCoolTimer = blackBoard_->GetValue<float>("BarrierCoolTimer");
+	float summonCoolTimer = blackBoard_->GetValue<float>("SummonCoolTimer");
+
+	//バリアのクールタイムが0より大きい＆バリアが展開されていないなら
+	if (barrierCoolTimer > 0.0f && !isBarrier) {
+		//時間を減らす
+		barrierCoolTimer -= kDeltaTime;
+		//クールタイムが0を下回ったら
+		if (barrierCoolTimer < 0.0f) {
+			//0.0fにとどめる
+			barrierCoolTimer = 0.0f;
+		}
+	}
+
+	//雑魚敵召喚のクールタイムが0より大きかったら
+	if (summonCoolTimer > 0.0f) {
+		//時間を減らす
+		summonCoolTimer -= kDeltaTime;
+		//クールタイムが0を下回ったら
+		if (summonCoolTimer < 0.0f) {
+			//0.0fにとどめる
+			summonCoolTimer = 0.0f;
+		}
+	}
+
+	//設定した情報をブラックボードにセット
+	blackBoard_->SetValue<float>("BarrierCoolTimer", barrierCoolTimer);
+	blackBoard_->SetValue<float>("SummonCoolTimer", summonCoolTimer);
+
+
 }
 

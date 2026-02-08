@@ -74,6 +74,11 @@ void PlayerBullet::DebugWithImGui() {
 }
 
 void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	//速度を算出
@@ -86,7 +91,7 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	collider_->SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	//アクティブ状態に変更
 	state_ = State::kActive;
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
+	//トレールの座標をクリア
 	trail_->ClearPositions();
 }
 

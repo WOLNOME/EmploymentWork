@@ -71,7 +71,4 @@ void Canota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	//アクティブ状態にする
 	SetState(State::kActive);
-	//前フレーム座標を初期化
-	prePosition_ = { FLT_MAX,FLT_MAX ,FLT_MAX };
-
 }

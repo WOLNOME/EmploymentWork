@@ -214,6 +214,8 @@ namespace Norm {
 
 		//パーティクル個別の設定
 		for (const auto& particle : particles) {
+			//パーティクルが生成されていなかったら次へ
+
 			//各パーティクルのブレンドモード情報からパイプラインステートを選択
 			mainRender->GetCommandList()->SetPipelineState(graphicsPipelineState[particle.second->GetParam()["BlendMode"]].Get());
 			//各パーティクルのエミッターIDをVSに送信
@@ -224,7 +226,7 @@ namespace Norm {
 			particle.second->shape_->Draw(0, 3, (uint32_t)maxNumGrains, particle.second->textureHandle_);
 		}
 
-		//描画に使うUAVリソースをSRV用にリソース遷移
+		//描画に使うSRVリソースをUAV用にリソース遷移
 		mainRender->TransitionResource(commonResourceForCS_.grainsResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		mainRender->TransitionResource(commonResourceForCS_.grainIndicesResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		mainRender->TransitionResource(commonResourceForCS_.emitterRangeResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
