@@ -33,8 +33,4 @@ namespace Norm {
 		mSatisfyIndex = -1;
 	}
 
-	int BranchNodeBase::GetRunningNodeID() const {
-		return mpBranchNodes[mSatisfyIndex]->GetRunningNodeID();
-	}
-
 }

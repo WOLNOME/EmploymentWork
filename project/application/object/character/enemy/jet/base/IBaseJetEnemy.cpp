@@ -45,6 +45,14 @@ void IBaseJetEnemy::SetMessageUI(MessageUI* messageUI) {
 	approachState_->SetMessageUI(messageUI);
 }
 
+void IBaseJetEnemy::SetEnemyUI(EnemyUI* _enemyUI) {
+	//インスタンスのセット
+	enemyUI_ = _enemyUI;
+
+	patrolState_->SetEnemyUI(enemyUI_);
+	approachState_->SetEnemyUI(enemyUI_);
+}
+
 void IBaseJetEnemy::ChangeState(const std::string& stateName) {
 	//新しい状態を決める
 	IJetEnemyState* newState = nullptr;

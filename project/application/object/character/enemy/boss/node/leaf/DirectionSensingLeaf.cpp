@@ -1,6 +1,9 @@
 #include "DirectionSensingLeaf.h"
 #include <ImGuiManager.h>
 
+//アプリケーション
+#include <application/ui/enemy/EnemyUI.h>
+
 using namespace Norm;
 
 DirectionSensingLeaf::DirectionSensingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
@@ -16,6 +19,16 @@ void DirectionSensingLeaf::Initialize() {
 	//ブラックボードの情報を初期化
 	float sensingTime = mpBlackBoard->GetValue<float>("SensingDirTime");
 	mpBlackBoard->SetValue<float>("SensingDirTimer", sensingTime);
+
+	//ブラックボードから必要な情報を取得
+	EnemyUI* enemyUI = mpBlackBoard->GetValue<EnemyUI*>("EnemyUI");
+	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
+	float uiHeight = mpBlackBoard->GetValue<float>("UIHeight");
+	float uiFront = mpBlackBoard->GetValue<float>("UIFront");
+
+	//発見UIを表示
+	enemyUI->GetEnemyReactionUI()->SensingSpawn(bossPos, uiHeight, uiFront);
+
 }
 
 void DirectionSensingLeaf::Update() {
@@ -25,6 +38,7 @@ void DirectionSensingLeaf::Update() {
 	//発見演出タイマーをデクリメント
 	sensingTimer -= kDeltaTime;
 	if (sensingTimer < 0.0f) {
+		//タイマー
 		sensingTimer = 0.0f;
 	}
 

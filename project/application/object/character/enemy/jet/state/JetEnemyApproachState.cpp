@@ -5,6 +5,7 @@
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
 #include <application/ui/message/MessageUI.h>
+#include <application/ui/enemy/EnemyUI.h>
 
 using namespace Norm;
 
@@ -37,10 +38,14 @@ void JetEnemyApproachState::Update(IBaseJetEnemy* enemy) {
 	if (stateContinueTimer_ > kStateContinueTime_) {
 		float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
 		if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetTranslate() - enemy->GetWorldTransform().GetTranslate()).Length() > searchPlayerDistanceApproach) {
+			//パトロールに切り替え
 			enemy->ChangeState("Patrol");
-
 			//接近範囲から外れた通知をする
 			messageUI_->AddMessage(L"ジェットの追跡から逃れた！");
+			//見失うUIを出す
+			float height = enemy->GetParam()["uiHeight"];
+			float front = enemy->GetParam()["uiFront"];
+			enemyUI_->GetEnemyReactionUI()->MissingSpawn(enemy->GetWorldTransform().GetWorldTranslate(), height, front);
 		}
 	}
 	//接近の更新処理

@@ -21,8 +21,6 @@ namespace Norm {
 		void Finalize() override;
 
 	private:
-		//次のインデックスの取得
-		const int GetNextIndex() const override;
 		//ノードのインクリメント
 		void NodeIncrement() override;
 	};

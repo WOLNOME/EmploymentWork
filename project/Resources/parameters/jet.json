@@ -20,5 +20,7 @@
     "height":40,
     "updateTargetPointDistance":20,
     "cannonDamage":10,
-    "bulletDamage":1
+    "bulletDamage":1,
+    "uiHeight":8.0,
+    "uiFront":0.0
 }

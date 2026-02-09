@@ -53,6 +53,7 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 	}
 	//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
 		hp -= holder_->GetParam()["cannonDamage"];
@@ -60,8 +61,10 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 		hp = std::clamp(hp, 0, holder_->GetMaxHP());
 
 		break;
-		//プレイヤー弾に当たった場合
+	}
+	//プレイヤー弾に当たった場合
 	case CollisionAttribute::PlayerBullet:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
 		hp -= holder_->GetParam()["bulletDamage"];
@@ -69,6 +72,17 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 		hp = std::clamp(hp, 0, holder_->GetMaxHP());
 
 		break;
+	}
+	//バリアに当たった場合
+	case CollisionAttribute::Barrier:
+	{
+		//相手の座標と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetTranslate() - GetWorldTransform().GetTranslate()).Normalized();
+		velocity.x += reflectVec.x * 30.0f;
+		velocity.z += reflectVec.z * 30.0f;
+
+		break;
+	}
 	default:
 		break;
 	}

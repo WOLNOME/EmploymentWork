@@ -26,10 +26,6 @@ namespace Norm {
 		virtual void Debug() = 0;
 		//ノードの状態を取得
 		virtual NodeResult GetNodeResult() const = 0;
-		//ノードIDのセット
-		virtual void SetNodeID(const int id) = 0;
-		//実行中のノードIDの取得
-		virtual int GetRunningNodeID() const = 0;
 	};
 
 }

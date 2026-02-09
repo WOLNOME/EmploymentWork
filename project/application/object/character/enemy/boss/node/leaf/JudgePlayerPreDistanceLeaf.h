@@ -8,7 +8,7 @@ class JudgePlayerPreDistanceLeaf :
     public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgePlayerPreDistanceLeaf(Norm::BlackBoard* _blackBoard,float _preDistance);
+	explicit JudgePlayerPreDistanceLeaf(Norm::BlackBoard* _blackBoard,float _distance);
 	// デストラクタ
 	~JudgePlayerPreDistanceLeaf();
 
@@ -22,6 +22,6 @@ public:
 	Norm::NodeResult GetNodeResult() const override;
 
 private:
-	float preDistance_ = 0.0f;		// プレイヤーの前フレームとの距離
+	float distance_ = 0.0f;		// プレイヤーの前フレームとの距離
 };
 

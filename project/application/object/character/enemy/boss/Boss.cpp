@@ -108,23 +108,25 @@ void Boss::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void Boss::Spawn(const Vector3& _position) {
+void Boss::Spawn(const Vector3& _initPos,const Vector3& _initRotate) {
 	//ステートがアイドルでなければ失敗
 	if (state_ != State::kIdle) {
 		return;
 	}
 
+	//初期位置を保存（高さはそろえる）
+	Vector3 initPos = _initPos;
+	initPos.y = 16.0f;
+	object3d_->worldTransform.SetTranslate(initPos);
+	//初期回転を保存
+	object3d_->worldTransform.SetRotate(_initRotate);
+	//モデルを表示
+	object3d_->SetIsDisplay(true);
+	circleShadow_->SetIsDisplay(true);
 	//HPをセット
 	hp_ = maxHP_;
 	//当たり判定を有効化
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
-	//モデルを表示
-	object3d_->SetIsDisplay(true);
-	circleShadow_->SetIsDisplay(true);
-	//指定座標に出現
-	Vector3 position = _position;
-	position.y = 16.0f;
-	object3d_->worldTransform.SetTranslate(position);
 	//ステートをアクティブに変更する
 	SetState(State::kActive);
 }
@@ -134,6 +136,20 @@ void Boss::SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) {
 	enemyWeaponManager_ = _enemyWeaponManager;
 	//ブラックボードに書き込む
 	blackBoard_->SetValue<EnemyWeaponManager*>("EnemyWeaponManager", enemyWeaponManager_);
+}
+
+void Boss::SetEnemyManager(EnemyManager* _enemyManager) {
+	//インスタンスをセット
+	enemyManager_ = _enemyManager;
+	//ブラックボードに書き込む
+	blackBoard_->SetValue<EnemyManager*>("EnemyManager", enemyManager_);
+}
+
+void Boss::SetEnemyUI(EnemyUI* _enemyUI) {
+	//インスタンスをセット
+	enemyUI_ = _enemyUI;
+	//ブラックボードに書き込む
+	blackBoard_->SetValue<EnemyUI*>("EnemyUI", enemyUI_);
 }
 
 void Boss::ConstantInfoToBlackBoard() {
@@ -162,6 +178,8 @@ void Boss::ConstantInfoToBlackBoard() {
 	//その他
 	blackBoard_->SetValue<float>("KeepDistanceTime", param_["keepDistanceTime"]);
 	blackBoard_->SetValue<float>("FloorFriction", floorFriction_);
+	blackBoard_->SetValue<float>("UIHeight", param_["uiHeight"]);
+	blackBoard_->SetValue<float>("UIFront", param_["uiFront"]);
 }
 
 void Boss::VariableInfoToBlackBoard(bool _isInit) {

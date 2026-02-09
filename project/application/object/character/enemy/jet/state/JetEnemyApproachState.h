@@ -2,7 +2,9 @@
 #include "IJetEnemyState.h"
 #include <Vector3.h>
 
+//前方宣言
 class MessageUI;
+class EnemyUI;
 
 /// <summary>
 /// ジェットエネミーの接近状態を管理するクラス
@@ -37,7 +39,12 @@ public:
 	/// メッセージUIのセット
 	/// </summary>
 	/// <param name="messageUI">メッセージUIのポインタ</param>
-	void SetMessageUI(MessageUI* messageUI) { messageUI_ = messageUI; }
+	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
+	/// <summary>
+	/// 敵UIのセット
+	/// </summary>
+	/// <param name="_enemyUI">敵UIのポインタ</param>
+	void SetEnemyUI(EnemyUI* _enemyUI) { enemyUI_ = _enemyUI; }
 
 private:
 	/// ============================== ///
@@ -49,6 +56,12 @@ private:
 	/// </summary>
 	/// <param name="enemy">ジェットエネミーのポインタ</param>
 	void UpdateApproach(IBaseJetEnemy* enemy);
+
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
+	EnemyUI* enemyUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

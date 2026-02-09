@@ -11,13 +11,13 @@
         "z":15.0
     },
     "speed":6.0,
-    "turnSpeed":1.6,
+    "turnSpeed":1.3,
     "maxSpeed":40.0,
     "barrierCoolTime":15.0,
     "barrierDirTime":3.0,
     "barrierMaxHP":100,
-    "bombReloadTime":3.0,
-    "cannonReloadTime":3.0,
+    "bombReloadTime":3.5,
+    "cannonReloadTime":2.0,
     "bulletReloadTime":3.0,
     "bulletIntervalTime":0.15,
     "bulletMaxMagazine":30,
@@ -26,8 +26,10 @@
     "summonDirTime":5.0,
     "keepDistanceTime":5.0,
     "confusionDirTime":6.0,
-    "missingDirTime":2.0,
-    "sensingDirTime":2.0,
+    "missingDirTime":0.1,
+    "sensingDirTime":0.1,
     "cannonDamage":10,
-    "bulletDamage":1
+    "bulletDamage":1,
+    "uiHeight":35.0,
+    "uiFront":15.0
 }

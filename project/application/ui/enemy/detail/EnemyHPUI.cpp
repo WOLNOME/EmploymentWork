@@ -117,14 +117,14 @@ void EnemyHPUI::Update() {
 	}
 
 	//ボス
-	{
+	for (const auto& boss : enemyManager_->GetBosses()) {
 		//死亡していたら描画しない
-		if (enemyManager_->GetBoss()->GetState() == BaseCharacter::State::kActive) {
+		if (boss->GetState() != BaseCharacter::State::kActive)
+			continue;
 
-			Vector3 pos = enemyManager_->GetBoss()->GetWorldTransform().GetWorldTranslate();
-			pos.y += bossHPBarHeight;
-			float rate = (float)enemyManager_->GetBoss()->GetHP() / (float)enemyManager_->GetBoss()->GetMaxHP();
-			drawHPBar(pos, rate);
-		}
+		Vector3 pos = boss->GetWorldTransform().GetWorldTranslate();
+		pos.y += bossHPBarHeight;
+		float rate = (float)boss->GetHP() / (float)boss->GetMaxHP();
+		drawHPBar(pos, rate);
 	}
 }

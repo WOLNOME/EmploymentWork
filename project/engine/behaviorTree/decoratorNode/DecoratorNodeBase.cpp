@@ -26,9 +26,4 @@ namespace Norm {
 		mChildNode = std::move(_node);
 	}
 
-	int DecoratorNodeBase::GetRunningNodeID() const {
-		// 子ノードの実行中ノードIDを返す
-		return mChildNode->GetRunningNodeID();
-	}
-
 }

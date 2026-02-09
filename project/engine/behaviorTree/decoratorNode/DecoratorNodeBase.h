@@ -21,9 +21,7 @@ namespace Norm {
 
         //子ノードのセット
         void SetNode(std::unique_ptr<INode> _node);
-        //実行中のノードIDの取得
-        int GetRunningNodeID() const override;
-
+        
     protected:
         std::unique_ptr<INode> mChildNode = nullptr;
     };

@@ -3,6 +3,7 @@
 
 //アプリケーション
 #include "detail/EnemyHPUI.h"
+#include "detail/EnemyReactionUI.h"
 
 //前方宣言（エンジン）
 namespace Norm {
@@ -35,6 +36,16 @@ public:
 	void DebugWithImGui();
 
 	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// リアクションUIを取得
+	/// </summary>
+	/// <returns>リアクションUIのポインタ</returns>
+	EnemyReactionUI* GetEnemyReactionUI() { return enemyReactionUI_.get(); }
+
+	/// ============================== ///
 	///		setter
 	/// ============================== ///
 
@@ -48,6 +59,7 @@ public:
 	/// </summary>
 	/// <param name="_camera">ゲームカメラ</param>
 	void SetGameCamera(Norm::GameCamera* _camera);
+
 private:
 	/// ============================== ///
 	///		インスタンス
@@ -55,11 +67,14 @@ private:
 
 	//HPUI
 	std::unique_ptr<EnemyHPUI> enemyHPUI_ = nullptr;
+	//リアクションUI
+	std::unique_ptr<EnemyReactionUI> enemyReactionUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
+	//パラメーター
 	json param_;
 
 };

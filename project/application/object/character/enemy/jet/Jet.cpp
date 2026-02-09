@@ -77,4 +77,6 @@ void Jet::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	//アクティブ状態にする
 	SetState(State::kActive);
+	//ステートを決定
+	ChangeState("Patrol");
 }

@@ -94,6 +94,7 @@ void GamePlayScene::Initialize() {
 	enemyManager_->SetItemManager(itemManager_.get());
 	enemyManager_->SetEnemyWeaponManager(enemyWeaponManager_.get());
 	enemyManager_->SetMessageUI(messageUI_.get());
+	enemyManager_->SetEnemyUI(enemyUI_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
@@ -103,20 +104,9 @@ void GamePlayScene::Initialize() {
 	playerUI_->SetItemManager(itemManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
-	//全てのインスタンスを更新しておく
-	BaseScene::Update();
-	timeScaleManager_->Update();
-	startDirection_->Update();
-	endDirection_->Update();
-	levelLoader_->Update();
+	//必要なインスタンスの更新
 	playerUI_->Update();
 	player_->Update();
-	enemyManager_->Update();
-	playerWeaponManager_->Update();
-	enemyWeaponManager_->Update();
-	enemyUI_->Update();
-	itemManager_->Update();
-	messageUI_->Update();
 	camera_->Update();
 }
 
@@ -217,7 +207,7 @@ void GamePlayScene::DebugWithImGui() {
 	pauseSystem_->Debug();
 
 	ImGui::Begin("距離");
-	float distance = Vector3(player_->GetWorldTransform().GetTranslate() - enemyManager_->GetBoss()->GetWorldTransform().GetTranslate()).Length();
+	float distance = Vector3(player_->GetWorldTransform().GetTranslate() - enemyManager_->GetBosses()[0]->GetWorldTransform().GetTranslate()).Length();
 	ImGui::Text("%f", distance);
 	ImGui::End();
 

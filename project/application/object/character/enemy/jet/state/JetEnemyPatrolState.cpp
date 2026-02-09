@@ -7,6 +7,7 @@
 #include <application/object/character/enemy/jet/base/IBaseJetEnemy.h>
 #include <application/object/character/player/Player.h>
 #include <application/ui/message/MessageUI.h>
+#include <application/ui/enemy/EnemyUI.h>
 
 using namespace Norm;
 
@@ -39,9 +40,15 @@ void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
 		Vector3 enemyPos = enemy->GetWorldTransform().GetTranslate();
 		float length = Vector3(playerPos - enemyPos).Length();
 		if (length < searchPlayerDistanceApproach) {
+			//接近に切り替え
 			enemy->ChangeState("Approach");
 			//接近の通知をする
 			messageUI_->AddMessage(L"<注意> ジェットに捕捉された！");
+			//発見UIを出す
+			float height = enemy->GetParam()["uiHeight"];
+			float front = enemy->GetParam()["uiFront"];
+			enemyUI_->GetEnemyReactionUI()->SensingSpawn(enemy->GetWorldTransform().GetWorldTranslate(), height, front);
+
 		}
 	}
 

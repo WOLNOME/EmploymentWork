@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard, float _preDistance) : LeafNodeBase(_blackBoard), preDistance_(_preDistance) {
+JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard, float _distance) : LeafNodeBase(_blackBoard), distance_(_distance) {
 }
 
 JudgePlayerPreDistanceLeaf::~JudgePlayerPreDistanceLeaf() {
@@ -29,13 +29,13 @@ NodeResult JudgePlayerPreDistanceLeaf::GetNodeResult() const {
 	playerPrePos.y = 0.0f;
 
 	//前フレームの距離を計算
-	float dist = (bossPrePos - playerPrePos).Length();
+	float preDist = (bossPrePos - playerPrePos).Length();
 
-	//もし前フレームの距離が設定距離より大きいならsuccessを返す
-	if (dist > preDistance_) {
+	//もし現フレームの距離が設定距離以下＆前フレームの距離が設定距離より大きいならSuccessを返す
+	if (preDist > distance_) {
 		return NodeResult::Success;
 	}
 
-	//前フレームの距離が設定距離より大きいならfailを返す
+	//前フレームの距離が設定距離より小さいならfailを返す
 	return NodeResult::Fail;
 }

@@ -8,10 +8,6 @@ namespace Norm {
 	/// 各ノードが継承する基底クラス
 	/// </summary>
 	class NodeBase : public INode {
-	public:
-		//ノードIDのセット
-		void SetNodeID(const int id) override { mNodeID = id; }
-
 	protected:
 		//コンストラクタ
 		explicit NodeBase(BlackBoard* _blackBoard) : mpBlackBoard(_blackBoard) {}
@@ -28,8 +24,6 @@ namespace Norm {
 
 		//結果を取得
 		virtual NodeResult GetNodeResult() const override { return mNodeResult; }
-		//実行中のノードIDの取得
-		virtual int GetRunningNodeID() const override { return mNodeID; }
 
 		NodeResult mNodeResult = NodeResult::Idle;  //ノードの状態
 		BlackBoard* mpBlackBoard = nullptr; //ブラックボード

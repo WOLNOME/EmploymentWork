@@ -19,6 +19,7 @@ class Player;
 class ItemManager;
 class EnemyWeaponManager;
 class MessageUI;
+class EnemyUI;
 
 /// <summary>
 /// エネミー全体の管理を行うクラス
@@ -41,6 +42,34 @@ public:
 	/// デバッグ用パラメーター調整
 	/// </summary>
 	void DebugWithImGui();
+
+	/// <summary>
+	/// キャノ太のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void CanotaSpawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate);
+
+	/// <summary>
+	/// キーキャノ太のスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void KeyCanotaSpawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate);
+
+	/// <summary>
+	/// ジェットのスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void JetSpawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate);
+
+	/// <summary>
+	/// ボスのスポーン
+	/// </summary>
+	/// <param name="_initPos">初期位置</param>
+	/// <param name="_initRotate">初期回転</param>
+	void BossSpawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate);
 
 	/// ============================== ///
 	///		getter
@@ -65,7 +94,7 @@ public:
 	/// ボスのコンテナ取得
 	/// </summary>
 	/// <returns></returns>
-	const std::unique_ptr<Boss>& GetBoss() const { return boss_; }
+	const std::vector<std::unique_ptr<Boss>>& GetBosses() const { return bosses_; }
 
 	/// ============================== ///
 	///		setter
@@ -96,8 +125,37 @@ public:
 	/// </summary>
 	/// <param name="_messageUI">メッセージUIのポインタ</param>
 	void SetMessageUI(MessageUI* _messageUI);
+	/// <summary>
+	/// 敵UIのセット
+	/// </summary>
+	/// <param name="_enemyUI"></param>
+	void SetEnemyUI(EnemyUI* _enemyUI);
 
 private:
+	/// ============================== ///
+	///		メンバ関数（private）
+	/// ============================== ///
+
+	/// <summary>
+	/// スポーンの共通処理(Spawn処理は爆弾のみ共通ではないので、関数オブジェクトを別で渡している)
+	/// </summary>
+	/// <typeparam name="T">プール内に格納されているオブジェクトの型</typeparam>
+	/// <typeparam name="SpawnFunc">Spawn処理を行う関数オブジェクト</typeparam>
+	/// <param name="container">コンテナ</param>
+	/// <param name="spawnFunc">実際のSpawn処理を定義する関数オブジェクト</param>
+	template<class T, class SpawnFunc>
+	void SpawnFromPool(
+		std::vector<std::unique_ptr<T>>& container,
+		SpawnFunc spawnFunc) {
+		for (auto& obj : container) {
+			if (obj->GetState() != BaseCharacter::State::kIdle)
+				continue;
+
+			spawnFunc(obj.get());
+			break;
+		}
+	}
+
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
@@ -108,6 +166,8 @@ private:
 	ItemManager* itemManager_ = nullptr;
 	//敵武器マネージャー
 	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
+	//敵UI
+	EnemyUI* enemyUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -123,7 +183,7 @@ private:
 	//ジェットのコンテナ
 	std::vector<std::unique_ptr<Jet>> jets_;
 	//ボスのインスタンス
-	std::unique_ptr<Boss> boss_ = nullptr;
+	std::vector<std::unique_ptr<Boss>> bosses_;
 
 };
 

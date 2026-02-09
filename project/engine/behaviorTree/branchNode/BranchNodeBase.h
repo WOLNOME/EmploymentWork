@@ -21,9 +21,6 @@ namespace Norm {
 		//終了
 		virtual void Finalize() override;
 
-		//実行中のノードIDの取得
-		int GetRunningNodeID() const override;
-
 	protected:
 		//状態フラグの取得
 		virtual const bool IsCondition() = 0;

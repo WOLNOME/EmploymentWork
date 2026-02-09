@@ -180,11 +180,6 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 			assert(false && "未知のノードタイプです");
 		}
 
-		// すべてのノードにIDを設定
-		if (node) {
-			node->SetNodeID(nodeId);
-		}
-
 		return node;
 		};
 

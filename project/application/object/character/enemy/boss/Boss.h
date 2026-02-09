@@ -11,6 +11,8 @@
 //前方宣言
 class Player;
 class EnemyWeaponManager;
+class EnemyManager;
+class EnemyUI;
 
 /// <summary>
 /// ボスクラス
@@ -45,8 +47,9 @@ public:
 	/// <summary>
 	/// スポーン処理
 	/// </summary>
-	/// <param name="_position">座標</param>
-	void Spawn(const Norm::Vector3& _position);
+	/// <param name="_initPos">初期座標</param>
+	/// <param name="_initRotate">初期回転</param>
+	void Spawn(const Norm::Vector3& _initPos,const Norm::Vector3& _initRotate);
 
 
 	/// ============================== ///
@@ -84,6 +87,16 @@ public:
 	/// </summary>
 	/// <param name="_enemyWeaponManager">敵武器マネージャーのポインタ</param>
 	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager);
+	/// <summary>
+	/// 敵マネージャーのセット
+	/// </summary>
+	/// <param name="_enemyManager">敵マネージャーのポインタ</param>
+	void SetEnemyManager(EnemyManager* _enemyManager);
+	/// <summary>
+	/// 敵UIのセット
+	/// </summary>
+	/// <param name="_enemyUI">敵UIのポインタ</param>
+	void SetEnemyUI(EnemyUI* _enemyUI);
 
 	/// <summary>
 	/// HPのセット
@@ -124,6 +137,11 @@ private:
 	Player* player_ = nullptr;
 	//敵武器マネージャー
 	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
+	//敵マネージャー
+	EnemyManager* enemyManager_ = nullptr;
+	//敵UI
+	EnemyUI* enemyUI_ = nullptr;
+
 	//バリア
 	std::unique_ptr<Barrier> barrier_ = nullptr;
 

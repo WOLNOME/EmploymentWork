@@ -3,7 +3,9 @@
 #include <Vector3.h>
 #include <string>
 
+//前方宣言
 class MessageUI;
+class EnemyUI;
 
 /// <summary>
 /// ジェットエネミーのパトロール状態を管理するクラス
@@ -38,7 +40,12 @@ public:
 	/// メッセージUIを設定する
 	/// </summary>
 	/// <param name="messageUI">メッセージUIのポインタ</param>
-	void SetMessageUI(MessageUI* messageUI) { messageUI_ = messageUI; }
+	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
+	/// <summary>
+	/// 敵UIを設定する
+	/// </summary>
+	/// <param name="_enemyUI">敵UIのポインタ</param>
+	void SetEnemyUI(EnemyUI* _enemyUI) { enemyUI_ = _enemyUI; }
 
 private:
 	/// ============================== ///
@@ -52,12 +59,18 @@ private:
 	void UpdatePatrol(IBaseJetEnemy* enemy);
 
 	/// ============================== ///
-	///		メンバ変数
+	///		インスタンス
 	/// ============================== ///
 
 	//メッセージUI
 	MessageUI* messageUI_ = nullptr;
+	//敵UI
+	EnemyUI* enemyUI_ = nullptr;
 
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+	
 	//目標ポイント
 	Norm::Vector3 targetPosition_ = {};
 	bool isDecidedTargetPoint_ = false;

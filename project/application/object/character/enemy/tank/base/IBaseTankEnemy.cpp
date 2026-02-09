@@ -100,3 +100,11 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 		currentState_->Enter(this);
 	}
 }
+
+void IBaseTankEnemy::SetEnemyUI(EnemyUI* _enemyUI) {
+	//インスタンスをセット
+	enemyUI_ = _enemyUI;
+
+	patrolState_->SetEnemyUI(enemyUI_);
+	approachState_->SetEnemyUI(enemyUI_);
+}

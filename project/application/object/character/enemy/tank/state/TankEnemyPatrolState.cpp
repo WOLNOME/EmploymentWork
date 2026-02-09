@@ -5,6 +5,7 @@
 //アプリケーション
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
 #include <application/object/character/player/Player.h>
+#include <application/ui/enemy/EnemyUI.h>
 
 using namespace Norm;
 
@@ -21,7 +22,12 @@ void TankEnemyPatrolState::Update(IBaseTankEnemy* enemy) {
 	//プレイヤーが近づいたら接近状態に切り替え
 	float searchPlayerDistanceApproach = enemy->GetParam()["searchPlayerDistanceApproach"];
 	if (Vector3(enemy->GetPlayer()->GetWorldTransform().GetWorldTranslate() - enemy->GetWorldTransform().GetWorldTranslate()).Length() < searchPlayerDistanceApproach) {
+		//接近に切り替え
 		enemy->ChangeState("Approach");
+		//発見UIを出す
+		float height = enemy->GetParam()["uiHeight"];
+		float front = enemy->GetParam()["uiFront"];
+		enemyUI_->GetEnemyReactionUI()->SensingSpawn(enemy->GetWorldTransform().GetWorldTranslate(), height, front);
 	}
 
 	//パトロールの更新処理

@@ -16,6 +16,7 @@ class Player;
 class ItemManager;
 class EnemyWeaponManager;
 class MessageUI;
+class EnemyUI;
 
 /// <summary>
 /// ジェットエネミー専用の基底クラス
@@ -120,6 +121,12 @@ public:
 	/// <param name="messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* messageUI);
 	/// <summary>
+	/// 敵UIを設定する
+	/// </summary>
+	/// <param name="_enemyUI">設定する敵UI</param>
+	void SetEnemyUI(EnemyUI* _enemyUI);
+
+	/// <summary>
 	/// HPをセット
 	/// </summary>
 	/// <param name="_hp">HP</param>
@@ -133,6 +140,7 @@ protected:
 	Player* player_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
 	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
+	EnemyUI* enemyUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(protected)

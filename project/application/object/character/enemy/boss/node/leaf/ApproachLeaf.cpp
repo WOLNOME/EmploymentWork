@@ -99,16 +99,7 @@ void ApproachLeaf::Debug() {
 }
 
 NodeResult ApproachLeaf::GetNodeResult() const {
-    // === BlackBoard取得 ===
-    Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
-    Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
-
-    //距離を求めて350~450ならrunning、それ以外ならsuccess
-    float distance = Vector3(bossPos - playerPos).Length();
-    if (distance > 350.0f && distance <= 450.0f) {
-        return NodeResult::Running;
-    }
-
+   
 	//成功を返す
 	return NodeResult::Success;
 }

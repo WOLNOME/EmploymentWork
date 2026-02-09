@@ -1,6 +1,9 @@
 #include "DirectionMissingLeaf.h"
 #include <ImGuiManager.h>
 
+//アプリケーション
+#include <application/ui/enemy/EnemyUI.h>
+
 using namespace Norm;
 
 DirectionMissingLeaf::DirectionMissingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
@@ -16,6 +19,16 @@ void DirectionMissingLeaf::Initialize() {
 	//ブラックボードの情報を初期化
 	float missingTime = mpBlackBoard->GetValue<float>("MissingDirTime");
 	mpBlackBoard->SetValue<float>("MissingDirTimer", missingTime);
+
+	//ブラックボードから必要な情報を取得
+	EnemyUI* enemyUI = mpBlackBoard->GetValue<EnemyUI*>("EnemyUI");
+	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
+	float uiHeight = mpBlackBoard->GetValue<float>("UIHeight");
+	float uiFront = mpBlackBoard->GetValue<float>("UIFront");
+
+	//見失うUIを表示
+	enemyUI->GetEnemyReactionUI()->MissingSpawn(bossPos, uiHeight, uiFront);
+
 }
 
 void DirectionMissingLeaf::Update() {
@@ -25,6 +38,7 @@ void DirectionMissingLeaf::Update() {
 	//見失うタイマーをデクリメント
 	missingTimer -= kDeltaTime;
 	if (missingTimer < 0.0f) {
+		//タイマー
 		missingTimer = 0.0f;
 	}
 

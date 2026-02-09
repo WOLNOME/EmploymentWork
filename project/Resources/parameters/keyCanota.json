@@ -18,5 +18,7 @@
     "cannonCoolTime":1.5,
     "maxHP":20,
     "cannonDamage":10,
-    "bulletDamage":1
+    "bulletDamage":1,
+    "uiHeight":13.0,
+    "uiFront":0.0
 }

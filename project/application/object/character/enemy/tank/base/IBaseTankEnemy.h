@@ -17,6 +17,7 @@
 class Player;
 class ItemManager;
 class EnemyWeaponManager;
+class EnemyUI;
 
 /// <summary>
 /// 戦車型エネミー専用の基底クラス
@@ -131,6 +132,12 @@ public:
 	/// <param name="_enemyWeaponManager">設定する敵武器マネージャー</param>
 	void SetEnemyWeaponManager(EnemyWeaponManager* _enemyWeaponManager) { enemyWeaponManager_ = _enemyWeaponManager; }
 	/// <summary>
+	/// 敵UIを設定する
+	/// </summary>
+	/// <param name="_enemyUI">敵UI</param>
+	void SetEnemyUI(EnemyUI* _enemyUI);
+
+	/// <summary>
 	/// HPをセット
 	/// </summary>
 	/// <param name="_hp">HP</param>
@@ -144,6 +151,7 @@ protected:
 	Player* player_ = nullptr;
 	ItemManager* itemManager_ = nullptr;
 	EnemyWeaponManager* enemyWeaponManager_ = nullptr;
+	EnemyUI* enemyUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(protected)

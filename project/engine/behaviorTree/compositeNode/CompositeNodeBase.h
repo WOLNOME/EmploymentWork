@@ -23,14 +23,9 @@ namespace Norm {
 		//ノードの追加
 		void AddNode(std::unique_ptr<INode> _node);
 
-		//実行中のノードIDの取得
-		virtual int GetRunningNodeID() const override;
-
 	protected:
 		//ノードのインクリメント
-		virtual void NodeIncrement();
-		//次のインデックスの取得
-		virtual const int GetNextIndex() const = 0;
+		virtual void NodeIncrement() = 0;
 
 	protected:
 		// 子ノード群

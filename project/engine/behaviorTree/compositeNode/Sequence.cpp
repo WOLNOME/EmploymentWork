@@ -38,23 +38,36 @@ namespace Norm {
 		CompositeNodeBase::Finalize();
 	}
 
-	const int Sequence::GetNextIndex() const {
-		return mRunningNodeIndex + 1;
-	}
-
 	void Sequence::NodeIncrement() {
-		// 現在のノードの後始末
-		mChildNodes[mRunningNodeIndex]->Finalize();
-		// インデックスを進める
-		mRunningNodeIndex = GetNextIndex();
-		// もしすべての子ノードを試しても成功したら
-		if (mRunningNodeIndex > mChildNodes.size() - 1) {
-			mNodeResult = NodeResult::Success;
-			Finalize();
+		while (true) {
+			//現在のノードの後始末
+			mChildNodes[mRunningNodeIndex]->Finalize();
+			//インデックスを進める
+			mRunningNodeIndex++;
+			//もしすべての子ノードを試しても成功したら
+			if (mRunningNodeIndex >= mChildNodes.size()) {
+				mNodeResult = NodeResult::Success;
+				Finalize();
+				return;
+			}
+			//次に回すノードの初期化
+			mChildNodes[mRunningNodeIndex]->Initialize();
+			//ノードの更新
+			mChildNodes[mRunningNodeIndex]->Update();
+			auto result = mChildNodes[mRunningNodeIndex]->GetNodeResult();
+
+			//もし成功が返されたら次のノードに進む
+			if (result == NodeResult::Success) {
+				continue; // 次を即評価
+			}
+			//もし失敗が返されたらノード終了
+			if (result == NodeResult::Fail) {
+				Finalize();
+			}
+
+			mNodeResult = result;
 			return;
 		}
-		// 次に回すノードの初期化
-		mChildNodes[mRunningNodeIndex]->Initialize();
 	}
 
 }

@@ -1,13 +1,16 @@
 #pragma once
 #include "ITankEnemyState.h"
 
+//前方宣言
+class EnemyUI;
+
 /// <summary>
 /// 戦車型エネミーの接近状態を管理するクラス
 /// </summary>
 class TankEnemyApproachState : public ITankEnemyState {
 public:
 	/// ============================== ///
-	///		メンバ関数
+	///		メンバ関数（public）
 	/// ============================== ///
 
 	/// <summary>
@@ -26,9 +29,25 @@ public:
 	/// <param name="enemy">タンクエネミーのポインタ</param>
 	void Exit(IBaseTankEnemy* enemy) override;
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 敵UIをセット
+	/// </summary>
+	/// <param name="_enemyUI">敵UI</param>
+	void SetEnemyUI(EnemyUI* _enemyUI) { enemyUI_ = _enemyUI; }
+
 private:
 	/// ============================== ///
-	///		非公開メンバ関数
+	///		インスタンス
+	/// ============================== ///
+
+	EnemyUI* enemyUI_ = nullptr;
+
+	/// ============================== ///
+	///		メンバ関数（private）
 	/// ============================== ///
 
 	/// <summary>

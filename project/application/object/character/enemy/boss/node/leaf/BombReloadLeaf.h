@@ -23,7 +23,14 @@ public:
 	Norm::NodeResult GetNodeResult() const override;
 
 private:
+	// リアクション
+	void Reaction();
+
 	// 最大弾倉数
 	const int kBombMaxMagazine_ = 1;
+
+	//見失ったか
+	bool isMissing_ = false;
+
 };
 

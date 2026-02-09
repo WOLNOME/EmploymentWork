@@ -56,6 +56,11 @@ void Canota::DebugWithImGui() {
 }
 
 void Canota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
+	//ステートがアイドルでなければ失敗
+	if (state_ != State::kIdle) {
+		return;
+	}
+
 	//初期位置を保存（高さはそろえる）
 	Vector3 initPos = _initPos;
 	initPos.y = 3.0f;
@@ -71,4 +76,6 @@ void Canota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	//アクティブ状態にする
 	SetState(State::kActive);
+	//ステートを決定
+	ChangeState("Patrol");
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
+#include <array>
 
 /// <summary>
 /// 召喚ノード
@@ -23,5 +24,10 @@ public:
 
 	// ノードの状態を取得
 	Norm::NodeResult GetNodeResult() const override;
+
+private:
+	//召喚する座標
+	static const int kSummonNum = 2;
+	std::array < Norm::Vector3, kSummonNum > summonPositions_;
 };
 

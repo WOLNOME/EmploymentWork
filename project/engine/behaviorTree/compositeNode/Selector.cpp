@@ -12,6 +12,7 @@ namespace Norm {
 		mChildNodes[mRunningNodeIndex]->Update();
 		auto result = mChildNodes[mRunningNodeIndex]->GetNodeResult();
 
+		//もし失敗が返されたら次のノードに進める
 		if (result == NodeResult::Fail) {
 			// 次回Sequenceに向けてノード番号を進める
 			NodeIncrement();
@@ -31,23 +32,36 @@ namespace Norm {
 		CompositeNodeBase::Finalize();
 	}
 
-	const int Selector::GetNextIndex() const {
-		return mRunningNodeIndex + 1;
-	}
-
 	void Selector::NodeIncrement() {
-		// 現在のノードの後始末
-		mChildNodes[mRunningNodeIndex]->Finalize();
-		// インデックスを進める
-		mRunningNodeIndex = GetNextIndex();
-		// もしすべての子ノードを試しても失敗したら
-		if (mRunningNodeIndex > mChildNodes.size() - 1) {
-			mNodeResult = NodeResult::Fail;
-			Finalize();
+		while (true) {
+			//現在のノードの後始末
+			mChildNodes[mRunningNodeIndex]->Finalize();
+			//インデックスを進める
+			mRunningNodeIndex++;
+			//もしすべての子ノードを試しても失敗したら
+			if (mRunningNodeIndex >= mChildNodes.size()) {
+				mNodeResult = NodeResult::Fail;
+				Finalize();
+				return;
+			}
+			//次に回すノードの初期化
+			mChildNodes[mRunningNodeIndex]->Initialize();
+			//ノードの更新
+			mChildNodes[mRunningNodeIndex]->Update();
+			auto result = mChildNodes[mRunningNodeIndex]->GetNodeResult();
+
+			//もし失敗が返されたら次のノードに進む
+			if (result == NodeResult::Fail) {
+				continue; // 次を即評価
+			}
+			//もし成功が返されたらノード終了
+			if (result == NodeResult::Success) {
+				Finalize();
+			}
+
+			mNodeResult = result;
 			return;
 		}
-		// 次に回すノードの初期化
-		mChildNodes[mRunningNodeIndex]->Initialize();
 	}
 
 }

@@ -35,27 +35,4 @@ namespace Norm {
 		mChildNodes.push_back(std::move(_node));
 	}
 
-	int CompositeNodeBase::GetRunningNodeID() const {
-		// 現在動かしているノードのIDを返す
-		return mChildNodes[mRunningNodeIndex]->GetRunningNodeID();
-	}
-
-	void CompositeNodeBase::NodeIncrement() {
-		// 現在のノードの後始末
-		mChildNodes[mRunningNodeIndex]->Finalize();
-
-		// インデックスを進める
-		mRunningNodeIndex = GetNextIndex();
-
-		// もしすべての子ノードを試しても失敗したら
-		if (mRunningNodeIndex > mChildNodes.size() - 1) {
-			mNodeResult = NodeResult::Fail;
-			Finalize();
-			return;
-		}
-
-		// 次に回すノードの初期化
-		mChildNodes[mRunningNodeIndex]->Initialize();
-	}
-
 }

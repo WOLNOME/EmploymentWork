@@ -3,5 +3,7 @@
     "canotaHPBarHeight":3.0,
     "keyCanotaHPBarHeight":4.0,
     "jetHPBarHeight":3.0,
-    "bossHPBarHeight":10.0
+    "bossHPBarHeight":10.0,
+    "sensingTargetSize":8.0,
+    "missingTargetSize":8.0
 }
