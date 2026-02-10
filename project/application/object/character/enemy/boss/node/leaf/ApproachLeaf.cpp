@@ -4,7 +4,7 @@
 
 using namespace Norm;
 
-ApproachLeaf::ApproachLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+ApproachLeaf::ApproachLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 ApproachLeaf::~ApproachLeaf() {

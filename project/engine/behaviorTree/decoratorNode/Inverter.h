@@ -11,7 +11,7 @@ namespace Norm {
 	class Inverter : public DecoratorNodeBase {
 	public:
 		//コンストラクタ
-		explicit Inverter(BlackBoard* _blackBoard, std::unique_ptr<INode> _childNode);
+		explicit Inverter(int _nodeID, BlackBoard* _blackBoard, std::unique_ptr<INode> _childNode);
 		//デストラクタ
 		~Inverter();
 

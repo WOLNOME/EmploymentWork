@@ -6,7 +6,7 @@
 
 using namespace Norm;
 
-BombAttackLeaf::BombAttackLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+BombAttackLeaf::BombAttackLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 BombAttackLeaf::~BombAttackLeaf() {
@@ -51,7 +51,7 @@ NodeResult BombAttackLeaf::GetNodeResult() const {
 		forward * localOffset.z;
 
 	//スポーン
-	enemyWeaponManager->SpawnBomb(BombMethod::Launch, initPos, playerPos);
+	enemyWeaponManager->SpawnBomb(BombMethod::Launch, initPos, playerPos, 7.0f);
 
 	//弾倉をデクリメント
 	bombMagazine--;

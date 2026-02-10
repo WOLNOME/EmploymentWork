@@ -7,7 +7,7 @@
 class JudgePlayerDistanceLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgePlayerDistanceLeaf(Norm::BlackBoard* _blackBoard, float _distance);
+	explicit JudgePlayerDistanceLeaf(int _nodeID, Norm::BlackBoard* _blackBoard, float _distance);
 	// デストラクタ
 	~JudgePlayerDistanceLeaf();
 

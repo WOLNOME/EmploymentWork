@@ -11,6 +11,9 @@ namespace Norm {
 		//稼働中の子ノードの更新
 		mChildNodes[mRunningNodeIndex]->Update();
 		auto result = mChildNodes[mRunningNodeIndex]->GetNodeResult();
+		if (!mIsRevaluation) {
+			mIsRevaluation = mChildNodes[mRunningNodeIndex]->GetIsRevaluation();
+		}
 
 		//もし失敗が返されたら次のノードに進める
 		if (result == NodeResult::Fail) {
@@ -30,6 +33,17 @@ namespace Norm {
 	void Selector::Finalize() {
 		//基底クラスの終了処理
 		CompositeNodeBase::Finalize();
+
+		//もしルートノードなら
+		if (mNodeID == 1) {
+			//再評価通知を受け取ったなら
+			if (mIsRevaluation) {
+				//再評価通知をリセット
+				mIsRevaluation = false;
+				//再びアップデートを行う
+				this->Update();
+			}
+		}
 	}
 
 	void Selector::NodeIncrement() {
@@ -49,6 +63,9 @@ namespace Norm {
 			//ノードの更新
 			mChildNodes[mRunningNodeIndex]->Update();
 			auto result = mChildNodes[mRunningNodeIndex]->GetNodeResult();
+			if (!mIsRevaluation) {
+				mIsRevaluation = mChildNodes[mRunningNodeIndex]->GetIsRevaluation();
+			}
 
 			//もし失敗が返されたら次のノードに進む
 			if (result == NodeResult::Fail) {

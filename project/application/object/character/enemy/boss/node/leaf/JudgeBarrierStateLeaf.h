@@ -7,7 +7,7 @@
 class JudgeBarrierStateLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeBarrierStateLeaf(Norm::BlackBoard* _blackBoard);
+	explicit JudgeBarrierStateLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeBarrierStateLeaf();
 

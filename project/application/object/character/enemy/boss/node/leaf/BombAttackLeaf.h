@@ -7,7 +7,7 @@
 class BombAttackLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BombAttackLeaf(Norm::BlackBoard* _blackBoard);
+	explicit BombAttackLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BombAttackLeaf();
 

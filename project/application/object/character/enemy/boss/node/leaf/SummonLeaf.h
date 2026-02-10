@@ -8,7 +8,7 @@
 class SummonLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit SummonLeaf(Norm::BlackBoard* _blackBoard);
+	explicit SummonLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~SummonLeaf();
 
@@ -24,6 +24,10 @@ public:
 
 	// ノードの状態を取得
 	Norm::NodeResult GetNodeResult() const override;
+
+private:
+	//回転処理
+	void Rotate();
 
 private:
 	//召喚する座標

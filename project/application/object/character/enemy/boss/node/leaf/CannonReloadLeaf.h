@@ -14,7 +14,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="_blackBoard">ブラックボード</param>
-	explicit CannonReloadLeaf(Norm::BlackBoard* _blackBoard);
+	explicit CannonReloadLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>

@@ -7,7 +7,7 @@
 class CheckBombReload : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckBombReload(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
+	explicit CheckBombReload(int _nodeID, Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckBombReload();
 

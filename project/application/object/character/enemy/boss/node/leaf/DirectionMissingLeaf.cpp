@@ -6,7 +6,7 @@
 
 using namespace Norm;
 
-DirectionMissingLeaf::DirectionMissingLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+DirectionMissingLeaf::DirectionMissingLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 DirectionMissingLeaf::~DirectionMissingLeaf() {
@@ -15,11 +15,9 @@ DirectionMissingLeaf::~DirectionMissingLeaf() {
 void DirectionMissingLeaf::Initialize() {
 	//基底クラスの初期化
 	LeafNodeBase::Initialize();
+}
 
-	//ブラックボードの情報を初期化
-	float missingTime = mpBlackBoard->GetValue<float>("MissingDirTime");
-	mpBlackBoard->SetValue<float>("MissingDirTimer", missingTime);
-
+void DirectionMissingLeaf::Update() {
 	//ブラックボードから必要な情報を取得
 	EnemyUI* enemyUI = mpBlackBoard->GetValue<EnemyUI*>("EnemyUI");
 	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
@@ -29,21 +27,6 @@ void DirectionMissingLeaf::Initialize() {
 	//見失うUIを表示
 	enemyUI->GetEnemyReactionUI()->MissingSpawn(bossPos, uiHeight, uiFront);
 
-}
-
-void DirectionMissingLeaf::Update() {
-	//ブラックボードから必要な情報を取得
-	float missingTimer = mpBlackBoard->GetValue<float>("MissingDirTimer");
-
-	//見失うタイマーをデクリメント
-	missingTimer -= kDeltaTime;
-	if (missingTimer < 0.0f) {
-		//タイマー
-		missingTimer = 0.0f;
-	}
-
-	//ブラックボードに更新した情報を保存
-	mpBlackBoard->SetValue<float>("MissingDirTimer", missingTimer);
 }
 
 void DirectionMissingLeaf::Debug() {
@@ -56,13 +39,6 @@ void DirectionMissingLeaf::Debug() {
 }
 
 NodeResult DirectionMissingLeaf::GetNodeResult() const {
-	//ブラックボードから必要な情報を取得
-	float missingTimer = mpBlackBoard->GetValue<float>("MissingDirTimer");
-
-	//もし見失うタイマーが0より大きいならrunningを返す
-	if (missingTimer > 0.0f) {
-		return NodeResult::Running;
-	}
-	//見失うタイマーが0以下ならsuccessを返す
+	//successを返す
 	return NodeResult::Success;
 }

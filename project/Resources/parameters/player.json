@@ -23,7 +23,7 @@
     "item_moveSpeedUpValue":0.5,
     "item_maxMoveSpeedUpValue":5.0,
     "item_turnSpeedUpValue":0.15,
-    "tackleDamage":5,
+    "tackleDamage":1,
     "cannonDamage":10,
     "bulletDamage":1,
     "bombDamage":30

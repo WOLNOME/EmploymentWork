@@ -64,10 +64,10 @@ void EnemyWeaponManager::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void EnemyWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _targetPos, float _size) {
 	//スポーン
 	SpawnFromPool(cannons_, [&](EnemyCannon* cannon) {
-		cannon->Spawn(_initPos, _targetPos);
+		cannon->Spawn(_initPos, _targetPos, _size);
 		});
 }
 
@@ -78,10 +78,10 @@ void EnemyWeaponManager::SpawnBullet(const Vector3& _initPos, const Vector3& _ta
 		});
 }
 
-void EnemyWeaponManager::SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyWeaponManager::SpawnBomb(const BombMethod& _bombMethod, const Vector3& _initPos, const Vector3& _targetPos, float _size) {
 	//スポーン
 	SpawnFromPool(bombs_, [&](EnemyBomb* bomb) {
-		bomb->Spawn(_bombMethod, _initPos, _targetPos);
+		bomb->Spawn(_bombMethod, _initPos, _targetPos, _size);
 		});
 }
 

@@ -9,7 +9,7 @@ namespace Norm {
 	class Selector : public CompositeNodeBase {
 	public:
 		//コンストラクタ
-		explicit Selector(BlackBoard* _blackBoard) : CompositeNodeBase(_blackBoard) {}
+		explicit Selector(int _nodeID, BlackBoard* _blackBoard) : CompositeNodeBase(_nodeID, _blackBoard) {}
 
 		//初期化
 		void Initialize() override;

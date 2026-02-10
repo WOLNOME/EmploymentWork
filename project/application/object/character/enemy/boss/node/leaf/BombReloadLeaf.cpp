@@ -2,12 +2,9 @@
 #include <MyMath.h>
 #include <ImGuiManager.h>
 
-//アプリケーション
-#include <application/ui/enemy/EnemyUI.h>
-
 using namespace Norm;
 
-BombReloadLeaf::BombReloadLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+BombReloadLeaf::BombReloadLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 BombReloadLeaf::~BombReloadLeaf() {
@@ -41,8 +38,8 @@ void BombReloadLeaf::Update() {
 		bombReloadTimer = 0.0f;
 	}
 
-	//リアクション処理
-	Reaction();
+	//回転処理
+	Rotate();
 
 	//ブラックボードに更新した情報を保存
 	mpBlackBoard->SetValue<float>("BombReloadTimer", bombReloadTimer);
@@ -73,48 +70,55 @@ NodeResult BombReloadLeaf::GetNodeResult() const {
 
 }
 
-void BombReloadLeaf::Reaction() {
+void BombReloadLeaf::Rotate() {
 	//ブラックボードから必要な情報を取得
-	EnemyUI* enemyUI = mpBlackBoard->GetValue<EnemyUI*>("EnemyUI");
 	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
-	Vector3 bossPosCopy = bossPos;
-	bossPos.y = 0.0f;
-	Vector3 bossPrePos = mpBlackBoard->GetValue<Vector3>("BossPrePos");
-	bossPrePos.y = 0.0f;
+	Vector3 bossRotate = mpBlackBoard->GetValue<Vector3>("BossRotate");
+	float bossTurnSpeed = mpBlackBoard->GetValue<float>("BossTurnSpeed");
 	Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
-	playerPos.y = 0.0f;
-	Vector3 playerPrePos = mpBlackBoard->GetValue<Vector3>("PlayerPrePos");
-	playerPrePos.y = 0.0f;
-	float uiHeight = mpBlackBoard->GetValue<float>("UIHeight");
-	float uiFront = mpBlackBoard->GetValue<float>("UIFront");
 
-	//現フレームと前フレームの距離を求める
-	const float kSearchDist = 450.0f;
-	float dist = Vector3(bossPos - playerPos).Length();
-	float preDist = Vector3(bossPrePos - playerPrePos).Length();
+	//ボスの回転速度は半減で使う
+	bossTurnSpeed *= 0.5f;
 
-	//一度も見失っていなければ
-	if (!isMissing_) {
-
-		//索敵範囲から外れた瞬間
-		if (dist > kSearchDist && preDist <= kSearchDist) {
-			//見失う演出
-			enemyUI->GetEnemyReactionUI()->MissingSpawn(bossPosCopy, uiHeight, uiFront);
-			//見失うフラグをオンにする
-			isMissing_ = true;
-		}
-
+	//現在のボスの向きを求める
+	Vector3 currentBossDir = {
+		std::sinf(bossRotate.y),
+		0.0f,
+		std::cosf(bossRotate.y)
+	};
+	currentBossDir.Normalize();
+	//目標ポイント（プレイヤーの位置）への方向を求める
+	Vector3 targetDir = playerPos - bossPos;
+	targetDir.Normalize();
+	//回転の差を求める
+	float angle = std::atan2f(targetDir.x, targetDir.z) - std::atan2f(currentBossDir.x, currentBossDir.z);
+	//angleを-pi~piでクランプする
+	if (angle > pi) {
+		angle -= 2 * pi;
 	}
-	//一度見つかっていたら
+	else if (angle < -pi) {
+		angle += 2 * pi;
+	}
+	//angle<回転速度の場合
+	float usingRotateSpeed = 0.0f;
+	if (std::abs(angle) < bossTurnSpeed * kDeltaTime) {
+		//仕上げの角度加算
+		usingRotateSpeed = angle;
+	}
 	else {
-
-		//索敵範囲に入った瞬間
-		if (dist <= kSearchDist && preDist > kSearchDist) {
-			//発見演出
-			enemyUI->GetEnemyReactionUI()->SensingSpawn(bossPosCopy, uiHeight, uiFront);
-			//見失うフラグをオフにする
-			isMissing_ = false;
-		}
-
+		//回転速度を使う場合、符号を揃える
+		usingRotateSpeed = (angle > 0) ? bossTurnSpeed * kDeltaTime : -bossTurnSpeed * kDeltaTime;
 	}
+	//回転加算
+	bossRotate.y += usingRotateSpeed;
+	//-π~πにクランプ
+	if (bossRotate.y > pi) {
+		bossRotate.y -= 2.0f * pi;
+	}
+	else if (bossRotate.y < -pi) {
+		bossRotate.y += 2.0f * pi;
+	}
+
+	//ブラックボードに更新した情報を保存
+	mpBlackBoard->SetValue<Vector3>("BossRotate", bossRotate);
 }

@@ -7,7 +7,7 @@
 class DirectionMissingLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit DirectionMissingLeaf(Norm::BlackBoard* _blackBoard);
+	explicit DirectionMissingLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~DirectionMissingLeaf();
 

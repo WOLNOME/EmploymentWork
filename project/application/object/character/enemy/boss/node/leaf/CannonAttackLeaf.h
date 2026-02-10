@@ -7,7 +7,7 @@
 class CannonAttackLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit CannonAttackLeaf(Norm::BlackBoard* _blackBoard);
+	explicit CannonAttackLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~CannonAttackLeaf();
 

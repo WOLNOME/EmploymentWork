@@ -156,7 +156,7 @@ void Item::UntilDeathProcess() {
 		//回転させる(めちゃ速く)
 		newRotate.y += 0.3f;
 		//縮小
-		float scale = MyMath::Lerp(1.0f, 0.0f, getParticle_->GetElapsedTime() / getParticle_->GetDuration());
+		float scale = MyMath::Lerp(1.0f, 0.0f, getParticle_->GetElapsedTimer() / getParticle_->GetDuration());
 		newScale = { scale, scale, scale };
 	}
 	else {

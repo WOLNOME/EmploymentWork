@@ -11,7 +11,7 @@ namespace Norm {
 	class CompositeNodeBase : public NodeBase {
 	public:
 		//コンストラクタ
-		explicit CompositeNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {}
+		explicit CompositeNodeBase(int _nodeID, BlackBoard* _blackBoard) : NodeBase(_nodeID, _blackBoard) {}
 		//デストラクタ
 		virtual ~CompositeNodeBase();
 

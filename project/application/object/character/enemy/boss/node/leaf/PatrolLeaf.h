@@ -7,7 +7,7 @@
 class PatrolLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit PatrolLeaf(Norm::BlackBoard* _blackBoard);
+	explicit PatrolLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~PatrolLeaf();
 

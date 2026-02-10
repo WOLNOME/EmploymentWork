@@ -9,7 +9,7 @@ namespace Norm {
 	class LeafNodeBase : public NodeBase {
 	protected:
 		//コンストラクタ
-		explicit LeafNodeBase(BlackBoard* _blackBoard);
+		explicit LeafNodeBase(int _nodeID, BlackBoard* _blackBoard);
 		//デストラクタ
 		virtual ~LeafNodeBase() = default;
 	};

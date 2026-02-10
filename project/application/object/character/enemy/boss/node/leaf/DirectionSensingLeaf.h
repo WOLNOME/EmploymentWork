@@ -7,7 +7,7 @@
 class DirectionSensingLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit DirectionSensingLeaf(Norm::BlackBoard* _blackBoard);
+	explicit DirectionSensingLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~DirectionSensingLeaf();
 

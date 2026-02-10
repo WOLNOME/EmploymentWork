@@ -214,7 +214,10 @@ namespace Norm {
 
 		//パーティクル個別の設定
 		for (const auto& particle : particles) {
-			//パーティクルが生成されていなかったら次へ
+			//パーティクルがアクティブでないなら次へ
+			if (!particle.second->emitter_.isDraw) {
+				continue;
+			}
 
 			//各パーティクルのブレンドモード情報からパイプラインステートを選択
 			mainRender->GetCommandList()->SetPipelineState(graphicsPipelineState[particle.second->GetParam()["BlendMode"]].Get());

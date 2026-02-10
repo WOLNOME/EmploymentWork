@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgeBarrierCoolTimeLeaf::JudgeBarrierCoolTimeLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+JudgeBarrierCoolTimeLeaf::JudgeBarrierCoolTimeLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 JudgeBarrierCoolTimeLeaf::~JudgeBarrierCoolTimeLeaf() {

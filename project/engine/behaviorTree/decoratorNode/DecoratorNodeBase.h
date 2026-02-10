@@ -10,7 +10,7 @@ namespace Norm {
     class DecoratorNodeBase : public NodeBase {
     public:
         //コンストラクタ
-        explicit DecoratorNodeBase(BlackBoard* _blackBoard);
+        explicit DecoratorNodeBase(int _nodeID, BlackBoard* _blackBoard);
         //デストラクタ
         virtual ~DecoratorNodeBase();
 

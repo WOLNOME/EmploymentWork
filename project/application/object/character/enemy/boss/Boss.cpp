@@ -173,8 +173,6 @@ void Boss::ConstantInfoToBlackBoard() {
 	blackBoard_->SetValue<float>("SummonDirTime", param_["summonDirTime"]);
 	//演出の情報
 	blackBoard_->SetValue<float>("ConfusionDirTime", param_["confusionDirTime"]);
-	blackBoard_->SetValue<float>("MissingDirTime", param_["missingDirTime"]);
-	blackBoard_->SetValue<float>("SensingDirTime", param_["sensingDirTime"]);
 	//その他
 	blackBoard_->SetValue<float>("KeepDistanceTime", param_["keepDistanceTime"]);
 	blackBoard_->SetValue<float>("FloorFriction", floorFriction_);
@@ -222,8 +220,6 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 		blackBoard_->SetValue<float>("SummonCoolTimer", 0.0f);
 		//演出の情報を入れる
 		blackBoard_->SetValue<float>("ConfusionDirTimer", 0.0f);
-		blackBoard_->SetValue<float>("MissingDirTimer", 0.0f);
-		blackBoard_->SetValue<float>("SensingDirTimer", 0.0f);
 		//その他
 		blackBoard_->SetValue<float>("KeepDistanceTimer", 0.0f);
 	}
@@ -251,14 +247,25 @@ void Boss::BlackBoardToVariableInfo() {
 void Boss::VariableUpdate() {
 	//必要な情報をブラックボードから取得
 	bool isBarrier = blackBoard_->GetValue<bool>("IsBarrier");
+	bool isPreBarrier= blackBoard_->GetValue<bool>("IsPreBarrier");
 	float barrierCoolTimer = blackBoard_->GetValue<float>("BarrierCoolTimer");
 	float summonCoolTimer = blackBoard_->GetValue<float>("SummonCoolTimer");
+
+	//前フレームのバリア状態を取得
+	isPreBarrier = isBarrier;
 
 	//バリアの状態がIdleなら
 	if (barrier_->GetState() == State::kIdle) {
 		//isBarrierをfalseにする
 		isBarrier = false;
 	}
+
+	//壊れた瞬間
+	if (!isBarrier && isPreBarrier) {
+		int a = 0;
+		a++;
+	}
+
 
 	//バリアのクールタイムが0より大きい＆バリアが展開されていないなら
 	if (barrierCoolTimer > 0.0f && !isBarrier) {
@@ -284,6 +291,7 @@ void Boss::VariableUpdate() {
 
 	//設定した情報をブラックボードにセット
 	blackBoard_->SetValue<bool>("IsBarrier", isBarrier);
+	blackBoard_->SetValue<bool>("IsPreBarrier", isPreBarrier);
 	blackBoard_->SetValue<float>("BarrierCoolTimer", barrierCoolTimer);
 	blackBoard_->SetValue<float>("SummonCoolTimer", summonCoolTimer);
 

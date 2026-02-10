@@ -7,7 +7,7 @@
 class JudgeHPHalfLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeHPHalfLeaf(Norm::BlackBoard* _blackBoard);
+	explicit JudgeHPHalfLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeHPHalfLeaf();
 

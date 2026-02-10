@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-PatrolLeaf::PatrolLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+PatrolLeaf::PatrolLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 PatrolLeaf::~PatrolLeaf() {

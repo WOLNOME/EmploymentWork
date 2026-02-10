@@ -35,7 +35,7 @@ namespace Norm {
 		playInfo_ = {
 			.isPlay = false,
 			.isRepeat = false,
-			.elapsedTime = 0.0f,
+			.elapsedTimer = 0.0f,
 			.duration = 0.0f
 		};
 
@@ -117,7 +117,7 @@ namespace Norm {
 		//再生フラグがオンなら
 		if (playInfo_.isPlay) {
 			//タイマーをカウント
-			playInfo_.elapsedTime += kDeltaTime;
+			playInfo_.elapsedTimer += kDeltaTime;
 			//全体尺の初期化
 			playInfo_.duration = 0.0f;
 			//全てのパーティクルを走査
@@ -136,30 +136,35 @@ namespace Norm {
 					//oneShotの場合
 					if (sParInfo.endTime == 0.0f) {
 						//タイマーがstartTime~にある＆現在時間-startTime<=kDeltaTimeの時
-						if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime - sParInfo.startTime <= kDeltaTime) {
+						if (playInfo_.elapsedTimer > sParInfo.startTime && playInfo_.elapsedTimer - sParInfo.startTime <= kDeltaTime) {
 							//パーティクルをオンにする
 							sParInfo.particle->emitter_.isPlay = true;
+							//描画フラグをオンにする
+							sParInfo.particle->emitter_.isDraw = true;
+
 						}
 						continue;
 					}
 
 					//タイマーがstartTime~endTimeにある時
-					if (playInfo_.elapsedTime > sParInfo.startTime && playInfo_.elapsedTime < sParInfo.endTime) {
+					if (playInfo_.elapsedTimer > sParInfo.startTime && playInfo_.elapsedTimer < sParInfo.endTime) {
 						//パーティクルをオンにする
 						sParInfo.particle->emitter_.isPlay = true;
+						//描画フラグをオンにする
+						sParInfo.particle->emitter_.isDraw = true;
 					}
 				}
 				//再生フラグがオンの時
 				else {
 					//タイマーがstartTime~endTimeの外にある時
-					if (playInfo_.elapsedTime < sParInfo.startTime || playInfo_.elapsedTime > sParInfo.endTime) {
+					if (playInfo_.elapsedTimer < sParInfo.startTime || playInfo_.elapsedTimer > sParInfo.endTime) {
 						//パーティクルをオフにする
 						sParInfo.particle->emitter_.isPlay = false;
 					}
 				}
 			}
 			//タイマーが全体の尺を超過したら
-			if (playInfo_.elapsedTime > playInfo_.duration) {
+			if (playInfo_.elapsedTimer > playInfo_.duration) {
 				//連続再生しない場合
 				if (!playInfo_.isRepeat) {
 					//再生フラグをオフにする
@@ -168,10 +173,13 @@ namespace Norm {
 					for (auto& sParInfo : particles_) {
 						//全てのパーティクルを停止させる
 						sParInfo.particle->emitter_.isPlay = false;
+						//全ての描画をオフにする
+						sParInfo.particle->emitter_.isDraw = false;
+
 					}
 				}
 				//タイマーをリセット(共通)
-				playInfo_.elapsedTime = 0.0f;
+				playInfo_.elapsedTimer = 0.0f;
 			}
 		}
 		else {

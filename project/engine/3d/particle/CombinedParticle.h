@@ -46,7 +46,7 @@ namespace Norm {
 		struct PlayInfo {
 			bool isPlay = false;		//再生フラグ
 			bool isRepeat = false;		//連続再生フラグ
-			float elapsedTime = 0.0f;	//経過時間
+			float elapsedTimer = 0.0f;	//経過タイマー
 			float duration = 0.0f;		//尺
 		};
 
@@ -101,10 +101,10 @@ namespace Norm {
 		/// <returns>全体尺</returns>
 		float GetDuration() { return playInfo_.duration; }
 		/// <summary>
-		/// 経過時間を取得する
+		/// 経過タイマーを取得する
 		/// </summary>
 		/// <returns>経過時間</returns>
-		float GetElapsedTime() { return playInfo_.elapsedTime; }
+		float GetElapsedTimer() { return playInfo_.elapsedTimer; }
 
 		/// ============================== ///
 		///		setter

@@ -141,7 +141,7 @@
     {
         "children" : [
             29,
-            30
+            53
         ],
         "id":19,
         "name":"Sequence",
@@ -150,7 +150,7 @@
     {
         "children" : [
             31,
-            32
+            54
         ],
         "id":20,
         "name":"Sequence",
@@ -168,7 +168,7 @@
     {
         "children" : [
             35,
-            36
+            57
         ],
         "id":22,
         "name":"Sequence",
@@ -217,7 +217,7 @@
     {
         "id":30,
         "name":"SummonLeaf",
-        "parent":19
+        "parent":53
     },
     {
         "id":31,
@@ -230,7 +230,7 @@
         "true_child":39,
         "id":32,
         "name":"CheckBulletReload",
-        "parent":20
+        "parent":54
     },
     {
         "id":33,
@@ -239,7 +239,7 @@
         "distance":250
     },
     {
-        "false_child":42,
+        "false_child":55,
         "true_child":41,
         "id":34,
         "name":"CheckCannonReload",
@@ -254,7 +254,7 @@
     {
         "id":36,
         "name":"KeepDistanceLeaf",
-        "parent":22
+        "parent":57
     },
     {
         "id":37,
@@ -263,7 +263,7 @@
         "distance":350
     },
     {
-        "false_child":44,
+        "false_child":58,
         "true_child":43,
         "id":38,
         "name":"CheckBombReload",
@@ -287,7 +287,7 @@
     {
         "id":42,
         "name":"CannonReloadLeaf",
-        "parent":34
+        "parent":55
     },
     {
         "id":43,
@@ -297,7 +297,7 @@
     {
         "id":44,
         "name":"BombReloadLeaf",
-        "parent":38
+        "parent":58
     },
     {
          "children" : [
@@ -331,7 +331,7 @@
         "distance":350
     },
     {
-        "false_child":51,
+        "false_child":56,
         "true_child":50,
         "id":49,
         "name":"CheckBombReload",
@@ -345,11 +345,48 @@
     {
         "id":51,
         "name":"BombReloadLeaf",
-        "parent":49
+        "parent":56
     },
     {
         "id":52,
         "name":"ApproachLeaf",
         "parent":14
+    },
+    {
+        "children": 30,
+        "id": 53,
+        "name": "Interruption",
+        "parent": 19
+    },
+    {
+        "children": 32,
+        "id": 54,
+        "name": "Interruption",
+        "parent": 20
+    },
+    {
+        "children": 42,
+        "id": 55,
+        "name": "Interruption",
+        "parent": 34
+    },
+    {
+        "children": 51,
+        "id": 56,
+        "name": "Interruption",
+        "parent": 47
+    },
+    {
+        "children": 36,
+        "id": 57,
+        "name": "Interruption",
+        "parent": 22
+    },
+    {
+        "children": 44,
+        "id": 58,
+        "name": "Interruption",
+        "parent": 38
     }
+
 ]

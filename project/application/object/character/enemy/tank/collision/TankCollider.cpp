@@ -78,8 +78,8 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 	{
 		//相手の座標と反対方向のベクトルを速度に加算
 		Vector3 reflectVec = -(_other->GetWorldTransform().GetTranslate() - GetWorldTransform().GetTranslate()).Normalized();
-		velocity.x += reflectVec.x * 30.0f;
-		velocity.z += reflectVec.z * 30.0f;
+		velocity.x += reflectVec.x * 50.0f;
+		velocity.z += reflectVec.z * 50.0f;
 
 		break;
 	}

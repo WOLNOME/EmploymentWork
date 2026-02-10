@@ -7,7 +7,7 @@
 class CheckCannonReload : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckCannonReload(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
+	explicit CheckCannonReload(int _nodeID, Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckCannonReload();
 

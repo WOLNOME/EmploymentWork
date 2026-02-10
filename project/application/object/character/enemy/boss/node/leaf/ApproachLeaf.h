@@ -7,7 +7,7 @@
 class ApproachLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit ApproachLeaf(Norm::BlackBoard* _blackBoard);
+	explicit ApproachLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~ApproachLeaf();
 

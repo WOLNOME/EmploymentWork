@@ -857,7 +857,7 @@ void ParticleEditorScene::Editor() {
 		}
 		//シークバー
 		{
-			float elapsedTime = cParticle_->GetElapsedTime();
+			float elapsedTime = cParticle_->GetElapsedTimer();
 			float maxTime = cParticle_->GetDuration();
 			ImGui::Text("再生時間 : %.2f / %.2f", elapsedTime, maxTime);
 			ImGui::SliderFloat(" ", &elapsedTime, 0.0f, maxTime);

@@ -41,7 +41,8 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void SpawnCannon(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
+	/// <param name="_size">サイズ</param>
+	void SpawnCannon(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos, float _size = 1.0f);
 	/// <summary>
 	/// 銃弾のスポーン
 	/// </summary>
@@ -54,7 +55,8 @@ public:
 	/// <param name="_bombMethod">爆弾の撃ち方</param>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void SpawnBomb(const BombMethod& _bombMethod, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
+	/// <param name="_size">サイズ</param>
+	void SpawnBomb(const BombMethod& _bombMethod, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos, float _size = 1.0f);
 
 	/// ============================== ///
 	///		getter

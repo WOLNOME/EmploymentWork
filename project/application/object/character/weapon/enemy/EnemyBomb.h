@@ -50,7 +50,8 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期位置</param>
 	/// <param name="_targetPos">目標位置</param>
-	void Spawn(const BombMethod& _method, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos);
+	/// <param name="_size">サイズ</param>
+	void Spawn(const BombMethod& _method, const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos, float _size = 1.0f);
 
 	/// ============================== ///
 	///		getter

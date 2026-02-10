@@ -26,6 +26,9 @@ namespace Norm {
 		virtual void Debug() = 0;
 		//ノードの状態を取得
 		virtual NodeResult GetNodeResult() const = 0;
+		//再評価するかを取得
+		virtual bool GetIsRevaluation() = 0;
+
 	};
 
 }

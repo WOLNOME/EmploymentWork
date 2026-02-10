@@ -16,11 +16,11 @@ namespace Norm {
 	///------------------------------------///
 
 	//δタイム
-	const float kDeltaTime = 1.0f / 60.0f;
+	static const float kDeltaTime = 1.0f / 60.0f;
 	//π
-	const float pi = std::numbers::pi_v<float>;
+	static const float pi = std::numbers::pi_v<float>;
 	//許容数(限りなく0.0fに近い値)
-	const float epsilon = 5e-4f;
+	static const float epsilon = 5e-4f;
 
 	///------------------------------------///
 	///             列挙体

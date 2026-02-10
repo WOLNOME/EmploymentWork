@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgeHPHalfLeaf::JudgeHPHalfLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+JudgeHPHalfLeaf::JudgeHPHalfLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 JudgeHPHalfLeaf::~JudgeHPHalfLeaf() {

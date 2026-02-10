@@ -9,10 +9,8 @@ namespace Norm {
 	class Sequence : public CompositeNodeBase {
 	public:
 		//コンストラクタ
-		explicit Sequence(BlackBoard* _blackBoard);
-		//デストラクタ
-		~Sequence();
-
+		explicit Sequence(int _nodeID, BlackBoard* _blackBoard) : CompositeNodeBase(_nodeID, _blackBoard) {}
+		
 		//初期化
 		void Initialize() override;
 		//更新

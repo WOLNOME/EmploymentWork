@@ -2,7 +2,7 @@
 
 namespace Norm {
 
-	DecoratorNodeBase::DecoratorNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {
+	DecoratorNodeBase::DecoratorNodeBase(int _nodeID, BlackBoard* _blackBoard) : NodeBase(_nodeID, _blackBoard) {
 	}
 
 	DecoratorNodeBase::~DecoratorNodeBase() {

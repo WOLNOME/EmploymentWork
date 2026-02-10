@@ -7,7 +7,7 @@
 class JudgeSummonCoolTimeLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit JudgeSummonCoolTimeLeaf(Norm::BlackBoard* _blackBoard);
+	explicit JudgeSummonCoolTimeLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~JudgeSummonCoolTimeLeaf();
 

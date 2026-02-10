@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(BlackBoard* _blackBoard, float _distance) : LeafNodeBase(_blackBoard), distance_(_distance) {
+JudgePlayerPreDistanceLeaf::JudgePlayerPreDistanceLeaf(int _nodeID, BlackBoard* _blackBoard, float _distance) : LeafNodeBase(_nodeID, _blackBoard), distance_(_distance) {
 }
 
 JudgePlayerPreDistanceLeaf::~JudgePlayerPreDistanceLeaf() {

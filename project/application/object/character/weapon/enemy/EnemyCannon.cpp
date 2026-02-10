@@ -75,7 +75,7 @@ void EnemyCannon::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos, float _size) {
 	//ステートがアイドルでなければ失敗
 	if (state_ != State::kIdle) {
 		return;
@@ -84,6 +84,11 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
+	//サイズを保存
+	object3d_->worldTransform.SetScale({ _size ,_size,_size });
+	circleShadow_->worldTransform.SetScale({ _size ,_size,_size });
+	auto* enemyCannonCollider = dynamic_cast<EnemyCannonCollider*>(collider_.get());
+	enemyCannonCollider->SetRadius(_size);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);

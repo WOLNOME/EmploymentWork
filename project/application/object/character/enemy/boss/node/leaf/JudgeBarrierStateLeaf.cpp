@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgeBarrierStateLeaf::JudgeBarrierStateLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+JudgeBarrierStateLeaf::JudgeBarrierStateLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 JudgeBarrierStateLeaf::~JudgeBarrierStateLeaf() {

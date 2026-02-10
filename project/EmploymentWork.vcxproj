@@ -284,6 +284,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp" />
     <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp" />
+    <ClCompile Include="application\object\character\enemy\boss\node\decorator\Interruption.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -471,6 +472,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h" />
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h" />
     <ClInclude Include="application\object\level\collision\LevelObjectCollider.h" />
+    <ClInclude Include="application\object\character\enemy\boss\node\decorator\Interruption.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

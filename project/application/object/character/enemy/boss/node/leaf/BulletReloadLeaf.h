@@ -7,7 +7,7 @@
 class BulletReloadLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BulletReloadLeaf(Norm::BlackBoard* _blackBoard);
+	explicit BulletReloadLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BulletReloadLeaf();
 
@@ -21,5 +21,9 @@ public:
 
 	// ノードの状態を取得
 	Norm::NodeResult GetNodeResult() const override;
+
+private:
+	//回転処理
+	void Rotate();
 };
 

@@ -2,7 +2,7 @@
 
 namespace Norm {
 
-	Inverter::Inverter(BlackBoard* _blackBoard, std::unique_ptr<INode> _childNode) :DecoratorNodeBase(_blackBoard) {
+	Inverter::Inverter(int _nodeID, BlackBoard* _blackBoard, std::unique_ptr<INode> _childNode) : DecoratorNodeBase(_nodeID, _blackBoard) {
 		//子ノードのセット
 		SetNode(std::move(_childNode));
 	}
@@ -20,6 +20,7 @@ namespace Norm {
 		mChildNode->Update();
 		// 子ノードの結果を取得
 		NodeResult result = mChildNode->GetNodeResult();
+		bool isRevaluaiton = mChildNode->GetIsRevaluation();
 		// 結果を反転させる
 		if (result == NodeResult::Success) {
 			mNodeResult = NodeResult::Fail;

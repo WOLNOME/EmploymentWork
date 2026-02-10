@@ -3,7 +3,7 @@
 class KeepDistanceLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit KeepDistanceLeaf(Norm::BlackBoard* _blackBoard);
+	explicit KeepDistanceLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~KeepDistanceLeaf();
 

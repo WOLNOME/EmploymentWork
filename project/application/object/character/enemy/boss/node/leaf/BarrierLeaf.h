@@ -9,7 +9,7 @@
 class BarrierLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BarrierLeaf(Norm::BlackBoard* _blackBoard);
+	explicit BarrierLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BarrierLeaf();
 
@@ -25,6 +25,10 @@ public:
 
 	// ノードの状態を取得
 	Norm::NodeResult GetNodeResult() const override;
+
+private:
+	//回転処理
+	void Rotate();
 
 private:
 	//バリア演出オブジェクト

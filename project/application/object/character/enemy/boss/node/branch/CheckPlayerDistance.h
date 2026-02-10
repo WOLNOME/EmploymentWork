@@ -7,7 +7,7 @@
 class CheckPlayerDistance : public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckPlayerDistance(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode,float _distance);
+	explicit CheckPlayerDistance(int _nodeID, Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode,float _distance);
 	// デストラクタ
 	~CheckPlayerDistance();
 

@@ -3,7 +3,7 @@
 
 using namespace Norm;
 
-JudgeSummonCoolTimeLeaf::JudgeSummonCoolTimeLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+JudgeSummonCoolTimeLeaf::JudgeSummonCoolTimeLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 JudgeSummonCoolTimeLeaf::~JudgeSummonCoolTimeLeaf() {

@@ -8,7 +8,7 @@ class CheckPlayerFront :
     public Norm::BranchNodeBase {
 public:
 	// コンストラクタ
-	explicit CheckPlayerFront(Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
+	explicit CheckPlayerFront(int _nodeID, Norm::BlackBoard* _blackBoard, std::unique_ptr<Norm::INode> _trueNode, std::unique_ptr<Norm::INode> _falseNode);
 	// デストラクタ
 	~CheckPlayerFront();
 

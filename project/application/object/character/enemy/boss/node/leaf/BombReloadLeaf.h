@@ -7,7 +7,7 @@
 class BombReloadLeaf : public Norm::LeafNodeBase {
 public:
 	// コンストラクタ
-	explicit BombReloadLeaf(Norm::BlackBoard* _blackBoard);
+	explicit BombReloadLeaf(int _nodeID, Norm::BlackBoard* _blackBoard);
 	// デストラクタ
 	~BombReloadLeaf();
 
@@ -23,9 +23,10 @@ public:
 	Norm::NodeResult GetNodeResult() const override;
 
 private:
-	// リアクション
-	void Reaction();
+	//回転処理
+	void Rotate();
 
+private:
 	// 最大弾倉数
 	const int kBombMaxMagazine_ = 1;
 

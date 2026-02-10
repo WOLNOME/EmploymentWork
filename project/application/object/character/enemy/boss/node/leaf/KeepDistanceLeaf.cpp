@@ -4,7 +4,7 @@
 
 using namespace Norm;
 
-KeepDistanceLeaf::KeepDistanceLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+KeepDistanceLeaf::KeepDistanceLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 KeepDistanceLeaf::~KeepDistanceLeaf() {

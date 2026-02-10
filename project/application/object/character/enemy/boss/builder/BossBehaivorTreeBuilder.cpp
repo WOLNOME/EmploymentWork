@@ -8,6 +8,7 @@
 #include "compositeNode/Sequence.h"
 #include "decoratorNode/Inverter.h"
 //個別ノードの各種ヘッダーファイル
+#include "../node/decorator/Interruption.h"
 #include "../node/branch/CheckPlayerFront.h"
 #include "../node/branch/CheckPlayerDistance.h"
 #include "../node/branch/CheckCannonReload.h"
@@ -61,14 +62,14 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 
 		// --- Compositeノード ---
 		if (name == "Sequence") {
-			std::unique_ptr<Sequence> seq = std::make_unique<Sequence>(_blackBoard);
+			std::unique_ptr<Sequence> seq = std::make_unique<Sequence>(nodeId, _blackBoard);
 			for (auto childId : nodeJson["children"]) {
 				seq->AddNode(buildNode(childId.get<int>()));
 			}
 			node = std::move(seq);
 		}
 		else if (name == "Selector") {
-			std::unique_ptr<Selector> selector = std::make_unique<Selector>(_blackBoard);
+			std::unique_ptr<Selector> selector = std::make_unique<Selector>(nodeId, _blackBoard);
 			for (auto childId : nodeJson["children"]) {
 				selector->AddNode(buildNode(childId.get<int>()));
 			}
@@ -78,7 +79,11 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 		// --- Decoratorノード ---
 		else if (name == "Inverter") {
 			int childId = nodeJson["children"].get<int>();
-			node = std::make_unique<Inverter>(_blackBoard, buildNode(childId));
+			node = std::make_unique<Inverter>(nodeId, _blackBoard, buildNode(childId));
+		}
+		else if (name == "Interruption") {
+			int childId = nodeJson["children"].get<int>();
+			node = std::make_unique<Interruption>(nodeId, _blackBoard, buildNode(childId));
 		}
 
 		// --- Branchノード ---
@@ -86,93 +91,93 @@ std::unique_ptr<INode> BossBehaivorTreeBuilder::BuildBehaviorTree(BlackBoard* _b
 		else if (name == "CheckBombReload") {
 			int trueChildId = nodeJson["true_child"].get<int>();
 			int falseChildId = nodeJson["false_child"].get<int>();
-			node = std::make_unique<CheckBombReload>(_blackBoard, buildNode(trueChildId), buildNode(falseChildId));
+			node = std::make_unique<CheckBombReload>(nodeId, _blackBoard, buildNode(trueChildId), buildNode(falseChildId));
 		}
 		else if (name == "CheckBulletReload") {
 			int trueChildId = nodeJson["true_child"].get<int>();
 			int falseChildId = nodeJson["false_child"].get<int>();
-			node = std::make_unique<CheckBulletReload>(_blackBoard, buildNode(trueChildId), buildNode(falseChildId));
+			node = std::make_unique<CheckBulletReload>(nodeId, _blackBoard, buildNode(trueChildId), buildNode(falseChildId));
 		}
 		else if (name == "CheckCannonReload") {
 			int trueChildId = nodeJson["true_child"].get<int>();
 			int falseChildId = nodeJson["false_child"].get<int>();
-			node = std::make_unique<CheckCannonReload>(_blackBoard, buildNode(trueChildId), buildNode(falseChildId));
+			node = std::make_unique<CheckCannonReload>(nodeId, _blackBoard, buildNode(trueChildId), buildNode(falseChildId));
 		}
 		else if (name == "CheckPlayerFront") {
 			int trueChildId = nodeJson["true_child"].get<int>();
 			int falseChildId = nodeJson["false_child"].get<int>();
-			node = std::make_unique<CheckPlayerFront>(_blackBoard, buildNode(trueChildId), buildNode(falseChildId));
+			node = std::make_unique<CheckPlayerFront>(nodeId, _blackBoard, buildNode(trueChildId), buildNode(falseChildId));
 		}
 		else if (name == "CheckPlayerDistance") {
 			int trueChildId = nodeJson["true_child"].get<int>();
 			int falseChildId = nodeJson["false_child"].get<int>();
 			float distance = nodeJson["distance"].get<float>();
-			node = std::make_unique<CheckPlayerDistance>(_blackBoard, buildNode(trueChildId), buildNode(falseChildId), distance);
+			node = std::make_unique<CheckPlayerDistance>(nodeId, _blackBoard, buildNode(trueChildId), buildNode(falseChildId), distance);
 		}
 
 		// --- Leafノード ---
 
 		else if (name == "ApproachLeaf") {
-			node = std::make_unique<ApproachLeaf>(_blackBoard);
+			node = std::make_unique<ApproachLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "BarrierLeaf") {
-			node = std::make_unique<BarrierLeaf>(_blackBoard);
+			node = std::make_unique<BarrierLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "BombAttackLeaf") {
-			node = std::make_unique<BombAttackLeaf>(_blackBoard);
+			node = std::make_unique<BombAttackLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "BombReloadLeaf") {
-			node = std::make_unique<BombReloadLeaf>(_blackBoard);
+			node = std::make_unique<BombReloadLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "BulletAttackLeaf") {
-			node = std::make_unique<BulletAttackLeaf>(_blackBoard);
+			node = std::make_unique<BulletAttackLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "BulletReloadLeaf") {
-			node = std::make_unique<BulletReloadLeaf>(_blackBoard);
+			node = std::make_unique<BulletReloadLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "CannonAttackLeaf") {
-			node = std::make_unique<CannonAttackLeaf>(_blackBoard);
+			node = std::make_unique<CannonAttackLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "CannonReloadLeaf") {
-			node = std::make_unique<CannonReloadLeaf>(_blackBoard);
+			node = std::make_unique<CannonReloadLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "DirectionConfusionLeaf") {
-			node = std::make_unique<DirectionConfusionLeaf>(_blackBoard);
+			node = std::make_unique<DirectionConfusionLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "DirectionMissingLeaf") {
-			node = std::make_unique<DirectionMissingLeaf>(_blackBoard);
+			node = std::make_unique<DirectionMissingLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "DirectionSensingLeaf") {
-			node = std::make_unique<DirectionSensingLeaf>(_blackBoard);
+			node = std::make_unique<DirectionSensingLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "JudgeBarrierCoolTimeLeaf") {
-			node = std::make_unique<JudgeBarrierCoolTimeLeaf>(_blackBoard);
+			node = std::make_unique<JudgeBarrierCoolTimeLeaf>(nodeId, _blackBoard);
 		}
-		else if(name=="JudgeBarrierStateLeaf"){
-			node = std::make_unique<JudgeBarrierStateLeaf>(_blackBoard);
+		else if (name == "JudgeBarrierStateLeaf") {
+			node = std::make_unique<JudgeBarrierStateLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "JudgeHPHalfLeaf") {
-			node = std::make_unique<JudgeHPHalfLeaf>(_blackBoard);
+			node = std::make_unique<JudgeHPHalfLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "JudgePlayerDistanceLeaf") {
 			float distance = nodeJson["distance"].get<float>();
-			node = std::make_unique<JudgePlayerDistanceLeaf>(_blackBoard, distance);
+			node = std::make_unique<JudgePlayerDistanceLeaf>(nodeId, _blackBoard, distance);
 		}
 		else if (name == "JudgePlayerPreDistanceLeaf") {
 			float preDistance = nodeJson["distance"].get<float>();
-			node = std::make_unique<JudgePlayerPreDistanceLeaf>(_blackBoard, preDistance);
+			node = std::make_unique<JudgePlayerPreDistanceLeaf>(nodeId, _blackBoard, preDistance);
 		}
 		else if (name == "JudgeSummonCoolTimeLeaf") {
-			node = std::make_unique<JudgeSummonCoolTimeLeaf>(_blackBoard);
+			node = std::make_unique<JudgeSummonCoolTimeLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "KeepDistanceLeaf") {
-			node = std::make_unique<KeepDistanceLeaf>(_blackBoard);
+			node = std::make_unique<KeepDistanceLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "PatrolLeaf") {
-			node = std::make_unique<PatrolLeaf>(_blackBoard);
+			node = std::make_unique<PatrolLeaf>(nodeId, _blackBoard);
 		}
 		else if (name == "SummonLeaf") {
-			node = std::make_unique<SummonLeaf>(_blackBoard);
+			node = std::make_unique<SummonLeaf>(nodeId, _blackBoard);
 		}
 
 		// --- 未知のノード ---

@@ -31,7 +31,7 @@ void EnemyBomb::Initialize() {
 	warning_->SetIsDisplay(false);
 	warning_->SetTexture(thWarning);
 	warning_->SetIsLightProcess(false);
-	warning_->worldTransform.SetScale({40.0f,1.0f,40.0f});
+	warning_->worldTransform.SetScale({ 40.0f,1.0f,40.0f });
 	warning_->SetColor({ 1.0f,1.0f,1.0f,0.8f });
 
 	//パーティクルの生成と初期化
@@ -56,9 +56,12 @@ void EnemyBomb::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//爆発演出が終了したらアイドル状態にする
-	if (state_ == State::kAsphyxia && !explosion_->GetIsPlay()) {
+	//爆発演出の半刻が過ぎたらが終了したら
+	if (state_ == State::kAsphyxia && explosion_->GetElapsedTimer() > explosion_->GetDuration() * 0.5f) {
+		//アイドル状態にする
 		SetState(State::kIdle);
+		//危険地帯オブジェクトを非表示にする
+		warning_->SetIsDisplay(false);
 	}
 
 	//弾がアクティブでないなら更新しない
@@ -80,7 +83,7 @@ void EnemyBomb::DebugWithImGui() {
 #endif // _DEBUG
 }
 
-void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos) {
+void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const Vector3& _targetPos, float _size) {
 	//ステートがアイドルでなければ失敗
 	if (state_ != State::kIdle) {
 		return;
@@ -91,6 +94,9 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	//初期位置を保存
 	object3d_->worldTransform.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
+	//サイズを保存
+	object3d_->worldTransform.SetScale({ _size ,_size,_size });
+	circleShadow_->worldTransform.SetScale({ _size ,_size,_size });
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -124,7 +130,7 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 
 		break;
 	}
-	case BombMethod::Fall: 
+	case BombMethod::Fall:
 	{
 		//初期位置を保存
 		Vector3 warningPos = _initPos;
@@ -165,7 +171,6 @@ void EnemyBomb::Move() {
 		explosion_->SetIsPlay(true);
 		//モデルを非表示に
 		object3d_->SetIsDisplay(false);
-		warning_->SetIsDisplay(false);
 		circleShadow_->SetIsDisplay(false);
 		//仮死状態にする
 		SetState(State::kAsphyxia);

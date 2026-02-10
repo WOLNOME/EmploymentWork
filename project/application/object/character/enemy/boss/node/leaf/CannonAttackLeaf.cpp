@@ -6,7 +6,7 @@
 
 using namespace Norm;
 
-CannonAttackLeaf::CannonAttackLeaf(BlackBoard* _blackBoard) : LeafNodeBase(_blackBoard) {
+CannonAttackLeaf::CannonAttackLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
 }
 
 CannonAttackLeaf::~CannonAttackLeaf() {
@@ -39,7 +39,7 @@ NodeResult CannonAttackLeaf::GetNodeResult() const {
 	initPos.z += std::cosf(bossRotate.y) * 35.0f;
 
 	//スポーン
-	enemyWeaponManager->SpawnCannon(initPos, playerPos);
+	enemyWeaponManager->SpawnCannon(initPos, playerPos, 3.0f);
 
 	//弾倉をデクリメント
 	cannonMagazine--;

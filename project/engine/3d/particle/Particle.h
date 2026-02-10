@@ -72,6 +72,7 @@ namespace Norm {
 			TransformEuler worldTransform;	//エミッターのトランスフォーム
 			bool isAffectedField = false;	//フィールドに影響を受けるか
 			bool isPlay = false;			//パーティクルを生成するか
+			bool isDraw = false;			//描画するか
 		};
 
 	public:

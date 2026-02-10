@@ -2,8 +2,7 @@
 
 namespace Norm {
 
-	LeafNodeBase::LeafNodeBase(BlackBoard* _blackBoard) : NodeBase(_blackBoard) {
+	LeafNodeBase::LeafNodeBase(int _nodeID, BlackBoard* _blackBoard) : NodeBase(_nodeID, _blackBoard) {
 	}
-
 
 }

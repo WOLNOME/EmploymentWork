@@ -2,7 +2,7 @@
 
 using namespace Norm;
 
-CheckCannonReload::CheckCannonReload(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode) : BranchNodeBase(_blackBoard, std::move(_trueNode), std::move(_falseNode)) {
+CheckCannonReload::CheckCannonReload(int _nodeID, BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode) : BranchNodeBase(_nodeID, _blackBoard, std::move(_trueNode), std::move(_falseNode)) {
 }
 
 CheckCannonReload::~CheckCannonReload() {

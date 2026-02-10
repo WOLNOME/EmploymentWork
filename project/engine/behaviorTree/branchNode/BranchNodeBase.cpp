@@ -2,7 +2,7 @@
 
 namespace Norm {
 
-	BranchNodeBase::BranchNodeBase(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode) : NodeBase(_blackBoard) {
+	BranchNodeBase::BranchNodeBase(int _nodeID, BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode) : NodeBase(_nodeID, _blackBoard) {
 		mpBranchNodes[0] = std::move(_trueNode);
 		mpBranchNodes[1] = std::move(_falseNode);
 	}
@@ -24,6 +24,7 @@ namespace Norm {
 		//条件を満たしているノードの更新
 		mpBranchNodes[mSatisfyIndex]->Update();
 		mNodeResult = mpBranchNodes[mSatisfyIndex]->GetNodeResult();
+		mIsRevaluation = mpBranchNodes[mSatisfyIndex]->GetIsRevaluation();
 	}
 
 	void BranchNodeBase::Finalize() {

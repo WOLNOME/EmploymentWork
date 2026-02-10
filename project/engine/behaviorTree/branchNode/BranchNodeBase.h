@@ -11,7 +11,7 @@ namespace Norm {
 	class BranchNodeBase : public NodeBase {
 	public:
 		//コンストラクタ
-		explicit BranchNodeBase(BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
+		explicit BranchNodeBase(int _nodeID, BlackBoard* _blackBoard, std::unique_ptr<INode> _trueNode, std::unique_ptr<INode> _falseNode);
 		//デストラクタ
 		virtual ~BranchNodeBase();
 		//初期化
