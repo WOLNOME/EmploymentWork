@@ -15,9 +15,7 @@ namespace Norm {
 		EnemyBullet,		//敵弾
 		EnemyBlast,			//敵爆風
 		Item_Heal,			//回復アイテム
-		Item_ReloadSpeedUp,	//リロード速度アップアイテム
-		Item_MoveSpeedUp,	//移動速度アップアイテム
-		Item_TurnSpeedUp,	//回転速度アップアイテム
+		Item_Key,			//鍵アイテム
 		Wall,				//壁
 		Barrier,			//バリア
 

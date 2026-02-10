@@ -6,7 +6,8 @@
 #include <JsonUtil.h>
 
 //アプリケーション
-#include <application/object/character/item/Item.h>
+#include <application/object/character/item/heal/ItemHeal.h>
+#include <application/object/character/item/key/ItemKey.h>
 
 /// <summary>
 /// シーン上すべてのアイテム管理を行うクラス
@@ -39,20 +40,30 @@ public:
 	void DebugWithImGui();
 
 	/// <summary>
-	/// アイテムの追加
+	/// 回復アイテムのスポーン
 	/// </summary>
 	/// <param name="_initPos">初期化用座標</param>
-	void AddItem(const Norm::Vector3& _initPos);
+	void SpawnHealItem(const Norm::Vector3& _initPos);
+	/// <summary>
+	/// キーアイテムのスポーン
+	/// </summary>
+	/// <param name="_initPos">初期化用座標</param>
+	void SpawnKeyItem(const Norm::Vector3& _initPos);
 
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
 
 	/// <summary>
-	/// アイテムのコンテナを取得
+	/// 回復アイテムのコンテナを取得
 	/// </summary>
-	/// <returns>アイテムのコンテナ</returns>
-	const std::vector<std::unique_ptr<Item>>& GetItems() const { return items_; }
+	/// <returns>回復アイテムのコンテナ</returns>
+	const std::vector<std::unique_ptr<ItemHeal>>& GetHealItems() const { return healItems_; }
+	/// <summary>
+	/// キーアイテムのコンテナを取得
+	/// </summary>
+	/// <returns>キーアイテムのコンテナ</returns>
+	const std::vector<std::unique_ptr<ItemKey>>& GetKeyItems() const { return keyItems_; }
 
 private:
 	/// ============================== ///
@@ -62,7 +73,10 @@ private:
 	//アイテムのパラメーター
 	json param_;
 
-	//アイテムのコンテナ
-	std::vector<std::unique_ptr<Item>> items_;
+	//回復アイテムのコンテナ
+	std::vector<std::unique_ptr<ItemHeal>> healItems_;
+	//キーアイテムのコンテナ
+	std::vector<std::unique_ptr<ItemKey>> keyItems_;
+
 };
 

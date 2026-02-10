@@ -31,8 +31,6 @@ void CannonUI::Update() {
 
 	//砲弾UIのマスクを砲弾クールタイムと同期させる
 	float reloadTime = param_["cannonReloadTime"];
-	float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
-	reloadTime -= player_->GetItemReloadSpeedUp() * reloadSpeedUpValue;
 	float cannonBallCoolRate = player_->GetCannonReloadTimer() / reloadTime;
 	sprites_[1]->SetSize({ sprites_[0]->GetSize().x, sprites_[0]->GetSize().y * cannonBallCoolRate });
 

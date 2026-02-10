@@ -61,9 +61,6 @@ void Player::Initialize() {
 	int bulletMaxNum = param_["bulletMagazine"];
 	bulletNum_ = bulletMaxNum;
 	bulletFireIntervalTimer_ = 0.0f;
-	item_reloadSpeedUp_ = 0;
-	item_moveSpeedUp_ = 0;
-	item_turnSpeedUp_ = 0;
 
 }
 
@@ -151,8 +148,6 @@ void Player::Rotate() {
 
 	//回転速度の上限
 	float turnSpeed = param_["turnSpeed"];
-	float item_turnSpeedUpValue = param_["item_turnSpeedUpValue"];
-	turnSpeed += item_turnSpeedUp_ * item_turnSpeedUpValue;
 	float addRotation = turnSpeed * kDeltaTime;
 
 	//回転すべき角度が小さい場合は目標角度を代入
@@ -195,8 +190,6 @@ void Player::Move() {
 	currentDir.Normalize();
 	//WSキー入力で前後移動
 	float speed = param_["speed"];
-	float item_moveSpeedUpValue = param_["item_moveSpeedUpValue"];
-	speed += item_moveSpeedUp_ * item_moveSpeedUpValue;
 	if (input_->PushKey(DIK_W) || (input_->GetLStickDir().y > 0.0f)) {
 		//速度を加算
 		velocity_ += currentDir * speed;
@@ -213,8 +206,6 @@ void Player::Move() {
 
 	//移動量の大きさを制限
 	float maxSpeed_ = param_["maxSpeed"];
-	float item_maxMoveSpeedUpValue = param_["item_maxMoveSpeedUpValue"];
-	maxSpeed_ += item_moveSpeedUp_ * item_maxMoveSpeedUpValue;
 	if (velocity_.Length() > maxSpeed_) {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed_;
@@ -266,10 +257,7 @@ void Player::CannonAttack() {
 	//スペースキーで砲弾を発射
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		//リロードタイムをセット
-		float cannonReloadTime = param_["cannonReloadTime"];
-		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
-		cannonReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
-		cannonReloadTimer_ = cannonReloadTime;
+		cannonReloadTimer_ = param_["cannonReloadTime"];
 		//初期位置と発射方向の計算
 		float orx = camera_->worldTransform.GetRotate().x;
 		float ory = camera_->worldTransform.GetRotate().y;
@@ -335,10 +323,7 @@ void Player::BulletAttack() {
 		bulletNum_--;
 		//銃弾数が0になったらリロードタイマーをセット
 		if (bulletNum_ <= 0) {
-			float bulletReloadTime = param_["bulletReloadTime"];
-			float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
-			bulletReloadTime -= item_reloadSpeedUp_ * reloadSpeedUpValue;
-			bulletReloadTimer_ = bulletReloadTime;
+			bulletReloadTimer_ = param_["bulletReloadTime"];
 		}
 		//初期位置と発射方向を計算
 		float orx = camera_->worldTransform.GetRotate().x;
@@ -387,8 +372,8 @@ void Player::CameraAlgorithm() {
 	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {
 		Vector3 newRotate = camera_->worldTransform.GetRotate();
-		newRotate.x += moveValue.y * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
-		newRotate.y += moveValue.x * (0.0005f + (item_turnSpeedUp_ * 0.1f * 0.0005f));
+		newRotate.x += moveValue.y * 0.0005f;
+		newRotate.y += moveValue.x * 0.0005f;
 		camera_->worldTransform.SetRotate(newRotate);
 	}
 	//回転制限

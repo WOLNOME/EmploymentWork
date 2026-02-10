@@ -6,9 +6,9 @@
 #include <JsonUtil.h>
 
 /// <summary>
-/// アイテム単体の処理全般を管理するクラス
+/// 回復アイテムを管理するクラス
 /// </summary>
-class Item : public BaseCharacter {
+class ItemHeal : public BaseCharacter {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Item() override = default;
+	~ItemHeal() override = default;
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -36,7 +36,7 @@ public:
 	/// </summary>
 	/// <param name="initPos_">初期位置</param>
 	void Spawn(const Norm::Vector3& _initPos);
-	
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -75,5 +75,6 @@ private:
 
 	float swingTimer_ = 0.0f; // アイテムの振り子のタイマー
 	bool isUp_ = true; // アイテムの上下移動フラグ
+
 };
 

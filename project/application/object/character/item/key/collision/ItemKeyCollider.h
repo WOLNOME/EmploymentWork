@@ -1,9 +1,9 @@
 #pragma once
 #include "OBBColliderBase.h"
 
-class Item;
+class ItemKey;
 
-class ItemCollider : public Norm::OBBColliderBase {
+class ItemKeyCollider : public Norm::OBBColliderBase {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -12,11 +12,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	ItemCollider(Item* _holder);
+	ItemKeyCollider(ItemKey* _holder);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~ItemCollider() override = default;
+	~ItemKeyCollider() override = default;
 
 	/// <summary>
 	/// デバッグ
@@ -31,7 +31,6 @@ public:
 
 private:
 	//所有者のポインタ
-	Item* holder_ = nullptr;
-
+	ItemKey* holder_ = nullptr;
 };
 

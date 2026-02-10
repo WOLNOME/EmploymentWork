@@ -107,6 +107,7 @@ void GamePlayScene::Initialize() {
 	//必要なインスタンスの更新
 	playerUI_->Update();
 	player_->Update();
+	enemyManager_->Update();
 	camera_->Update();
 }
 

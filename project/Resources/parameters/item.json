@@ -1,5 +1,6 @@
 {
-    "maxItemNum":10,
+    "maxHealItemNum":10,
+    "maxKeyItemNum":2,
     "initHeight":1.7,
     "swingWidth":2.0,
     "swingTime":1.0,

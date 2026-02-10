@@ -211,7 +211,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\line\LineManager.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\state\ITankEnemyState.cpp" />
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp" />
-    <ClCompile Include="application\object\character\item\Item.cpp" />
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
     <ClCompile Include="application\ui\player\detail\ItemUI.cpp" />
     <ClCompile Include="engine\3d\level\LevelObject.cpp" />
@@ -279,12 +278,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\collision\base\SphereColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\collision\JetCollider.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\collision\TankCollider.cpp" />
-    <ClCompile Include="application\object\character\item\collision\ItemCollider.cpp" />
     <ClCompile Include="application\object\character\player\collision\PlayerCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp" />
     <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\decorator\Interruption.cpp" />
+    <ClCompile Include="application\object\character\item\heal\ItemHeal.cpp" />
+    <ClCompile Include="application\object\character\item\heal\collision\ItemHealCollider.cpp" />
+    <ClCompile Include="application\object\character\item\key\ItemKey.cpp" />
+    <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -405,7 +407,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\line\LineManager.h" />
     <ClInclude Include="application\object\character\enemy\tank\state\ITankEnemyState.h" />
     <ClInclude Include="application\ui\player\detail\HitIndicator.h" />
-    <ClInclude Include="application\object\character\item\Item.h" />
     <ClInclude Include="application\object\character\item\manager\ItemManager.h" />
     <ClInclude Include="application\ui\message\MessageUI.h" />
     <ClInclude Include="application\ui\player\detail\ItemUI.h" />
@@ -467,12 +468,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\collision\base\SphereColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\jet\collision\JetCollider.h" />
     <ClInclude Include="application\object\character\enemy\tank\collision\TankCollider.h" />
-    <ClInclude Include="application\object\character\item\collision\ItemCollider.h" />
     <ClInclude Include="application\object\character\player\collision\PlayerCollider.h" />
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h" />
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h" />
     <ClInclude Include="application\object\level\collision\LevelObjectCollider.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\decorator\Interruption.h" />
+    <ClInclude Include="application\object\character\item\heal\ItemHeal.h" />
+    <ClInclude Include="application\object\character\item\heal\collision\ItemHealCollider.h" />
+    <ClInclude Include="application\object\character\item\key\ItemKey.h" />
+    <ClInclude Include="application\object\character\item\key\collision\ItemKeyCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

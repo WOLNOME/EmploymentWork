@@ -37,7 +37,7 @@ public:
 	/// 時間効果を適用する (新しい命令があったら上書きされる)
 	/// </summary>
 	/// <param name="_activeTime">稼働時間(秒)</param>
-	/// <param name="_playInterval">再生インターバル(フレーム) nフレームにで1回再生</param>
+	/// <param name="_playInterval">再生インターバル(フレーム) nフレームに1回再生</param>
 	/// <returns>適用できたか</returns>
 	void ApplyTimeEffect(float _activeTime, uint32_t _playInterval);
 

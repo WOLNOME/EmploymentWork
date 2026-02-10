@@ -1,14 +1,14 @@
-#include "ItemCollider.h"
+#include "ItemHealCollider.h"
 
 //アプリケーション
-#include <application/object/character/item/Item.h>
+#include <application/object/character/item/heal/ItemHeal.h>
 
 using namespace Norm;
 
-ItemCollider::ItemCollider(Item* _holder) : holder_(_holder) {
+ItemHealCollider::ItemHealCollider(ItemHeal* _holder) : holder_(_holder) {
 }
 
-void ItemCollider::Debug() {
+void ItemHealCollider::Debug() {
 #ifdef _DEBUG
 	//基底クラスのデバッグ処理
 	OBBColliderBase::Debug();
@@ -20,7 +20,7 @@ void ItemCollider::Debug() {
 
 }
 
-void ItemCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) {
+void ItemHealCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) {
 	//当たり判定時の処理
 	switch (_attribute) {
 		//プレイヤーに当たった場合

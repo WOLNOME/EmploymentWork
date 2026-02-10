@@ -21,7 +21,6 @@ IBaseTankEnemy::IBaseTankEnemy() {
 	//移動パーティクルの生成・初期化
 	moveParticle_ = std::make_unique<CombinedParticle>();
 	moveParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("TankEnemyMove"), "Tank_Move");
-	//moveParticle_->SetBaseTransform()
 	moveParticle_->SetIsRepeat(true);
 	//初期ステートを決定
 	currentStateName_ = StateName::kPatrol;
@@ -84,8 +83,17 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 		currentStateName_ = StateName::kDead;
 		//移動パーティクルをオフにする
 		moveParticle_->SetIsPlay(false);
-		//アイテムを生成
-		itemManager_->AddItem(GetWorldTransform().GetTranslate());
+
+		//キャノ太なら
+		if (param_["tag"] == "canota") {
+			//回復アイテムを生成
+			itemManager_->SpawnHealItem(GetWorldTransform().GetTranslate());
+		}
+		//キーキャノ太なら
+		if (param_["tag"] == "keyCanota") {
+			//キーアイテムを生成
+			itemManager_->SpawnKeyItem(GetWorldTransform().GetTranslate());
+		}
 	}
 	else {
 		assert(0 && "使用できない名前が使われています。");

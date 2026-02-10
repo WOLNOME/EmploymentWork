@@ -53,17 +53,17 @@ void EndDirection::SceneChange() {
 }
 
 void EndDirection::AllBossDefeated() {
-	//ボスを全て倒したかをチェック
-	bool allBossDead = true;
-	for (auto& keyCanota : enemyManager_->GetKeyCanotas()) {
-		if (keyCanota->GetCurrentStateName() == IBaseTankEnemy::StateName::kDead) {
-			allBossDead = true;
+	//ボスを倒したかをチェック
+	bool isBossDead = true;
+	for (auto& boss : enemyManager_->GetBosses()) {
+		if (boss->GetHP() == 0) {
+			isBossDead = true;
 			break;
 		}
-		allBossDead = false;
+		isBossDead = false;
 	}
-	//もし全てのボスが死亡していたら
-	if (allBossDead) {
+	//もしボスが死亡していたら
+	if (isBossDead) {
 		//まだスローモーションになっていなければ
 		if (!isSlowMotion_) {
 			//10秒間スローモーションにする

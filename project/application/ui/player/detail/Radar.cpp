@@ -200,9 +200,9 @@ void Radar::UpdateItemMark() {
 	};
 	//アイテム処理ラムダ
 	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
-		if (itemPos.Length() > kSearchLength_) return;
 		//プレイヤー→アイテムのベクトルを作る
 		Vector3 playerToItem = itemPos - player_->GetWorldTransform().GetWorldTranslate();
+		if (playerToItem.Length() > kSearchLength_) return;
 		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
 			kCenterPosition_.x + (rotated.x * kUnitLength_),
@@ -218,14 +218,23 @@ void Radar::UpdateItemMark() {
 	}
 	//レーダー中心とスプライトインデックス
 	int spriteIndex = 0;
-	//アイテムマークの更新（白）
-	for (const auto& item : itemManager_->GetItems()) {
+	//回復アイテムマークの更新（白）
+	for (const auto& healItem : itemManager_->GetHealItems()) {
 		//アイテムがアイドル状態なら次へ
-		if (item->GetState() == BaseCharacter::State::kIdle) {
+		if (healItem->GetState() == BaseCharacter::State::kIdle) {
 			continue;
 		}
 
-		processItem(item->GetWorldTransform().GetWorldTranslate(), { 1, 1, 1, 1 }, spriteIndex);
+		processItem(healItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 1, 1 }, spriteIndex);
+	}
+	//キーアイテムマークの更新（黄）
+	for (const auto& keyItem : itemManager_->GetKeyItems()) {
+		//アイテムがアイドル状態なら次へ
+		if (keyItem->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
+		processItem(keyItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex);
 	}
 }
 

@@ -7,41 +7,47 @@ void ItemManager::Initialize() {
 	//アイテムのパラメーターを読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/item");
 
-	//アイテムコンテナの生成・初期化
-	int itemNum = param_["maxItemNum"];
-	for (int i = 0; i < itemNum; i++) {
-		items_.push_back(std::make_unique<Item>());
-		items_[i]->Initialize();
+	//回復アイテムコンテナの生成・初期化
+	int healItemNum = param_["maxHealItemNum"];
+	for (int i = 0; i < healItemNum; i++) {
+		healItems_.push_back(std::make_unique<ItemHeal>());
+		healItems_[i]->Initialize();
 	}
-
+	//キーアイテムコンテナの生成・初期化
+	int keyItemNum = param_["maxKeyItemNum"];
+	for (int i = 0; i < healItemNum; i++) {
+		keyItems_.push_back(std::make_unique<ItemKey>());
+		keyItems_[i]->Initialize();
+	}
 }
 
 void ItemManager::Update() {
-	// アイテムの更新
-	for (const auto& item : items_) {
+	// 回復アイテムの更新
+	for (const auto& healItem : healItems_) {
 		//アイドル状態の要素はスキップ
-		if (item->GetState() == BaseCharacter::State::kIdle) {
+		if (healItem->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		healItem->Update();
+	}
+	// キーアイテムの更新
+	for (const auto& keyItem : keyItems_) {
+		//アイドル状態の要素はスキップ
+		if (keyItem->GetState() == BaseCharacter::State::kIdle) {
 			continue;
 		}
 
-		item->Update();
+		keyItem->Update();
 	}
 }
 
 void ItemManager::DebugWithImGui() {
 #ifdef _DEBUG
-	// 各アイテムのデバッグ情報を表示
-	for (const auto& item : items_) {
-		//アイドル状態の要素はスキップ
-		if (item->GetState() == BaseCharacter::State::kIdle) {
-			continue;
-		}
-		item->DebugWithImGui();
-	}
+	
 #endif // _DEBUG
 }
 
-void ItemManager::AddItem(const Vector3& _initPos) {
+void ItemManager::SpawnHealItem(const Vector3& _initPos) {
 	//確率でアイテムを生成
 	std::random_device rd;
 	std::mt19937 mt(rd());
@@ -51,14 +57,28 @@ void ItemManager::AddItem(const Vector3& _initPos) {
 		return;
 	}
 
-	//アイテムコンテナを走査
-	for (auto& item : items_) {
-		//アイテムがアイドル状態でなければ次へ
-		if (item->GetState() != BaseCharacter::State::kIdle) {
+	//回復アイテムコンテナを走査
+	for (auto& healItem : healItems_) {
+		//回復アイテムがアイドル状態でなければ次へ
+		if (healItem->GetState() != BaseCharacter::State::kIdle) {
 			continue;
 		}
-		//アイテムをスポーン
-		item->Spawn(_initPos);
+		//回復アイテムをスポーン
+		healItem->Spawn(_initPos);
+
+		break;
+	}
+}
+
+void ItemManager::SpawnKeyItem(const Norm::Vector3& _initPos) {
+	//キーアイテムコンテナを走査
+	for (auto& keyItem : keyItems_) {
+		//回復アイテムがアイドル状態でなければ次へ
+		if (keyItem->GetState() != BaseCharacter::State::kIdle) {
+			continue;
+		}
+		//回復アイテムをスポーン
+		keyItem->Spawn(_initPos);
 
 		break;
 	}

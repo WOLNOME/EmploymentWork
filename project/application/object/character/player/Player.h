@@ -93,21 +93,6 @@ public:
 	/// <returns>死亡演出中フラグ</returns>
 	bool GetIsDeathDir() const { return deathDirection_->GetIsDirection(); }
 	/// <summary>
-	/// アイテムによるリロード速度アップ数を取得する
-	/// </summary>
-	/// <returns>リロード速度アップ数</returns>
-	uint32_t GetItemReloadSpeedUp() const { return item_reloadSpeedUp_; }
-	/// <summary>
-	/// アイテムによる移動速度アップ数を取得する
-	/// </summary>
-	/// <returns>移動速度アップ数</returns>
-	uint32_t GetItemMoveSpeedUp() const { return item_moveSpeedUp_; }
-	/// <summary>
-	/// アイテムによる回転速度アップ数を取得する
-	/// </summary>
-	/// <returns>回転速度アップ数</returns>
-	uint32_t GetItemTurnSpeedUp() const { return item_turnSpeedUp_; }
-	/// <summary>
 	/// 反射速度を取得する
 	/// </summary>
 	/// <returns>反射速度</returns>
@@ -132,13 +117,6 @@ public:
 	/// </summary>
 	/// <param name="_hp">HP</param>
 	void SetHP(int _hp) { hp_ = _hp; }
-
-	void SetItemReloadSpeedUp(uint32_t _num) { item_reloadSpeedUp_ = _num; }
-
-	void SetItemMoveSpeedUp(uint32_t _num) { item_moveSpeedUp_ = _num; }
-
-	void SetItemTurnSpeedUp(uint32_t _num) { item_turnSpeedUp_ = _num; }
-
 	/// <summary>
 	/// ダメージフラグのセット
 	/// </summary>
@@ -232,9 +210,5 @@ private:
 
 	Norm::Vector3 reflectVelocity_ = { 0.0f,0.0f,0.0f };
 
-	//アイテム
-	uint32_t item_reloadSpeedUp_;
-	uint32_t item_moveSpeedUp_;
-	uint32_t item_turnSpeedUp_;
 };
 

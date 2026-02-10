@@ -182,9 +182,6 @@
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp">
       <Filter>application\object\character\item\manager</Filter>
     </ClCompile>
-    <ClCompile Include="application\object\character\item\Item.cpp">
-      <Filter>application\object\character\item</Filter>
-    </ClCompile>
     <ClCompile Include="application\object\character\player\Player.cpp">
       <Filter>application\object\character\player</Filter>
     </ClCompile>
@@ -509,7 +506,6 @@
     <ClCompile Include="application\object\character\enemy\boss\collision\BossCollider.cpp" />
     <ClCompile Include="application\object\character\enemy\jet\collision\JetCollider.cpp" />
     <ClCompile Include="application\object\character\enemy\tank\collision\TankCollider.cpp" />
-    <ClCompile Include="application\object\character\item\collision\ItemCollider.cpp" />
     <ClCompile Include="application\object\character\player\collision\PlayerCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.cpp" />
@@ -521,6 +517,10 @@
     <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp" />
     <ClCompile Include="application\ui\enemy\detail\EnemyReactionUI.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\decorator\Interruption.cpp" />
+    <ClCompile Include="application\object\character\item\heal\ItemHeal.cpp" />
+    <ClCompile Include="application\object\character\item\heal\collision\ItemHealCollider.cpp" />
+    <ClCompile Include="application\object\character\item\key\ItemKey.cpp" />
+    <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -604,9 +604,6 @@
     </ClInclude>
     <ClInclude Include="application\object\character\item\manager\ItemManager.h">
       <Filter>application\object\character\item\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="application\object\character\item\Item.h">
-      <Filter>application\object\character\item</Filter>
     </ClInclude>
     <ClInclude Include="application\object\character\player\Player.h">
       <Filter>application\object\character\player</Filter>
@@ -978,7 +975,6 @@
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
     <ClInclude Include="application\object\character\enemy\jet\collision\JetCollider.h" />
     <ClInclude Include="application\object\character\enemy\tank\collision\TankCollider.h" />
-    <ClInclude Include="application\object\character\item\collision\ItemCollider.h" />
     <ClInclude Include="application\object\character\player\collision\PlayerCollider.h" />
     <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.h" />
     <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.h" />
@@ -990,6 +986,10 @@
     <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h" />
     <ClInclude Include="application\ui\enemy\detail\EnemyReactionUI.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\decorator\Interruption.h" />
+    <ClInclude Include="application\object\character\item\heal\ItemHeal.h" />
+    <ClInclude Include="application\object\character\item\heal\collision\ItemHealCollider.h" />
+    <ClInclude Include="application\object\character\item\key\ItemKey.h" />
+    <ClInclude Include="application\object\character\item\key\collision\ItemKeyCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

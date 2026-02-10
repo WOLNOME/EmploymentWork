@@ -33,8 +33,6 @@ void BulletUI::Update() {
 	if (player_->GetBulletReloadTimer() > 0.0f) {
 		//銃弾リロードタイムと同期させる
 		float reloadTime = param_["bulletReloadTime"];
-		float reloadSpeedUpValue = param_["item_reloadSpeedUpValue"];
-		reloadTime -= player_->GetItemReloadSpeedUp()* reloadSpeedUpValue;
 		float bulletReloadRate = player_->GetBulletReloadTimer() / reloadTime;
 		sprites_[1]->SetSize({ sprites_[0]->GetSize().x, sprites_[0]->GetSize().y * bulletReloadRate });
 	}
