@@ -38,6 +38,7 @@ void EnemyCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 	switch (_attribute) {
 		//プレイヤーに当たった場合
 	case CollisionAttribute::Player:
+	{
 		//共通処理
 		commonCollisionProcess();
 
@@ -45,24 +46,31 @@ void EnemyCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 		holder_->GetPlayerUI()->GetHitIndicator()->RegistIndicator(holder_->GetGeneratedPosition());
 
 		break;
-		//プレイヤー弾に当たった場合
+	}
+	//プレイヤー弾に当たった場合
 	case CollisionAttribute::PlayerBullet:
+	{
 		//共通処理
 		commonCollisionProcess();
 
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
-
 		break;
-		//プレイヤーキャノンに当たった場合
+	}
+	//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
+	{
 		//共通処理
 		commonCollisionProcess();
 
-		//当たり判定属性をなしに
-		SetCollisionAttribute(CollisionAttribute::Nothingness);
+		break;
+	}
+	//プレイヤー必殺弾に当たった場合
+	case CollisionAttribute::PlayerSpecial:
+	{
+		//共通処理
+		commonCollisionProcess();
 
 		break;
+	}
 	default:
 		break;
 	}

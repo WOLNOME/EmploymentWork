@@ -28,20 +28,34 @@ void JetCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) 
 	switch (_attribute) {
 		//プレイヤーキャノンに当たった場合
 	case CollisionAttribute::PlayerCannon:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
 		hp -= holder_->GetParam()["cannonDamage"];
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, holder_->GetMaxHP());
 		break;
-		//プレイヤー弾に当たった場合
+	}
+	//プレイヤー弾に当たった場合
 	case CollisionAttribute::PlayerBullet:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//HPを減らす
 		hp -= holder_->GetParam()["bulletDamage"];
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, holder_->GetMaxHP());
 		break;
+	}
+	case CollisionAttribute::PlayerSpecial:
+	{
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//HPを減らす
+		hp -= holder_->GetParam()["specialDamage"];
+		//0~MaxHPの範囲に収める
+		hp = std::clamp(hp, 0, holder_->GetMaxHP());
+
+		break;
+	}
 	default:
 		break;
 	}

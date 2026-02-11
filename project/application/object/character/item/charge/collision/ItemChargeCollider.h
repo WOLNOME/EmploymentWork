@@ -1,12 +1,12 @@
 #pragma once
 #include "OBBColliderBase.h"
 
-class ItemHeal;
+class ItemCharge;
 
 /// <summary>
-/// 回復アイテムのコライダー
+/// 必殺弾チャージアイテムのコライダー
 /// </summary>
-class ItemHealCollider : public Norm::OBBColliderBase {
+class ItemChargeCollider : public Norm::OBBColliderBase {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -15,11 +15,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	ItemHealCollider(ItemHeal* _holder);
+	ItemChargeCollider(ItemCharge* _holder);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~ItemHealCollider() override = default;
+	~ItemChargeCollider() override = default;
 
 	/// <summary>
 	/// デバッグ
@@ -34,6 +34,6 @@ public:
 
 private:
 	//所有者のポインタ
-	ItemHeal* holder_ = nullptr;
+	ItemCharge* holder_ = nullptr;
 };
 

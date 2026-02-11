@@ -28,6 +28,7 @@
     "confusionDirTime":7.5,
     "cannonDamage":10,
     "bulletDamage":1,
+    "specialDamage":50,
     "uiHeight":35.0,
     "uiFront":15.0
 }

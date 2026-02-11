@@ -73,6 +73,17 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 
 		break;
 	}
+	//プレイヤー必殺弾に当たった場合
+	case CollisionAttribute::PlayerSpecial:
+	{
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//HPを減らす
+		hp -= holder_->GetParam()["specialDamage"];
+		//0~MaxHPの範囲に収める
+		hp = std::clamp(hp, 0, holder_->GetMaxHP());
+
+		break;
+	}
 	//バリアに当たった場合
 	case CollisionAttribute::Barrier:
 	{

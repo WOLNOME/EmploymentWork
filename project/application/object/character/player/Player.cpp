@@ -56,11 +56,14 @@ void Player::Initialize() {
 	//パラメータのセット
 	int maxHP = param_["maxHP"];
 	hp_ = maxHP;
+	keyNum_ = 0;
 	cannonReloadTimer_ = 0.0f;
 	bulletReloadTimer_ = 0.0f;
 	int bulletMaxNum = param_["bulletMagazine"];
 	bulletNum_ = bulletMaxNum;
 	bulletFireIntervalTimer_ = 0.0f;
+	specialNum_ = 0;
+	specialFireIntervalTimer_ = 0.0f;
 
 }
 
@@ -82,6 +85,7 @@ void Player::Update() {
 	//攻撃処理
 	CannonAttack();
 	BulletAttack();
+	SpecialAttack();
 	//死亡処理
 	DeadProcess();
 	//死亡演出更新
@@ -232,7 +236,6 @@ void Player::Move() {
 	//速度を加算
 	Vector3 newTranslate = object3d_->worldTransform.GetTranslate() + velocity_ * kDeltaTime;
 	object3d_->worldTransform.SetTranslate(newTranslate);
-	object3d_->worldTransform.SetTranslate(newTranslate);
 }
 
 void Player::CannonAttack() {
@@ -250,7 +253,7 @@ void Player::CannonAttack() {
 		if (cannonReloadTimer_ < 0.0f) {
 			cannonReloadTimer_ = 0.0f;
 		}
-		//計算後はこの関数を抜ける
+
 		return;
 	}
 
@@ -310,7 +313,6 @@ void Player::BulletAttack() {
 
 	//インターバルおよびリロード中は発射しない
 	if (isInterval || isReload) {
-		//計算後はこの関数を抜ける
 		return;
 	}
 
@@ -338,6 +340,57 @@ void Player::BulletAttack() {
 		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
+	}
+}
+
+void Player::SpecialAttack() {
+	//死亡演出中なら処理をしない
+	if (deathDirection_->GetIsDirection())
+		return;
+	//アクティブでないなら処理をしない
+	if (state_ != State::kActive)
+		return;
+
+	//発射間隔の計算
+	bool isInterval = false;
+	if (specialFireIntervalTimer_ > 0.0f) {
+		isInterval = true;
+		specialFireIntervalTimer_ -= kDeltaTime;
+		//発射間隔がマイナスになったら0にする
+		if (specialFireIntervalTimer_ < 0.0f) {
+			specialFireIntervalTimer_ = 0.0f;
+		}
+	}
+
+	//インターバル中は発射しない
+	if (isInterval) {
+		return;
+	}
+	//必殺弾の数が0以下なら発射しない
+	if (specialNum_ <= 0) {
+		return;
+	}
+
+	//右クリックで銃弾を発射
+	if (input_->PushMouseButton(MouseButton::RightButton) || input_->TriggerPadButton(GamePadButton::RB)) {
+		//間隔計測用タイマーをセット
+		float specialFireIntervalTime = param_["specialFireIntervalTime"];
+		specialFireIntervalTimer_ = specialFireIntervalTime;
+		//必殺弾の数を減らす
+		specialNum_--;
+		//初期位置と発射方向を計算
+		float orx = camera_->worldTransform.GetRotate().x;
+		float ory = camera_->worldTransform.GetRotate().y;
+		Vector3 currentDir = {
+			std::cosf(orx) * std::sinf(ory),
+			-std::sinf(orx),		//←角度
+			std::cosf(orx) * std::cosf(ory)
+		};
+		currentDir.Normalize();
+		Vector3 specialPos = camera_->worldTransform.GetTranslate();
+		specialPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+		//スポーン
+		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
 	}
 }
 
@@ -390,6 +443,6 @@ void Player::CameraAlgorithm() {
 
 	//カメラの座標を決める
 	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
-	newTranslate.y += 0.5f;
+	newTranslate.y += 1.5f;
 	camera_->worldTransform.SetTranslate(newTranslate);
 }

@@ -1,7 +1,7 @@
 {
     "collisionCenterOffsetOBB":{
         "x":0.0,
-        "y":-0.3,
+        "y":0.5,
         "z":0.0
     },
     "collisionSizeOBB":{
@@ -17,6 +17,8 @@
     "bulletReloadTime":2.0,
     "bulletMagazine":50,
     "bulletFireIntervalTime":0.05,
+    "specialMagazine":3,
+    "specialFireIntervalTime":1.0,
     "item_healValue":100,
     "tackleDamage":1,
     "cannonDamage":10,

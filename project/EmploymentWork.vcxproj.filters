@@ -521,6 +521,10 @@
     <ClCompile Include="application\object\character\item\heal\collision\ItemHealCollider.cpp" />
     <ClCompile Include="application\object\character\item\key\ItemKey.cpp" />
     <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\PlayerSpecial.cpp" />
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.cpp" />
+    <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp" />
+    <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -990,6 +994,10 @@
     <ClInclude Include="application\object\character\item\heal\collision\ItemHealCollider.h" />
     <ClInclude Include="application\object\character\item\key\ItemKey.h" />
     <ClInclude Include="application\object\character\item\key\collision\ItemKeyCollider.h" />
+    <ClInclude Include="application\object\character\weapon\player\PlayerSpecial.h" />
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.h" />
+    <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h" />
+    <ClInclude Include="application\object\character\item\charge\ItemCharge.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

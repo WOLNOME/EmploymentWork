@@ -63,6 +63,11 @@ public:
 	/// <returns>現在のHP</returns>
 	int GetHP() const { return hp_; }
 	/// <summary>
+	/// 鍵の数を取得する
+	/// </summary>
+	/// <returns>鍵の数</returns>
+	int GetKeyNum() const { return keyNum_; }
+	/// <summary>
 	/// 砲弾のリロードタイムタイマーを取得する
 	/// </summary>
 	/// <returns>砲弾リロードタイムタイマー</returns>
@@ -82,6 +87,16 @@ public:
 	/// </summary>
 	/// <returns>発射間隔タイマー</returns>
 	float GetBulletFireIntervalTimer() const { return bulletFireIntervalTimer_; }
+	/// <summary>
+	/// 現在の必殺弾の数を取得する
+	/// </summary>
+	/// <returns>必殺弾の数</returns>
+	int GetSpecialNum() const { return specialNum_; }
+	/// <summary>
+	/// 必殺弾の発射間隔タイマーを取得する
+	/// </summary>
+	/// <returns>発射間隔タイマー</returns>
+	float GetSpecialFireIntervalTimer() const { return specialFireIntervalTimer_; }
 	/// <summary>
 	/// ダメージを受けたかどうかを取得する
 	/// </summary>
@@ -117,6 +132,16 @@ public:
 	/// </summary>
 	/// <param name="_hp">HP</param>
 	void SetHP(int _hp) { hp_ = _hp; }
+	/// <summary>
+	/// 鍵の数をセット
+	/// </summary>
+	/// <param name="_keyNum">鍵の数</param>
+	void SetKeyNum(int _keyNum) { keyNum_ = _keyNum; }
+	/// <summary>
+	/// 必殺弾の数をセット
+	/// </summary>
+	/// <param name="_specialNum">必殺弾の数</param>
+	void SetSpecialNum(int _specialNum) { specialNum_ = _specialNum; }
 	/// <summary>
 	/// ダメージフラグのセット
 	/// </summary>
@@ -166,6 +191,8 @@ private:
 	void CannonAttack();
 	//銃弾攻撃
 	void BulletAttack();
+	//必殺弾攻撃
+	void SpecialAttack();
 	//死亡処理
 	void DeadProcess();
 
@@ -196,13 +223,17 @@ private:
 
 
 	//変数
-	int hp_;	//現在のHP
+	int hp_;						//現在のHP
+	int keyNum_;					//取得した鍵の数
 
 	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
 
 	float bulletReloadTimer_;		//銃弾リロードタイム計測用タイマー
 	int bulletNum_;					//現在の銃弾の数
 	float bulletFireIntervalTimer_;	//銃弾の発射間隔タイマー
+
+	int specialNum_;				//取得した必殺弾の数
+	float specialFireIntervalTimer_;//必殺弾の発射間隔タイマー
 
 	bool isDamage_ = false;			//ダメージを受けたか
 

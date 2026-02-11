@@ -1,12 +1,12 @@
 #pragma once
-#include "OBBColliderBase.h"
+#include "SphereColliderBase.h"
 
-class ItemHeal;
+class PlayerSpecial;
 
 /// <summary>
-/// 回復アイテムのコライダー
+/// プレイヤー必殺弾のコライダー
 /// </summary>
-class ItemHealCollider : public Norm::OBBColliderBase {
+class PlayerSpecialCollider : public Norm::SphereColliderBase {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -15,11 +15,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	ItemHealCollider(ItemHeal* _holder);
+	PlayerSpecialCollider(PlayerSpecial* _holder);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~ItemHealCollider() override = default;
+	~PlayerSpecialCollider() override = default;
 
 	/// <summary>
 	/// デバッグ
@@ -29,11 +29,12 @@ public:
 	/// <summary>
 	/// 衝突時のコールバック
 	/// </summary>
-	/// <param name="_other"></param>
+	/// <param name="_other">衝突相手のコライダー</param>
 	void OnCollision(Norm::ICollider* _other, Norm::CollisionAttribute _attribute) override;
 
 private:
 	//所有者のポインタ
-	ItemHeal* holder_ = nullptr;
+	PlayerSpecial* holder_ = nullptr;
+
 };
 

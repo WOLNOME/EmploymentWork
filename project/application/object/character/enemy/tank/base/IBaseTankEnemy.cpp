@@ -3,6 +3,7 @@
 #include <TextureManager.h>
 #include <ImGuiManager.h>
 #include <ParticleManager.h>
+#include <random>
 #include <cassert>
 
 //アプリケーション
@@ -86,8 +87,22 @@ void IBaseTankEnemy::ChangeState(const std::string& stateName) {
 
 		//キャノ太なら
 		if (param_["tag"] == "canota") {
+			//確率でアイテムを生成
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+			float healDropRate = param_["item_healDropRate"];
+			float chargeDropRate = param_["item_chargeDropRate"];
+			float value = dist(mt);
 			//回復アイテムを生成
-			itemManager_->SpawnHealItem(GetWorldTransform().GetTranslate());
+			if (value >= 0.0f && value < healDropRate) {
+				itemManager_->SpawnHealItem(GetWorldTransform().GetTranslate());
+			}
+			//必殺弾チャージアイテムを生成
+			if (value >= healDropRate && value < healDropRate + chargeDropRate) {
+				itemManager_->SpawnChargeItem(GetWorldTransform().GetTranslate());
+			}
+
 		}
 		//キーキャノ太なら
 		if (param_["tag"] == "keyCanota") {

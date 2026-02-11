@@ -16,15 +16,12 @@ void Jet::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/jet");
 
-	//テクスチャ
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("jet.png");
 	//オブジェクトの生成と初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Jet"), "jet");
 	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->worldTransform.SetScale({ 1.5f,1.5f,1.5f });
 	object3d_->SetIsDisplay(false);
-	object3d_->SetTexture(textureHandle_);
 
 	//当たり判定の初期化
 	auto* jetCollider = dynamic_cast<JetCollider*>(collider_.get());

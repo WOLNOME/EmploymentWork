@@ -1,4 +1,5 @@
 {
     "maxCannonNum":3,
-    "maxBulletNum":30
+    "maxBulletNum":30,
+    "maxSpecialNum":3
 }

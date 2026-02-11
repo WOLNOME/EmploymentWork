@@ -25,6 +25,8 @@ void PlayerCollider::Debug() {
 void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) {
 	//変更する変数の定義
 	int hp = holder_->GetHP();
+	int specialNum = holder_->GetSpecialNum();
+	int keyNum = holder_->GetKeyNum();
 	bool isDamage = holder_->GetIsDamage();
 	Vector3 reflectVelocity = holder_->GetReflectVelocity();
 
@@ -100,11 +102,39 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		//HPを回復
 		int healValue = holder_->GetParam()["item_healValue"];
 		hp += healValue;
+
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, maxHP);
+
 		//メッセージUIにアイテム取得を通知
 		std::wstring message = L"HPを" + std::to_wstring(healValue) + L"回復！";
 		holder_->GetMessageUI()->AddMessage(message);
+
+		break;
+	}
+	case CollisionAttribute::Item_Charge:
+	{
+		//必殺弾の数をインクリメント
+		specialNum++;
+
+		//必殺弾の数をクランプ
+		int maxSpecial = holder_->GetParam()["specialMagazine"];
+		specialNum = std::clamp(specialNum, 0, maxSpecial);
+
+		//メッセージUIにアイテム取得を通知
+		holder_->GetMessageUI()->AddMessage(L"必殺弾を獲得！");
+
+		break;
+	}
+	case CollisionAttribute::Item_Key:
+	{
+		//鍵の数をインクリメント
+		keyNum++;
+
+		//メッセージUIにアイテム取得を通知
+		std::wstring message = std::to_wstring(keyNum) + L"つめのキーを入手！";
+		holder_->GetMessageUI()->AddMessage(message);
+
 		break;
 	}
 	case CollisionAttribute::Wall:
@@ -131,6 +161,8 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 
 	//変更した変数のセット
 	holder_->SetHP(hp);
+	holder_->SetSpecialNum(specialNum);
+	holder_->SetKeyNum(keyNum);
 	holder_->SetIsDamage(isDamage);
 	holder_->SetReflectVelocity(reflectVelocity);
 

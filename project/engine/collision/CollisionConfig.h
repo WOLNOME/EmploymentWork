@@ -15,6 +15,7 @@ namespace Norm {
 		EnemyBullet,		//敵弾
 		EnemyBlast,			//敵爆風
 		Item_Heal,			//回復アイテム
+		Item_Charge,		//必殺弾チャージアイテム
 		Item_Key,			//鍵アイテム
 		Wall,				//壁
 		Barrier,			//バリア

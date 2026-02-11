@@ -1,4 +1,4 @@
-#include "PlayerCannon.h"
+#include "PlayerSpecial.h"
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "Object3dManager.h"
@@ -6,46 +6,46 @@
 #include "BulletTrailManager.h"
 
 //アプリケーション
-#include <application/object/character/weapon/player/collision/PlayerCannonCollider.h>
+#include <application/object/character/weapon/player/collision/PlayerSpecialCollider.h>
 
 using namespace Norm;
 
-void PlayerCannon::Initialize() {
+void PlayerSpecial::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
 	//パラメータの読み込み
-	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerSpecial");
 
 	//インスタンスの生成と初期化
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("blue.png");
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Cannon"), Shape::kSphere);
+	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Special"), Shape::kSphere);
 	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
 	//パーティクルの生成と初期化
 	explosionParticle_ = std::make_unique<CombinedParticle>();
-	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerCannonHit"), "Cannon_Hit");
+	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialHit"), "Cannon_Hit");
 	explosionParticle_->SetIsPlay(false);
 	//トレールの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerSpecial"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
 	trail_->SetIsDisplay(false);
 
 	//当たり判定の生成・初期化
-	collider_ = std::make_unique<PlayerCannonCollider>(this);
-	auto* playerCannonCollider = dynamic_cast<PlayerCannonCollider*>(collider_.get());
+	collider_ = std::make_unique<PlayerSpecialCollider>(this);
+	auto* playerSpecialCollider = dynamic_cast<PlayerSpecialCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	collider_->SetWorldTransform(&object3d_->worldTransform);
-	playerCannonCollider->SetRadius(param_["collisionRadiusSphere"]);
+	playerSpecialCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
 	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
 
 }
 
-void PlayerCannon::Update() {
+void PlayerSpecial::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
@@ -65,16 +65,16 @@ void PlayerCannon::Update() {
 	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
 }
 
-void PlayerCannon::DebugWithImGui() {
+void PlayerSpecial::DebugWithImGui() {
 #ifdef _DEBUG
 	//ベースキャラクターのデバッグ処理
 	BaseCharacter::DebugWithImGui();
 
 #endif // _DEBUG
-
 }
 
-void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
+
+void PlayerSpecial::Spawn(const Vector3& _initPos, const Vector3& _initDirection) {
 	//ステートがアイドルでなければ失敗
 	if (state_ != State::kIdle) {
 		return;
@@ -90,14 +90,14 @@ void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	//速度を決める
 	velocity_ = _initDirection * speed;
 	//当たり判定の属性を決める
-	collider_->SetCollisionAttribute(CollisionAttribute::PlayerCannon);
+	collider_->SetCollisionAttribute(CollisionAttribute::PlayerSpecial);
 	//アクティブ状態にする
 	SetState(State::kActive);
 	//トレールの座標をクリア
 	trail_->ClearPositions();
 }
 
-void PlayerCannon::Move() {
+void PlayerSpecial::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
 	//空気抵抗をかける

@@ -26,6 +26,7 @@ void EnemyBulletCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 	switch (_attribute) {
 		//プレイヤーに当たった場合
 	case CollisionAttribute::Player:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//死亡処理
 		holder_->DeadProcess();
@@ -34,13 +35,25 @@ void EnemyBulletCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 		holder_->GetPlayerUI()->GetHitIndicator()->RegistIndicator(holder_->GetGeneratedPosition());
 
 		break;
-		//プレイヤー砲弾に当たった場合
+	}
+	//プレイヤー砲弾に当たった場合
 	case CollisionAttribute::PlayerCannon:
+	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//死亡処理
 		holder_->DeadProcess();
 
 		break;
+	}
+	//プレイヤー必殺弾に当たった場合
+	case CollisionAttribute::PlayerSpecial:
+	{
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//死亡処理
+		holder_->DeadProcess();
+
+		break;
+	}
 	default:
 		break;
 	}

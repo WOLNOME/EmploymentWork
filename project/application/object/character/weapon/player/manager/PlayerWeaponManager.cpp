@@ -22,6 +22,13 @@ void PlayerWeaponManager::Initialize() {
 		bullets_.push_back(std::make_unique<PlayerBullet>());
 		bullets_[i]->Initialize();
 	}
+
+	//必殺弾の生成と初期化
+	int specialNum = param_["maxSpecialNum"];
+	for (int i = 0; i < specialNum; i++) {
+		specials_.push_back(std::make_unique<PlayerSpecial>());
+		specials_[i]->Initialize();
+	}
 }
 
 void PlayerWeaponManager::Update() {
@@ -32,6 +39,10 @@ void PlayerWeaponManager::Update() {
 	//銃弾の更新
 	for (auto& bullet : bullets_) {
 		bullet->Update();
+	}
+	//必殺弾の更新
+	for (auto& special : specials_) {
+		special->Update();
 	}
 }
 
@@ -45,33 +56,33 @@ void PlayerWeaponManager::DebugWithImGui() {
 	for (const auto& bullet : bullets_) {
 		bullet->DebugWithImGui();
 	}
+	//必殺弾のデバッグ
+	for (const auto& special : specials_) {
+		special->DebugWithImGui();
+	}
 #endif // _DEBUG
 }
 
 void PlayerWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _initDirection) {
-	//砲弾のコンテナを走査
-	for (auto& cannon : cannons_) {
-		//砲弾がアイドル状態でないなら次へ
-		if (cannon->GetState() != BaseCharacter::State::kIdle)
-			continue;
-		//スポーン
+	//スポーン
+	SpawnFromPool(cannons_, [&](PlayerCannon* cannon) {
 		cannon->Spawn(_initPos, _initDirection);
-		//カメラシェイクを入れる
 		camera_->RegistShake(0.2f, 0.15f);
-
-		break;
-	}
+		});
 }
 
 void PlayerWeaponManager::SpawnBullet(const Vector3& _initPos, const Vector3& _initDirection) {
-	//銃弾のコンテナを走査
-	for (auto& bullet : bullets_) {
-		//銃弾がアイドル状態でないなら次へ
-		if (bullet->GetState() != BaseCharacter::State::kIdle)
-			continue;
-		//スポーン
+	//スポーン
+	SpawnFromPool(bullets_, [&](PlayerBullet* bullet) {
 		bullet->Spawn(_initPos, _initDirection);
+		camera_->RegistShake(0.15f, 0.1f);
+		});
+}
 
-		break;
-	}
+void PlayerWeaponManager::SpawnSpecial(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection) {
+	//スポーン
+	SpawnFromPool(specials_, [&](PlayerSpecial* special) {
+		special->Spawn(_initPos, _initDirection);
+		camera_->RegistShake(0.4f, 0.3f);
+		});
 }

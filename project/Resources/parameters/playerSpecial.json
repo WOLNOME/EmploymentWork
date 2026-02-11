@@ -1,0 +1,7 @@
+{
+    "collisionRadiusSphere":1.0,
+    "maxSpeed": 700.0,
+    "speed":300.0,
+    "trailMaxLength":0.6,
+    "trailLengthDecayValue":0.016
+}

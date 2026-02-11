@@ -2,7 +2,7 @@
     "tag" : "canota",
     "collisionCenterOffsetOBB":{
         "x":0.0,
-        "y":-0.3,
+        "y":0.5,
         "z":0.0
     },
     "collisionSizeOBB":{
@@ -19,6 +19,9 @@
     "maxHP":30,
     "cannonDamage":10,
     "bulletDamage":1,
+    "specialDamage":50,
     "uiHeight":9.0,
-    "uiFront":0.0
+    "uiFront":0.0,
+    "item_healDropRate":0.3,
+    "item_chargeDropRate":0.3
 }

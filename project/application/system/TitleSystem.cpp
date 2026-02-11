@@ -74,9 +74,9 @@ void TitleSystem::Initialize() {
 
 		//戦車
 		for (int i = 0; i < 5; i++) {
-			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("player.png");
+			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/playerFull.png");
 			auto tank = std::make_unique<Object3d>();
-			tank->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
+			tank->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "canota");
 			tank->SetTexture(textureHandle);
 			tank->worldTransform.SetTranslate({ -60.0f + (30.0f * i),3.1f,0.0f });
 			tanks_.push_back(std::move(tank));

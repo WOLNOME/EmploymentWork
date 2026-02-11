@@ -1,7 +1,8 @@
 {
     "maxHealItemNum":10,
+    "maxChargeItemNum":10,
     "maxKeyItemNum":2,
-    "initHeight":1.7,
+    "initHeight":2.2,
     "swingWidth":2.0,
     "swingTime":1.0,
     "dropRate":0.9
