@@ -38,7 +38,7 @@ namespace Norm {
 		memset(resource_.indexData, 0, sizeof(uint32_t) * (((kMaxVertexNum_ / 4) - 1) * 24 + 12));
 		indexCount_ = 0;
 
-		// 1. トレール寿命処理
+		// トレール寿命処理
 		for (auto it = positions_.begin(); it != positions_.end(); ) {
 			it->second++; // カウント進行
 			if (verLength_ - it->second * lengthDecayValue_ <= 0.0f) {
@@ -49,10 +49,13 @@ namespace Norm {
 			}
 		}
 
-		// 2. 描画対象が1つ以下なら抜ける
-		if (positions_.size() <= 1) return;
+		//描画対象が2つ以上なら描画する
+		isDisplay_ = (positions_.size() >= 2);
 
-		// 3. 頂点生成
+		// 描画しないのであればreturn
+		if (!isDisplay_) return;
+
+		// 頂点生成
 		std::list<Vector3> vertices;
 		Vector3 prevPos;
 
@@ -84,7 +87,7 @@ namespace Norm {
 			vertices.push_back(pos - right * verLength - up * verLength);  // LB
 		}
 
-		// 4. 頂点データの転送
+		// 頂点データの転送
 		int vtxIdx = 0;
 		for (const auto& vtx : vertices) {
 			resource_.vertexData[vtxIdx].position = Vector4(vtx.x, vtx.y, vtx.z, 1.0f);
@@ -92,7 +95,7 @@ namespace Norm {
 			++vtxIdx;
 		}
 
-		// 5. インデックス構築
+		// インデックス構築
 		const int sectionCount = static_cast<int>(vertices.size() / 4 - 1);
 		if (sectionCount <= 0) return;
 

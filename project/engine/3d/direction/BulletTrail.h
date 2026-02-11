@@ -81,12 +81,7 @@ namespace Norm {
 		/// </summary>
 		/// <param name="_textureHandle">テクスチャハンドル</param>
 		void SetTexture(int32_t _textureHandle) { textureHandle_ = _textureHandle; }
-		/// <summary>
-		/// 表示するかのセット
-		/// </summary>
-		/// <param name="_isDisplay">表示するか</param>
-		void SetIsDisplay(bool _isDisplay) { isDisplay_ = _isDisplay; };
-
+		
 	private:
 		/// ============================== ///
 		///		マネージャーへの委託処理
@@ -131,7 +126,7 @@ namespace Norm {
 		float lengthDecayValue_;
 
 		//描画するか
-		bool isDisplay_ = true;
+		bool isDisplay_ = false;
 
 		//最大頂点数
 		const int kMaxVertexNum_

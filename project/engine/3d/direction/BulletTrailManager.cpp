@@ -56,7 +56,6 @@ namespace Norm {
 		//全弾丸トレールの描画
 		for (const auto& bulletTrail : bulletTrails_) {
 			if (!bulletTrail.second->isDisplay_) {
-				bulletTrail.second->SetIsDisplay(true);
 				continue;
 			}
 

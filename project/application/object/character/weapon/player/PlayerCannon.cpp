@@ -31,7 +31,6 @@ void PlayerCannon::Initialize() {
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
 	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
-	trail_->SetIsDisplay(false);
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<PlayerCannonCollider>(this);
@@ -49,8 +48,8 @@ void PlayerCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//死亡演出が終了していたらアイドル状態にする
-	if (state_ == State::kAsphyxia && !explosionParticle_->GetIsPlay()) {
+	//仮死状態だったらアイドル状態にする
+	if (state_ == State::kAsphyxia) {
 		SetState(State::kIdle);
 	}
 

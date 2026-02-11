@@ -50,8 +50,8 @@ void EnemyBullet::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//死亡演出が終了したらアイドル状態にする
-	if (state_ == State::kAsphyxia && !hitEffect_->GetIsPlay()) {
+	//仮死状態だったらアイドル状態にする
+	if (state_ == State::kAsphyxia) {
 		SetState(State::kIdle);
 	}
 
