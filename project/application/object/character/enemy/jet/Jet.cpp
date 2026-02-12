@@ -20,7 +20,6 @@ void Jet::Initialize() {
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Jet"), "jet");
 	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
-	object3d_->worldTransform.SetScale({ 1.5f,1.5f,1.5f });
 	object3d_->SetIsDisplay(false);
 
 	//当たり判定の初期化
