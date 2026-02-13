@@ -281,10 +281,10 @@
     <ClCompile Include="engine\3d\camera\GameCamera.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\level\LevelLoader.cpp">
+    <ClCompile Include="application\object\level\loader\LevelLoader.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\level\LevelObject.cpp">
+    <ClCompile Include="application\object\level\base\IBaseLevelObject.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\3d\line\LineManager.cpp">
@@ -525,6 +525,7 @@
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.cpp" />
     <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp" />
     <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp" />
+    <ClCompile Include="application\object\level\tree\LevelTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -708,10 +709,10 @@
     <ClInclude Include="engine\3d\camera\GameCamera.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\level\LevelLoader.h">
+    <ClInclude Include="application\object\level\loader\LevelLoader.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\level\LevelObject.h">
+    <ClInclude Include="application\object\level\base\IBaseLevelObject.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\line\LineManager.h">
@@ -998,6 +999,7 @@
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.h" />
     <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h" />
     <ClInclude Include="application\object\character\item\charge\ItemCharge.h" />
+    <ClInclude Include="application\object\level\tree\LevelTree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

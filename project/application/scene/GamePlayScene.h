@@ -3,6 +3,7 @@
 #include "GameCamera.h"
 
 //アプリケーション
+#include "application/object/level/LevelLoader.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
 #include "application/object/character/player/Player.h"
@@ -72,7 +73,7 @@ private:
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
 	//レベルローダー
-	std::unique_ptr<Norm::LevelLoader> levelLoader_ = nullptr;
+	std::unique_ptr<LevelLoader> levelLoader_ = nullptr;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;

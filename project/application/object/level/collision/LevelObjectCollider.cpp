@@ -1,9 +1,12 @@
 #include "LevelObjectCollider.h"
-#include <level/LevelObject.h>
+
+//アプリケーション
+#include "application/object/level/LevelLoader.h"
+
 
 using namespace Norm;
 
-LevelObjectCollider::LevelObjectCollider(LevelObject* _holder) : OBBColliderBase(), holder_(_holder) {
+LevelObjectCollider::LevelObjectCollider(IBaseLevelObject* _holder) : OBBColliderBase(), holder_(_holder) {
 }
 
 void LevelObjectCollider::Debug() {

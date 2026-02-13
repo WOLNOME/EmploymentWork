@@ -63,7 +63,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -170,7 +170,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\3d\direction\BulletTrailManager.cpp" />
     <ClCompile Include="engine\3d\object\AnimationModel.cpp" />
     <ClCompile Include="engine\3d\particle\CombinedParticle.cpp" />
-    <ClCompile Include="engine\3d\level\LevelLoader.cpp" />
+    <ClCompile Include="application\object\level\loader\LevelLoader.cpp" />
     <ClCompile Include="engine\base\render\D2DRender.cpp" />
     <ClCompile Include="engine\base\view\DSVManager.cpp" />
     <ClCompile Include="engine\base\view\GPUDescriptorManager.cpp" />
@@ -213,7 +213,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp" />
     <ClCompile Include="application\object\character\item\manager\ItemManager.cpp" />
     <ClCompile Include="application\ui\player\detail\ItemUI.cpp" />
-    <ClCompile Include="engine\3d\level\LevelObject.cpp" />
+    <ClCompile Include="application\object\level\base\IBaseLevelObject.cpp" />
     <ClCompile Include="application\scene\GameClearScene.cpp" />
     <ClCompile Include="application\system\GameClearSystem.cpp" />
     <ClCompile Include="application\system\GameOverSystem.cpp" />
@@ -291,6 +291,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.cpp" />
     <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp" />
     <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp" />
+    <ClCompile Include="application\object\level\tree\LevelTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -352,7 +353,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\3d\direction\BulletTrailManager.h" />
     <ClInclude Include="engine\3d\object\AnimationModel.h" />
     <ClInclude Include="engine\3d\particle\CombinedParticle.h" />
-    <ClInclude Include="engine\3d\level\LevelLoader.h" />
+    <ClInclude Include="application\object\level\loader\LevelLoader.h" />
     <ClInclude Include="engine\base\render\D2DRender.h" />
     <ClInclude Include="engine\base\view\DSVManager.h" />
     <ClInclude Include="engine\base\view\GPUDescriptorManager.h" />
@@ -414,7 +415,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\item\manager\ItemManager.h" />
     <ClInclude Include="application\ui\message\MessageUI.h" />
     <ClInclude Include="application\ui\player\detail\ItemUI.h" />
-    <ClInclude Include="engine\3d\level\LevelObject.h" />
+    <ClInclude Include="application\object\level\base\IBaseLevelObject.h" />
     <ClInclude Include="application\scene\GameClearScene.h" />
     <ClInclude Include="application\system\GameClearSystem.h" />
     <ClInclude Include="application\system\GameOverSystem.h" />
@@ -485,6 +486,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.h" />
     <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h" />
     <ClInclude Include="application\object\character\item\charge\ItemCharge.h" />
+    <ClInclude Include="application\object\level\tree\LevelTree.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -13,12 +13,8 @@
 //アプリケーション
 #include <application/system/DeathDirection.h>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class LevelLoader;
-}
-
 //前方宣言（アプリケーション）
+class LevelLoader;
 class PlayerWeaponManager;
 class MessageUI;
 
@@ -163,7 +159,7 @@ public:
 	/// レベルローダーを設定する
 	/// </summary>
 	/// <param name="_levelLoader">設定するレベルローダー</param>
-	void SetLevelLoader(Norm::LevelLoader* _levelLoader);
+	void SetLevelLoader(LevelLoader* _levelLoader);
 	/// <summary>
 	/// ゲームカメラを設定する
 	/// </summary>

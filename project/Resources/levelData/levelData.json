@@ -2,18 +2,39 @@
     "name": "scene",
     "objects": [
         {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
+            "type": "LIGHT",
+            "name": "Light",
             "transform": {
                 "translation": [
-                    0.0,
-                    0.0,
-                    1.5
+                    4.076245307922363,
+                    1.0054539442062378,
+                    5.903861999511719
                 ],
                 "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
+                    37.26104736328125,
+                    3.1637091636657715,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    1.0,
+                    0.9999999403953552,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera",
+            "transform": {
+                "translation": [
+                    7.358891487121582,
+                    -6.925790786743164,
+                    4.958309173583984
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    2.2983238068263745e-07,
+                    46.69194412231445
                 ],
                 "scaling": [
                     1.0,
@@ -23,18 +44,39 @@
             }
         },
         {
-            "type": "EnemySpawn",
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    650.0,
+                    0.0,
+                    1.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "CanotaSpawn",
             "name": "Canota",
             "transform": {
                 "translation": [
-                    -200.0,
-                    100.0,
+                    -389.18560791015625,
+                    32.116111755371094,
                     1.5
                 ],
                 "rotation": [
                     0.0,
                     0.0,
-                    -24.12381362915039
+                    -24.123817443847656
                 ],
                 "scaling": [
                     0.9999998807907104,
@@ -45,7 +87,7 @@
             "file_name": "canota"
         },
         {
-            "type": "EnemySpawn",
+            "type": "CanotaSpawn",
             "name": "Canota1",
             "transform": {
                 "translation": [
@@ -56,23 +98,23 @@
                 "rotation": [
                     0.0,
                     -0.0,
-                    50.81620788574219
+                    50.81622314453125
                 ],
                 "scaling": [
-                    0.9999999403953552,
-                    0.9999999403953552,
+                    0.9999998807907104,
+                    0.9999998807907104,
                     1.0
                 ]
             },
-            "file_name": "canota"
+            "file_name": ""
         },
         {
-            "type": "EnemySpawn",
+            "type": "CanotaSpawn",
             "name": "Canota2",
             "transform": {
                 "translation": [
-                    0.0,
-                    -300.0,
+                    39.602027893066406,
+                    -392.7000732421875,
                     1.5
                 ],
                 "rotation": [
@@ -86,10 +128,10 @@
                     1.0
                 ]
             },
-            "file_name": "canota"
+            "file_name": ""
         },
         {
-            "type": "EnemySpawn",
+            "type": "KeyCanotaSpawn",
             "name": "KeyCanota",
             "transform": {
                 "translation": [
@@ -108,10 +150,10 @@
                     1.5
                 ]
             },
-            "file_name": "keyCanota"
+            "file_name": ""
         },
         {
-            "type": "EnemySpawn",
+            "type": "CanotaSpawn",
             "name": "Canota3",
             "transform": {
                 "translation": [
@@ -122,7 +164,7 @@
                 "rotation": [
                     0.0,
                     -0.0,
-                    51.09457778930664
+                    51.09459686279297
                 ],
                 "scaling": [
                     1.0,
@@ -130,10 +172,10 @@
                     1.0
                 ]
             },
-            "file_name": "canota"
+            "file_name": ""
         },
         {
-            "type": "EnemySpawn",
+            "type": "CanotaSpawn",
             "name": "Canota4",
             "transform": {
                 "translation": [
@@ -152,15 +194,15 @@
                     1.0
                 ]
             },
-            "file_name": "canota"
+            "file_name": ""
         },
         {
             "type": "TreeObject",
             "name": "TreeObject",
             "transform": {
                 "translation": [
-                    26.495927810668945,
-                    42.464988708496094,
+                    174.32623291015625,
+                    125.48015594482422,
                     0.0
                 ],
                 "rotation": [
@@ -174,6 +216,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -186,8 +229,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -209,6 +251,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -221,8 +264,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -244,6 +286,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -256,8 +299,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -279,6 +321,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -291,8 +334,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -314,6 +356,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -326,8 +369,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -349,6 +391,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -361,8 +404,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -384,6 +426,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -396,8 +439,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -419,6 +461,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -431,8 +474,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -454,6 +496,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -466,8 +509,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -489,6 +531,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -501,8 +544,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -524,6 +566,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -536,8 +579,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -559,6 +601,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -571,8 +614,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -594,6 +636,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -606,8 +649,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -629,6 +671,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -641,8 +684,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -664,6 +706,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -676,8 +719,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -699,6 +741,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -711,8 +754,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -734,6 +776,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -746,8 +789,7 @@
                     1.5,
                     10.0
                 ]
-            },
-            "file_name": "tree"
+            }
         },
         {
             "type": "TreeObject",
@@ -769,6 +811,7 @@
                     1.0
                 ]
             },
+            "file_name": "tree",
             "collider": {
                 "type": "BOX",
                 "center": [
@@ -781,8 +824,478 @@
                     1.5,
                     10.0
                 ]
+            }
+        },
+        {
+            "type": "JetSpawn",
+            "name": "JetSpawn",
+            "transform": {
+                "translation": [
+                    270.0,
+                    360.0,
+                    40.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -150.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "FenceObject",
+            "name": "FenceObject",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "SealedBoxObject",
+            "name": "SealedBoxObject",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
             },
-            "file_name": "tree"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    35.0
+                ],
+                "size": [
+                    70.0,
+                    70.0,
+                    70.0
+                ]
+            }
+        },
+        {
+            "type": "JetSpawn",
+            "name": "JetSpawn.001",
+            "transform": {
+                "translation": [
+                    -193.06321716308594,
+                    -328.4669494628906,
+                    40.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    61.43782424926758
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject",
+            "transform": {
+                "translation": [
+                    110.96392822265625,
+                    -160.89869689941406,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.001",
+            "transform": {
+                "translation": [
+                    170.56890869140625,
+                    -61.87355041503906,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.002",
+            "transform": {
+                "translation": [
+                    26.04169464111328,
+                    -143.12826538085938,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.003",
+            "transform": {
+                "translation": [
+                    -80.11073303222656,
+                    -171.47848510742188,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.004",
+            "transform": {
+                "translation": [
+                    -196.60244750976562,
+                    -34.622955322265625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.005",
+            "transform": {
+                "translation": [
+                    -170.00897216796875,
+                    110.14508819580078,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.006",
+            "transform": {
+                "translation": [
+                    -55.85497283935547,
+                    273.944580078125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "BigTreeObject",
+            "name": "BigTreeObject.007",
+            "transform": {
+                "translation": [
+                    144.31851196289062,
+                    212.06256103515625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    25.0
+                ],
+                "size": [
+                    6.5,
+                    6.5,
+                    50.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject",
+            "transform": {
+                "translation": [
+                    146.5872344970703,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    56.368804931640625
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "size": [
+                    5.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.001",
+            "transform": {
+                "translation": [
+                    105.09742736816406,
+                    24.636852264404297,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -175.12936401367188
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "size": [
+                    5.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.002",
+            "transform": {
+                "translation": [
+                    105.09742736816406,
+                    -41.98176956176758,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    123.55799865722656
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "size": [
+                    5.0,
+                    2.0,
+                    2.0
+                ]
+            }
         }
     ]
 }

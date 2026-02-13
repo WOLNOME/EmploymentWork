@@ -9,12 +9,8 @@
 #include "application/object/character/enemy/jet/Jet.h"
 #include "application/object/character/enemy/boss/Boss.h"
 
-//前方宣言（エンジン）
-namespace Norm {
-	class LevelLoader;
-}
-
 //前方宣言（アプリケーション）
+class LevelLoader;
 class Player;
 class ItemManager;
 class EnemyWeaponManager;
@@ -104,7 +100,7 @@ public:
 	/// レベルローダーのセット
 	/// </summary>
 	/// <param name="_levelLoader">レベルローダーのポインタ</param>
-	void SetLevelLoader(Norm::LevelLoader* _levelLoader);
+	void SetLevelLoader(LevelLoader* _levelLoader);
 	/// <summary>
 	/// プレイヤーのセット
 	/// </summary>

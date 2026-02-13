@@ -1,10 +1,8 @@
 #pragma once
 #include "OBBColliderBase.h"
 
-//前方宣言（エンジン）
-namespace Norm {
-	class LevelObject;
-};
+//前方宣言（アプリケーション）
+class IBaseLevelObject;
 
 /// <summary>
 /// レベルオブジェクトのコライダー
@@ -18,7 +16,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	LevelObjectCollider(Norm::LevelObject* _holder);
+	LevelObjectCollider(IBaseLevelObject* _holder);
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -37,7 +35,7 @@ public:
 
 private:
 	//所有者のポインタ
-	Norm::LevelObject* holder_ = nullptr;
+	IBaseLevelObject* holder_ = nullptr;
 
 };
 
