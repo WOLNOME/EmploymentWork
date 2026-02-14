@@ -1,9 +1,12 @@
 #pragma once
-#include "application/object/level/LevelObject.h"
 #include <JsonUtil.h>
+#include <Vector3.h>
 #include <list>
 #include <string>
 #include <memory>
+
+//前方宣言
+class IBaseLevelObject;
 
 /// <summary>
 /// レベルデータの読み込みと管理を行うクラス

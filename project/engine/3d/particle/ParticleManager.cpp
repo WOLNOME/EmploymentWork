@@ -1242,55 +1242,56 @@ namespace Norm {
 	ParticleManager::CommonResourceForCS ParticleManager::CreateCommonResourceForCS() {
 		CommonResourceForCS result;
 		DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+		GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
 
 		//粒
 		{
 			//粒の情報用のResorceを確保
 			result.grainsResource = dxCommon->CreateUAVBufferResource(sizeof(GrainForCS) * kMaxNumGrains);
 			//粒情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
-			result.grainsUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.grainsUavIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
+			result.grainsUavIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateUAVforRWStructuredBuffer(result.grainsUavIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
 			//粒情報用のsrvを作成。StructuredBufferでアクセスできるようにする
-			result.grainsSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.grainsSrvIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
+			result.grainsSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.grainsSrvIndex, result.grainsResource.Get(), UINT(kMaxNumGrains), sizeof(GrainForCS));
 		}
 		//粒のIndex
 		{
 			//粒のIndexの情報用のResorceを確保
 			result.grainIndicesResource = dxCommon->CreateUAVBufferResource(sizeof(int32_t) * kMaxNumGrains);
 			//粒のIndex情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
-			result.grainIndicesUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.grainIndicesUavIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
+			result.grainIndicesUavIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateUAVforRWStructuredBuffer(result.grainIndicesUavIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
 			//粒のIndex情報用のsrvを作成。StructuredBufferでアクセスできるようにする
-			result.grainIndicesSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.grainIndicesSrvIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
+			result.grainIndicesSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.grainIndicesSrvIndex, result.grainIndicesResource.Get(), UINT(kMaxNumGrains), sizeof(int32_t));
 		}
 		//エミッターの範囲
 		{
 			//エミッターの範囲情報用のResorceを確保
 			result.emitterRangeResource = dxCommon->CreateUAVBufferResource(sizeof(EmitterRangeForCS) * kMaxNumEmitters);
 			//エミッターの範囲情報用のuavを作成。RBStructuredBufferでアクセスできるようにする
-			result.emitterRangeUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.emitterRangeUavIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
+			result.emitterRangeUavIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateUAVforRWStructuredBuffer(result.emitterRangeUavIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
 			//エミッターの範囲情報用のsrvを作成。StructuredBufferでアクセスできるようにする
-			result.emitterRangeSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.emitterRangeSrvIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
+			result.emitterRangeSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.emitterRangeSrvIndex, result.emitterRangeResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterRangeForCS));
 		}
 		//フリーリストインデックス
 		{
 			//フリーリストインデックス用のResourceを確保
 			result.freeListIndexResource = dxCommon->CreateUAVBufferResource(sizeof(int32_t));
 			//フリーリストインデックス用のuavを作成。RWStructuredBufferでアクセスできるようにする
-			result.freeListIndexUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.freeListIndexUavIndex, result.freeListIndexResource.Get(), 1, sizeof(int32_t));
+			result.freeListIndexUavIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateUAVforRWStructuredBuffer(result.freeListIndexUavIndex, result.freeListIndexResource.Get(), 1, sizeof(int32_t));
 		}
 		//フリーリスト
 		{
 			//フリーリスト用のResourceを確保
 			result.freeListResource = dxCommon->CreateUAVBufferResource(sizeof(uint32_t) * kMaxNumGrains);
 			//フリーリスト用のuavを作成。RWStructuredBufferでアクセスできるようにする
-			result.freeListUavIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateUAVforRWStructuredBuffer(result.freeListUavIndex, result.freeListResource.Get(),
+			result.freeListUavIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateUAVforRWStructuredBuffer(result.freeListUavIndex, result.freeListResource.Get(),
 				UINT(kMaxNumGrains), sizeof(uint32_t));
 		}
 		//エミッター情報
@@ -1300,8 +1301,8 @@ namespace Norm {
 			//マッピング
 			result.emitterResource->Map(0, nullptr, reinterpret_cast<void**>(&result.mappedEmitter));
 			//エミッター情報用のsrvを作成。StructuredBufferでアクセスできるようにする
-			result.emitterSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.emitterSrvIndex, result.emitterResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterForCS));
+			result.emitterSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.emitterSrvIndex, result.emitterResource.Get(), UINT(kMaxNumEmitters), sizeof(EmitterForCS));
 		}
 		//JSON情報
 		{
@@ -1310,8 +1311,8 @@ namespace Norm {
 			//マッピング
 			result.jsonInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&result.mappedJsonInfo));
 			//JSON情報用のsrvを作成。StructuredBufferでアクセスできるようにする
-			result.jsonInfoSrvIndex = GPUDescriptorManager::GetInstance()->Allocate();
-			GPUDescriptorManager::GetInstance()->CreateSRVforStructuredBuffer(result.jsonInfoSrvIndex, result.jsonInfoResource.Get(), UINT(kMaxNumEmitters), sizeof(JsonInfoForCS));
+			result.jsonInfoSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.jsonInfoSrvIndex, result.jsonInfoResource.Get(), UINT(kMaxNumEmitters), sizeof(JsonInfoForCS));
 		}
 		//総合情報
 		{

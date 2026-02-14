@@ -26,8 +26,7 @@ namespace Norm {
 		/// オブジェクト名用グラフィックスパイプラインの種類
 		/// </summary>
 		enum class NameGPS {
-			None,			//通常
-			Animation,		//アニメーション
+			Normal,			//通常
 			SkyBox,			//スカイボックス
 
 			kMaxNumNameGPS,	//最大数
@@ -93,7 +92,7 @@ namespace Norm {
 		/// 共通のグラフィックスパイプライン設定
 		/// </summary>
 		/// <param name="index">番号</param>
-		void SettingCommonDrawing(NameGPS index = NameGPS::None);
+		void SettingCommonDrawing(NameGPS index = NameGPS::Normal);
 		/// <summary>
 		/// アニメーション用のグラフィックスパイプライン設定
 		/// </summary>
@@ -132,10 +131,6 @@ namespace Norm {
 		/// 通常用のPSO設定
 		/// </summary>
 		void NormalPSOOption();
-		/// <summary>
-		/// アニメーション用のPSO設定
-		/// </summary>
-		void AnimationPSOOption();
 		/// <summary>
 		/// スカイボックス用のPSO設定
 		/// </summary>

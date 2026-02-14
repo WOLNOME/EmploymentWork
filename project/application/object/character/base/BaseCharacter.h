@@ -1,5 +1,6 @@
 #pragma once
 #include "Object3d.h"
+#include "WorldTransform.h"
 
 //前方宣言（エンジン）
 namespace Norm {
@@ -58,7 +59,7 @@ public:
 	/// ワールドトランスフォームの取得
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
-	const Norm::WorldTransform& GetWorldTransform() { return object3d_->worldTransform; }
+	const Norm::WorldTransform& GetWorldTransform() { return worldTransform_; }
 	
 	/// <summary>
 	/// 状態の取得
@@ -85,17 +86,17 @@ public:
 	/// スケールのセット
 	/// </summary>
 	/// <param name="scale">スケール</param>
-	void SetScale(const Norm::Vector3& scale) { object3d_->worldTransform.SetScale(scale); }
+	void SetScale(const Norm::Vector3& scale) { worldTransform_.SetScale(scale); }
 	/// <summary>
 	/// 回転のセット
 	/// </summary>
 	/// <param name="rotate">回転</param>
-	void SetRotate(const Norm::Vector3& rotate) { object3d_->worldTransform.SetRotate(rotate); }
+	void SetRotate(const Norm::Vector3& rotate) { worldTransform_.SetRotate(rotate); }
 	/// <summary>
 	/// 平行移動のセット
 	/// </summary>
 	/// <param name="translate">平行移動</param>
-	void SetTranslate(const Norm::Vector3& translate) { object3d_->worldTransform.SetTranslate(translate); }
+	void SetTranslate(const Norm::Vector3& translate) { worldTransform_.SetTranslate(translate); }
 
 	/// <summary>
 	/// 状態のセット
@@ -118,8 +119,13 @@ protected:
 	int32_t textureHandle_ = EOF;
 	//オブジェクト3D
 	std::unique_ptr<Norm::Object3d> object3d_ = nullptr;
+	//ワールドトランスフォーム
+	Norm::WorldTransform worldTransform_;
+
 	//丸影
 	std::unique_ptr<Norm::Object3d> circleShadow_ = nullptr;
+	//丸影のワールドトランスフォーム
+	Norm::WorldTransform csWorldTransform_;
 
 	//当たり判定
 	std::unique_ptr<Norm::ICollider> collider_ = nullptr;

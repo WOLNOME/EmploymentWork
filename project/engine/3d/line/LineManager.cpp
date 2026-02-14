@@ -212,25 +212,44 @@ namespace Norm {
 	}
 
 	LineManager::LineResource LineManager::MakeLineResource() {
-		LineResource lineResource;
-		//各要素のリソース作成
-		lineResource.vertexResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexForGPU) * 2);
-		lineResource.instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(LineForGPU) * kMaxLineNum_);
-		//頂点バッファービューを作成
-		lineResource.vertexBufferView.BufferLocation = lineResource.vertexResource->GetGPUVirtualAddress();
-		lineResource.vertexBufferView.SizeInBytes = UINT(sizeof(VertexForGPU) * 2);
-		lineResource.vertexBufferView.StrideInBytes = sizeof(VertexForGPU);
-		//マッピング
-		lineResource.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&lineResource.vertexData));
-		lineResource.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&lineResource.instancingData));
-		//データ書き込み
-		lineResource.vertexData[0].position = { 0.0f,0.0f,0.0f };
-		lineResource.vertexData[1].position = { 1.0f,0.0f,0.0f };
-		lineResource.vertexData[0].vertexIndex = 0.0f;
-		lineResource.vertexData[1].vertexIndex = 1.0f;
+		LineResource result;
 
-		//リターン
-		return lineResource;
+		DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+		GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
+
+		//頂点
+		{
+			//頂点用Resourceを確保
+			result.vertexResource = dxCommon->CreateBufferResource(sizeof(VertexForGPU) * 2);
+			//頂点バッファービューを作成
+			result.vertexBufferView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
+			result.vertexBufferView.SizeInBytes = UINT(sizeof(VertexForGPU) * 2);
+			result.vertexBufferView.StrideInBytes = sizeof(VertexForGPU);
+			//マッピング
+			result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&result.vertexData));
+			//データ入力
+			result.vertexData[0].position = { 0.0f,0.0f,0.0f };
+			result.vertexData[1].position = { 1.0f,0.0f,0.0f };
+			result.vertexData[0].vertexIndex = 0.0f;
+			result.vertexData[1].vertexIndex = 1.0f;
+		}
+		//インスタンシング
+		{
+			//インスタンシング情報用のResourceを確保
+			result.instancingResource = dxCommon->CreateBufferResource(sizeof(LineForGPU) * kMaxLineNum_);
+			//マッピング
+			result.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&result.instancingData));
+			//インスタンシング用のSRVを作成
+			result.srvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(
+				result.srvIndex,
+				result.instancingResource.Get(),
+				kMaxLineNum_,
+				sizeof(LineForGPU)
+			);
+		}
+
+		return result;
 	}
 
 	void LineManager::SettingSRV() {

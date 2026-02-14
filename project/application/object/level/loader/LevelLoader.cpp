@@ -1,6 +1,9 @@
 #include "LevelLoader.h"
 #include <assert.h>
 
+//アプリケーション
+#include <application/object/level/base/IBaseLevelObject.h>
+
 using namespace Norm;
 
 void LevelLoader::Initialize() {

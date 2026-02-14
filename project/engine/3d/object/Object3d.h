@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <cstdint>
 #include <memory>
 #include "MyMath.h"
@@ -14,12 +15,27 @@
 
 namespace Norm {
 
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// オブジェクトの種類
+	/// </summary>
+	enum class ObjectKind {
+		Model,				//通常モデル
+		AnimationModel,		//アニメーションモデル
+		Shape,				//単純形状
+
+		kMaxNumObjectKind,
+	};
 
 	//初期化用のタグ
 	struct ModelTag {};
 	struct AnimationModelTag {};
 	struct ShapeTag {};
 
+	//前方宣言
 	class BaseCamera;
 	class SceneLight;
 
@@ -31,25 +47,18 @@ namespace Norm {
 		friend class Object3dManager;
 
 	public:
-		/// ============================== ///
-		///		列挙体
-		/// ============================== ///
-
-		/// <summary>
-		/// オブジェクトの種類
-		/// </summary>
-		enum class ObjectKind {
-			Model,				//通常モデル
-			AnimationModel,		//アニメーションモデル
-			Shape,				//単純形状
-
-			kMaxNumObjectKind,
-		};
 
 		/// ============================== ///
 		///		構造体
 		/// ============================== ///
 
+		/// <summary>
+		/// インスタンシング用データ
+		/// </summary>
+		struct InstancingForGPU {
+			Matrix4x4 matWorld;
+			Matrix4x4 matWorldInverseTranspose;
+		};
 		/// <summary>
 		/// ライト用フラグ(GPU用)
 		/// </summary>
@@ -58,11 +67,14 @@ namespace Norm {
 			uint32_t isActiveEnvironment;
 		};
 		/// <summary>
-		/// ライト用リソース
+		/// Object用リソース
 		/// </summary>
-		struct FlagResource {
-			Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-			FlagForGPU* data;
+		struct ObjectResource {
+			Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
+			InstancingForGPU* instancingData;
+			uint32_t instancingSrvIndex;
+			Microsoft::WRL::ComPtr<ID3D12Resource> lightFlagResource;
+			FlagForGPU* lightFlagData;
 		};
 
 		/// ============================== ///
@@ -99,6 +111,18 @@ namespace Norm {
 		/// <param name="name">名前</param>
 		/// <param name="kind">形状の種類</param>
 		void Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind);
+
+		/// <summary>
+		/// ワールドトランスフォームの登録
+		/// </summary>
+		/// <param name="_worldTransform">ワールドトランスフォームのポインタ</param>
+		/// <returns>ハンドル</returns>
+		uint32_t RegistWorldTransform(WorldTransform* _worldTransform);
+		/// <summary>
+		/// ワールドトランスフォームの削除
+		/// </summary>
+		/// <param name="_handle">ハンドル</param>
+		void DeleteWorldTransform(uint32_t _handle);
 
 		/// ============================== ///
 		///		getter
@@ -152,13 +176,6 @@ namespace Norm {
 		/// <param name="_name">名前</param>
 		void SetCurrentAnimation(const std::string& _name);
 
-		/// ============================== ///
-		///		メンバ変数(public)
-		/// ============================== ///
-
-		//ワールドトランスフォーム
-		WorldTransform worldTransform;
-
 	private:
 		/// ============================== ///
 		///		マネージャーへの委託処理用
@@ -180,10 +197,10 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// ライト用フラグリソースの作成
+		/// オブジェクト用リソースの作成
 		/// </summary>
 		/// <returns>ライト用フラグリソース</returns>
-		FlagResource CreateFlagResource();
+		ObjectResource CreateObjectResource();
 
 		/// ============================== ///
 		///		描画に利用するメンバ変数
@@ -208,11 +225,17 @@ namespace Norm {
 		//形状
 		std::unique_ptr<Shape> shape_ = nullptr;
 
+		//トランスフォーム
+		static const int kMaxInstancingNum = 1024;
+		std::unordered_map<uint32_t, WorldTransform*> worldTransforms_;
+		uint32_t nextIndex_ = 0u;
+		std::vector<uint32_t> freeIndices_;
+
 		//オブジェクトの種類
 		ObjectKind objKind_;
 
-		//ライト有無用リソース
-		FlagResource flagResource_;
+		//オブジェクト用リソース
+		ObjectResource objectResource_;
 
 		//描画するか
 		bool isDisplay_ = true;

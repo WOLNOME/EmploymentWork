@@ -15,16 +15,20 @@
 namespace Norm {
 
 	Object3d::Object3d() {
-		//フラッグリソースの作成
-		flagResource_ = CreateFlagResource();
+		//オブジェクトリソースの作成
+		objectResource_ = CreateObjectResource();
 	}
 
 	Object3d::~Object3d() {
+		//ワールドトランスフォームを破棄
+		worldTransforms_.clear();
 		//マネージャーから削除
 		Object3dManager::GetInstance()->DeleteObject(name_);
 	}
 
 	void Object3d::Initialize(ModelTag, const std::string& name, const std::string& filePath) {
+		//オブジェクトの種類を決定
+		objKind_ = ObjectKind::Model;
 		//名前
 		name_ = name;
 		//モデルマネージャーでモデルを生成
@@ -32,66 +36,85 @@ namespace Norm {
 		//モデルマネージャーから検索してセットする
 		model_ = ModelManager::GetInstance()->FindModel(filePath);
 
-		objKind_ = ObjectKind::Model;
-
-		//ワールドトランスフォームの初期化
-		worldTransform.Initialize();
 
 		//マネージャーに登録
 		Object3dManager::GetInstance()->RegisterObject(name_, this);
-
 	}
 
 	void Object3d::Initialize(AnimationModelTag, const std::string& name, const std::string& filePath) {
+		//オブジェクトの種類を決定
+		objKind_ = ObjectKind::AnimationModel;
 		//名前
 		name_ = name;
 		//アニメーションモデルの生成と初期化
 		animationModel_ = std::make_unique<AnimationModel>();
 		animationModel_->Initialize(filePath, ModelFormat::GLTF);
 
-		objKind_ = ObjectKind::AnimationModel;
-
-		//ワールドトランスフォームの初期化
-		worldTransform.Initialize();
-
 		//マネージャーに登録
 		Object3dManager::GetInstance()->RegisterObject(name_, this);
-
 	}
 
 	void Object3d::Initialize(ShapeTag, const std::string& name, Shape::ShapeKind kind) {
+		//オブジェクトの種類を決定
+		objKind_ = ObjectKind::Shape;
 		//名前
 		name_ = name;
 		//形状の生成と初期化
 		shape_ = std::make_unique<Shape>();
 		shape_->Initialize(kind);
 
-		objKind_ = ObjectKind::Shape;
-
-		//ワールドトランスフォームの初期化
-		worldTransform.Initialize();
-
 		//マネージャーに登録
 		Object3dManager::GetInstance()->RegisterObject(name_, this);
+	}
 
+	uint32_t Object3d::RegistWorldTransform(WorldTransform* _worldTransform) {
+		if (_worldTransform == nullptr) {
+			return UINT32_MAX; // 無効ハンドル
+		}
+
+		uint32_t handle;
+
+		// 再利用可能なインデックスがある場合
+		if (!freeIndices_.empty()) {
+			handle = freeIndices_.back();
+			freeIndices_.pop_back();
+		}
+		else {
+			handle = nextIndex_;
+			++nextIndex_;
+		}
+
+		worldTransforms_[handle] = _worldTransform;
+
+		return handle;
+	}
+
+	void Object3d::DeleteWorldTransform(uint32_t _handle) {
+		auto it = worldTransforms_.find(_handle);
+		if (it == worldTransforms_.end()) {
+			return; // 存在しない
+		}
+
+		// マップから削除
+		worldTransforms_.erase(it);
+
+		// インデックスを再利用リストへ
+		freeIndices_.push_back(_handle);
 	}
 
 	void Object3d::Update() {
-		//ワールドトランスフォームの更新
-		worldTransform.UpdateMatrix();
-
 		//オブジェクトの種類ごとの処理
 		switch (objKind_) {
-		case Object3d::ObjectKind::Model:
+		case ObjectKind::Model:
 			//何もなし
 			break;
-		case Object3d::ObjectKind::AnimationModel:
+		case ObjectKind::AnimationModel:
 			//アニメーション反映処理
 			animationModel_->Update();
 			//CS前処理（スキニング）
 			animationModel_->SettingCSPreDraw();
 			break;
-		case Object3d::ObjectKind::Shape:
+		case ObjectKind::Shape:
 			//形状の更新処理
 			shape_->Update();
 			break;
@@ -106,20 +129,42 @@ namespace Norm {
 		case ObjectKind::Model:
 		{
 			//通常モデル用共通描画の設定
-			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::None);
+			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::Normal);
 			//シーンライト有無設定
-			flagResource_.data->isActiveLights = (isLightProcess_) ? true : false;
+			objectResource_.lightFlagData->isActiveLights = (isLightProcess_) ? true : false;
 
 			//lightFlagCbufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, flagResource_.resource->GetGPUVirtualAddress());
+			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, objectResource_.lightFlagResource->GetGPUVirtualAddress());
 
 			//SceneLightCBufferの場所を設定
-			if (flagResource_.data->isActiveLights) {
+			if (objectResource_.lightFlagData->isActiveLights) {
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, _sceneLight->GetSceneLightConstBuffer()->GetGPUVirtualAddress());
 			}
 
-			//WorldTransformCBufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.GetConstBuffer()->GetGPUVirtualAddress());
+			//WorldTransformの設定
+			{
+				//データに入れる処理
+				uint32_t index = 0u;
+				for (auto it = worldTransforms_.begin(); it != worldTransforms_.end(); ) {
+					WorldTransform* worldTransform = it->second;
+					//nullptrなら削除
+					if (worldTransform == nullptr) {
+						it = worldTransforms_.erase(it);
+						continue;
+					}
+					//ワールド行列
+					Matrix4x4 matWorld = worldTransform->GetWorldMatrix();
+					objectResource_.instancingData[index].matWorld =
+						matWorld;
+					objectResource_.instancingData[index].matWorldInverseTranspose =
+						MyMath::Transpose(MyMath::Inverse(matWorld));
+
+					++index;
+					++it;
+				}
+				//GPUに送信
+				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1,GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
+			}
 
 			//CameraからビュープロジェクションCBufferの場所設定
 			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, _camera->GetViewProjectionConstBuffer()->GetGPUVirtualAddress());
@@ -129,36 +174,58 @@ namespace Norm {
 
 			//環境光テクスチャの設定
 			if (environmentLightTextureHandle_ != EOF) {
-				flagResource_.data->isActiveEnvironment = true;
+				objectResource_.lightFlagData->isActiveEnvironment = true;
 				//PSにテクスチャ情報を送る
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(environmentLightTextureHandle_));
 			}
 			else {
-				flagResource_.data->isActiveEnvironment = false;
+				objectResource_.lightFlagData->isActiveEnvironment = false;
 			}
 
 			//モデルを描画する
-			model_->Draw(color_, 0, 3, 1, textureHandle_);
+			model_->Draw(color_, 0, 3, worldTransforms_.size(), textureHandle_);
 			break;
 		}
 		case ObjectKind::AnimationModel:
 		{
-			//アニメーションモデル用共通描画の設定
-			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::Animation);
+			//通常モデル用共通描画の設定
+			Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::Normal);
 
 			//シーンライト有無設定
-			flagResource_.data->isActiveLights = (isLightProcess_) ? true : false;
+			objectResource_.lightFlagData->isActiveLights = (isLightProcess_) ? true : false;
 
 			//lightFlagCbufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, flagResource_.resource->GetGPUVirtualAddress());
+			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, objectResource_.lightFlagResource->GetGPUVirtualAddress());
 
 			//SceneLightCBufferの場所を設定
-			if (flagResource_.data->isActiveLights) {
+			if (objectResource_.lightFlagData->isActiveLights) {
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, _sceneLight->GetSceneLightConstBuffer()->GetGPUVirtualAddress());
 			}
 
-			//WorldTransformCBufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.GetConstBuffer()->GetGPUVirtualAddress());
+			//WorldTransformの設定
+			{
+				//データに入れる処理
+				uint32_t index = 0u;
+				for (auto it = worldTransforms_.begin(); it != worldTransforms_.end(); ) {
+					WorldTransform* worldTransform = it->second;
+					//nullptrなら削除
+					if (worldTransform == nullptr) {
+						it = worldTransforms_.erase(it);
+						continue;
+					}
+					//ワールド行列
+					Matrix4x4 matWorld = worldTransform->GetWorldMatrix();
+					objectResource_.instancingData[index].matWorld =
+						matWorld;
+					objectResource_.instancingData[index].matWorldInverseTranspose =
+						MyMath::Transpose(MyMath::Inverse(matWorld));
+
+					++index;
+					++it;
+				}
+				//GPUに送信
+				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
+			}
 
 			//CameraからビュープロジェクションCBufferの場所設定
 			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, _camera->GetViewProjectionConstBuffer()->GetGPUVirtualAddress());
@@ -168,16 +235,16 @@ namespace Norm {
 
 			//環境光テクスチャの設定
 			if (environmentLightTextureHandle_ != EOF) {
-				flagResource_.data->isActiveEnvironment = true;
+				objectResource_.lightFlagData->isActiveEnvironment = true;
 				//PSにテクスチャ情報を送る
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(environmentLightTextureHandle_));
 			}
 			else {
-				flagResource_.data->isActiveEnvironment = false;
+				objectResource_.lightFlagData->isActiveEnvironment = false;
 			}
 
 			//モデルを描画する
-			animationModel_->Draw(0, 3, 1, textureHandle_);
+			animationModel_->Draw(0, 3, worldTransforms_.size(), textureHandle_);
 
 			//CS描画後処理(スキニング)
 			animationModel_->SettingCSPostDraw();
@@ -193,35 +260,59 @@ namespace Norm {
 			}
 			else {
 				//通常の描画設定
-				Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::None);
+				Object3dManager::GetInstance()->SettingCommonDrawing(Object3dManager::NameGPS::Normal);
 			}
 
 			//シーンライト有無設定
-			flagResource_.data->isActiveLights = (isLightProcess_) ? true : false;
+			objectResource_.lightFlagData->isActiveLights = (isLightProcess_) ? true : false;
 			//lightFlagCbufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, flagResource_.resource->GetGPUVirtualAddress());
+			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, objectResource_.lightFlagResource->GetGPUVirtualAddress());
 			//SceneLightCBufferの場所を設定
-			if (flagResource_.data->isActiveLights) {
+			if (objectResource_.lightFlagData->isActiveLights) {
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, _sceneLight->GetSceneLightConstBuffer()->GetGPUVirtualAddress());
 			}
-			//WorldTransformCBufferの場所を設定
-			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.GetConstBuffer()->GetGPUVirtualAddress());
+
+			//WorldTransformの設定
+			{
+				//データに入れる処理
+				uint32_t index = 0u;
+				for (auto it = worldTransforms_.begin(); it != worldTransforms_.end(); ) {
+					WorldTransform* worldTransform = it->second;
+					//nullptrなら削除
+					if (worldTransform == nullptr) {
+						it = worldTransforms_.erase(it);
+						continue;
+					}
+					//ワールド行列
+					Matrix4x4 matWorld = worldTransform->GetWorldMatrix();
+					objectResource_.instancingData[index].matWorld =
+						matWorld;
+					objectResource_.instancingData[index].matWorldInverseTranspose =
+						MyMath::Transpose(MyMath::Inverse(matWorld));
+
+					++index;
+					++it;
+				}
+				//GPUに送信
+				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
+			}
+
 			//CameraからビュープロジェクションCBufferの場所設定
 			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, _camera->GetViewProjectionConstBuffer()->GetGPUVirtualAddress());
 			//Cameraからカメラ座標CBufferの場所を設定
 			MainRender::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, _camera->GetCameraPositionConstBuffer()->GetGPUVirtualAddress());
 			//環境光テクスチャの設定
 			if (environmentLightTextureHandle_ != EOF) {
-				flagResource_.data->isActiveEnvironment = true;
+				objectResource_.lightFlagData->isActiveEnvironment = true;
 				//PSにテクスチャ情報を送る
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(environmentLightTextureHandle_));
 			}
 			else {
-				flagResource_.data->isActiveEnvironment = false;
+				objectResource_.lightFlagData->isActiveEnvironment = false;
 			}
 
 			//形状を描画する
-			shape_->Draw(0, 3, 1, textureHandle_);
+			shape_->Draw(0, 3, worldTransforms_.size(), textureHandle_);
 
 			break;
 		}
@@ -256,18 +347,18 @@ namespace Norm {
 
 		//オブジェクトの種類ごとに分けてセット
 		switch (objKind_) {
-		case Object3d::ObjectKind::Model:
+		case ObjectKind::Model:
 		{
 			//モデルは個別で色を持たないためDrawでセットする
 			break;
 		}
-		case Object3d::ObjectKind::AnimationModel:
+		case ObjectKind::AnimationModel:
 		{
 			//色をセット
 			animationModel_->SetColor(color_);
 			break;
 		}
-		case Object3d::ObjectKind::Shape:
+		case ObjectKind::Shape:
 		{
 			//色をセット
 			shape_->SetColor(color_);
@@ -278,15 +369,31 @@ namespace Norm {
 		}
 	}
 
-	Object3d::FlagResource Object3d::CreateFlagResource() {
-		FlagResource result;
-		//リソース作成
-		result.resource = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(FlagForGPU));
-		//リソースにマッピング
-		result.resource->Map(0, nullptr, reinterpret_cast<void**>(&result.data));
-		//データに書き込み
-		result.data->isActiveLights = false;
-		result.data->isActiveEnvironment = false;
+	Object3d::ObjectResource Object3d::CreateObjectResource() {
+		ObjectResource result;
+		DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+		GPUDescriptorManager* gpuDescriptorManager = GPUDescriptorManager::GetInstance();
+
+		//インスタンシング
+		{
+			//エミッター情報用のResorceを確保
+			result.instancingResource = dxCommon->CreateBufferResource(sizeof(InstancingForGPU) * kMaxInstancingNum);
+			//マッピング
+			result.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&result.instancingData));
+			//インスタンシング情報用のsrvを作成。StructuredBufferでアクセスできるようにする
+			result.instancingSrvIndex = gpuDescriptorManager->Allocate();
+			gpuDescriptorManager->CreateSRVforStructuredBuffer(result.instancingSrvIndex, result.instancingResource.Get(), UINT(kMaxInstancingNum), sizeof(InstancingForGPU));
+		}
+		//ライトフラグ
+		{
+			//ライト情報用のResorceを確保
+			result.lightFlagResource = dxCommon->CreateBufferResource(sizeof(FlagForGPU));
+			//マッピング
+			result.lightFlagResource->Map(0, nullptr, reinterpret_cast<void**>(&result.lightFlagData));
+			//データ入力
+			result.lightFlagData->isActiveLights = false;
+			result.lightFlagData->isActiveEnvironment = false;
+		}
 
 		return result;
 	}

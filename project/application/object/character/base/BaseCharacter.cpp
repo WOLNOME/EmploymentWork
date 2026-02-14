@@ -17,18 +17,24 @@ void BaseCharacter::Initialize() {
 	circleShadow_ = std::make_unique<Object3d>();
 	circleShadow_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("CircleShadow"), "circleShadow");
 	circleShadow_->SetIsLightProcess(false);
-	circleShadow_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
-	circleShadow_->worldTransform.SetScale({ 5.0f,5.0f,5.0f });
+	
 	circleShadow_->SetIsDisplay(false);
 	circleShadow_->SetColor({ 1,1,1,0.8f });
+	//丸影ワールドトランスフォームの初期化
+	csWorldTransform_.Initialize();
+	csWorldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+	csWorldTransform_.SetScale({ 5.0f,5.0f,5.0f });
+	//丸影にセット
+	circleShadow_->RegistWorldTransform(&csWorldTransform_);
+
 }
 
 void BaseCharacter::Update() {
 	//丸影の更新処理
-	circleShadow_->worldTransform.SetTranslate(object3d_->worldTransform.GetTranslate());
-	Vector3 translate = circleShadow_->worldTransform.GetTranslate();
+	csWorldTransform_.SetTranslate(worldTransform_.GetTranslate());
+	Vector3 translate = csWorldTransform_.GetTranslate();
 	translate.y = 0.01f;
-	circleShadow_->worldTransform.SetTranslate(translate);
+	csWorldTransform_.SetTranslate(translate);
 }
 
 void BaseCharacter::DebugWithImGui() {
@@ -50,9 +56,9 @@ void BaseCharacter::SetState(const State& _state) {
 	switch (state_) {
 	case BaseCharacter::State::kIdle:
 		//座標を遥か遠くにセット
-		object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+		worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		if (circleShadow_) {
-			circleShadow_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+			worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		}
 		//不可視にする
 		object3d_->SetIsDisplay(false);
