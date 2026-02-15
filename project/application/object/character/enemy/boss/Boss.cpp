@@ -20,8 +20,7 @@ void Boss::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/boss");
 
-	//モデルの生成・初期化
-	object3d_ = std::make_unique<Object3d>();
+	//モデルの初期化
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Boss"), "boss");
 	object3d_->SetIsLightProcess(true);
 	object3d_->SetIsDisplay(false);
@@ -34,7 +33,7 @@ void Boss::Initialize() {
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<BossCollider>(this);
 	auto* bossCollider = dynamic_cast<BossCollider*>(collider_.get());
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	collider_->SetOffset({
 		param_["collisionCenterOffsetOBB"]["x"],
@@ -48,7 +47,7 @@ void Boss::Initialize() {
 		});
 
 	//影の大きさを調整
-	circleShadow_->worldTransform.SetScale({ 16.0f,1.0f,16.0f });
+	csWorldTransform_.SetScale({ 16.0f,1.0f,16.0f });
 	circleShadow_->SetIsDisplay(false);
 
 	//ブラックボードの生成
@@ -117,9 +116,9 @@ void Boss::Spawn(const Vector3& _initPos,const Vector3& _initRotate) {
 	//初期位置を保存（高さはそろえる）
 	Vector3 initPos = _initPos;
 	initPos.y = 16.0f;
-	object3d_->worldTransform.SetTranslate(initPos);
+	worldTransform_.SetTranslate(initPos);
 	//初期回転を保存
-	object3d_->worldTransform.SetRotate(_initRotate);
+	worldTransform_.SetRotate(_initRotate);
 	//モデルを表示
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -183,8 +182,8 @@ void Boss::ConstantInfoToBlackBoard() {
 void Boss::VariableInfoToBlackBoard(bool _isInit) {
 	//初期化・更新共通処理
 	//ボスの情報を入れる
-	blackBoard_->SetValue<Vector3>("BossPos", object3d_->worldTransform.GetTranslate());
-	blackBoard_->SetValue<Vector3>("BossRotate", object3d_->worldTransform.GetRotate());
+	blackBoard_->SetValue<Vector3>("BossPos", worldTransform_.GetTranslate());
+	blackBoard_->SetValue<Vector3>("BossRotate", worldTransform_.GetRotate());
 	blackBoard_->SetValue<Vector3>("BossVelocity", velocity_);
 	blackBoard_->SetValue<Vector3>("BossPrePos", GetWorldTransform().GetPreWorldTranslate());
 	//プレイヤーの情報を入れる
@@ -238,8 +237,8 @@ void Boss::VariableInfoToBlackBoard(bool _isInit) {
 
 void Boss::BlackBoardToVariableInfo() {
 	//ボスの情報を取得
-	object3d_->worldTransform.SetTranslate(blackBoard_->GetValue<Vector3>("BossPos"));
-	object3d_->worldTransform.SetRotate(blackBoard_->GetValue<Vector3>("BossRotate"));
+	worldTransform_.SetTranslate(blackBoard_->GetValue<Vector3>("BossPos"));
+	worldTransform_.SetRotate(blackBoard_->GetValue<Vector3>("BossRotate"));
 	velocity_ = blackBoard_->GetValue<Vector3>("BossVelocity");
 	hp_ = blackBoard_->GetValue<int>("BossHP");
 }

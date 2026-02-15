@@ -162,6 +162,8 @@ namespace Norm {
 					++index;
 					++it;
 				}
+				//一つも登録されていなかったらassert
+				assert(index && "WorldTransform情報がセットされていません");
 				//GPUに送信
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1,GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
 			}
@@ -183,7 +185,7 @@ namespace Norm {
 			}
 
 			//モデルを描画する
-			model_->Draw(color_, 0, 3, worldTransforms_.size(), textureHandle_);
+			model_->Draw(color_, 0, 3, (uint32_t)worldTransforms_.size(), textureHandle_);
 			break;
 		}
 		case ObjectKind::AnimationModel:
@@ -223,6 +225,8 @@ namespace Norm {
 					++index;
 					++it;
 				}
+				//一つも登録されていなかったらassert
+				assert(index && "WorldTransform情報がセットされていません");
 				//GPUに送信
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
 			}
@@ -244,7 +248,7 @@ namespace Norm {
 			}
 
 			//モデルを描画する
-			animationModel_->Draw(0, 3, worldTransforms_.size(), textureHandle_);
+			animationModel_->Draw(0, 3, (uint32_t)worldTransforms_.size(), textureHandle_);
 
 			//CS描画後処理(スキニング)
 			animationModel_->SettingCSPostDraw();
@@ -293,6 +297,8 @@ namespace Norm {
 					++index;
 					++it;
 				}
+				//一つも登録されていなかったらassert
+				assert(index && "WorldTransform情報がセットされていません");
 				//GPUに送信
 				MainRender::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, GPUDescriptorManager::GetInstance()->GetGPUDescriptorHandle(objectResource_.instancingSrvIndex));
 			}
@@ -312,7 +318,7 @@ namespace Norm {
 			}
 
 			//形状を描画する
-			shape_->Draw(0, 3, worldTransforms_.size(), textureHandle_);
+			shape_->Draw(0, 3, (uint32_t)worldTransforms_.size(), textureHandle_);
 
 			break;
 		}

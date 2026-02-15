@@ -18,6 +18,8 @@ void EnemyReactionUI::Initialize() {
 		sensing_[i].object->SetTexture(textureHandleSensing_);
 		sensing_[i].object->SetIsDisplay(false);
 		sensing_[i].object->SetIsLightProcess(false);
+		sensing_[i].worldTransform.Initialize();
+		sensing_[i].object->RegistWorldTransform(&sensing_[i].worldTransform);
 		sensing_[i].basePosition = { 0,0,0 };
 		sensing_[i].isActive = false;
 	}
@@ -29,6 +31,8 @@ void EnemyReactionUI::Initialize() {
 		missing_[i].object->SetTexture(textureHandleMissing_);
 		missing_[i].object->SetIsDisplay(false);
 		missing_[i].object->SetIsLightProcess(false);
+		missing_[i].worldTransform.Initialize();
+		missing_[i].object->RegistWorldTransform(&missing_[i].worldTransform);
 		missing_[i].basePosition = { 0,0,0 };
 		missing_[i].isActive = false;
 	}
@@ -56,7 +60,7 @@ void EnemyReactionUI::Update() {
 			//線形補完で求める
 			size = MyMath::Lerp(0.0f, sensingTargetSize, MyMath::EaseOutBack(1.0f - (sensing_[i].dirTimer / kSensingDirTime)));
 			//サイズをセット
-			sensing_[i].object->worldTransform.SetScale({ size,size,size });
+			sensing_[i].worldTransform.SetScale({ size,size,size });
 		}
 		//回転を変える（ビルボード）
 		{
@@ -83,12 +87,12 @@ void EnemyReactionUI::Update() {
 				rotate.z = 0;
 			}
 			//回転をセット
-			sensing_[i].object->worldTransform.SetRotate(rotate);
+			sensing_[i].worldTransform.SetRotate(rotate);
 		}
 		//座標を変える
 		{
 			//基準座標をセット
-			sensing_[i].object->worldTransform.SetTranslate(sensing_[i].basePosition);
+			sensing_[i].worldTransform.SetTranslate(sensing_[i].basePosition);
 		}
 
 		//透明度を変える
@@ -129,7 +133,7 @@ void EnemyReactionUI::Update() {
 			//線形補完で求める
 			size = MyMath::Lerp(0.0f, missingTargetSize, MyMath::EaseOutBack(1.0f - (missing_[i].dirTimer / kMissingDirTime)));
 			//サイズをセット
-			missing_[i].object->worldTransform.SetScale({ size,size,size });
+			missing_[i].worldTransform.SetScale({ size,size,size });
 		}
 		//回転を変える（ビルボード）
 		{
@@ -156,12 +160,12 @@ void EnemyReactionUI::Update() {
 				rotate.z = 0;
 			}
 			//回転をセット
-			missing_[i].object->worldTransform.SetRotate(rotate);
+			missing_[i].worldTransform.SetRotate(rotate);
 		}
 		//座標を変える
 		{
 			//基準座標をセット
-			missing_[i].object->worldTransform.SetTranslate(missing_[i].basePosition);
+			missing_[i].worldTransform.SetTranslate(missing_[i].basePosition);
 		}
 
 		//透明度を変える

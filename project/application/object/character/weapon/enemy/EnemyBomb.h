@@ -3,6 +3,7 @@
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
+#include "WorldTransform.h"
 #include "CombinedParticle.h"
 #include "JsonUtil.h"
 #include <Vector3.h>
@@ -97,6 +98,7 @@ private:
 
 	//爆破範囲警告
 	std::unique_ptr<Norm::Object3d> warning_ = nullptr;
+	Norm::WorldTransform warningWorldTransform_;
 
 	//爆風パーティクル
 	std::unique_ptr<Norm::CombinedParticle> explosion_ = nullptr;

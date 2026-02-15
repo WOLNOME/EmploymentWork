@@ -1,7 +1,7 @@
 #include "LevelObjectCollider.h"
 
 //アプリケーション
-#include "application/object/level/LevelLoader.h"
+#include "application/object/level/loader/LevelLoader.h"
 
 
 using namespace Norm;

@@ -19,14 +19,14 @@ void EnemyBullet::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
 	lifeTimer_ = 0.0f;
 
-	//オブジェクトの生成・初期化
+	//オブジェクトの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bullet"), Shape::kSphere);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
-	object3d_->worldTransform.SetScale({ 0.01f,0.01f,0.01f });
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
+	worldTransform_.SetScale({ 0.01f,0.01f,0.01f });
 
 	//トレールエフェクトの生成・初期化
 	trail_ = std::make_unique<BulletTrail>();
@@ -41,7 +41,7 @@ void EnemyBullet::Initialize() {
 	collider_ = std::make_unique<EnemyBulletCollider>(this);
 	auto* enemyBulletCollider = dynamic_cast<EnemyBulletCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	enemyBulletCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 }
@@ -63,7 +63,7 @@ void EnemyBullet::Update() {
 	Move();
 
 	//トレールポジションの設定
-	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
+	trail_->SetPosition(worldTransform_.GetTranslate());
 }
 
 void EnemyBullet::DebugWithImGui() {
@@ -79,7 +79,7 @@ void EnemyBullet::DebugWithImGui() {
 
 void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
-	object3d_->worldTransform.SetTranslate(_initPos);
+	worldTransform_.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
 	//速度を算出
 	float speed = param_["speed"];
@@ -100,7 +100,7 @@ void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 void EnemyBullet::DeadProcess() {
 	//衝突エフェクトの発生
 	TransformEuler transform = hitEffect_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.GetTranslate();
+	transform.translate = worldTransform_.GetTranslate();
 	hitEffect_->SetBaseTransform(transform);
 	hitEffect_->SetIsPlay(true);
 	//仮死状態にする
@@ -118,7 +118,7 @@ void EnemyBullet::Move() {
 	}
 
 	//新座標を定義
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
@@ -129,7 +129,7 @@ void EnemyBullet::Move() {
 	}
 
 	//座標をセット
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	worldTransform_.SetTranslate(newTranslate);
 
 	//弾が寿命を迎えたら死亡
 	float lifeTime = param_["lifeTime"];

@@ -35,6 +35,7 @@ void IBaseTankEnemy::Initialize() {
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<TankCollider>(this);
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&worldTransform_);
 
 }
 
@@ -47,7 +48,7 @@ void IBaseTankEnemy::Update() {
 
 	//移動パーティクルの座標を合わせる
 	TransformEuler particleTransform = moveParticle_->GetBaseTransform();
-	particleTransform.translate = object3d_->worldTransform.GetTranslate();
+	particleTransform.translate = worldTransform_.GetTranslate();
 	moveParticle_->SetBaseTransform(particleTransform);
 }
 

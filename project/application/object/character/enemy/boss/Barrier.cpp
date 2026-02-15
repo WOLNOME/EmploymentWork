@@ -19,15 +19,15 @@ void Barrier::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/barrier");
 
-	//モデルの生成・初期化
+	//モデルの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("sky.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Barrier"), Shape::ShapeKind::kSphere);
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
 	object3d_->SetIsLightProcess(false);
 	object3d_->SetColor({ 1,1,1,0.6f });
-	object3d_->worldTransform.SetScale({
+	//モデルのワールドトランスフォームの初期化
+	worldTransform_.SetScale({
 		param_["collisionRadiusSphere"],
 		param_["collisionRadiusSphere"],
 		param_["collisionRadiusSphere"]
@@ -36,7 +36,7 @@ void Barrier::Initialize() {
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<BarrierCollider>(this);
 	auto* barrierCollider = dynamic_cast<BarrierCollider*>(collider_.get());
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	barrierCollider->SetRadius(param_["collisionRadiusSphere"]);
 
@@ -79,7 +79,7 @@ void Barrier::Spawn(const Vector3& _position) {
 	object3d_->SetIsDisplay(true);
 	//指定座標に出現
 	Vector3 position = _position;
-	object3d_->worldTransform.SetTranslate(position);
+	worldTransform_.SetTranslate(position);
 	//ステートをアクティブに変更する
 	SetState(State::kActive);
 }
@@ -91,7 +91,7 @@ void Barrier::Move() {
 	}
 
 	//座標を常にボスの座標に合わせる
-	object3d_->worldTransform.SetTranslate(boss_->GetWorldTransform().GetWorldTranslate());
+	worldTransform_.SetTranslate(boss_->GetWorldTransform().GetWorldTranslate());
 }
 
 void Barrier::DeadProcess() {

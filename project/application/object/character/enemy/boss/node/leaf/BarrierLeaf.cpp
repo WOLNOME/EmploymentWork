@@ -19,6 +19,10 @@ BarrierLeaf::BarrierLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_n
 	dirObject_->SetIsDisplay(false);
 	dirObject_->SetIsLightProcess(false);
 	dirObject_->SetColor({ 1,1,1,0.6f });
+	//ワールドトランスフォームの初期化
+	dirWorldTransform_.Initialize();
+	//オブジェクトにセット
+	dirObject_->RegistWorldTransform(&dirWorldTransform_);
 
 }
 
@@ -63,10 +67,10 @@ void BarrierLeaf::Update() {
 		size = MyMath::Lerp(0.0f, targetSize, MyMath::EaseOutCubic(1.0f - (barrierDirTimer / barrierDirTime)));
 
 		//オブジェクトに座標を指定
-		dirObject_->worldTransform.SetTranslate(bossPos);
+		dirWorldTransform_.SetTranslate(bossPos);
 
 		//サイズをオブジェクトに適用
-		dirObject_->worldTransform.SetScale({ size,size ,size });
+		dirWorldTransform_.SetScale({ size,size ,size });
 
 	}
 

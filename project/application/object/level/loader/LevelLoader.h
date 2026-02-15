@@ -6,7 +6,7 @@
 #include <memory>
 
 //前方宣言
-class IBaseLevelObject;
+class LevelTree;
 
 /// <summary>
 /// レベルデータの読み込みと管理を行うクラス
@@ -37,12 +37,20 @@ private:
 	/// レベルデータ
 	/// </summary>
 	struct LevelData {
-		//オブジェクトのコンテナ
-		std::list<std::unique_ptr<IBaseLevelObject>> objects;
 		//自キャラコンテナ
 		std::list<PlayerSpawnData> players;
 		//敵キャラコンテナ
 		std::list<EnemySpawnData> enemies;
+		//ツリー
+		std::unique_ptr<LevelTree> tree;
+		//巨大ツリー
+		//std::unique_ptr<LevelBigTree> tree;
+		//岩
+		//std::unique_ptr<LevelRock> tree;
+		//柵
+		//std::unique_ptr<LevelFence> tree;
+		//封印ボックス
+		//std::unique_ptr<LevelSealedBox> tree;
 	};
 
 public:
@@ -77,6 +85,11 @@ public:
 	/// </summary>
 	/// <returns>敵スポーンデータ</returns>
 	const std::list<EnemySpawnData>& GetEnemySpawnData() const { return levelData_.enemies; }
+	/// <summary>
+	/// ツリーデータの取得
+	/// </summary>
+	/// <returns>ツリーデータ</returns>
+	const std::unique_ptr<LevelTree>& GetTreeData() const { return levelData_.tree; }
 
 private:
 	/// ============================== ///

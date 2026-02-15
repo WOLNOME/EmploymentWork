@@ -18,13 +18,14 @@ void EnemyCannon::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
 
-	//インスタンスの生成と初期化
+	//インスタンスの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Cannon"), Shape::kSphere);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 	object3d_->SetIsDisplay(false);
 	object3d_->SetTexture(textureHandle_);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
+
 	//トレールエフェクトの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
@@ -37,11 +38,11 @@ void EnemyCannon::Initialize() {
 	collider_ = std::make_unique<EnemyCannonCollider>(this);
 	auto* enemyCannonCollider = dynamic_cast<EnemyCannonCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	enemyCannonCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
-	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
+	csWorldTransform_.SetScale({ 1.0f,1.0f,1.0f });
 }
 
 void EnemyCannon::Update() {
@@ -61,7 +62,7 @@ void EnemyCannon::Update() {
 	Move();
 
 	//トレールポジションの設定
-	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
+	trail_->SetPosition(worldTransform_.GetTranslate());
 }
 
 void EnemyCannon::DebugWithImGui() {
@@ -82,11 +83,11 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos, floa
 	}
 
 	//初期位置を保存
-	object3d_->worldTransform.SetTranslate(_initPos);
+	worldTransform_.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
 	//サイズを保存
-	object3d_->worldTransform.SetScale({ _size ,_size,_size });
-	circleShadow_->worldTransform.SetScale({ _size ,_size,_size });
+	worldTransform_.SetScale({ _size ,_size,_size });
+	csWorldTransform_.SetScale({ _size ,_size,_size });
 	auto* enemyCannonCollider = dynamic_cast<EnemyCannonCollider*>(collider_.get());
 	enemyCannonCollider->SetRadius(_size);
 	//表示する
@@ -133,7 +134,7 @@ void EnemyCannon::Move() {
 	velocity_.y -= gravity_ * kDeltaTime;
 
 	//新座標を定義
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら
@@ -144,5 +145,5 @@ void EnemyCannon::Move() {
 	}
 
 	//座標をセット
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	worldTransform_.SetTranslate(newTranslate);
 }

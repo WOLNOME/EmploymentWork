@@ -20,6 +20,10 @@ namespace Norm {
 	/// </summary>
 	class WorldTransform {
 	public:
+		//ムーブ許可
+		WorldTransform(WorldTransform&&) noexcept = default;
+		WorldTransform& operator=(WorldTransform&&) noexcept = default;
+
 		/// ============================== ///
 		///		メンバ関数
 		/// ============================== ///
@@ -133,10 +137,6 @@ namespace Norm {
 		Matrix4x4 matWorld_;
 		// 親となるワールド変換へのポインタ
 		const WorldTransform* parent_ = nullptr;
-
-		// コピー禁止
-		WorldTransform(const WorldTransform&) = delete;
-		WorldTransform& operator=(const WorldTransform&) = delete;
 
 	};
 

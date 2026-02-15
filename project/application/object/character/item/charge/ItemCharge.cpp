@@ -17,11 +17,11 @@ void ItemCharge::Initialize() {
 
 	//オブジェクトを生成・初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("blue.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Item_Charge"), Shape::ShapeKind::kCube);
 	object3d_->SetTexture(textureHandle_);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetIsDisplay(false);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<CombinedParticle>();
@@ -35,10 +35,10 @@ void ItemCharge::Initialize() {
 	collider_ = std::make_unique<ItemChargeCollider>(this);
 	auto* itemCollider = dynamic_cast<ItemChargeCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 
 	//影の大きさを調整
-	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
+	csWorldTransform_.SetScale({ 1.0f,1.0f,1.0f });
 }
 
 void ItemCharge::Update() {
@@ -65,7 +65,7 @@ void ItemCharge::Spawn(const Vector3& _initPos) {
 	//初期座標を保存
 	Vector3 initPos = _initPos;
 	initPos.y = param_["initHeight"];
-	object3d_->worldTransform.SetTranslate(initPos);
+	worldTransform_.SetTranslate(initPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -96,9 +96,9 @@ void ItemCharge::UntilDeathProcess() {
 		float swingWidth = param_["swingWidth"];
 		float from = isUp_ ? initHeight : initHeight + swingWidth;
 		float to = isUp_ ? initHeight + swingWidth : initHeight;
-		Vector3 pos = object3d_->worldTransform.GetTranslate();
+		Vector3 pos = worldTransform_.GetTranslate();
 		pos.y = MyMath::Lerp(from, to, MyMath::EaseInOutSine(t));
-		object3d_->worldTransform.SetTranslate(pos);
+		worldTransform_.SetTranslate(pos);
 
 		// 状態遷移
 		if (swingTimer_ >= swingTime) {
@@ -108,8 +108,8 @@ void ItemCharge::UntilDeathProcess() {
 	}
 
 	//新トランスフォーム
-	Vector3 newRotate = object3d_->worldTransform.GetRotate();
-	Vector3 newScale = object3d_->worldTransform.GetScale();
+	Vector3 newRotate = worldTransform_.GetRotate();
+	Vector3 newScale = worldTransform_.GetScale();
 
 	// アイテムが消えるまでの処理(仮死状態の時)
 	if (state_ == State::kAsphyxia) {
@@ -132,12 +132,12 @@ void ItemCharge::UntilDeathProcess() {
 	}
 
 	//新トランスフォームのセット
-	object3d_->worldTransform.SetRotate(newRotate);
-	object3d_->worldTransform.SetScale(newScale);
+	worldTransform_.SetRotate(newRotate);
+	worldTransform_.SetScale(newScale);
 }
 
 void ItemCharge::UpdateParticle() {
 	TransformEuler transform = idleParticle_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.GetTranslate();
+	transform.translate = worldTransform_.GetTranslate();
 	idleParticle_->SetBaseTransform(transform);
 }

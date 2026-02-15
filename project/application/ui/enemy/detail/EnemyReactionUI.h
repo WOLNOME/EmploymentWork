@@ -1,6 +1,7 @@
 #pragma once
 #include <JsonUtil.h>
 #include <Object3d.h>
+#include <WorldTransform.h>
 #include <MyMath.h>
 #include <array>
 #include <memory>
@@ -24,6 +25,7 @@ private:
 	/// </summary>
 	struct Reaction {
 		std::unique_ptr<Norm::Object3d> object;
+		Norm::WorldTransform worldTransform;
 		Norm::Vector3 basePosition;
 		float dirTimer;
 		bool isActive = false;

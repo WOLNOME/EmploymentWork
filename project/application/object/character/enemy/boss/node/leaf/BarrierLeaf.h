@@ -1,6 +1,7 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
 #include "Object3d.h"
+#include "WorldTransform.h"
 #include <memory>
 
 /// <summary>
@@ -33,6 +34,7 @@ private:
 private:
 	//バリア演出オブジェクト
 	std::unique_ptr<Norm::Object3d> dirObject_ = nullptr;
+	Norm::WorldTransform dirWorldTransform_;
 
 };
 

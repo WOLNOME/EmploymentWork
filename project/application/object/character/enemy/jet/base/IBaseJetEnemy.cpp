@@ -1,4 +1,5 @@
 #include "IBaseJetEnemy.h"
+#include <Object3dManager.h>
 
 //アプリケーション
 #include <application/object/character/enemy/jet/collision/JetCollider.h>
@@ -20,9 +21,33 @@ void IBaseJetEnemy::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
-	//当たり判定の生成・初期化
+	//パラメータの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/jet");
+
+	//オブジェクトの生成と初期化
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Jet"), "jet");
+	object3d_->SetIsDisplay(false);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+
+	//当たり判定の初期化
+	auto* jetCollider = dynamic_cast<JetCollider*>(collider_.get());
 	collider_ = std::make_unique<JetCollider>(this);
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	collider_->SetWorldTransform(&worldTransform_);
+	collider_->SetOffset({
+		param_["collisionCenterOffsetOBB"]["x"],
+		param_["collisionCenterOffsetOBB"]["y"],
+		param_["collisionCenterOffsetOBB"]["z"]
+		});
+	jetCollider->SetOBBSize({
+		param_["collisionSizeOBB"]["x"],
+		param_["collisionSizeOBB"]["y"],
+		param_["collisionSizeOBB"]["z"]
+		});
+
+	//パラメータの反映
+	maxHP_ = param_["maxHP"];
 }
 
 void IBaseJetEnemy::Update() {

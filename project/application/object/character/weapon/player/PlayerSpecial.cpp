@@ -21,8 +21,10 @@ void PlayerSpecial::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("blue.png");
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Special"), Shape::kSphere);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+
 	//パーティクルの生成と初期化
 	explosionParticle_ = std::make_unique<CombinedParticle>();
 	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialHit"), "Cannon_Hit");
@@ -36,11 +38,11 @@ void PlayerSpecial::Initialize() {
 	collider_ = std::make_unique<PlayerSpecialCollider>(this);
 	auto* playerSpecialCollider = dynamic_cast<PlayerSpecialCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	playerSpecialCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
-	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
+	csWorldTransform_.SetScale({ 1.0f,1.0f,1.0f });
 
 }
 
@@ -61,7 +63,7 @@ void PlayerSpecial::Update() {
 	Move();
 
 	//トレール座標設定
-	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
+	trail_->SetPosition(worldTransform_.GetTranslate());
 }
 
 void PlayerSpecial::DebugWithImGui() {
@@ -80,7 +82,7 @@ void PlayerSpecial::Spawn(const Vector3& _initPos, const Vector3& _initDirection
 	}
 
 	//初期位置を保存
-	object3d_->worldTransform.SetTranslate(_initPos);
+	worldTransform_.SetTranslate(_initPos);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -109,7 +111,7 @@ void PlayerSpecial::Move() {
 		velocity_.Normalize();
 		velocity_ *= maxSpeed;
 	}
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate += velocity_ * kDeltaTime;
 
 	//弾が地面に当たったら死亡
@@ -119,5 +121,5 @@ void PlayerSpecial::Move() {
 		SetState(State::kIdle);
 	}
 	//オブジェクトに反映
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	worldTransform_.SetTranslate(newTranslate);
 }

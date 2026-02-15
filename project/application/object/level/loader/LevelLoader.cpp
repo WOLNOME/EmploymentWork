@@ -2,7 +2,7 @@
 #include <assert.h>
 
 //アプリケーション
-#include <application/object/level/base/IBaseLevelObject.h>
+#include <application/object/level/tree/LevelTree.h>
 
 using namespace Norm;
 
@@ -17,17 +17,13 @@ void LevelLoader::Initialize() {
 
 void LevelLoader::Update() {
 	//オブジェクトの更新
-	for (const auto& object : levelData_.objects) {
-		object->Update();
-	}
+	levelData_.tree->Update();
 }
 
 void LevelLoader::DebugWithImGui() {
 #ifdef _DEBUG
 	//全オブジェクトのデバッグ処理
-	for (const auto& object : levelData_.objects) {
-		object->DebugWithImGui();
-	}
+	levelData_.tree->DebugWithImGui();
 #endif // _DEBUG
 
 }

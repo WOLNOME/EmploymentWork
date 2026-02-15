@@ -15,15 +15,14 @@ void Canota::Initialize() {
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/canota");
 
-	//インスタンスの生成と初期化
-	object3d_ = std::make_unique<Object3d>();
+	//モデルの初期化
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Canota"), "canota");
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 	object3d_->SetIsDisplay(false);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 
 	//当たり判定の初期化
 	auto* tankCollider = dynamic_cast<TankCollider*>(collider_.get());
-	collider_->SetWorldTransform(&object3d_->worldTransform);
 	collider_->SetOffset({
 		param_["collisionCenterOffsetOBB"]["x"],
 		param_["collisionCenterOffsetOBB"]["y"],
@@ -39,7 +38,7 @@ void Canota::Initialize() {
 	maxHP_ = param_["maxHP"];
 
 	//影の初期化
-	circleShadow_->worldTransform.SetScale({ 5.3f,5.3f,5.3f });
+	csWorldTransform_.SetScale({ 5.3f,5.3f,5.3f });
 
 }
 
@@ -64,9 +63,9 @@ void Canota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 	//初期位置を保存（高さはそろえる）
 	Vector3 initPos = _initPos;
 	initPos.y = 1.5f;
-	object3d_->worldTransform.SetTranslate(initPos);
+	worldTransform_.SetTranslate(initPos);
 	//初期回転を保存
-	object3d_->worldTransform.SetRotate(_initRotate);
+	worldTransform_.SetRotate(_initRotate);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);

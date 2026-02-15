@@ -1,5 +1,7 @@
 #pragma once
 #include "application/object/level/base/IBaseLevelObject.h"
+#include <cstdint>
+#include <unordered_map>
 
 /// <summary>
 /// ツリーオブジェクトの管理クラス
@@ -23,8 +25,7 @@ public:
 	/// </summary>
 	/// <param name="_name">名前</param>
 	/// <param name="_filePath">ファイルパス</param>
-	/// <param name="_transform">トランスフォーム(オイラー角)</param>
-	void Initialize(const std::string& _name, const std::string& _filePath, const Norm::TransformEuler& _transform) override;
+	void Initialize(const std::string& _name, const std::string& _filePath) override;
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -81,7 +82,7 @@ private:
 	/// ============================== ///
 
 	//ツリーオブジェクト限定変数
-	bool isAction_ = false;		// 倒れるアクションをするかどうか
+	std::unordered_map<uint32_t, bool> isActions_;	// 倒れるアクションをするかどうか
 	Norm::Vector3 invertDirection_ = { 0.0f,0.0f,0.0f };	// 倒れる方向
 	const float time_ = 1.0f;
 	float timer_ = 0.0f;	// タイマー

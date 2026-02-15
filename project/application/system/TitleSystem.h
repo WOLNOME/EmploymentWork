@@ -4,8 +4,9 @@
 #include <SceneManager.h>
 #include <Vector3.h>
 #include <Object3d.h>
+#include <WorldTransform.h>
 #include <Sprite.h>
-#include <vector>
+#include <array>
 #include <memory>
 #include <Handle.h>
 
@@ -112,9 +113,12 @@ private:
 
 	//ガレージ
 	std::unique_ptr<Norm::Object3d> garage_ = nullptr;
+	Norm::WorldTransform garageWorldTransform_;
 
 	//戦車
-	std::vector<std::unique_ptr<Norm::Object3d>> tanks_;
+	static const int kTanksNum_ = 5;
+	std::array<std::unique_ptr<Norm::Object3d>,kTanksNum_> tanks_;
+	std::array<Norm::WorldTransform, kTanksNum_> tankWorldTransforms_;
 
 	//カメラ操作
 	Norm::Vector3 cameraStartPos_ = { -60.0f,12.0f,-17.0f };

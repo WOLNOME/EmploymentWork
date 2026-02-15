@@ -7,7 +7,7 @@
 #include <cassert>
 
 //アプリケーション
-#include "application/object/level/LevelLoader.h"
+#include "application/object/level/loader/LevelLoader.h"
 #include <application/object/character/player/collision/PlayerCollider.h>
 #include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 #include <application/ui/player/PlayerUI.h>
@@ -27,7 +27,6 @@ void Player::Initialize() {
 	input_->SetIsMouseDisplay(false);
 	input_->SetIsMouseFixed(true);
 	//オブジェクトの生成・初期化
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Player"), "player");
 
 	//死亡演出の生成・初期化
@@ -38,7 +37,7 @@ void Player::Initialize() {
 	collider_ = std::make_unique<PlayerCollider>(this);
 	auto* playerCollider = dynamic_cast<PlayerCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	collider_->SetOffset({
 		param_["collisionCenterOffsetOBB"]["x"],
 		param_["collisionCenterOffsetOBB"]["y"],
@@ -121,8 +120,8 @@ void Player::DebugWithImGui() {
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 	//プレイヤーの座標を読み込む
 	for (const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
-		object3d_->worldTransform.SetTranslate(playerSpawnData.translation);
-		object3d_->worldTransform.SetRotate(playerSpawnData.rotation);
+		worldTransform_.SetTranslate(playerSpawnData.translation);
+		worldTransform_.SetRotate(playerSpawnData.rotation);
 
 		//最初のデータのみを読み込む
 		break;
@@ -145,7 +144,7 @@ void Player::Rotate() {
 		};
 
 	float cameraRotateY = camera_->worldTransform.GetRotate().y;
-	float vehicleRotateY = object3d_->worldTransform.GetRotate().y;
+	float vehicleRotateY = worldTransform_.GetRotate().y;
 
 	//最短角度差を求める
 	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
@@ -168,9 +167,9 @@ void Player::Rotate() {
 	}
 
 	//オブジェクトの水平回転量に代入
-	Vector3 rotate = object3d_->worldTransform.GetRotate();
+	Vector3 rotate = worldTransform_.GetRotate();
 	rotate.y = vehicleRotateY;
-	object3d_->worldTransform.SetRotate(rotate);
+	worldTransform_.SetRotate(rotate);
 
 }
 
@@ -183,13 +182,13 @@ void Player::Move() {
 		return;
 
 	//移動前に前フレームの座標を保存
-	prePosition_ = object3d_->worldTransform.GetWorldTranslate();
+	prePosition_ = worldTransform_.GetWorldTranslate();
 
 	//現在の向き(水平向きのみを考慮)
 	Vector3 currentDir = {
-		std::sinf(object3d_->worldTransform.GetRotate().y),
+		std::sinf(worldTransform_.GetRotate().y),
 		0.0f,
-		std::cosf(object3d_->worldTransform.GetRotate().y)
+		std::cosf(worldTransform_.GetRotate().y)
 	};
 	currentDir.Normalize();
 	//WSキー入力で前後移動
@@ -234,8 +233,8 @@ void Player::Move() {
 	}
 
 	//速度を加算
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate() + velocity_ * kDeltaTime;
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	Vector3 newTranslate = worldTransform_.GetTranslate() + velocity_ * kDeltaTime;
+	worldTransform_.SetTranslate(newTranslate);
 }
 
 void Player::CannonAttack() {
@@ -270,7 +269,7 @@ void Player::CannonAttack() {
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 cannonPos = object3d_->worldTransform.GetTranslate();
+		Vector3 cannonPos = worldTransform_.GetTranslate();
 		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
 		Vector3 cannonDirection = currentDir;
 		//スポーン
@@ -442,7 +441,7 @@ void Player::CameraAlgorithm() {
 	camera_->worldTransform.SetRotate(newRotate);
 
 	//カメラの座標を決める
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate.y += 1.5f;
 	camera_->worldTransform.SetTranslate(newTranslate);
 }

@@ -27,7 +27,9 @@ void GameClearSystem::Initialize() {
 		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
 		tank_->SetTexture(textureHandle);
 		tank_->SetIsDisplay(true);
-		tank_->worldTransform.SetTranslate({ 0.0f,3.0f,0.0f });
+		tankWorldTransform_.Initialize();
+		tankWorldTransform_.SetTranslate({ 0.0f,1.5f,0.0f });
+		tank_->RegistWorldTransform(&tankWorldTransform_);
 	}
 
 	//クリアテキスト
@@ -197,7 +199,7 @@ void GameClearSystem::CameraWork() {
 		Vector3 cameraPos = MyMath::Lerp(cameraWorkParam_.startPos, cameraWorkParam_.endPos, MyMath::EaseOutQuad(t));
 		gameCamera_->worldTransform.SetTranslate(cameraPos);
 		//カメラの回転更新
-		Vector3 targetPos = tank_->worldTransform.GetTranslate();
+		Vector3 targetPos = tankWorldTransform_.GetTranslate();
 		targetPos.y += 2.5f;	//少し上を見る
 		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.GetTranslate()));
 		gameCamera_->worldTransform.SetRotate(cameraRotate);

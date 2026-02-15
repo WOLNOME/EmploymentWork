@@ -19,12 +19,13 @@ void PlayerBullet::Initialize() {
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Bullet"), Shape::kSphere);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
-	object3d_->worldTransform.SetScale({ 0.01f,0.01f,0.01f });
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsDisplay(false);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
+	worldTransform_.SetScale({ 0.01f,0.01f,0.01f });
+
 	//トレールエフェクトの生成と初期化
 	trail_ = std::make_unique<BulletTrail>();
 	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
@@ -37,7 +38,7 @@ void PlayerBullet::Initialize() {
 	collider_ = std::make_unique<PlayerBulletCollider>(this);
 	auto* playerBulletCollider = dynamic_cast<PlayerBulletCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	playerBulletCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 }
@@ -59,7 +60,7 @@ void PlayerBullet::Update() {
 	Move();
 
 	//トレールポジションの設定
-	trail_->SetPosition(object3d_->worldTransform.GetTranslate());
+	trail_->SetPosition(worldTransform_.GetTranslate());
 }
 
 void PlayerBullet::DebugWithImGui() {
@@ -80,7 +81,7 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	}
 
 	//初期位置を保存
-	object3d_->worldTransform.SetTranslate(_initPos);
+	worldTransform_.SetTranslate(_initPos);
 	//速度を算出
 	float speed = param_["speed"];
 	//速度を更新
@@ -98,7 +99,7 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 void PlayerBullet::DeadProcess() {
 	//衝突エフェクトの発生
 	TransformEuler transform = hitEffect_->GetBaseTransform();
-	transform.translate = object3d_->worldTransform.GetTranslate();
+	transform.translate = worldTransform_.GetTranslate();
 	hitEffect_->SetBaseTransform(transform);
 	hitEffect_->SetIsPlay(true);
 	//仮死状態にする
@@ -116,7 +117,7 @@ void PlayerBullet::Move() {
 	}
 
 	//新トランスフォーム
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 
 	newTranslate += velocity_ * kDeltaTime;
 
@@ -138,6 +139,6 @@ void PlayerBullet::Move() {
 	}
 
 	//新トランスフォームをセット
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	worldTransform_.SetTranslate(newTranslate);
 
 }

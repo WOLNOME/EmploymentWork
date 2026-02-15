@@ -108,6 +108,7 @@ private:
 
 	//戦車オブジェクト
 	std::unique_ptr<Norm::Object3d> tank_ = nullptr;
+	Norm::WorldTransform tankWorldTransform_;
 
 	//クリアテキスト
 	std::vector<Norm::Handle> clearTextHandles_;

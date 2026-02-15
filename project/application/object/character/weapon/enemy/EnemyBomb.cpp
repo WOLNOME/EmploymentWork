@@ -19,10 +19,10 @@ void EnemyBomb::Initialize() {
 
 	//オブジェクトの生成・初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Enemy_Bomb"), Shape::kSphere);
-	object3d_->worldTransform.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 	object3d_->SetTexture(textureHandle_);
+	//ワールドトランスフォームの初期化
+	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 
 	//危険地帯の生成・初期化
 	uint32_t thWarning = TextureManager::GetInstance()->LoadTexture("red.png");
@@ -31,8 +31,12 @@ void EnemyBomb::Initialize() {
 	warning_->SetIsDisplay(false);
 	warning_->SetTexture(thWarning);
 	warning_->SetIsLightProcess(false);
-	warning_->worldTransform.SetScale({ 40.0f,1.0f,40.0f });
 	warning_->SetColor({ 1.0f,1.0f,1.0f,0.8f });
+	//危険地帯のワールドトランスフォームの初期化
+	warningWorldTransform_.Initialize();
+	warningWorldTransform_.SetScale({ 40.0f,1.0f,40.0f });
+	//危険地帯オブジェクトにセット
+	warning_->RegistWorldTransform(&warningWorldTransform_);
 
 	//パーティクルの生成と初期化
 	{
@@ -44,11 +48,11 @@ void EnemyBomb::Initialize() {
 	collider_ = std::make_unique<EnemyBombCollider>(this);
 	auto* enemyBombCollider = dynamic_cast<EnemyBombCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
-	collider_->SetWorldTransform(&object3d_->worldTransform);
+	collider_->SetWorldTransform(&worldTransform_);
 	enemyBombCollider->SetRadius(param_["collisionRadiusSphere"]);
 
 	//影の初期化
-	circleShadow_->worldTransform.SetScale({ 1.0f,1.0f,1.0f });
+	csWorldTransform_.SetScale({ 1.0f,1.0f,1.0f });
 
 }
 
@@ -92,11 +96,11 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	///共通処理
 
 	//初期位置を保存
-	object3d_->worldTransform.SetTranslate(_initPos);
+	worldTransform_.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
 	//サイズを保存
-	object3d_->worldTransform.SetScale({ _size ,_size,_size });
-	circleShadow_->worldTransform.SetScale({ _size ,_size,_size });
+	worldTransform_.SetScale({ _size ,_size,_size });
+	csWorldTransform_.SetScale({ _size ,_size,_size });
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -117,7 +121,7 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 		//初期位置を保存
 		Vector3 warningPos = _targetPos;
 		warningPos.y = 0.005f;
-		warning_->worldTransform.SetTranslate(warningPos);
+		warningWorldTransform_.SetTranslate(warningPos);
 
 		//速度
 		Vector3 targetVec = fallingPoint - _initPos;
@@ -135,7 +139,7 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 		//初期位置を保存
 		Vector3 warningPos = _initPos;
 		warningPos.y = 0.005f;
-		warning_->worldTransform.SetTranslate(warningPos);
+		warningWorldTransform_.SetTranslate(warningPos);
 
 		//速度は0(自由落下)
 		velocity_ = { 0.0f,0.0f,0.0f };
@@ -154,7 +158,7 @@ void EnemyBomb::Move() {
 	}
 
 	//新座標を定義
-	Vector3 newTranslate = object3d_->worldTransform.GetTranslate();
+	Vector3 newTranslate = worldTransform_.GetTranslate();
 
 	//重力の影響を加算
 	velocity_.y -= gravity_ * kDeltaTime;
@@ -180,5 +184,5 @@ void EnemyBomb::Move() {
 	}
 
 	//座標をセット
-	object3d_->worldTransform.SetTranslate(newTranslate);
+	worldTransform_.SetTranslate(newTranslate);
 }

@@ -13,11 +13,17 @@ BaseCharacter::~BaseCharacter() {
 }
 
 void BaseCharacter::Initialize() {
+	//オブジェクトの生成
+	object3d_ = std::make_unique<Object3d>();
+	//ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	//オブジェクトにセット
+	object3d_->RegistWorldTransform(&worldTransform_);
+
 	//丸影の生成
 	circleShadow_ = std::make_unique<Object3d>();
 	circleShadow_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("CircleShadow"), "circleShadow");
 	circleShadow_->SetIsLightProcess(false);
-	
 	circleShadow_->SetIsDisplay(false);
 	circleShadow_->SetColor({ 1,1,1,0.8f });
 	//丸影ワールドトランスフォームの初期化
