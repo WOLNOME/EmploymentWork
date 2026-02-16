@@ -7,6 +7,20 @@
 /// ツリーオブジェクトの管理クラス
 /// </summary>
 class LevelTree : public IBaseLevelObject {
+private:
+	/// ============================== ///
+	///		構造体
+	/// ============================== ///
+
+	/// <summary>
+	/// ツリー1つのデータ
+	/// </summary>
+	struct TreeData {
+		bool isAction;
+		Norm::Vector3 invertDirection;
+		float invertTimer;
+	};
+
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -24,8 +38,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="_name">名前</param>
-	/// <param name="_filePath">ファイルパス</param>
-	void Initialize(const std::string& _name, const std::string& _filePath) override;
+	void Initialize(const std::string& _name) override;
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -40,16 +53,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// アクションフラグの取得
+	/// ツリーデータコンテナの取得
 	/// </summary>
-	/// <returns>アクションフラグ</returns>
-	bool GetIsAction() { return isAction_; }
-
-	/// <summary>
-	/// 倒れる方向の取得
-	/// </summary>
-	/// <returns>倒れる方向</returns>
-	const Norm::Vector3& GetInvertDirection() { return invertDirection_; }
+	/// <returns></returns>
+	const std::unordered_map<uint32_t, TreeData>& GetTreeDatas() { return treeDatas_; }
 
 	/// ============================== ///
 	///		setter
@@ -58,14 +65,16 @@ public:
 	/// <summary>
 	/// アクションフラグの設定
 	/// </summary>
+	/// <param name="_handle">ハンドル</param>
 	/// <param name="_isAction">アクション中かどうか</param>
-	void SetIsAction(bool _isAction) { isAction_ = _isAction; }
+	void SetIsAction(uint32_t _handle, bool _isAction) { treeDatas_[_handle].isAction = _isAction; }
 
 	/// <summary>
 	/// 倒れる方向の設定
 	/// </summary>
+	/// <param name="_handle">ハンドル</param>
 	/// <param name="_direction">倒れる方向</param>
-	void SetInvertDirection(const Norm::Vector3& _direction) { invertDirection_ = _direction; }
+	void SetInvertDirection(uint32_t _handle, const Norm::Vector3& _direction) { treeDatas_[_handle].invertDirection = _direction; }
 
 private:
 	/// ============================== ///
@@ -81,11 +90,10 @@ private:
 	///		メンバ変数(private)
 	/// ============================== ///
 
-	//ツリーオブジェクト限定変数
-	std::unordered_map<uint32_t, bool> isActions_;	// 倒れるアクションをするかどうか
-	Norm::Vector3 invertDirection_ = { 0.0f,0.0f,0.0f };	// 倒れる方向
-	const float time_ = 1.0f;
-	float timer_ = 0.0f;	// タイマー
+	//ツリーデータのコンテナ
+	std::unordered_map<uint32_t, TreeData> treeDatas_;
+
+	const float kInvertTime_ = 1.0f;		//倒木にかかる時間
 
 };
 

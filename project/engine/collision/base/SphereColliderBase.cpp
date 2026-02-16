@@ -3,7 +3,6 @@
 #include <ImGuiManager.h>
 #endif // _DEBUG
 
-
 using namespace Norm;
 
 SphereColliderBase::SphereColliderBase() : ICollider() {
@@ -13,6 +12,10 @@ SphereColliderBase::SphereColliderBase() : ICollider() {
 
 void SphereColliderBase::Debug() {
 #ifdef _DEBUG
+	//Nothingなら描画しない
+	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) {
+		return;
+	}
 	//球体を定義
 	Sphere sphere = {
 		.center = GetWorldTransform().GetWorldTranslate(),

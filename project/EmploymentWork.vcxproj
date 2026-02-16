@@ -292,6 +292,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp" />
     <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp" />
     <ClCompile Include="application\object\level\tree\LevelTree.cpp" />
+    <ClCompile Include="application\object\level\bigTree\LevelBigTree.cpp" />
+    <ClCompile Include="application\object\level\rock\LevelRock.cpp" />
+    <ClCompile Include="application\object\level\fence\LevelFence.cpp" />
+    <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -487,6 +491,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h" />
     <ClInclude Include="application\object\character\item\charge\ItemCharge.h" />
     <ClInclude Include="application\object\level\tree\LevelTree.h" />
+    <ClInclude Include="application\object\level\bigTree\LevelBigTree.h" />
+    <ClInclude Include="application\object\level\rock\LevelRock.h" />
+    <ClInclude Include="application\object\level\fence\LevelFence.h" />
+    <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -103,6 +103,13 @@ namespace Norm {
 	}
 
 	void Object3d::Update() {
+		//ワールドトランスフォームの更新
+		for (auto& [handle, worldTransform] : worldTransforms_) {
+			if (worldTransform) {
+				worldTransform->UpdateMatrix();
+			}
+		}
+
 		//オブジェクトの種類ごとの処理
 		switch (objKind_) {
 		case ObjectKind::Model:

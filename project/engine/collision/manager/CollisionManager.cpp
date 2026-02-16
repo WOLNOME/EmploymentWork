@@ -46,6 +46,11 @@ namespace Norm {
 	void CollisionManager::CheckCollision() {
 		//衝突フィルタリングラムダ式
 		auto ShouldIgnore = [](CollisionAttribute a, CollisionAttribute b) {
+			//同じ属性なら当たらない
+			if (a == b) {
+				return true;
+			}
+
 			// 虚無オブジェクトは何とも当たらない
 			if (a == CollisionAttribute::Nothingness ||
 				b == CollisionAttribute::Nothingness) {
@@ -69,6 +74,8 @@ namespace Norm {
 
 			return false;
 			};
+
+		//
 
 		// リスト内のペアを総当たり（重複しない）
 		std::list<ICollider*>::iterator itrA = colliders_.begin();

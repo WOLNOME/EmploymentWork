@@ -5,8 +5,12 @@
 #include <string>
 #include <memory>
 
-//前方宣言
-class LevelTree;
+//アプリケーション
+#include <application/object/level/tree/LevelTree.h>
+#include <application/object/level/bigTree/LevelBigTree.h>
+#include <application/object/level/rock/LevelRock.h>
+#include <application/object/level/fence/LevelFence.h>
+#include <application/object/level/sealedBox/LevelSealedBox.h>
 
 /// <summary>
 /// レベルデータの読み込みと管理を行うクラス
@@ -28,7 +32,7 @@ private:
 	/// 敵スポーンデータ
 	/// </summary>
 	struct EnemySpawnData {
-		std::string fileName;	//ファイル名(敵の区別をするため)
+		std::string type;			//タイプ(敵の区別をするため)
 		Norm::Vector3 translation;	//平行移動
 		Norm::Vector3 rotation;		//回転角
 	};
@@ -44,13 +48,13 @@ private:
 		//ツリー
 		std::unique_ptr<LevelTree> tree;
 		//巨大ツリー
-		//std::unique_ptr<LevelBigTree> tree;
+		std::unique_ptr<LevelBigTree> bigTree;
 		//岩
-		//std::unique_ptr<LevelRock> tree;
+		std::unique_ptr<LevelRock> rock;
 		//柵
-		//std::unique_ptr<LevelFence> tree;
+		std::unique_ptr<LevelFence> fence;
 		//封印ボックス
-		//std::unique_ptr<LevelSealedBox> tree;
+		std::unique_ptr<LevelSealedBox> sealedBox;
 	};
 
 public:

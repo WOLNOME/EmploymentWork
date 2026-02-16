@@ -1,10 +1,13 @@
 #include "LevelTree.h"
+#include <Object3dManager.h>
 
 using namespace Norm;
 
-void LevelTree::Initialize(const std::string& _name, const std::string& _filePath) {
+void LevelTree::Initialize(const std::string& _name) {
 	//基底クラスの初期化
-	IBaseLevelObject::Initialize(_name, _filePath);
+	IBaseLevelObject::Initialize(_name);
+	//オブジェクトの初期化
+	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName(_name), "tree");
 
 }
 
@@ -22,25 +25,30 @@ void LevelTree::DebugWithImGui() {
 }
 
 void LevelTree::TreeInvertProcess() {
-	if (isAction_) {
-		//アクション中ならタイマーを進める
-		timer_ += kDeltaTime;
-		timer_ = std::min(timer_, time_);
+	//ツリーデータを走査
+	for (auto& [handle, treeData] : treeDatas_) {
+		//アクションフラグが立っているなら
+		if (treeData.isAction) {
+			//アクション中ならタイマーを進める
+			treeData.invertTimer += kDeltaTime;
+			treeData.invertTimer = std::min(treeData.invertTimer, kInvertTime_);
 
-		//新回転
-		Vector3 newRotate = object3d_->worldTransform.GetRotate();
+			//新回転
+			Vector3 newRotate = worldTransforms_[handle]->GetRotate();
 
-		//Lerpで倒れる方向に回転
-		newRotate.x = MyMath::Lerp(0.0f, invertDirection_.z * -(pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
-		newRotate.z = MyMath::Lerp(0.0f, invertDirection_.x * (pi / 2.0f), MyMath::EaseInOutSine(timer_ / time_));
+			//Lerpで倒れる方向に回転
+			newRotate.x = MyMath::Lerp(0.0f, treeData.invertDirection.z * -(pi / 2.0f), MyMath::EaseInOutSine(treeData.invertTimer / kInvertTime_));
+			newRotate.z = MyMath::Lerp(0.0f, treeData.invertDirection.x * (pi / 2.0f), MyMath::EaseInOutSine(treeData.invertTimer / kInvertTime_));
 
-		//新回転をセット
-		object3d_->worldTransform.SetRotate(newRotate);
+			//新回転をセット
+			worldTransforms_[handle]->SetRotate(newRotate);
 
-		//タイマーが経過したらアクションを終了
-		if (timer_ >= time_) {
-			isAction_ = false;
-			timer_ = 0.0f;
+			//タイマーが経過したらアクションを終了
+			if (treeData.invertTimer >= kInvertTime_) {
+				treeData.isAction = false;
+				treeData.invertTimer = 0.0f;
+			}
 		}
 	}
+
 }

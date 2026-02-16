@@ -31,8 +31,8 @@ void IBaseJetEnemy::Initialize() {
 	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 
 	//当たり判定の初期化
-	auto* jetCollider = dynamic_cast<JetCollider*>(collider_.get());
 	collider_ = std::make_unique<JetCollider>(this);
+	auto* jetCollider = dynamic_cast<JetCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	collider_->SetWorldTransform(&worldTransform_);
 	collider_->SetOffset({

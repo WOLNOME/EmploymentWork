@@ -84,6 +84,16 @@ void TankCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute)
 
 		break;
 	}
+	//壁にぶつかった場合
+	case CollisionAttribute::Wall:
+	{
+		//相手の座標と反対方向のベクトルを速度に加算
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetTranslate() - GetWorldTransform().GetTranslate()).Normalized();
+		velocity.x += reflectVec.x * 15.0f;
+		velocity.z += reflectVec.z * 15.0f;
+
+		break;
+	}
 	//バリアに当たった場合
 	case CollisionAttribute::Barrier:
 	{

@@ -1,15 +1,13 @@
 #include "IBaseLevelObject.h"
-#include <Object3dManager.h>
 #include <CollisionManager.h>
 
 using namespace Norm;
 
-void IBaseLevelObject::Initialize(const std::string& _name, const std::string& _filePath, const TransformEuler& _transform) {
+void IBaseLevelObject::Initialize(const std::string& _name) {
 	//名前のセット
 	name_ = _name;
-	//オブジェクトの生成と初期化
+	//オブジェクトの生成
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName(_name), _filePath);
 }
 
 void IBaseLevelObject::Update() {
@@ -52,7 +50,7 @@ uint32_t IBaseLevelObject::SetTransformInfo(const Norm::TransformEuler& _transfo
 void IBaseLevelObject::SetCollisionInfo(uint32_t _handle, const Vector3& _center, const Vector3& _size) {
 	//当たり判定を定義
 	std::unique_ptr<LevelObjectCollider> collider = nullptr;
-	collider = std::make_unique<LevelObjectCollider>();
+	collider = std::make_unique<LevelObjectCollider>(this);
 	collider->SetOffset(_center / 2.0f);
 	collider->SetOBBSize(_size / 2.0f);
 	collider->SetCollisionAttribute(CollisionAttribute::Wall);
@@ -62,5 +60,6 @@ void IBaseLevelObject::SetCollisionInfo(uint32_t _handle, const Vector3& _center
 
 	//コライダーに保存
 	colliders_[_handle] = std::move(collider);
+	colliders_[_handle]->SetHandle(_handle);
 
 }

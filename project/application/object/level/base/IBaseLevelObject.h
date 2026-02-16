@@ -31,8 +31,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="_name">名前</param>
-	/// <param name="_filePath">ファイルパス</param>
-	virtual void Initialize(const std::string& _name, const std::string& _filePath);
+	virtual void Initialize(const std::string& _name);
 	/// <summary>
 	/// 更新
 	/// </summary>

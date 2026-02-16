@@ -120,8 +120,11 @@ void Player::DebugWithImGui() {
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 	//プレイヤーの座標を読み込む
 	for (const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
+		//車体を合わせる
 		worldTransform_.SetTranslate(playerSpawnData.translation);
 		worldTransform_.SetRotate(playerSpawnData.rotation);
+		//カメラの向きを車体に合わせる
+		camera_->worldTransform.SetRotate(worldTransform_.GetRotate());
 
 		//最初のデータのみを読み込む
 		break;
@@ -234,6 +237,12 @@ void Player::Move() {
 
 	//速度を加算
 	Vector3 newTranslate = worldTransform_.GetTranslate() + velocity_ * kDeltaTime;
+
+	//移動制限
+	const float limit = 995.0f;
+	newTranslate.x = std::clamp(newTranslate.x, -limit, limit);
+	newTranslate.z = std::clamp(newTranslate.z, -limit, limit);
+
 	worldTransform_.SetTranslate(newTranslate);
 }
 

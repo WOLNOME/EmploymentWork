@@ -73,15 +73,18 @@ void TitleSystem::Initialize() {
 		garage_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("garage"), "garage");
 		//ガレージのワールドトランスフォーム
 		garageWorldTransform_.Initialize();
+		//オブジェクトにセット
+		garage_->RegistWorldTransform(&garageWorldTransform_);
 
 		//戦車
 		for (int i = 0; i < kTanksNum_; i++) {
 			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/playerFull.png");
 			tanks_[i] = std::make_unique<Object3d>();
-			tanks_[i]->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "canota");
+			tanks_[i]->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("titleTank"), "canota");
 			tanks_[i]->SetTexture(textureHandle);
 			tankWorldTransforms_[i].Initialize();
 			tankWorldTransforms_[i].SetTranslate({ -60.0f + (30.0f * i),3.1f,0.0f });
+			tanks_[i]->RegistWorldTransform(&tankWorldTransforms_[i]);
 		}
 
 	}

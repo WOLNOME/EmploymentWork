@@ -13,6 +13,11 @@ OBBColliderBase::OBBColliderBase() : ICollider() {
 
 void OBBColliderBase::Debug() {
 #ifdef _DEBUG
+	//Nothingなら描画しない
+	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) {
+		return;
+	}
+
 	//回転行列
 	Matrix4x4 matRotate = MyMath::MakeRotateMatrix(GetWorldTransform().GetRotate());
 	//OBBを定義

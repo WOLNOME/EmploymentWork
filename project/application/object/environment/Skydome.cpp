@@ -12,6 +12,7 @@ void Skydome::Initialize() {
 	object3d_->SetTexture(textureHandle_);
 	object3d_->SetIsLightProcess(false);
 	//ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
 	Vector3 pos = worldTransform_.GetTranslate();
 	pos.y += 120.0f;
 	worldTransform_.SetTranslate(pos);

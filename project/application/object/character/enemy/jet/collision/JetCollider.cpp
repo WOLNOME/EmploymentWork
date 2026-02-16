@@ -46,6 +46,7 @@ void JetCollider::OnCollision(ICollider* _other, CollisionAttribute _attribute) 
 		hp = std::clamp(hp, 0, holder_->GetMaxHP());
 		break;
 	}
+	//必殺弾に当たった場合
 	case CollisionAttribute::PlayerSpecial:
 	{
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };

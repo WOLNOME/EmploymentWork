@@ -134,34 +134,25 @@ void EnemyManager::BossSpawn(const Norm::Vector3& _initPos, const Norm::Vector3&
 }
 
 void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
-	//レベルローダーからキャノ太のスポーンデータを取得
-	const auto& canotaSpawnData = _levelLoader->GetEnemySpawnData();
-	for (const auto& data : canotaSpawnData) {
-		if (data.fileName != "canota") {
-			continue; // ファイル名が"canota"でない場合はスキップ
+	const auto& enemySpawnData = _levelLoader->GetEnemySpawnData();
+	//レベルローダーからスポーンデータを取得
+	for (const auto& data : enemySpawnData) {
+		if (data.type == "Canota") {
+			//スポーン
+			CanotaSpawn(data.translation, data.rotation);
+			continue;
 		}
-		//スポーン
-		CanotaSpawn(data.translation, data.rotation);
-	}
-	//レベルローダーからキーキャノ太のスポーンデータを取得
-	const auto& keyCanotaSpawnData = _levelLoader->GetEnemySpawnData();
-	for (const auto& data : keyCanotaSpawnData) {
-		if (data.fileName != "keyCanota") {
-			continue; // ファイル名が"canota"でない場合はスキップ
+		else if (data.type == "KeyCanota") {
+			//スポーン
+			KeyCanotaSpawn(data.translation, data.rotation);
+			continue;
 		}
-		//スポーン
-		KeyCanotaSpawn(data.translation, data.rotation);
+		else if (data.type == "Jet") {
+			//スポーン
+			JetSpawn(data.translation, data.rotation);
+			continue;
+		}
 	}
-	//レベルローダーからジェットのスポーンデータを取得
-
-	//コンテナを走査
-	for (int i = 0; i < param_["maxJetNum"]; i++) {
-		//スポーン
-		JetSpawn({ 0.0f,40.0f,400.0f }, { 0.0f,0.0f,0.0f });
-
-		break;
-	}
-
 }
 
 void EnemyManager::SetPlayer(Player* _player) {

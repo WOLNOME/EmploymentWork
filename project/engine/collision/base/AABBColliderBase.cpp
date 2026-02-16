@@ -10,6 +10,10 @@ Norm::AABBColliderBase::AABBColliderBase() : ICollider() {
 
 void Norm::AABBColliderBase::Debug() {
 #ifdef _DEBUG
+	//Nothingなら描画しない
+	if (GetCollisionAttribute() == CollisionAttribute::Nothingness) {
+		return;
+	}
 	//AABBを定義
 	AABB aabb = {
 		.min = aabb_.min + GetWorldTransform().GetTranslate(),

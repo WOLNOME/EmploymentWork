@@ -19,7 +19,6 @@ void PlayerSpecial::Initialize() {
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("blue.png");
-	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(ShapeTag{}, Object3dManager::GetInstance()->GenerateName("Player_Special"), Shape::kSphere);
 	object3d_->SetTexture(textureHandle_);
 	//ワールドトランスフォームの初期化

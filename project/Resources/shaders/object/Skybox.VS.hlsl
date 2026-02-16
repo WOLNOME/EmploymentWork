@@ -11,8 +11,12 @@ struct CameraInfo
     float4x4 matView;
     float4x4 matProjection;
 };
-ConstantBuffer<WorldTransformationMatrix> gWorldTransformationMatrix : register(b0);
-ConstantBuffer<CameraInfo> gCameraInfo : register(b1);
+
+//ワールドトランスフォーム情報
+StructuredBuffer<WorldTransformationMatrix> gWorldTransformationMatrix : register(t0);
+
+//カメラ情報
+ConstantBuffer<CameraInfo> gCameraInfo : register(b0);
 
 struct VertexShaderInput
 {
@@ -21,10 +25,10 @@ struct VertexShaderInput
     float3 normal : NORMAL0;
 };
 
-VertexShaderOutput main(VertexShaderInput input)
+VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID)
 {
     VertexShaderOutput output;
-    float4x4 wvpMatrix = mul(mul(gWorldTransformationMatrix.World, gCameraInfo.matView), gCameraInfo.matProjection);
+    float4x4 wvpMatrix = mul(mul(gWorldTransformationMatrix[instanceId].World, gCameraInfo.matView), gCameraInfo.matProjection);
     output.position = mul(input.position, wvpMatrix).xyww;
     output.texcoord = input.position.xyz;
     return output;
