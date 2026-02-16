@@ -108,6 +108,15 @@ namespace Norm {
 		return result;
 	}
 
+	void CombinedParticle::SetIsRepeat(bool isRepeat) {
+		playInfo_.isRepeat = isRepeat;
+		//全体尺の再計算
+		playInfo_.duration = 0.0f;
+		for (auto& sParInfo : particles_) {
+			playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
+		}
+	}
+
 	void CombinedParticle::Update() {
 		//particlesが空なら抜ける
 		if (particles_.empty()) {

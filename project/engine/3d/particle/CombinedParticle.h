@@ -125,7 +125,7 @@ namespace Norm {
 		/// 連続再生フラグをセットする
 		/// </summary>
 		/// <param name="isRepeat">連続再生フラグ</param>
-		void SetIsRepeat(bool isRepeat) { playInfo_.isRepeat = isRepeat; }
+		void SetIsRepeat(bool isRepeat);
 
 	private:
 		/// ============================== ///

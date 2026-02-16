@@ -140,7 +140,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 	case CollisionAttribute::Wall:
 	{
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 15.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 

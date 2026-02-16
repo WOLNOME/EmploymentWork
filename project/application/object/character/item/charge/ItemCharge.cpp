@@ -66,6 +66,8 @@ void ItemCharge::Spawn(const Vector3& _initPos) {
 	Vector3 initPos = _initPos;
 	initPos.y = param_["initHeight"];
 	worldTransform_.SetTranslate(initPos);
+	//初期スケールを保存
+	worldTransform_.SetScale({ 1,1,1 });
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -74,6 +76,9 @@ void ItemCharge::Spawn(const Vector3& _initPos) {
 	transform.translate = _initPos;
 	idleParticle_->SetBaseTransform(transform);
 	idleParticle_->SetIsPlay(true);
+	//変数のリセット
+	swingTimer_ = 0.0f;
+	isUp_ = true;
 	//コライダーの属性を決める
 	collider_->SetCollisionAttribute(CollisionAttribute::Item_Charge);
 	//アクティブ状態にする

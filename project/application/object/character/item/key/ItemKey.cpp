@@ -22,7 +22,6 @@ void ItemKey::Initialize() {
 	//ワールドトランスフォームの初期化
 	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 
-
 	//アイドル状態のパーティクルを生成
 	idleParticle_ = std::make_unique<CombinedParticle>();
 	idleParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("item_idle"), "Item_Idle");
@@ -65,6 +64,8 @@ void ItemKey::Spawn(const Vector3& _initPos) {
 	Vector3 initPos = _initPos;
 	initPos.y = param_["initHeight"];
 	worldTransform_.SetTranslate(initPos);
+	//初期スケールを保存
+	worldTransform_.SetScale({ 1,1,1 });
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -73,6 +74,9 @@ void ItemKey::Spawn(const Vector3& _initPos) {
 	transform.translate = _initPos;
 	idleParticle_->SetBaseTransform(transform);
 	idleParticle_->SetIsPlay(true);
+	//変数のリセット
+	swingTimer_ = 0.0f;
+	isUp_ = true;
 	//コライダーの属性を決める
 	collider_->SetCollisionAttribute(CollisionAttribute::Item_Key);
 	//アクティブ状態にする
@@ -119,7 +123,7 @@ void ItemKey::UntilDeathProcess() {
 
 		//表示
 		object3d_->SetIsDisplay(true);
-		//回転させる(めちゃ速く)
+		//回転させる(速く)
 		newRotate.y += 0.3f;
 		//縮小
 		float scale = MyMath::Lerp(1.0f, 0.0f, getParticle_->GetElapsedTimer() / getParticle_->GetDuration());
