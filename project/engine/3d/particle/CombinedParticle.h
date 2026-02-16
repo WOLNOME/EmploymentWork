@@ -31,8 +31,9 @@ namespace Norm {
 		/// </summary>
 		struct SingleParticleInfo {
 			std::unique_ptr<Particle> particle; // パーティクル本体
-			float startTime = 0.0f; // 発生開始時間
-			float endTime = 0.0f;   // 発生終了時間
+			TransformEuler localTransform;		// ローカルトランスフォーム
+			float startTime = 0.0f;				// 発生開始時間
+			float endTime = 0.0f;				// 発生終了時間
 		};
 
 	private:

@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include <vector>
 #include <memory>
 #include "ICollider.h"
 
@@ -78,7 +78,7 @@ namespace Norm {
 		/// ============================== ///
 
 		// コライダーリスト
-		std::list<ICollider*> colliders_;
+		std::vector<ICollider*> colliders_;
 	};
 
 }

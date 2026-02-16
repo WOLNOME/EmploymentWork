@@ -1832,6 +1832,23 @@ namespace Norm {
 	}
 
 	bool MyMath::IsCollision(const AABB& aabb, const OBB& obb) {
+		//ブロードフェーズ処理
+		{
+			Vector3 aabbCenter = (aabb.min + aabb.max) * 0.5f;
+			Vector3 aabbExtents = (aabb.max - aabb.min) * 0.5f;
+
+			float aabbRadius = Length(aabbExtents);
+			float obbRadius = Length(obb.size);
+
+			Vector3 diff = aabbCenter - obb.center;
+			float distSq = Dot(diff, diff);
+
+			float radiusSum = aabbRadius + obbRadius;
+			if (distSq > radiusSum * radiusSum) {
+				return false;
+			}
+		}
+
 		//ワールド行列
 		Matrix4x4 obbWorldMatrix = {
 			obb.orientations[0].x, obb.orientations[0].y, obb.orientations[0].z, 0,
@@ -1902,6 +1919,25 @@ namespace Norm {
 	}
 
 	bool MyMath::IsCollision(const OBB& obb1, const OBB& obb2) {
+		//ブロードフェーズ処理
+		{
+			// 中心間ベクトル
+			Vector3 diff = obb2.center - obb1.center;
+			// 中心間距離の2乗
+			float centerDistSq = Dot(diff, diff);
+			// 各OBBの最大半径（中心→最遠頂点）
+			float r1 = Length(obb1.size);
+			float r2 = Length(obb2.size);
+			// 半径合計
+			float radiusSum = r1 + r2;
+			// 半径合計の2乗
+			float radiusSumSq = radiusSum * radiusSum;
+			// 明らかに離れているなら即終了
+			if (centerDistSq > radiusSumSq) {
+				return false;
+			}
+		}
+
 		//各OBBの頂点をローカル座標で定義
 		Vector3 obb1Vertex[8] = {
 			{ -obb1.size.x, obb1.size.y, -obb1.size.z },
@@ -2087,6 +2123,26 @@ namespace Norm {
 	}
 
 	bool MyMath::IsCollision(const OBB& obb, const Capsule& capsule) {
+		//ブロードフェーズ処理
+		{
+			// OBBの最大半径
+			float obbRadius = Length(obb.size);
+			// カプセルの半径 + 半分の線分長
+			float capsuleHalfLen = Length(capsule.segment.diff) * 0.5f;
+			float capsuleRadius = capsule.radius + capsuleHalfLen;
+			// カプセル中心
+			Vector3 capsuleCenter = capsule.segment.origin + capsule.segment.diff * 0.5f;
+			// 中心距離
+			Vector3 diff = capsuleCenter - obb.center;
+			float distSq = Dot(diff, diff);
+			float radiusSum = obbRadius + capsuleRadius;
+
+			if (distSq > radiusSum * radiusSum) {
+				return false;
+			}
+		}
+
+
 		//ある座標がOBB内にあるか判定するラムダ式
 		auto isPointInOBB = [&](const Vector3& point) -> bool {
 			Vector3 d = point - obb.center;
@@ -2171,6 +2227,27 @@ namespace Norm {
 	}
 
 	bool MyMath::IsCollision(const Capsule& capsule1, const Capsule& capsule2) {
+		//ブロードフェーズ処理
+		{
+			// カプセル1
+			Vector3 center1 = capsule1.segment.origin + capsule1.segment.diff * 0.5f;
+			float halfLen1 = Length(capsule1.segment.diff) * 0.5f;
+			float broadRadius1 = halfLen1 + capsule1.radius;
+			// カプセル2
+			Vector3 center2 = capsule2.segment.origin + capsule2.segment.diff * 0.5f;
+			float halfLen2 = Length(capsule2.segment.diff) * 0.5f;
+			float broadRadius2 = halfLen2 + capsule2.radius;
+			// 中心距離
+			Vector3 diffCenter = center1 - center2;
+			float centerDistSq = Dot(diffCenter, diffCenter);
+			// 半径合計
+			float broadRadiusSum = broadRadius1 + broadRadius2;
+			// 明らかに離れているなら終了
+			if (centerDistSq > broadRadiusSum * broadRadiusSum) {
+				return false;
+			}
+		}
+
 		//線分同士の最短距離（二乗）を求めるラムダ式
 		auto SegmentSegmentDistSq = [&](const Segment& seg1, const Segment& seg2) -> float {
 			Vector3 p1 = seg1.origin;

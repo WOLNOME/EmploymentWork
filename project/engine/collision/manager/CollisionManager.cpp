@@ -48,6 +48,11 @@ namespace Norm {
 		auto ShouldIgnore = [](CollisionAttribute a, CollisionAttribute b) {
 			//同じ属性なら当たらない
 			if (a == b) {
+				//例外
+				if (a == CollisionAttribute::Enemy) {
+					return false;
+				}
+
 				return true;
 			}
 
@@ -75,29 +80,20 @@ namespace Norm {
 			return false;
 			};
 
-		//
-
 		// リスト内のペアを総当たり（重複しない）
-		std::list<ICollider*>::iterator itrA = colliders_.begin();
-		for (; itrA != colliders_.end(); ++itrA) {
-			// イテレータAからコライダーAを取得する
-			ICollider* colliderA = *itrA;
-			// イテレータBはイテレーターAの次の要素から回す
-			std::list<ICollider*>::iterator itrB = itrA;
-			itrB++;
-			for (; itrB != colliders_.end(); ++itrB) {
-				// イテレーターBからコライダーBを取得する
-				ICollider* colliderB = *itrB;
-				// 衝突フィルタリング
-				CollisionAttribute attrA = colliderA->GetCollisionAttribute();
+		const size_t size = colliders_.size();
+		for (size_t i = 0; i < size; ++i) {
+			ICollider* colliderA = colliders_[i];
+			CollisionAttribute attrA = colliderA->GetCollisionAttribute();
+
+			for (size_t j = i + 1; j < size; ++j) {
+				ICollider* colliderB = colliders_[j];
 				CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 
-				if (ShouldIgnore(attrA, attrB) ||
-					ShouldIgnore(attrB, attrA)) {
+				if (ShouldIgnore(attrA, attrB)) {
 					continue;
 				}
 
-				// ペアの当たり判定
 				CheckCollisionPair(colliderA, colliderB);
 			}
 		}
@@ -110,7 +106,13 @@ namespace Norm {
 
 	void CollisionManager::DeleteCollider(ICollider* _collider) {
 		//削除
-		colliders_.remove(_collider);
+		for (size_t i = 0; i < colliders_.size(); ++i) {
+			if (colliders_[i] == _collider) {
+				colliders_[i] = colliders_.back();
+				colliders_.pop_back();
+				return;
+			}
+		}
 	}
 
 	void CollisionManager::CheckCollisionPair(ICollider* colliderA, ICollider* colliderB) {

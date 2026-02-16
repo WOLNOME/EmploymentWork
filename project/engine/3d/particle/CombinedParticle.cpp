@@ -118,19 +118,8 @@ namespace Norm {
 		if (playInfo_.isPlay) {
 			//タイマーをカウント
 			playInfo_.elapsedTimer += kDeltaTime;
-			//全体尺の初期化
-			playInfo_.duration = 0.0f;
 			//全てのパーティクルを走査
 			for (auto& sParInfo : particles_) {
-				//全体尺の見直し
-				if (!playInfo_.isRepeat) {
-					float maxLifeTime = sParInfo.particle->param_["LifeTime"]["Max"];
-					playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + maxLifeTime);
-				}
-				else {
-					//最大寿命を考慮しない
-					playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
-				}
 				//再生フラグがオフの時
 				if (!sParInfo.particle->emitter_.isPlay) {
 					//oneShotの場合
@@ -192,8 +181,7 @@ namespace Norm {
 		//全パーティクルの走査
 		for (auto& sParInfo : particles_) {
 			//エミッターのトランスフォームを更新
-			TransformEuler local = makeTransformFromJson(sParInfo.particle->param_["LocalTransform"]);
-			sParInfo.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
+			sParInfo.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, sParInfo.localTransform);
 		}
 
 	}
@@ -214,8 +202,8 @@ namespace Norm {
 		//パーティクルの初期化(名前はnameベースで適当に生成)
 		newParticle.particle->Initialize(name, cutJson);
 		//トランスフォームを計算
-		TransformEuler local = makeTransformFromJson(newParticle.particle->param_["LocalTransform"]);
-		newParticle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, local);
+		newParticle.localTransform = makeTransformFromJson(newParticle.particle->param_["LocalTransform"]);
+		newParticle.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, newParticle.localTransform);
 		//パーティクルをコンテナに追加
 		particles_.push_back(std::move(newParticle));
 
