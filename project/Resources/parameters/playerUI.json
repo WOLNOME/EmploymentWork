@@ -1,5 +1,25 @@
 {
     "shakePower":40,
     "blinkDuration":1.0,
-    "blinkInterval":0.05
+    "blinkInterval":0.05,
+    "radarCenterPos":{
+        "x":640,
+        "y":590
+    },
+    "keyCenterPos":{
+        "x":400,
+        "y":600
+    },
+    "directionCenterPos":{
+        "x":640,
+        "y":70
+    },
+    "directionArrowCenterPos":{
+        "x":640,
+        "y":40
+    },
+    "operationUI":{
+        "x":640,
+        "y":360
+    }
 }
