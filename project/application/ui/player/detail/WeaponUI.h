@@ -1,15 +1,14 @@
 #pragma once
 #include <Sprite.h>
-#include <array>
 #include <memory>
 #include <JsonUtil.h>
 
 class Player;
 
 /// <summary>
-/// 砲弾の装填状況UIを管理するクラス
+/// 武器の状況UIを管理するクラス
 /// </summary>
-class CannonUI {
+class WeaponUI {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -30,7 +29,7 @@ public:
 	/// <param name="_shakeOffset">シェイクオフセット</param>
 	void AttachShake(const Norm::Vector2& _shakeOffset);
 	/// <summary>
-	/// 点滅の適用
+	/// 点滅エフェクトの適用
 	/// </summary>
 	/// <param name="_color">色</param>
 	void AttachBlinking(const Norm::Vector4& _color);
@@ -42,9 +41,9 @@ public:
 	/// <summary>
 	/// プレイヤーの設定
 	/// </summary>
-	/// <param name="_player">プレイヤー</param>
+	/// <param name="_player"></param>
 	void SetPlayer(Player* _player) { player_ = _player; }
-	
+
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
@@ -56,10 +55,21 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	//プレイヤーのパラメーター
+	//パラメーター
 	json param_;
+	//プレイヤーのパラメーター
+	json playerParam_;
 
-	std::array<uint32_t, 2> textureHandles_;
-	std::array<std::unique_ptr<Norm::Sprite>, 2> sprites_;
+	//砲弾
+	uint32_t thCannon_;
+	std::unique_ptr<Norm::Sprite> spriteCannon_;
+
+	//銃弾
+	uint32_t thBullet_;
+	std::unique_ptr<Norm::Sprite> spriteBullet_;
+
+	//スペシャル
+	uint32_t thSpecial_;
+	std::unique_ptr<Norm::Sprite> spriteSpecial_;
 };
 

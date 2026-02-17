@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include <JsonUtil.h>
 #include <Sprite.h>
 #include <memory>
 
@@ -7,20 +7,6 @@
 /// 操作方法のUIを管理するクラス
 /// </summary>
 class OperationUI {
-private:
-	/// ============================== ///
-	///		列挙体
-	/// ============================== ///
-
-	enum class Type {
-		kCannon,			//砲弾攻撃
-		kBullet,			//機関銃攻撃
-		kPerspective,		//視点移動
-		kMove,				//移動
-
-		kMaxTypeNum,		//タイプの数
-	};
-
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -51,7 +37,14 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	std::array<uint32_t, (int)Type::kMaxTypeNum> textureHandles_;
-	std::array<std::unique_ptr<Norm::Sprite>, (int)Type::kMaxTypeNum> sprites_;
+	//パラメーター
+	json param_;
+
+	//中心座標
+	Norm::Vector2 centerPos_;
+
+	//スプライト
+	uint32_t textureHandle_;
+	std::unique_ptr<Norm::Sprite> sprite_;
 };
 

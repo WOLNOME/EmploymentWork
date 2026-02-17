@@ -242,12 +242,6 @@
     <ClCompile Include="application\ui\player\detail\PlayerHPUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\BulletUI.cpp">
-      <Filter>application\ui\player\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="application\ui\player\detail\CannonUI.cpp">
-      <Filter>application\ui\player\detail</Filter>
-    </ClCompile>
     <ClCompile Include="application\ui\player\detail\DecorativeUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
@@ -530,6 +524,7 @@
     <ClCompile Include="application\object\level\rock\LevelRock.cpp" />
     <ClCompile Include="application\object\level\fence\LevelFence.cpp" />
     <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp" />
+    <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -672,12 +667,6 @@
       <Filter>application\ui\message</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\PlayerHPUI.h">
-      <Filter>application\ui\player\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="application\ui\player\detail\BulletUI.h">
-      <Filter>application\ui\player\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="application\ui\player\detail\CannonUI.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\DecorativeUI.h">
@@ -1008,6 +997,7 @@
     <ClInclude Include="application\object\level\rock\LevelRock.h" />
     <ClInclude Include="application\object\level\fence\LevelFence.h" />
     <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h" />
+    <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

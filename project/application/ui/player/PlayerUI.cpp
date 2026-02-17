@@ -25,13 +25,9 @@ void PlayerUI::Initialize() {
 	playerHPUI_ = std::make_unique<PlayerHPUI>();
 	playerHPUI_->Initialize();
 
-	//砲弾UI
-	cannonUI_ = std::make_unique<CannonUI>();
-	cannonUI_->Initialize();
-
-	//銃弾UI
-	bulletUI_ = std::make_unique<BulletUI>();
-	bulletUI_->Initialize();
+	//武器UI
+	weaponUI_ = std::make_unique<WeaponUI>();
+	weaponUI_->Initialize();
 
 	//レーダーUI
 	radar_ = std::make_unique<Radar>();
@@ -63,10 +59,8 @@ void PlayerUI::Update() {
 	decorativeUI_->Update();
 	//プレイヤーHPUIの更新
 	playerHPUI_->Update();
-	//砲弾UIの更新
-	cannonUI_->Update();
-	//弾丸UIの更新
-	bulletUI_->Update();
+	//武器UIの更新
+	weaponUI_->Update();
 	//レーダーUIの更新
 	radar_->Update();
 	//被弾インジケーターUIの更新
@@ -98,10 +92,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	decorativeUI_->SetPlayer(_player);
 	//プレイヤーHPUIに渡す
 	playerHPUI_->SetPlayer(player_);
-	//砲弾UIに渡す
-	cannonUI_->SetPlayer(player_);
-	//弾丸UIに渡す
-	bulletUI_->SetPlayer(player_);
+	//武器UIに渡す
+	weaponUI_->SetPlayer(player_);
 	//レーダーUIに渡す
 	radar_->SetPlayer(player_);
 	//被弾インジケーターUIに渡す
@@ -140,8 +132,7 @@ void PlayerUI::DamageShaking() {
 		//設定
 		decorativeUI_->AttachShake(offset);
 		playerHPUI_->AttachShake(offset);
-		cannonUI_->AttachShake(offset);
-		bulletUI_->AttachShake(offset);
+		weaponUI_->AttachShake(offset);
 		radar_->AttachShake(offset);
 		itemUI_->AttachShake(offset);
 		operationUI_->AttachShake(offset);
@@ -156,10 +147,8 @@ void PlayerUI::DamageBlinking() {
 		decorativeUI_->AttachBlinking(color);
 		//HPUI
 		playerHPUI_->AttachBlinking(color);
-		//砲弾UI
-		cannonUI_->AttachBlinking(color);
-		//弾丸UI
-		bulletUI_->AttachBlinking(color);
+		//武器UI
+		weaponUI_->AttachBlinking(color);
 		//レーダーUI
 		radar_->AttachBlinking(color);
 		//アイテムUI

@@ -59,14 +59,6 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
-
-	//スプライト
-	uint32_t textureHandleN_ = 0u;
-	uint32_t textureHandleD_ = 0u;
-	std::unique_ptr<Norm::Sprite> sprite_ = nullptr;
-
-	//通常状態→ダメージ状態UVスクロール
-	uint32_t textureHandleND_ = 0u;
-	std::unique_ptr<Norm::Sprite> uvScroll_ = nullptr;
+	
 };
 

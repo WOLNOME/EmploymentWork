@@ -1,0 +1,78 @@
+#include "WeaponUI.h"
+#include <TextureManager.h>
+#include <SpriteManager.h>
+#include <cassert>
+
+//アプリケーション
+#include <application/object/character/player/Player.h>
+
+using namespace Norm;
+
+void WeaponUI::Initialize() {
+	//パラメーターの初期化
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
+	playerParam_ = JsonUtil::GetJsonData("Resources/parameters/player");
+
+	//スプライトの生成・初期化
+
+	//砲弾
+	{
+		Vector2 cannonUICenterPos = { param_["cannonUICenterPos"]["x"],param_["cannonUICenterPos"]["y"] };
+		thCannon_ = TextureManager::GetInstance()->LoadTexture("cannonUI.png");
+		spriteCannon_ = std::make_unique<Sprite>();
+		spriteCannon_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Order::Front1, 2, 0.01f, false, thCannon_);
+		spriteCannon_->SetAnchorPoint({ 0.5f,0.5f });
+		spriteCannon_->SetPosition(cannonUICenterPos);
+	}
+	//銃弾
+	{
+		Vector2 bulletUICenterPos = { param_["bulletUICenterPos"]["x"],param_["bulletUICenterPos"]["y"] };
+		thBullet_ = TextureManager::GetInstance()->LoadTexture("bulletUI.png");
+		spriteBullet_ = std::make_unique<Sprite>();
+		spriteBullet_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletUI"), Order::Front1, thBullet_);
+		spriteBullet_->SetAnchorPoint({ 0.5f,0.5f });
+		spriteBullet_->SetPosition(bulletUICenterPos);
+	}
+	//スペシャル
+	{
+		Vector2 specialUICenterPos = { param_["specialUICenterPos"]["x"],param_["specialUICenterPos"]["y"] };
+		thSpecial_ = TextureManager::GetInstance()->LoadTexture("specialUI.png");
+		spriteSpecial_ = std::make_unique<Sprite>();
+		spriteSpecial_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerSpecialUI"), Order::Front1, 4, 0.01f, false, thSpecial_);
+		spriteSpecial_->SetAnchorPoint({ 0.5f,0.5f });
+		spriteSpecial_->SetPosition(specialUICenterPos);
+	}
+}
+
+void WeaponUI::Update() {
+	//プレイヤーがセットされていなければ警告
+	assert(player_ != nullptr && "プレイヤーがセットされていません。");
+	//砲弾UIの更新
+	{
+		//砲弾のリロード中
+		if(player_->GetCannonReloadTimer() > 0.0f){
+			spriteCannon_->SetUVScrollSheetNum(1);
+		}
+		//装填済み
+		else {
+			spriteCannon_->SetUVScrollSheetNum(0);
+		}
+	}
+	//スペシャルUIの更新
+	{
+		//スペシャルの数に合わせてUVシートを切り替える
+		spriteSpecial_->SetUVScrollSheetNum(player_->GetSpecialNum());
+	}
+}
+
+void WeaponUI::AttachShake(const Norm::Vector2& _shakeOffset) {
+	spriteCannon_->SetShakeOffset(_shakeOffset);
+	spriteBullet_->SetShakeOffset(_shakeOffset);
+	spriteSpecial_->SetShakeOffset(_shakeOffset);
+}
+
+void WeaponUI::AttachBlinking(const Norm::Vector4& _color) {
+	spriteCannon_->SetColor(_color);
+	spriteBullet_->SetColor(_color);
+	spriteSpecial_->SetColor(_color);
+}

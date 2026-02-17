@@ -18,8 +18,20 @@
         "x":640,
         "y":40
     },
-    "operationUI":{
+    "operationUICenterPos":{
         "x":640,
         "y":360
+    },
+    "cannonUICenterPos":{
+        "x":1020,
+        "y":180
+    },
+    "bulletUICenterPos":{
+        "x":1020,
+        "y":320
+    },
+    "specialUICenterPos":{
+        "x":1020,
+        "y":460
     }
 }

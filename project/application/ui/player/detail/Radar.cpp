@@ -14,46 +14,63 @@
 using namespace Norm;
 
 void Radar::Initialize() {
+	//jsonファイルの読み込み
+	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
+
+	//変数の初期化
+	centerPosition_ = { param_["radarCenterPos"]["x"],param_["radarCenterPos"]["y"] };
+
 	//スプライトの生成・初期化
+
+	//コンパス
 	{
-		//プレイヤー
+		thCompass_ = TextureManager::GetInstance()->LoadTexture("compass.png");
+		compass_ = std::make_unique<Sprite>();
+		compass_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("compass"), Order::Front4, thCompass_);
+		compass_->SetAnchorPoint({ 0.5f,0.5f });
+		compass_->SetPosition(centerPosition_);
+	}
+	//レーダー基盤
+	{
+		thRadarBase_ = TextureManager::GetInstance()->LoadTexture("radar.png");
+		radarBase_ = std::make_unique<Sprite>();
+		radarBase_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("radar"), Order::Front2, 18, 0.07f, true, thRadarBase_);
+		radarBase_->SetAnchorPoint({ 0.5f,0.5f });
+		radarBase_->SetPosition(centerPosition_);
+		radarBase_->SetIsPlayUVScroll(true);
+	}
+	//プレイヤー
+	{
 		thPlayerMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		playerMark_ = std::make_unique<Sprite>();
-		playerMark_->Initialize(SpriteTag{},SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front2, thPlayerMark_);
+		playerMark_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front3, thPlayerMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
 		playerMark_->SetSize(playerMark_->GetSize() * 0.2f);
-		playerMark_->SetPosition(kCenterPosition_);
+		playerMark_->SetPosition(centerPosition_);
 		playerMark_->SetColor({ 1,0,0,1 });
 	}
+	//エネミー
 	{
-		//エネミー
 		thEnemyMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kEnemyUINum_; i++) {
 			enemyMarks_[i] = std::make_unique<Sprite>();
-			enemyMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("enemyMark"), Order::Front2, thEnemyMark_);
+			enemyMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("enemyMark"), Order::Front3, thEnemyMark_);
 			enemyMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			enemyMarks_[i]->SetSize(enemyMarks_[i]->GetSize() * 0.1f);
 
 		}
 	}
+	//アイテム
 	{
-		//アイテム
 		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kItemUINum_; i++) {
 			itemMarks_[i] = std::make_unique<Sprite>();
-			itemMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("itemMark"), Order::Front1, thItemMark_);
+			itemMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("itemMark"), Order::Front3, thItemMark_);
 			itemMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 			itemMarks_[i]->SetSize(itemMarks_[i]->GetSize() * 0.1f);
 		}
 	}
-	{
-		//コンパス
-		thCompass_ = TextureManager::GetInstance()->LoadTexture("compass.png");
-		compass_ = std::make_unique<Sprite>();
-		compass_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("compass"), Order::Front2, thCompass_);
-		compass_->SetAnchorPoint({ 0.5f,0.5f });
-		compass_->SetPosition(kCenterPosition_);
-	}
+
 }
 
 void Radar::Update() {
@@ -76,6 +93,11 @@ void Radar::Update() {
 }
 
 void Radar::AttachShake(const Vector2& _shakeOffset) {
+	//コンパスを揺らす
+	compass_->SetShakeOffset(_shakeOffset);
+	//レーダー基盤を揺らす
+	radarBase_->SetShakeOffset(_shakeOffset);
+
 	//プレイヤーマークを揺らす
 	playerMark_->SetShakeOffset(_shakeOffset);
 	//エネミーマークを揺らす
@@ -86,13 +108,13 @@ void Radar::AttachShake(const Vector2& _shakeOffset) {
 	for (int i = 0; i < kItemUINum_; i++) {
 		itemMarks_[i]->SetShakeOffset(_shakeOffset);
 	}
-	//コンパスを揺らす
-	compass_->SetShakeOffset(_shakeOffset);
 }
 
 void Radar::AttachBlinking(const Vector4& _color) {
 	//コンパスは通常通り色を適用する
 	compass_->SetColor(_color);
+	//レーダー基盤は通常通り色を適用する
+	radarBase_->SetColor(_color);
 
 	//プレイヤーマークは引数と元の色の各成分を掛けた値を適用する
 	Vector4 playerMarkColor = { 1,0,0,1 };
@@ -137,8 +159,8 @@ void Radar::UpdateEnemyMark() {
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
 
 		enemyMarks_[spriteIndex]->SetPosition({
-			kCenterPosition_.x + (rotated.x * kUnitLength_),
-			kCenterPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (rotated.x * kUnitLength_),
+			centerPosition_.y - (rotated.z * kUnitLength_)
 			});
 
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
@@ -155,8 +177,8 @@ void Radar::UpdateEnemyMark() {
 		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
-			kCenterPosition_.x + (rotated.x * kUnitLength_),
-			kCenterPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (rotated.x * kUnitLength_),
+			centerPosition_.y - (rotated.z * kUnitLength_)
 			});
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
 		enemyMarks_[spriteIndex]->SetColor(color);
@@ -197,7 +219,7 @@ void Radar::UpdateItemMark() {
 			vec.y,
 			vec.x * sinTheta + vec.z * cosTheta
 		};
-	};
+		};
 	//アイテム処理ラムダ
 	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
 		//プレイヤー→アイテムのベクトルを作る
@@ -205,13 +227,13 @@ void Radar::UpdateItemMark() {
 		if (playerToItem.Length() > kSearchLength_) return;
 		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
-			kCenterPosition_.x + (rotated.x * kUnitLength_),
-			kCenterPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (rotated.x * kUnitLength_),
+			centerPosition_.y - (rotated.z * kUnitLength_)
 			});
 		itemMarks_[spriteIndex]->SetIsDisplay(true);
 		itemMarks_[spriteIndex]->SetColor(color);
 		spriteIndex++;
-	};
+		};
 	//全スプライトを非表示に
 	for (int i = 0; i < kItemUINum_; i++) {
 		itemMarks_[i]->SetIsDisplay(false);

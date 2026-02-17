@@ -294,6 +294,11 @@ namespace Norm {
 		/// </summary>
 		/// <param name="_isPlay">UVスクロールの動作フラグ</param>
 		void SetIsPlayUVScroll(bool _isPlay) { uvScrollData_.isPlay = _isPlay; }
+		/// <summary>
+		/// UVスクロールのシート設定をする（0から始まる）
+		/// </summary>
+		/// <param name="_sheetNum">シートの番号</param>
+		void SetUVScrollSheetNum(int _sheetNum) { uvScrollData_.currentSheetNum = _sheetNum; }
 
 	private:
 		/// ============================== ///

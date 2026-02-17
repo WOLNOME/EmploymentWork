@@ -1,4 +1,5 @@
 #pragma once
+#include <JsonUtil.h>
 #include <Sprite.h>
 #include <Vector2.h>
 #include <Vector4.h>
@@ -106,24 +107,31 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	const Norm::Vector2 kCenterPosition_ = { 640.0f,620.0f };	//レーダーの中心座標
-	const float kUnitLength_ = 31.0f / 100.0f;		//レーダー上の1の長さ
+	//パラメータ
+	json param_;
+
+	Norm::Vector2 centerPosition_;	//レーダーの中心座標
+	const float kUnitLength_ = 31.0f / 100.0f;		//レーダー上の100mの長さ
 	const float kSearchLength_ = 300.0f;		//索敵距離
 
+	//コンパス
+	uint32_t thCompass_ = 0u;
+	std::unique_ptr<Norm::Sprite> compass_ = nullptr;
+	//レーダー基盤
+	uint32_t thRadarBase_ = 0u;
+	std::unique_ptr<Norm::Sprite> radarBase_ = nullptr;
+
+	//プレイヤーマーク
 	uint32_t thPlayerMark_ = 0u;
 	std::unique_ptr<Norm::Sprite> playerMark_ = nullptr;
-
+	//敵マーク
 	static const int kEnemyUINum_ = 20;
 	uint32_t thEnemyMark_ = 0u;
 	std::array<std::unique_ptr<Norm::Sprite>, kEnemyUINum_> enemyMarks_;
-
+	//アイテムマーク
 	static const int kItemUINum_ = 10;
 	uint32_t thItemMark_ = 0u;
 	std::array<std::unique_ptr<Norm::Sprite>, kItemUINum_> itemMarks_;
-
-	uint32_t thCompass_ = 0u;
-	std::unique_ptr<Norm::Sprite> compass_ = nullptr;
-
 
 };
 

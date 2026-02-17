@@ -4,8 +4,7 @@
 #include "detail/ReticleUI.h"
 #include "detail/DecorativeUI.h"
 #include "detail/PlayerHPUI.h"
-#include "detail/CannonUI.h"
-#include "detail/BulletUI.h"
+#include "detail/WeaponUI.h"
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
 #include "detail/ItemUI.h"
@@ -111,10 +110,8 @@ private:
 	std::unique_ptr<DecorativeUI> decorativeUI_ = nullptr;
 	//HPバー
 	std::unique_ptr<PlayerHPUI> playerHPUI_ = nullptr;
-	//砲弾UI
-	std::unique_ptr<CannonUI> cannonUI_ = nullptr;
-	//銃弾UI
-	std::unique_ptr<BulletUI> bulletUI_ = nullptr;
+	//武器UI
+	std::unique_ptr<WeaponUI> weaponUI_ = nullptr;
 	//レーダーUI
 	std::unique_ptr<Radar> radar_ = nullptr;
 	//被弾インジケーターUI
