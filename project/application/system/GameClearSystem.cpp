@@ -22,9 +22,9 @@ void GameClearSystem::Initialize() {
 
 	//戦車オブジェクト
 	{
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("player.png");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/playerFull.png");
 		tank_ = std::make_unique<Object3d>();
-		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("tank"), "enemy");
+		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("clearTank"), "canota");
 		tank_->SetTexture(textureHandle);
 		tank_->SetIsDisplay(true);
 		tankWorldTransform_.Initialize();

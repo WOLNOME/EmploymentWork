@@ -10,6 +10,10 @@ BulletAttackLeaf::BulletAttackLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafN
 }
 
 BulletAttackLeaf::~BulletAttackLeaf() {
+	
+}
+
+void BulletAttackLeaf::Update() {
 	//ブラックボードから必要な情報を取得
 	EnemyWeaponManager* enemyWeaponManager = mpBlackBoard->GetValue<EnemyWeaponManager*>("EnemyWeaponManager");
 	Vector3 playerPos = mpBlackBoard->GetValue<Vector3>("PlayerPos");
@@ -27,7 +31,7 @@ BulletAttackLeaf::~BulletAttackLeaf() {
 	if (bulletIntervalTimer > 0.0f) {
 		//ブラックボードの情報を送信
 		mpBlackBoard->SetValue<float>("BulletIntervalTimer", bulletIntervalTimer);
-		
+
 		return;
 	}
 
@@ -64,9 +68,6 @@ BulletAttackLeaf::~BulletAttackLeaf() {
 	mpBlackBoard->SetValue<float>("BulletIntervalTimer", bulletIntervalTimer);
 	mpBlackBoard->SetValue<int>("BulletMagazine", bulletMagazine);
 
-}
-
-void BulletAttackLeaf::Update() {
 }
 
 void BulletAttackLeaf::Debug() {

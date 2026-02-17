@@ -74,6 +74,7 @@ namespace Norm {
 			json data = JsonUtil::GetJsonData(folderPath + "/" + fileName);
 			sParticle.startTime = data["StartTime"];
 			sParticle.endTime = data["EndTime"];
+			sParticle.localTransform = makeTransformFromJson(data["LocalTransform"]);
 			//全体尺のうち長ければ更新
 			playInfo_.duration = std::max(playInfo_.duration, sParticle.endTime + sParticle.particle->param_["LifeTime"]["Max"]);
 
@@ -190,7 +191,6 @@ namespace Norm {
 			//エミッターのトランスフォームを更新
 			sParInfo.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, sParInfo.localTransform);
 		}
-
 	}
 
 	void CombinedParticle::ReculculateDuration() {
