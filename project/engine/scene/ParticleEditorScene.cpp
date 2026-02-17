@@ -31,11 +31,14 @@ void ParticleEditorScene::Initialize() {
 	//天球と地面の生成と初期化
 	skydome_ = std::make_unique<Object3d>();
 	skydome_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Skydome"), "skydome");
+	skydomeWT_.Initialize();
+	skydome_->RegistWorldTransform(&skydomeWT_);
 	textureHandleGround_ = TextureManager::GetInstance()->LoadTexture("grid.png");
 	ground_ = std::make_unique<Object3d>();
 	ground_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Ground"), "ground");
 	ground_->SetTexture(textureHandleGround_);
-
+	groundWT_.Initialize();
+	ground_->RegistWorldTransform(&groundWT_);
 
 }
 
@@ -73,6 +76,7 @@ void ParticleEditorScene::DebugWithImGui() {
 	//デバッグ表示
 	if (cParticle_) {
 		cParticle_->Debug();
+		cParticle_->ReculculateDuration();
 	}
 
 #endif //_DEBUG

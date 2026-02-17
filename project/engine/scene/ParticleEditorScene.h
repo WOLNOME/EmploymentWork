@@ -127,8 +127,10 @@ namespace Norm {
 
 		//天球と地面
 		std::unique_ptr<Object3d> skydome_ = nullptr;
+		WorldTransform skydomeWT_;
 		uint32_t textureHandleGround_ = EOF;
 		std::unique_ptr<Object3d> ground_ = nullptr;
+		WorldTransform groundWT_;
 
 		// 編集するパーティクル
 		std::unique_ptr<CombinedParticle> cParticle_ = nullptr;
