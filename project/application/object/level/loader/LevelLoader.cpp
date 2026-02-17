@@ -30,12 +30,20 @@ void LevelLoader::Initialize() {
 void LevelLoader::Update() {
 	//オブジェクトの更新
 	levelData_.tree->Update();
+	levelData_.bigTree->Update();
+	levelData_.rock->Update();
+	levelData_.fence->Update();
+	levelData_.sealedBox->Update();
 }
 
 void LevelLoader::DebugWithImGui() {
 #ifdef _DEBUG
 	//全オブジェクトのデバッグ処理
 	levelData_.tree->DebugWithImGui();
+	levelData_.bigTree->DebugWithImGui();
+	levelData_.rock->DebugWithImGui();
+	levelData_.fence->DebugWithImGui();
+	levelData_.sealedBox->DebugWithImGui();
 #endif // _DEBUG
 
 }
@@ -63,15 +71,15 @@ void LevelLoader::ScanObjectData(json& object) {
 	//ラムダ式でオブジェクト生成
 	auto createObject = [&](const std::string& type) {
 		//トランスフォームパラメータの読み込み
-		TransformEuler transform;
+		TransformEuler transform = {};
 		//平行移動
 		transform.translate.x = (float)object["transform"]["translation"][0];
 		transform.translate.y = (float)object["transform"]["translation"][2];
 		transform.translate.z = (float)object["transform"]["translation"][1];
 		//回転角
-		transform.rotate.x = -(float)object["transform"]["rotation"][0];
-		transform.rotate.y = -(float)object["transform"]["rotation"][2];
-		transform.rotate.z = -(float)object["transform"]["rotation"][1];
+		transform.rotate.x = -(float)object["transform"]["rotation"][0] / 180.0f * pi;
+		transform.rotate.y = -(float)object["transform"]["rotation"][2] / 180.0f * pi;
+		transform.rotate.z = -(float)object["transform"]["rotation"][1] / 180.0f * pi;
 		//スケーリング
 		transform.scale.x = (float)object["transform"]["scaling"][0];
 		transform.scale.y = (float)object["transform"]["scaling"][2];
