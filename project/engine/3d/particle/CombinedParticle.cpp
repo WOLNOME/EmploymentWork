@@ -111,10 +111,8 @@ namespace Norm {
 	void CombinedParticle::SetIsRepeat(bool isRepeat) {
 		playInfo_.isRepeat = isRepeat;
 		//全体尺の再計算
-		playInfo_.duration = 0.0f;
-		for (auto& sParInfo : particles_) {
-			playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
-		}
+		ReculculateDuration();
+
 	}
 
 	void CombinedParticle::Update() {
@@ -193,6 +191,18 @@ namespace Norm {
 			sParInfo.particle->emitter_.worldTransform = MyMath::Combine(baseTransform_, sParInfo.localTransform);
 		}
 
+	}
+
+	void CombinedParticle::ReculculateDuration() {
+		playInfo_.duration = 0.0f;
+		for (auto& sParInfo : particles_) {
+			if (playInfo_.isRepeat) {
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime);
+			}
+			else {
+				playInfo_.duration = std::max(playInfo_.duration, sParInfo.endTime + sParInfo.particle->param_["LifeTime"]["Max"]);
+			}
+		}
 	}
 
 	bool CombinedParticle::AddParticle(const std::string& _fileName, float _startTime, float _endTime) {

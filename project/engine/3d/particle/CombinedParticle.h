@@ -138,6 +138,11 @@ namespace Norm {
 		void Update();
 
 		/// <summary>
+		/// 全体尺の再計算
+		/// </summary>
+		void ReculculateDuration();
+
+		/// <summary>
 		/// パーティクルを追加(パーティクルエディター用)
 		/// </summary>
 		/// <param name="_fileName">ファイル名</param>
