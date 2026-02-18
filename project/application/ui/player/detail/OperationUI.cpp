@@ -10,7 +10,7 @@ void OperationUI::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
 
 	//変数の初期化
-	centerPos_ = { param_["operationUICenterPos"]["x"],param_["operationUICenterPos"]["y"] };
+	centerPos_ = { param_["operationUI"]["centerPos"]["x"],param_["operationUI"]["centerPos"]["y"] };
 
 
 	//移動UIスプライトの初期化

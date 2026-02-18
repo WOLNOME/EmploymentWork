@@ -2,14 +2,16 @@
 #include <Sprite.h>
 #include <memory>
 #include <JsonUtil.h>
-#include <Handle.h>
 
-class Player;
+//前方宣言（エンジン）
+namespace Norm {
+	class GameCamera;
+}
 
 /// <summary>
-/// 武器の状況UIを管理するクラス
+/// カメラの向いている方向を示すUIを管理するクラス
 /// </summary>
-class WeaponUI {
+class DirectionUI {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -40,16 +42,16 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// プレイヤーの設定
+	/// ゲームカメラの設定
 	/// </summary>
-	/// <param name="_player"></param>
-	void SetPlayer(Player* _player) { player_ = _player; }
+	/// <param name="_camera">ゲームカメラのポインタ</param>
+	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; }
 
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	Player* player_ = nullptr;
+	Norm::GameCamera* camera_ = nullptr;
 
 private:
 	/// ============================== ///
@@ -58,25 +60,15 @@ private:
 
 	//パラメーター
 	json param_;
-	//プレイヤーのパラメーター
-	json playerParam_;
 
-	//砲弾
-	uint32_t thCannon_;
-	std::unique_ptr<Norm::Sprite> spriteCannon_;
-	uint32_t thCannonReload_;
-	std::unique_ptr<Norm::Sprite> spriteCannonReload_;
+	//矢印
+	uint32_t thArrow_;
+	std::unique_ptr<Norm::Sprite> spriteArrow_;
 
-	//銃弾
-	uint32_t thBullet_;
-	std::unique_ptr<Norm::Sprite> spriteBullet_;
-	Norm::Handle bulletNumHandle_;
-	std::unique_ptr<Norm::Sprite> spriteBulletNum_;
-	uint32_t thBulletReload_;
-	std::unique_ptr<Norm::Sprite> spriteBulletReload_;
+	//目盛り
+	uint32_t thScale_;
+	std::unique_ptr<Norm::Sprite> spriteScale_;
 
-	//スペシャル
-	uint32_t thSpecial_;
-	std::unique_ptr<Norm::Sprite> spriteSpecial_;
+
 };
 

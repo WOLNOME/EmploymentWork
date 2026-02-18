@@ -18,7 +18,7 @@ void Radar::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
 
 	//変数の初期化
-	centerPosition_ = { param_["radarCenterPos"]["x"],param_["radarCenterPos"]["y"] };
+	centerPosition_ = { param_["radar"]["centerPos"]["x"],param_["radar"]["centerPos"]["y"]};
 
 	//スプライトの生成・初期化
 

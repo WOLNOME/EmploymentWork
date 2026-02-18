@@ -2,14 +2,13 @@
 #include <Sprite.h>
 #include <memory>
 #include <JsonUtil.h>
-#include <Handle.h>
 
 class Player;
 
 /// <summary>
-/// 武器の状況UIを管理するクラス
+/// キーの状況UIを管理するクラス
 /// </summary>
-class WeaponUI {
+class KeyUI {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -61,22 +60,9 @@ private:
 	//プレイヤーのパラメーター
 	json playerParam_;
 
-	//砲弾
-	uint32_t thCannon_;
-	std::unique_ptr<Norm::Sprite> spriteCannon_;
-	uint32_t thCannonReload_;
-	std::unique_ptr<Norm::Sprite> spriteCannonReload_;
+	//キー
+	uint32_t thKey_;
+	std::unique_ptr<Norm::Sprite> spriteKey_;
 
-	//銃弾
-	uint32_t thBullet_;
-	std::unique_ptr<Norm::Sprite> spriteBullet_;
-	Norm::Handle bulletNumHandle_;
-	std::unique_ptr<Norm::Sprite> spriteBulletNum_;
-	uint32_t thBulletReload_;
-	std::unique_ptr<Norm::Sprite> spriteBulletReload_;
-
-	//スペシャル
-	uint32_t thSpecial_;
-	std::unique_ptr<Norm::Sprite> spriteSpecial_;
 };
 

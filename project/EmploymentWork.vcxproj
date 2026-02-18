@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\character\enemy\boss\Barrier.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp" />
     <ClCompile Include="application\ui\enemy\detail\EnemyReactionUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\DirectionUI.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -295,6 +296,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\level\fence\LevelFence.cpp" />
     <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp" />
     <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -304,6 +306,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\character\enemy\boss\Barrier.h" />
     <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h" />
     <ClInclude Include="application\ui\enemy\detail\EnemyReactionUI.h" />
+    <ClInclude Include="application\ui\player\detail\DirectionUI.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
@@ -493,6 +496,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\level\fence\LevelFence.h" />
     <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h" />
     <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
+    <ClInclude Include="application\ui\player\detail\KeyUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -49,6 +49,14 @@ void PlayerUI::Initialize() {
 	moveLeverUI_ = std::make_unique<MoveLever>();
 	moveLeverUI_->Initialize();
 
+	//キーUI
+	keyUI_ = std::make_unique<KeyUI>();
+	keyUI_->Initialize();
+
+	//方向UI
+	directionUI_ = std::make_unique<DirectionUI>();
+	directionUI_->Initialize();
+
 }
 
 void PlayerUI::Update() {
@@ -71,6 +79,10 @@ void PlayerUI::Update() {
 	operationUI_->Update();
 	//移動レバーUIの更新
 	moveLeverUI_->Update();
+	//キーUIの更新
+	keyUI_->Update();
+	//方向UIの更新
+	directionUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -100,6 +112,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	hitIndicator_->SetPlayer(player_);
 	//アイテムUIに渡す
 	itemUI_->SetPlayer(player_);
+	//キーUIに渡す
+	keyUI_->SetPlayer(player_);
 }
 
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
@@ -118,6 +132,8 @@ void PlayerUI::SetGameCamera(GameCamera* _camera) {
 	radar_->SetGameCamera(camera_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetGameCamera(camera_);
+	//方向UIに渡す
+	directionUI_->SetGameCamera(camera_);
 }
 
 void PlayerUI::DamageShaking() {
@@ -137,6 +153,8 @@ void PlayerUI::DamageShaking() {
 		itemUI_->AttachShake(offset);
 		operationUI_->AttachShake(offset);
 		moveLeverUI_->AttachShake(offset);
+		keyUI_->AttachShake(offset);
+		directionUI_->AttachShake(offset);
 	}
 }
 
@@ -157,6 +175,10 @@ void PlayerUI::DamageBlinking() {
 		operationUI_->AttachBlinking(color);
 		//移動レバーUI
 		moveLeverUI_->AttachBlinking(color);
+		//キーUI
+		keyUI_->AttachBlinking(color);
+		//方向UI
+		directionUI_->AttachBlinking(color);
 
 		};
 

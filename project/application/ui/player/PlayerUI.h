@@ -10,6 +10,8 @@
 #include "detail/ItemUI.h"
 #include "detail/OperationUI.h"
 #include "detail/MoveLever.h"
+#include "detail/KeyUI.h"
+#include "detail/DirectionUI.h"
 
 //前方宣言（エンジン）
 namespace Norm {
@@ -122,6 +124,10 @@ private:
 	std::unique_ptr<OperationUI> operationUI_ = nullptr;
 	//移動レバーUI
 	std::unique_ptr<MoveLever> moveLeverUI_ = nullptr;
+	//キーUI
+	std::unique_ptr<KeyUI> keyUI_ = nullptr;
+	//方向UI
+	std::unique_ptr<DirectionUI> directionUI_ = nullptr;
 
 
 	//パラメーター

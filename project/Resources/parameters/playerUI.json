@@ -2,36 +2,69 @@
     "shakePower":40,
     "blinkDuration":1.0,
     "blinkInterval":0.05,
-    "radarCenterPos":{
-        "x":640,
-        "y":590
+    "radar": {
+        "centerPos": {
+            "x": 640,
+            "y": 590
+        }
     },
-    "keyCenterPos":{
-        "x":400,
-        "y":600
+    "key": {
+        "centerPos": {
+            "x": 400,
+            "y": 600
+        }
     },
-    "directionCenterPos":{
-        "x":640,
-        "y":70
+    "direction": {
+        "centerPos": {
+            "x": 640,
+            "y": 70
+        },
+        "textureSize":{
+            "x":640,
+            "y":70
+        },
+        "pivotX":968
     },
-    "directionArrowCenterPos":{
-        "x":640,
-        "y":40
+    "directionArrow": {
+        "centerPos": {
+            "x": 640,
+            "y": 40
+        }
     },
-    "operationUICenterPos":{
-        "x":640,
-        "y":360
+    "operationUI": {
+        "centerPos": {
+            "x": 640,
+            "y": 360
+        }
     },
-    "cannonUICenterPos":{
-        "x":1020,
-        "y":180
+    "cannonUI": {
+        "centerPos": {
+            "x": 1020,
+            "y": 180
+        },
+        "reloadUIOffset":{
+            "x":120,
+            "y":25
+        }
     },
-    "bulletUICenterPos":{
-        "x":1020,
-        "y":320
+    "bulletUI": {
+        "centerPos": {
+            "x": 1020,
+            "y": 320
+        },
+        "magazineUIOffset":{
+            "x":20,
+            "y":25
+        },
+        "reloadUIOffset":{
+            "x":170,
+            "y":25
+        }
     },
-    "specialUICenterPos":{
-        "x":1020,
-        "y":460
+    "specialUI": {
+        "centerPos": {
+            "x": 1020,
+            "y": 460
+        }
     }
 }
