@@ -66,5 +66,19 @@
             "x": 1020,
             "y": 460
         }
+    },
+    "velocityUI":{
+        "centerPos":{
+            "x":880,
+            "y":600
+        },
+        "needleOffset":{
+            "x":0,
+            "y":68
+        },
+        "numTextOffset":{
+            "x":0,
+            "y":-30
+        }
     }
 }

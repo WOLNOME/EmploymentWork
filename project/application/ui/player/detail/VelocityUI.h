@@ -1,26 +1,16 @@
 #pragma once
 #include <Input.h>
 #include <Sprite.h>
-#include <array>
 #include <memory>
 #include <JsonUtil.h>
+#include <Handle.h>
+
+class Player;
 
 /// <summary>
-/// 移動量(速度)を示すレバーUIを管理するクラス
+/// 速度を示すレバーUIを管理するクラス
 /// </summary>
-class MoveLever {
-private:
-	/// ============================== ///
-	///		列挙体
-	/// ============================== ///
-
-	enum class Type {
-		kControlScale,	//制御目盛り
-		kLever,			//レバー
-
-		kMaxTypeNum,	//タイプの数
-	};
-
+class VelocityUI {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -46,23 +36,46 @@ public:
 	/// <param name="_color">色</param>
 	void AttachBlinking(const Norm::Vector4& _color);
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤーの設定
+	/// </summary>
+	/// <param name="_player">プレイヤー</param>
+	void SetPlayer(Player* _player) { player_ = _player; }
+
+
 private:
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	//入力
-	Norm::Input* input_ = Norm::Input::GetInstance();
+	//プレイヤー
+	Player* player_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
-	std::array<uint32_t, (int)Type::kMaxTypeNum> textureHandles_;
-	std::array<std::unique_ptr<Norm::Sprite>, (int)Type::kMaxTypeNum> sprites_;
+	//パラメーター
+	json param_;
+	//プレイヤーのパラメーター
+	json playerParam_;
 
-	//ゲージ(0~500)
-	const int kMaxGauge_ = 250;
-	int gauge_ = 125;
+
+	//速度計
+	uint32_t thSpeedMeter_ = 0;
+	std::unique_ptr<Norm::Sprite> spriteSpeedMeter_;
+
+	//針
+	uint32_t thNeedle_ = 0;
+	std::unique_ptr<Norm::Sprite> spriteNeedle_;
+
+	//数値テキスト
+	Norm::Handle thNumText_;
+	std::unique_ptr<Norm::Sprite> spriteNumText_;
+
 };
 

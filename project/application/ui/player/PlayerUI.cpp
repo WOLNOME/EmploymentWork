@@ -45,9 +45,9 @@ void PlayerUI::Initialize() {
 	operationUI_ = std::make_unique<OperationUI>();
 	operationUI_->Initialize();
 
-	//移動レバーUI
-	moveLeverUI_ = std::make_unique<MoveLever>();
-	moveLeverUI_->Initialize();
+	//速度UI
+	velocityUI_ = std::make_unique<VelocityUI>();
+	velocityUI_->Initialize();
 
 	//キーUI
 	keyUI_ = std::make_unique<KeyUI>();
@@ -77,8 +77,8 @@ void PlayerUI::Update() {
 	itemUI_->Update();
 	//操作UIの更新
 	operationUI_->Update();
-	//移動レバーUIの更新
-	moveLeverUI_->Update();
+	//速度UIの更新
+	velocityUI_->Update();
 	//キーUIの更新
 	keyUI_->Update();
 	//方向UIの更新
@@ -112,6 +112,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	hitIndicator_->SetPlayer(player_);
 	//アイテムUIに渡す
 	itemUI_->SetPlayer(player_);
+	//速度UIに渡す
+	velocityUI_->SetPlayer(player_);
 	//キーUIに渡す
 	keyUI_->SetPlayer(player_);
 }
@@ -152,7 +154,7 @@ void PlayerUI::DamageShaking() {
 		radar_->AttachShake(offset);
 		itemUI_->AttachShake(offset);
 		operationUI_->AttachShake(offset);
-		moveLeverUI_->AttachShake(offset);
+		velocityUI_->AttachShake(offset);
 		keyUI_->AttachShake(offset);
 		directionUI_->AttachShake(offset);
 	}
@@ -173,8 +175,8 @@ void PlayerUI::DamageBlinking() {
 		itemUI_->AttachBlinking(color);
 		//操作UI
 		operationUI_->AttachBlinking(color);
-		//移動レバーUI
-		moveLeverUI_->AttachBlinking(color);
+		//速度UI
+		velocityUI_->AttachBlinking(color);
 		//キーUI
 		keyUI_->AttachBlinking(color);
 		//方向UI
