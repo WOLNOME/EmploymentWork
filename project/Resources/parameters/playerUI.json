@@ -6,7 +6,8 @@
         "centerPos": {
             "x": 640,
             "y": 590
-        }
+        },
+        "markSize":20
     },
     "key": {
         "centerPos": {
@@ -98,5 +99,20 @@
             "x":640,
             "y":360
         }
+    },
+    "hpUI":{
+        "centerPos":{
+            "x":1010,
+            "y":630
+        },
+        "barOffset":{
+            "x":-58,
+            "y":30
+        },
+        "textOffset":{
+            "x":0,
+            "y":-30
+        }
+        
     }
 }

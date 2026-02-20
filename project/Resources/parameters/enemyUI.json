@@ -1,4 +1,25 @@
 {
+    "information": {
+        "frameDrawDistanceMax": 500.0,
+        "detailDrawDistanceMax": 250.0,
+        "bulletDistance": 150.0,
+        "baseOffset": {
+            "x": 150.0,
+            "y": -90.0
+        },
+        "levelOffset": {
+            "x": 265.0,
+            "y": -180.0
+        },
+        "rangeOffset": {
+            "x": 310.0,
+            "y": -90.0
+        },
+        "itemOffset": {
+            "x": 300.0,
+            "y": -30.0
+        }
+    },
     "hpBarSizeRatio":0.15,
     "canotaHPBarHeight":3.0,
     "keyCanotaHPBarHeight":6.0,
@@ -6,4 +27,5 @@
     "bossHPBarHeight":12.0,
     "sensingTargetSize":8.0,
     "missingTargetSize":8.0
+    
 }

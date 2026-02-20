@@ -84,6 +84,10 @@ private:
 	/// <summary>
 	/// プレイヤーマークを更新
 	/// </summary>
+	void UpdatePlayerMark();
+	/// <summary>
+	/// エネミーマークを更新
+	/// </summary>
 	void UpdateEnemyMark();
 	/// <summary>
 	/// アイテムマークを更新
@@ -121,16 +125,17 @@ private:
 	uint32_t thRadarBase_ = 0u;
 	std::unique_ptr<Norm::Sprite> radarBase_ = nullptr;
 
+	//テクスチャハンドル
+	uint32_t thCharacterMark_ = 0u;
+	uint32_t thItemMark_ = 0u;
+
 	//プレイヤーマーク
-	uint32_t thPlayerMark_ = 0u;
 	std::unique_ptr<Norm::Sprite> playerMark_ = nullptr;
 	//敵マーク
 	static const int kEnemyUINum_ = 20;
-	uint32_t thEnemyMark_ = 0u;
 	std::array<std::unique_ptr<Norm::Sprite>, kEnemyUINum_> enemyMarks_;
 	//アイテムマーク
 	static const int kItemUINum_ = 10;
-	uint32_t thItemMark_ = 0u;
 	std::array<std::unique_ptr<Norm::Sprite>, kItemUINum_> itemMarks_;
 
 };

@@ -51,7 +51,7 @@ void WeaponUI::Initialize() {
 			.font = Font::UDDegitalN_B,
 			.fontStyle = FontStyle::Normal,
 			.size = 48.0f,
-			.color = Vector4(0.0157f,0.5059f,0.4941f,1.0f),
+			.color = Vector4(0.224f,0.769f,0.584f,1.0f),
 		};
 		//基本UI
 		thBullet_ = TextureManager::GetInstance()->LoadTexture("bulletUI.png");

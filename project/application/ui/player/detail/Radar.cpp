@@ -18,7 +18,7 @@ void Radar::Initialize() {
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerUI");
 
 	//変数の初期化
-	centerPosition_ = { param_["radar"]["centerPos"]["x"],param_["radar"]["centerPos"]["y"]};
+	centerPosition_ = { param_["radar"]["centerPos"]["x"],param_["radar"]["centerPos"]["y"] };
 
 	//スプライトの生成・初期化
 
@@ -39,38 +39,37 @@ void Radar::Initialize() {
 		radarBase_->SetPosition(centerPosition_);
 		radarBase_->SetIsPlayUVScroll(true);
 	}
+	//テクスチャハンドル
+	{
+		thCharacterMark_ = TextureManager::GetInstance()->LoadTexture("whiteTriangle.png");
+		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteCircle.png");
+	}
+
 	//プレイヤー
 	{
-		thPlayerMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		playerMark_ = std::make_unique<Sprite>();
-		playerMark_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front3, thPlayerMark_);
+		playerMark_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front3, thCharacterMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
-		playerMark_->SetSize(playerMark_->GetSize() * 0.2f);
 		playerMark_->SetPosition(centerPosition_);
-		playerMark_->SetColor({ 1,0,0,1 });
+		playerMark_->SetColor({ 1,1,1,1 });
 	}
 	//エネミー
 	{
-		thEnemyMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kEnemyUINum_; i++) {
 			enemyMarks_[i] = std::make_unique<Sprite>();
-			enemyMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("enemyMark"), Order::Front3, thEnemyMark_);
+			enemyMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("enemyMark"), Order::Front3, thCharacterMark_);
 			enemyMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
-			enemyMarks_[i]->SetSize(enemyMarks_[i]->GetSize() * 0.1f);
 
 		}
 	}
 	//アイテム
 	{
-		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteHeart.png");
 		for (int i = 0; i < kItemUINum_; i++) {
 			itemMarks_[i] = std::make_unique<Sprite>();
 			itemMarks_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("itemMark"), Order::Front3, thItemMark_);
 			itemMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
-			itemMarks_[i]->SetSize(itemMarks_[i]->GetSize() * 0.1f);
 		}
 	}
-
 }
 
 void Radar::Update() {
@@ -83,6 +82,8 @@ void Radar::Update() {
 	//アイテムマネージャーがセットされていなければ警告
 	assert(itemManager_ != nullptr && "RadarにItemManagerインスタンスを渡してください");
 
+	//プレイヤーマークの更新
+	UpdatePlayerMark();
 	//エネミーマークの更新
 	UpdateEnemyMark();
 	//アイテムマークの更新
@@ -117,7 +118,7 @@ void Radar::AttachBlinking(const Vector4& _color) {
 	radarBase_->SetColor(_color);
 
 	//プレイヤーマークは引数と元の色の各成分を掛けた値を適用する
-	Vector4 playerMarkColor = { 1,0,0,1 };
+	Vector4 playerMarkColor = { 1,1,1,1 };
 	playerMark_->SetColor({ playerMarkColor.x * _color.x,playerMarkColor.y * _color.y ,playerMarkColor.z * _color.z ,playerMarkColor.w * _color.w });
 
 	//エネミーマークは現在のカラーと引数を掛けた値を適用する
@@ -129,12 +130,19 @@ void Radar::AttachBlinking(const Vector4& _color) {
 	for (int i = 0; i < kItemUINum_; i++) {
 		itemMarks_[i]->SetColor({ itemMarks_[i]->GetColor().x * _color.x,itemMarks_[i]->GetColor().y * _color.y ,itemMarks_[i]->GetColor().z * _color.z ,itemMarks_[i]->GetColor().w * _color.w });
 	}
+
 }
 
 void Radar::DebugWithImGui() {
 #ifdef _DEBUG
 
 #endif //_DEBUG
+}
+
+void Radar::UpdatePlayerMark() {
+	//本体の回転を適用
+	float playerRotated = -camera_->worldTransform.GetRotate().y + player_->GetWorldTransform().GetRotate().y;
+	playerMark_->SetRotation(playerRotated);
 }
 
 void Radar::UpdateEnemyMark() {
@@ -150,18 +158,25 @@ void Radar::UpdateEnemyMark() {
 		};
 
 	//タンクエネミー処理ラムダ
-	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex) {
-		if (!enemy || enemy->GetHP() == 0) return;
+	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex, float sizeRate) {
+		//敵がアクティブでないなら処理しない
+		if (enemy->GetState()!=BaseCharacter::State::kActive) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
-
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
-			centerPosition_.x + (rotated.x * kUnitLength_),
-			centerPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (cameraRotated.x * kUnitLength_),
+			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
+		//本体の回転を適用（カメラ回転+本体の回転）
+		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
+		//サイズ設定
+		float markSize = param_["radar"]["markSize"];
+		markSize *= sizeRate;
+		enemyMarks_[spriteIndex]->SetSize({ markSize,markSize });
 
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
 		enemyMarks_[spriteIndex]->SetColor(color);
@@ -169,17 +184,52 @@ void Radar::UpdateEnemyMark() {
 		};
 
 	//ジェットエネミー処理ラムダ
-	auto processJetEnemy = [&](IBaseJetEnemy* enemy, const Vector4& color, int& spriteIndex) {
-		if (!enemy || enemy->GetHP() == 0) return;
+	auto processJetEnemy = [&](IBaseJetEnemy* enemy, const Vector4& color, int& spriteIndex, float sizeRate) {
+		//敵がアクティブでないなら処理しない
+		if (enemy->GetState() != BaseCharacter::State::kActive) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 rotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
-			centerPosition_.x + (rotated.x * kUnitLength_),
-			centerPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (cameraRotated.x * kUnitLength_),
+			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
+		//本体の回転を適用（カメラ回転+本体の回転）
+		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
+		//サイズ設定
+		float markSize = param_["radar"]["markSize"];
+		markSize *= sizeRate;
+		enemyMarks_[spriteIndex]->SetSize({ markSize,markSize });
+
+		enemyMarks_[spriteIndex]->SetIsDisplay(true);
+		enemyMarks_[spriteIndex]->SetColor(color);
+		spriteIndex++;
+		};
+
+	//ボスエネミー処理ラムダ
+	auto processBossEnemy = [&](Boss* enemy, const Vector4& color, int& spriteIndex, float sizeRate) {
+		//敵がアクティブでないなら処理しない
+		if (enemy->GetState() != BaseCharacter::State::kActive) return;
+		//プレイヤー→敵のベクトルを作る
+		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
+		if (playerToEnemy.Length() > kSearchLength_) return;
+		//カメラの回転を適用
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
+		enemyMarks_[spriteIndex]->SetPosition({
+			centerPosition_.x + (cameraRotated.x * kUnitLength_),
+			centerPosition_.y - (cameraRotated.z * kUnitLength_)
+			});
+		//本体の回転を適用（カメラ回転+本体の回転）
+		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
+		//サイズ設定
+		float markSize = param_["radar"]["markSize"];
+		markSize *= sizeRate;
+		enemyMarks_[spriteIndex]->SetSize({ markSize,markSize });
+
 		enemyMarks_[spriteIndex]->SetIsDisplay(true);
 		enemyMarks_[spriteIndex]->SetColor(color);
 		spriteIndex++;
@@ -195,18 +245,24 @@ void Radar::UpdateEnemyMark() {
 
 	//キャノ太処理（青）
 	for (const auto& canota : enemyManager_->GetCanotas()) {
-		processEnemy(canota.get(), { 0, 0, 1, 1 }, spriteIndex);
+		processEnemy(canota.get(), { 0, 0, 1, 1 }, spriteIndex, 0.8f);
 	}
 
-	//ボス処理（紫）
-	for (const auto& boss : enemyManager_->GetKeyCanotas()) {
-		processEnemy(boss.get(), { 1, 0, 1, 1 }, spriteIndex);
+	//キーキャノ太処理（紫）
+	for (const auto& keyCanota : enemyManager_->GetKeyCanotas()) {
+		processEnemy(keyCanota.get(), { 1, 0, 1, 1 }, spriteIndex, 1.0f);
 	}
 
 	//ジェット処理（緑）
 	for (const auto& jet : enemyManager_->GetJets()) {
-		processJetEnemy(jet.get(), { 0, 1, 0, 1 }, spriteIndex);
+		processJetEnemy(jet.get(), { 0, 1, 0, 1 }, spriteIndex, 0.8f);
 	}
+
+	//ボス処理（赤）
+	for (const auto& boss : enemyManager_->GetBosses()) {
+		processBossEnemy(boss.get(), { 1, 0, 0, 1 }, spriteIndex, 1.2f);
+	}
+
 }
 
 void Radar::UpdateItemMark() {
@@ -221,15 +277,21 @@ void Radar::UpdateItemMark() {
 		};
 		};
 	//アイテム処理ラムダ
-	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex) {
+	auto processItem = [&](const Vector3& itemPos, const Vector4& color, int& spriteIndex, float sizeRate) {
 		//プレイヤー→アイテムのベクトルを作る
 		Vector3 playerToItem = itemPos - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToItem.Length() > kSearchLength_) return;
+		//カメラの回転を適用
 		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
 			centerPosition_.x + (rotated.x * kUnitLength_),
 			centerPosition_.y - (rotated.z * kUnitLength_)
 			});
+		//サイズ設定
+		float markSize = param_["radar"]["markSize"];
+		markSize *= sizeRate;
+		itemMarks_[spriteIndex]->SetSize({ markSize,markSize });
+
 		itemMarks_[spriteIndex]->SetIsDisplay(true);
 		itemMarks_[spriteIndex]->SetColor(color);
 		spriteIndex++;
@@ -240,14 +302,22 @@ void Radar::UpdateItemMark() {
 	}
 	//レーダー中心とスプライトインデックス
 	int spriteIndex = 0;
-	//回復アイテムマークの更新（白）
+	//回復アイテムマークの更新（黄緑）
 	for (const auto& healItem : itemManager_->GetHealItems()) {
 		//アイテムがアイドル状態なら次へ
 		if (healItem->GetState() == BaseCharacter::State::kIdle) {
 			continue;
 		}
 
-		processItem(healItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 1, 1 }, spriteIndex);
+		processItem(healItem->GetWorldTransform().GetWorldTranslate(), { 0.68f,1.0f,0.18f,1.0f }, spriteIndex, 0.6f);
+	}
+	//スペシャルチャージアイテムマークの更新（水色）
+	for (const auto& chargeItem : itemManager_->GetChargeItems()) {
+		//アイテムがアイドル状態なら次へ
+		if (chargeItem->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		processItem(chargeItem->GetWorldTransform().GetWorldTranslate(), { 0.4f,0.8f,1.0f,1.0f }, spriteIndex, 0.6f);
 	}
 	//キーアイテムマークの更新（黄）
 	for (const auto& keyItem : itemManager_->GetKeyItems()) {
@@ -256,7 +326,7 @@ void Radar::UpdateItemMark() {
 			continue;
 		}
 
-		processItem(keyItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex);
+		processItem(keyItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex, 0.8f);
 	}
 }
 

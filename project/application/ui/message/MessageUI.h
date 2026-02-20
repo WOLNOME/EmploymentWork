@@ -120,10 +120,14 @@ private:
 
 	//スプライト
 	static const int kMaxSpriteNum_ = 5;	//最大スプライト数
-	std::array<Norm::Sprite, kMaxSpriteNum_> sprites_;
+	std::array<std::unique_ptr<Norm::Sprite>, kMaxSpriteNum_> sprites_;
 
 	//基本のテキストパラメーター
 	Norm::TextParam baseTextParam_;
-	Norm::EdgeParam baseEdgeParam_;
+
+	//ヘッダー
+	uint32_t thHeader_;
+	std::unique_ptr<Norm::Sprite> spriteHeader_;
+
 };
 

@@ -1,5 +1,6 @@
 #include "MessageUI.h"
 #include <WinApp.h>
+#include <TextureManager.h>
 #include <SpriteManager.h>
 #include <MyMath.h>
 
@@ -11,37 +12,34 @@ void MessageUI::Initialize() {
 
 	//スプライトの生成・初期化
 	for (int i = 0; i < kMaxSpriteNum_; ++i) {
-		sprites_[i].Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("messageUI"), Order::Front2);
-		sprites_[i].SetIsDisplay(false);
-		sprites_[i].SetAnchorPoint({ 0.5f, 0.5f });
+		sprites_[i] = std::make_unique<Sprite>();
+		sprites_[i]->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("messageUI"), Order::Front2);
+		sprites_[i]->SetIsDisplay(false);
+		sprites_[i]->SetAnchorPoint({ 0.5f, 0.5f });
 	}
 
+	//ヘッダーの生成・初期化
+	{
+		Vector2 centerPos = { param_["header"]["centerPos"]["x"], param_["header"]["centerPos"]["y"] };
+		thHeader_ = TextureManager::GetInstance()->LoadTexture("messageUI.png");
+		spriteHeader_ = std::make_unique<Sprite>();
+		spriteHeader_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("messageUIHeader"), Order::Front2, thHeader_);
+		spriteHeader_->SetAnchorPoint({ 0.5f, 0.5f });
+		spriteHeader_->SetPosition(centerPos);
+	}
+
+
 	//基本のテキストパラメーターを設定
-	auto textColor = param_["textColor"];
+	auto textColor = param_["text"]["color"];
 	baseTextParam_.text = L"";
-	baseTextParam_.font = (Font)param_["textFont"];
-	baseTextParam_.fontStyle = (FontStyle)param_["textFontStyle"];
-	baseTextParam_.size = param_["textSize"];
+	baseTextParam_.font = (Font)param_["text"]["font"];
+	baseTextParam_.fontStyle = (FontStyle)param_["text"]["fontStyle"];
+	baseTextParam_.size = param_["text"]["size"];
 	baseTextParam_.color = Vector4(
 		textColor[0].get<float>(),
 		textColor[1].get<float>(),
 		textColor[2].get<float>(),
 		textColor[3].get<float>()
-	);
-	//基本のエッジパラメーターを設定
-	auto edgeSlideRate = param_["edgeSlideRate"];
-	auto edgeColor = param_["edgeColor"];
-	baseEdgeParam_.width = param_["edgeWidth"];
-	baseEdgeParam_.isEdgeDisplay = 1;
-	baseEdgeParam_.slideRate = Vector2(
-		edgeSlideRate[0].get<float>(),
-		edgeSlideRate[1].get<float>()
-	);
-	baseEdgeParam_.color = Vector4(
-		edgeColor[0].get<float>(),
-		edgeColor[1].get<float>(),
-		edgeColor[2].get<float>(),
-		edgeColor[3].get<float>()
 	);
 }
 
@@ -83,7 +81,6 @@ uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bo
 	newMessage.isFinished = false;
 	newMessage.isBlinking = _isBlinking;
 	newMessage.textHandle = TextTextureManager::GetInstance()->LoadTextTexture(baseTextParam_);
-	TextTextureManager::GetInstance()->EditEdgeParam(newMessage.textHandle, baseEdgeParam_);
 	messages_.push_back(newMessage);
 
 	//メッセージのハンドルを返す
@@ -179,7 +176,6 @@ void MessageUI::UpdateMessage() {
 			float disappearTime = param_["disappearTime"];
 			float alpha = message.disappearTimer / disappearTime;
 			TextTextureManager::GetInstance()->EditTextColor(message.textHandle, { baseTextParam_.color.x, baseTextParam_.color.y, baseTextParam_.color.z, alpha });
-			TextTextureManager::GetInstance()->EditEdgeColor(message.textHandle, { baseEdgeParam_.color.x, baseEdgeParam_.color.y, baseEdgeParam_.color.z, alpha });
 
 			break;
 		}
@@ -195,19 +191,24 @@ void MessageUI::UpdateMessage() {
 
 void MessageUI::UpdateSprite() {
 	int index = 0;
+
+	float interval = param_["text"]["interval"];
 	//登録されたメッセージのうち先入れされたメッセージを表示する処理
 	for (auto it = messages_.rbegin(); it != messages_.rend(); ++it) {
 		if (index >= kMaxSpriteNum_) break;
 
-		sprites_[index].SetIsDisplay(true);
-		sprites_[index].SetPosition(Vector2(WinApp::kClientWidth / 2.0f, WinApp::kClientHeight / 2.0f - 240.0f + index * 35.0f)); // 上から下に並べる
-		sprites_[index].SetTexture(it->textHandle);
+		Vector2 centerPos = { param_["text"]["centerPos"]["x"], param_["text"]["centerPos"]["y"] };
+		centerPos.y += index * interval; // スプライト同士の間隔を空ける
+
+		sprites_[index]->SetIsDisplay(true);
+		sprites_[index]->SetPosition(centerPos);
+		sprites_[index]->SetTexture(it->textHandle);
 
 		++index;
 	}
 
 	// 残りのスプライトを非表示にする
 	for (; index < kMaxSpriteNum_; ++index) {
-		sprites_[index].SetIsDisplay(false);
+		sprites_[index]->SetIsDisplay(false);
 	}
 }

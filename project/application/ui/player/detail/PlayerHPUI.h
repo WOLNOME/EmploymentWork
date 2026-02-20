@@ -3,6 +3,7 @@
 #include <array>
 #include <memory>
 #include <JsonUtil.h>
+#include <Handle.h>
 
 class Player;
 
@@ -56,10 +57,21 @@ private:
 	///		メンバ変数
 	/// ============================== ///
 
-	//プレイヤーのパラメーター
+	//パラメーター
 	json param_;
+	//プレイヤーのパラメーター
+	json playerParam_;
 
-	std::array<uint32_t, 2> textureHandles_;
-	std::array<std::unique_ptr<Norm::Sprite>, 2> sprites_;
+	//HP基盤
+	uint32_t thBase_;
+	std::unique_ptr<Norm::Sprite> spriteBase_;
+
+	//HPバー
+	std::array<uint32_t, 2> thBar_;
+	std::array<std::unique_ptr<Norm::Sprite>, 2> spriteBar_;
+
+	//HPテキスト
+	Norm::Handle thHPText_;
+	std::unique_ptr<Norm::Sprite> spriteHPText_;
 };
 

@@ -49,12 +49,8 @@ private:
 	///		メンバ関数（private:）
 	/// ============================== ///
 
-	//フレームの処理
-	void FrameProcess();
-	//詳細の処理
-	void DetailProcess();
-
-
+	//情報処理
+	void InformationProcess();
 
 	/// ============================== ///
 	///		インスタンス
