@@ -4,6 +4,7 @@
 //アプリケーション
 #include "detail/EnemyHPUI.h"
 #include "detail/EnemyReactionUI.h"
+#include "detail/EnemyInformationUI.h"
 
 //前方宣言（エンジン）
 namespace Norm {
@@ -69,6 +70,8 @@ private:
 	std::unique_ptr<EnemyHPUI> enemyHPUI_ = nullptr;
 	//リアクションUI
 	std::unique_ptr<EnemyReactionUI> enemyReactionUI_ = nullptr;
+	//情報UI
+	std::unique_ptr<EnemyInformationUI> enemyInformationUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

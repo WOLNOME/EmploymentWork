@@ -21,9 +21,9 @@ void EnemyHPUI::Initialize() {
 		for (int j = 0; j < 2; j++) {
 			sprites_[i][j] = std::make_unique<Sprite>();
 			if (j == 0)
-				sprites_[i][j]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back1, textureHandles_[j]);
-			else
 				sprites_[i][j]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back2, textureHandles_[j]);
+			else
+				sprites_[i][j]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("EnemyHPBar"), Order::Back3, textureHandles_[j]);
 			sprites_[i][j]->SetSize({
 				sprites_[i][j]->GetSize().x * hpBarSizeRatio,
 				sprites_[i][j]->GetSize().y * hpBarSizeRatio
@@ -55,7 +55,7 @@ void EnemyHPUI::Update() {
 
 	//共通描画用ラムダ式
 	auto drawHPBar = [&](const Vector3& worldPos, float hpRate) {
-		//HPバーの表示率が0以下なら描画しない
+		//HPバーの番号が最大値を超えていたら描画しない
 		if (hpBarIndex >= kNumHPBar) return;
 
 		Vector3 clipPos = MyMath::Transform(worldPos, camera_->GetViewProjectionMatrix());

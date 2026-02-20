@@ -459,9 +459,6 @@
     <ClCompile Include="engine\behaviorTree\leafNode\LeafNodeBase.cpp">
       <Filter>application\behaviorTree\rollNodeBase</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\MoveLever.cpp">
-      <Filter>application\ui\player\detail</Filter>
-    </ClCompile>
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
@@ -527,6 +524,8 @@
     <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
     <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
     <ClCompile Include="application\ui\player\detail\DirectionUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\DamageUI.cpp" />
+    <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -934,9 +933,6 @@
     <ClInclude Include="engine\behaviorTree\leafNode\LeafNodeBase.h">
       <Filter>application\behaviorTree\rollNodeBase</Filter>
     </ClInclude>
-    <ClInclude Include="application\ui\player\detail\MoveLever.h">
-      <Filter>application\ui\player\detail</Filter>
-    </ClInclude>
     <ClInclude Include="application\ui\player\detail\OperationUI.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
@@ -1002,6 +998,8 @@
     <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
     <ClInclude Include="application\ui\player\detail\KeyUI.h" />
     <ClInclude Include="application\ui\player\detail\DirectionUI.h" />
+    <ClInclude Include="application\ui\player\detail\DamageUI.h" />
+    <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

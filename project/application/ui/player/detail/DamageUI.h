@@ -7,9 +7,9 @@
 #include <application/object/character/player/player.h>
 
 /// <summary>
-/// 戦車内装のスプライトを管理するクラス
+/// ダメージ表現スプライトを管理するクラス
 /// </summary>
-class DecorativeUI {
+class DamageUI {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~DecorativeUI();
+	~DamageUI();
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -60,12 +60,17 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
-	
+
 	//パラメーター
 	json param_;
 
-	uint32_t textureHandle_;
-	std::unique_ptr<Norm::Sprite> sprite_;
+	//窓ガラスが割れている表現
+	uint32_t thGlass_;
+	std::unique_ptr<Norm::Sprite> spriteGrass_;
+
+	//死亡時のガラス演出
+	uint32_t thDeathDir_;
+	std::unique_ptr<Norm::Sprite> spriteDeathDir_;
 
 };
 

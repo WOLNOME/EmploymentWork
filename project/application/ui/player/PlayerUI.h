@@ -12,6 +12,7 @@
 #include "detail/VelocityUI.h"
 #include "detail/KeyUI.h"
 #include "detail/DirectionUI.h"
+#include "detail/DamageUI.h"
 
 //前方宣言（エンジン）
 namespace Norm {
@@ -128,6 +129,8 @@ private:
 	std::unique_ptr<KeyUI> keyUI_ = nullptr;
 	//方向UI
 	std::unique_ptr<DirectionUI> directionUI_ = nullptr;
+	//ダメージUI
+	std::unique_ptr<DamageUI> damageUI_ = nullptr;
 
 	//パラメーター
 	json param_;

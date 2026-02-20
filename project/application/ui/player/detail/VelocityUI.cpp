@@ -44,7 +44,7 @@ void VelocityUI::Initialize() {
 			.font = Font::UDDegitalN_B,
 			.fontStyle = FontStyle::Normal,
 			.size = 32.0f,
-			.color = Vector4(0.0549f,0.7490f,0.4745f,1.0f),
+			.color = Vector4(0.224f,0.769f,0.584f,1.0f),
 		};
 		thNumText_ = TextTextureManager::GetInstance()->LoadTextTexture(numTextParam);
 		spriteNumText_ = std::make_unique<Sprite>();
@@ -94,7 +94,7 @@ void VelocityUI::Update() {
 		spriteNeedle_->SetRotation(rotation);
 
 		//数値テキストを更新
-		TextTextureManager::GetInstance()->EditTextString(thNumText_, L"{:.1f}km/h", forwardSpeed);
+		TextTextureManager::GetInstance()->EditTextString(thNumText_, L"{:02.0f}km/h", forwardSpeed);
 	}
 
 }

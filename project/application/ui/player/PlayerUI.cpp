@@ -57,6 +57,10 @@ void PlayerUI::Initialize() {
 	directionUI_ = std::make_unique<DirectionUI>();
 	directionUI_->Initialize();
 
+	//ダメージUI
+	damageUI_ = std::make_unique<DamageUI>();
+	damageUI_->Initialize();
+
 }
 
 void PlayerUI::Update() {
@@ -83,6 +87,8 @@ void PlayerUI::Update() {
 	keyUI_->Update();
 	//方向UIの更新
 	directionUI_->Update();
+	//ダメージUIの更新
+	damageUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -116,6 +122,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	velocityUI_->SetPlayer(player_);
 	//キーUIに渡す
 	keyUI_->SetPlayer(player_);
+	//ダメージUIに渡す
+	damageUI_->SetPlayer(player_);
 }
 
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
@@ -157,6 +165,8 @@ void PlayerUI::DamageShaking() {
 		velocityUI_->AttachShake(offset);
 		keyUI_->AttachShake(offset);
 		directionUI_->AttachShake(offset);
+		reticleUI_->AttachShake(offset);
+		damageUI_->AttachShake(offset);
 	}
 }
 
@@ -181,6 +191,10 @@ void PlayerUI::DamageBlinking() {
 		keyUI_->AttachBlinking(color);
 		//方向UI
 		directionUI_->AttachBlinking(color);
+		//レティクルUI
+		reticleUI_->AttachBlinking(color);
+		//ダメージUI
+		damageUI_->AttachBlinking(color);
 
 		};
 

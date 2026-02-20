@@ -12,6 +12,9 @@ void EnemyUI::Initialize() {
 	//リアクションUIの生成・初期化
 	enemyReactionUI_ = std::make_unique<EnemyReactionUI>();
 	enemyReactionUI_->Initialize();
+	//情報UIの生成・初期化
+	enemyInformationUI_ = std::make_unique<EnemyInformationUI>();
+	enemyInformationUI_->Initialize();
 
 }
 
@@ -20,6 +23,8 @@ void EnemyUI::Update() {
 	enemyHPUI_->Update();
 	//リアクションUIの更新
 	enemyReactionUI_->Update();
+	//情報UIの更新
+	enemyInformationUI_->Update();
 }
 
 void EnemyUI::DebugWithImGui() {
@@ -28,11 +33,12 @@ void EnemyUI::DebugWithImGui() {
 void EnemyUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	//エネミーマネージャーのセット
 	enemyHPUI_->SetEnemyManager(_enemyManager);
+	enemyInformationUI_->SetEnemyManager(_enemyManager);
 }
 
 void EnemyUI::SetGameCamera(GameCamera* _camera) {
 	//カメラのセット
 	enemyHPUI_->SetGameCamera(_camera);
 	enemyReactionUI_->SetGameCamera(_camera);
-
+	enemyInformationUI_->SetGameCamera(_camera);
 }

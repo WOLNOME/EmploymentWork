@@ -10,8 +10,8 @@
     },
     "key": {
         "centerPos": {
-            "x": 400,
-            "y": 600
+            "x": 360,
+            "y": 630
         }
     },
     "direction": {
@@ -40,7 +40,7 @@
     "cannonUI": {
         "centerPos": {
             "x": 1020,
-            "y": 180
+            "y": 160
         },
         "reloadUIOffset":{
             "x":120,
@@ -50,7 +50,7 @@
     "bulletUI": {
         "centerPos": {
             "x": 1020,
-            "y": 320
+            "y": 300
         },
         "magazineUIOffset":{
             "x":20,
@@ -64,13 +64,13 @@
     "specialUI": {
         "centerPos": {
             "x": 1020,
-            "y": 460
+            "y": 440
         }
     },
     "velocityUI":{
         "centerPos":{
-            "x":880,
-            "y":600
+            "x":850,
+            "y":630
         },
         "needleOffset":{
             "x":0,
@@ -79,6 +79,24 @@
         "numTextOffset":{
             "x":0,
             "y":-30
+        }
+    },
+    "decorativeUI":{
+        "centerPos":{
+            "x":640,
+            "y":360
+        }
+    },
+    "reticle":{
+        "centerPos":{
+            "x":640,
+            "y":360
+        }
+    },
+    "damageUI":{
+        "centerPos":{
+            "x":640,
+            "y":360
         }
     }
 }
