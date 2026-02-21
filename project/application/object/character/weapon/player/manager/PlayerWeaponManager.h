@@ -8,14 +8,9 @@
 #include "application/object/character/weapon/player/PlayerCannon.h"
 #include "application/object/character/weapon/player/PlayerSpecial.h"
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
-
 //前方宣言（アプリケーション）
+class CameraManager;
 class Player;
-
 
 /// <summary>
 /// プレイヤーの武器（砲弾・銃弾）の管理を行うクラスです。
@@ -80,10 +75,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラを設定する
+	/// カメラマネージャーを設定する
 	/// </summary>
-	/// <param name="_camera">設定するゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; };
+	/// <param name="_cameraManager">設定するカメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; };
 	/// <summary>
 	/// プレイヤーを設定する
 	/// </summary>
@@ -120,7 +115,7 @@ private:
 	/// ============================== ///
 
 	//カメラ
-	Norm::GameCamera* camera_ = nullptr;
+	CameraManager* cameraManager_ = nullptr;
 	//プレイヤー
 	Player* player_ = nullptr;
 

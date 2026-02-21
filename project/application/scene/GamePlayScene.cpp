@@ -13,12 +13,17 @@ void GamePlayScene::Initialize() {
 	input_->SetIsMouseDisplay(false);
 	input_->SetIsMouseFixed(true);
 
-	//カメラの生成・初期化
-	camera_ = std::make_unique<GameCamera>();
-	camera_->Initialize();
-	camera_->SetFarClip(2000.0f);
-	camera_->worldTransform.SetRotate({ 0.15f,0.0f,0.0f });
-	camera_->worldTransform.SetTranslate({ 0.0f,20.0f,-80.0f });
+	//カメラマネージャーの生成・初期化
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->Initialize();
+
+	//ゲーム用カメラを作ってマネージャーに登録する
+	std::unique_ptr<GameCamera> gameCamera = std::make_unique<GameCamera>();
+	gameCamera->Initialize();
+	gameCamera->SetFarClip(2000.0f);
+	cameraManager_->RegistCamera("Game", std::move(gameCamera));
+	//アクティブカメラをゲーム用カメラにする
+	cameraManager_->SetActiveCamera("Game");
 
 	//ライトの生成・初期化＆登録
 	dirLight_ = std::make_unique<DirectionalLight>();
@@ -68,15 +73,11 @@ void GamePlayScene::Initialize() {
 	messageUI_->Initialize();
 	pauseSystem_->Initialize();
 
-	//カメラのセット
-	Object3dManager::GetInstance()->SetCamera(camera_.get());
-	LineManager::GetInstance()->SetCamera(camera_.get());
-	ParticleManager::GetInstance()->SetCamera(camera_.get());
-	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
-	player_->SetGameCamera(camera_.get());
-	playerWeaponManager_->SetGameCamera(camera_.get());
-	playerUI_->SetGameCamera(camera_.get());
-	enemyUI_->SetGameCamera(camera_.get());
+	//カメラマネージャーのセット
+	player_->SetCameraManager(cameraManager_.get());
+	playerWeaponManager_->SetCameraManager(cameraManager_.get());
+	playerUI_->SetCameraManager(cameraManager_.get());
+	enemyUI_->SetCameraManager(cameraManager_.get());
 
 	//ライトのセット
 	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
@@ -105,10 +106,10 @@ void GamePlayScene::Initialize() {
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
 	//必要なインスタンスの更新
-	playerUI_->Update();
 	player_->Update();
 	enemyManager_->Update();
-	camera_->Update();
+	playerUI_->Update();
+	cameraManager_->Update();
 }
 
 void GamePlayScene::Finalize() {
@@ -174,7 +175,7 @@ void GamePlayScene::Update() {
 	itemManager_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
-	camera_->Update();
+	cameraManager_->Update();
 
 	//カメラの更新後の処理（スクリーン座標を参照したいインスタンスの更新）
 	enemyUI_->Update();
@@ -184,7 +185,7 @@ void GamePlayScene::DebugWithImGui() {
 	//ImGui
 #ifdef _DEBUG
 	//カメラのImGui
-	camera_->DebugWithImGui();
+	cameraManager_->DebugWithImGui();
 
 	//レベルローダーのImGui
 	levelLoader_->DebugWithImGui();

@@ -1,6 +1,5 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
-#include "GameCamera.h"
 #include "Input.h"
 #include "Object3d.h"
 #include "Sprite.h"
@@ -14,6 +13,7 @@
 #include <application/system/DeathDirection.h>
 
 //前方宣言（アプリケーション）
+class CameraManager;
 class LevelLoader;
 class PlayerWeaponManager;
 class MessageUI;
@@ -109,10 +109,10 @@ public:
 	/// <returns>反射速度</returns>
 	const Norm::Vector3& GetReflectVelocity() { return reflectVelocity_; }
 	/// <summary>
-	/// カメラを取得する
+	/// カメラマネージャーを取得する
 	/// </summary>
-	/// <returns>カメラ</returns>
-	Norm::GameCamera* GetCamera()  { return camera_; }
+	/// <returns>カメラマネージャー</returns>
+	CameraManager* GetCameraManager()  { return cameraManager_; }
 	/// <summary>
 	/// メッセージUIを取得する
 	/// </summary>
@@ -163,11 +163,8 @@ public:
 	/// <summary>
 	/// ゲームカメラを設定する
 	/// </summary>
-	/// <param name="_camera">設定するゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera) {
-		camera_ = _camera;
-		deathDirection_->SetGameCamera(_camera);
-	}
+	/// <param name="_cameraManager">設定するゲームカメラ</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 	/// <summary>
 	/// メッセージUIを設定する
 	/// </summary>
@@ -201,8 +198,8 @@ private:
 
 	//インプット
 	Norm::Input* input_ = nullptr;
-	//カメラ
-	Norm::GameCamera* camera_ = nullptr;
+	//カメラマネージャー
+	CameraManager* cameraManager_ = nullptr;
 	//プレイヤー武器マネージャー
 	PlayerWeaponManager* playerWeaponManager_ = nullptr;
 	//メッセージUI

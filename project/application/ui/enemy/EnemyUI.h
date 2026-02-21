@@ -6,11 +6,8 @@
 #include "detail/EnemyReactionUI.h"
 #include "detail/EnemyInformationUI.h"
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
 //前方宣言（アプリケーション）
+class CameraManager;
 class EnemyManager;
 
 
@@ -56,10 +53,10 @@ public:
 	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager);
 	/// <summary>
-	/// ゲームカメラのセット
+	/// カメラマネージャーのセット
 	/// </summary>
-	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera);
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 
 private:
 	/// ============================== ///

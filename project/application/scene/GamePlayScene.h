@@ -1,8 +1,8 @@
 #pragma once
 #include "BaseScene.h"
-#include "GameCamera.h"
 
 //アプリケーション
+#include "application/system/CameraManager.h"
 #include "application/object/level/loader/LevelLoader.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
@@ -53,8 +53,8 @@ private:
 	//インプット
 	Norm::Input* input_ = nullptr;
 
-	//ゲーム用カメラ
-	std::unique_ptr<Norm::GameCamera> camera_ = nullptr;
+	//カメラマネージャー
+	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
 
 	//タイムスケールマネージャー
 	std::unique_ptr<TimeScaleManager> timeScaleManager_ = nullptr;

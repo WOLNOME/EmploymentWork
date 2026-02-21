@@ -1,10 +1,10 @@
 #pragma once
-#include "GameCamera.h"
 #include "CombinedParticle.h"
 #include "Vector3.h"
 #include <MyMath.h>
 #include <memory>
 
+class CameraManager;
 
 /// <summary>
 /// プレイヤーの死亡演出処理
@@ -49,10 +49,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラの設定
+	/// カメラマネージャーの設定
 	/// </summary>
-	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _gameCamera) { camera_ = _gameCamera; }
+	/// <param name="_cameraManaqer">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManaqer) { cameraManaqer_ = _cameraManaqer; }
 	/// <summary>
 	/// 演出フラグの設定
 	/// </summary>
@@ -77,8 +77,8 @@ private:
 	///		インスタンス
 	/// ============================== ///
 
-	//ゲームカメラ
-	Norm::GameCamera* camera_ = nullptr;
+	//カメラマネージャー
+	CameraManager* cameraManaqer_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

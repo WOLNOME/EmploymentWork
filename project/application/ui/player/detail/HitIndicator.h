@@ -3,11 +3,9 @@
 #include <Vector3.h>
 #include <memory>
 #include <array>
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
+
 //前方宣言（アプリケーション）
+class CameraManager;
 class Player;
 
 /// <summary>
@@ -60,10 +58,10 @@ public:
 	/// <param name="_player">プレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
 	/// <summary>
-	/// ゲームカメラの設定
+	/// カメラマネージャーの設定
 	/// </summary>
-	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 private:
 	/// ============================== ///
@@ -71,7 +69,7 @@ private:
 	/// ============================== ///
 
 	Player* player_ = nullptr;
-	Norm::GameCamera* gameCamera_ = nullptr;
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

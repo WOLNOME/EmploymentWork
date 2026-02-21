@@ -4,11 +4,8 @@
 #include <array>
 #include <memory>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
 //前方宣言（アプリケーション）
+class CameraManager;
 class EnemyManager;
 
 /// <summary>
@@ -39,19 +36,19 @@ public:
 	/// <param name="_enemyManager">エネミーマネージャー</param>
 	void SetEnemyManager(EnemyManager* _enemyManager) { enemyManager_ = _enemyManager; }
 	/// <summary>
-	/// ゲームカメラのセット
+	/// カメラマネージャーのセット
 	/// </summary>
-	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; }
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 private:
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
+	//カメラマネージャー
+	CameraManager* cameraManager_ = nullptr;
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
-	//カメラ
-	Norm::GameCamera* camera_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

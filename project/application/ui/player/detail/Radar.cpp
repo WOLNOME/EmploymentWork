@@ -6,6 +6,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/system/CameraManager.h>
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 #include <application/object/character/item/manager/ItemManager.h>
@@ -73,8 +74,8 @@ void Radar::Initialize() {
 }
 
 void Radar::Update() {
-	//カメラがセットされていなければ警告
-	assert(camera_ != nullptr && "RadarにBaseCameraインスタンスを渡してください");
+	//カメラマネージャーがセットされていなければ警告
+	assert(cameraManager_ != nullptr && "RadarにCameraManagerインスタンスを渡してください");
 	//プレイヤーがセットされていなければ警告
 	assert(player_ != nullptr && "RadarにPlayerインスタンスを渡してください");
 	//エネミーマネージャーがセットされていなければ警告
@@ -141,7 +142,7 @@ void Radar::DebugWithImGui() {
 
 void Radar::UpdatePlayerMark() {
 	//本体の回転を適用
-	float playerRotated = -camera_->worldTransform.GetRotate().y + player_->GetWorldTransform().GetRotate().y;
+	float playerRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + player_->GetWorldTransform().GetRotate().y;
 	playerMark_->SetRotation(playerRotated);
 }
 
@@ -165,13 +166,13 @@ void Radar::UpdateEnemyMark() {
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
 			centerPosition_.x + (cameraRotated.x * kUnitLength_),
 			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
 		//本体の回転を適用（カメラ回転+本体の回転）
-		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		float subjectRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
 		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
 		//サイズ設定
 		float markSize = param_["radar"]["markSize"];
@@ -191,13 +192,13 @@ void Radar::UpdateEnemyMark() {
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
 			centerPosition_.x + (cameraRotated.x * kUnitLength_),
 			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
 		//本体の回転を適用（カメラ回転+本体の回転）
-		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		float subjectRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
 		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
 		//サイズ設定
 		float markSize = param_["radar"]["markSize"];
@@ -217,13 +218,13 @@ void Radar::UpdateEnemyMark() {
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 cameraRotated = rotateAttach(playerToEnemy, camera_->worldTransform.GetRotate().y);
+		Vector3 cameraRotated = rotateAttach(playerToEnemy, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 		enemyMarks_[spriteIndex]->SetPosition({
 			centerPosition_.x + (cameraRotated.x * kUnitLength_),
 			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
 		//本体の回転を適用（カメラ回転+本体の回転）
-		float subjectRotated = -camera_->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
+		float subjectRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + enemy->GetWorldTransform().GetRotate().y;
 		enemyMarks_[spriteIndex]->SetRotation(subjectRotated);
 		//サイズ設定
 		float markSize = param_["radar"]["markSize"];
@@ -282,7 +283,7 @@ void Radar::UpdateItemMark() {
 		Vector3 playerToItem = itemPos - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToItem.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 rotated = rotateAttach(playerToItem, camera_->worldTransform.GetRotate().y);
+		Vector3 rotated = rotateAttach(playerToItem, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
 			centerPosition_.x + (rotated.x * kUnitLength_),
 			centerPosition_.y - (rotated.z * kUnitLength_)
@@ -332,5 +333,5 @@ void Radar::UpdateItemMark() {
 
 void Radar::UpdateCompass() {
 	//カメラの回転をコンパスにそのまま適用
-	compass_->SetRotation(-camera_->worldTransform.GetRotate().y);
+	compass_->SetRotation(-cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 }

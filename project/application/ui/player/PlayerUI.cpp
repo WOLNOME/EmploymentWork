@@ -4,6 +4,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/system/CameraManager.h>
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 
@@ -136,23 +137,23 @@ void PlayerUI::SetItemManager(ItemManager* _itemManager) {
 	radar_->SetItemManager(_itemManager);
 }
 
-void PlayerUI::SetGameCamera(GameCamera* _camera) {
-	camera_ = _camera;
+void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
+	cameraManager_ = _cameraManager;
 	//レーダーUIに渡す
-	radar_->SetGameCamera(camera_);
+	radar_->SetCameraManager(cameraManager_);
 	//被弾インジケーターUIに渡す
-	hitIndicator_->SetGameCamera(camera_);
+	hitIndicator_->SetCameraManager(cameraManager_);
 	//方向UIに渡す
-	directionUI_->SetGameCamera(camera_);
+	directionUI_->SetCameraManager(cameraManager_);
 }
 
 void PlayerUI::DamageShaking() {
 	//もしカメラが揺れてたらUIも一部揺らす(オフセットはそろえる)
-	if (camera_->GetIsShake()) {
+	if (cameraManager_->GetActiveCamera()->GetIsShake()) {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
 		int shakePower = param_["shakePower"];
-		std::uniform_int_distribution<int> dist(int(-shakePower * camera_->GetShakePower()), int(shakePower * camera_->GetShakePower()));
+		std::uniform_int_distribution<int> dist(int(-shakePower * cameraManager_->GetActiveCamera()->GetShakePower()), int(shakePower * cameraManager_->GetActiveCamera()->GetShakePower()));
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 		//設定

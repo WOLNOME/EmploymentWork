@@ -7,11 +7,8 @@
 #include <cstdint>
 #include <memory>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class BaseCamera;
-}
 //前方宣言（アプリケーション）
+class CameraManager;
 class Player;
 class EnemyManager;
 class ItemManager;
@@ -55,10 +52,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラを設定する
+	/// カメラマネージャーを設定する
 	/// </summary>
-	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(Norm::BaseCamera* _camera) { camera_ = _camera; }
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 	/// <summary>
 	/// プレイヤーを設定する
 	/// </summary>
@@ -102,7 +99,7 @@ private:
 	///		インスタンス
 	/// ============================== ///
 
-	Norm::BaseCamera* camera_ = nullptr;
+	CameraManager* cameraManager_ = nullptr;
 	Player* player_ = nullptr;
 	EnemyManager* enemyManager_ = nullptr;
 	ItemManager* itemManager_ = nullptr;

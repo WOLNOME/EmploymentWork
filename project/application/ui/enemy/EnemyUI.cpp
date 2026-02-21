@@ -1,5 +1,8 @@
 #include "EnemyUI.h"
 
+//アプリケーション
+#include "application/system/CameraManager.h"
+
 using namespace Norm;
 
 void EnemyUI::Initialize() {
@@ -36,9 +39,9 @@ void EnemyUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	enemyInformationUI_->SetEnemyManager(_enemyManager);
 }
 
-void EnemyUI::SetGameCamera(GameCamera* _camera) {
+void EnemyUI::SetCameraManager(CameraManager* _cameraManager) {
 	//カメラのセット
-	enemyHPUI_->SetGameCamera(_camera);
-	enemyReactionUI_->SetGameCamera(_camera);
-	enemyInformationUI_->SetGameCamera(_camera);
+	enemyHPUI_->SetCameraManager(_cameraManager);
+	enemyReactionUI_->SetCameraManager(_cameraManager);
+	enemyInformationUI_->SetCameraManager(_cameraManager);
 }

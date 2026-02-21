@@ -38,11 +38,6 @@ void EnemyManager::Initialize() {
 		bosses_[i]->Initialize();
 		bosses_[i]->SetEnemyManager(this);
 	}
-
-	//↓仮処理
-
-	//ボスをスポーンさせる
-	BossSpawn({ 0.0f,0.0f,-500.0f }, { 0.0f,3.14f,0.0f });
 }
 
 void EnemyManager::Update() {

@@ -3,6 +3,9 @@
 #include <CombinedParticleManager.h>
 #include <random>
 
+//アプリケーション
+#include "application/system/CameraManager.h"
+
 using namespace Norm;
 
 void DeathDirection::Initialize() {
@@ -12,8 +15,8 @@ void DeathDirection::Initialize() {
 }
 
 void DeathDirection::Update() {
-	//カメラチェック
-	assert(camera_ != nullptr && "カメラに値が入っていません。");
+	//カメラマネージャーチェック
+	assert(cameraManaqer_ != nullptr && "カメラマネージャーがセットされていません");
 
 	//カメラの操作
 	CameraControl();
@@ -53,7 +56,7 @@ void DeathDirection::CameraControl() {
 		}
 
 		//カメラのシェイクを開始する
-		camera_->RegistShake(kTime_, 0.5f);
+		cameraManaqer_->GetActiveCamera()->RegistShake(kTime_, 0.5f);
 	}
 
 	//タイマーを進める
@@ -65,8 +68,8 @@ void DeathDirection::CameraControl() {
 	}
 
 	//新トランスフォームを定義
-	Vector3 newTranslate = camera_->worldTransform.GetTranslate();
-	Vector3 newRotate = camera_->worldTransform.GetRotate();
+	Vector3 newTranslate = cameraManaqer_->GetActiveCamera()->worldTransform.GetTranslate();
+	Vector3 newRotate = cameraManaqer_->GetActiveCamera()->worldTransform.GetRotate();
 
 	//カメラの移動処理
 	{
@@ -98,8 +101,8 @@ void DeathDirection::CameraControl() {
 	}
 
 	//新トランスフォームをセット
-	camera_->worldTransform.SetTranslate(newTranslate);
-	camera_->worldTransform.SetRotate(newRotate);
+	cameraManaqer_->GetActiveCamera()->worldTransform.SetTranslate(newTranslate);
+	cameraManaqer_->GetActiveCamera()->worldTransform.SetRotate(newRotate);
 
 }
 
@@ -114,7 +117,7 @@ void DeathDirection::ParticeDir() {
 
 	//エミッターの座標を常にカメラへ
 	TransformEuler transform = particle_->GetBaseTransform();
-	transform.translate = camera_->worldTransform.GetWorldTranslate();
+	transform.translate = cameraManaqer_->GetActiveCamera()->worldTransform.GetWorldTranslate();
 	particle_->SetBaseTransform(transform);
 
 }

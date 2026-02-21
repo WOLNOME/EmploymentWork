@@ -54,13 +54,7 @@ namespace Norm {
 		/// <summary>
 		/// 次のシーンのセット
 		/// </summary>
-		/// <param name="nextSceneName"></param>
-		/// <param name="inType"></param>
-		/// <param name="outType"></param>
-		/// <param name="option"></param>
-		/// <param name="time"></param>
-		/// <param name="_textureHandle"></param>
-		void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u);
+		void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u, bool _isTemporary = false);
 
 	private:
 		/// ============================== ///
@@ -80,6 +74,9 @@ namespace Norm {
 		std::unique_ptr<BaseScene> scene_ = nullptr;
 		//次のシーン
 		std::unique_ptr<BaseScene> nextScene_ = nullptr;
+		//キープシーン
+		std::unique_ptr<BaseScene> keepScene_ = nullptr;
+
 		//シーンファクトリー
 		std::unique_ptr<AbstractSceneFactory> sceneFactory_ = nullptr;
 		//シーン遷移アニメーション

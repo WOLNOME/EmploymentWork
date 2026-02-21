@@ -1,6 +1,7 @@
 #include "PlayerWeaponManager.h"
 
 //アプリケーション
+#include "application/system/CameraManager.h"
 #include "application/object/character/player/Player.h"
 
 using namespace Norm;
@@ -67,7 +68,7 @@ void PlayerWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _i
 	//スポーン
 	SpawnFromPool(cannons_, [&](PlayerCannon* cannon) {
 		cannon->Spawn(_initPos, _initDirection);
-		camera_->RegistShake(0.2f, 0.15f);
+		cameraManager_->GetActiveCamera()->RegistShake(0.2f, 0.15f);
 		});
 }
 
@@ -75,7 +76,7 @@ void PlayerWeaponManager::SpawnBullet(const Vector3& _initPos, const Vector3& _i
 	//スポーン
 	SpawnFromPool(bullets_, [&](PlayerBullet* bullet) {
 		bullet->Spawn(_initPos, _initDirection);
-		camera_->RegistShake(0.15f, 0.1f);
+		cameraManager_->GetActiveCamera()->RegistShake(0.15f, 0.1f);
 		});
 }
 
@@ -83,6 +84,6 @@ void PlayerWeaponManager::SpawnSpecial(const Norm::Vector3& _initPos, const Norm
 	//スポーン
 	SpawnFromPool(specials_, [&](PlayerSpecial* special) {
 		special->Spawn(_initPos, _initDirection);
-		camera_->RegistShake(0.4f, 0.3f);
+		cameraManager_->GetActiveCamera()->RegistShake(0.4f, 0.3f);
 		});
 }

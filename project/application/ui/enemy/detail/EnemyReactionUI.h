@@ -6,10 +6,8 @@
 #include <array>
 #include <memory>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
+//前方宣言（アプリケーション）
+class CameraManager;
 
 /// <summary>
 /// 敵のリアクションUIを管理するクラス
@@ -66,17 +64,18 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラのセット
+	/// カメラマネージャーのセット
 	/// </summary>
-	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; }
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
+
 private:
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	//カメラ
-	Norm::GameCamera* camera_ = nullptr;
+	//カメラマネージャー
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

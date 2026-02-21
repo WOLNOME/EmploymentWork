@@ -7,6 +7,7 @@
 #include <cassert>
 
 //アプリケーション
+#include "application/system/CameraManager.h"
 #include "application/object/level/loader/LevelLoader.h"
 #include <application/object/character/player/collision/PlayerCollider.h>
 #include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
@@ -67,8 +68,8 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
-	//カメラがセットされていなかったら警告
-	assert(camera_ && "カメラがセットされていません。");
+	//カメラマネージャーがセットされていなかったら警告
+	assert(cameraManager_ && "カメラマネージャーがセットされていません。");
 	//メッセージUIがセットされていなかったら警告
 	assert(messageUI_ && "メッセージUIがセットされていません。");
 
@@ -124,11 +125,17 @@ void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 		worldTransform_.SetTranslate(playerSpawnData.translation);
 		worldTransform_.SetRotate(playerSpawnData.rotation);
 		//カメラの向きを車体に合わせる
-		camera_->worldTransform.SetRotate(worldTransform_.GetRotate());
+		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(worldTransform_.GetRotate());
 
 		//最初のデータのみを読み込む
 		break;
 	}
+}
+
+void Player::SetCameraManager(CameraManager* _cameraManager) {
+	cameraManager_ = _cameraManager;
+	//死亡演出にカメラをセット
+	deathDirection_->SetCameraManager(cameraManager_);
 }
 
 void Player::Rotate() {
@@ -146,7 +153,7 @@ void Player::Rotate() {
 		return diff;
 		};
 
-	float cameraRotateY = camera_->worldTransform.GetRotate().y;
+	float cameraRotateY = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
 	float vehicleRotateY = worldTransform_.GetRotate().y;
 
 	//最短角度差を求める
@@ -270,8 +277,8 @@ void Player::CannonAttack() {
 		//リロードタイムをセット
 		cannonReloadTimer_ = param_["cannonReloadTime"];
 		//初期位置と発射方向の計算
-		float orx = camera_->worldTransform.GetRotate().x;
-		float ory = camera_->worldTransform.GetRotate().y;
+		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
@@ -336,15 +343,15 @@ void Player::BulletAttack() {
 			bulletReloadTimer_ = param_["bulletReloadTime"];
 		}
 		//初期位置と発射方向を計算
-		float orx = camera_->worldTransform.GetRotate().x;
-		float ory = camera_->worldTransform.GetRotate().y;
+		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 bulletPos = camera_->worldTransform.GetTranslate();
+		Vector3 bulletPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
 		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
@@ -387,15 +394,15 @@ void Player::SpecialAttack() {
 		//必殺弾の数を減らす
 		specialNum_--;
 		//初期位置と発射方向を計算
-		float orx = camera_->worldTransform.GetRotate().x;
-		float ory = camera_->worldTransform.GetRotate().y;
+		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
 		Vector3 currentDir = {
 			std::cosf(orx) * std::sinf(ory),
 			-std::sinf(orx),		//←角度
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 specialPos = camera_->worldTransform.GetTranslate();
+		Vector3 specialPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
 		specialPos += currentDir * 8.0f;	//銃弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
@@ -432,25 +439,25 @@ void Player::CameraAlgorithm() {
 	//デッドゾーン
 	float deadZone = 2.5f;
 	if (moveValue.Length() > deadZone) {
-		Vector3 newRotate = camera_->worldTransform.GetRotate();
+		Vector3 newRotate = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
 		newRotate.x += moveValue.y * 0.0005f;
 		newRotate.y += moveValue.x * 0.0005f;
-		camera_->worldTransform.SetRotate(newRotate);
+		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(newRotate);
 	}
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
 	const float minPitch = -(pi / 9.0f);		//上向き制限
-	Vector3 newRotate = camera_->worldTransform.GetRotate();
-	newRotate.x = std::clamp(camera_->worldTransform.GetRotate().x, minPitch, maxPitch);
+	Vector3 newRotate = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
+	newRotate.x = std::clamp(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x, minPitch, maxPitch);
 	//水平回転をπ~-πの間に収める
-	if (camera_->worldTransform.GetRotate().y > pi)
+	if (cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y > pi)
 		newRotate.y -= pi * 2.0f;
-	else if (camera_->worldTransform.GetRotate().y < -pi)
+	else if (cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y < -pi)
 		newRotate.y += pi * 2.0f;
-	camera_->worldTransform.SetRotate(newRotate);
+	cameraManager_->GetActiveCamera()->worldTransform.SetRotate(newRotate);
 
 	//カメラの座標を決める
 	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate.y += 1.5f;
-	camera_->worldTransform.SetTranslate(newTranslate);
+	cameraManager_->GetActiveCamera()->worldTransform.SetTranslate(newTranslate);
 }

@@ -2,10 +2,10 @@
 #include <WinApp.h>
 #include <TextureManager.h>
 #include <SpriteManager.h>
-#include <GameCamera.h>
 #include <cassert>
 
 //アプリケーション
+#include <application/system/CameraManager.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 
 using namespace Norm;
@@ -35,10 +35,10 @@ void EnemyHPUI::Initialize() {
 }
 
 void EnemyHPUI::Update() {
-	//カメラチェック
-	assert(camera_ != nullptr && "カメラをセットしてください");
+	//カメラマネージャーチェック
+	assert(cameraManager_ && "カメラマネージャーをセットしてください");
 	//エネミーマネージャーチェック
-	assert(enemyManager_ != nullptr && "エネミーマネージャーをセットしてください");
+	assert(enemyManager_ && "エネミーマネージャーをセットしてください");
 
 	//パラメータのローカル変数
 	float canotaHPBarHeight = param_["canotaHPBarHeight"];
@@ -58,7 +58,7 @@ void EnemyHPUI::Update() {
 		//HPバーの番号が最大値を超えていたら描画しない
 		if (hpBarIndex >= kNumHPBar) return;
 
-		Vector3 clipPos = MyMath::Transform(worldPos, camera_->GetViewProjectionMatrix());
+		Vector3 clipPos = MyMath::Transform(worldPos, cameraManager_->GetActiveCamera()->GetViewProjectionMatrix());
 		//クリップ座標のZ値が0未満または1より大きいなら描画しない
 		if (clipPos.z < 0.0f || clipPos.z > 1.0f) return;
 

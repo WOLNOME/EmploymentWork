@@ -1,8 +1,10 @@
 #include "EnemyReactionUI.h"
 #include <TextureManager.h>
 #include <Object3dManager.h>
-#include <GameCamera.h>
 #include <cassert>
+
+//アプリケーション
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -39,8 +41,8 @@ void EnemyReactionUI::Initialize() {
 }
 
 void EnemyReactionUI::Update() {
-	//カメラチェック
-	assert(camera_ != nullptr && "カメラをセットしてください");
+	//カメラマネージャーチェック
+	assert(cameraManager_ && "カメラマネージャーをセットしてください");
 
 	//感知オブジェクトの走査
 	for (int i = 0; i < kNumSensing; i++) {
@@ -65,7 +67,7 @@ void EnemyReactionUI::Update() {
 		//回転を変える（ビルボード）
 		{
 			//カメラからビュー行列を取得
-			Matrix4x4 view = camera_->GetViewMatrix();
+			Matrix4x4 view = cameraManager_->GetActiveCamera()->GetViewMatrix();
 			//平行移動を消す
 			view.m[3][0] = 0.0f;
 			view.m[3][1] = 0.0f;
@@ -138,7 +140,7 @@ void EnemyReactionUI::Update() {
 		//回転を変える（ビルボード）
 		{
 			//カメラからビュー行列を取得
-			Matrix4x4 view = camera_->GetViewMatrix();
+			Matrix4x4 view = cameraManager_->GetActiveCamera()->GetViewMatrix();
 			//平行移動を消す
 			view.m[3][0] = 0.0f;
 			view.m[3][1] = 0.0f;
@@ -210,7 +212,7 @@ void EnemyReactionUI::SensingSpawn(const Norm::Vector3& _subjectPos, float _heig
 			//基準座標の定義
 			Vector3 basePosition{};
 			//対象座標→カメラ座標の方向を求める
-			Vector3 direction = camera_->worldTransform.GetWorldTranslate() - _subjectPos;
+			Vector3 direction = cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate() - _subjectPos;
 			direction.Normalize();
 			//高さを設定
 			basePosition.y = _subjectPos.y + _height;
@@ -244,7 +246,7 @@ void EnemyReactionUI::MissingSpawn(const Norm::Vector3& _subjectPos, float _heig
 			//基準座標の定義
 			Vector3 basePosition{};
 			//対象座標→カメラ座標の方向を求める
-			Vector3 direction = camera_->worldTransform.GetWorldTranslate() - _subjectPos;
+			Vector3 direction = cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate() - _subjectPos;
 			direction.Normalize();
 			//高さを設定
 			basePosition.y = _subjectPos.y + _height;

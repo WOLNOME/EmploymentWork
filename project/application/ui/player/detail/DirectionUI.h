@@ -3,10 +3,8 @@
 #include <memory>
 #include <JsonUtil.h>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
+//前方宣言（アプリケーション）
+class CameraManager;
 
 /// <summary>
 /// カメラの向いている方向を示すUIを管理するクラス
@@ -42,16 +40,16 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラの設定
+	/// カメラマネージャーの設定
 	/// </summary>
-	/// <param name="_camera">ゲームカメラのポインタ</param>
-	void SetGameCamera(Norm::GameCamera* _camera) { camera_ = _camera; }
+	/// <param name="_cameraManager">カメラマネージャーのポインタ</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	Norm::GameCamera* camera_ = nullptr;
+	CameraManager* cameraManager_ = nullptr;
 
 private:
 	/// ============================== ///

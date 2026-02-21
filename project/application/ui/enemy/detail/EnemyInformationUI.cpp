@@ -3,10 +3,10 @@
 #include <TextTextureManager.h>
 #include <TextureManager.h>
 #include <SpriteManager.h>
-#include <GameCamera.h>
 #include <cassert>
 
 //アプリケーション
+#include <application/system/CameraManager.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
 
 using namespace Norm;
@@ -72,8 +72,8 @@ void EnemyInformationUI::Initialize() {
 }
 
 void EnemyInformationUI::Update() {
-	//カメラチェック
-	assert(camera_ != nullptr && "カメラをセットしてください");
+	//カメラマネージャーチェック
+	assert(cameraManager_ && "カメラマネージャーをセットしてください");
 	//エネミーマネージャーチェック
 	assert(enemyManager_ != nullptr && "エネミーマネージャーをセットしてください");
 
@@ -136,7 +136,7 @@ void EnemyInformationUI::InformationProcess() {
 			// ---- 座標変換 ----
 
 			Vector3 clipPos =
-				MyMath::Transform(worldPos, camera_->GetViewProjectionMatrix());
+				MyMath::Transform(worldPos, cameraManager_->GetActiveCamera()->GetViewProjectionMatrix());
 
 			if (clipPos.z < 0.0f || clipPos.z > 1.0f)
 				continue;
@@ -151,7 +151,7 @@ void EnemyInformationUI::InformationProcess() {
 				continue;
 
 			float distance =
-				(camera_->worldTransform.GetWorldTranslate() - worldPos).Length();
+				(cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate() - worldPos).Length();
 
 			// ===================================================
 			// フレームUI処理

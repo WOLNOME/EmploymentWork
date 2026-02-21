@@ -14,11 +14,8 @@
 #include "detail/DirectionUI.h"
 #include "detail/DamageUI.h"
 
-//前方宣言（エンジン）
-namespace Norm {
-	class GameCamera;
-}
 //前方宣言（アプリケーション）
+class CameraManager;
 class Player;
 class EnemyManager;
 class ItemManager;
@@ -75,10 +72,10 @@ public:
 	/// <param name="_itemManager">アイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager);
 	/// <summary>
-	/// ゲームカメラの設定
+	/// カメラマネージャーの設定
 	/// </summary>
-	/// <param name="_camera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _camera);
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 
 private:
 	/// ============================== ///
@@ -100,8 +97,8 @@ private:
 
 	//プレイヤー
 	Player* player_ = nullptr;
-	//カメラ
-	Norm::GameCamera* camera_ = nullptr;
+	//カメラマネージャー
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

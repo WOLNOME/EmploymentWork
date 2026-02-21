@@ -59,6 +59,53 @@ namespace Norm {
 		instance_.reset();
 	}
 
+	void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle, bool _isTemporary) {
+		//遷移中なら何もしない
+		if (sceneTransitionAnimation_->GetIsTransitioning()) return;
+
+		//警告
+		assert(sceneFactory_);
+		assert(!nextScene_);
+
+		//もし最初のシーンだったらここで生成＆初期化
+		if (!scene_) {
+			scene_ = sceneFactory_->CreateScene(nextSceneName);
+			nextScene_.reset();
+			scene_->Initialize();
+			return;
+		}
+
+		//キープシーンがあるなら
+		if (keepScene_) {
+			//次シーンのシーン名とキープシーンのシーン名が同じなら
+			if(keepScene_->GetSceneName() == nextSceneName) {
+				//次シーンにキープシーンを移す
+				nextScene_ = std::move(keepScene_);
+				keepScene_.reset();
+			}
+		}
+		else {
+			//次シーンを生成
+			nextScene_ = sceneFactory_->CreateScene(nextSceneName);
+		}
+
+		//遷移アニメーションタイプを設定
+		sceneTransitionAnimation_->SetType(inType, outType);
+		//遷移アニメーションオプションを設定
+		sceneTransitionAnimation_->SetOption(option);
+		//遷移アニメーションも時間を設定
+		sceneTransitionAnimation_->SetTime(time);
+		//テクスチャを設定
+		sceneTransitionAnimation_->SetTexture(_textureHandle);
+
+		//仮のシーン遷移なら
+		if (_isTemporary) {
+			//キープシーンに今のシーンを保存
+			keepScene_ = std::move(scene_);
+		}
+
+	}
+
 	void SceneManager::ChangeScene() {
 		//次のシーン予約があるなら
 		if (nextScene_ && !sceneTransitionAnimation_->GetIsTransitioning()) {
@@ -96,34 +143,6 @@ namespace Norm {
 			//フェードアウト終了
 			sceneTransitionAnimation_->EndAll();
 		}
-	}
-
-	void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle) {
-		//遷移中なら何もしない
-		if (sceneTransitionAnimation_->GetIsTransitioning()) return;
-
-		//警告
-		assert(sceneFactory_);
-		assert(!nextScene_);
-
-		//もし最初のシーンだったらここで生成＆初期化
-		if (!scene_) {
-			scene_ = sceneFactory_->CreateScene(nextSceneName);
-			nextScene_.reset();
-			scene_->Initialize();
-			return;
-		}
-
-		//次シーンを生成
-		nextScene_ = sceneFactory_->CreateScene(nextSceneName);
-		//遷移アニメーションタイプを設定
-		sceneTransitionAnimation_->SetType(inType, outType);
-		//遷移アニメーションオプションを設定
-		sceneTransitionAnimation_->SetOption(option);
-		//遷移アニメーションも時間を設定
-		sceneTransitionAnimation_->SetTime(time);
-		//テクスチャを設定
-		sceneTransitionAnimation_->SetTexture(_textureHandle);
 	}
 
 }

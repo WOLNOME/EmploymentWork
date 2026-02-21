@@ -7,6 +7,7 @@
 #include <cassert>
 
 //アプリケーション
+#include <application/system/CameraManager.h>
 #include <application/object/character/player/Player.h>
 
 using namespace Norm;
@@ -33,13 +34,9 @@ void HitIndicator::Initialize() {
 
 void HitIndicator::Update() {
 	//プレイヤーがセットされていなかったら警告
-	if (!player_) {
-		assert(0 && "プレイヤーがセットされていません");
-	}
-	//ゲームカメラがセットされていなかったら警告
-	if (!gameCamera_) {
-		assert(0 && "ゲームカメラがセットされていません");
-	}
+	assert(player_ && "プレイヤーがセットされていません");
+	//カメラマネージャーがセットされていなかったら警告
+	assert(cameraManager_ && "カメラマネージャーがセットされていません");
 
 	//インジケーターの更新処理
 	for (int i = 0; i < kNumIndicators_; i++) {
@@ -72,9 +69,9 @@ void HitIndicator::Update() {
 		//使用する変数
 		Vector3 p = player_->GetWorldTransform().GetTranslate();	//プレイヤーの座標
 		Vector3 v1 = {
-			std::sinf(gameCamera_->worldTransform.GetRotate().y),
+			std::sinf(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y),
 			0.0f,
-			std::cosf(gameCamera_->worldTransform.GetRotate().y)
+			std::cosf(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y)
 		};	//カメラの向き
 		Vector3 v2 = indicators_[i].hitPosition - p;	//目標位置への方向
 		v2.y = 0.0f;

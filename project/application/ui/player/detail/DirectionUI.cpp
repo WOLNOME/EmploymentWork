@@ -1,8 +1,10 @@
 #include "DirectionUI.h"
 #include <TextureManager.h>
 #include <SpriteManager.h>
-#include <camera/GameCamera.h>
 #include <cassert>
+
+//アプリケーション
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -34,12 +36,12 @@ void DirectionUI::Initialize() {
 }
 
 void DirectionUI::Update() {
-	//カメラがセットされていなければ警告
-	assert(camera_ != nullptr && "DirectionUIにカメラをセットしてください");
+	//カメラマネージャーがセットされていなければ警告
+	assert(cameraManager_ && "カメラマネージャーをセットしてください");
 	//目盛りの回転
 	{
 		// カメラの現在の回転（Yaw）を取得
-		Vector3 cameraRotate = camera_->worldTransform.GetRotate();
+		Vector3 cameraRotate = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
 
 		// 角度を -π～π の範囲に正規化
 		cameraRotate.y = MyMath::NormalizeAngle(cameraRotate.y);
@@ -71,7 +73,6 @@ void DirectionUI::Update() {
 }
 
 void DirectionUI::AttachShake(const Norm::Vector2& _shakeOffset) {
-
 	spriteArrow_->SetShakeOffset(_shakeOffset);
 	spriteScale_->SetShakeOffset(_shakeOffset);
 }

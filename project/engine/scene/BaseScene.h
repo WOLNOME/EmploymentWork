@@ -68,6 +68,27 @@ namespace Norm {
 		/// </summary>
 		void ShowFPS();
 
+		/// ============================== ///
+		///		getter
+		///	============================== ///
+
+		/// <summary>
+		/// シーン名の取得
+		/// </summary>
+		/// <returns>シーン名</returns>
+		const std::string& GetSceneName() const { return sceneName_; }
+
+
+		/// ============================== ///
+		///		setter
+		///	============================== ///
+
+		/// <summary>
+		/// シーン名のセット
+		/// </summary>
+		/// <param name="sceneName">シーン名</param>
+		void SetSceneName(const std::string& sceneName) { sceneName_ = sceneName; }
+
 	protected:
 		/// ============================== ///
 		///		メンバ変数
@@ -77,6 +98,9 @@ namespace Norm {
 		SceneManager* sceneManager_ = nullptr;
 		//シーンライト
 		std::unique_ptr<SceneLight> sceneLight_ = nullptr;
+
+		//シーン名
+		std::string sceneName_ = "";
 
 		//fps計測用変数
 		std::chrono::steady_clock::time_point lastFrameTime_ = std::chrono::steady_clock::now();

@@ -30,6 +30,9 @@ namespace Norm {
 			newScene = std::make_unique<ParticleEditorScene>();
 		}
 
+		//シーン名をセット
+		newScene->SetSceneName(sceneName);
+
 		return newScene;
 	}
 
