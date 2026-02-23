@@ -8,6 +8,7 @@
 #include "ModelManager.h"
 #include "BaseCamera.h"
 #include "SceneLight.h"
+#include "SceneManager.h"
 #include <fstream>
 #include <sstream>
 #include <cassert>
@@ -15,6 +16,9 @@
 namespace Norm {
 
 	Object3d::Object3d() {
+		//シーンタグ
+		sceneTag_ = SceneManager::GetInstance()->GetCurrentScene()->GetSceneName();
+
 		//オブジェクトリソースの作成
 		objectResource_ = CreateObjectResource();
 	}

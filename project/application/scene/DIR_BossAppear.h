@@ -5,12 +5,12 @@
 #include "application/system/CameraManager.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
-#include <application/system/GameClearSystem.h>
+#include "application/system/BossAppearSystem.h"
 
 /// <summary>
-/// ゲームクリアシーン全般を管理するクラス
+/// ボス出現演出シーン全般を管理するクラス
 /// </summary>
-class GameClearScene : public Norm::BaseScene {
+class DIR_BossAppear : public Norm::BaseScene {
 public:
 	/// ============================== ///
 	///		メンバ関数
@@ -41,14 +41,16 @@ private:
 	//カメラマネージャー
 	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
 
+	//平行光源
+	std::unique_ptr<Norm::DirectionalLight> dirLight_;
+
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
 
-	//ゲームクリアシステム
-	std::unique_ptr<GameClearSystem> gameClearSystem_ = nullptr;
-
+	//ボス出現演出システム
+	std::unique_ptr<BossAppearSystem> bossAppearSystem_ = nullptr;
 
 };
 

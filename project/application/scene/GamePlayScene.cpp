@@ -1,6 +1,7 @@
 #include "GamePlayScene.h"
 #include "SceneManager.h"
 #include <TextureManager.h>
+#include <GameCamera.h>
 
 using namespace Norm;
 

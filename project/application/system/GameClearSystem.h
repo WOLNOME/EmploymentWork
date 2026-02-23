@@ -1,7 +1,6 @@
 #pragma once
 #include <Input.h>
 #include <CombinedParticle.h>
-#include <GameCamera.h>
 #include <SceneManager.h>
 #include <Object3d.h>
 #include <Sprite.h>
@@ -9,6 +8,9 @@
 #include <memory>
 #include <random>
 #include <Handle.h>
+
+//前方宣言
+class CameraManager;
 
 /// <summary>
 /// ゲームクリアシーンのUIや演出、操作等を管理するクラス
@@ -61,10 +63,10 @@ public:
 	/// ============================== ///
 
 	/// <summary>
-	/// ゲームカメラのセット
+	/// カメラマネージャーのセット
 	/// </summary>
-	/// <param name="_gameCamera">ゲームカメラ</param>
-	void SetGameCamera(Norm::GameCamera* _gameCamera) { gameCamera_ = _gameCamera; }
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 private:
 	/// ============================== ///
@@ -96,8 +98,8 @@ private:
 	Norm::Input* input_ = nullptr;
 	//シーンマネージャー
 	Norm::SceneManager* sceneManager_ = nullptr;
-	//ゲームカメラ
-	Norm::GameCamera* gameCamera_ = nullptr;
+	//カメラマネージャー
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

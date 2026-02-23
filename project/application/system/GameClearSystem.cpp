@@ -8,6 +8,9 @@
 #include <MyMath.h>
 #include <cassert>
 
+//アプリケーション
+#include "application/system/CameraManager.h"
+
 using namespace Norm;
 
 void GameClearSystem::Initialize() {
@@ -116,8 +119,8 @@ void GameClearSystem::Initialize() {
 }
 
 void GameClearSystem::Update() {
-	//ゲームカメラのチェック
-	assert(gameCamera_ != nullptr && "ゲームカメラがセットされていません");
+	//カメラマネージャーのチェック
+	assert(cameraManager_ && "カメラマネージャーがセットされていません");
 
 	//操作
 	Operate();
@@ -197,18 +200,18 @@ void GameClearSystem::CameraWork() {
 		//カメラ位置更新
 		float t = (float)cameraWorkParam_.timer / cameraWorkParam_.moveDuration;
 		Vector3 cameraPos = MyMath::Lerp(cameraWorkParam_.startPos, cameraWorkParam_.endPos, MyMath::EaseOutQuad(t));
-		gameCamera_->worldTransform.SetTranslate(cameraPos);
+		cameraManager_->GetActiveCamera()->worldTransform.SetTranslate(cameraPos);
 		//カメラの回転更新
 		Vector3 targetPos = tankWorldTransform_.GetTranslate();
 		targetPos.y += 2.5f;	//少し上を見る
-		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - gameCamera_->worldTransform.GetTranslate()));
-		gameCamera_->worldTransform.SetRotate(cameraRotate);
+		Vector3 cameraRotate = MyMath::DirectionToRotation(Vector3(targetPos - cameraManager_->GetActiveCamera()->worldTransform.GetTranslate()));
+		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(cameraRotate);
 	}
 }
 
 void GameClearSystem::ConfettiParticleUpdate() {
 	//パーティクルの座標をカメラの座標に合わせる
 	TransformEuler transform = confettiParticle_->GetBaseTransform();
-	transform.translate.y = gameCamera_->worldTransform.GetTranslate().y + 7.0f;
+	transform.translate.y = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate().y + 7.0f;
 	confettiParticle_->SetBaseTransform(transform);
 }

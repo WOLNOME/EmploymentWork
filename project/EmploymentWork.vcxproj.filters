@@ -447,7 +447,7 @@
     <ClCompile Include="application\system\TimeScaleManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\blackBoard\BlackBoard.cpp">
+    <ClCompile Include="engine\blackBoard\BlackBoard.cpp">
       <Filter>application\behaviorTree\blackBoard</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp">
@@ -528,6 +528,11 @@
     <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
     <ClCompile Include="application\system\CameraWork.cpp" />
     <ClCompile Include="application\system\CameraManager.cpp" />
+    <ClCompile Include="application\scene\DIR_BossAppear.cpp" />
+    <ClCompile Include="application\system\BossAppearSystem.cpp" />
+    <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
+    <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
+    <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -923,7 +928,7 @@
     <ClInclude Include="engine\3d\particle\ParticleTypes.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\behaviorTree\blackBoard\BlackBoard.h">
+    <ClInclude Include="engine\blackBoard\BlackBoard.h">
       <Filter>application\behaviorTree\blackBoard</Filter>
     </ClInclude>
     <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h">
@@ -1004,6 +1009,11 @@
     <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
     <ClInclude Include="application\system\CameraWork.h" />
     <ClInclude Include="application\system\CameraManager.h" />
+    <ClInclude Include="application\scene\DIR_BossAppear.h" />
+    <ClInclude Include="application\system\BossAppearSystem.h" />
+    <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
+    <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
+    <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

@@ -1,5 +1,5 @@
 #pragma once
-#include <GameCamera.h>
+#include <BaseCamera.h>
 #include <unordered_map>
 
 /// <summary>
@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="name">名前</param>
 	/// <param name="camera">カメラのユニークポインタ</param>
-	void RegistCamera(const std::string& name, std::unique_ptr<Norm::GameCamera> camera);
+	void RegistCamera(const std::string& name, std::unique_ptr<Norm::BaseCamera> camera);
 
 	/// ============================== ///
 	///		getter
@@ -49,15 +49,15 @@ public:
 	/// アクティブカメラの取得
 	/// </summary>
 	/// <returns>アクティブカメラのポインタ</returns>
-	Norm::GameCamera* GetActiveCamera() { return activeCamera_; }
+	Norm::BaseCamera* GetActiveCamera() { return activeCamera_; }
 
 private:
 	/// ============================== ///
 	///		インスタンス
 	/// ============================== ///
 
-	std::unordered_map<std::string, std::unique_ptr<Norm::GameCamera>> cameras_;
-	Norm::GameCamera* activeCamera_ = nullptr;
+	std::unordered_map<std::string, std::unique_ptr<Norm::BaseCamera>> cameras_;
+	Norm::BaseCamera* activeCamera_ = nullptr;
 
 };
 

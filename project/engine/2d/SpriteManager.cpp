@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Sprite.h"
 #include "RandomStringUtil.h"
+#include "SceneManager.h"
 
 namespace Norm {
 
@@ -46,6 +47,14 @@ namespace Norm {
 
 		//バックスプライト0の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back0)
 				//表示しないなら次へ
@@ -55,6 +64,14 @@ namespace Norm {
 		}
 		//バックスプライト1の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back1)
 				//表示しないなら次へ
@@ -64,6 +81,14 @@ namespace Norm {
 		}
 		//バックスプライト2の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back2)
 				//表示しないなら次へ
@@ -73,6 +98,14 @@ namespace Norm {
 		}
 		//バックスプライト3の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back3)
 				//表示しないなら次へ
@@ -82,6 +115,14 @@ namespace Norm {
 		}
 		//バックスプライト4の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back4)
 				//表示しないなら次へ
@@ -91,6 +132,14 @@ namespace Norm {
 		}
 		//バックスプライト5の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Back5)
 				//表示しないなら次へ
@@ -115,6 +164,14 @@ namespace Norm {
 
 		//フロントスプライト0の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front0)
 				//表示しないなら次へ
@@ -124,6 +181,14 @@ namespace Norm {
 		}
 		//フロントスプライト1の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front1)
 				//表示しないなら次へ
@@ -133,6 +198,14 @@ namespace Norm {
 		}
 		//フロントスプライト2の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front2)
 				//表示しないなら次へ
@@ -142,6 +215,14 @@ namespace Norm {
 		}
 		//フロントスプライト3の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front3)
 				//表示しないなら次へ
@@ -151,6 +232,14 @@ namespace Norm {
 		}
 		//フロントスプライト4の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front4)
 				//表示しないなら次へ
@@ -160,6 +249,14 @@ namespace Norm {
 		}
 		//フロントスプライト5の描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::Front5)
 				//表示しないなら次へ
@@ -169,6 +266,14 @@ namespace Norm {
 		}
 		//シーン遷移スプライトの描画
 		for (const auto& sprite : sprites_) {
+			//スプライトのシーンタグが現在のシーンと違うなら次へ
+			if (sprite.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				//シーンタグがAllでないなら次へ
+				if (sprite.second->sceneTag_ != "All") {
+					continue;
+				}
+			}
+
 			//順序選別
 			if (sprite.second->order_ == Order::SceneTransition)
 				//表示しないなら次へ

@@ -59,7 +59,7 @@ namespace Norm {
 		instance_.reset();
 	}
 
-	void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle, bool _isTemporary) {
+	void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle, TransitionMode _transitionMode) {
 		//遷移中なら何もしない
 		if (sceneTransitionAnimation_->GetIsTransitioning()) return;
 
@@ -75,18 +75,39 @@ namespace Norm {
 			return;
 		}
 
-		//キープシーンがあるなら
-		if (keepScene_) {
-			//次シーンのシーン名とキープシーンのシーン名が同じなら
-			if(keepScene_->GetSceneName() == nextSceneName) {
-				//次シーンにキープシーンを移す
-				nextScene_ = std::move(keepScene_);
-				keepScene_.reset();
-			}
-		}
-		else {
+		//遷移モードをセット
+		transitionMode_ = _transitionMode;
+		//遷移モードによる処理
+		switch (transitionMode_) {
+		case Norm::TransitionMode::Normal:
+		{
 			//次シーンを生成
 			nextScene_ = sceneFactory_->CreateScene(nextSceneName);
+
+			break;
+		}
+		case Norm::TransitionMode::Temporary:
+		{
+			//キープシーンに今のシーンを保存
+			keepScene_ = std::move(scene_);
+			//次シーンを生成
+			nextScene_ = sceneFactory_->CreateScene(nextSceneName);
+
+			break;
+		}
+		case Norm::TransitionMode::FromKeep:
+		{
+			//keepシーンがないなら警告
+			assert(keepScene_&&"キープシーンが空です");
+
+			//次シーンにキープシーンを写す
+			nextScene_ = std::move(keepScene_);
+			keepScene_.reset();
+
+			break;
+		}
+		default:
+			break;
 		}
 
 		//遷移アニメーションタイプを設定
@@ -97,13 +118,7 @@ namespace Norm {
 		sceneTransitionAnimation_->SetTime(time);
 		//テクスチャを設定
 		sceneTransitionAnimation_->SetTexture(_textureHandle);
-
-		//仮のシーン遷移なら
-		if (_isTemporary) {
-			//キープシーンに今のシーンを保存
-			keepScene_ = std::move(scene_);
-		}
-
+		
 	}
 
 	void SceneManager::ChangeScene() {
@@ -120,16 +135,53 @@ namespace Norm {
 		else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::END_IN) {
 			//フェードイン終了
 			sceneTransitionAnimation_->EndIn();
-			//旧シーンの終了
-			if (scene_) {
-				scene_->Finalize();
-				scene_.reset();
+
+			//遷移モードによる処理
+			switch (transitionMode_) {
+			case Norm::TransitionMode::Normal:
+			{
+				//旧シーンの終了
+				if (scene_) {
+					scene_->Finalize();
+					scene_.reset();
+				}
+				//シーンの切り替え
+				scene_ = std::move(nextScene_);
+				nextScene_.reset();
+				//次のシーンを初期化する
+				scene_->Initialize();
+
+				break;
 			}
-			//シーンの切り替え
-			scene_ = std::move(nextScene_);
-			nextScene_.reset();
-			//次のシーンを初期化する
-			scene_->Initialize();
+			case Norm::TransitionMode::Temporary:
+			{
+				//旧シーンはキープシーンに保存
+				keepScene_.reset();
+				keepScene_ = std::move(scene_);
+				scene_.reset();
+				//シーンの切り替え
+				scene_ = std::move(nextScene_);
+				nextScene_.reset();
+				break;
+			}
+			case Norm::TransitionMode::FromKeep:
+			{
+				//旧シーンの終了
+				if (scene_) {
+					scene_->Finalize();
+					scene_.reset();
+				}
+				//シーンの切り替え
+				scene_ = std::move(nextScene_);
+				nextScene_.reset();
+
+				//※FromKeepはキープシーンから復帰する遷移なので、次のシーンはすでに初期化されている前提で、ここでは初期化しない
+
+				break;
+			}
+			default:
+				break;
+			}
 		}
 		else if (sceneTransitionAnimation_->GetState() == SceneTransitionAnimation::State::UPDATE_OUT) {
 			//フェードアウト処理

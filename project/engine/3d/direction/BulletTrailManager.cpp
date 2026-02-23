@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "RandomStringUtil.h"
 #include "BulletTrail.h"
+#include "SceneManager.h"
 #include <cassert>
 
 namespace Norm {
@@ -55,6 +56,11 @@ namespace Norm {
 
 		//全弾丸トレールの描画
 		for (const auto& bulletTrail : bulletTrails_) {
+			//シーンタグが現在のシーンと違うのであれば次へ
+			if (bulletTrail.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
+			//表示しないのであれば次へ
 			if (!bulletTrail.second->isDisplay_) {
 				continue;
 			}

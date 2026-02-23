@@ -2,7 +2,7 @@
 #include "application/object/character/base/BaseCharacter.h"
 #include "JsonUtil.h"
 #include "interface/INode.h"
-#include "blackBoard/BlackBoard.h"
+#include "BlackBoard.h"
 #include <memory>
 
 //アプリケーション

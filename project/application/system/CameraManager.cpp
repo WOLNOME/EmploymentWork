@@ -22,7 +22,7 @@ void CameraManager::DebugWithImGui() {
     }
 }
 
-void CameraManager::RegistCamera(const std::string& name, std::unique_ptr<Norm::GameCamera> camera) {
+void CameraManager::RegistCamera(const std::string& name, std::unique_ptr<Norm::BaseCamera> camera) {
     // nullチェック
     if (!camera) {
         assert(false && "カメラがnullです");

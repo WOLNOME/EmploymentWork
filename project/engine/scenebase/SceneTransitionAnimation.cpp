@@ -17,7 +17,7 @@ namespace Norm {
 
 	void SceneTransitionAnimation::Initialize() {
 		//スプライト生成
-		sprite_ = std::make_unique<Sprite>();
+		sprite_ = std::make_unique<Sprite>(true);
 		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
 		sprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("transitionBack"), Order::SceneTransition, textureHandle);
 		sprite_->SetIsDisplay(false);

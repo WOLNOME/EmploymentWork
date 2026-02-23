@@ -92,8 +92,23 @@ public:
 	/// <summary>
 	/// ツリーデータの取得
 	/// </summary>
-	/// <returns>ツリーデータ</returns>
-	const std::unique_ptr<LevelTree>& GetTreeData() const { return levelData_.tree; }
+	LevelTree* GetTreeData() const { return levelData_.tree.get(); }
+	/// <summary>
+	/// 巨大ツリーデータの取得
+	/// </summary>
+	LevelBigTree* GetBigTreeData() const { return levelData_.bigTree.get(); }
+	/// <summary>
+	/// 岩データの取得
+	/// </summary>
+	LevelRock* GetRockData() const { return levelData_.rock.get(); }
+	/// <summary>
+	/// 柵データの取得
+	/// </summary>
+	LevelFence* GetFenceData() const { return levelData_.fence.get(); }
+	/// <summary>
+	/// 封印ボックスデータの取得
+	/// </summary>
+	LevelSealedBox* GetSealedBoxData() const { return levelData_.sealedBox.get(); }
 
 private:
 	/// ============================== ///

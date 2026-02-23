@@ -1,4 +1,5 @@
 #include "PlayerCollider.h"
+#include <GameCamera.h>
 
 //アプリケーション
 #include <application/system/CameraManager.h>
@@ -32,6 +33,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 
 	//ローカル変数
 	int maxHP = holder_->GetParam()["maxHP"];
+	GameCamera* gameCamera = dynamic_cast<GameCamera*>(holder_->GetCameraManager()->GetActiveCamera());
 
 	//当たり判定時の処理
 	switch (_attribute) {
@@ -42,7 +44,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, maxHP);
 		//カメラシェイクを入れるmaxHP
-		holder_->GetCameraManager()->GetActiveCamera()->RegistShake(0.4f, 0.8f);
+		gameCamera->RegistShake(0.4f, 0.8f);
 
 		//ダメージヒット
 		isDamage = true;
@@ -60,7 +62,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, maxHP);
 		//カメラシェイクを入れる
-		holder_->GetCameraManager()->GetActiveCamera()->RegistShake(0.4f, 0.8f);
+		gameCamera->RegistShake(0.4f, 0.8f);
 
 		//ダメージヒット
 		isDamage = true;
@@ -72,7 +74,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, maxHP);
 		//カメラシェイクを入れる
-		holder_->GetCameraManager()->GetActiveCamera()->RegistShake(0.2f, 0.3f);
+		gameCamera->RegistShake(0.2f, 0.3f);
 
 		//ダメージヒット
 		isDamage = true;
@@ -85,7 +87,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		//0~MaxHPの範囲に収める
 		hp = std::clamp(hp, 0, maxHP);
 		//カメラシェイクを入れるmaxHP
-		holder_->GetCameraManager()->GetActiveCamera()->RegistShake(0.4f, 0.8f);
+		gameCamera->RegistShake(0.4f, 0.8f);
 
 		//ダメージヒット
 		isDamage = true;

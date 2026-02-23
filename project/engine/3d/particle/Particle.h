@@ -81,6 +81,10 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		Particle();
+		/// <summary>
 		/// デストラクタ
 		/// </summary>
 		~Particle();
@@ -146,6 +150,9 @@ namespace Norm {
 
 		//名前
 		std::string name_;
+		//シーンタグ
+		std::string sceneTag_;
+
 		//エミッターID（識別番号）
 		uint32_t emitterID_ = 0u;
 		//各粒のパラメーター

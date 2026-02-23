@@ -5,8 +5,14 @@
 #include "ParticleManager.h"
 #include "TextureManager.h"
 #include "JsonUtil.h"
+#include "SceneManager.h"
 
 namespace Norm {
+
+	Particle::Particle() {
+		//シーンタグの初期化
+		sceneTag_ = SceneManager::GetInstance()->GetCurrentScene()->GetSceneName();
+	}
 
 	Particle::~Particle() {
 		//マネージャーから削除

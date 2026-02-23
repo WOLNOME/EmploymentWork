@@ -1,4 +1,5 @@
 #include "PlayerWeaponManager.h"
+#include <GameCamera.h>
 
 //アプリケーション
 #include "application/system/CameraManager.h"
@@ -65,25 +66,34 @@ void PlayerWeaponManager::DebugWithImGui() {
 }
 
 void PlayerWeaponManager::SpawnCannon(const Vector3& _initPos, const Vector3& _initDirection) {
+	//ゲームカメラ
+	GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManager_->GetActiveCamera());
+
 	//スポーン
 	SpawnFromPool(cannons_, [&](PlayerCannon* cannon) {
 		cannon->Spawn(_initPos, _initDirection);
-		cameraManager_->GetActiveCamera()->RegistShake(0.2f, 0.15f);
+		gameCamera->RegistShake(0.2f, 0.15f);
 		});
 }
 
 void PlayerWeaponManager::SpawnBullet(const Vector3& _initPos, const Vector3& _initDirection) {
+	//ゲームカメラ
+	GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManager_->GetActiveCamera());
+
 	//スポーン
 	SpawnFromPool(bullets_, [&](PlayerBullet* bullet) {
 		bullet->Spawn(_initPos, _initDirection);
-		cameraManager_->GetActiveCamera()->RegistShake(0.15f, 0.1f);
+		gameCamera->RegistShake(0.15f, 0.1f);
 		});
 }
 
 void PlayerWeaponManager::SpawnSpecial(const Norm::Vector3& _initPos, const Norm::Vector3& _initDirection) {
+	//ゲームカメラ
+	GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManager_->GetActiveCamera());
+
 	//スポーン
 	SpawnFromPool(specials_, [&](PlayerSpecial* special) {
 		special->Spawn(_initPos, _initDirection);
-		cameraManager_->GetActiveCamera()->RegistShake(0.4f, 0.3f);
+		gameCamera->RegistShake(0.4f, 0.3f);
 		});
 }
