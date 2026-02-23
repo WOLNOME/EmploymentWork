@@ -3,6 +3,15 @@
 #include "BlackBoard.h"
 
 /// <summary>
+/// ショットの結果
+/// </summary>
+enum class ShotResult {
+	Idle,		//待機中
+	Running,	//実行中
+	Finish		//終了
+};
+
+/// <summary>
 /// ショットのインターフェース
 /// </summary>
 class IShotBase {
@@ -14,7 +23,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	IShotBase(int _index,Norm::TransformEuler _startCameraTransform,Norm::TransformEuler _endCameraTransform,float _duration,Norm::BlackBoard* _blackBoard) {};
+	IShotBase(int _index, Norm::TransformEuler _startCameraTransform, Norm::TransformEuler _endCameraTransform, float _duration, Norm::BlackBoard* _blackBoard) {};
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -37,6 +46,16 @@ public:
 	/// </summary>
 	virtual void Debug() {};
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// ショットの結果を取得
+	/// </summary>
+	/// <returns>ショットの結果</returns>
+	ShotResult GetShotResult() const { return shotResult_; }
+
 protected:
 	/// ============================== ///
 	///		メンバ変数
@@ -50,7 +69,12 @@ protected:
 	Norm::TransformEuler endCameraTransform_ = {};
 	//ショットの尺
 	float duration_ = 0.0f;
+	//ショットのタイマー
+	float elapsedTimer_ = 0.0f;
 	//ブラックボード
 	Norm::BlackBoard* blackBoard_ = nullptr;
+	//ショットの結果
+	ShotResult shotResult_ = ShotResult::Idle;
+
 };
 

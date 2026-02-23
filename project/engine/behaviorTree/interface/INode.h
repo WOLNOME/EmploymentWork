@@ -2,6 +2,9 @@
 
 namespace Norm {
 
+	/// <summary>
+	/// ノードの結果
+	/// </summary>
 	enum class NodeResult {
 		Idle,		//待機中
 		Running,	//実行中

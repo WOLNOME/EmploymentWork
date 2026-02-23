@@ -533,6 +533,13 @@
     <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
     <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
     <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShowSealedBoxShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearKeyShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_UnlockShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -1014,6 +1021,13 @@
     <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
     <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
     <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShowSealedBoxShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearKeyShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_UnlockShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

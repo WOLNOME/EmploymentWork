@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include <vector>
 #include <string>
 #include <cstdint>
 #include <memory>
@@ -17,6 +17,6 @@ class IShotBase;
 /// </summary>
 class CinematicBuilder {
 public:
-	static std::map<uint32_t, std::unique_ptr<IShotBase>> BuildCinematic(const std::string& _fileName, Norm::BlackBoard* _blackBoard);
+	static std::vector<std::unique_ptr<IShotBase>> BuildCinematic(const std::string& _fileName, Norm::BlackBoard* _blackBoard);
 };
 

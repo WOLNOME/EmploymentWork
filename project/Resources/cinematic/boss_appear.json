@@ -1,0 +1,93 @@
+[
+    {
+        "index": 0,
+        "name": "ShowSealedBox",
+        "startCameraTransform": {
+            "translate": { "x": -105.6, "y": 24.4, "z": -97.6 },
+            "rotate": { "x": -0.1, "y": 13.4, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -218.6, "y": 3.0, "z": -201.1 },
+            "rotate": { "x": -0.1, "y": 13.4, "z": 0.0 }
+        },
+        "duration": 4.0
+    },
+    {
+        "index": 1,
+        "name": "Stillness",
+        "startCameraTransform": {
+            "translate": { "x": -155.6, "y": 93.1, "z": -102.3 },
+            "rotate": { "x": 0.3, "y": 13.7, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -155.6, "y": 93.1, "z": -102.3 },
+            "rotate": { "x": 0.3, "y": 13.7, "z": 0.0 }
+        },
+        "duration": 2.0
+    },
+    {
+        "index": 2,
+        "name": "AppearKey",
+        "startCameraTransform": {
+            "translate": { "x": -155.6, "y": 93.1, "z": -102.3 },
+            "rotate": { "x": 0.3, "y": 13.7, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -155.6, "y": 93.1, "z": -102.3 },
+            "rotate": { "x": 0.3, "y": 13.7, "z": 0.0 }
+        },
+        "duration": 2.0
+    },
+    {
+        "index": 3,
+        "name": "Unlock",
+        "startCameraTransform": {
+            "translate": { "x": -79.9, "y": 69.1, "z": -124.2 },
+            "rotate": { "x": 0.3, "y": 13.3, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -79.9, "y": 69.1, "z": -124.2 },
+            "rotate": { "x": 0.3, "y": 13.3, "z": 0.0 }
+        },
+        "duration": 3.0
+    },
+    {
+        "index": 4,
+        "name": "Shake",
+        "startCameraTransform": {
+            "translate": { "x": -79.9, "y": 69.1, "z": -124.2 },
+            "rotate": { "x": 0.3, "y": 13.3, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -79.9, "y": 69.1, "z": -124.2 },
+            "rotate": { "x": 0.3, "y": 13.3, "z": 0.0 }
+        },
+        "duration": 2.0
+    },
+    {
+        "index": 5,
+        "name": "ZoomOut",
+        "startCameraTransform": {
+            "translate": { "x": -79.9, "y": 69.1, "z": -124.2 },
+            "rotate": { "x": 0.3, "y": 13.3, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -85.2, "y": 114.7, "z": -341.9 },
+            "rotate": { "x": 0.2, "y": 12.8, "z": 0.0 }
+        },
+        "duration": 4.0
+    },
+    {
+        "index": 6,
+        "name": "AppearBoss",
+        "startCameraTransform": {
+            "translate": { "x": -85.2, "y": 114.7, "z": -341.9 },
+            "rotate": { "x": 0.2, "y": 12.8, "z": 0.0 }
+        },
+        "endCameraTransform": {
+            "translate": { "x": -85.2, "y": 114.7, "z": -341.9 },
+            "rotate": { "x": 0.2, "y": 12.8, "z": 0.0 }
+        },
+        "duration": 5.0
+    }
+]
