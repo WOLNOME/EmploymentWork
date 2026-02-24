@@ -14,8 +14,12 @@ void TitleScene::Initialize() {
 	camera_ = std::make_unique<DevelopCamera>();
 	camera_->Initialize();
 	camera_->SetFarClip(2000.0f);
-	camera_->worldTransform.SetRotate({ 0.15f,0.0f,0.0f });
-	camera_->worldTransform.SetTranslate({ 0.0f,20.0f,-80.0f });
+
+	//ライトの生成・初期化＆登録
+	dirLight_ = std::make_unique<DirectionalLight>();
+	dirLight_->Initialize();
+	dirLight_->SetDirection({ -0.19f,-0.58f,0.45f });
+	sceneLight_->SetLight(dirLight_.get());
 
 	//インスタンスの生成
 	titleSystem_ = std::make_unique<TitleSystem>();
