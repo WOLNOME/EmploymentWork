@@ -2,6 +2,7 @@
 #include <memory>
 #include <JsonUtil.h>
 #include <Object3d.h>
+#include <CombinedParticle.h>
 
 //アプリケーション
 #include "application/object/level/loader/LevelLoader.h"
@@ -47,10 +48,7 @@ private:
 	///		メンバ関数
 	/// ============================== ///
 
-	/// <summary>
-	/// 初期化時点でブラックボードに必要な情報を入れる
-	/// </summary>
-	void InitBlackBoard();
+
 
 	/// ============================== ///
 	///		インスタンス
@@ -71,11 +69,18 @@ private:
 
 	//鍵1
 	std::unique_ptr<Norm::Object3d> key1_ = nullptr;
-	Norm::WorldTransform wtKey1_;
+	std::unique_ptr<Norm::WorldTransform> wtKey1_;
 
 	//鍵2
 	std::unique_ptr<Norm::Object3d> key2_ = nullptr;
-	Norm::WorldTransform wtKey2_;
+	std::unique_ptr<Norm::WorldTransform> wtKey2_;
+
+	//フラッシュパーティクル1
+	std::unique_ptr<CombinedParticle> flush1_ = nullptr;
+
+	//フラッシュパーティクル2
+	std::unique_ptr<CombinedParticle> flush2_ = nullptr;
+
 
 	//ブラックボード
 	std::unique_ptr<Norm::BlackBoard> blackBoard_ = nullptr;

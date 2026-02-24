@@ -264,6 +264,26 @@ namespace Norm {
 					//パラメーターをセット
 					sParInfo.particle->param_ = param;
 					isFind = true;
+					//即時反映
+					sParInfo.particle->TraceEmitterForCS();
+					sParInfo.particle->TraceJsonInfoForCS();
+					//ローカルトランスフォームは個別で反映
+					sParInfo.localTransform.translate = {
+						sParInfo.particle->jsonInfoForCS_.localTransform.translate.x,
+						sParInfo.particle->jsonInfoForCS_.localTransform.translate.y,
+						sParInfo.particle->jsonInfoForCS_.localTransform.translate.z,
+					};
+					sParInfo.localTransform.rotate = {
+						sParInfo.particle->jsonInfoForCS_.localTransform.rotate.x,
+						sParInfo.particle->jsonInfoForCS_.localTransform.rotate.y,
+						sParInfo.particle->jsonInfoForCS_.localTransform.rotate.z,
+					};
+					sParInfo.localTransform.scale = {
+						sParInfo.particle->jsonInfoForCS_.localTransform.scale.x,
+						sParInfo.particle->jsonInfoForCS_.localTransform.scale.y,
+						sParInfo.particle->jsonInfoForCS_.localTransform.scale.z,
+					};
+
 					break;
 				}
 			}

@@ -1,5 +1,6 @@
 #pragma once
 #include "application/system/direction/shot/base/IShotBase.h"
+#include <JsonUtil.h>
 
 /// <summary>
 /// 鍵を出現させる演出
@@ -41,6 +42,10 @@ private:
 	/// ============================== ///
 	///		メンバ関数
 	/// ============================== ///
+
+	//パラメーター
+	json param_;
+
 
 };
 

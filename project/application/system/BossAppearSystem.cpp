@@ -1,5 +1,6 @@
 #include "BossAppearSystem.h"
 #include <Object3dManager.h>
+#include <CombinedParticleManager.h>
 #include <cassert>
 #include <ImGuiManager.h>
 
@@ -14,8 +15,6 @@ void BossAppearSystem::Initialize() {
 
 	//ブラックボードの生成・初期化
 	blackBoard_ = std::make_unique<BlackBoard>();
-	//ブラックボードに必要な情報を登録
-	InitBlackBoard();
 
 	//映像演出の生成・初期化
 	cinematic_ = std::make_unique<Cinematic>();
@@ -34,12 +33,13 @@ void BossAppearSystem::Initialize() {
 		key1_->SetIsDisplay(true);
 		key1_->SetIsLightProcess(true);
 		//ワールドトランスフォームの初期化
-		wtKey1_.Initialize();
+		wtKey1_ = std::make_unique<WorldTransform>();
+		wtKey1_->Initialize();
 		//オブジェクトにセット
-		key1_->RegistWorldTransform(&wtKey1_);
+		key1_->RegistWorldTransform(wtKey1_.get());
 		//ブラックボードに登録
 		blackBoard_->SetValue<Object3d*>("Key1_Object", key1_.get());
-		blackBoard_->SetValue<WorldTransform>("Key1_WorldTransform",wtKey1_);
+		blackBoard_->SetValue<WorldTransform*>("Key1_WorldTransform",wtKey1_.get());
 
 	}
 	//鍵2の生成・初期化
@@ -49,12 +49,27 @@ void BossAppearSystem::Initialize() {
 		key2_->SetIsDisplay(true);
 		key2_->SetIsLightProcess(true);
 		//ワールドトランスフォームの初期化
-		wtKey2_.Initialize();
+		wtKey2_ = std::make_unique<WorldTransform>();
+		wtKey2_->Initialize();
 		//オブジェクトにセット
-		key2_->RegistWorldTransform(&wtKey2_);
+		key2_->RegistWorldTransform(wtKey2_.get());
 		//ブラックボードに登録
 		blackBoard_->SetValue<Object3d*>("Key2_Object", key2_.get());
-		blackBoard_->SetValue<WorldTransform>("Key2_WorldTransform", wtKey2_);
+		blackBoard_->SetValue<WorldTransform*>("Key2_WorldTransform", wtKey2_.get());
+	}
+	//フラッシュパーティクル1の生成・初期化
+	{
+		flush1_ = std::make_unique<CombinedParticle>();
+		flush1_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("flush1"), "Flush");
+		//ブラックボードに登録
+		blackBoard_->SetValue<CombinedParticle*>("Flush1_Particle", flush1_.get());
+	}
+	//フラッシュパーティクル2の生成・初期化
+	{
+		flush2_ = std::make_unique<CombinedParticle>();
+		flush2_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("flush2"), "Flush");
+		//ブラックボードに登録
+		blackBoard_->SetValue<CombinedParticle*>("Flush2_Particle", flush2_.get());
 	}
 
 
