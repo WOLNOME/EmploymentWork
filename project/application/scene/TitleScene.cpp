@@ -30,9 +30,6 @@ void TitleScene::Initialize() {
 	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
 	titleSystem_->SetCamera(camera_.get());
 
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 }
 
 void TitleScene::Finalize() {

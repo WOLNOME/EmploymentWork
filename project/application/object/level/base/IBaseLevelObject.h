@@ -55,6 +55,8 @@ public:
 	/// </summary>
 	/// <returns>ワールド変換情報</returns>
 	const std::unordered_map<uint32_t, std::unique_ptr<Norm::WorldTransform>>& GetWorldTransforms() const { return worldTransforms_; }
+
+	const std::unordered_map<uint32_t, std::unique_ptr<LevelObjectCollider>>& GetColliders() const { return colliders_; }
 	/// <summary>
 	/// オブジェクト3Dの取得
 	/// </summary>

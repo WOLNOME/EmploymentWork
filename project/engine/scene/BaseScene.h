@@ -64,6 +64,11 @@ namespace Norm {
 		virtual void DebugWithImGui() = 0;
 
 		/// <summary>
+		/// 復帰時の処理
+		/// </summary>
+		virtual void OnResume();
+
+		/// <summary>
 		/// FPS表示
 		/// </summary>
 		void ShowFPS();

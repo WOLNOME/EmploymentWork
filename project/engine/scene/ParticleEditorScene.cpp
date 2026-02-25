@@ -25,9 +25,7 @@ namespace Norm {
 		Object3dManager::GetInstance()->SetCamera(camera_.get());
 		LineManager::GetInstance()->SetCamera(camera_.get());
 		ParticleManager::GetInstance()->SetCamera(camera_.get());
-		//シーンライトをセット
-		Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
+		
 		//天球と地面の生成と初期化
 		skydome_ = std::make_unique<Object3d>();
 		skydome_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("Skydome"), "skydome");

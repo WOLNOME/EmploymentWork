@@ -29,9 +29,6 @@ void GameClearScene::Initialize() {
 	ground_->Initialize();
 	gameClearSystem_->Initialize();
 
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 	//その他インスタンスのセット
 	gameClearSystem_->SetCameraManager(cameraManager_.get());
 

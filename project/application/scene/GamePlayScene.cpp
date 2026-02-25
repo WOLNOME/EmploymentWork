@@ -80,9 +80,6 @@ void GamePlayScene::Initialize() {
 	playerUI_->SetCameraManager(cameraManager_.get());
 	enemyUI_->SetCameraManager(cameraManager_.get());
 
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 	//その他インスタンスのセット
 	startDirection_->SetMessageUI(messageUI_.get());
 	endDirection_->SetTimeScaleManager(timeScaleManager_.get());
@@ -235,4 +232,24 @@ void GamePlayScene::DebugWithImGui() {
 
 
 #endif // _DEBUG
+}
+
+void GamePlayScene::OnResume() {
+	//基底クラスの復帰時処理
+	BaseScene::OnResume();
+
+	//アクティブカメラをゲーム専用カメラにする
+	cameraManager_->SetActiveCamera("Game");
+
+	//封印オブジェクトを消す
+	levelLoader_->GetSealedBoxData()->GetObject3d()->SetIsDisplay(false);
+	for (auto& collider : levelLoader_->GetSealedBoxData()->GetColliders()) {
+		collider.second->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	}
+
+	//ボスを出現させる
+	enemyManager_->BossSpawn({ 0,0,0 }, { 0,pi,0 });
+
+
+
 }

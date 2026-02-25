@@ -170,7 +170,8 @@ namespace Norm {
 				scene_ = std::move(nextScene_);
 				nextScene_.reset();
 
-				//※FromKeepはキープシーンから復帰する遷移なので、次のシーンはすでに初期化されている前提で、ここでは初期化しない
+				//次のシーンの復帰時処理を行う
+				scene_->OnResume();
 
 				break;
 			}

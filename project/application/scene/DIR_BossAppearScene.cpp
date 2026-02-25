@@ -42,9 +42,6 @@ void DIR_BossAppearScene::Initialize() {
 	ground_->Initialize();
 	bossAppearSystem_->Initialize();
 
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 	//その他インスタンスのセット
 	bossAppearSystem_->SetCameraManager(cameraManager_.get());
 
