@@ -18,6 +18,8 @@ void GameClearScene::Initialize() {
 	gameCamera->SetFarClip(2000.0f);
 	//カメラマネージャーにゲームカメラをセット
 	cameraManager_->RegistCamera("Game", std::move(gameCamera));
+	//アクティブカメラをセット
+	cameraManager_->SetActiveCamera("Game");
 
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
