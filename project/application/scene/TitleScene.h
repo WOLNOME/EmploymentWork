@@ -44,6 +44,10 @@ private:
 	//ゲーム用カメラ
 	std::unique_ptr<Norm::DevelopCamera> camera_ = nullptr;
 
+	//平行光源
+	std::unique_ptr<Norm::DirectionalLight> dirLight_;
+
+
 	std::unique_ptr<TitleSystem> titleSystem_ = nullptr;
 
 };

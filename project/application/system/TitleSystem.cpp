@@ -82,6 +82,7 @@ void TitleSystem::Initialize() {
 			tanks_[i] = std::make_unique<Object3d>();
 			tanks_[i]->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("titleTank"), "canota");
 			tanks_[i]->SetTexture(textureHandle);
+			tanks_[i]->SetIsLightProcess(true);
 			tankWorldTransforms_[i].Initialize();
 			tankWorldTransforms_[i].SetTranslate({ -60.0f + (30.0f * i),1.5f,0.0f });
 			tanks_[i]->RegistWorldTransform(&tankWorldTransforms_[i]);
