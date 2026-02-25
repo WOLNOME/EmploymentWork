@@ -104,5 +104,7 @@ private:
 	//デバッグ用フラグ
 	bool isDebug_ = false;
 
+	bool isBossAppear_ = false;
+
 };
 

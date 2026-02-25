@@ -181,6 +181,25 @@ void GamePlayScene::Update() {
 	//カメラの更新後の処理（スクリーン座標を参照したいインスタンスの更新）
 	enemyUI_->Update();
 
+
+	//ボス出現演出
+	if (!isBossAppear_) {
+		//もし鍵を2つあつめたら
+		if (player_->GetKeyNum() == 2) {
+			isBossAppear_ = true;
+			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
+			SceneManager::GetInstance()->SetNextScene("DIR_BossAppear",
+				SceneTransitionAnimation::Type::FADE,
+				SceneTransitionAnimation::Type::FADE,
+				SceneTransitionAnimation::Option::NONE,
+				0.5f, textureHandle, TransitionMode::Temporary
+			);
+
+		}
+	}
+
+
+
 }
 void GamePlayScene::DebugWithImGui() {
 	//ImGui

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <JsonUtil.h>
+#include <Sprite.h>
 #include <Object3d.h>
 #include <CombinedParticle.h>
 
@@ -67,6 +68,14 @@ private:
 	//レベルローダー
 	std::unique_ptr<LevelLoader> levelLoader_ = nullptr;
 
+	//レターボックス
+	uint32_t thLetterBox_ = 0u;
+	std::unique_ptr<Norm::Sprite> letterBox_ = nullptr;
+
+	//スキップUI
+	uint32_t thSkipUI_ = 0u;
+	std::unique_ptr<Norm::Sprite> skipUI_ = nullptr;
+
 	//鍵1
 	std::unique_ptr<Norm::Object3d> key1_ = nullptr;
 	std::unique_ptr<Norm::WorldTransform> wtKey1_;
@@ -75,11 +84,21 @@ private:
 	std::unique_ptr<Norm::Object3d> key2_ = nullptr;
 	std::unique_ptr<Norm::WorldTransform> wtKey2_;
 
+	//ボス
+	std::unique_ptr<Norm::Object3d> boss_ = nullptr;
+	std::unique_ptr<Norm::WorldTransform> wtBoss_;
+
 	//フラッシュパーティクル1
-	std::unique_ptr<CombinedParticle> flush1_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> flush1_ = nullptr;
 
 	//フラッシュパーティクル2
-	std::unique_ptr<CombinedParticle> flush2_ = nullptr;
+	std::unique_ptr<Norm::CombinedParticle> flush2_ = nullptr;
+
+	//封印解除中パーティクル
+	std::unique_ptr<Norm::CombinedParticle> verge_ = nullptr;
+
+	//ボス出現時パーティクル
+	std::unique_ptr<Norm::CombinedParticle> appear_ = nullptr;
 
 
 	//ブラックボード

@@ -1,11 +1,11 @@
-#include "DIR_BossAppear.h"
+#include "DIR_BossAppearScene.h"
 #include "SceneManager.h"
 #include "GameCamera.h"
 #include "DevelopCamera.h"
 
 using namespace Norm;
 
-void DIR_BossAppear::Initialize() {
+void DIR_BossAppearScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
 
@@ -24,7 +24,7 @@ void DIR_BossAppear::Initialize() {
 	developCamera->SetFarClip(2000.0f);
 	cameraManager_->RegistCamera("Develop", std::move(developCamera));
 	//アクティブカメラのセット
-	cameraManager_->SetActiveCamera("Develop");
+	cameraManager_->SetActiveCamera("Game");
 
 	//ライトの生成・初期化＆登録
 	dirLight_ = std::make_unique<DirectionalLight>();
@@ -50,10 +50,10 @@ void DIR_BossAppear::Initialize() {
 
 }
 
-void DIR_BossAppear::Finalize() {
+void DIR_BossAppearScene::Finalize() {
 }
 
-void DIR_BossAppear::Update() {
+void DIR_BossAppearScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
@@ -64,7 +64,7 @@ void DIR_BossAppear::Update() {
 	cameraManager_->Update();
 }
 
-void DIR_BossAppear::DebugWithImGui() {
+void DIR_BossAppearScene::DebugWithImGui() {
 	//ImGui
 #ifdef _DEBUG
 	//カメラのImGui

@@ -25,10 +25,10 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//シーンマネージャーに最初のシーンをセット
-	SceneManager::GetInstance()->SetNextScene("PARTICLEEDITOR");
+	SceneManager::GetInstance()->SetNextScene("Title");
 
 	//パーティクルエディター→PARTICLEEDITOR
-	//開発用シーン→DEVELOP Title DIR_BossAppear
+	//開発用シーン→DEVELOP Title DIR_BossAppearScene
 }
 
 void MyGame::Finalize() {

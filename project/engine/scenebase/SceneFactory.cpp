@@ -6,7 +6,7 @@
 #include <application/scene/GamePlayScene.h>
 #include <application/scene/GameClearScene.h>
 #include <application/scene/GameOverScene.h>
-#include <application/scene/DIR_BossAppear.h>
+#include <application/scene/DIR_BossAppearScene.h>
 
 namespace Norm {
 
@@ -27,7 +27,7 @@ namespace Norm {
 			newScene = std::make_unique<GameOverScene>();
 		}
 		else if(sceneName == "DIR_BossAppear") {
-			newScene = std::make_unique<DIR_BossAppear>();
+			newScene = std::make_unique<DIR_BossAppearScene>();
 		}
 		// パーティクルエディター
 		else if (sceneName == "PARTICLEEDITOR") {

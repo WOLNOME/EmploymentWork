@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	IShotBase(int _index, Norm::TransformEuler _startCameraTransform, Norm::TransformEuler _endCameraTransform, float _duration, Norm::BlackBoard* _blackBoard) {};
+	IShotBase(int _index, Norm::TransformEuler _startCameraTransform, Norm::TransformEuler _endCameraTransform, float _duration, Norm::BlackBoard* _blackBoard) :index_(_index), startCameraTransform_(_startCameraTransform), endCameraTransform_(_endCameraTransform), duration_(_duration), blackBoard_(_blackBoard) {};
 	/// <summary>
 	/// デストラクタ
 	/// </summary>

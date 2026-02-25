@@ -35,13 +35,15 @@ void BA_ShowSealedBoxShot::Update() {
 	}
 
 	//カメラの座標と回転を線形補完で動かす
-	Vector3 cameraTranslate = camera->worldTransform.GetTranslate();
-	cameraTranslate = MyMath::Lerp(startCameraTransform_.translate, endCameraTransform_.translate, MyMath::EaseInSine(1.0f - (elapsedTimer_ / duration_)));
-	Vector3 cameraRotate = camera->worldTransform.GetRotate();
-	cameraRotate = MyMath::Lerp(startCameraTransform_.rotate, endCameraTransform_.rotate, MyMath::EaseInSine(1.0f - (elapsedTimer_ / duration_)));
-	//結果をセット
-	camera->worldTransform.SetTranslate(cameraTranslate);
-	camera->worldTransform.SetRotate(cameraRotate);
+	{
+		Vector3 cameraTranslate = camera->worldTransform.GetTranslate();
+		cameraTranslate = MyMath::Lerp(startCameraTransform_.translate, endCameraTransform_.translate, MyMath::EaseInSine(1.0f - (elapsedTimer_ / duration_)));
+		Vector3 cameraRotate = camera->worldTransform.GetRotate();
+		cameraRotate = MyMath::Lerp(startCameraTransform_.rotate, endCameraTransform_.rotate, MyMath::EaseInSine(1.0f - (elapsedTimer_ / duration_)));
+		//結果をセット
+		camera->worldTransform.SetTranslate(cameraTranslate);
+		camera->worldTransform.SetRotate(cameraRotate);
+	}
 
 	
 }

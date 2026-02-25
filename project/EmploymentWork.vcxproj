@@ -120,7 +120,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
     <ClCompile Include="application\system\CameraWork.cpp" />
     <ClCompile Include="application\system\CameraManager.cpp" />
-    <ClCompile Include="application\scene\DIR_BossAppear.cpp" />
+    <ClCompile Include="application\scene\DIR_BossAppearScene.cpp" />
     <ClCompile Include="application\system\BossAppearSystem.cpp" />
     <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
     <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
@@ -327,7 +327,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
     <ClInclude Include="application\system\CameraWork.h" />
     <ClInclude Include="application\system\CameraManager.h" />
-    <ClInclude Include="application\scene\DIR_BossAppear.h" />
+    <ClInclude Include="application\scene\DIR_BossAppearScene.h" />
     <ClInclude Include="application\system\BossAppearSystem.h" />
     <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
     <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />

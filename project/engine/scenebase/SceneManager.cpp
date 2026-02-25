@@ -80,16 +80,8 @@ namespace Norm {
 		//遷移モードによる処理
 		switch (transitionMode_) {
 		case Norm::TransitionMode::Normal:
-		{
-			//次シーンを生成
-			nextScene_ = sceneFactory_->CreateScene(nextSceneName);
-
-			break;
-		}
 		case Norm::TransitionMode::Temporary:
 		{
-			//キープシーンに今のシーンを保存
-			keepScene_ = std::move(scene_);
 			//次シーンを生成
 			nextScene_ = sceneFactory_->CreateScene(nextSceneName);
 
@@ -162,6 +154,9 @@ namespace Norm {
 				//シーンの切り替え
 				scene_ = std::move(nextScene_);
 				nextScene_.reset();
+				//次のシーンを初期化する
+				scene_->Initialize();
+
 				break;
 			}
 			case Norm::TransitionMode::FromKeep:

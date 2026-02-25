@@ -10,7 +10,7 @@
 /// <summary>
 /// ボス出現演出シーン全般を管理するクラス
 /// </summary>
-class DIR_BossAppear : public Norm::BaseScene {
+class DIR_BossAppearScene : public Norm::BaseScene {
 public:
 	/// ============================== ///
 	///		メンバ関数
