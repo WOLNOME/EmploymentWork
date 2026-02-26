@@ -12,6 +12,11 @@
 #include "../shot/BA_StillnessShot.h"
 #include "../shot/BA_UnlockShot.h"
 #include "../shot/BA_ZoomOutShot.h"
+#include "../shot/BD_BigExplosion1Shot.h"
+#include "../shot/BD_BigExplosion2Shot.h"
+#include "../shot/BD_BigExplosion3Shot.h"
+#include "../shot/BD_StillnessShot.h"
+#include "../shot/BD_ZoomOutShot.h"
 
 using namespace Norm;
 
@@ -72,13 +77,18 @@ std::vector<std::unique_ptr<IShotBase>> CinematicBuilder::BuildCinematic(const s
 		using ShotFactory = std::function<std::unique_ptr<IShotBase>()>;
 
 		std::unordered_map<std::string, ShotFactory> factory = {
-			{ "AppearBoss", [&]() { return std::make_unique<BA_AppearBossShot>(index, start, end, duration, _blackBoard); } },
-			{ "AppearKey", [&]() { return std::make_unique<BA_AppearKeyShot>(index, start, end, duration, _blackBoard); } },
-			{ "Shake", [&]() { return std::make_unique<BA_ShakeShot>(index, start, end, duration, _blackBoard); } },
-			{ "ShowSealedBox", [&]() { return std::make_unique<BA_ShowSealedBoxShot>(index, start, end, duration, _blackBoard); } },
-			{ "Stillness", [&]() { return std::make_unique<BA_StillnessShot>(index, start, end, duration, _blackBoard); } },
-			{ "Unlock", [&]() { return std::make_unique<BA_UnlockShot>(index, start, end, duration, _blackBoard); } },
-			{ "ZoomOut", [&]() { return std::make_unique<BA_ZoomOutShot>(index, start, end, duration, _blackBoard); } }
+			{ "BA_AppearBoss", [&]() { return std::make_unique<BA_AppearBossShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_AppearKey", [&]() { return std::make_unique<BA_AppearKeyShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_Shake", [&]() { return std::make_unique<BA_ShakeShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_ShowSealedBox", [&]() { return std::make_unique<BA_ShowSealedBoxShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_Stillness", [&]() { return std::make_unique<BA_StillnessShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_Unlock", [&]() { return std::make_unique<BA_UnlockShot>(index, start, end, duration, _blackBoard); } },
+			{ "BA_ZoomOut", [&]() { return std::make_unique<BA_ZoomOutShot>(index, start, end, duration, _blackBoard); } },
+			{ "BD_ZoomOut", [&]() { return std::make_unique<BD_ZoomOutShot>(index, start, end, duration, _blackBoard); } },
+			{ "BD_Stillness", [&]() { return std::make_unique<BD_StillnessShot>(index, start, end, duration, _blackBoard); } },
+			{ "BD_BigExplosion1", [&]() { return std::make_unique<BD_BigExplosion1Shot>(index, start, end, duration, _blackBoard); } },
+			{ "BD_BigExplosion2", [&]() { return std::make_unique<BD_BigExplosion2Shot>(index, start, end, duration, _blackBoard); } },
+			{ "BD_BigExplosion3", [&]() { return std::make_unique<BD_BigExplosion3Shot>(index, start, end, duration, _blackBoard); } }
 		};
 
 		auto it = factory.find(name);

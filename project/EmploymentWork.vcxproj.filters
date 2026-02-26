@@ -540,6 +540,13 @@
     <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp" />
     <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp" />
     <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp" />
+    <ClCompile Include="application\scene\DIR_BossDestroyScene.cpp" />
+    <ClCompile Include="application\system\BossDestroySystem.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -1028,6 +1035,13 @@
     <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h" />
     <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h" />
     <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h" />
+    <ClInclude Include="application\scene\DIR_BossDestroyScene.h" />
+    <ClInclude Include="application\system\BossDestroySystem.h" />
+    <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

@@ -153,7 +153,6 @@ void BossAppearSystem::Update() {
 			);
 		}
 	}
-
 }
 
 void BossAppearSystem::DebugWithImGui() {

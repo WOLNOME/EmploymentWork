@@ -28,7 +28,7 @@ void MyGame::Initialize() {
 	SceneManager::GetInstance()->SetNextScene("Title");
 
 	//パーティクルエディター→PARTICLEEDITOR
-	//開発用シーン→DEVELOP Title DIR_BossAppearScene
+	//開発用シーン→DEVELOP Title DIR_BossDestroy
 }
 
 void MyGame::Finalize() {
