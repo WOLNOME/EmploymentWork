@@ -1,5 +1,6 @@
 #include "Barrier.h"
 #include <TextureManager.h>
+#include <CombinedParticleManager.h>
 #include <Object3dManager.h>
 #include <cassert>
 
@@ -32,6 +33,20 @@ void Barrier::Initialize() {
 		param_["collisionRadiusSphere"],
 		param_["collisionRadiusSphere"]
 		});
+
+	//バリア削れエフェクトの生成・初期化
+	{
+		for (int i = 0; i < kScrapeNum; i++) {
+			scrapes_[i] = std::make_unique<CombinedParticle>();
+			scrapes_[i]->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BarrierScrape"), "Barrier_Scrape");
+		}
+	}
+	//バリア割れるエフェクトの生成・初期化
+	{
+		destroy_ = std::make_unique<CombinedParticle>();
+		destroy_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BarrierDestroy"), "Barrier_Destroy");
+	}
+
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<BarrierCollider>(this);
@@ -102,6 +117,13 @@ void Barrier::DeadProcess() {
 
 	//HPが0になったら
 	if (hp_ <= 0) {
+		//バリア破壊エフェクト発生
+		TransformEuler transform = destroy_->GetBaseTransform();
+		transform.translate = boss_->GetWorldTransform().GetTranslate();
+		transform.translate.y = 0.0f;
+		destroy_->SetBaseTransform(transform);
+		destroy_->SetIsPlay(true);
+
 		//アイドル状態にする
 		SetState(BaseCharacter::State::kIdle);
 	}

@@ -1,6 +1,8 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
 #include "JsonUtil.h"
+#include <CombinedParticle.h>
+#include <array>
 #include <memory>
 
 //前方宣言
@@ -10,6 +12,12 @@ class Boss;
 /// バリアクラス
 /// </summary>
 class Barrier : public BaseCharacter {
+private:
+	/// ============================== ///
+	///		定数
+	/// ============================== ///
+
+	static const int kScrapeNum = 50;
 public:
 	/// ============================== ///
 	///		メンバ関数（public）
@@ -52,6 +60,21 @@ public:
 	/// </summary>
 	/// <returns>パラメーター</returns>
 	const json& GetParam() { return param_; }
+
+	/// <summary>
+	/// バリア削れエフェクト取得
+	/// </summary>
+	/// <returns>エフェクト配列</returns>
+	const std::array<std::unique_ptr<Norm::CombinedParticle>, kScrapeNum>& GetScrapes() const {
+		return scrapes_;
+	}
+	/// <summary>
+	/// バリア破壊エフェクト取得
+	/// </summary>
+	/// <returns>破壊エフェクト</returns>
+	Norm::CombinedParticle* GetDestroyEffect() const {
+		return destroy_.get();
+	}
 
 	/// <summary>
 	/// HPを取得
@@ -107,6 +130,13 @@ private:
 
 	//パラメーター
 	json param_;
+
+	//バリアが削れるエフェクト
+	std::array<std::unique_ptr<Norm::CombinedParticle>, kScrapeNum> scrapes_;
+
+	//バリアが割れるエフェクト
+	std::unique_ptr<Norm::CombinedParticle> destroy_ = nullptr;
+
 
 	//HP
 	int hp_ = 0;

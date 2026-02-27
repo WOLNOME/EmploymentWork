@@ -3,18 +3,18 @@
         "Max": {
             "x": 0.0,
             "y": 0.0,
-            "z": 6.199999809265137
+            "z": 0.0
         },
         "Min": {
             "x": 0.0,
             "y": 0.0,
-            "z": -6.199999809265137
+            "z": 0.0
         }
     },
     "BlendMode": 2,
-    "ClumpNum": 7,
-    "EffectStyle": 1,
-    "EmitRate": 0,
+    "ClumpNum": 1,
+    "EffectStyle": 0,
+    "EmitRate": 5,
     "EndColor": {
         "Max": {
             "w": 0.0,
@@ -29,14 +29,14 @@
             "z": 1.0
         }
     },
-    "EndTime": 0.0,
+    "EndTime": 1.0,
     "FloorHeight": 0.0,
-    "GenerateMethod": 1,
+    "GenerateMethod": 0,
     "GrainTransform": {
         "Rotate": {
             "Max": {
-                "x": 0.0,
-                "y": 0.0,
+                "x": 3.140000104904175,
+                "y": 3.140000104904175,
                 "z": 3.140000104904175
             },
             "Min": {
@@ -47,24 +47,24 @@
         },
         "Scale": {
             "Max": {
-                "x": 70.0,
-                "y": 3.5,
+                "x": 1.0,
+                "y": 1.0,
                 "z": 1.0
             },
             "Min": {
-                "x": 60.0,
-                "y": 3.5,
+                "x": 1.0,
+                "y": 1.0,
                 "z": 1.0
             }
         }
     },
     "Gravity": 1.0,
-    "IsBillboard": 1,
+    "IsBillboard": 0,
     "IsBound": 0,
     "IsGravity": 0,
     "LifeTime": {
-        "Max": 0.30000001192092896,
-        "Min": 0.20000000298023224
+        "Max": 1.0,
+        "Min": 1.0
     },
     "LocalTransform": {
         "Rotate": {
@@ -75,50 +75,50 @@
         },
         "Scale": {
             "w": 0.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "Translate": {
-            "w": 0.0,
             "x": 0.10000000149011612,
             "y": 0.10000000149011612,
             "z": 0.10000000149011612
+        },
+        "Translate": {
+            "w": 0.0,
+            "x": 0.0,
+            "y": 8.0,
+            "z": 0.0
         }
     },
-    "MaxGrains": 7,
-    "Primitive": 3,
+    "MaxGrains": 10,
+    "Primitive": 4,
     "Repulsion": 0.5,
     "SizeVelocity": {
-        "Max": -0.6000000238418579,
-        "Min": -1.100000023841858
+        "Max": 400.0,
+        "Min": 400.0
     },
     "StartColor": {
         "Max": {
             "w": 1.0,
             "x": 1.0,
             "y": 1.0,
-            "z": 0.0
+            "z": 1.0
         },
         "Min": {
             "w": 1.0,
             "x": 1.0,
             "y": 1.0,
-            "z": 0.0
+            "z": 1.0
         }
     },
-    "StartTime": 0.10000000149011612,
-    "Texture": "circle2.png",
+    "StartTime": 0.0,
+    "Texture": "gradationLine2.png",
     "Velocity": {
         "Max": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
         "Min": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
         }
     }
 }

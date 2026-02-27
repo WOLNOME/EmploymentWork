@@ -106,6 +106,7 @@ namespace Norm {
 		/// </summary>
 		/// <param name="translate">設定する座標</param>
 		void SetTranslate(const Vector3& translate) { translate_ = translate; }
+	
 		/// <summary>
 		/// 親となるワールド変換を設定する
 		/// </summary>

@@ -1,4 +1,5 @@
 #include "SummonLeaf.h"
+#include <CombinedParticleManager.h>
 #include <ImGuiManager.h>
 #include <MyMath.h>
 
@@ -8,6 +9,21 @@
 using namespace Norm;
 
 SummonLeaf::SummonLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
+	//召喚中パーティクルの生成・初期化
+	{
+		for (int i = 0; i < kSummonNum; i++) {
+			summonMidst_[i] = std::make_unique<CombinedParticle>();
+			summonMidst_[i]->Initialize(CombinedParticleManager::GetInstance()->GenerateName("SummonMidst"), "Summon_Midst");
+			summonMidst_[i]->SetIsRepeat(true);
+		}
+	}
+	//召喚完了パーティクルの生成・初期化
+	{
+		for (int i = 0; i < kSummonNum; i++) {
+			summonComplete_[i] = std::make_unique<CombinedParticle>();
+			summonComplete_[i]->Initialize(CombinedParticleManager::GetInstance()->GenerateName("SummonComplete"), "Summon_Complete");
+		}
+	}
 }
 
 SummonLeaf::~SummonLeaf() {
@@ -43,8 +59,19 @@ void SummonLeaf::Initialize() {
 		bossLeftDir.Normalize();
 
 		//召喚座標を設定
-		summonPositions_[0] = bossPos + bossRightDir * 50.0f;
-		summonPositions_[1] = bossPos + bossLeftDir * 50.0f;
+		summonPositions_[0] = bossPos + bossRightDir * 60.0f;
+		summonPositions_[0].y = 0.0f;
+		summonPositions_[1] = bossPos + bossLeftDir * 60.0f;
+		summonPositions_[1].y = 0.0f;
+	}
+	//召喚中パーティクルを発生
+	{
+		for (int i = 0; i < kSummonNum; i++) {
+			TransformEuler transform = summonMidst_[i]->GetBaseTransform();
+			transform.translate = summonPositions_[i];
+			summonMidst_[i]->SetBaseTransform(transform);
+			summonMidst_[i]->SetIsPlay(true);
+		}
 	}
 
 }
@@ -59,11 +86,6 @@ void SummonLeaf::Update() {
 
 	//演出タイマーを更新
 	summonDirTimer -= kDeltaTime;
-
-	//演出
-	{
-		
-	}
 
 	//回転処理
 	Rotate();
@@ -82,6 +104,16 @@ void SummonLeaf::Update() {
 		//召喚処理
 		enemyManager->CanotaSpawn(summonPositions_[0], bossRotate);
 		enemyManager->CanotaSpawn(summonPositions_[1], bossRotate);
+
+		for (int i = 0; i < kSummonNum; i++) {
+			//召喚中パーティクルを停止
+			summonMidst_[i]->SetIsPlay(false);
+			//召喚完了パーティクルを発生
+			summonComplete_[i]->SetBaseTransform(summonMidst_[i]->GetBaseTransform());
+			summonComplete_[i]->SetIsPlay(true);
+
+		}
+
 	}
 
 	//ブラックボードに更新した情報を保存
@@ -93,6 +125,12 @@ void SummonLeaf::Update() {
 void SummonLeaf::Finalize() {
 	//基底クラスの終了処理
 	LeafNodeBase::Finalize();
+
+	//召喚中パーティクルの停止
+	for (int i = 0; i < kSummonNum; i++) {
+		summonMidst_[i]->SetIsPlay(false);
+	}
+
 }
 
 void SummonLeaf::Debug() {

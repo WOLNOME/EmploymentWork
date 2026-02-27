@@ -26,13 +26,30 @@ void EnemyCannon::Initialize() {
 	//ワールドトランスフォームの初期化
 	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX,FLT_MAX });
 
-	//トレールエフェクトの生成と初期化
-	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
-	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
-	//パーティクルの生成と初期化
-	explosionParticle_ = std::make_unique<CombinedParticle>();
-	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "Cannon_Hit");
+	//爆発パーティクルの生成と初期化
+	{
+		explosionParticle_ = std::make_unique<CombinedParticle>();
+		explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonHit"), "Cannon_Hit");
+		explosionParticle_->SetIsPlay(false);
+	}
+	//地面衝突パーティクルの生成と初期化
+	{
+		groundParticle_ = std::make_unique<CombinedParticle>();
+		groundParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonGround"), "Cannon_Ground");
+		explosionParticle_->SetIsPlay(false);
+	}
+	//発射時パーティクルの生成と初期化
+	{
+		fireParticle_ = std::make_unique<CombinedParticle>();
+		fireParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyCannonFire"), "Cannon_Fire");
+		fireParticle_->SetIsPlay(false);
+	}
+	//トレールの生成と初期化
+	{
+		trail_ = std::make_unique<BulletTrail>();
+		trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("EnemyCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+		trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
+	}
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<EnemyCannonCollider>(this);
@@ -49,8 +66,14 @@ void EnemyCannon::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//仮死状態だったらアイドル状態にする
+	//仮死状態だったら
 	if (state_ == State::kAsphyxia) {
+		//パーティクルが稼働中ならreturn
+		if (explosionParticle_->GetIsPlay() || groundParticle_->GetIsPlay() || fireParticle_->GetIsPlay()) {
+			return;
+		}
+
+		//全ての演出処理が終わったらアイドル状態にする
 		SetState(State::kIdle);
 	}
 
@@ -61,7 +84,7 @@ void EnemyCannon::Update() {
 	//移動処理
 	Move();
 
-	//トレールポジションの設定
+	//トレール座標設定
 	trail_->SetPosition(worldTransform_.GetTranslate());
 }
 
@@ -90,6 +113,13 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos, floa
 	csWorldTransform_.SetScale({ _size ,_size,_size });
 	auto* enemyCannonCollider = dynamic_cast<EnemyCannonCollider*>(collider_.get());
 	enemyCannonCollider->SetRadius(_size);
+	//ワールドトランスフォームを更新（前データの上書き）
+	worldTransform_.UpdateMatrix();
+	//発射時パーティクルの発生
+	TransformEuler transform = fireParticle_->GetBaseTransform();
+	transform.translate = _initPos;
+	fireParticle_->SetBaseTransform(transform);
+	fireParticle_->SetIsPlay(true);
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -137,11 +167,18 @@ void EnemyCannon::Move() {
 	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate += velocity_ * kDeltaTime;
 
-	//弾が地面に当たったら
+	//弾が地面に当たったら死亡
 	if (newTranslate.y < 0.0f) {
 		newTranslate.y = 0.0f;
-		//アイドル状態にする
-		SetState(State::kIdle);
+
+		//地面衝突パーティクルの発生
+		TransformEuler transform = groundParticle_->GetBaseTransform();
+		transform.translate = newTranslate;
+		groundParticle_->SetBaseTransform(transform);
+		groundParticle_->SetIsPlay(true);
+		//仮死状態にする
+		SetState(BaseCharacter::State::kAsphyxia);
+
 	}
 
 	//座標をセット

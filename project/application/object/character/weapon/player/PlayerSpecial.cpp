@@ -24,14 +24,37 @@ void PlayerSpecial::Initialize() {
 	//ワールドトランスフォームの初期化
 	worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 
-	//パーティクルの生成と初期化
-	explosionParticle_ = std::make_unique<CombinedParticle>();
-	explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialHit"), "Cannon_Hit");
-	explosionParticle_->SetIsPlay(false);
+	//爆発パーティクルの生成と初期化
+	{
+		explosionParticle_ = std::make_unique<CombinedParticle>();
+		explosionParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialHit"), "Cannon_Hit");
+		explosionParticle_->SetIsPlay(false);
+	}
+	//地面衝突パーティクルの生成と初期化
+	{
+		groundParticle_ = std::make_unique<CombinedParticle>();
+		groundParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialGround"), "Cannon_Ground");
+		explosionParticle_->SetIsPlay(false);
+	}
+	//発射時パーティクルの生成と初期化
+	{
+		fireParticle_ = std::make_unique<CombinedParticle>();
+		fireParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialFire"), "Cannon_Fire");
+		fireParticle_->SetIsPlay(false);
+	}
+	//粒パーティクルの生成と初期化
+	{
+		grainParticle_ = std::make_unique<CombinedParticle>();
+		grainParticle_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerSpecialGrain"), "Special_Grain");
+		grainParticle_->SetIsPlay(false);
+		grainParticle_->SetIsRepeat(true);
+	}
 	//トレールの生成と初期化
-	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerSpecial"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
-	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	{
+		trail_ = std::make_unique<BulletTrail>();
+		trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerCannon"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+		trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("blue.png"));
+	}
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<PlayerSpecialCollider>(this);
@@ -49,8 +72,17 @@ void PlayerSpecial::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//仮死状態の場合アイドル状態にする
+	//仮死状態だったら
 	if (state_ == State::kAsphyxia) {
+		//粒パーティクルを停止
+		grainParticle_->SetIsPlay(false);
+
+		//パーティクルが稼働中ならreturn
+		if (explosionParticle_->GetIsPlay() || groundParticle_->GetIsPlay() || fireParticle_->GetIsPlay() || grainParticle_->GetIsPlay()) {
+			return;
+		}
+
+		//全ての演出処理が終わったらアイドル状態にする
 		SetState(State::kIdle);
 	}
 
@@ -82,6 +114,17 @@ void PlayerSpecial::Spawn(const Vector3& _initPos, const Vector3& _initDirection
 
 	//初期位置を保存
 	worldTransform_.SetTranslate(_initPos);
+	//ワールドトランスフォームを更新（前データの上書き）
+	worldTransform_.UpdateMatrix();
+	//発射時パーティクルの発生
+	TransformEuler transform = fireParticle_->GetBaseTransform();
+	transform.translate = _initPos;
+	fireParticle_->SetBaseTransform(transform);
+	fireParticle_->SetIsPlay(true);
+	//粒パーティクルの発生
+	grainParticle_->SetBaseTransform(transform);
+	grainParticle_->SetIsPlay(true);
+
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);
@@ -113,11 +156,24 @@ void PlayerSpecial::Move() {
 	Vector3 newTranslate = worldTransform_.GetTranslate();
 	newTranslate += velocity_ * kDeltaTime;
 
+	//粒パーティクルのトランスフォームを更新
+	TransformEuler transform = fireParticle_->GetBaseTransform();
+	transform.translate = newTranslate;
+	grainParticle_->SetBaseTransform(transform);
+
 	//弾が地面に当たったら死亡
 	if (newTranslate.y < 0.0f) {
 		newTranslate.y = 0.0f;
-		//アイドル状態にする
-		SetState(State::kIdle);
+
+		//地面衝突パーティクルの発生
+		TransformEuler transform = groundParticle_->GetBaseTransform();
+		transform.translate = newTranslate;
+		groundParticle_->SetBaseTransform(transform);
+		groundParticle_->SetIsPlay(true);
+
+		//仮死状態にする
+		SetState(BaseCharacter::State::kAsphyxia);
+
 	}
 	//オブジェクトに反映
 	worldTransform_.SetTranslate(newTranslate);

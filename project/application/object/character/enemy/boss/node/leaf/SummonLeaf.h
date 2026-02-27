@@ -1,5 +1,6 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
+#include <CombinedParticle.h>
 #include <array>
 
 /// <summary>
@@ -30,8 +31,14 @@ private:
 	void Rotate();
 
 private:
-	//召喚する座標
+
 	static const int kSummonNum = 2;
+	//召喚中パーティクル
+	std::array<std::unique_ptr<Norm::CombinedParticle>,kSummonNum> summonMidst_;
+	//召喚完了パーティクル
+	std::array<std::unique_ptr<Norm::CombinedParticle>,kSummonNum> summonComplete_;
+
+	//召喚する座標
 	std::array < Norm::Vector3, kSummonNum > summonPositions_;
 };
 

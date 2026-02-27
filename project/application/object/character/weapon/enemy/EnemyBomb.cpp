@@ -38,10 +38,10 @@ void EnemyBomb::Initialize() {
 	//危険地帯オブジェクトにセット
 	warning_->RegistWorldTransform(&warningWorldTransform_);
 
-	//パーティクルの生成と初期化
+	//爆発パーティクルの生成と初期化
 	{
 		explosion_ = std::make_unique<CombinedParticle>();
-		explosion_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BombExplosion"), "Explosion");
+		explosion_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BombGround"), "Bomb_Ground");
 	}
 
 	//当たり判定の生成・初期化
@@ -60,7 +60,7 @@ void EnemyBomb::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//爆発演出の半刻が過ぎたらが終了したら
+	//爆発演出の半刻が過ぎたら
 	if (state_ == State::kAsphyxia && explosion_->GetElapsedTimer() > explosion_->GetDuration() * 0.5f) {
 		//アイドル状態にする
 		SetState(State::kIdle);
@@ -101,6 +101,8 @@ void EnemyBomb::Spawn(const BombMethod& _method, const Vector3& _initPos, const 
 	//サイズを保存
 	worldTransform_.SetScale({ _size ,_size,_size });
 	csWorldTransform_.SetScale({ _size ,_size,_size });
+	//ワールドトランスフォームを更新（前データの上書き）
+	worldTransform_.UpdateMatrix();
 	//表示する
 	object3d_->SetIsDisplay(true);
 	circleShadow_->SetIsDisplay(true);

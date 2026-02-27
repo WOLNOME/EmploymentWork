@@ -1,6 +1,7 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
-#include "Object3d.h"
+#include <CombinedParticle.h>
+#include <Object3d.h>
 #include "WorldTransform.h"
 #include <memory>
 
@@ -32,6 +33,12 @@ private:
 	void Rotate();
 
 private:
+
+	//展開中パーティクル
+	std::unique_ptr<Norm::CombinedParticle> barrierMidst_ = nullptr;
+	//展開完了パーティクル
+	std::unique_ptr<Norm::CombinedParticle> barrierComplete_ = nullptr;
+
 	//バリア演出オブジェクト
 	std::unique_ptr<Norm::Object3d> dirObject_ = nullptr;
 	Norm::WorldTransform dirWorldTransform_;

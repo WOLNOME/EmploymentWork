@@ -24,7 +24,7 @@ void PlayerCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 	auto commonCollisionProcess = [this]() {
 		//デバッグ用ラインのカラーを赤にする
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
+		//爆発パーティクルの発生
 		TransformEuler transform = holder_->GetExplosionParticle()->GetBaseTransform();
 		transform.translate = GetWorldTransform().GetTranslate();
 		holder_->GetExplosionParticle()->SetBaseTransform(transform);
