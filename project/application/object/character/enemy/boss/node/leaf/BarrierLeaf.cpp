@@ -1,6 +1,7 @@
 #include "BarrierLeaf.h"
 #include "ImGuiManager.h"
 #include <cstdint>
+#include <CombinedParticleManager.h>
 #include <TextureManager.h>
 #include <Object3dManager.h>
 #include <MyMath.h>
@@ -11,6 +12,18 @@
 using namespace Norm;
 
 BarrierLeaf::BarrierLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
+	//展開中パーティクルの生成・初期化
+	{
+		barrierMidst_ = std::make_unique<CombinedParticle>();
+		barrierMidst_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BarrierMidst"), "Barrier_Midst");
+		barrierMidst_->SetIsRepeat(true);
+	}
+	//展開完了パーティクルの生成・初期化
+	{
+		barrierComplete_ = std::make_unique<CombinedParticle>();
+		barrierComplete_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BarrierComplete"), "Barrier_Complete");
+	}
+
 	//バリア演出オブジェクトの生成・初期化
 	uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("sky.png");
 	dirObject_ = std::make_unique<Object3d>();
@@ -33,10 +46,21 @@ void BarrierLeaf::Initialize() {
 	//基底クラスの初期化
 	LeafNodeBase::Initialize();
 
+	//ブラックボードから必要な情報を取得
+	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
+
 	//ブラックボードの情報を初期化
 	mpBlackBoard->SetValue<bool>("IsBarrier", false);
 	float barrierDirTime = mpBlackBoard->GetValue<float>("BarrierDirTime");
 	mpBlackBoard->SetValue<float>("BarrierDirTimer", barrierDirTime);
+
+	//バリア展開中エフェクトを発生
+	TransformEuler transform = barrierMidst_->GetBaseTransform();
+	transform.translate = bossPos;
+	transform.translate.y = 0.0f;
+	barrierMidst_->SetBaseTransform(transform);
+	barrierMidst_->SetIsPlay(true);
+
 }
 
 void BarrierLeaf::Update() {
@@ -91,6 +115,12 @@ void BarrierLeaf::Update() {
 		dirObject_->SetIsDisplay(false);
 		//バリアをスポーン
 		barrier->Spawn(bossPos);
+
+		//バリア展開中エフェクトの停止
+		barrierMidst_->SetIsPlay(false);
+		//バリア完成エフェクトの発生
+		barrierComplete_->SetBaseTransform(barrierMidst_->GetBaseTransform());
+		barrierComplete_->SetIsPlay(true);
 	}
 
 	//ブラックボードに更新した情報を保存
@@ -103,6 +133,9 @@ void BarrierLeaf::Update() {
 void BarrierLeaf::Finalize() {
 	//基底クラスの終了処理
 	LeafNodeBase::Finalize();
+
+	//バリア展開中エフェクトの停止
+	barrierMidst_->SetIsPlay(false);
 }
 
 void BarrierLeaf::Debug() {

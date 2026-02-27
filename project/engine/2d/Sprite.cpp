@@ -6,8 +6,23 @@
 #include "TextTextureManager.h"
 #include "ImGuiManager.h"
 #include "SpriteManager.h"
+#include "SceneManager.h"
 
 namespace Norm {
+
+	Sprite::Sprite(bool _isNotUsingScene) {
+		//シーンタグを設定
+		if (_isNotUsingScene) {
+			sceneTag_ = "All";
+		}
+		else {
+			sceneTag_ = SceneManager::GetInstance()->GetCurrentScene()->GetSceneName();
+		}
+
+		//リソースの作成
+		resource_ = CreateResourceForGPU();
+
+	}
 
 	Sprite::~Sprite() {
 		//マネージャーから削除
@@ -17,9 +32,6 @@ namespace Norm {
 	void Sprite::Initialize(SpriteTag, const std::string& _name, const Order& _order, uint32_t _textureHandle) {
 		//名前
 		name_ = _name;
-
-		//リソースの作成
-		resource_ = CreateResourceForGPU();
 
 		//描画順タグ
 		order_ = _order;
@@ -36,9 +48,6 @@ namespace Norm {
 	void Sprite::Initialize(UVScrollTag, const std::string& _name, const Order& _order, int _sheetsNum, float _switchTime, bool _isLoop, uint32_t _textureHandle) {
 		//名前
 		name_ = _name;
-
-		//リソースの作成
-		resource_ = CreateResourceForGPU();
 
 		//描画順タグ
 		order_ = _order;

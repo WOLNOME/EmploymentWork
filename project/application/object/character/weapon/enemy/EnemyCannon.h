@@ -89,17 +89,24 @@ private:
 
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
-	//トレールエフェクト
-	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
-	//パーティクル
-	std::unique_ptr<Norm::CombinedParticle> explosionParticle_ = nullptr;
-
+	
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
 	//パラメータ-
 	json param_;
+
+	//爆発パーティクル
+	std::unique_ptr<Norm::CombinedParticle> explosionParticle_ = nullptr;
+	//地面衝突パーティクル
+	std::unique_ptr<Norm::CombinedParticle> groundParticle_ = nullptr;
+	//発射時パーティクル
+	std::unique_ptr<Norm::CombinedParticle> fireParticle_ = nullptr;
+
+	//トレールエフェクト
+	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
+
 
 	//生成された座標
 	Norm::Vector3 generatedPosition_ = {};

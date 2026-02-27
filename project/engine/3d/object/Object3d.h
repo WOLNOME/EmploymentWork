@@ -217,6 +217,8 @@ namespace Norm {
 
 		//名前
 		std::string name_;
+		//シーンタグ
+		std::string sceneTag_;
 
 		//モデル
 		Model* model_ = nullptr;

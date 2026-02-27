@@ -4,10 +4,13 @@
 #include "MainRender.h"
 #include "GPUDescriptorManager.h"
 #include "BaseCamera.h"
+#include "SceneManager.h"
 
 namespace Norm {
 
 	BulletTrail::BulletTrail() {
+		//シーンタグの初期化
+		sceneTag_ = SceneManager::GetInstance()->GetCurrentScene()->GetSceneName();
 	}
 
 	BulletTrail::~BulletTrail() {

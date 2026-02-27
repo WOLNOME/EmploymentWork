@@ -46,9 +46,9 @@ void EndDirection::SceneChange() {
 	}
 	//もしスローモーション中で、かつスローモーションタイマーが一定時間を超えたら
 	if (isSlowMotion_ && slowMotionTimer_ >= kSlowMotionToSceneChangeTime_) {
-		//クリアシーンへ遷移
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
-		sceneManager_->SetNextScene("GameClear", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 2.0f, textureHandle);
+		//ボス撃破シーンへ遷移
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
+		sceneManager_->SetNextScene("DIR_BossDestroy", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 0.5f, textureHandle);
 	}
 }
 

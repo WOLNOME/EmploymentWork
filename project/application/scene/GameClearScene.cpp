@@ -1,5 +1,6 @@
 #include "GameClearScene.h"
 #include "SceneManager.h"
+#include "GameCamera.h"
 
 using namespace Norm;
 
@@ -7,15 +8,18 @@ void GameClearScene::Initialize() {
 	//シーン共通の初期化
 	BaseScene::Initialize();
 
-	//インプットの初期化
-	input_ = Input::GetInstance();
+	//カメラマネージャーの生成と初期化
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->Initialize();
 
-	//カメラの生成・初期化
-	camera_ = std::make_unique<GameCamera>();
-	camera_->Initialize();
-	camera_->SetFarClip(2000.0f);
-	camera_->worldTransform.SetRotate({ 0.15f,0.0f,0.0f });
-	camera_->worldTransform.SetTranslate({ 0.0f,20.0f,-80.0f });
+	//ゲームカメラの生成と初期化
+	std::unique_ptr<GameCamera> gameCamera = std::make_unique<GameCamera>();
+	gameCamera->Initialize();
+	gameCamera->SetFarClip(2000.0f);
+	//カメラマネージャーにゲームカメラをセット
+	cameraManager_->RegistCamera("Game", std::move(gameCamera));
+	//アクティブカメラをセット
+	cameraManager_->SetActiveCamera("Game");
 
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
@@ -27,17 +31,8 @@ void GameClearScene::Initialize() {
 	ground_->Initialize();
 	gameClearSystem_->Initialize();
 
-	//カメラのセット
-	Object3dManager::GetInstance()->SetCamera(camera_.get());
-	LineManager::GetInstance()->SetCamera(camera_.get());
-	ParticleManager::GetInstance()->SetCamera(camera_.get());
-	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
-
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 	//その他インスタンスのセット
-	gameClearSystem_->SetGameCamera(camera_.get());
+	gameClearSystem_->SetCameraManager(cameraManager_.get());
 
 }
 
@@ -52,7 +47,7 @@ void GameClearScene::Update() {
 	gameClearSystem_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
-	camera_->Update();
+	cameraManager_->Update();
 }
 
 void GameClearScene::DebugWithImGui() {
@@ -61,7 +56,7 @@ void GameClearScene::DebugWithImGui() {
 	//ゲームクリアシステムのImGui
 	gameClearSystem_->DebugWithImGui();
 	//カメラのImGui
-	camera_->DebugWithImGui();
+	cameraManager_->DebugWithImGui();
 
 #endif // _DEBUG
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "interface/INode.h"
-#include "blackBoard/BlackBoard.h"
+#include "BlackBoard.h"
 
 namespace Norm {
 

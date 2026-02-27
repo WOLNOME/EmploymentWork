@@ -9,6 +9,15 @@
 namespace Norm {
 
 	/// <summary>
+	/// シーン遷移のモード
+	/// </summary>
+	enum class TransitionMode {
+		Normal,			//通常遷移
+		Temporary,		//仮遷移（Keep）
+		FromKeep		//Keepから復帰
+	};
+
+	/// <summary>
 	/// 全てのシーン処理を行うクラス
 	/// シングルトンパターンで実装
 	/// </summary>
@@ -54,7 +63,17 @@ namespace Norm {
 		/// <summary>
 		/// 次のシーンのセット
 		/// </summary>
-		void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u, bool _isTemporary = false);
+		void SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type outType = SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option option = SceneTransitionAnimation::Option::NONE, float time = 1.0f, uint32_t _textureHandle = 0u, TransitionMode _transitionMode = TransitionMode::Normal);
+
+		/// ============================== ///
+		///		getter
+		///	============================== ///
+
+		/// <summary>
+		/// 現在のシーンの取得
+		/// </summary>
+		/// <returns>現在のシーン</returns>
+		BaseScene* GetCurrentScene() const { return scene_.get(); }
 
 	private:
 		/// ============================== ///
@@ -76,6 +95,8 @@ namespace Norm {
 		std::unique_ptr<BaseScene> nextScene_ = nullptr;
 		//キープシーン
 		std::unique_ptr<BaseScene> keepScene_ = nullptr;
+		//シーン遷移のモード
+		TransitionMode transitionMode_ = TransitionMode::Normal;
 
 		//シーンファクトリー
 		std::unique_ptr<AbstractSceneFactory> sceneFactory_ = nullptr;

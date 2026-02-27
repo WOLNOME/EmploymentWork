@@ -1,0 +1,12 @@
+{
+    "particleBox":{
+        "center":{"x":0.0,"y":11.46,"z":0.0},
+        "size":{"x":17.65,"y":11.33,"z":12.09}
+    },
+    "shakeShortTime":0.8,
+    "shakeLongTime":4.0,
+    "shakeHugePower":1.5,
+    "shakeMediumPower":1.2,
+    "shakeSmallPower":0.3
+
+}

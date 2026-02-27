@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include "RandomStringUtil.h"
 #include "Particle.h"
+#include "SceneManager.h"
 #include <numbers>
 #include <random>
 #include <algorithm>
@@ -67,6 +68,15 @@ namespace Norm {
 
 		//各パーティクルの更新
 		for (const auto& particle : particles) {
+			//パーティクルのシーンタグが現在のシーンタグと違うなら次へ
+			if (particle.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
+			//パーティクルがアクティブでないなら次へ
+			if (!particle.second->emitter_.isDraw) {
+				continue;
+			}
+
 			//エミッターの更新（GPU送信用データに変換）
 			particle.second->TraceEmitterForCS();
 
@@ -214,6 +224,10 @@ namespace Norm {
 
 		//パーティクル個別の設定
 		for (const auto& particle : particles) {
+			//パーティクルのシーンタグが現在のシーンタグと違うなら次へ
+			if (particle.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
 			//パーティクルがアクティブでないなら次へ
 			if (!particle.second->emitter_.isDraw) {
 				continue;

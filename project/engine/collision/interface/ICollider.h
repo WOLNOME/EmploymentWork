@@ -2,6 +2,7 @@
 #include "CollisionConfig.h"
 #include "WorldTransform.h"
 #include "Vector3.h"
+#include <string>
 
 namespace Norm {
 
@@ -49,6 +50,12 @@ namespace Norm {
 		/// ============================== ///
 		///		getter
 		/// ============================== ///
+
+		/// <summary>
+		/// シーンタグを取得する
+		/// </summary>
+		/// <returns>シーンタグ</returns>
+		const std::string& GetSceneTag() { return sceneTag_; }
 
 		/// <summary>
 		/// コリジョン属性を取得する
@@ -118,6 +125,9 @@ namespace Norm {
 		/// ============================== ///
 		///		メンバ変数(protected)
 		/// ============================== ///
+
+		//シーンタグ
+		std::string sceneTag_ = "";
 
 		//コリジョン属性
 		CollisionAttribute collisionAttribute_ = CollisionAttribute::Nothingness;

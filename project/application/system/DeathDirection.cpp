@@ -2,6 +2,7 @@
 #include <cassert>
 #include <CombinedParticleManager.h>
 #include <random>
+#include <GameCamera.h>
 
 //アプリケーション
 #include "application/system/CameraManager.h"
@@ -56,7 +57,8 @@ void DeathDirection::CameraControl() {
 		}
 
 		//カメラのシェイクを開始する
-		cameraManaqer_->GetActiveCamera()->RegistShake(kTime_, 0.5f);
+		GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManaqer_->GetActiveCamera());
+		gameCamera->RegistShake(kTime_, 0.5f);
 	}
 
 	//タイマーを進める

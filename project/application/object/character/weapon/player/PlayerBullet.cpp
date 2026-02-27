@@ -27,12 +27,16 @@ void PlayerBullet::Initialize() {
 	worldTransform_.SetScale({ 0.01f,0.01f,0.01f });
 
 	//トレールエフェクトの生成と初期化
-	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
-	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	{
+		trail_ = std::make_unique<BulletTrail>();
+		trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("playerBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+		trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("yellow.png"));
+	}
 	//衝突エフェクトの生成と初期化
-	hitEffect_ = std::make_unique<CombinedParticle>();
-	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerBulletHitEffect"), "Bullet_Hit");
+	{
+		hitEffect_ = std::make_unique<CombinedParticle>();
+		hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("PlayerBulletHitEffect"), "Bullet_Hit");
+	}
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<PlayerBulletCollider>(this);
@@ -47,8 +51,14 @@ void PlayerBullet::Update() {
 	//ベースキャラクターの更新
 	BaseCharacter::Update();
 
-	//死亡演出が終了したらアイドル状態にする
-	if (state_ == State::kAsphyxia && !hitEffect_->GetIsPlay()) {
+	//仮死状態なら
+	if (state_ == State::kAsphyxia) {
+		//稼働中のパーティクルがあるならreturn
+		if (hitEffect_->GetIsPlay()) {
+			return;
+		}
+
+		//全ての演出処理が終わったらアイドル状態にする
 		SetState(State::kIdle);
 	}
 
@@ -82,6 +92,8 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 
 	//初期位置を保存
 	worldTransform_.SetTranslate(_initPos);
+	//ワールドトランスフォームを更新（前データの上書き）
+	worldTransform_.UpdateMatrix();
 	//速度を算出
 	float speed = param_["speed"];
 	//速度を更新

@@ -1,0 +1,28 @@
+{
+    "key1": {
+        "startTransform": {
+            "scale": { "x": 5.0, "y": 5.0, "z": 5.0 },
+            "translate": { "x": -17.5, "y": 36.6, "z": -60.0 },
+            "rotate": { "x": -1.67, "y": 2.5, "z": 4.61 }
+        },
+        "endTransform": {
+            "scale": { "x": 5.0, "y": 5.0, "z": 5.0 },
+            "translate": { "x": -17.5, "y": 36.6, "z": -38.0 },
+            "rotate": { "x": -1.67, "y": 2.5, "z": 4.61 }
+        }
+    },
+    "key2": {
+        "startTransform": {
+            "scale": { "x": 5.0, "y": 5.0, "z": 5.0 },
+            "translate": { "x": 19.5, "y": 36.6, "z": -60.0 },
+            "rotate": { "x": -1.67, "y": 2.5, "z": 4.61 }
+        },
+        "endTransform": {
+            "scale": { "x": 5.0, "y": 5.0, "z": 5.0 },
+            "translate": { "x": 19.5, "y": 36.6, "z": -38.0 },
+            "rotate": { "x": -1.67, "y": 2.5, "z": 4.61 }
+        }
+    },
+    "shakeTime":4.0,
+    "shakePower":1.5
+}

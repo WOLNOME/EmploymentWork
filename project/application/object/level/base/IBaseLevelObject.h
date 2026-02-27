@@ -56,6 +56,13 @@ public:
 	/// <returns>ワールド変換情報</returns>
 	const std::unordered_map<uint32_t, std::unique_ptr<Norm::WorldTransform>>& GetWorldTransforms() const { return worldTransforms_; }
 
+	const std::unordered_map<uint32_t, std::unique_ptr<LevelObjectCollider>>& GetColliders() const { return colliders_; }
+	/// <summary>
+	/// オブジェクト3Dの取得
+	/// </summary>
+	/// <returns>オブジェクト3D</returns>
+	Norm::Object3d* GetObject3d() { return object3d_.get(); }
+
 	/// ============================== ///
 	///		setter
 	/// ============================== ///
@@ -73,6 +80,7 @@ public:
 	/// <param name="_center">中心点</param>
 	/// <param name="_size">サイズ</param>
 	void SetCollisionInfo(uint32_t _handle, const Norm::Vector3& _center, const Norm::Vector3& _size);
+
 
 protected:
 	/// ============================== ///

@@ -148,12 +148,15 @@ void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
 }
 
 void PlayerUI::DamageShaking() {
+	//ゲームカメラ
+	GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManager_->GetActiveCamera());
+
 	//もしカメラが揺れてたらUIも一部揺らす(オフセットはそろえる)
-	if (cameraManager_->GetActiveCamera()->GetIsShake()) {
+	if (gameCamera->GetIsShake()) {
 		std::random_device seed_gen;
 		std::mt19937 engine(seed_gen());
 		int shakePower = param_["shakePower"];
-		std::uniform_int_distribution<int> dist(int(-shakePower * cameraManager_->GetActiveCamera()->GetShakePower()), int(shakePower * cameraManager_->GetActiveCamera()->GetShakePower()));
+		std::uniform_int_distribution<int> dist(int(-shakePower * gameCamera->GetShakePower()), int(shakePower * gameCamera->GetShakePower()));
 		//オフセット
 		Vector2 offset = { (float)dist(engine),(float)dist(engine) };
 		//設定

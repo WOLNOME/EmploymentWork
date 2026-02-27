@@ -63,7 +63,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\blackBoard;$(ProjectDir)engine\scenebase;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\base\directx;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager;$(ProjectDir)engine\behaviorTree\branchNode;$(ProjectDir)engine\behaviorTree\compositeNode;$(ProjectDir)engine\behaviorTree\decoratorNode;$(ProjectDir)engine\behaviorTree\interface;$(ProjectDir)engine\behaviorTree\leafNode;$(ProjectDir)engine\behaviorTree\nodeBase</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir);$(ProjectDir)engine\scenebase;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\level;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\base\directX;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\nlohmann;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\audio;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\blackBoard;$(ProjectDir)engine\scenebase;$(ProjectDir)engine\util;$(ProjectDir)engine\collision;$(ProjectDir)engine\behaviorTree;$(ProjectDir)engine\base\directx;$(ProjectDir)engine\base\framework;$(ProjectDir)engine\base\logger;$(ProjectDir)engine\base\myGame;$(ProjectDir)engine\base\postEffect;$(ProjectDir)engine\base\render;$(ProjectDir)engine\base\view;$(ProjectDir)engine\base\texture;$(ProjectDir)engine\base\windows;$(ProjectDir)engine\3d\camera;$(ProjectDir)engine\3d\direction;$(ProjectDir)engine\3d\light;$(ProjectDir)engine\3d\line;$(ProjectDir)engine\3d\object;$(ProjectDir)engine\3d\particle;$(ProjectDir)engine\3d\worldTransform;$(ProjectDir)engine\collision\base;$(ProjectDir)engine\collision\interface;$(ProjectDir)engine\collision\manager;$(ProjectDir)engine\behaviorTree\branchNode;$(ProjectDir)engine\behaviorTree\compositeNode;$(ProjectDir)engine\behaviorTree\decoratorNode;$(ProjectDir)engine\behaviorTree\interface;$(ProjectDir)engine\behaviorTree\leafNode;$(ProjectDir)engine\behaviorTree\nodeBase</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -120,6 +120,24 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
     <ClCompile Include="application\system\CameraWork.cpp" />
     <ClCompile Include="application\system\CameraManager.cpp" />
+    <ClCompile Include="application\scene\DIR_BossAppearScene.cpp" />
+    <ClCompile Include="application\system\BossAppearSystem.cpp" />
+    <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
+    <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearKeyShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShowSealedBoxShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_UnlockShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp" />
+    <ClCompile Include="application\scene\DIR_BossDestroyScene.cpp" />
+    <ClCompile Include="application\system\BossDestroySystem.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -166,7 +184,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\EndDirection.cpp" />
     <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp" />
     <ClCompile Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.cpp" />
-    <ClCompile Include="engine\behaviorTree\blackBoard\BlackBoard.cpp" />
+    <ClCompile Include="engine\blackBoard\BlackBoard.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\Boss.cpp" />
     <ClCompile Include="engine\3d\particle\CombinedParticleManager.cpp" />
     <ClCompile Include="engine\3d\direction\BulletTrail.cpp" />
@@ -301,6 +319,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp" />
     <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
     <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
+    <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -315,6 +334,24 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
     <ClInclude Include="application\system\CameraWork.h" />
     <ClInclude Include="application\system\CameraManager.h" />
+    <ClInclude Include="application\scene\DIR_BossAppearScene.h" />
+    <ClInclude Include="application\system\BossAppearSystem.h" />
+    <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
+    <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearKeyShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShowSealedBoxShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_UnlockShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h" />
+    <ClInclude Include="application\scene\DIR_BossDestroyScene.h" />
+    <ClInclude Include="application\system\BossDestroySystem.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
@@ -358,7 +395,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\EndDirection.h" />
     <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h" />
     <ClInclude Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.h" />
-    <ClInclude Include="engine\behaviorTree\blackBoard\BlackBoard.h" />
+    <ClInclude Include="engine\blackBoard\BlackBoard.h" />
     <ClInclude Include="application\object\character\enemy\boss\Boss.h" />
     <ClInclude Include="engine\3d\particle\CombinedParticleManager.h" />
     <ClInclude Include="engine\3d\direction\BulletTrail.h" />
@@ -505,6 +542,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h" />
     <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
     <ClInclude Include="application\ui\player\detail\KeyUI.h" />
+    <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

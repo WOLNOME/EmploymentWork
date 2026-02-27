@@ -44,6 +44,10 @@ public:
 	/// デバッグ処理 
 	/// </summary>
 	void DebugWithImGui() override;
+	/// <summary>
+	/// 復帰時の処理
+	/// </summary>
+	void OnResume() override;
 
 private:
 	/// ============================== ///
@@ -103,6 +107,8 @@ private:
 
 	//デバッグ用フラグ
 	bool isDebug_ = false;
+
+	bool isBossAppear_ = false;
 
 };
 

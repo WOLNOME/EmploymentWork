@@ -1,8 +1,8 @@
 #pragma once
 #include "BaseScene.h"
-#include "GameCamera.h"
 
 //アプリケーション
+#include "application/system/CameraManager.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
 #include <application/system/GameClearSystem.h>
@@ -38,17 +38,15 @@ private:
 	///		インスタンス
 	/// ============================== ///
 
-	//インプット
-	Norm::Input* input_ = nullptr;
-
-	//ゲーム用カメラ
-	std::unique_ptr<Norm::GameCamera> camera_ = nullptr;
+	//カメラマネージャー
+	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
 
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
 
+	//ゲームクリアシステム
 	std::unique_ptr<GameClearSystem> gameClearSystem_ = nullptr;
 
 

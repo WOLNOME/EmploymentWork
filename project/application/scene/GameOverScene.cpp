@@ -33,9 +33,6 @@ void GameOverScene::Initialize() {
 	ParticleManager::GetInstance()->SetCamera(camera_.get());
 	BulletTrailManager::GetInstance()->SetCamera(camera_.get());
 
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
-
 }
 
 void GameOverScene::Finalize() {

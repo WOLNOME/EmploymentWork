@@ -1,6 +1,7 @@
 #include "GamePlayScene.h"
 #include "SceneManager.h"
 #include <TextureManager.h>
+#include <GameCamera.h>
 
 using namespace Norm;
 
@@ -78,9 +79,6 @@ void GamePlayScene::Initialize() {
 	playerWeaponManager_->SetCameraManager(cameraManager_.get());
 	playerUI_->SetCameraManager(cameraManager_.get());
 	enemyUI_->SetCameraManager(cameraManager_.get());
-
-	//ライトのセット
-	Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	//その他インスタンスのセット
 	startDirection_->SetMessageUI(messageUI_.get());
@@ -180,6 +178,25 @@ void GamePlayScene::Update() {
 	//カメラの更新後の処理（スクリーン座標を参照したいインスタンスの更新）
 	enemyUI_->Update();
 
+
+	//ボス出現演出
+	if (!isBossAppear_) {
+		//もし鍵を2つあつめたら
+		if (player_->GetKeyNum() == 2) {
+			isBossAppear_ = true;
+			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
+			SceneManager::GetInstance()->SetNextScene("DIR_BossAppear",
+				SceneTransitionAnimation::Type::FADE,
+				SceneTransitionAnimation::Type::FADE,
+				SceneTransitionAnimation::Option::NONE,
+				0.5f, textureHandle, TransitionMode::Temporary
+			);
+
+		}
+	}
+
+
+
 }
 void GamePlayScene::DebugWithImGui() {
 	//ImGui
@@ -215,4 +232,24 @@ void GamePlayScene::DebugWithImGui() {
 
 
 #endif // _DEBUG
+}
+
+void GamePlayScene::OnResume() {
+	//基底クラスの復帰時処理
+	BaseScene::OnResume();
+
+	//アクティブカメラをゲーム専用カメラにする
+	cameraManager_->SetActiveCamera("Game");
+
+	//封印オブジェクトを消す
+	levelLoader_->GetSealedBoxData()->GetObject3d()->SetIsDisplay(false);
+	for (auto& collider : levelLoader_->GetSealedBoxData()->GetColliders()) {
+		collider.second->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	}
+
+	//ボスを出現させる
+	enemyManager_->BossSpawn({ 0,0,0 }, { 0,pi,0 });
+
+
+
 }

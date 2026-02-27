@@ -447,7 +447,7 @@
     <ClCompile Include="application\system\TimeScaleManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\blackBoard\BlackBoard.cpp">
+    <ClCompile Include="engine\blackBoard\BlackBoard.cpp">
       <Filter>application\behaviorTree\blackBoard</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp">
@@ -528,6 +528,25 @@
     <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
     <ClCompile Include="application\system\CameraWork.cpp" />
     <ClCompile Include="application\system\CameraManager.cpp" />
+    <ClCompile Include="application\scene\DIR_BossAppearScene.cpp" />
+    <ClCompile Include="application\system\BossAppearSystem.cpp" />
+    <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
+    <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
+    <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShowSealedBoxShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearKeyShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_UnlockShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp" />
+    <ClCompile Include="application\scene\DIR_BossDestroyScene.cpp" />
+    <ClCompile Include="application\system\BossDestroySystem.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp" />
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -923,7 +942,7 @@
     <ClInclude Include="engine\3d\particle\ParticleTypes.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\behaviorTree\blackBoard\BlackBoard.h">
+    <ClInclude Include="engine\blackBoard\BlackBoard.h">
       <Filter>application\behaviorTree\blackBoard</Filter>
     </ClInclude>
     <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h">
@@ -1004,6 +1023,25 @@
     <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
     <ClInclude Include="application\system\CameraWork.h" />
     <ClInclude Include="application\system\CameraManager.h" />
+    <ClInclude Include="application\scene\DIR_BossAppearScene.h" />
+    <ClInclude Include="application\system\BossAppearSystem.h" />
+    <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
+    <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
+    <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShowSealedBoxShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearKeyShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_UnlockShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h" />
+    <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h" />
+    <ClInclude Include="application\scene\DIR_BossDestroyScene.h" />
+    <ClInclude Include="application\system\BossDestroySystem.h" />
+    <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h" />
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

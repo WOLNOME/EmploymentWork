@@ -29,13 +29,16 @@ void EnemyBullet::Initialize() {
 	worldTransform_.SetScale({ 0.01f,0.01f,0.01f });
 
 	//トレールエフェクトの生成・初期化
-	trail_ = std::make_unique<BulletTrail>();
-	trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
-	trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
-
+	{
+		trail_ = std::make_unique<BulletTrail>();
+		trail_->Initialize(BulletTrailManager::GetInstance()->GenerateName("enemyBullet"), param_["trailMaxLength"], param_["trailLengthDecayValue"]);
+		trail_->SetTexture(TextureManager::GetInstance()->LoadTexture("red.png"));
+	}
 	//衝突エフェクトの生成・初期化
-	hitEffect_ = std::make_unique<CombinedParticle>();
-	hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyBulletHitEffect"), "Bullet_Hit");
+	{
+		hitEffect_ = std::make_unique<CombinedParticle>();
+		hitEffect_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("EnemyBulletHitEffect"), "Bullet_Hit");
+	}
 
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<EnemyBulletCollider>(this);
@@ -52,6 +55,12 @@ void EnemyBullet::Update() {
 
 	//仮死状態だったらアイドル状態にする
 	if (state_ == State::kAsphyxia) {
+		//稼働中のパーティクルがあるならreturn
+		if (hitEffect_->GetIsPlay()) {
+			return;
+		}
+
+		//全ての演出処理が終わったらアイドル状態にする
 		SetState(State::kIdle);
 	}
 
@@ -81,6 +90,8 @@ void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	//初期位置を保存
 	worldTransform_.SetTranslate(_initPos);
 	generatedPosition_ = _initPos;
+	//ワールドトランスフォームを更新（前データの上書き）
+	worldTransform_.UpdateMatrix();
 	//速度を算出
 	float speed = param_["speed"];
 	//向きを算出

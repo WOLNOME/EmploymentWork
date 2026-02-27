@@ -53,7 +53,9 @@ namespace Norm {
 	void BaseCamera::DebugWithImGui() {
 #ifdef _DEBUG
 
-		ImGui::Begin("Camera");
+		ImGui::Begin("カメラ");
+		ImGui::Text("座標： (%.2f, %.2f, %.2f)", worldTransform.GetWorldTranslate().x, worldTransform.GetWorldTranslate().y, worldTransform.GetWorldTranslate().z);
+		ImGui::Text("回転： (%.2f, %.2f, %.2f)", worldTransform.GetRotate().x, worldTransform.GetRotate().y, worldTransform.GetRotate().z);
 		ImGui::End();
 
 #endif // _DEBUG

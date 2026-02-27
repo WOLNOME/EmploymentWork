@@ -13,6 +13,8 @@ namespace Norm {
 		//シーンライトの生成と初期化
 		sceneLight_ = std::make_unique<SceneLight>();
 		sceneLight_->Initialize();
+		//ライトのセット
+		Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 
 	}
 
@@ -22,6 +24,11 @@ namespace Norm {
 	void BaseScene::Update() {
 		//シーンの更新
 		sceneLight_->Update();
+	}
+
+	void BaseScene::OnResume() {
+		//ライトのセット
+		Object3dManager::GetInstance()->SetSceneLight(sceneLight_.get());
 	}
 
 	void BaseScene::ShowFPS() {

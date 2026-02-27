@@ -2,6 +2,7 @@
 #include "DirectXCommon.h"
 #include "MainRender.h"
 #include "SceneLight.h"
+#include "SceneManager.h"
 #include "Logger.h"
 #include "RandomStringUtil.h"
 #include "Object3d.h"
@@ -49,6 +50,10 @@ namespace Norm {
 
 		//全オブジェクトの描画（不透明）
 		for (const auto& object : objects_) {
+			//オブジェクトのシーンタグが現在のシーンタグと違うならスキップ
+			if (object.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
 			//オブジェクトが非表示ならスキップ
 			if (!object.second->isDisplay_) {
 				continue;
@@ -63,6 +68,10 @@ namespace Norm {
 
 		//全オブジェクトの描画（半透明）
 		for (const auto& object : objects_) {
+			//オブジェクトのシーンタグが現在のシーンタグと違うならスキップ
+			if (object.second->sceneTag_ != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
 			//オブジェクトが非表示ならスキップ
 			if (!object.second->isDisplay_) {
 				continue;
