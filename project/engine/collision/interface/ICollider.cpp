@@ -1,9 +1,13 @@
 #include "ICollider.h"
 #include "CollisionManager.h"
+#include <SceneManager.h>
 
 using namespace Norm;
 
 ICollider::ICollider() {
+	//シーンタグを設定
+	sceneTag_ = SceneManager::GetInstance()->GetCurrentScene()->GetSceneName();
+
 	//当たり判定マネージャーに登録
 	CollisionManager::GetInstance()->RegistCollider(this);
 }

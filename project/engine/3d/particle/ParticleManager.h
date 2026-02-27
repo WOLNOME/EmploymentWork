@@ -213,7 +213,7 @@ namespace Norm {
 		//粒の最大数 (必要に応じて増やす)
 		static const int kMaxNumGrains = 2000000;
 		//エミッターの最大数 (必要に応じて増やす)
-		static const int kMaxNumEmitters = 1000;
+		static const int kMaxNumEmitters = 1500;
 
 		//共通のCS用リソース
 		CommonResourceForCS commonResourceForCS_;

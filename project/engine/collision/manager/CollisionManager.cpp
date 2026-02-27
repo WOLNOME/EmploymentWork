@@ -1,4 +1,5 @@
 #include "CollisionManager.h"
+#include <SceneManager.h>
 #include "CollisionConfig.h"
 #include "SphereColliderBase.h"
 #include "AABBColliderBase.h"
@@ -46,37 +47,101 @@ namespace Norm {
 	void CollisionManager::CheckCollision() {
 		//衝突フィルタリングラムダ式
 		auto ShouldIgnore = [](CollisionAttribute a, CollisionAttribute b) {
-			//同じ属性なら当たらない
+			// Nothingness は誰とも当たらない
+			if (a == CollisionAttribute::Nothingness ||
+				b == CollisionAttribute::Nothingness) {
+				return true;
+			}
+
+			// 同じ属性同士
 			if (a == b) {
-				//例外
+				// Enemy同士は当たる
 				if (a == CollisionAttribute::Enemy) {
+					return false;
+				}
+				// それ以外の同属性は当たらない
+				return true;
+			}
+
+			// ===== プレイヤー系判定 =====
+			auto IsPlayerSide = [](CollisionAttribute x) {
+				return x == CollisionAttribute::Player ||
+					x == CollisionAttribute::PlayerCannon ||
+					x == CollisionAttribute::PlayerBullet ||
+					x == CollisionAttribute::PlayerSpecial;
+				};
+
+			// プレイヤー系同士は当たらない
+			if (IsPlayerSide(a) && IsPlayerSide(b)) {
+				return true;
+			}
+
+			// ===== 敵系判定 =====
+			auto IsEnemySide = [](CollisionAttribute x) {
+				return x == CollisionAttribute::Enemy ||
+					x == CollisionAttribute::EnemyCannon ||
+					x == CollisionAttribute::EnemyBullet ||
+					x == CollisionAttribute::EnemyBlast;
+				};
+
+			// EnemyはEnemy同士のみ当たる
+			if (IsEnemySide(a) && IsEnemySide(b)) {
+
+				// Enemy本体同士は当たる
+				if (a == CollisionAttribute::Enemy &&
+					b == CollisionAttribute::Enemy) {
+					return false;
+				}
+
+				// それ以外（弾など）は当たらない
+				return true;
+			}
+
+			// ===== アイテム系 =====
+			auto IsItem = [](CollisionAttribute x) {
+				return x == CollisionAttribute::Item_Heal ||
+					x == CollisionAttribute::Item_Charge ||
+					x == CollisionAttribute::Item_Key;
+				};
+
+			// アイテムはPlayerとしか当たらない
+			if (IsItem(a) || IsItem(b)) {
+
+				if ((IsItem(a) && b == CollisionAttribute::Player) ||
+					(IsItem(b) && a == CollisionAttribute::Player)) {
 					return false;
 				}
 
 				return true;
 			}
 
-			// 虚無オブジェクトは何とも当たらない
-			if (a == CollisionAttribute::Nothingness ||
-				b == CollisionAttribute::Nothingness) {
+			// ===== 壁 =====
+			if (a == CollisionAttribute::Wall || b == CollisionAttribute::Wall) {
+
+				if ((a == CollisionAttribute::Wall &&
+					(b == CollisionAttribute::Player || b == CollisionAttribute::Enemy)) ||
+					(b == CollisionAttribute::Wall &&
+						(a == CollisionAttribute::Player || a == CollisionAttribute::Enemy))) {
+					return false;
+				}
+
 				return true;
 			}
 
-			// 自機と自機系
-			if (a == CollisionAttribute::Player &&
-				(b == CollisionAttribute::PlayerCannon ||
-					b == CollisionAttribute::PlayerBullet)) {
+			// ===== バリア =====
+			if (a == CollisionAttribute::Barrier || b == CollisionAttribute::Barrier) {
+
+				if ((a == CollisionAttribute::Barrier &&
+					(b == CollisionAttribute::Player || b == CollisionAttribute::Enemy)) ||
+					(b == CollisionAttribute::Barrier &&
+						(a == CollisionAttribute::Player || a == CollisionAttribute::Enemy))) {
+					return false;
+				}
+
 				return true;
 			}
 
-			// 敵と敵系
-			if (a == CollisionAttribute::Enemy &&
-				(b == CollisionAttribute::EnemyCannon ||
-					b == CollisionAttribute::EnemyBullet ||
-					b == CollisionAttribute::EnemyBlast)) {
-				return true;
-			}
-
+			// それ以外は当たる
 			return false;
 			};
 
@@ -86,10 +151,21 @@ namespace Norm {
 			ICollider* colliderA = colliders_[i];
 			CollisionAttribute attrA = colliderA->GetCollisionAttribute();
 
+			//シーンタグが現在シーンの物ではない場合弾く
+			if (colliderA->GetSceneTag() != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+				continue;
+			}
+
 			for (size_t j = i + 1; j < size; ++j) {
 				ICollider* colliderB = colliders_[j];
 				CollisionAttribute attrB = colliderB->GetCollisionAttribute();
 
+				//シーンタグが現在シーンの物ではない場合弾く
+				if (colliderA->GetSceneTag() != SceneManager::GetInstance()->GetCurrentScene()->GetSceneName()) {
+					continue;
+				}
+
+				//当たり判定を行わないペアは弾く
 				if (ShouldIgnore(attrA, attrB)) {
 					continue;
 				}
