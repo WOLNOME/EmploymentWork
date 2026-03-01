@@ -320,6 +320,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
     <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
     <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
+    <ClCompile Include="application\scene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -543,6 +544,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
     <ClInclude Include="application\ui\player\detail\KeyUI.h" />
     <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
+    <ClInclude Include="application\scene\TutorialScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

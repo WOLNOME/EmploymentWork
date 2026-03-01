@@ -3,6 +3,7 @@
 
 //アプリケーション
 #include <application/scene/TitleScene.h>
+#include <application/scene/TutorialScene.h>
 #include <application/scene/GamePlayScene.h>
 #include <application/scene/GameClearScene.h>
 #include <application/scene/GameOverScene.h>
@@ -17,6 +18,9 @@ namespace Norm {
 
 		if (sceneName == "Title") {
 			newScene = std::make_unique<TitleScene>();
+		}
+		else if (sceneName == "Tutorial") {
+			newScene = std::make_unique<TutorialScene>();
 		}
 		else if (sceneName == "GamePlay") {
 			newScene = std::make_unique<GamePlayScene>();
