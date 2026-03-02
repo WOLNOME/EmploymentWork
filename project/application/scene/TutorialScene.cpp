@@ -35,10 +35,12 @@ void TutorialScene::Initialize() {
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();
+	system_ = std::make_unique<TutorialSystem>();
 
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
+	system_->Initialize();
 
 	//その他インスタンスのセット
 
@@ -52,7 +54,7 @@ void TutorialScene::Update() {
 	BaseScene::Update();
 
 	//インスタンスの更新
-
+	system_->Update(); //
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	cameraManager_->Update();

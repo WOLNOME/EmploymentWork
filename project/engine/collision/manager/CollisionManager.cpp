@@ -119,11 +119,12 @@ namespace Norm {
 			if (a == CollisionAttribute::Wall || b == CollisionAttribute::Wall) {
 
 				if ((a == CollisionAttribute::Wall &&
-					(b == CollisionAttribute::Player || b == CollisionAttribute::Enemy)) ||
+					(IsPlayerSide(b) || IsEnemySide(b))) ||
 					(b == CollisionAttribute::Wall &&
-						(a == CollisionAttribute::Player || a == CollisionAttribute::Enemy))) {
+						(IsPlayerSide(a) || IsEnemySide(a)))) {
 					return false;
 				}
+
 
 				return true;
 			}
@@ -132,9 +133,17 @@ namespace Norm {
 			if (a == CollisionAttribute::Barrier || b == CollisionAttribute::Barrier) {
 
 				if ((a == CollisionAttribute::Barrier &&
-					(b == CollisionAttribute::Player || b == CollisionAttribute::Enemy)) ||
+					(b == CollisionAttribute::Player ||
+						b == CollisionAttribute::Enemy ||
+						b == CollisionAttribute::PlayerCannon ||
+						b == CollisionAttribute::PlayerBullet ||
+						b == CollisionAttribute::PlayerSpecial)) ||
 					(b == CollisionAttribute::Barrier &&
-						(a == CollisionAttribute::Player || a == CollisionAttribute::Enemy))) {
+						(a == CollisionAttribute::Player ||
+							a == CollisionAttribute::Enemy ||
+							a == CollisionAttribute::PlayerCannon ||
+							a == CollisionAttribute::PlayerBullet ||
+							a == CollisionAttribute::PlayerSpecial))) {
 					return false;
 				}
 

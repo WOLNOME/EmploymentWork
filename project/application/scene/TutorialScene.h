@@ -5,6 +5,7 @@
 #include "application/system/CameraManager.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
+#include "application/system/TutorialSystem.h"
 
 /// <summary>
 /// チュートリアルシーン全般を管理するクラス
@@ -47,6 +48,9 @@ private:
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面
 	std::unique_ptr<Ground> ground_ = nullptr;
+
+	//チュートリアルシステム
+	std::unique_ptr<TutorialSystem> system_ = nullptr;
 
 };
 

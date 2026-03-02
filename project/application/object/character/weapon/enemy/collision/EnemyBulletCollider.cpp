@@ -54,6 +54,15 @@ void EnemyBulletCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 
 		break;
 	}
+	//壁に当たった場合
+	case CollisionAttribute::Wall:
+	{
+		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		//死亡処理
+		holder_->DeadProcess();
+
+		break;
+	}
 	default:
 		break;
 	}

@@ -254,7 +254,7 @@ void Player::CannonAttack() {
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+	if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
 		//リロードタイムをセット
 		cannonReloadTimer_ = param_["cannonReloadTime"];
 		//初期位置と発射方向の計算
@@ -367,8 +367,8 @@ void Player::SpecialAttack() {
 		return;
 	}
 
-	//右クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::RightButton) || input_->TriggerPadButton(GamePadButton::RB)) {
+	//右クリックで必殺弾を発射
+	if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
 		//間隔計測用タイマーをセット
 		float specialFireIntervalTime = param_["specialFireIntervalTime"];
 		specialFireIntervalTimer_ = specialFireIntervalTime;

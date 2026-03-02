@@ -1,6 +1,7 @@
 #include "TitleSystem.h"
 #include <WinApp.h>
 #include <ImGuiManager.h>
+#include <TextureManager.h>
 #include <TextTextureManager.h>
 #include <Object3dManager.h>
 #include <SpriteManager.h>
@@ -44,26 +45,13 @@ void TitleSystem::Initialize() {
 
 	//スタートテキスト
 	{
-		TextParam textParam;
-		textParam.color = { 1,1,1,1 };
-		textParam.font = Font::UDDegitalNK_B;
-		textParam.fontStyle = FontStyle::Normal;
-		textParam.size = 48.0f;
-		textParam.text = L"[SPACE]ではじめる";
-		EdgeParam edgeParam;
-		edgeParam.color = { 0,0,0,1 };
-		edgeParam.isEdgeDisplay = true;
-		edgeParam.slideRate = { 0,0 };
-		edgeParam.width = 3.0f;
 		//テクスチャハンドルに登録
-		startTextHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
-		TextTextureManager::GetInstance()->EditEdgeParam(startTextHandle_, edgeParam);
+		startTextHandle_ = TextureManager::GetInstance()->LoadTexture("toStartUI.png");
 		//スプライト
 		startTextSprite_ = std::make_unique<Sprite>();
-		startTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
+		startTextSprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0,startTextHandle_);
 		startTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
 		startTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
-		startTextSprite_->SetTexture(startTextHandle_);
 	}
 
 	//オブジェクト
@@ -108,7 +96,7 @@ void TitleSystem::DebugWithImGui() {
 void TitleSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-		sceneManager_->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"));
+		sceneManager_->SetNextScene("Tutorial", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"));
 	}
 
 	//Escapeキーで終了

@@ -120,7 +120,7 @@ private:
 	std::vector<std::unique_ptr<Norm::Sprite>> clearTextBack_;
 
 	//タイトルに戻るテキスト
-	Norm::Handle titleTextHandle_;
+	uint32_t titleTextHandle_;
 	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 	//紙吹雪パーティクル

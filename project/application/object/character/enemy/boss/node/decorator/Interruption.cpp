@@ -33,6 +33,8 @@ void Interruption::Update() {
 	if (isInterruption) {
 		//結果をFailにする
 		mNodeResult = NodeResult::Fail;
+		//子ノードの終了処理
+		mChildNode->Finalize();
 		//再評価通知を送信
 		mIsRevaluation = true;
 

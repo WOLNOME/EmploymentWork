@@ -27,12 +27,12 @@ void StartDirection::Update() {
 		isFirstFrame_ = false;
 
 		//メッセージUI
-		messageId_ = messageUI_->AddMessage(L"TABでスタート", 999.0f, true);
+		messageId_ = messageUI_->AddMessage(L"（ A ）でスタート", 999.0f, true);
 	}
 
 
 	//TABキーでスタート演出終了
-	if (input_->TriggerKey(DIK_TAB) || input_->TriggerPadButton(GamePadButton::A)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		isStartDirection_ = false;
 		isMaskDisappear_ = true;
 

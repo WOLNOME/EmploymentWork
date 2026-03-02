@@ -71,6 +71,14 @@ void EnemyCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 
 		break;
 	}
+	//壁に当たった場合
+	case CollisionAttribute::Wall:
+	{
+		//共通処理
+		commonCollisionProcess();
+
+		break;
+	}
 	default:
 		break;
 	}

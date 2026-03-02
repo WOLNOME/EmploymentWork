@@ -65,7 +65,7 @@ private:
 	std::unique_ptr<Norm::Sprite> gameOverTextSprite_ = nullptr;
 
 	//タイトルに戻るテキスト
-	Norm::Handle titleTextHandle_;
+	uint32_t titleTextHandle_;
 	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 };

@@ -72,8 +72,6 @@ void BarrierLeaf::Update() {
 	float barrierDirTimer = mpBlackBoard->GetValue<float>("BarrierDirTimer");
 	float barrierCoolTime = mpBlackBoard->GetValue<float>("BarrierCoolTime");
 	float barrierCoolTimer = mpBlackBoard->GetValue<float>("BarrierCoolTimer");
-	int barrierHP = mpBlackBoard->GetValue<int>("BarrierHP");
-	int barrierMaxHP = mpBlackBoard->GetValue<int>("BarrierMaxHP");
 
 	//演出タイマーを更新
 	barrierDirTimer -= kDeltaTime;
@@ -109,8 +107,6 @@ void BarrierLeaf::Update() {
 		barrierDirTimer = 0.0f;
 		//バリアのクールタイムをセット
 		barrierCoolTimer = barrierCoolTime;
-		//バリアのHPを最大にセット
-		barrierHP = barrierMaxHP;
 		//演出オブジェクトを非表示
 		dirObject_->SetIsDisplay(false);
 		//バリアをスポーン
@@ -127,7 +123,6 @@ void BarrierLeaf::Update() {
 	mpBlackBoard->SetValue<bool>("IsBarrier", isBarrier);
 	mpBlackBoard->SetValue<float>("BarrierDirTimer", barrierDirTimer);
 	mpBlackBoard->SetValue<float>("BarrierCoolTimer", barrierCoolTimer);
-	mpBlackBoard->SetValue<int>("BarrierHP", barrierHP);
 }
 
 void BarrierLeaf::Finalize() {

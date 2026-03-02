@@ -27,6 +27,10 @@ void LevelObjectCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 	//当たり判定の属性によって分岐
 	switch (_attribute) {
 	case CollisionAttribute::Player:
+	case CollisionAttribute::PlayerSpecial:
+	case CollisionAttribute::PlayerCannon:
+	case CollisionAttribute::EnemyBlast:
+	case CollisionAttribute::EnemyCannon:
 	{
 		//ツリーオブジェクトに当たった場合
 		if (holder_->GetName() == "LevelTree") {
@@ -67,18 +71,6 @@ void LevelObjectCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 			debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		}
 
-		break;
-	}
-	case CollisionAttribute::Enemy:
-	{
-		break;
-	}
-	case CollisionAttribute::PlayerBullet:
-	{
-		break;
-	}
-	case CollisionAttribute::EnemyBullet:
-	{
 		break;
 	}
 	default:
