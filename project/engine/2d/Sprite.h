@@ -133,6 +133,10 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		Sprite(bool _isNotUsingScene = false);
+		/// <summary>
 		/// デストラクタ
 		/// </summary>
 		~Sprite();
@@ -322,6 +326,8 @@ namespace Norm {
 
 		//名前
 		std::string name_;
+		//シーンタグ
+		std::string sceneTag_;
 
 		//リソース
 		ResourceForGPU resource_;
