@@ -119,15 +119,21 @@ namespace Norm {
 		/// <summary>
 		/// 指定したキーが現在押されているかを判定する
 		/// </summary>
-		/// <param name="keyNumber">判定対象のキー番号（例：DIK_SPACE など）</param>
+		/// <param name="keyNumber">判定対象のキー番号</param>
 		/// <returns>押されていれば true、押されていなければ false</returns>
 		bool PushKey(BYTE keyNumber);
 		/// <summary>
 		/// 指定したキーが「このフレームで押された瞬間」であるかを判定する
 		/// </summary>
-		/// <param name="keyNumber">判定対象のキー番号（例：DIK_RETURN など）</param>
+		/// <param name="keyNumber">判定対象のキー番号</param>
 		/// <returns>押された瞬間であれば true、そうでなければ false</returns>
 		bool TriggerKey(BYTE keyNumber);
+		/// <summary>
+		/// 指定したキーが「このフレームで離された瞬間」であるかを判定する
+		/// </summary>
+		/// <param name="keyNumber">判定対象のキー番号</param>
+		/// <returns></returns>
+		bool ReleaseKey(BYTE keyNumber);
 		/// <summary>
 		/// 指定したゲームパッドボタンが現在押されているかを判定する
 		/// </summary>
@@ -140,6 +146,12 @@ namespace Norm {
 		/// <param name="button">判定対象のゲームパッドボタン</param>
 		/// <returns>押された瞬間であれば true、そうでなければ false</returns>
 		bool TriggerPadButton(GamePadButton button);
+		/// <summary>
+		/// 指定したゲームパッドボタンが「このフレームで離された瞬間」であるかを判定する
+		/// </summary>
+		/// <param name="button">判定対象のゲームパッドボタン</param>
+		/// <returns>離された瞬間であれば true、そうでなければ false</returns>
+		bool ReleasePadButton(GamePadButton button);
 		/// <summary>
 		/// 現在のマウス座標を取得する
 		/// </summary>

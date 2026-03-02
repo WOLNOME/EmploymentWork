@@ -163,6 +163,11 @@ namespace Norm {
 		return (keys_[keyNumber] && !preKeys_[keyNumber]);
 	}
 
+	bool Input::ReleaseKey(BYTE keyNumber) {
+		//状態を返す
+		return (!keys_[keyNumber] && preKeys_[keyNumber]);
+	}
+
 	bool Input::PushPadButton(GamePadButton button) {
 		//状態を返す
 		return buttonStates_[(int)button];
@@ -171,6 +176,11 @@ namespace Norm {
 	bool Input::TriggerPadButton(GamePadButton button) {
 		//状態を返す
 		return (!preButtonStates_[(int)button] && buttonStates_[(int)button]);
+	}
+
+	bool Input::ReleasePadButton(GamePadButton button) {
+		//状態を返す
+		return (preButtonStates_[(int)button] && !buttonStates_[(int)button]);
 	}
 
 	Vector2 Input::GetMousePosition() {

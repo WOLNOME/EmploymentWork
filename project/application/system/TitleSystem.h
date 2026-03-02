@@ -108,7 +108,7 @@ private:
 	std::unique_ptr<Norm::Sprite> titleTextSprite_ = nullptr;
 
 	//スタートテキスト
-	Norm::Handle startTextHandle_;
+	uint32_t startTextHandle_;
 	std::unique_ptr<Norm::Sprite> startTextSprite_ = nullptr;
 
 	//ガレージ

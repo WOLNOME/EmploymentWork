@@ -146,41 +146,22 @@ void Player::Rotate() {
 	if (state_ != State::kActive)
 		return;
 
-	auto ShortestAngleDiff = [=](float from, float to) -> float {
-		float diff = to - from;
-		while (diff > pi)  diff -= 2.0f * pi;
-		while (diff < -pi) diff += 2.0f * pi;
-		return diff;
-		};
-
-	float cameraRotateY = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-	float vehicleRotateY = worldTransform_.GetRotate().y;
-
-	//最短角度差を求める
-	float angleDiff = ShortestAngleDiff(vehicleRotateY, cameraRotateY);
-
-	//回転速度の上限
+	//ADキー入力で回転
+	float addRotation = 0.0f;
 	float turnSpeed = param_["turnSpeed"];
-	float addRotation = turnSpeed * kDeltaTime;
-
-	//回転すべき角度が小さい場合は目標角度を代入
-	if (std::abs(angleDiff) <= addRotation) {
-		vehicleRotateY = cameraRotateY;
+	if (input_->PushKey(DIK_A) || (input_->GetLStickDir().x < 0.0f)) {
+		addRotation = -turnSpeed * kDeltaTime;
 	}
-	else {
-		//回転方向に応じて加算または減算
-		vehicleRotateY += (angleDiff > 0 ? 1 : -1) * addRotation;
-
-		//-π ～ π に整える
-		if (vehicleRotateY > pi)  vehicleRotateY -= 2.0f * pi;
-		if (vehicleRotateY < -pi) vehicleRotateY += 2.0f * pi;
+	if (input_->PushKey(DIK_D) || (input_->GetLStickDir().x > 0.0f)) {
+		addRotation = turnSpeed * kDeltaTime;
 	}
 
 	//オブジェクトの水平回転量に代入
 	Vector3 rotate = worldTransform_.GetRotate();
-	rotate.y = vehicleRotateY;
-	worldTransform_.SetRotate(rotate);
+	rotate.y += addRotation;
+	rotate.y = MyMath::NormalizeAngle(rotate.y);
 
+	worldTransform_.SetRotate(rotate);
 }
 
 void Player::Move() {
@@ -273,7 +254,7 @@ void Player::CannonAttack() {
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+	if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
 		//リロードタイムをセット
 		cannonReloadTimer_ = param_["cannonReloadTime"];
 		//初期位置と発射方向の計算
@@ -386,8 +367,8 @@ void Player::SpecialAttack() {
 		return;
 	}
 
-	//右クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::RightButton) || input_->TriggerPadButton(GamePadButton::RB)) {
+	//右クリックで必殺弾を発射
+	if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
 		//間隔計測用タイマーをセット
 		float specialFireIntervalTime = param_["specialFireIntervalTime"];
 		specialFireIntervalTimer_ = specialFireIntervalTime;

@@ -167,7 +167,6 @@ void Boss::ConstantInfoToBlackBoard() {
 	blackBoard_->SetValue<Barrier*>("Barrier", barrier_.get());
 	blackBoard_->SetValue<float>("BarrierCoolTime", param_["barrierCoolTime"]);
 	blackBoard_->SetValue<float>("BarrierDirTime", param_["barrierDirTime"]);
-	blackBoard_->SetValue<int>("BarrierMaxHP", param_["barrierMaxHP"]);
 	blackBoard_->SetValue<float>("SummonCoolTime", param_["summonCoolTime"]);
 	blackBoard_->SetValue<float>("SummonDirTime", param_["summonDirTime"]);
 	//演出の情報
@@ -258,13 +257,6 @@ void Boss::VariableUpdate() {
 		//isBarrierをfalseにする
 		isBarrier = false;
 	}
-
-	//壊れた瞬間
-	if (!isBarrier && isPreBarrier) {
-		int a = 0;
-		a++;
-	}
-
 
 	//バリアのクールタイムが0より大きい＆バリアが展開されていないなら
 	if (barrierCoolTimer > 0.0f && !isBarrier) {

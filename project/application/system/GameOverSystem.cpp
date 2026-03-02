@@ -39,26 +39,13 @@ void GameOverSystem::Initialize() {
 	}
 	//タイトルテキスト
 	{
-		TextParam textParam;
-		textParam.color = { 1,1,1,1 };
-		textParam.font = Font::UDDegitalNK_B;
-		textParam.fontStyle = FontStyle::Normal;
-		textParam.size = 24.0f;
-		textParam.text = L"[SPACE]でタイトルに戻る";
-		EdgeParam edgeParam;
-		edgeParam.color = { 0,0,0,1 };
-		edgeParam.isEdgeDisplay = true;
-		edgeParam.slideRate = { 0,0 };
-		edgeParam.width = 2.0f;
 		//テクスチャハンドルに登録
-		titleTextHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(textParam);
-		TextTextureManager::GetInstance()->EditEdgeParam(titleTextHandle_, edgeParam);
+		titleTextHandle_ = TextureManager::GetInstance()->LoadTexture("toTitleUI.png");
 		//スプライト
 		titleTextSprite_ = std::make_unique<Sprite>();
-		titleTextSprite_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0);
+		titleTextSprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("TitleStartUI"), Order::Front0, titleTextHandle_);
 		titleTextSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f + 50.0f });
 		titleTextSprite_->SetAnchorPoint({ 0.5f,0.5f });
-		titleTextSprite_->SetTexture(titleTextHandle_);
 	}
 
 

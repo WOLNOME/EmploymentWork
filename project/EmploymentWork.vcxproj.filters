@@ -547,6 +547,8 @@
     <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
+    <ClCompile Include="application\scene\TutorialScene.cpp" />
+    <ClCompile Include="application\system\TutorialSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
@@ -1042,6 +1044,8 @@
     <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h" />
     <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h" />
     <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
+    <ClInclude Include="application\scene\TutorialScene.h" />
+    <ClInclude Include="application\system\TutorialSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

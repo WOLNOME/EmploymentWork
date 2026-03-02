@@ -33,7 +33,6 @@ private:
 	void Rotate();
 
 private:
-
 	//展開中パーティクル
 	std::unique_ptr<Norm::CombinedParticle> barrierMidst_ = nullptr;
 	//展開完了パーティクル

@@ -16,7 +16,7 @@
     "rotateSpeed": 1.256,
     "searchPlayerDistanceAttack": 150.0,
     "cannonCoolTime":1.5,
-    "maxHP":20,
+    "maxHP":100,
     "cannonDamage":10,
     "bulletDamage":1,
     "specialDamage":50,

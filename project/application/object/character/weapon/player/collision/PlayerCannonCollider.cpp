@@ -37,28 +37,44 @@ void PlayerCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 	switch (_attribute) {
 		//敵に当たった場合
 	case CollisionAttribute::Enemy:
+	{
 		//共通処理
 		commonCollisionProcess();
 
 		break;
-		//敵弾に当たった場合
+	}
+	//敵弾に当たった場合
 	case CollisionAttribute::EnemyBullet:
+	{
 		//共通処理
 		commonCollisionProcess();
 
 		break;
-		//敵キャノンに当たった場合
+	}
+	//敵キャノンに当たった場合
 	case CollisionAttribute::EnemyCannon:
+	{
 		//共通処理
 		commonCollisionProcess();
 
 		break;
-		//バリアに当たった場合
+	}
+	//バリアに当たった場合
 	case CollisionAttribute::Barrier:
+	{
 		//共通処理
 		commonCollisionProcess();
 
 		break;
+	}
+	//壁に当たった場合
+	case CollisionAttribute::Wall:
+	{
+		//共通処理
+		commonCollisionProcess();
+
+		break;
+	}
 	default:
 		break;
 	}

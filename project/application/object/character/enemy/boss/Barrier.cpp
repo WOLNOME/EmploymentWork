@@ -47,7 +47,6 @@ void Barrier::Initialize() {
 		destroy_->Initialize(CombinedParticleManager::GetInstance()->GenerateName("BarrierDestroy"), "Barrier_Destroy");
 	}
 
-
 	//当たり判定の生成・初期化
 	collider_ = std::make_unique<BarrierCollider>(this);
 	auto* barrierCollider = dynamic_cast<BarrierCollider*>(collider_.get());

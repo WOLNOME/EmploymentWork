@@ -104,5 +104,6 @@ private:
 	//操作ガイド表示中か
 	bool isOperationGuideDisplay_;
 
+	bool isTrriger = false;
 };
 

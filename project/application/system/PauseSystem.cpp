@@ -125,6 +125,107 @@ void PauseSystem::Update() {
 
 	//ポーズ中の処理
 	if (isPause_) {
+
+		//操作ガイド表示中の処理
+		if (isOperationGuideDisplay_) {
+			// ===== 操作ガイド専用処理 =====
+			maskSprite_->SetIsDisplay(false);
+			guideSprite_->SetIsDisplay(true);
+			for (int i = 0; i < kMaxStringNum_; i++) {
+				stringMenuSprite_[i]->SetIsDisplay(false);
+			}
+
+			if (input_->TriggerKey(DIK_SPACE) ||
+				input_->TriggerPadButton(GamePadButton::A)) {
+
+				isOperationGuideDisplay_ = false;
+			}
+		}
+		else {
+			// ===== ポーズメニュー処理 =====
+			maskSprite_->SetIsDisplay(true);
+			guideSprite_->SetIsDisplay(false);
+
+			for (int i = 0; i < kMaxStringNum_; i++) {
+				stringMenuSprite_[i]->SetIsDisplay(true);
+			}
+
+			switch (selectMenu_) {
+			case PauseSystem::Menu::kContinue: {
+				//決定
+				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+					//ポーズ画面を終了
+					isPause_ = false;
+				}
+				//下
+				if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN) || input_->GetLStickDir().y < 0.0f) {
+					//メニューを操作ガイドに切り替え
+					selectMenu_ = Menu::kOperationGuide;
+				}
+
+				//色を変える
+				stringMenuSprite_[1]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
+				stringMenuSprite_[2]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+				stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+
+
+				break;
+			}
+			case PauseSystem::Menu::kOperationGuide: {
+				//決定
+				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+					//操作ガイドを表示
+					isOperationGuideDisplay_ = true;
+
+					isTrriger = true;
+
+				}
+				//上
+				if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP) || input_->GetLStickDir().y > 0.0f) {
+					//メニューを続行に切り替え
+					selectMenu_ = Menu::kContinue;
+				}
+				//下
+				if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN) || input_->GetLStickDir().y < 0.0f) {
+					//メニューをタイトルに切り替え
+					selectMenu_ = Menu::kTItle;
+				}
+
+				//色を変える
+				stringMenuSprite_[1]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+				stringMenuSprite_[2]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
+				stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+
+
+				break;
+			}
+			case PauseSystem::Menu::kTItle: {
+				//決定
+				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+					//タイトルシーンへ
+					uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
+					SceneManager::GetInstance()->SetNextScene("Title", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 1.0f, textureHandle);
+				}
+				//上
+				if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP) || input_->GetLStickDir().y > 0.0f) {
+					//メニューを操作ガイドに切り替え
+					selectMenu_ = Menu::kOperationGuide;
+				}
+
+				//色を変える
+				stringMenuSprite_[1]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+				stringMenuSprite_[2]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+				stringMenuSprite_[3]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
+
+
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
+
 		//メニューを表示
 		maskSprite_->SetIsDisplay(true);
 		for (int i = 0; i < kMaxStringNum_; i++) {
@@ -132,76 +233,10 @@ void PauseSystem::Update() {
 		}
 
 		//メニュー決定＆切り替え
-		switch (selectMenu_) {
-		case PauseSystem::Menu::kContinue: {
-			//決定
-			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-				//ポーズ画面を終了
-				isPause_ = false;
-			}
-			//下
-			if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN)) {
-				//メニューを操作ガイドに切り替え
-				selectMenu_ = Menu::kOperationGuide;
-			}
+		
 
-			//色を変える
-			stringMenuSprite_[1]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
-			stringMenuSprite_[2]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		
 
-
-			break;
-		}
-		case PauseSystem::Menu::kOperationGuide: {
-			//決定
-			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-				//操作ガイドを表示
-				isOperationGuideDisplay_ = true;
-			}
-			//上
-			if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP)) {
-				//メニューを続行に切り替え
-				selectMenu_ = Menu::kContinue;
-			}
-			//下
-			if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN)) {
-				//メニューをタイトルに切り替え
-				selectMenu_ = Menu::kTItle;
-			}
-
-			//色を変える
-			stringMenuSprite_[1]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			stringMenuSprite_[2]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
-			stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-
-
-			break;
-		}
-		case PauseSystem::Menu::kTItle: {
-			//決定
-			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-				//タイトルシーンへ
-				uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
-				SceneManager::GetInstance()->SetNextScene("Title", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 1.0f, textureHandle);
-			}
-			//上
-			if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP)) {
-				//メニューを操作ガイドに切り替え
-				selectMenu_ = Menu::kOperationGuide;
-			}
-
-			//色を変える
-			stringMenuSprite_[1]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			stringMenuSprite_[2]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			stringMenuSprite_[3]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
-
-
-			break;
-		}
-		default:
-			break;
-		}
 	}
 	else {
 		//全て非表示
@@ -212,24 +247,7 @@ void PauseSystem::Update() {
 		}
 	}
 
-	//操作ガイド表示中の処理
-	if (isOperationGuideDisplay_) {
-		//操作ガイドのみ表示
-		maskSprite_->SetIsDisplay(false);
-		guideSprite_->SetIsDisplay(true);
-		for (int i = 0; i < kMaxStringNum_; i++) {
-			stringMenuSprite_[i]->SetIsDisplay(false);
-		}
-		//Bボタンで終了
-		if (input_->TriggerKey(DIK_TAB) || input_->TriggerPadButton(GamePadButton::B)) {
-			//フラグを取り下げる
-			isOperationGuideDisplay_ = false;
-		}
-	}
-	else {
-		//操作ガイドを非表示
-		guideSprite_->SetIsDisplay(false);
-	}
+	
 }
 
 void PauseSystem::Debug() {
