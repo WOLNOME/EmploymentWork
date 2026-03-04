@@ -64,7 +64,7 @@ void BaseCharacter::SetState(const State& _state) {
 		//座標を遥か遠くにセット
 		worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		if (circleShadow_) {
-			worldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
+			csWorldTransform_.SetTranslate({ FLT_MAX,FLT_MAX ,FLT_MAX });
 		}
 		//不可視にする
 		object3d_->SetIsDisplay(false);
