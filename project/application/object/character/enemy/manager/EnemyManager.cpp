@@ -33,7 +33,7 @@ void EnemyManager::Initialize() {
 	}
 	//ボスの生成と初期化
 	int bossNum = param_["maxBossNum"];
-	for (int i = 0; i < jetNum; i++) {
+	for (int i = 0; i < bossNum; i++) {
 		bosses_.push_back(std::make_unique<Boss>());
 		bosses_[i]->Initialize();
 		bosses_[i]->SetEnemyManager(this);

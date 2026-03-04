@@ -132,6 +132,17 @@ void EnemyInformationUI::InformationProcess() {
 				continue;
 
 			Vector3 worldPos = enemy->GetWorldTransform().GetWorldTranslate();
+			//タイプによって高さを変える
+			if (type == "canota") {
+				worldPos.y += 3.5f;
+			}
+			else if (type == "jet") {
+			}
+			else if (type == "keyCanota") {
+				worldPos.y += 7.0f;
+			}
+			else if (type == "boss") {
+			}
 
 			// ---- 座標変換 ----
 

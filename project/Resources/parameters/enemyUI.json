@@ -21,10 +21,10 @@
         }
     },
     "hpBarSizeRatio":0.15,
-    "canotaHPBarHeight":3.0,
-    "keyCanotaHPBarHeight":6.0,
+    "canotaHPBarHeight":9.0,
+    "keyCanotaHPBarHeight":16.0,
     "jetHPBarHeight":3.0,
-    "bossHPBarHeight":12.0,
+    "bossHPBarHeight":20.0,
     "sensingTargetSize":8.0,
     "missingTargetSize":8.0
     

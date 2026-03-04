@@ -82,14 +82,14 @@ void TankEnemyAttackState::UpdateAttack(IBaseTankEnemy* enemy) {
 		Vector3 initPos = enemy->GetWorldTransform().GetTranslate();
 		std::string tag = enemy->GetParam()["tag"];
 		if (tag == "canota") {
-			initPos.y += 1.5f;
-			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 7.0f;
-			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 7.0f;
+			initPos.y += 5.5f;
+			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 16.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 16.0f;
 		}
 		else if (tag == "keyCanota") {
-			initPos.y += 2.0f;	//←高さ
-			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 10.0f;
-			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 10.0f;
+			initPos.y += 11.0f;	//←高さ
+			initPos.x += std::sinf(enemy->GetWorldTransform().GetRotate().y) * 32.0f;
+			initPos.z += std::cosf(enemy->GetWorldTransform().GetRotate().y) * 32.0f;
 		}
 		else {
 			//そのタグは存在しない

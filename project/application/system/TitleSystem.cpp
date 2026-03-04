@@ -66,13 +66,13 @@ void TitleSystem::Initialize() {
 
 		//戦車
 		for (int i = 0; i < kTanksNum_; i++) {
-			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/playerFull.png");
+			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/player.png");
 			tanks_[i] = std::make_unique<Object3d>();
 			tanks_[i]->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("titleTank"), "canota");
 			tanks_[i]->SetTexture(textureHandle);
 			tanks_[i]->SetIsLightProcess(true);
 			tankWorldTransforms_[i].Initialize();
-			tankWorldTransforms_[i].SetTranslate({ -60.0f + (30.0f * i),1.5f,0.0f });
+			tankWorldTransforms_[i].SetTranslate({ -60.0f + (30.0f * i),0.0f,0.0f });
 			tanks_[i]->RegistWorldTransform(&tankWorldTransforms_[i]);
 		}
 

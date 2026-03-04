@@ -26,6 +26,9 @@ namespace Norm {
 	Object3d::~Object3d() {
 		//ワールドトランスフォームを破棄
 		worldTransforms_.clear();
+		//確保したヒープを解放
+		GPUDescriptorManager::GetInstance()->Free(objectResource_.instancingSrvIndex);
+
 		//マネージャーから削除
 		Object3dManager::GetInstance()->DeleteObject(name_);
 	}

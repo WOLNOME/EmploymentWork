@@ -176,9 +176,6 @@ void PauseSystem::Update() {
 				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 					//操作ガイドを表示
 					isOperationGuideDisplay_ = true;
-
-					isTrriger = true;
-
 				}
 				//上
 				if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP) || input_->GetLStickDir().y > 0.0f) {
@@ -217,26 +214,12 @@ void PauseSystem::Update() {
 				stringMenuSprite_[2]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 				stringMenuSprite_[3]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
 
-
 				break;
 			}
 			default:
 				break;
 			}
 		}
-
-
-		//メニューを表示
-		maskSprite_->SetIsDisplay(true);
-		for (int i = 0; i < kMaxStringNum_; i++) {
-			stringMenuSprite_[i]->SetIsDisplay(true);
-		}
-
-		//メニュー決定＆切り替え
-		
-
-		
-
 	}
 	else {
 		//全て非表示
