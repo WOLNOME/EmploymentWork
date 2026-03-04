@@ -25,13 +25,13 @@ void GameClearSystem::Initialize() {
 
 	//戦車オブジェクト
 	{
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/playerFull.png");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("../models/player/player.png");
 		tank_ = std::make_unique<Object3d>();
 		tank_->Initialize(ModelTag{}, Object3dManager::GetInstance()->GenerateName("clearTank"), "canota");
 		tank_->SetTexture(textureHandle);
 		tank_->SetIsDisplay(true);
 		tankWorldTransform_.Initialize();
-		tankWorldTransform_.SetTranslate({ 0.0f,1.5f,0.0f });
+		tankWorldTransform_.SetTranslate({ 0.0f,0.0f,0.0f });
 		tank_->RegistWorldTransform(&tankWorldTransform_);
 	}
 

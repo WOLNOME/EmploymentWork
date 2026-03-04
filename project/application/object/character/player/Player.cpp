@@ -121,9 +121,15 @@ void Player::DebugWithImGui() {
 void Player::SetLevelLoader(LevelLoader* _levelLoader) {
 	//プレイヤーの座標を読み込む
 	for (const auto& playerSpawnData : _levelLoader->GetPlayerSpawnData()) {
+		TransformEuler initTransform;
+		initTransform.translate = playerSpawnData.translation;
+		initTransform.translate.y = 0.0f;
+		initTransform.rotate = playerSpawnData.rotation;
+		initTransform.scale = { 1,1,1 };
+
 		//車体を合わせる
-		worldTransform_.SetTranslate(playerSpawnData.translation);
-		worldTransform_.SetRotate(playerSpawnData.rotation);
+		worldTransform_.SetTranslate(initTransform.translate);
+		worldTransform_.SetRotate(initTransform.rotate);
 		//カメラの向きを車体に合わせる
 		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(worldTransform_.GetRotate());
 
@@ -267,7 +273,7 @@ void Player::CannonAttack() {
 		};
 		currentDir.Normalize();
 		Vector3 cannonPos = worldTransform_.GetTranslate();
-		cannonPos.y += 1.7f;	//砲弾の初期位置を調整
+		cannonPos.y += 7.2f;	//砲弾の初期位置を調整
 		Vector3 cannonDirection = currentDir;
 		//スポーン
 		playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
@@ -384,7 +390,7 @@ void Player::SpecialAttack() {
 		};
 		currentDir.Normalize();
 		Vector3 specialPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
-		specialPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+		specialPos.y += 7.2f;	//必殺弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
 	}
@@ -439,6 +445,6 @@ void Player::CameraAlgorithm() {
 
 	//カメラの座標を決める
 	Vector3 newTranslate = worldTransform_.GetTranslate();
-	newTranslate.y += 1.5f;
+	newTranslate.y += 5.5f;
 	cameraManager_->GetActiveCamera()->worldTransform.SetTranslate(newTranslate);
 }

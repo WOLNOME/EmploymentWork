@@ -62,7 +62,7 @@ void KeyCanota::Spawn(const Vector3& _initPos, const Vector3& _initRotate) {
 
 	//初期位置を保存（高さはそろえる）
 	Vector3 initPos = _initPos;
-	initPos.y = 3.0f;
+	initPos.y = 0.0f;
 	worldTransform_.SetTranslate(initPos);
 	//初期回転を保存
 	worldTransform_.SetRotate(_initRotate);
