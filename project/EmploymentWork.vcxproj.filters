@@ -717,7 +717,9 @@
     <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp">
       <Filter>application\object\character\item\key\collision</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\main.cpp" />
+    <ClCompile Include="engine\base\main.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
