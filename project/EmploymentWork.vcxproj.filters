@@ -430,7 +430,214 @@
       <Filter>application\behaviorTree\rollNode</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\nodeBase\NodeBase.cpp">
-      <Filter>application\behaviorTree\allNodeBase</Filter>
+      <Filter>engine\behaviorTree\nodeBase</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\worldTransform\WorldTransform.cpp">
+      <Filter>engine\3d\worldTransform</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\camera\BaseCamera.cpp">
+      <Filter>engine\3d\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\camera\GameCamera.cpp">
+      <Filter>engine\3d\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\camera\DevelopCamera.cpp">
+      <Filter>engine\3d\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\direction\BulletTrail.cpp">
+      <Filter>engine\3d\direction</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\direction\BulletTrailManager.cpp">
+      <Filter>engine\3d\direction</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\light\DirectionalLight.cpp">
+      <Filter>engine\3d\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\light\PointLight.cpp">
+      <Filter>engine\3d\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\light\SpotLight.cpp">
+      <Filter>engine\3d\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\light\SceneLight.cpp">
+      <Filter>engine\3d\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\line\LineManager.cpp">
+      <Filter>engine\3d\line</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\particle\CombinedParticle.cpp">
+      <Filter>engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\particle\CombinedParticleManager.cpp">
+      <Filter>engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\particle\Particle.cpp">
+      <Filter>engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\particle\ParticleManager.cpp">
+      <Filter>engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\AnimationModel.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\Model.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\ModelManager.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\Object3d.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\Object3dManager.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\object\Shape.cpp">
+      <Filter>engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\directx\D3DResourceLeakChecker.cpp">
+      <Filter>engine\base\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\directx\DirectXCommon.cpp">
+      <Filter>engine\base\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\framework\Framework.cpp">
+      <Filter>engine\base\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\logger\Logger.cpp">
+      <Filter>engine\base\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\myGame\MyGame.cpp">
+      <Filter>engine\base\myGame</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\windows\WinApp.cpp">
+      <Filter>engine\base\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\view\DSVManager.cpp">
+      <Filter>engine\base\view</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\view\GPUDescriptorManager.cpp">
+      <Filter>engine\base\view</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\view\RTVManager.cpp">
+      <Filter>engine\base\view</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\texture\TextTextureManager.cpp">
+      <Filter>engine\base\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\texture\TextTextureRender.cpp">
+      <Filter>engine\base\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\texture\TextureManager.cpp">
+      <Filter>engine\base\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\render\D2DRender.cpp">
+      <Filter>engine\base\render</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\render\MainRender.cpp">
+      <Filter>engine\base\render</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\postEffect\PostEffectManager.cpp">
+      <Filter>engine\base\postEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\collision\interface\ICollider.cpp">
+      <Filter>engine\collision\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\collision\manager\CollisionManager.cpp">
+      <Filter>engine\collision\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\collision\base\AABBColliderBase.cpp">
+      <Filter>engine\collision\base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\collision\base\SphereColliderBase.cpp">
+      <Filter>engine\collision\base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\collision\base\OBBColliderBase.cpp">
+      <Filter>engine\collision\base</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\bigTree\LevelBigTree.cpp">
+      <Filter>application\object\level\bigTree</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\fence\LevelFence.cpp">
+      <Filter>application\object\level\fence</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp">
+      <Filter>application\object\level\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\rock\LevelRock.cpp">
+      <Filter>application\object\level\rock</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp">
+      <Filter>application\object\level\sealedBox</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\tree\LevelTree.cpp">
+      <Filter>application\object\level\tree</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\loader\LevelLoader.cpp">
+      <Filter>application\object\level\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\base\IBaseLevelObject.cpp">
+      <Filter>application\object\level\base</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\Boss.cpp">
+      <Filter>application\object\character\enemy\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp">
+      <Filter>application\object\character\enemy\boss\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\Barrier.cpp">
+      <Filter>application\object\character\enemy\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp">
+      <Filter>application\object\character\enemy\boss\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\collision\BossCollider.cpp">
+      <Filter>application\object\character\enemy\boss\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBombReload.cpp">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.cpp">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.cpp">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.cpp">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\decorator\Interruption.cpp">
+      <Filter>application\object\character\enemy\boss\node\decorator</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
     </ClCompile>
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
@@ -462,94 +669,55 @@
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
-    <ClCompile Include="application\object\character\enemy\boss\Boss.cpp" />
-    <ClCompile Include="engine\behaviorTree\decoratorNode\Inverter.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckBombReload.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp" />
-    <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp" />
-    <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
-    <ClCompile Include="engine\collision\base\OBBColliderBase.cpp" />
-    <ClCompile Include="engine\collision\base\SphereColliderBase.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\collision\BossCollider.cpp" />
-    <ClCompile Include="application\object\character\enemy\jet\collision\JetCollider.cpp" />
-    <ClCompile Include="application\object\character\enemy\tank\collision\TankCollider.cpp" />
-    <ClCompile Include="application\object\character\player\collision\PlayerCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp" />
-    <ClCompile Include="application\object\level\collision\LevelObjectCollider.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\Barrier.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\collision\BarrierCollider.cpp" />
-    <ClCompile Include="application\ui\enemy\detail\EnemyReactionUI.cpp" />
-    <ClCompile Include="application\object\character\enemy\boss\node\decorator\Interruption.cpp" />
-    <ClCompile Include="application\object\character\item\heal\ItemHeal.cpp" />
-    <ClCompile Include="application\object\character\item\heal\collision\ItemHealCollider.cpp" />
-    <ClCompile Include="application\object\character\item\key\ItemKey.cpp" />
-    <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp" />
-    <ClCompile Include="application\object\character\weapon\player\PlayerSpecial.cpp" />
-    <ClCompile Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.cpp" />
-    <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp" />
-    <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp" />
-    <ClCompile Include="application\object\level\tree\LevelTree.cpp" />
-    <ClCompile Include="application\object\level\bigTree\LevelBigTree.cpp" />
-    <ClCompile Include="application\object\level\rock\LevelRock.cpp" />
-    <ClCompile Include="application\object\level\fence\LevelFence.cpp" />
-    <ClCompile Include="application\object\level\sealedBox\LevelSealedBox.cpp" />
-    <ClCompile Include="application\ui\player\detail\WeaponUI.cpp" />
-    <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
-    <ClCompile Include="application\ui\player\detail\DirectionUI.cpp" />
-    <ClCompile Include="application\ui\player\detail\DamageUI.cpp" />
-    <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp" />
-    <ClCompile Include="application\system\CameraWork.cpp" />
-    <ClCompile Include="application\system\CameraManager.cpp" />
-    <ClCompile Include="application\scene\DIR_BossAppearScene.cpp" />
-    <ClCompile Include="application\system\BossAppearSystem.cpp" />
-    <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp" />
-    <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
-    <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_ShowSealedBoxShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_StillnessShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_AppearKeyShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_UnlockShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp" />
-    <ClCompile Include="application\scene\DIR_BossDestroyScene.cpp" />
-    <ClCompile Include="application\system\BossDestroySystem.cpp" />
-    <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp" />
-    <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
-    <ClCompile Include="application\scene\TutorialScene.cpp" />
-    <ClCompile Include="application\system\TutorialSystem.cpp" />
-    <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp" />
+    <ClCompile Include="engine\behaviorTree\decoratorNode\Inverter.cpp">
+      <Filter>engine\behaviorTree\decoratorNode</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.cpp">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.cpp">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.cpp">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\enemy\EnemyBullet.cpp">
+      <Filter>application\object\character\weapon\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerBulletCollider.cpp">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerCannonCollider.cpp">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\player\PlayerSpecial.cpp">
+      <Filter>application\object\character\weapon\player</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.cpp">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\player\collision\PlayerCollider.cpp">
+      <Filter>application\object\character\player\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\charge\ItemCharge.cpp">
+      <Filter>application\object\character\item\charge</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\charge\collision\ItemChargeCollider.cpp">
+      <Filter>application\object\character\item\charge\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\heal\ItemHeal.cpp">
+      <Filter>application\object\character\item\heal</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\heal\collision\ItemHealCollider.cpp">
+      <Filter>application\object\character\item\heal\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\key\ItemKey.cpp">
+      <Filter>application\object\character\item\key</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp">
+      <Filter>application\object\character\item\key\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\myGame\MyGame.h" />
