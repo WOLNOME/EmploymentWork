@@ -11,6 +11,7 @@ void LevelLoader::Initialize() {
 	levelData_.tree = std::make_unique<LevelTree>();
 	levelData_.bigTree = std::make_unique<LevelBigTree>();
 	levelData_.rock = std::make_unique<LevelRock>();
+	levelData_.bigRock = std::make_unique<LevelBigRock>();
 	levelData_.fence = std::make_unique<LevelFence>();
 	levelData_.sealedBox = std::make_unique<LevelSealedBox>();
 
@@ -18,6 +19,7 @@ void LevelLoader::Initialize() {
 	levelData_.tree->Initialize("LevelTree");
 	levelData_.bigTree->Initialize("LevelBigTree");
 	levelData_.rock->Initialize("LevelRock");
+	levelData_.bigRock->Initialize("LevelBigRock");
 	levelData_.fence->Initialize("LevelFence");
 	levelData_.sealedBox->Initialize("LevelSealedBox");
 
@@ -32,6 +34,7 @@ void LevelLoader::Update() {
 	levelData_.tree->Update();
 	levelData_.bigTree->Update();
 	levelData_.rock->Update();
+	levelData_.bigRock->Update();
 	levelData_.fence->Update();
 	levelData_.sealedBox->Update();
 }
@@ -42,6 +45,7 @@ void LevelLoader::DebugWithImGui() {
 	levelData_.tree->DebugWithImGui();
 	levelData_.bigTree->DebugWithImGui();
 	levelData_.rock->DebugWithImGui();
+	levelData_.bigRock->DebugWithImGui();
 	levelData_.fence->DebugWithImGui();
 	levelData_.sealedBox->DebugWithImGui();
 #endif // _DEBUG
@@ -126,6 +130,16 @@ void LevelLoader::ScanObjectData(json& object) {
 				levelData_.rock->SetCollisionInfo(handle, center, size);
 			}
 		}
+		//巨大岩
+		else if (type == "BigRockObject") {
+			uint32_t handle = 0u;
+			//トランスフォームを登録
+			handle = levelData_.bigRock->SetTransformInfo(transform);
+			//コライダーを登録
+			if (isCollider) {
+				levelData_.bigRock->SetCollisionInfo(handle, center, size);
+			}
+		}
 		//柵
 		else if (type == "FenceObject") {
 			uint32_t handle = 0u;
@@ -196,6 +210,10 @@ void LevelLoader::ScanObjectData(json& object) {
 	//岩生成ポイント
 	else if (type.compare("RockObject") == 0) {
 		createObject("RockObject");
+	}
+	//巨大岩生成ポイント
+	else if (type.compare("BigRockObject") == 0) {
+		createObject("BigRockObject");
 	}
 	//柵生成ポイント
 	else if (type.compare("FenceObject") == 0) {
