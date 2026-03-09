@@ -100,64 +100,26 @@ void LevelLoader::ScanObjectData(json& object) {
 			size = { (float)collision["size"][0], (float)collision["size"][2], (float)collision["size"][1] };
 		}
 
-		//ツリー
-		if (type == "TreeObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.tree->SetTransformInfo(transform);
-			//コライダーを登録
+		//オブジェクトテーブルの作成
+		std::map<std::string, IBaseLevelObject*> objectTable = {
+			{"TreeObject", levelData_.tree.get()},
+			{"BigTreeObject", levelData_.bigTree.get()},
+			{"RockObject", levelData_.rock.get()},
+			{"BigRockObject", levelData_.bigRock.get()},
+			{"FenceObject", levelData_.fence.get()},
+			{"SealedBoxObject", levelData_.sealedBox.get()}
+		};
+
+		//タイプからテーブルのキーを検索
+		auto it = objectTable.find(type);
+		//該当のテーブルで処理を行う
+		if (it != objectTable.end()) {
+			auto* object = it->second;
+			//トランスフォームの設定
+			uint32_t handle = object->SetTransformInfo(transform);
+			//コライダーの設定
 			if (isCollider) {
-				levelData_.tree->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//巨大ツリー
-		else if (type == "BigTreeObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.bigTree->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.bigTree->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//岩
-		else if (type == "RockObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.rock->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.rock->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//巨大岩
-		else if (type == "BigRockObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.bigRock->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.bigRock->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//柵
-		else if (type == "FenceObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.fence->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.fence->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//封印ボックス
-		else if (type == "SealedBoxObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.sealedBox->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.sealedBox->SetCollisionInfo(handle, center, size);
+				object->SetCollisionInfo(handle, center, size);
 			}
 		}
 
