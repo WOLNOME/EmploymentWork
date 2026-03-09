@@ -149,6 +149,7 @@ void LevelLoader::ScanObjectData(json& object) {
 
 		};
 
+
 	//"type"データがない場合不正データのため警告
 	assert(object.contains("type"));
 
