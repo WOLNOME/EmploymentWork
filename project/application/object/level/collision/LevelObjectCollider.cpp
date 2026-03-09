@@ -5,6 +5,7 @@
 #include "application/object/level/tree/LevelTree.h"
 #include "application/object/level/bigTree/LevelBigTree.h"
 #include "application/object/level/rock/LevelRock.h"
+#include "application/object/level/bigRock/LevelBigRock.h"
 #include "application/object/level/sealedBox/LevelSealedBox.h"
 
 using namespace Norm;
@@ -60,6 +61,13 @@ void LevelObjectCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 		else if (holder_->GetName() == "LevelRock") {
 			//岩としてdynamic_cast
 			auto* levelRock = dynamic_cast<LevelRock*>(holder_);
+			//当たり判定可視化用ラインの色を変更
+			debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		}
+		//巨大岩オブジェクトに当たった場合
+		else if (holder_->GetName() == "LevelBigRock") {
+			//巨大岩としてdynamic_cast
+			auto* levelRock = dynamic_cast<LevelBigRock*>(holder_);
 			//当たり判定可視化用ラインの色を変更
 			debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		}

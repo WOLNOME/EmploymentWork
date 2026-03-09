@@ -9,6 +9,7 @@
 #include <application/object/level/tree/LevelTree.h>
 #include <application/object/level/bigTree/LevelBigTree.h>
 #include <application/object/level/rock/LevelRock.h>
+#include <application/object/level/bigRock/LevelBigRock.h>
 #include <application/object/level/fence/LevelFence.h>
 #include <application/object/level/sealedBox/LevelSealedBox.h>
 
@@ -51,6 +52,8 @@ private:
 		std::unique_ptr<LevelBigTree> bigTree;
 		//岩
 		std::unique_ptr<LevelRock> rock;
+		//巨大岩
+		std::unique_ptr<LevelBigRock> bigRock;
 		//柵
 		std::unique_ptr<LevelFence> fence;
 		//封印ボックス
@@ -101,6 +104,10 @@ public:
 	/// 岩データの取得
 	/// </summary>
 	LevelRock* GetRockData() const { return levelData_.rock.get(); }
+	/// <summary>
+	/// 巨大岩データの取得
+	/// </summary>
+	LevelBigRock* GetBigRockData() const { return levelData_.bigRock.get(); }
 	/// <summary>
 	/// 柵データの取得
 	/// </summary>
