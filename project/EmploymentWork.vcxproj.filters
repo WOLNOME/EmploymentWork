@@ -93,8 +93,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="engine\base\main.cpp" />
-    <ClCompile Include="engine\base\myGame\MyGame.cpp" />
     <ClCompile Include="engine\scenebase\AbstractSceneFactory.cpp">
       <Filter>engine\scenebase</Filter>
     </ClCompile>
@@ -104,29 +102,8 @@
     <ClCompile Include="engine\audio\AudioCommon.cpp">
       <Filter>engine\audio</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\camera\BaseCamera.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\BaseScene.cpp">
       <Filter>engine\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\collision\interface\ICollider.cpp">
-      <Filter>engine\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\collision\manager\CollisionManager.cpp">
-      <Filter>engine\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\directx\D3DResourceLeakChecker.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\camera\DevelopCamera.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\light\DirectionalLight.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\directx\DirectXCommon.cpp">
-      <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="application\object\character\base\BaseCharacter.cpp">
       <Filter>application\object\character\base</Filter>
@@ -260,63 +237,6 @@
     <ClCompile Include="application\ui\player\PlayerUI.cpp">
       <Filter>application\ui\player</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\object\AnimationModel.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\direction\BulletTrail.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\direction\BulletTrailManager.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\particle\CombinedParticle.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\camera\GameCamera.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="application\object\level\loader\LevelLoader.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="application\object\level\base\IBaseLevelObject.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\line\LineManager.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\object\Model.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\object\ModelManager.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\object\Object3d.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\object\Object3dManager.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\particle\Particle.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\particle\ParticleManager.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\light\PointLight.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\light\SceneLight.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\object\Shape.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\light\SpotLight.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\worldTransform\WorldTransform.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\2d\ImGuiManager.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
@@ -325,42 +245,6 @@
     </ClCompile>
     <ClCompile Include="engine\2d\SpriteManager.cpp">
       <Filter>engine\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\texture\TextTextureManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\view\DSVManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\render\D2DRender.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\framework\Framework.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\view\GPUDescriptorManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\logger\Logger.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\render\MainRender.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\postEffect\PostEffectManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\view\RTVManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\texture\TextTextureRender.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\texture\TextureManager.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\windows\WinApp.cpp">
-      <Filter>engine\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\input\Input.cpp">
       <Filter>engine\input</Filter>
@@ -410,24 +294,44 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>externals\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\StartDirection.cpp" />
-    <ClCompile Include="application\system\DeathDirection.cpp" />
-    <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
-    <ClCompile Include="application\ui\player\detail\VelocityUI.cpp" />
-    <ClCompile Include="application\system\EndDirection.cpp" />
-    <ClCompile Include="application\system\TimeScaleManager.cpp" />
-    <ClCompile Include="application\system\PauseSystem.cpp" />
-    <ClCompile Include="engine\behaviorTree\interface\INode.cpp">
-      <Filter>application\behaviorTree\interface</Filter>
+    <ClCompile Include="application\system\DeathDirection.cpp">
+      <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\compositeNode\CompositeNodeBase.cpp">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
+    <ClCompile Include="application\system\EndDirection.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\StartDirection.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\TimeScaleManager.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\OperationUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\blackBoard\BlackBoard.cpp">
+      <Filter>engine\blackBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\behaviorTree\interface\INode.cpp">
+      <Filter>engine\behaviorTree\interface</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\compositeNode\Selector.cpp">
-      <Filter>application\behaviorTree\rollNode</Filter>
+      <Filter>engine\behaviorTree\compositeNode</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\compositeNode\Sequence.cpp">
-      <Filter>application\behaviorTree\rollNode</Filter>
+      <Filter>engine\behaviorTree\compositeNode</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\behaviorTree\leafNode\LeafNodeBase.cpp">
+      <Filter>engine\behaviorTree\leafNode</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.cpp">
+      <Filter>engine\behaviorTree\decoratorNode</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\behaviorTree\compositeNode\CompositeNodeBase.cpp">
+      <Filter>engine\behaviorTree\compositeNode</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp">
+      <Filter>engine\behaviorTree\branchNode</Filter>
     </ClCompile>
     <ClCompile Include="engine\behaviorTree\nodeBase\NodeBase.cpp">
       <Filter>engine\behaviorTree\nodeBase</Filter>
@@ -639,32 +543,149 @@
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.cpp">
       <Filter>application\object\character\enemy\boss\node\leaf</Filter>
     </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\jet\collision\JetCollider.cpp">
+      <Filter>application\object\character\enemy\jet\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\enemy\tank\collision\TankCollider.cpp">
+      <Filter>application\object\character\enemy\tank\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\builder\CinematicBuilder.cpp">
+      <Filter>application\system\direction\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\cinematic\Cinematic.cpp">
+      <Filter>application\system\direction\cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp">
+      <Filter>application\system\direction\shot\base</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_AppearBossShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_AppearKeyShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_ShakeShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_ShowSealedBoxShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_StillnessShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_UnlockShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BA_ZoomOutShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion1Shot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion2Shot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp">
+      <Filter>application\system\direction\shot</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\BossAppearSystem.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\BossDestroySystem.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\CameraManager.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\CameraWork.cpp">
+      <Filter>application\system</Filter>
+    </ClCompile>
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\system\EndDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\StartDirection.cpp">
+    <ClCompile Include="application\system\PauseSystem.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\particle\CombinedParticleManager.cpp">
-      <Filter>engine\3d</Filter>
+    <ClCompile Include="application\system\StartDirection.cpp">
+      <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\system\TimeScaleManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\blackBoard\BlackBoard.cpp">
-      <Filter>application\behaviorTree\blackBoard</Filter>
+    <ClCompile Include="application\system\TutorialSystem.cpp">
+      <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
+    <ClCompile Include="application\scene\DIR_BossAppearScene.cpp">
+      <Filter>application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.cpp">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
+    <ClCompile Include="application\scene\DIR_BossDestroyScene.cpp">
+      <Filter>application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\behaviorTree\leafNode\LeafNodeBase.cpp">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
+    <ClCompile Include="application\scene\TutorialScene.cpp">
+      <Filter>application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\enemy\detail\EnemyInformationUI.cpp">
+      <Filter>application\ui\enemy\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\enemy\detail\EnemyReactionUI.cpp">
+      <Filter>application\ui\enemy\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\DamageUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\DirectionUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\KeyUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\VelocityUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\WeaponUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
     </ClCompile>
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp">
       <Filter>application\ui\player\detail</Filter>
@@ -717,12 +738,14 @@
     <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp">
       <Filter>application\object\character\item\key\collision</Filter>
     </ClCompile>
+    <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp">
+      <Filter>application\object\level\bigRock</Filter>
+    </ClCompile>
     <ClCompile Include="engine\base\main.cpp">
       <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\base\myGame\MyGame.h" />
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
       <Filter>engine\scenebase</Filter>
     </ClInclude>
@@ -732,23 +755,8 @@
     <ClInclude Include="engine\audio\AudioCommon.h">
       <Filter>engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\camera\BaseCamera.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\BaseScene.h">
       <Filter>engine\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\directx\D3DResourceLeakChecker.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\camera\DevelopCamera.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\light\DirectionalLight.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\directx\DirectXCommon.h">
-      <Filter>engine\base</Filter>
     </ClInclude>
     <ClInclude Include="application\object\character\base\BaseCharacter.h">
       <Filter>application\object\character\base</Filter>
@@ -882,66 +890,6 @@
     <ClInclude Include="application\ui\player\PlayerUI.h">
       <Filter>application\ui\player</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\object\AnimationModel.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\direction\BulletTrail.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\direction\BulletTrailManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\particle\CombinedParticle.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\camera\GameCamera.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="application\object\level\loader\LevelLoader.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="application\object\level\base\IBaseLevelObject.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\line\LineManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\Model.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\ModelFormat.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\ModelManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\Object3d.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\Object3dManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\particle\Particle.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\particle\ParticleManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\light\PointLight.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\light\SceneLight.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\object\Shape.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\light\SpotLight.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\worldTransform\WorldTransform.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\2d\ImGuiManager.h">
       <Filter>engine\2d</Filter>
     </ClInclude>
@@ -953,42 +901,6 @@
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
       <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\texture\TextTextureManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\view\DSVManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\render\D2DRender.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\framework\Framework.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\view\GPUDescriptorManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\logger\Logger.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\render\MainRender.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\postEffect\PostEffectManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\view\RTVManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\texture\TextTextureRender.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\texture\TextureManager.h">
-      <Filter>engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\windows\WinApp.h">
-      <Filter>engine\base</Filter>
     </ClInclude>
     <ClInclude Include="engine\input\Input.h">
       <Filter>engine\input</Filter>
@@ -1062,40 +974,11 @@
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>externals\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collision\interface\ICollider.h">
+    <ClInclude Include="engine\collision\CollisionConfig.h">
       <Filter>engine\collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionConfig.h">
       <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collision\manager\CollisionManager.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collision\CollisionConfig.h">
-      <Filter>engine\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="application\system\StartDirection.h" />
-    <ClInclude Include="application\system\DeathDirection.h" />
-    <ClInclude Include="application\ui\player\detail\OperationUI.h" />
-    <ClInclude Include="application\ui\player\detail\VelocityUI.h" />
-    <ClInclude Include="application\system\EndDirection.h" />
-    <ClInclude Include="application\system\TimeScaleManager.h" />
-    <ClInclude Include="engine\3d\ParticleTypes.h" />
-    <ClInclude Include="application\system\PauseSystem.h" />
-    <ClInclude Include="engine\behaviorTree\interface\INode.h">
-      <Filter>application\behaviorTree\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\compositeNode\CompositeNodeBase.h">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\compositeNode\Selector.h">
-      <Filter>application\behaviorTree\rollNode</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\compositeNode\Sequence.h">
-      <Filter>application\behaviorTree\rollNode</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\nodeBase\NodeBase.h">
-      <Filter>application\behaviorTree\allNodeBase</Filter>
     </ClInclude>
     <ClInclude Include="application\system\DeathDirection.h">
       <Filter>application\system</Filter>
@@ -1106,118 +989,453 @@
     <ClInclude Include="application\system\StartDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\particle\CombinedParticleManager.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="application\system\TimeScaleManager.h">
       <Filter>application\system</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\particle\ParticleTypes.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\blackBoard\BlackBoard.h">
-      <Filter>application\behaviorTree\blackBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.h">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\behaviorTree\leafNode\LeafNodeBase.h">
-      <Filter>application\behaviorTree\rollNodeBase</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\OperationUI.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
-    <ClInclude Include="application\object\character\enemy\boss\Boss.h" />
-    <ClInclude Include="engine\behaviorTree\decoratorNode\Inverter.h" />
-    <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBombReload.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h" />
-    <ClInclude Include="application\object\character\weapon\enemy\EnemyBullet.h" />
-    <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
-    <ClInclude Include="engine\collision\base\OBBColliderBase.h" />
-    <ClInclude Include="engine\collision\base\SphereColliderBase.h" />
-    <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
-    <ClInclude Include="application\object\character\enemy\jet\collision\JetCollider.h" />
-    <ClInclude Include="application\object\character\enemy\tank\collision\TankCollider.h" />
-    <ClInclude Include="application\object\character\player\collision\PlayerCollider.h" />
-    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.h" />
-    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.h" />
-    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.h" />
-    <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h" />
-    <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h" />
-    <ClInclude Include="application\object\level\collision\LevelObjectCollider.h" />
-    <ClInclude Include="application\object\character\enemy\boss\Barrier.h" />
-    <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h" />
-    <ClInclude Include="application\ui\enemy\detail\EnemyReactionUI.h" />
-    <ClInclude Include="application\object\character\enemy\boss\node\decorator\Interruption.h" />
-    <ClInclude Include="application\object\character\item\heal\ItemHeal.h" />
-    <ClInclude Include="application\object\character\item\heal\collision\ItemHealCollider.h" />
-    <ClInclude Include="application\object\character\item\key\ItemKey.h" />
-    <ClInclude Include="application\object\character\item\key\collision\ItemKeyCollider.h" />
-    <ClInclude Include="application\object\character\weapon\player\PlayerSpecial.h" />
-    <ClInclude Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.h" />
-    <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h" />
-    <ClInclude Include="application\object\character\item\charge\ItemCharge.h" />
-    <ClInclude Include="application\object\level\tree\LevelTree.h" />
-    <ClInclude Include="application\object\level\bigTree\LevelBigTree.h" />
-    <ClInclude Include="application\object\level\rock\LevelRock.h" />
-    <ClInclude Include="application\object\level\fence\LevelFence.h" />
-    <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h" />
-    <ClInclude Include="application\ui\player\detail\WeaponUI.h" />
-    <ClInclude Include="application\ui\player\detail\KeyUI.h" />
-    <ClInclude Include="application\ui\player\detail\DirectionUI.h" />
-    <ClInclude Include="application\ui\player\detail\DamageUI.h" />
-    <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h" />
-    <ClInclude Include="application\system\CameraWork.h" />
-    <ClInclude Include="application\system\CameraManager.h" />
-    <ClInclude Include="application\scene\DIR_BossAppearScene.h" />
-    <ClInclude Include="application\system\BossAppearSystem.h" />
-    <ClInclude Include="application\system\direction\cinematic\Cinematic.h" />
-    <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
-    <ClInclude Include="application\system\direction\builder\CinematicBuilder.h" />
-    <ClInclude Include="application\system\direction\shot\BA_ShowSealedBoxShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_StillnessShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_AppearKeyShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_UnlockShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h" />
-    <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h" />
-    <ClInclude Include="application\scene\DIR_BossDestroyScene.h" />
-    <ClInclude Include="application\system\BossDestroySystem.h" />
-    <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
-    <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
-    <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h" />
-    <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h" />
-    <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
-    <ClInclude Include="application\scene\TutorialScene.h" />
-    <ClInclude Include="application\system\TutorialSystem.h" />
-    <ClInclude Include="application\object\level\bigRock\LevelBigRock.h" />
+    <ClInclude Include="engine\blackBoard\BlackBoard.h">
+      <Filter>engine\blackBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\interface\INode.h">
+      <Filter>engine\behaviorTree\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\compositeNode\Selector.h">
+      <Filter>engine\behaviorTree\compositeNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\compositeNode\Sequence.h">
+      <Filter>engine\behaviorTree\compositeNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\leafNode\LeafNodeBase.h">
+      <Filter>engine\behaviorTree\leafNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.h">
+      <Filter>engine\behaviorTree\decoratorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\compositeNode\CompositeNodeBase.h">
+      <Filter>engine\behaviorTree\compositeNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h">
+      <Filter>engine\behaviorTree\branchNode</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\nodeBase\NodeBase.h">
+      <Filter>engine\behaviorTree\nodeBase</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\worldTransform\WorldTransform.h">
+      <Filter>engine\3d\worldTransform</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\camera\BaseCamera.h">
+      <Filter>engine\3d\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\camera\GameCamera.h">
+      <Filter>engine\3d\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\camera\DevelopCamera.h">
+      <Filter>engine\3d\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\direction\BulletTrail.h">
+      <Filter>engine\3d\direction</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\direction\BulletTrailManager.h">
+      <Filter>engine\3d\direction</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\light\DirectionalLight.h">
+      <Filter>engine\3d\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\light\PointLight.h">
+      <Filter>engine\3d\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\light\SpotLight.h">
+      <Filter>engine\3d\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\light\SceneLight.h">
+      <Filter>engine\3d\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\line\LineManager.h">
+      <Filter>engine\3d\line</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\particle\CombinedParticle.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\particle\CombinedParticleManager.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\particle\Particle.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\particle\ParticleManager.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\particle\ParticleTypes.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\AnimationModel.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\Model.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\ModelFormat.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\ModelManager.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\Object3d.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\Object3dManager.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\object\Shape.h">
+      <Filter>engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\directx\D3DResourceLeakChecker.h">
+      <Filter>engine\base\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\directx\DirectXCommon.h">
+      <Filter>engine\base\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\framework\Framework.h">
+      <Filter>engine\base\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\logger\Logger.h">
+      <Filter>engine\base\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\myGame\MyGame.h">
+      <Filter>engine\base\myGame</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\windows\WinApp.h">
+      <Filter>engine\base\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\view\DSVManager.h">
+      <Filter>engine\base\view</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\view\GPUDescriptorManager.h">
+      <Filter>engine\base\view</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\view\RTVManager.h">
+      <Filter>engine\base\view</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\texture\TextTextureManager.h">
+      <Filter>engine\base\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\texture\TextTextureRender.h">
+      <Filter>engine\base\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\texture\TextureManager.h">
+      <Filter>engine\base\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\render\D2DRender.h">
+      <Filter>engine\base\render</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\render\MainRender.h">
+      <Filter>engine\base\render</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\postEffect\PostEffectManager.h">
+      <Filter>engine\base\postEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\interface\ICollider.h">
+      <Filter>engine\collision\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\manager\CollisionManager.h">
+      <Filter>engine\collision\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\base\AABBColliderBase.h">
+      <Filter>engine\collision\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\base\SphereColliderBase.h">
+      <Filter>engine\collision\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collision\base\OBBColliderBase.h">
+      <Filter>engine\collision\base</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\bigTree\LevelBigTree.h">
+      <Filter>application\object\level\bigTree</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\fence\LevelFence.h">
+      <Filter>application\object\level\fence</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\collision\LevelObjectCollider.h">
+      <Filter>application\object\level\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\rock\LevelRock.h">
+      <Filter>application\object\level\rock</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\sealedBox\LevelSealedBox.h">
+      <Filter>application\object\level\sealedBox</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\tree\LevelTree.h">
+      <Filter>application\object\level\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\loader\LevelLoader.h">
+      <Filter>application\object\level\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\base\IBaseLevelObject.h">
+      <Filter>application\object\level\base</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\Boss.h">
+      <Filter>application\object\character\enemy\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h">
+      <Filter>application\object\character\enemy\boss\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\Barrier.h">
+      <Filter>application\object\character\enemy\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\collision\BarrierCollider.h">
+      <Filter>application\object\character\enemy\boss\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h">
+      <Filter>application\object\character\enemy\boss\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BarrierLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBombReload.h">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckBulletReload.h">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckCannonReload.h">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerFront.h">
+      <Filter>application\object\character\enemy\boss\node\branch</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\decorator\Interruption.h">
+      <Filter>application\object\character\enemy\boss\node\decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\ApproachLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombAttackLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BombReloadLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletAttackLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\BulletReloadLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonAttackLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\CannonReloadLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionConfusionLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionMissingLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\DirectionSensingLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierCoolTimeLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeBarrierStateLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeHPHalfLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerDistanceLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgePlayerPreDistanceLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\JudgeSummonCoolTimeLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\KeepDistanceLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h">
+      <Filter>application\object\character\enemy\boss\node\leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\jet\collision\JetCollider.h">
+      <Filter>application\object\character\enemy\jet\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\enemy\tank\collision\TankCollider.h">
+      <Filter>application\object\character\enemy\tank\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\builder\CinematicBuilder.h">
+      <Filter>application\system\direction\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\cinematic\Cinematic.h">
+      <Filter>application\system\direction\cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\base\IShotBase.h">
+      <Filter>application\system\direction\shot\base</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_AppearBossShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_AppearKeyShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_ShakeShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_ShowSealedBoxShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_StillnessShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_UnlockShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BA_ZoomOutShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion1Shot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion2Shot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h">
+      <Filter>application\system\direction\shot</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\BossAppearSystem.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\BossDestroySystem.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\CameraManager.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\CameraWork.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\DeathDirection.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\EndDirection.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\PauseSystem.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\StartDirection.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\TimeScaleManager.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\TutorialSystem.h">
+      <Filter>application\system</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\DIR_BossAppearScene.h">
+      <Filter>application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\DIR_BossDestroyScene.h">
+      <Filter>application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\TutorialScene.h">
+      <Filter>application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\enemy\detail\EnemyInformationUI.h">
+      <Filter>application\ui\enemy\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\enemy\detail\EnemyReactionUI.h">
+      <Filter>application\ui\enemy\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\DamageUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\DirectionUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\KeyUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\VelocityUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\WeaponUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\OperationUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\behaviorTree\decoratorNode\Inverter.h">
+      <Filter>engine\behaviorTree\decoratorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBombCollider.h">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyBulletCollider.h">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\enemy\collision\EnemyCannonCollider.h">
+      <Filter>application\object\character\weapon\enemy\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\enemy\EnemyBullet.h">
+      <Filter>application\object\character\weapon\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerBulletCollider.h">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerCannonCollider.h">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\player\PlayerSpecial.h">
+      <Filter>application\object\character\weapon\player</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\weapon\player\collision\PlayerSpecialCollider.h">
+      <Filter>application\object\character\weapon\player\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\player\collision\PlayerCollider.h">
+      <Filter>application\object\character\player\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\charge\ItemCharge.h">
+      <Filter>application\object\character\item\charge</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\charge\collision\ItemChargeCollider.h">
+      <Filter>application\object\character\item\charge\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\heal\ItemHeal.h">
+      <Filter>application\object\character\item\heal</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\heal\collision\ItemHealCollider.h">
+      <Filter>application\object\character\item\heal\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\key\ItemKey.h">
+      <Filter>application\object\character\item\key</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\key\collision\ItemKeyCollider.h">
+      <Filter>application\object\character\item\key\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\ParticleTypes.h">
+      <Filter>engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\level\bigRock\LevelBigRock.h">
+      <Filter>application\object\level\bigRock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
@@ -1408,26 +1626,188 @@
     <Filter Include="application\scene">
       <UniqueIdentifier>{e02dbacf-5660-4d4f-a256-7b35be3057e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="application\behaviorTree">
-      <UniqueIdentifier>{c2f1cf31-da2a-4f79-8c23-5cbf65cf2293}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="application\behaviorTree\allNodeBase">
-      <UniqueIdentifier>{c38e1a9c-4051-46d4-a3b0-dd29f0e4e8ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="application\behaviorTree\interface">
-      <UniqueIdentifier>{242c7b7a-23b9-427f-9e95-109f355d7426}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="application\behaviorTree\rollNodeBase">
-      <UniqueIdentifier>{f596ce67-4d2d-4ed5-bbd0-78a44dab5a6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="application\behaviorTree\rollNode">
-      <UniqueIdentifier>{e5d82476-94f6-4f31-bd52-091df0e38ec6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\shaders\textTexture">
       <UniqueIdentifier>{f3ae9c70-1481-4b48-abba-f59e8fcde179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="application\behaviorTree\blackBoard">
-      <UniqueIdentifier>{e91bdec3-27d0-472d-bdae-8a598b265530}</UniqueIdentifier>
+    <Filter Include="engine\behaviorTree">
+      <UniqueIdentifier>{44cabeb8-80c1-4270-9983-1c7ae3a59e9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\blackBoard">
+      <UniqueIdentifier>{f8c6dfd2-4a55-4d75-a0a3-eb5ab5e28375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\branchNode">
+      <UniqueIdentifier>{c36e8bba-5133-45be-8268-4d73606286c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\compositeNode">
+      <UniqueIdentifier>{9dc2e140-ef53-46a5-9717-dd8155d28323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\decoratorNode">
+      <UniqueIdentifier>{84146b93-1da6-467f-bde1-337ecc9386b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\interface">
+      <UniqueIdentifier>{3ed9aba9-dd87-408c-b01b-790049be58cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\leafNode">
+      <UniqueIdentifier>{e58010fa-9be5-43d0-bcb1-0407a0798afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\behaviorTree\nodeBase">
+      <UniqueIdentifier>{7835eaa0-7938-4907-a7d1-254eff71162c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\camera">
+      <UniqueIdentifier>{b562207e-3220-4ffa-9874-34cf4c551dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\direction">
+      <UniqueIdentifier>{99ebb544-e868-45a7-902f-361f3270b06c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\light">
+      <UniqueIdentifier>{d33cfc36-d52c-4c69-aff6-3fe90d3fcac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\line">
+      <UniqueIdentifier>{257ff3d3-4a74-4b69-820f-dc614a6034f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\object">
+      <UniqueIdentifier>{354ee608-0a45-4812-8f5b-a330820afb39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\particle">
+      <UniqueIdentifier>{23575276-63d6-43b9-9607-0b3145eb0394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d\worldTransform">
+      <UniqueIdentifier>{0e2d56de-0d9d-487e-b9c3-da925ed1a059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\directx">
+      <UniqueIdentifier>{d04fc05d-ef6d-4777-a7fb-6e136c118bb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\framework">
+      <UniqueIdentifier>{37ece9dc-c02e-4760-902c-a896c2e5e3cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\logger">
+      <UniqueIdentifier>{48cf21f3-7ff9-4497-8a82-5f0832c954a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\myGame">
+      <UniqueIdentifier>{6a8bb68a-7d08-418c-9de9-1980901481dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\postEffect">
+      <UniqueIdentifier>{8c3652c6-ca6b-4d5e-9d2a-0bc2a384b9c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\render">
+      <UniqueIdentifier>{b2720a28-a191-45a5-bb0f-ba19cb4b7619}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\texture">
+      <UniqueIdentifier>{de79c026-3bf4-4cd4-b2d4-935bf12dd3f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\view">
+      <UniqueIdentifier>{09217dea-7406-4ff1-a93c-0f0c8ffb52de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\base\windows">
+      <UniqueIdentifier>{3f0a04d3-703e-4560-ad69-1d35e1d7e5af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\collision\base">
+      <UniqueIdentifier>{3db4b239-8e26-4db1-9304-0b6f000a81fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\collision\interface">
+      <UniqueIdentifier>{5d03be9d-99d1-4cab-8e56-5dcb344246be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\collision\manager">
+      <UniqueIdentifier>{9b76ba28-2cdd-4e0a-9827-38e7d7954f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level">
+      <UniqueIdentifier>{0f805d92-de37-47bd-b73d-20e46fca3532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\base">
+      <UniqueIdentifier>{e9dd9e80-4e65-4e62-8ea3-ca2a6e9103fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\bigTree">
+      <UniqueIdentifier>{d97ffe50-81e2-4061-ab07-f278c791fe05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\collision">
+      <UniqueIdentifier>{edc71cf8-ffef-4868-ba1c-afc09fac9b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\fence">
+      <UniqueIdentifier>{ccbbc104-1b1e-49c2-a355-7746c91e101c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\loader">
+      <UniqueIdentifier>{dc8b2583-2657-410c-a2ff-59a242743e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\rock">
+      <UniqueIdentifier>{59e0efd7-f915-4415-8999-54ef1c195b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\sealedBox">
+      <UniqueIdentifier>{9fb56daf-7167-45eb-96b2-06d1e22b03b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\tree">
+      <UniqueIdentifier>{f9455a29-060c-4dd3-9f5c-0b1ccb5d3865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss">
+      <UniqueIdentifier>{ee8873cd-54ea-45e0-9f44-4ba2211c548d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\builder">
+      <UniqueIdentifier>{1b81b4d0-8812-4aa9-96c4-90e9f1f8f066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\collision">
+      <UniqueIdentifier>{091c7451-6f01-4593-ae79-bc88cfabaf23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\node">
+      <UniqueIdentifier>{78d5e9cf-24f9-417a-ae21-00f0ec8cee5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\node\branch">
+      <UniqueIdentifier>{a0715d27-f9d7-45fb-9993-071f26c0ab0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\node\decorator">
+      <UniqueIdentifier>{bf3d386f-caac-42aa-a9f7-d6fc04fa6992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\boss\node\leaf">
+      <UniqueIdentifier>{bfbedebf-0865-44f6-a869-f23d9ddcffd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\jet\collision">
+      <UniqueIdentifier>{c9751b87-ecb1-4bb2-8420-33d2b235486d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\enemy\tank\collision">
+      <UniqueIdentifier>{c0ba609f-e65d-42f8-b4e3-c5cb21ee5b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\system\direction">
+      <UniqueIdentifier>{ad818e92-bdc0-4cde-97eb-b8e89702aeda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\system\direction\builder">
+      <UniqueIdentifier>{c05c3aa6-72d0-45ca-ad45-d8477ee132d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\system\direction\cinematic">
+      <UniqueIdentifier>{02b01596-458a-4416-860a-9378b0366698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\system\direction\shot">
+      <UniqueIdentifier>{e394359e-aff1-427e-8f1e-b2dccde47e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\system\direction\shot\base">
+      <UniqueIdentifier>{c2a2d725-373b-4f32-86fc-9da59893dc74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\weapon\enemy\collision">
+      <UniqueIdentifier>{6ae05f23-878f-4ae4-90c9-8948c84f16c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\weapon\player\collision">
+      <UniqueIdentifier>{58f346df-f8c0-46e8-ba91-721d4ebb5a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\player\collision">
+      <UniqueIdentifier>{17fd53ec-a9ac-44b3-9667-9e852c83d053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\charge">
+      <UniqueIdentifier>{fef01c39-1e9a-47ae-a788-23ba94ecbac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\heal">
+      <UniqueIdentifier>{fffd2738-4321-4158-b7c9-7068c9e79f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\key">
+      <UniqueIdentifier>{4720b3ce-441a-42ab-b4f4-f7e0c777f52e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\charge\collision">
+      <UniqueIdentifier>{ea6bf2a2-d3d6-4804-9ba9-1734d01c6be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\heal\collision">
+      <UniqueIdentifier>{1f400dc0-18c3-4298-9aaa-89760e5e0fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\key\collision">
+      <UniqueIdentifier>{98837b9c-c892-4042-a9e4-7a545b58fbb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\bigRock">
+      <UniqueIdentifier>{3e68dc19-0ca8-48c2-8695-b3017c1f2cd6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
