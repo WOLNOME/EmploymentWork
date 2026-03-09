@@ -444,9 +444,6 @@
     <ClCompile Include="engine\base\postEffect\PostEffectManager.cpp">
       <Filter>engine\base\postEffect</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\main.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="engine\collision\interface\ICollider.cpp">
       <Filter>engine\collision\interface</Filter>
     </ClCompile>
@@ -741,6 +738,7 @@
     <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp">
       <Filter>application\object\character\item\key\collision</Filter>
     </ClCompile>
+    <ClCompile Include="engine\base\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
