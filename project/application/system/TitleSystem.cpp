@@ -16,6 +16,11 @@ void TitleSystem::Initialize() {
 	//シーンマネージャー
 	sceneManager_ = SceneManager::GetInstance();
 
+	//BGMの初期化
+	demo_ = std::make_unique<Audio>();
+	demo_->Initialize("bgm/title.mp3");
+	demo_->Play(true, 1.0f);
+
 	//メンバ変数の初期化
 	menu_ = Menu::kStart;
 

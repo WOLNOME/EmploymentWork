@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <array>
+#include <vector>
 #include <set>
 #include <memory>
 
@@ -55,10 +56,8 @@ namespace Norm {
 		struct SoundData {
 			//波形フォーマット
 			WAVEFORMATEX wfex;
-			//バッファの先頭アドレス
-			BYTE* pBuffer;
-			//バッファのサイズ
-			unsigned int bufferSize;
+			//バッファ
+			std::vector<BYTE> buffer;
 			//ファイルパス
 			std::string name;
 		};
@@ -105,7 +104,7 @@ namespace Norm {
 		/// </summary>
 		/// <param name="filename">ファイルパス</param>
 		/// <returns>音声データハンドル</returns>
-		uint32_t SoundLoadWave(const std::string& filename);
+		uint32_t SoundLoadFile(const std::string& filename);
 		/// <summary>
 		/// サウンドの再生
 		/// </summary>

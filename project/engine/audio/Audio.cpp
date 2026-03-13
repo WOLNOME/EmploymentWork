@@ -13,8 +13,8 @@ namespace Norm {
 		// ディレクトリパスのコピー
 		directoryPath_ = directoryPath;
 
-		// WAVファイルを読み込み
-		soundDataHandle_ = AudioCommon::GetInstance()->SoundLoadWave(directoryPath_ + filename);
+		// 音声ファイルを読み込み
+		soundDataHandle_ = AudioCommon::GetInstance()->SoundLoadFile(directoryPath_ + filename);
 	}
 
 	void Audio::DebugWithImGui(const std::wstring& _name) {

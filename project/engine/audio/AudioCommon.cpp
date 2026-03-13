@@ -1,6 +1,22 @@
 #include "AudioCommon.h"
 #include <cassert>
 #include <fstream>
+#include <StringUtility.h>
+#include <filesystem>
+#include <wrl.h>
+
+//MediaFoundation
+#include <mfapi.h>
+#include <mfobjects.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+#include <mferror.h>
+
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
+
+using namespace Microsoft::WRL;
 
 namespace Norm {
 
@@ -17,177 +33,238 @@ namespace Norm {
 	}
 
 	void AudioCommon::Initialize() {
+		HRESULT hr;
 		//XAudio2エンジンのインスタンス作成
-		HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+		hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 		assert(SUCCEEDED(hr));
 		//マスターボイスを作成
 		hr = xAudio2_->CreateMasteringVoice(&masterVoice);
 		assert(SUCCEEDED(hr));
 
+		//Windows Media Foundationの初期化（ローカルファイル版）
+		hr = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+		assert(SUCCEEDED(hr));
+
 	}
 
 	void AudioCommon::Finalize() {
+		HRESULT hr;
 		//コンテナの全開放
 		ShutdownContainer();
 		//インスタンスを削除
 		instance_.reset();
+		//Windows Media Foundationの終了
+		hr = MFShutdown();
+		assert(SUCCEEDED(hr));
 	}
 
-
-	uint32_t AudioCommon::SoundLoadWave(const std::string& filename) {
-		// 既存のサウンドデータを検索
+	uint32_t AudioCommon::SoundLoadFile(const std::string& filename) {
+		// 既存データ検索
 		for (uint32_t i = kStartSoundDataIndex; i < soundDatas_.size(); ++i) {
-			if (soundDatas_[i].name == filename) {  // 名前が一致するサウンドデータを発見
-				return i;                           // 既存のインデックスを返す
+			if (soundDatas_[i].name == filename) {
+				return i;
 			}
 		}
 
-		// ファイルオープン
-		std::ifstream file;
-		file.open(filename, std::ios_base::binary);
-		assert(file.is_open());
+		// フルパス
+		std::string fullPath = std::filesystem::absolute(filename).string();
+		std::wstring filePathW = StringUtility::ConvertString(fullPath);
 
-		// RIFFヘッダの読み込み
-		RiffHeader riff;
-		file.read((char*)&riff, sizeof(riff));
-		// ファイルがRIFFかチェック
-		assert(strncmp(riff.chunk.id, "RIFF", 4) == 0);
-		// タイプがWAVEかチェック
-		assert(strncmp(riff.type, "WAVE", 4) == 0);
+		HRESULT hr;
 
-		// 'fmt 'チャンクと'data'チャンクを見つけるまでループ
-		FormatChunk format = {};
-		BYTE* pBuffer = nullptr;
-		unsigned int dataSize = 0;
+		// SourceReader作成
+		ComPtr<IMFSourceReader> pReader;
+		hr = MFCreateSourceReaderFromURL(filePathW.c_str(), nullptr, &pReader);
+		assert(SUCCEEDED(hr));
 
-		while (file.peek() != EOF) {
-			// チャンクヘッダの読み込み
-			ChunkHeader chunkHeader;
-			file.read((char*)&chunkHeader, sizeof(chunkHeader));
+		// PCM指定
+		ComPtr<IMFMediaType> pPCMType;
+		MFCreateMediaType(&pPCMType);
+		pPCMType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+		pPCMType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
 
-			// チャンクIDに応じて処理
-			if (strncmp(chunkHeader.id, "fmt ", 4) == 0) {
-				// 'fmt 'チャンクの読み込み
-				assert(chunkHeader.size <= sizeof(format.fmt));
-				file.read((char*)&format.fmt, chunkHeader.size);
-			}
-			else if (strncmp(chunkHeader.id, "data", 4) == 0) {
-				// 'data'チャンクの読み込み
-				pBuffer = new BYTE[chunkHeader.size];
-				dataSize = chunkHeader.size;
-				file.read(reinterpret_cast<char*>(pBuffer), chunkHeader.size);
-			}
-			else {
-				// 他のチャンクは読み飛ばす
-				file.seekg(chunkHeader.size, std::ios::cur);
-			}
+		hr = pReader->SetCurrentMediaType(
+			MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+			nullptr,
+			pPCMType.Get()
+		);
+		assert(SUCCEEDED(hr));
 
-			// 必要なチャンクが見つかったら終了
-			if (format.fmt.wFormatTag && pBuffer) {
+		// 出力フォーマット取得
+		ComPtr<IMFMediaType> pOutType;
+		pReader->GetCurrentMediaType(
+			MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+			&pOutType
+		);
+
+		// WaveFormat取得
+		WAVEFORMATEX* waveFormat = nullptr;
+		MFCreateWaveFormatExFromMFMediaType(
+			pOutType.Get(),
+			&waveFormat,
+			nullptr
+		);
+
+		SoundData soundData{};
+		soundData.wfex = *waveFormat;
+		soundData.name = filename;
+
+		CoTaskMemFree(waveFormat);
+
+		//音声サイズを事前取得
+		PROPVARIANT var;
+		PropVariantInit(&var);
+		
+		hr = pReader->GetPresentationAttribute(
+			MF_SOURCE_READER_MEDIASOURCE,
+			MF_PD_DURATION,
+			&var
+		);
+
+		UINT64 duration = var.hVal.QuadPart;
+		PropVariantClear(&var);
+
+		UINT32 bytesPerSec = 0;
+		pOutType->GetUINT32(
+			MF_MT_AUDIO_AVG_BYTES_PER_SECOND,
+			&bytesPerSec
+		);
+
+		UINT64 estimatedSize =
+			(duration * bytesPerSec) / 10000000;
+
+		soundData.buffer.reserve((size_t)estimatedSize);
+
+		//PCMデータ読み込み
+		while (true) {
+
+			ComPtr<IMFSample> pSample;
+			DWORD streamIndex = 0;
+			DWORD flags = 0;
+			LONGLONG timeStamp = 0;
+
+			hr = pReader->ReadSample(
+				MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+				0,
+				&streamIndex,
+				&flags,
+				&timeStamp,
+				&pSample
+			);
+
+			assert(SUCCEEDED(hr));
+
+			if (flags & MF_SOURCE_READERF_ENDOFSTREAM) {
 				break;
 			}
+
+			if (!pSample) {
+				continue;
+			}
+
+			ComPtr<IMFMediaBuffer> pBuffer;
+			pSample->ConvertToContiguousBuffer(&pBuffer);
+
+			BYTE* pData = nullptr;
+			DWORD maxLength = 0;
+			DWORD currentLength = 0;
+
+			pBuffer->Lock(&pData, &maxLength, &currentLength);
+
+			size_t oldSize = soundData.buffer.size();
+			soundData.buffer.resize(oldSize + currentLength);
+
+			memcpy(
+				soundData.buffer.data() + oldSize,
+				pData,
+				currentLength
+			);
+
+			pBuffer->Unlock();
 		}
 
-		// チャンクが見つかったか確認
-		assert(format.fmt.wFormatTag != 0);
-		assert(pBuffer != nullptr);
-
-		// ファイルクローズ
-		file.close();
-
-		// サウンドデータの登録
-		SoundData soundData = {};
-		soundData.wfex = format.fmt;
-		soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-		soundData.bufferSize = dataSize;
-		soundData.name = filename;  // ファイル名を保存
-
-		// soundDatas_に空きがある場所を検索して登録
+		// 登録
 		for (uint32_t i = kStartSoundDataIndex; i < soundDatas_.size(); ++i) {
-			if (soundDatas_[i].pBuffer == nullptr) { // 空きスロットを検索
-				soundDatas_[i] = soundData;          // 新しいデータを格納
-				return i;                            // インデックスを返す
+
+			if (soundDatas_[i].buffer.empty()) {
+				soundDatas_[i] = std::move(soundData);
+				return i;
 			}
 		}
 
-		// 空きがない場合はエラー
-		delete[] pBuffer;
 		assert(false && "No available space in soundDatas_");
-		return -1; // ここには到達しないが、警告回避のため
+		return -1;
 	}
 
 	uint32_t AudioCommon::SoundPlayWave(uint32_t soundDataHandle, bool loop, float volume) {
-		//手順
-		//空のボイスデータを作成
-		//ボイスデータコンテナからボイスデータ内のhandleと引数のサウンドデータハンドルが一致しているか確認
-		//一致してる→空のボイスデータに既存のボイスデータのポインタを移植
-		//一致してない→新しくボイスデータを作る→コンテナに登録。
-		//ボイスデータの準備が両方できたので再生等各種設定
-
-
-		assert(soundDataHandle < soundDatas_.size()); // ハンドルの範囲チェック
+		assert(soundDataHandle < soundDatas_.size());
 		SoundData& soundData = soundDatas_[soundDataHandle];
-		assert(soundData.pBuffer != nullptr); // 有効なサウンドデータが存在することを確認
 
-		// 1. voiceDatas_から既存のボイスデータを検索
+		// vector版チェック
+		assert(!soundData.buffer.empty());
+
+		// 既存Voice検索
 		VoiceData* targetVoiceData = nullptr;
+
 		for (VoiceData* voiceData : voiceDatas_) {
 			if (voiceData->handle == soundDataHandle) {
-				targetVoiceData = voiceData; // 一致するボイスデータを保持
+				targetVoiceData = voiceData;
 				break;
 			}
 		}
 
-		// 2. 一致するボイスデータがない場合、新しいボイスデータを作成
+		// 新規Voice作成
 		if (targetVoiceData == nullptr) {
+
 			targetVoiceData = new VoiceData();
 			targetVoiceData->handle = soundDataHandle;
 
-			HRESULT result = xAudio2_->CreateSourceVoice(&targetVoiceData->sourceVoice, &soundData.wfex);
+			HRESULT result = xAudio2_->CreateSourceVoice(
+				&targetVoiceData->sourceVoice,
+				&soundData.wfex
+			);
+
 			assert(SUCCEEDED(result));
 
-			voiceDatas_.insert(targetVoiceData); // 新しいボイスデータをコンテナに登録
+			voiceDatas_.insert(targetVoiceData);
 		}
 
-		assert(targetVoiceData->sourceVoice != nullptr); // ソースボイスが有効であることを確認
+		assert(targetVoiceData->sourceVoice != nullptr);
 
-		// 3. 波形データの設定
+		// バッファ設定
 		XAUDIO2_BUFFER buf{};
-		buf.pAudioData = soundData.pBuffer;
-		buf.AudioBytes = soundData.bufferSize;
+		buf.pAudioData = soundData.buffer.data();
+		buf.AudioBytes = static_cast<UINT32>(soundData.buffer.size());
 		buf.Flags = XAUDIO2_END_OF_STREAM;
 
 		if (loop) {
-			buf.LoopCount = XAUDIO2_LOOP_INFINITE; // 無限ループ
+			buf.LoopCount = XAUDIO2_LOOP_INFINITE;
 		}
 		else {
-			buf.LoopCount = 0; // ループなし
+			buf.LoopCount = 0;
 		}
 
-		// 4. サウンドの再生準備
+		// 再生準備
 		HRESULT result = targetVoiceData->sourceVoice->Stop();
 		result = targetVoiceData->sourceVoice->FlushSourceBuffers();
+
 		result = targetVoiceData->sourceVoice->SubmitSourceBuffer(&buf);
 		assert(SUCCEEDED(result));
 
-		// 5. 音量の設定
+		// 音量設定
 		result = targetVoiceData->sourceVoice->SetVolume(volume);
 		assert(SUCCEEDED(result));
 
-		// 6. サウンドの再生
+		// 再生
 		result = targetVoiceData->sourceVoice->Start();
 		assert(SUCCEEDED(result));
 
-		// 7. 該当するボイスデータの位置を返す
 		return soundDataHandle;
 	}
 
 	void AudioCommon::SoundUnload(SoundData* soundData) {
 		//バッファのメモリを解放
-		delete[] soundData->pBuffer;
-
-		soundData->pBuffer = 0;
-		soundData->bufferSize = 0;
+		soundData->buffer.clear();
 		soundData->wfex = {};
 	}
 
@@ -230,9 +307,8 @@ namespace Norm {
 
 	void AudioCommon::ClearSoundData() {
 		for (auto& soundData : soundDatas_) {
-			if (soundData.pBuffer) {
-				SoundUnload(&soundData); // バッファを解放
-			}
+			soundData.buffer.clear();
+			soundData.name.clear();
 		}
 	}
 
