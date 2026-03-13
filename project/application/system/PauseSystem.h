@@ -1,4 +1,5 @@
 #pragma once
+#include <Audio.h>
 #include <Sprite.h>
 #include <Handle.h>
 #include <cstdint>
@@ -85,6 +86,10 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
+	std::unique_ptr<Norm::Audio> cursolMoveSE_ = nullptr;	//カーソル移動
 
 	//背景マスク
 	uint32_t maskTextureHandle_ = 0u;

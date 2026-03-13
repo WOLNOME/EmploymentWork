@@ -7,6 +7,7 @@
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
 #include <application/object/character/weapon/enemy/collision/EnemyBombCollider.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -14,8 +15,13 @@ void EnemyBomb::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	deadSE_ = std::make_unique<Audio>();
+	deadSE_->Initialize("se/explosion_medium.mp3");
+
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBomb");
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
 
 	//オブジェクトの生成・初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
@@ -178,13 +184,29 @@ void EnemyBomb::Move() {
 		//モデルを非表示に
 		object3d_->SetIsDisplay(false);
 		circleShadow_->SetIsDisplay(false);
+		//座標をセット
+		worldTransform_.SetTranslate(newTranslate);
+		//最大距離
+		float maxDistance = audioParam_["distance"].get<float>();
+		//カメラまでの距離
+		float distance = Vector3(
+			worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+		).Length();
+		//音量
+		float volume = 0.0f;
+		if (distance < maxDistance) {
+			volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+		}
+		//死亡SE
+		deadSE_->Play(false, volume);
 		//仮死状態にする
 		SetState(State::kAsphyxia);
 
 		//当たり判定属性を爆風に
 		collider_->SetCollisionAttribute(CollisionAttribute::EnemyBlast);
 	}
-
-	//座標をセット
-	worldTransform_.SetTranslate(newTranslate);
+	else {
+		//座標をセット
+		worldTransform_.SetTranslate(newTranslate);
+	}
 }

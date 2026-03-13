@@ -7,6 +7,7 @@
 
 //アプリケーション
 #include <application/object/character/weapon/player/collision/PlayerCannonCollider.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -14,8 +15,15 @@ void PlayerCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	shotSE_ = std::make_unique<Audio>();
+	shotSE_->Initialize("se/cannonShot.mp3");
+	deadSE_ = std::make_unique<Audio>();
+	deadSE_->Initialize("se/explosion_small.mp3");
+
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerCannon");
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
 
 	//インスタンスの生成と初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("black.png");
@@ -123,6 +131,54 @@ void PlayerCannon::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	SetState(State::kActive);
 	//トレールの座標をクリア
 	trail_->ClearPositions();
+	//発射SE
+	shotSE_->Play(false, 1.0f);
+}
+
+void PlayerCannon::DeadProcess(DeadType _deadType) {
+
+	//タイプ別の処理
+	switch (_deadType) {
+	case PlayerCannon::DeadType::Collide:
+	{
+		//爆発パーティクルの発生
+		TransformEuler transform = explosionParticle_->GetBaseTransform();
+		transform.translate = worldTransform_.GetTranslate();
+		explosionParticle_->SetBaseTransform(transform);
+		explosionParticle_->SetIsPlay(true);
+		
+		break;
+	}
+	case PlayerCannon::DeadType::Ground:
+	{
+		//地面衝突パーティクルの発生
+		TransformEuler transform = groundParticle_->GetBaseTransform();
+		transform.translate = worldTransform_.GetTranslate();
+		groundParticle_->SetBaseTransform(transform);
+		groundParticle_->SetIsPlay(true);
+		
+		break;
+	}
+	default:
+		break;
+	}
+
+	//最大距離
+	float maxDistance = audioParam_["distance"].get<float>();
+	//カメラまでの距離
+	float distance = Vector3(
+		worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+	).Length();
+	//音量
+	float volume = 0.0f;
+	if (distance < maxDistance) {
+		volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+	}
+	//死亡SE
+	deadSE_->Play(false, volume);
+	//仮死状態にする
+	SetState(BaseCharacter::State::kAsphyxia);
+
 }
 
 void PlayerCannon::Move() {
@@ -144,16 +200,10 @@ void PlayerCannon::Move() {
 	//弾が地面に当たったら死亡
 	if (newTranslate.y < 0.0f) {
 		newTranslate.y = 0.0f;
-
-		//地面衝突パーティクルの発生
-		TransformEuler transform = groundParticle_->GetBaseTransform();
-		transform.translate = newTranslate;
-		groundParticle_->SetBaseTransform(transform);
-		groundParticle_->SetIsPlay(true);
-		//仮死状態にする
-		SetState(BaseCharacter::State::kAsphyxia);
-
+		worldTransform_.SetTranslate(newTranslate);
+		DeadProcess(DeadType::Ground);
 	}
-	//オブジェクトに反映
-	worldTransform_.SetTranslate(newTranslate);
+	else {
+		worldTransform_.SetTranslate(newTranslate);
+	}
 }

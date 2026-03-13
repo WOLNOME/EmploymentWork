@@ -214,7 +214,6 @@ private:
 	//死亡演出
 	std::unique_ptr<DeathDirection> deathDirection_ = nullptr;
 
-
 	//変数
 	int hp_;						//現在のHP
 	int keyNum_;					//取得した鍵の数

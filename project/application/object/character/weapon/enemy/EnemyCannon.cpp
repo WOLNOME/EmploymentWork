@@ -8,6 +8,7 @@
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
 #include <application/object/character/weapon/enemy/collision/EnemyCannonCollider.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -15,8 +16,15 @@ void EnemyCannon::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	shotSE_ = std::make_unique<Audio>();
+	shotSE_->Initialize("se/cannonShot.mp3");
+	deadSE_ = std::make_unique<Audio>();
+	deadSE_->Initialize("se/explosion_small.mp3");
+
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/EnemyCannon");
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
 
 	//インスタンスの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("red.png");
@@ -131,6 +139,19 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos, floa
 	velocity_.z = targetVec.z / hitTime;
 	//トレールエフェクトをクリア
 	trail_->ClearPositions();
+	//最大距離
+	float maxDistance = audioParam_["distance"].get<float>();
+	//カメラまでの距離
+	float distance = Vector3(
+		worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+	).Length();
+	//音量
+	float volume = 0.0f;
+	if (distance < maxDistance) {
+		volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+	}
+	//発射SE
+	shotSE_->Play(false, volume);
 
 	//最大高度から重力を求める
 	float maxHeight = param_["maxHeight"];
@@ -159,6 +180,52 @@ void EnemyCannon::Spawn(const Vector3& _initPos, const Vector3& _targetPos, floa
 	SetState(State::kActive);
 }
 
+void EnemyCannon::DeadProcess(DeadType _deadType) {
+
+	//タイプ別の処理
+	switch (_deadType) {
+	case EnemyCannon::DeadType::Collide:
+	{
+		//爆発パーティクルの発生
+		TransformEuler transform = explosionParticle_->GetBaseTransform();
+		transform.translate = worldTransform_.GetTranslate();
+		explosionParticle_->SetBaseTransform(transform);
+		explosionParticle_->SetIsPlay(true);
+
+		break;
+	}
+	case EnemyCannon::DeadType::Ground:
+	{
+		//地面衝突パーティクルの発生
+		TransformEuler transform = groundParticle_->GetBaseTransform();
+		transform.translate = worldTransform_.GetTranslate();
+		groundParticle_->SetBaseTransform(transform);
+		groundParticle_->SetIsPlay(true);
+
+		break;
+	}
+	default:
+		break;
+	}
+
+	//最大距離
+	float maxDistance = audioParam_["distance"].get<float>();
+	//カメラまでの距離
+	float distance = Vector3(
+		worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+	).Length();
+	//音量
+	float volume = 0.0f;
+	if (distance < maxDistance) {
+		volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+	}
+	//死亡SE
+	deadSE_->Play(false, volume);
+	//仮死状態にする
+	SetState(BaseCharacter::State::kAsphyxia);
+
+}
+
 void EnemyCannon::Move() {
 	//重力をかける
 	velocity_.y -= gravity_ * kDeltaTime;
@@ -170,17 +237,10 @@ void EnemyCannon::Move() {
 	//弾が地面に当たったら死亡
 	if (newTranslate.y < 0.0f) {
 		newTranslate.y = 0.0f;
-
-		//地面衝突パーティクルの発生
-		TransformEuler transform = groundParticle_->GetBaseTransform();
-		transform.translate = newTranslate;
-		groundParticle_->SetBaseTransform(transform);
-		groundParticle_->SetIsPlay(true);
-		//仮死状態にする
-		SetState(BaseCharacter::State::kAsphyxia);
-
+		worldTransform_.SetTranslate(newTranslate);
+		DeadProcess(DeadType::Ground);
 	}
-
-	//座標をセット
-	worldTransform_.SetTranslate(newTranslate);
+	else {
+		worldTransform_.SetTranslate(newTranslate);
+	}
 }

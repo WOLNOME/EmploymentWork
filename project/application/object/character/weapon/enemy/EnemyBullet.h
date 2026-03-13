@@ -1,5 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include <Audio.h>
 #include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
@@ -8,6 +9,7 @@
 
 //前方宣言（アプリケーション）
 class PlayerUI;
+class CameraManager;
 
 /// <summary>
 /// 敵の使う機関銃弾単体の処理全般を管理するクラス
@@ -71,6 +73,11 @@ public:
 	/// </summary>
 	/// <param name="_playerUI">設定するプレイヤーUI</param>
 	void SetPlayerUI(PlayerUI* _playerUI) { playerUI_ = _playerUI; }
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 private:
 	/// ============================== ///
@@ -88,17 +95,24 @@ private:
 
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
-	//トレールエフェクト
-	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
-	//衝突エフェクト
-	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
+	//カメラ
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
+	//SE
+	std::unique_ptr<Norm::Audio> shotSE_ = nullptr;		//発射
+
 	//パラメータ
 	json param_;
+	json audioParam_;
+
+	//トレールエフェクト
+	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
+	//衝突エフェクト
+	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
 
 	Norm::Vector3 generatedPosition_{};	//生成された座標
 	float lifeTimer_;		//寿命タイマー

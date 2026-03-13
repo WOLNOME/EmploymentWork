@@ -8,6 +8,7 @@
 //アプリケーション
 #include <application/ui/player/PlayerUI.h>
 #include <application/object/character/weapon/enemy/collision/EnemyBulletCollider.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -15,8 +16,14 @@ void EnemyBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	shotSE_ = std::make_unique<Audio>();
+	shotSE_->Initialize("se/bulletShot.mp3");
+
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/enemyBullet");
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
+
 	lifeTimer_ = 0.0f;
 
 	//オブジェクトの初期化
@@ -106,6 +113,19 @@ void EnemyBullet::Spawn(const Vector3& _initPos, const Vector3& _targetPos) {
 	state_ = State::kActive;
 	//トレールの座標をクリア
 	trail_->ClearPositions();
+	//最大距離
+	float maxDistance = audioParam_["distance"].get<float>();
+	//カメラまでの距離
+	float distance = Vector3(
+		worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+	).Length();
+	//音量
+	float volume = 0.0f;
+	if (distance < maxDistance) {
+		volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+	}
+	//死亡SE
+	shotSE_->Play(false, volume);
 }
 
 void EnemyBullet::DeadProcess() {

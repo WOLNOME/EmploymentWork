@@ -25,13 +25,10 @@ void EnemyCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _att
 	auto commonCollisionProcess = [this]() {
 		//デバッグ用ラインのカラーを赤にする
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		//パーティクルの発生
-		TransformEuler transform = holder_->GetExplosionParticle()->GetBaseTransform();
-		transform.translate = GetWorldTransform().GetTranslate();
-		holder_->GetExplosionParticle()->SetBaseTransform(transform);
-		holder_->GetExplosionParticle()->SetIsPlay(true);
-		//仮死状態にする
-		holder_->SetState(BaseCharacter::State::kAsphyxia);
+
+		//死亡処理
+		holder_->DeadProcess(EnemyCannon::DeadType::Collide);
+
 		};
 
 	//当たり判定時の処理

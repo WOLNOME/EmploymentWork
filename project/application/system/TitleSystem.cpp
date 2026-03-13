@@ -17,9 +17,12 @@ void TitleSystem::Initialize() {
 	sceneManager_ = SceneManager::GetInstance();
 
 	//BGMの初期化
-	demo_ = std::make_unique<Audio>();
-	demo_->Initialize("bgm/title.mp3");
-	demo_->Play(true, 1.0f);
+	bgm_ = std::make_unique<Audio>();
+	bgm_->Initialize("bgm/title.mp3");
+	bgm_->Play(true, 1.0f);
+	//SEの初期化
+	decideSE_ = std::make_unique<Audio>();
+	decideSE_->Initialize("se/decide.mp3");
 
 	//メンバ変数の初期化
 	menu_ = Menu::kStart;
@@ -101,7 +104,10 @@ void TitleSystem::DebugWithImGui() {
 void TitleSystem::Operate() {
 	//Spaceキーで開始
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
-		sceneManager_->SetNextScene("Tutorial", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"));
+		if (sceneManager_->SetNextScene("Tutorial", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f, TextureManager::GetInstance()->LoadTexture("shutter.png"))) {
+			//決定音を出す
+			decideSE_->Play(false, 1.0f);
+		}
 	}
 
 	//Escapeキーで終了

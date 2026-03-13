@@ -14,6 +14,11 @@ void GamePlayScene::Initialize() {
 	input_->SetIsMouseDisplay(false);
 	input_->SetIsMouseFixed(true);
 
+	//BGMの初期化
+	bgm_ = std::make_unique<Audio>();
+	bgm_->Initialize("bgm/gamePlay.mp3");
+	bgm_->Play(true, 1.0f);
+
 	//カメラマネージャーの生成・初期化
 	cameraManager_ = std::make_unique<CameraManager>();
 	cameraManager_->Initialize();
@@ -98,6 +103,7 @@ void GamePlayScene::Initialize() {
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
+	enemyWeaponManager_->SetCameraManager(cameraManager_.get());
 	playerUI_->SetPlayer(player_.get());
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	playerUI_->SetItemManager(itemManager_.get());

@@ -97,7 +97,9 @@ private:
 	/// ============================== ///
 
 	//BGM
-	std::unique_ptr<Norm::Audio> demo_ = nullptr;
+	std::unique_ptr<Norm::Audio> bgm_ = nullptr;
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;	//決定
 
 	//タイトルメニュー
 	Menu menu_;

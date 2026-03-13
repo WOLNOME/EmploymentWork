@@ -1,5 +1,6 @@
 #pragma once
 #include <Input.h>
+#include <Audio.h>
 #include <CombinedParticle.h>
 #include <SceneManager.h>
 #include <Object3d.h>
@@ -104,6 +105,9 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
 
 	//ランダムエンジン
 	std::mt19937 engine{ std::random_device{}() };

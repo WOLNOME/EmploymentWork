@@ -14,6 +14,10 @@
 using namespace Norm;
 
 void BossDestroySystem::Initialize() {
+	//SEの初期化
+	decideSE_ = std::make_unique<Audio>();
+	decideSE_->Initialize("se/decide.mp3");
+
 	//パラメーターの取得
 	param_ = JsonUtil::GetJsonData("Resources/parameters/bossAppearSystem");
 
@@ -126,12 +130,15 @@ void BossDestroySystem::Update() {
 			input->TriggerKey(DIK_ESCAPE) ||
 			input->TriggerPadButton(GamePadButton::START)) {
 			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
-			SceneManager::GetInstance()->SetNextScene("GameClear",
+			if (SceneManager::GetInstance()->SetNextScene("GameClear",
 				SceneTransitionAnimation::Type::FADE,
 				SceneTransitionAnimation::Type::FADE,
 				SceneTransitionAnimation::Option::NONE,
 				2.0f, textureHandle, TransitionMode::Normal
-			);
+			)) {
+				//決定音を出す
+				decideSE_->Play(false, 1.0f);
+			}
 		}
 	}
 

@@ -59,9 +59,10 @@ namespace Norm {
 		instance_.reset();
 	}
 
-	void SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle, TransitionMode _transitionMode) {
+	bool SceneManager::SetNextScene(const std::string& nextSceneName, SceneTransitionAnimation::Type inType, SceneTransitionAnimation::Type outType, SceneTransitionAnimation::Option option, float time, uint32_t _textureHandle, TransitionMode _transitionMode) {
 		//遷移中なら何もしない
-		if (sceneTransitionAnimation_->GetIsTransitioning()) return;
+		if (sceneTransitionAnimation_->GetIsTransitioning())
+			return false;
 
 		//警告
 		assert(sceneFactory_);
@@ -72,7 +73,7 @@ namespace Norm {
 			scene_ = sceneFactory_->CreateScene(nextSceneName);
 			nextScene_.reset();
 			scene_->Initialize();
-			return;
+			return true;
 		}
 
 		//遷移モードをセット
@@ -111,6 +112,7 @@ namespace Norm {
 		//テクスチャを設定
 		sceneTransitionAnimation_->SetTexture(_textureHandle);
 		
+		return true;
 	}
 
 	void SceneManager::ChangeScene() {

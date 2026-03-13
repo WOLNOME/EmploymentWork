@@ -1,4 +1,5 @@
 #pragma once
+#include <Audio.h>
 #include <memory>
 #include <JsonUtil.h>
 #include <Sprite.h>
@@ -61,6 +62,9 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
 
 	//パラメーター
 	json param_;
