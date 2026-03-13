@@ -444,9 +444,6 @@
     <ClCompile Include="engine\base\postEffect\PostEffectManager.cpp">
       <Filter>engine\base\postEffect</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\main.cpp">
-      <Filter>engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="engine\collision\interface\ICollider.cpp">
       <Filter>engine\collision\interface</Filter>
     </ClCompile>
@@ -740,6 +737,12 @@
     </ClCompile>
     <ClCompile Include="application\object\character\item\key\collision\ItemKeyCollider.cpp">
       <Filter>application\object\character\item\key\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp">
+      <Filter>application\object\level\bigRock</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\main.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1430,6 +1433,9 @@
     <ClInclude Include="engine\3d\ParticleTypes.h">
       <Filter>engine\3d\particle</Filter>
     </ClInclude>
+    <ClInclude Include="application\object\level\bigRock\LevelBigRock.h">
+      <Filter>application\object\level\bigRock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
@@ -1799,6 +1805,9 @@
     </Filter>
     <Filter Include="application\object\character\item\key\collision">
       <UniqueIdentifier>{98837b9c-c892-4042-a9e4-7a545b58fbb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\level\bigRock">
+      <UniqueIdentifier>{3e68dc19-0ca8-48c2-8695-b3017c1f2cd6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

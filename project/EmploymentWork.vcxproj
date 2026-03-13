@@ -322,6 +322,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
     <ClCompile Include="application\scene\TutorialScene.cpp" />
     <ClCompile Include="application\system\TutorialSystem.cpp" />
+    <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -547,6 +548,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
     <ClInclude Include="application\scene\TutorialScene.h" />
     <ClInclude Include="application\system\TutorialSystem.h" />
+    <ClInclude Include="application\object\level\bigRock\LevelBigRock.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -11,6 +11,7 @@ void LevelLoader::Initialize() {
 	levelData_.tree = std::make_unique<LevelTree>();
 	levelData_.bigTree = std::make_unique<LevelBigTree>();
 	levelData_.rock = std::make_unique<LevelRock>();
+	levelData_.bigRock = std::make_unique<LevelBigRock>();
 	levelData_.fence = std::make_unique<LevelFence>();
 	levelData_.sealedBox = std::make_unique<LevelSealedBox>();
 
@@ -18,6 +19,7 @@ void LevelLoader::Initialize() {
 	levelData_.tree->Initialize("LevelTree");
 	levelData_.bigTree->Initialize("LevelBigTree");
 	levelData_.rock->Initialize("LevelRock");
+	levelData_.bigRock->Initialize("LevelBigRock");
 	levelData_.fence->Initialize("LevelFence");
 	levelData_.sealedBox->Initialize("LevelSealedBox");
 
@@ -32,6 +34,7 @@ void LevelLoader::Update() {
 	levelData_.tree->Update();
 	levelData_.bigTree->Update();
 	levelData_.rock->Update();
+	levelData_.bigRock->Update();
 	levelData_.fence->Update();
 	levelData_.sealedBox->Update();
 }
@@ -42,6 +45,7 @@ void LevelLoader::DebugWithImGui() {
 	levelData_.tree->DebugWithImGui();
 	levelData_.bigTree->DebugWithImGui();
 	levelData_.rock->DebugWithImGui();
+	levelData_.bigRock->DebugWithImGui();
 	levelData_.fence->DebugWithImGui();
 	levelData_.sealedBox->DebugWithImGui();
 #endif // _DEBUG
@@ -96,58 +100,31 @@ void LevelLoader::ScanObjectData(json& object) {
 			size = { (float)collision["size"][0], (float)collision["size"][2], (float)collision["size"][1] };
 		}
 
-		//ツリー
-		if (type == "TreeObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.tree->SetTransformInfo(transform);
-			//コライダーを登録
+		//オブジェクトテーブルの作成
+		std::map<std::string, IBaseLevelObject*> objectTable = {
+			{"TreeObject", levelData_.tree.get()},
+			{"BigTreeObject", levelData_.bigTree.get()},
+			{"RockObject", levelData_.rock.get()},
+			{"BigRockObject", levelData_.bigRock.get()},
+			{"FenceObject", levelData_.fence.get()},
+			{"SealedBoxObject", levelData_.sealedBox.get()}
+		};
+
+		//タイプからテーブルのキーを検索
+		auto it = objectTable.find(type);
+		//該当のテーブルで処理を行う
+		if (it != objectTable.end()) {
+			auto* object = it->second;
+			//トランスフォームの設定
+			uint32_t handle = object->SetTransformInfo(transform);
+			//コライダーの設定
 			if (isCollider) {
-				levelData_.tree->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//巨大ツリー
-		else if (type == "BigTreeObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.bigTree->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.bigTree->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//岩
-		else if (type == "RockObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.rock->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.rock->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//柵
-		else if (type == "FenceObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.fence->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.fence->SetCollisionInfo(handle, center, size);
-			}
-		}
-		//封印ボックス
-		else if (type == "SealedBoxObject") {
-			uint32_t handle = 0u;
-			//トランスフォームを登録
-			handle = levelData_.sealedBox->SetTransformInfo(transform);
-			//コライダーを登録
-			if (isCollider) {
-				levelData_.sealedBox->SetCollisionInfo(handle, center, size);
+				object->SetCollisionInfo(handle, center, size);
 			}
 		}
 
 		};
+
 
 	//"type"データがない場合不正データのため警告
 	assert(object.contains("type"));
@@ -196,6 +173,10 @@ void LevelLoader::ScanObjectData(json& object) {
 	//岩生成ポイント
 	else if (type.compare("RockObject") == 0) {
 		createObject("RockObject");
+	}
+	//巨大岩生成ポイント
+	else if (type.compare("BigRockObject") == 0) {
+		createObject("BigRockObject");
 	}
 	//柵生成ポイント
 	else if (type.compare("FenceObject") == 0) {
