@@ -9,6 +9,9 @@
 using namespace Norm;
 
 PlayerCollider::PlayerCollider(Player* _holder) : OBBColliderBase(), holder_(_holder) {
+	//SEの初期化
+	collideSE_ = std::make_unique<Audio>();
+	collideSE_->Initialize("se/collide.mp3");
 }
 
 void PlayerCollider::Debug() {
@@ -53,6 +56,9 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
+
+		//衝突SE
+		collideSE_->Play(false, 1.0f);
 
 		break;
 	}
@@ -145,6 +151,9 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
+
+		//衝突SE
+		collideSE_->Play(false, 1.0f);
 
 		break;
 	}

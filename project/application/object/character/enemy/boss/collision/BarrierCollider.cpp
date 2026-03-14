@@ -58,32 +58,7 @@ void BarrierCollider::OnCollision(ICollider* _other, CollisionAttribute _attribu
 	hp = std::clamp(hp, 0, holder_->GetMaxHP());
 
 	// エフェクト生成処理
-	if (effectGenerateCount > 0) {
-
-		size_t size = holder_->GetScrapes().size();
-		int count = 0;
-
-		for (int i = 0; i < size; i++) {
-
-			if (!holder_->GetScrapes().at(i)->GetIsPlay()) {
-
-				TransformEuler transform =
-					holder_->GetScrapes().at(i)->GetBaseTransform();
-
-				transform.translate =
-					_other->GetWorldTransform().GetTranslate();
-
-				holder_->GetScrapes().at(i)->SetBaseTransform(transform);
-				holder_->GetScrapes().at(i)->SetIsPlay(true);
-
-				count++;
-			}
-
-			if (count >= effectGenerateCount) {
-				break;
-			}
-		}
-	}
+	holder_->DamageProcess(effectGenerateCount, _other->GetWorldTransform().GetTranslate());
 
 	//変更した変数のセット
 	holder_->SetHP(hp);

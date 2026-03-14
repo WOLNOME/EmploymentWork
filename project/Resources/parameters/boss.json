@@ -20,7 +20,7 @@
     "bulletReloadTime":3.0,
     "bulletIntervalTime":0.15,
     "bulletMaxMagazine":30,
-    "maxHP":400,
+    "maxHP":200,
     "summonCoolTime":20.0,
     "summonDirTime":5.0,
     "keepDistanceTime":5.0,

@@ -1,5 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include <Audio.h>
 #include "JsonUtil.h"
 #include <CombinedParticle.h>
 #include <array>
@@ -7,6 +8,7 @@
 
 //前方宣言
 class Boss;
+class CameraManager;
 
 /// <summary>
 /// バリアクラス
@@ -50,6 +52,10 @@ public:
 	/// <param name="_position">座標</param>
 	void Spawn(const Norm::Vector3& _position);
 
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	void DamageProcess(int _effectGenerateNum, const Norm::Vector3& _subjectPos);
 
 	/// ============================== ///
 	///		getter
@@ -96,7 +102,11 @@ public:
 	/// </summary>
 	/// <param name="_boss">ボスのポインタ</param>
 	void SetBoss(Boss* _boss) { boss_ = _boss; }
-
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 	/// <summary>
 	/// HPのセット
 	/// </summary>
@@ -112,7 +122,7 @@ private:
 	/// 移動
 	/// </summary>
 	void Move();
-
+	
 	/// <summary>
 	/// 死亡処理
 	/// </summary>
@@ -122,14 +132,22 @@ private:
 	///		インスタンス
 	/// ============================== ///
 
+	//ボス
 	Boss* boss_ = nullptr;
+	//カメラ
+	CameraManager* cameraManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数(private)
 	/// ============================== ///
 
+	//SE
+	std::unique_ptr<Norm::Audio> shaveSE_ = nullptr;	//削り
+	std::unique_ptr<Norm::Audio> breakSE_ = nullptr;	//破壊
+
 	//パラメーター
 	json param_;
+	json audioParam_;
 
 	//バリアが削れるエフェクト
 	std::array<std::unique_ptr<Norm::CombinedParticle>, kScrapeNum> scrapes_;

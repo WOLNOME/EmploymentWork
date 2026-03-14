@@ -99,6 +99,7 @@ void GamePlayScene::Initialize() {
 	enemyManager_->SetEnemyWeaponManager(enemyWeaponManager_.get());
 	enemyManager_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetEnemyUI(enemyUI_.get());
+	enemyManager_->SetCameraManager(cameraManager_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());

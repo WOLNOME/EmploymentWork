@@ -6,6 +6,9 @@
 using namespace Norm;
 
 ItemHealCollider::ItemHealCollider(ItemHeal* _holder) : holder_(_holder) {
+	//SEの初期化
+	getSE_ = std::make_unique<Audio>();
+	getSE_->Initialize("se/itemGet_heal.mp3");
 }
 
 void ItemHealCollider::Debug() {
@@ -34,6 +37,9 @@ void ItemHealCollider::OnCollision(ICollider* _other, CollisionAttribute _attrib
 		TransformEuler transform = holder_->GetGetParticle()->GetBaseTransform();
 		transform.translate = holder_->GetWorldTransform().GetTranslate();
 		holder_->GetGetParticle()->SetBaseTransform(transform);
+
+		//取得SE
+		getSE_->Play(false, 1.0f);
 
 		break;
 	}

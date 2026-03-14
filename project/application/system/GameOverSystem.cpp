@@ -14,6 +14,10 @@ void GameOverSystem::Initialize() {
 	//シーンマネージャー
 	sceneManager_ = SceneManager::GetInstance();
 
+	//BGMの初期化
+	bgm_ = std::make_unique<Audio>();
+	bgm_->Initialize("bgm/gameOver.mp3");
+	bgm_->Play(true, 1.0f);
 	//SEの初期化
 	decideSE_ = std::make_unique<Audio>();
 	decideSE_->Initialize("se/decide.mp3");

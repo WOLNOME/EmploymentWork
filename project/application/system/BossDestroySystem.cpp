@@ -126,19 +126,28 @@ void BossDestroySystem::Update() {
 	//映像演出が終了もしくはスキップボタンが押されたならクリアシーンへ遷移
 	{
 		Input* input = Input::GetInstance();
-		if (cinematic_->GetIsAllShotsFinished() ||
-			input->TriggerKey(DIK_ESCAPE) ||
-			input->TriggerPadButton(GamePadButton::START)) {
-			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
-			if (SceneManager::GetInstance()->SetNextScene("GameClear",
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
+		if (!cinematic_->GetIsAllShotsFinished()) {
+			if (input->TriggerKey(DIK_ESCAPE) || input->TriggerPadButton(GamePadButton::START)) {
+
+				if (SceneManager::GetInstance()->SetNextScene("GameClear",
+					SceneTransitionAnimation::Type::FADE,
+					SceneTransitionAnimation::Type::FADE,
+					SceneTransitionAnimation::Option::NONE,
+					2.0f, textureHandle, TransitionMode::Normal
+				)) {
+					//決定音を出す
+					decideSE_->Play(false, 1.0f);
+				}
+			}
+		}
+		else {
+			SceneManager::GetInstance()->SetNextScene("GameClear",
 				SceneTransitionAnimation::Type::FADE,
 				SceneTransitionAnimation::Type::FADE,
 				SceneTransitionAnimation::Option::NONE,
 				2.0f, textureHandle, TransitionMode::Normal
-			)) {
-				//決定音を出す
-				decideSE_->Play(false, 1.0f);
-			}
+			);
 		}
 	}
 

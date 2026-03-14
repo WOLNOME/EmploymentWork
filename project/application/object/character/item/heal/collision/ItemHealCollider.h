@@ -1,5 +1,7 @@
 #pragma once
 #include "OBBColliderBase.h"
+#include <Audio.h>
+#include <memory>
 
 class ItemHeal;
 
@@ -35,5 +37,8 @@ public:
 private:
 	//所有者のポインタ
 	ItemHeal* holder_ = nullptr;
+
+	//SE
+	std::unique_ptr<Norm::Audio> getSE_ = nullptr;	//取得
 };
 
