@@ -14,10 +14,6 @@
 using namespace Norm;
 
 void BossDestroySystem::Initialize() {
-	//SEの初期化
-	decideSE_ = std::make_unique<Audio>();
-	decideSE_->Initialize("se/decide.mp3");
-
 	//パラメーターの取得
 	param_ = JsonUtil::GetJsonData("Resources/parameters/bossAppearSystem");
 
@@ -35,6 +31,23 @@ void BossDestroySystem::Initialize() {
 	levelLoader_->GetSealedBoxData()->GetObject3d()->SetIsDisplay(false);
 	for (auto& collider : levelLoader_->GetSealedBoxData()->GetColliders()) {
 		collider.second->SetCollisionAttribute(CollisionAttribute::Nothingness);
+	}
+
+	//SEの初期化
+	{
+		decideSE_ = std::make_unique<Audio>();
+		decideSE_->Initialize("se/decide.mp3");
+		groundShakeSE_ = std::make_unique<Audio>();
+		groundShakeSE_->Initialize("se/ground_shake.mp3");
+		explosionSmallSE_ = std::make_unique<Audio>();
+		explosionSmallSE_->Initialize("se/explosion_small.mp3");
+		explosionLargeSE_ = std::make_unique<Audio>();
+		explosionLargeSE_->Initialize("se/explosion_large.mp3");
+
+		//ブラックボードに登録
+		blackBoard_->SetValue<Audio*>("Ground_Shake_SE", groundShakeSE_.get());
+		blackBoard_->SetValue<Audio*>("Explosion_Small_SE", explosionSmallSE_.get());
+		blackBoard_->SetValue<Audio*>("Explosion_Large_SE", explosionLargeSE_.get());
 	}
 
 	//レターボックス

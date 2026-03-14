@@ -159,7 +159,15 @@ void GamePlayScene::Update() {
 	}
 	//ポーズ画面による再生の管理
 	if (pauseSystem_->GetIsPause()) {
+		//プレイヤーの移動音を停止
+		if (player_->GetMoveSE()->GetIsPlaying()) {
+			player_->GetMoveSE()->Pause();
+		}
+
 		return;
+	}
+	else {
+		player_->GetMoveSE()->Resume();
 	}
 
 	//メッセージUIの更新
@@ -199,10 +207,11 @@ void GamePlayScene::Update() {
 				0.5f, textureHandle, TransitionMode::Temporary
 			);
 
+			//演出通知
+			player_->GetMoveSE()->Pause();
+
 		}
 	}
-
-
 
 }
 void GamePlayScene::DebugWithImGui() {
@@ -257,6 +266,6 @@ void GamePlayScene::OnResume() {
 	//ボスを出現させる
 	enemyManager_->BossSpawn({ 0,0,0 }, { 0,pi,0 });
 
-
-
+	//演出シーンからの復帰時処理
+	player_->GetMoveSE()->Resume();
 }

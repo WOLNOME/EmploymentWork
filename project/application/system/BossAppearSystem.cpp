@@ -14,10 +14,6 @@
 using namespace Norm;
 
 void BossAppearSystem::Initialize() {
-	//SEの初期化
-	decideSE_ = std::make_unique<Audio>();
-	decideSE_->Initialize("se/decide.mp3");
-
 	//パラメーターの取得
 	param_ = JsonUtil::GetJsonData("Resources/parameters/bossAppearSystem");
 
@@ -34,6 +30,24 @@ void BossAppearSystem::Initialize() {
 	//ブラックボードに登録
 	blackBoard_->SetValue<Object3d*>("SealedBox_Object", levelLoader_->GetSealedBoxData()->GetObject3d());
 
+	//SEの初期化
+	{
+		decideSE_ = std::make_unique<Audio>();
+		decideSE_->Initialize("se/decide.mp3");
+		keyAppearSE_ = std::make_unique<Audio>();
+		keyAppearSE_->Initialize("se/key_appear.mp3");
+		keyFinishSE_ = std::make_unique<Audio>();
+		keyFinishSE_->Initialize("se/key_finish.mp3");
+		groundShakeSE_ = std::make_unique<Audio>();
+		groundShakeSE_->Initialize("se/ground_shake.mp3");
+		bossAppearSE_ = std::make_unique<Audio>();
+		bossAppearSE_->Initialize("se/boss_appear.mp3");
+		//ブラックボードに登録
+		blackBoard_->SetValue<Audio*>("Key_Appear_SE", keyAppearSE_.get());
+		blackBoard_->SetValue<Audio*>("Key_Finish_SE", keyFinishSE_.get());
+		blackBoard_->SetValue<Audio*>("Ground_Shake_SE", groundShakeSE_.get());
+		blackBoard_->SetValue<Audio*>("Boss_Appear_SE", bossAppearSE_.get());
+	}
 	//レターボックス
 	{
 		//テクスチャ

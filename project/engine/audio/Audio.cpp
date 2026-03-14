@@ -1,6 +1,7 @@
 #include "Audio.h"
 #include "ImGuiManager.h"
 #include "StringUtility.h"
+#include <cassert>
 
 namespace Norm {
 
@@ -62,6 +63,13 @@ namespace Norm {
 		if (voiceDataHandle_ != 0u) {
 			AudioCommon::GetInstance()->SoundResume(voiceDataHandle_);
 		}
+	}
+
+	bool Audio::GetIsPlaying() {
+		if (voiceDataHandle_ != 0u) {
+			return AudioCommon::GetInstance()->GetIsPlaying(voiceDataHandle_);
+		}
+		assert(false && "初期化されていません");
 	}
 
 	void Audio::SetVolume(float volume) {

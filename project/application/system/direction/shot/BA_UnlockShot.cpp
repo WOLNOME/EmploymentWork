@@ -1,4 +1,5 @@
 #include "BA_UnlockShot.h"
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <WorldTransform.h>
 #include <CombinedParticle.h>
@@ -34,6 +35,7 @@ void BA_UnlockShot::Update() {
 	BaseCamera* camera = blackBoard_->GetValue<BaseCamera*>("Camera");
 	WorldTransform* wtKey1 = blackBoard_->GetValue<WorldTransform*>("Key1_WorldTransform");
 	WorldTransform* wtKey2 = blackBoard_->GetValue<WorldTransform*>("Key2_WorldTransform");
+	Audio* key_finish = blackBoard_->GetValue<Audio*>("Key_Finish_SE");
 
 	//時間を進める
 	elapsedTimer_ -= kDeltaTime;
@@ -42,6 +44,9 @@ void BA_UnlockShot::Update() {
 	if (elapsedTimer_ < 0.0f) {
 		//finishを出力
 		shotResult_ = ShotResult::Finish;
+
+		//鍵完了SE
+		key_finish->Play(false, 1.0f);
 
 		return;
 	}

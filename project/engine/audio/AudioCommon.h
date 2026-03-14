@@ -128,6 +128,23 @@ namespace Norm {
 		/// </summary>
 		/// <param name="voiceHandle">ボイスハンドル</param>
 		void SoundResume(uint32_t voiceHandle);
+
+
+		/// ============================== ///
+		///		getter
+		/// ============================== ///
+
+		/// <summary>
+		/// 再生中かどうかを取得
+		/// </summary>
+		/// <param name="voiceHandle">ボイスハンドル</param>
+		/// <returns>再生中かどうか</returns>
+		bool GetIsPlaying(uint32_t voiceHandle);
+
+		/// ============================== ///
+		///		setter
+		/// ============================== ///
+
 		/// <summary>
 		/// サウンドのボリューム設定
 		/// </summary>

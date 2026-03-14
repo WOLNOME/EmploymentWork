@@ -1,6 +1,7 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
 #include "Input.h"
+#include "Audio.h"
 #include "Object3d.h"
 #include "Sprite.h"
 #include "MyMath.h"
@@ -118,6 +119,11 @@ public:
 	/// </summary>
 	/// <returns>メッセージUI</returns>
 	MessageUI* GetMessageUI()  { return messageUI_; }
+	/// <summary>
+	/// 移動SEを取得する
+	/// </summary>
+	/// <returns>移動SE</returns>
+	Norm::Audio* GetMoveSE() { return moveSE_.get(); }
 
 	/// ============================== ///
 	///		setter
@@ -208,6 +214,10 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> moveSE_ = nullptr;	//移動
+	float volumeMoveSE_ = 0.0f;
 
 	//パラメータ
 	json param_;

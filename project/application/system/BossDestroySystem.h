@@ -65,7 +65,10 @@ private:
 	/// ============================== ///
 
 	//SE
-	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;	//決定
+	std::unique_ptr<Norm::Audio> groundShakeSE_ = nullptr;	//地響き
+	std::unique_ptr<Norm::Audio> explosionSmallSE_ = nullptr;	//小爆発
+	std::unique_ptr<Norm::Audio> explosionLargeSE_ = nullptr;	//大爆発
 
 	//パラメーター
 	json param_;

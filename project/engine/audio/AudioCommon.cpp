@@ -296,6 +296,20 @@ namespace Norm {
 		}
 	}
 
+	bool AudioCommon::GetIsPlaying(uint32_t voiceHandle) {
+		auto it = std::find_if(voiceDatas_.begin(), voiceDatas_.end(),
+			[voiceHandle](VoiceData* data) { return data->handle == voiceHandle; });
+
+		if (it != voiceDatas_.end() && (*it)->sourceVoice) {
+			XAUDIO2_VOICE_STATE state{};
+			(*it)->sourceVoice->GetState(&state);
+
+			return state.BuffersQueued > 0;
+		}
+
+		return false;
+	}
+
 	void AudioCommon::SetVolume(uint32_t voiceHandle, float volume) {
 		auto it = std::find_if(voiceDatas_.begin(), voiceDatas_.end(),
 			[voiceHandle](VoiceData* data) { return data->handle == voiceHandle; });
