@@ -225,9 +225,6 @@
     <ClCompile Include="application\ui\player\detail\HitIndicator.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\ItemUI.cpp">
-      <Filter>application\ui\player\detail</Filter>
-    </ClCompile>
     <ClCompile Include="application\ui\player\detail\Radar.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
@@ -636,9 +633,6 @@
     <ClCompile Include="application\system\CameraManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\CameraWork.cpp">
-      <Filter>application\system</Filter>
-    </ClCompile>
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
@@ -743,6 +737,9 @@
     </ClCompile>
     <ClCompile Include="engine\base\main.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp">
+      <Filter>application\ui\player\detail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -876,9 +873,6 @@
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\HitIndicator.h">
-      <Filter>application\ui\player\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="application\ui\player\detail\ItemUI.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\Radar.h">
@@ -1328,9 +1322,6 @@
     <ClInclude Include="application\system\CameraManager.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\CameraWork.h">
-      <Filter>application\system</Filter>
-    </ClInclude>
     <ClInclude Include="application\system\DeathDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
@@ -1435,6 +1426,9 @@
     </ClInclude>
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h">
       <Filter>application\object\level\bigRock</Filter>
+    </ClInclude>
+    <ClInclude Include="application\ui\player\detail\MoveIndicator.h">
+      <Filter>application\ui\player\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

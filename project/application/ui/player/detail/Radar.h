@@ -124,6 +124,7 @@ private:
 
 	//テクスチャハンドル
 	uint32_t thCharacterMark_ = 0u;
+	uint32_t thPlayerMark_ = 0u;
 	uint32_t thItemMark_ = 0u;
 
 	//プレイヤーマーク

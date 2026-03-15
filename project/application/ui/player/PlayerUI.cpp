@@ -38,9 +38,9 @@ void PlayerUI::Initialize() {
 	hitIndicator_ = std::make_unique<HitIndicator>();
 	hitIndicator_->Initialize();
 
-	//アイテムUI
-	itemUI_ = std::make_unique<ItemUI>();
-	itemUI_->Initialize();
+	//移動インジケーターUI
+	moveIndicator_ = std::make_unique<MoveIndicator>();
+	moveIndicator_->Initialize();
 
 	//操作UI
 	operationUI_ = std::make_unique<OperationUI>();
@@ -78,8 +78,8 @@ void PlayerUI::Update() {
 	radar_->Update();
 	//被弾インジケーターUIの更新
 	hitIndicator_->Update();
-	//アイテムUIの更新
-	itemUI_->Update();
+	//移動インジケーターUIの更新
+	moveIndicator_->Update();
 	//操作UIの更新
 	operationUI_->Update();
 	//速度UIの更新
@@ -117,8 +117,8 @@ void PlayerUI::SetPlayer(Player* _player) {
 	radar_->SetPlayer(player_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetPlayer(player_);
-	//アイテムUIに渡す
-	itemUI_->SetPlayer(player_);
+	//移動インジケーターUIに渡す
+	moveIndicator_->SetPlayer(player_);
 	//速度UIに渡す
 	velocityUI_->SetPlayer(player_);
 	//キーUIに渡す
@@ -143,6 +143,8 @@ void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
 	radar_->SetCameraManager(cameraManager_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetCameraManager(cameraManager_);
+	//移動インジケーターUIに渡す
+	moveIndicator_->SetCameraManager(cameraManager_);
 	//方向UIに渡す
 	directionUI_->SetCameraManager(cameraManager_);
 }
@@ -164,7 +166,6 @@ void PlayerUI::DamageShaking() {
 		playerHPUI_->AttachShake(offset);
 		weaponUI_->AttachShake(offset);
 		radar_->AttachShake(offset);
-		itemUI_->AttachShake(offset);
 		operationUI_->AttachShake(offset);
 		velocityUI_->AttachShake(offset);
 		keyUI_->AttachShake(offset);
@@ -185,8 +186,6 @@ void PlayerUI::DamageBlinking() {
 		weaponUI_->AttachBlinking(color);
 		//レーダーUI
 		radar_->AttachBlinking(color);
-		//アイテムUI
-		itemUI_->AttachBlinking(color);
 		//操作UI
 		operationUI_->AttachBlinking(color);
 		//速度UI

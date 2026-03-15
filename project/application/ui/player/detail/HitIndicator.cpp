@@ -19,7 +19,7 @@ void HitIndicator::Initialize() {
 		indicators_[i].textureHandle = TextureManager::GetInstance()->LoadTexture("HitIndicator.png");
 		//スプライト
 		indicators_[i].sprite = std::make_unique<Sprite>();
-		indicators_[i].sprite->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("hitIndicator"), Order::Front3, indicators_[i].textureHandle);
+		indicators_[i].sprite->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("hitIndicator"), Order::Front5, indicators_[i].textureHandle);
 		indicators_[i].sprite->SetAnchorPoint({ 0.5f,0.5f });
 		indicators_[i].sprite->SetPosition({ WinApp::GetInstance()->kClientWidth / 2.0f,WinApp::GetInstance()->kClientHeight / 2.0f });
 		indicators_[i].sprite->SetIsDisplay(false);

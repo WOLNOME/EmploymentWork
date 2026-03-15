@@ -430,11 +430,14 @@ void Player::CameraAlgorithm() {
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue;
 	Vector2 mouseMoveValue = input_->GetMousePosition();
-	Vector2 padMoveValue = input_->GetRStickDir() * 40.0f;
+	Vector2 padMoveValue = {
+		input_->GetRStickDir().x * 20.0f,
+		input_->GetRStickDir().y * 10.0f,
+	};
 	padMoveValue.y *= -1.0f;
 	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
-	float deadZone = 2.5f;
+	float deadZone = 1.5f;
 	if (moveValue.Length() > deadZone) {
 		Vector3 newRotate = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
 		newRotate.x += moveValue.y * 0.0005f;

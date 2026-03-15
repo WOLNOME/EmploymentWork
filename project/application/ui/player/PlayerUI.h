@@ -7,7 +7,7 @@
 #include "detail/WeaponUI.h"
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
-#include "detail/ItemUI.h"
+#include "detail/MoveIndicator.h"
 #include "detail/OperationUI.h"
 #include "detail/VelocityUI.h"
 #include "detail/KeyUI.h"
@@ -116,8 +116,8 @@ private:
 	std::unique_ptr<Radar> radar_ = nullptr;
 	//被弾インジケーターUI
 	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
-	//アイテムUI
-	std::unique_ptr<ItemUI> itemUI_ = nullptr;
+	//移動インジケーターUI
+	std::unique_ptr<MoveIndicator> moveIndicator_ = nullptr;
 	//操作UI
 	std::unique_ptr<OperationUI> operationUI_ = nullptr;
 	//速度UI

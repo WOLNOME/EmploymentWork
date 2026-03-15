@@ -70,6 +70,7 @@ namespace Norm {
 			return AudioCommon::GetInstance()->GetIsPlaying(voiceDataHandle_);
 		}
 		assert(false && "初期化されていません");
+		return false;
 	}
 
 	void Audio::SetVolume(float volume) {

@@ -18,34 +18,26 @@ void WeaponUI::Initialize() {
 
 	//砲弾
 	{
-		Vector2 centerPos = { param_["cannonUI"]["centerPos"]["x"],param_["cannonUI"]["centerPos"]["y"] };
-		Vector2 reloadUICenterPos = centerPos;
-		reloadUICenterPos.x += param_["cannonUI"]["reloadUIOffset"]["x"];
-		reloadUICenterPos.y += param_["cannonUI"]["reloadUIOffset"]["y"];
+		Vector2 leftTopPos = { param_["cannonUI"]["leftTopPos"]["x"],param_["cannonUI"]["leftTopPos"]["y"] };
 		//基本UI
 		thCannon_ = TextureManager::GetInstance()->LoadTexture("cannonUI.png");
 		spriteCannon_ = std::make_unique<Sprite>();
-		spriteCannon_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Order::Front1, 2, 0.01f, false, thCannon_);
-		spriteCannon_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteCannon_->SetPosition(centerPos);
+		spriteCannon_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerCannonUI"), Order::Front2, thCannon_);
+		spriteCannon_->SetPosition(leftTopPos);
 		//リロードUI
 		thCannonReload_ = TextureManager::GetInstance()->LoadTexture("reloadUI.png");
 		spriteCannonReload_ = std::make_unique<Sprite>();
-		spriteCannonReload_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerCannonReloadUI"), Order::Front1, thCannonReload_);
-		spriteCannonReload_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteCannonReload_->SetPosition(reloadUICenterPos);
+		spriteCannonReload_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerCannonReloadUI"), Order::Front3, thCannonReload_);
+		spriteCannonReload_->SetPosition(leftTopPos);
 		spriteCannonReload_->SetIsDisplay(false);
 
 	}
 	//銃弾
 	{
-		Vector2 centerPos = { param_["bulletUI"]["centerPos"]["x"],param_["bulletUI"]["centerPos"]["y"] };
-		Vector2 magazineUICenterPos = centerPos;
-		magazineUICenterPos.x += param_["bulletUI"]["magazineUIOffset"]["x"];
-		magazineUICenterPos.y += param_["bulletUI"]["magazineUIOffset"]["y"];
-		Vector2 reloadUICenterPos = centerPos;
-		reloadUICenterPos.x += param_["bulletUI"]["reloadUIOffset"]["x"];
-		reloadUICenterPos.y += param_["bulletUI"]["reloadUIOffset"]["y"];
+		Vector2 leftTopPos = { param_["bulletUI"]["leftTopPos"]["x"],param_["bulletUI"]["leftTopPos"]["y"] };
+		Vector2 magazineUILeftTopPos;
+		magazineUILeftTopPos.x += param_["bulletUI"]["magazineUILeftTopPos"]["x"];
+		magazineUILeftTopPos.y += param_["bulletUI"]["magazineUILeftTopPos"]["y"];
 		TextParam bulletNumTextParam = {
 			.text = L"",
 			.font = Font::UDDegitalN_B,
@@ -56,32 +48,28 @@ void WeaponUI::Initialize() {
 		//基本UI
 		thBullet_ = TextureManager::GetInstance()->LoadTexture("bulletUI.png");
 		spriteBullet_ = std::make_unique<Sprite>();
-		spriteBullet_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletUI"), Order::Front1, thBullet_);
-		spriteBullet_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteBullet_->SetPosition(centerPos);
+		spriteBullet_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletUI"), Order::Front2, thBullet_);
+		spriteBullet_->SetPosition(leftTopPos);
 		//弾数UI
 		bulletNumHandle_ = TextTextureManager::GetInstance()->LoadTextTexture(bulletNumTextParam);
 		spriteBulletNum_ = std::make_unique<Sprite>();
-		spriteBulletNum_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletNumUI"), Order::Front1);
-		spriteBulletNum_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteBulletNum_->SetPosition(magazineUICenterPos);
+		spriteBulletNum_->Initialize(TextTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletNumUI"), Order::Front2);
+		spriteBulletNum_->SetPosition(magazineUILeftTopPos);
 		spriteBulletNum_->SetTexture(bulletNumHandle_);
 		//リロードUI
 		thBulletReload_ = TextureManager::GetInstance()->LoadTexture("reloadUI.png");
 		spriteBulletReload_ = std::make_unique<Sprite>();
-		spriteBulletReload_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletReloadUI"), Order::Front1, thBulletReload_);
-		spriteBulletReload_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteBulletReload_->SetPosition(reloadUICenterPos);
+		spriteBulletReload_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("PlayerBulletReloadUI"), Order::Front3, thBulletReload_);
+		spriteBulletReload_->SetPosition(leftTopPos);
 		spriteBulletReload_->SetIsDisplay(false);
 	}
 	//スペシャル
 	{
-		Vector2 specialUICenterPos = { param_["specialUI"]["centerPos"]["x"],param_["specialUI"]["centerPos"]["y"] };
+		Vector2 leftTopPos = { param_["specialUI"]["leftTopPos"]["x"],param_["specialUI"]["leftTopPos"]["y"] };
 		thSpecial_ = TextureManager::GetInstance()->LoadTexture("specialUI.png");
 		spriteSpecial_ = std::make_unique<Sprite>();
-		spriteSpecial_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerSpecialUI"), Order::Front1, 4, 0.01f, false, thSpecial_);
-		spriteSpecial_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteSpecial_->SetPosition(specialUICenterPos);
+		spriteSpecial_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerSpecialUI"), Order::Front2, 4, 0.01f, false, thSpecial_);
+		spriteSpecial_->SetPosition(leftTopPos);
 	}
 }
 
@@ -96,11 +84,13 @@ void WeaponUI::Update() {
 			spriteCannon_->SetUVScrollSheetNum(1);
 			//リロードUIを表示
 			spriteCannonReload_->SetIsDisplay(true);
-			//α値をリロードの進行度に合わせて変化させる
-			float alpha = MyMath::Lerp(0.0f, 1.0f, player_->GetCannonReloadTimer() / playerParam_["cannonReloadTime"].get<float>());
-			Vector4 color = spriteCannonReload_->GetColor();
-			color.w = alpha;
-			spriteCannonReload_->SetColor(color);
+			//UVスクロール
+			Vector2 size = {
+				spriteCannon_->GetSize().x * (player_->GetCannonReloadTimer() / playerParam_["cannonReloadTime"].get<float>()),
+				spriteCannon_->GetSize().y
+			};
+			spriteCannonReload_->SetSize(size);
+			spriteCannonReload_->SetTextureSize(size);
 
 		}
 		//装填済み
@@ -120,11 +110,14 @@ void WeaponUI::Update() {
 		if (player_->GetBulletReloadTimer() > 0.0f) {
 			//リロードUIを表示
 			spriteBulletReload_->SetIsDisplay(true);
-			//α値をリロードの進行度に合わせて変化させる
-			float alpha = MyMath::Lerp(0.0f, 1.0f, player_->GetBulletReloadTimer() / playerParam_["bulletReloadTime"].get<float>());
-			Vector4 color = spriteBulletReload_->GetColor();
-			color.w = alpha;
-			spriteBulletReload_->SetColor(color);
+
+			//UVスクロール
+			Vector2 size = {
+				spriteBullet_->GetSize().x * (player_->GetBulletReloadTimer() / playerParam_["bulletReloadTime"].get<float>()),
+				spriteBullet_->GetSize().y
+			};
+			spriteBulletReload_->SetSize(size);
+			spriteBulletReload_->SetTextureSize(size);
 		}
 		//装填済み
 		else {

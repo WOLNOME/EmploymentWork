@@ -208,7 +208,7 @@ void GamePlayScene::Update() {
 			);
 
 			//演出通知
-			player_->GetMoveSE()->Pause();
+			player_->GetMoveSE()->Stop();
 
 		}
 	}
@@ -267,5 +267,5 @@ void GamePlayScene::OnResume() {
 	enemyManager_->BossSpawn({ 0,0,0 }, { 0,pi,0 });
 
 	//演出シーンからの復帰時処理
-	player_->GetMoveSE()->Resume();
+	player_->GetMoveSE()->Play(true,0.0f);
 }

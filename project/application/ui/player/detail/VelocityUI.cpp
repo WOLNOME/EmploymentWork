@@ -30,7 +30,7 @@ void VelocityUI::Initialize() {
 		centerPos.y += param_["velocityUI"]["needleOffset"]["y"];
 		thNeedle_ = TextureManager::GetInstance()->LoadTexture("needle.png");
 		spriteNeedle_ = std::make_unique<Sprite>();
-		spriteNeedle_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("needleUI"), Order::Front3, thNeedle_);
+		spriteNeedle_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("needleUI"), Order::Front4, thNeedle_);
 		spriteNeedle_->SetAnchorPoint({ 0.5f,0.5f });
 		spriteNeedle_->SetPosition(centerPos);
 	}
