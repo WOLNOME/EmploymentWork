@@ -2,6 +2,7 @@
     "maxHealItemNum":10,
     "maxChargeItemNum":10,
     "maxKeyItemNum":2,
+    "maxTutorialCollectibleItemNum":10,
     "initHeight":2.2,
     "swingWidth":2.0,
     "swingTime":1.0,

@@ -323,6 +323,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\TutorialSystem.cpp" />
     <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp" />
     <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp" />
+    <ClCompile Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.cpp" />
+    <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -549,6 +551,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\TutorialSystem.h" />
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h" />
     <ClInclude Include="application\ui\player\detail\MoveIndicator.h" />
+    <ClInclude Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.h" />
+    <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

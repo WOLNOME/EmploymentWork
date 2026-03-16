@@ -63,6 +63,7 @@ private:
 
 	//パラメーター
 	json param_;
+	json playerParam_;
 
 	//窓ガラスが割れている表現
 	uint32_t thGlass_;

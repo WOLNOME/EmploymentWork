@@ -329,8 +329,8 @@ void Radar::UpdateItemMark() {
 	int spriteIndex = 0;
 	//回復アイテムマークの更新（黄緑）
 	for (const auto& healItem : itemManager_->GetHealItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (healItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (healItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
@@ -338,16 +338,16 @@ void Radar::UpdateItemMark() {
 	}
 	//スペシャルチャージアイテムマークの更新（水色）
 	for (const auto& chargeItem : itemManager_->GetChargeItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (chargeItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (chargeItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 		processItem(chargeItem->GetWorldTransform().GetWorldTranslate(), { 0.4f,0.8f,1.0f,1.0f }, spriteIndex, 0.6f);
 	}
 	//キーアイテムマークの更新（黄）
 	for (const auto& keyItem : itemManager_->GetKeyItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (keyItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (keyItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
@@ -370,23 +370,18 @@ void Radar::UpdateInductionArrow() {
 	auto processInductionArrow = [&](const Vector3& subjectPos, const Vector4& color, int& spriteIndex) {
 		//プレイヤー→対象物のベクトルを作る
 		Vector3 playerToSubject = subjectPos - player_->GetWorldTransform().GetWorldTranslate();
-		//対象物が規定距離より短いなら表示しない
-		if (playerToSubject.Length() < param_["radar"]["inductionArrowMinLength"].get<float>()) return;
-		//対象物がレーダーの範囲外に外れている場合
-		Vector3 rotated;
-		if (playerToSubject.Length() > kSearchLength_) {
-			//カメラの回転を適用
-			rotated = rotateAttach(playerToSubject.Normalized() * kSearchLength_, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
-		}
-		else {
-			//カメラの回転を適用
-			rotated = rotateAttach(playerToSubject.Normalized() * (playerToSubject.Length() - param_["radar"]["inductionArrowOffsetLength"].get<float>()), cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
-		}
+		//対象物が索敵距離より短いなら表示しない
+		if (playerToSubject.Length() < kSearchLength_) return;
+
+		//カメラの回転を適用
+		Vector3 rotated = rotateAttach(playerToSubject.Normalized() * kSearchLength_, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
+
 		//座標
 		inductionArrows_[spriteIndex]->SetPosition({
 			centerPosition_.x + (rotated.x * kUnitLength_),
 			centerPosition_.y - (rotated.z * kUnitLength_)
 			});
+
 		//本体の回転を適用（カメラ回転+本体の回転）
 		Vector3 cameraForward = {
 			sinf(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y),
@@ -410,8 +405,8 @@ void Radar::UpdateInductionArrow() {
 
 	//キーキャノ太(紫)
 	for (const auto& keyCanota : enemyManager_->GetKeyCanotas()) {
-		//キーキャノ太がアイドル状態なら次へ
-		if (keyCanota->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (keyCanota->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
@@ -419,8 +414,8 @@ void Radar::UpdateInductionArrow() {
 	}
 	//ボス(赤)
 	for (const auto& boss : enemyManager_->GetBosses()) {
-		//ボスがアイドル状態なら次へ
-		if (boss->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (boss->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
@@ -428,8 +423,8 @@ void Radar::UpdateInductionArrow() {
 	}
 	//鍵(黄)
 	for (const auto& key : itemManager_->GetKeyItems()) {
-		//鍵がアイドル状態なら次へ
-		if (key->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (key->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 

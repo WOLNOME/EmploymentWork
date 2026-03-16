@@ -9,6 +9,7 @@
 #include <application/object/character/item/heal/ItemHeal.h>
 #include <application/object/character/item/charge/ItemCharge.h>
 #include <application/object/character/item/key/ItemKey.h>
+#include <application/object/character/item/tutorialCollectible/ItemTutorialCollectible.h>
 
 /// <summary>
 /// シーン上すべてのアイテム管理を行うクラス
@@ -55,6 +56,11 @@ public:
 	/// </summary>
 	/// <param name="_initPos">初期化用座標</param>
 	void SpawnKeyItem(const Norm::Vector3& _initPos);
+	/// <summary>
+	/// チュートリアル収集アイテムのスポーン
+	/// </summary>
+	/// <param name="_initPos">初期化用座標</param>
+	void SpawnTutorialCollectibleItme(const Norm::Vector3& _initPos);
 
 	/// ============================== ///
 	///		getter
@@ -75,6 +81,11 @@ public:
 	/// </summary>
 	/// <returns>キーアイテムのコンテナ</returns>
 	const std::vector<std::unique_ptr<ItemKey>>& GetKeyItems() const { return keyItems_; }
+	/// <summary>
+	/// チュートリアル収集アイテムのコンテナを取得
+	/// </summary>
+	/// <returns>チュートリアル収集アイテムのコンテナ</returns>
+	const std::vector<std::unique_ptr<ItemTutorialCollectible>>& GetTutorialCollectibleItmes() const { return tutorialCollectibleItems_; }
 
 private:
 	/// ============================== ///
@@ -114,6 +125,8 @@ private:
 	std::vector<std::unique_ptr<ItemCharge>> chargeItems_;
 	//キーアイテムのコンテナ
 	std::vector<std::unique_ptr<ItemKey>> keyItems_;
+	//チュートリアルアイテムのコンテナ
+	std::vector<std::unique_ptr<ItemTutorialCollectible>> tutorialCollectibleItems_;
 
 };
 

@@ -21,9 +21,15 @@ void ItemManager::Initialize() {
 	}
 	//キーアイテムコンテナの生成・初期化
 	int keyItemNum = param_["maxKeyItemNum"];
-	for (int i = 0; i < healItemNum; i++) {
+	for (int i = 0; i < keyItemNum; i++) {
 		keyItems_.push_back(std::make_unique<ItemKey>());
 		keyItems_[i]->Initialize();
+	}
+	//キーアイテムコンテナの生成・初期化
+	int tutorialCollectibleItemNum = param_["maxTutorialCollectibleItemNum"];
+	for (int i = 0; i < healItemNum; i++) {
+		tutorialCollectibleItems_.push_back(std::make_unique<ItemTutorialCollectible>());
+		tutorialCollectibleItems_[i]->Initialize();
 	}
 }
 
@@ -53,6 +59,15 @@ void ItemManager::Update() {
 
 		keyItem->Update();
 	}
+	// チュートリアル収集アイテムの更新
+	for (const auto& tutorialCollectibleItem : tutorialCollectibleItems_) {
+		//アイドル状態の要素はスキップ
+		if (tutorialCollectibleItem->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+
+		tutorialCollectibleItem->Update();
+	}
 }
 
 void ItemManager::DebugWithImGui() {
@@ -79,5 +94,12 @@ void ItemManager::SpawnKeyItem(const Norm::Vector3& _initPos) {
 	//スポーン
 	SpawnFromPool(keyItems_, [&](ItemKey* key) {
 		key->Spawn(_initPos);
+		});
+}
+
+void ItemManager::SpawnTutorialCollectibleItme(const Norm::Vector3& _initPos) {
+	//スポーン
+	SpawnFromPool(tutorialCollectibleItems_, [&](ItemTutorialCollectible* tutorailCollectible) {
+		tutorailCollectible->Spawn(_initPos);
 		});
 }

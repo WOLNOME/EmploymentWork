@@ -741,7 +741,15 @@
     <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp" />
+    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp">
+      <Filter>application\ui\player\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.cpp">
+      <Filter>application\object\character\item\tutorialCollectible</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp">
+      <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1431,7 +1439,15 @@
     <ClInclude Include="application\ui\player\detail\MoveIndicator.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
-    <ClInclude Include="application\ui\player\detail\EmphasisUI.h" />
+    <ClInclude Include="application\ui\player\detail\EmphasisUI.h">
+      <Filter>application\ui\player\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.h">
+      <Filter>application\object\character\item\tutorialCollectible</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h">
+      <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
@@ -1804,6 +1820,12 @@
     </Filter>
     <Filter Include="application\object\level\bigRock">
       <UniqueIdentifier>{3e68dc19-0ca8-48c2-8695-b3017c1f2cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\tutorialCollectible">
+      <UniqueIdentifier>{5d129bbe-acea-4c6f-8f8d-2eecc36321a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\tutorialCollectible\collision">
+      <UniqueIdentifier>{ffaddbd1-77f0-4822-a84b-c5fb72056a83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
