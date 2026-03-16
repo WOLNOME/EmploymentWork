@@ -5,14 +5,14 @@
     "radar": {
         "centerPos": {
             "x": 640,
-            "y": 590
+            "y": 560
         },
         "markSize":20
     },
     "key": {
-        "centerPos": {
-            "x": 360,
-            "y": 630
+        "leftTopPos": {
+            "x": 1075,
+            "y": 458
         }
     },
     "direction": {
@@ -39,47 +39,39 @@
         }
     },
     "cannonUI": {
-        "centerPos": {
-            "x": 1020,
-            "y": 160
-        },
-        "reloadUIOffset":{
-            "x":120,
-            "y":25
+        "leftTopPos": {
+            "x": 131,
+            "y": 458
         }
     },
     "bulletUI": {
-        "centerPos": {
-            "x": 1020,
-            "y": 300
+        "leftTopPos": {
+            "x": 131,
+            "y": 527
         },
-        "magazineUIOffset":{
-            "x":20,
-            "y":25
-        },
-        "reloadUIOffset":{
-            "x":170,
-            "y":25
+        "magazineUILeftTopPos":{
+            "x":298,
+            "y":535
         }
     },
     "specialUI": {
-        "centerPos": {
-            "x": 1020,
-            "y": 440
+        "leftTopPos": {
+            "x": 131,
+            "y": 596
         }
     },
     "velocityUI":{
         "centerPos":{
-            "x":850,
-            "y":630
+            "x":943,
+            "y":611
         },
         "needleOffset":{
             "x":0,
-            "y":68
+            "y":45
         },
         "numTextOffset":{
             "x":0,
-            "y":-30
+            "y":20
         }
     },
     "decorativeUI":{
@@ -101,18 +93,21 @@
         }
     },
     "hpUI":{
-        "centerPos":{
-            "x":1010,
-            "y":630
+        "leftTopPos":{
+            "x":832,
+            "y":505
         },
-        "barOffset":{
-            "x":-58,
-            "y":30
+        "barSize":{
+            "x":222,
+            "y":45
         },
-        "textOffset":{
-            "x":0,
-            "y":-30
+        "textLeftTopPos":{
+            "x":928,
+            "y":460
         }
         
+    },
+    "moveIndicator":{
+        "maxSizeY":2.0
     }
 }

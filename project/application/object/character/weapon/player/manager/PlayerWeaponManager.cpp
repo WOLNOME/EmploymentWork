@@ -97,3 +97,15 @@ void PlayerWeaponManager::SpawnSpecial(const Norm::Vector3& _initPos, const Norm
 		gameCamera->RegistShake(0.4f, 0.3f);
 		});
 }
+
+void PlayerWeaponManager::SetCameraManager(CameraManager* _cameraManager) {
+	cameraManager_ = _cameraManager;
+	//砲弾全てに渡す
+	for (auto& cannon : cannons_) {
+		cannon->SetCameraManager(_cameraManager);
+	}
+	//必殺弾全てに渡す
+	for (auto& special : specials_) {
+		special->SetCameraManager(_cameraManager);
+	}
+}

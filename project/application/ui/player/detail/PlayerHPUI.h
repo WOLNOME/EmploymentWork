@@ -1,6 +1,5 @@
 #pragma once
 #include <Sprite.h>
-#include <array>
 #include <memory>
 #include <JsonUtil.h>
 #include <Handle.h>
@@ -62,13 +61,9 @@ private:
 	//プレイヤーのパラメーター
 	json playerParam_;
 
-	//HP基盤
-	uint32_t thBase_;
-	std::unique_ptr<Norm::Sprite> spriteBase_;
-
 	//HPバー
-	std::array<uint32_t, 2> thBar_;
-	std::array<std::unique_ptr<Norm::Sprite>, 2> spriteBar_;
+	uint32_t thBar_;
+	std::unique_ptr<Norm::Sprite> spriteBar_;
 
 	//HPテキスト
 	Norm::Handle thHPText_;

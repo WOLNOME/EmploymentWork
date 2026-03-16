@@ -14,6 +14,9 @@ void PlayerBullet::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	shotSE_ = std::make_unique<Audio>();
+	shotSE_->Initialize("se/bulletShot.mp3");
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/playerBullet");
 
@@ -106,6 +109,8 @@ void PlayerBullet::Spawn(const Vector3& _initPos, const Vector3& _initDirection)
 	state_ = State::kActive;
 	//トレールの座標をクリア
 	trail_->ClearPositions();
+	//発射SE
+	shotSE_->Play(false, 1.0f);
 }
 
 void PlayerBullet::DeadProcess() {

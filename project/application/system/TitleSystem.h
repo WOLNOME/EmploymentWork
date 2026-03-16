@@ -1,5 +1,6 @@
 #pragma once
 #include <Input.h>
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <SceneManager.h>
 #include <Vector3.h>
@@ -94,6 +95,11 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//BGM
+	std::unique_ptr<Norm::Audio> bgm_ = nullptr;
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;	//決定
 
 	//タイトルメニュー
 	Menu menu_;

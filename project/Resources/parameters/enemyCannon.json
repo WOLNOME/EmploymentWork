@@ -1,7 +1,7 @@
 {
     "collisionRadiusSphere":1.0,
     "maxHeight": 3.0,
-    "hitTime": 0.9,
+    "hitTime": 1.5,
     "trailMaxLength":0.6,
     "trailLengthDecayValue":0.016
 }

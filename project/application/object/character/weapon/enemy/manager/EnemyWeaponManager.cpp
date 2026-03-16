@@ -4,6 +4,7 @@
 #include "application/object/character/enemy/manager/EnemyManager.h"
 #include "application/object/character/player/Player.h"
 #include <application/object/character/enemy/tank/base/IBaseTankEnemy.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -97,5 +98,20 @@ void EnemyWeaponManager::SetPlayerUI(PlayerUI* _playerUI) {
 	//爆弾全てに渡す
 	for (auto& bomb : bombs_) {
 		bomb->SetPlayerUI(_playerUI);
+	}
+}
+
+void EnemyWeaponManager::SetCameraManager(CameraManager* _cameraManager) {
+	//砲弾全てに渡す
+	for (auto& cannon : cannons_) {
+		cannon->SetCameraManager(_cameraManager);
+	}
+	//銃弾全てに渡す
+	for (auto& bullet : bullets_) {
+		bullet->SetCameraManager(_cameraManager);
+	}
+	//爆弾全てに渡す
+	for (auto& bomb : bombs_) {
+		bomb->SetCameraManager(_cameraManager);
 	}
 }

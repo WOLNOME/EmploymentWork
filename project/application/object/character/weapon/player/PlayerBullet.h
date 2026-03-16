@@ -1,5 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include <Audio.h>
 #include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
@@ -55,20 +56,18 @@ private:
 	void Move();
 
 	/// ============================== ///
-	///		インスタンス
+	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> shotSE_ = nullptr;		//発射
+	//パラメータ
+	json param_;
 
 	//トレールエフェクト
 	std::unique_ptr<Norm::BulletTrail> trail_ = nullptr;
 	//衝突エフェクト
 	std::unique_ptr<Norm::CombinedParticle> hitEffect_ = nullptr;
-
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
-
-	//パラメータ
-	json param_;
 
 	float lifeTimer_ = 0.0f;		//寿命タイマー
 

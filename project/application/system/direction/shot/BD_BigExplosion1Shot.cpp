@@ -1,4 +1,5 @@
 #include "BD_BigExplosion1Shot.h"
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <GameCamera.h>
 #include <Object3d.h>
@@ -20,6 +21,7 @@ void BD_BigExplosion1Shot::Initialize() {
 	//ブラックボードから必要な情報を取得
 	BaseCamera* camera = blackBoard_->GetValue<BaseCamera*>("Camera");
 	std::vector<CombinedParticle*> hugeExplosions = blackBoard_->GetValue<std::vector<CombinedParticle*>>("HugeExplosion_Particle");
+	Audio* explosion_large = blackBoard_->GetValue<Audio*>("Explosion_Large_SE");
 
 	//カメラの座標、回転を初期状態に合わせる
 	{
@@ -50,6 +52,11 @@ void BD_BigExplosion1Shot::Initialize() {
 				break; // 1つだけ出す
 			}
 		}
+	}
+
+	//大爆発SE
+	{
+		explosion_large->Play(false, 1.0f);
 	}
 
 	//現在時間を初期化

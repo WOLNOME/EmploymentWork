@@ -13,6 +13,7 @@ class Player;
 class EnemyWeaponManager;
 class EnemyManager;
 class EnemyUI;
+class CameraManager;
 
 /// <summary>
 /// ボスクラス
@@ -97,6 +98,11 @@ public:
 	/// </summary>
 	/// <param name="_enemyUI">敵UIのポインタ</param>
 	void SetEnemyUI(EnemyUI* _enemyUI);
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 
 	/// <summary>
 	/// HPのセット

@@ -78,7 +78,7 @@ public:
 	/// カメラマネージャーを設定する
 	/// </summary>
 	/// <param name="_cameraManager">設定するカメラマネージャー</param>
-	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; };
+	void SetCameraManager(CameraManager* _cameraManager);
 	/// <summary>
 	/// プレイヤーを設定する
 	/// </summary>

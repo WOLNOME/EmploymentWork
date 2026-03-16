@@ -7,6 +7,7 @@
 #include <application/object/character/enemy/boss/builder/BossBehaivorTreeBuilder.h>
 #include <application/object/character/player/Player.h>
 #include <application/object/character/enemy/boss/collision/BossCollider.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -149,6 +150,14 @@ void Boss::SetEnemyUI(EnemyUI* _enemyUI) {
 	enemyUI_ = _enemyUI;
 	//ブラックボードに書き込む
 	blackBoard_->SetValue<EnemyUI*>("EnemyUI", enemyUI_);
+}
+
+void Boss::SetCameraManager(CameraManager* _cameraManager) {
+	//バリアにセット
+	barrier_->SetCameraManager(_cameraManager);
+
+	//ブラックボードに書き込む
+	blackBoard_->SetValue<CameraManager*>("CameraManager", _cameraManager);
 }
 
 void Boss::ConstantInfoToBlackBoard() {

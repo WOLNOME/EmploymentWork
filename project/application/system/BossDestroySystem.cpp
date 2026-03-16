@@ -33,6 +33,23 @@ void BossDestroySystem::Initialize() {
 		collider.second->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	}
 
+	//SEの初期化
+	{
+		decideSE_ = std::make_unique<Audio>();
+		decideSE_->Initialize("se/decide.mp3");
+		groundShakeSE_ = std::make_unique<Audio>();
+		groundShakeSE_->Initialize("se/ground_shake.mp3");
+		explosionSmallSE_ = std::make_unique<Audio>();
+		explosionSmallSE_->Initialize("se/explosion_small.mp3");
+		explosionLargeSE_ = std::make_unique<Audio>();
+		explosionLargeSE_->Initialize("se/explosion_large.mp3");
+
+		//ブラックボードに登録
+		blackBoard_->SetValue<Audio*>("Ground_Shake_SE", groundShakeSE_.get());
+		blackBoard_->SetValue<Audio*>("Explosion_Small_SE", explosionSmallSE_.get());
+		blackBoard_->SetValue<Audio*>("Explosion_Large_SE", explosionLargeSE_.get());
+	}
+
 	//レターボックス
 	{
 		//テクスチャ
@@ -122,10 +139,22 @@ void BossDestroySystem::Update() {
 	//映像演出が終了もしくはスキップボタンが押されたならクリアシーンへ遷移
 	{
 		Input* input = Input::GetInstance();
-		if (cinematic_->GetIsAllShotsFinished() ||
-			input->TriggerKey(DIK_ESCAPE) ||
-			input->TriggerPadButton(GamePadButton::START)) {
-			uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("white.png");
+		if (!cinematic_->GetIsAllShotsFinished()) {
+			if (input->TriggerKey(DIK_ESCAPE) || input->TriggerPadButton(GamePadButton::START)) {
+
+				if (SceneManager::GetInstance()->SetNextScene("GameClear",
+					SceneTransitionAnimation::Type::FADE,
+					SceneTransitionAnimation::Type::FADE,
+					SceneTransitionAnimation::Option::NONE,
+					2.0f, textureHandle, TransitionMode::Normal
+				)) {
+					//決定音を出す
+					decideSE_->Play(false, 1.0f);
+				}
+			}
+		}
+		else {
 			SceneManager::GetInstance()->SetNextScene("GameClear",
 				SceneTransitionAnimation::Type::FADE,
 				SceneTransitionAnimation::Type::FADE,

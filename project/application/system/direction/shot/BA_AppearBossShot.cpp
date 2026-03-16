@@ -1,4 +1,5 @@
 #include "BA_AppearBossShot.h"
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <Object3d.h>
 #include <WorldTransform.h>
@@ -21,6 +22,7 @@ void BA_AppearBossShot::Initialize() {
 	Object3d* boss = blackBoard_->GetValue<Object3d*>("Boss_Object");
 	WorldTransform* wtBoss = blackBoard_->GetValue<WorldTransform*>("Boss_WorldTransform");
 	CombinedParticle* appear = blackBoard_->GetValue<CombinedParticle*>("Appear_Particle");
+	Audio* boss_appear = blackBoard_->GetValue<Audio*>("Boss_Appear_SE");
 
 	//カメラの座標、回転を初期状態に合わせる
 	{
@@ -46,6 +48,11 @@ void BA_AppearBossShot::Initialize() {
 		appear->SetBaseTransform(TransformEuler({ 1,1,1 }, { 0,0,0 }, pos));
 		//再生
 		appear->SetIsPlay(true);
+	}
+
+	//ボス出現SE
+	{
+		boss_appear->Play(false, 1.0f);
 	}
 
 	//現在時間を初期化

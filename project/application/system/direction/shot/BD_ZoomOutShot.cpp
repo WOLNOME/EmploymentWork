@@ -1,4 +1,5 @@
 #include "BD_ZoomOutShot.h"
+#include <Audio.h>
 #include <vector>
 #include <random>
 #include <BaseCamera.h>
@@ -21,6 +22,7 @@ void BD_ZoomOutShot::Initialize() {
 	//ブラックボードから必要な情報を取得
 	BaseCamera* camera = blackBoard_->GetValue<BaseCamera*>("Camera");
 	std::vector<CombinedParticle*> blackSmokes = blackBoard_->GetValue<std::vector<CombinedParticle*>>("BlackSmoke_Particle");
+	Audio* ground_shake = blackBoard_->GetValue<Audio*>("Ground_Shake_SE");
 
 	//カメラの座標、回転を初期状態に合わせる
 	{
@@ -63,7 +65,10 @@ void BD_ZoomOutShot::Initialize() {
 			blackSmokes[i]->SetIsPlay(true);
 		}
 	}
-
+	//地響きSE
+	{
+		ground_shake->Play(true, 0.5f);
+	}
 
 	//現在時間を初期化
 	elapsedTimer_ = duration_;
@@ -74,6 +79,7 @@ void BD_ZoomOutShot::Update() {
 	//ブラックボードから必要な情報を取得
 	BaseCamera* camera = blackBoard_->GetValue<BaseCamera*>("Camera");
 	std::vector<CombinedParticle*> mediunExplosions = blackBoard_->GetValue<std::vector<CombinedParticle*>>("MediumExplosion_Particle");
+	Audio* explosion_small = blackBoard_->GetValue<Audio*>("Explosion_Small_SE");
 
 	//時間を進める
 	elapsedTimer_ -= kDeltaTime;
@@ -148,6 +154,10 @@ void BD_ZoomOutShot::Update() {
 
 					particle->SetBaseTransform({ { 1,1,1 }, { 0,0,0 }, pos });
 					particle->SetIsPlay(true);
+
+					//小爆発SE
+					explosion_small->Play(false, 1.0f);
+
 					break; // 1個だけ発生させる
 				}
 			}

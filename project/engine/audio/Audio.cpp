@@ -1,6 +1,7 @@
 #include "Audio.h"
 #include "ImGuiManager.h"
 #include "StringUtility.h"
+#include <cassert>
 
 namespace Norm {
 
@@ -13,8 +14,8 @@ namespace Norm {
 		// ディレクトリパスのコピー
 		directoryPath_ = directoryPath;
 
-		// WAVファイルを読み込み
-		soundDataHandle_ = AudioCommon::GetInstance()->SoundLoadWave(directoryPath_ + filename);
+		// 音声ファイルを読み込み
+		soundDataHandle_ = AudioCommon::GetInstance()->SoundLoadFile(directoryPath_ + filename);
 	}
 
 	void Audio::DebugWithImGui(const std::wstring& _name) {
@@ -62,6 +63,14 @@ namespace Norm {
 		if (voiceDataHandle_ != 0u) {
 			AudioCommon::GetInstance()->SoundResume(voiceDataHandle_);
 		}
+	}
+
+	bool Audio::GetIsPlaying() {
+		if (voiceDataHandle_ != 0u) {
+			return AudioCommon::GetInstance()->GetIsPlaying(voiceDataHandle_);
+		}
+		assert(false && "初期化されていません");
+		return false;
 	}
 
 	void Audio::SetVolume(float volume) {

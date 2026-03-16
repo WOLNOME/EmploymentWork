@@ -7,6 +7,7 @@
 //アプリケーション
 #include <application/object/character/enemy/boss/collision/BarrierCollider.h>
 #include <application/object/character/enemy/boss/Boss.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -17,8 +18,15 @@ void Barrier::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
 
+	//SEの初期化
+	shaveSE_ = std::make_unique<Audio>();
+	shaveSE_->Initialize("se/barrier_shave.mp3");
+	breakSE_ = std::make_unique<Audio>();
+	breakSE_->Initialize("se/barrier_break.mp3");
+
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/barrier");
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
 
 	//モデルの初期化
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("sky.png");
@@ -108,6 +116,54 @@ void Barrier::Move() {
 	worldTransform_.SetTranslate(boss_->GetWorldTransform().GetWorldTranslate());
 }
 
+void Barrier::DamageProcess(int _effectGenerateNum,const Vector3& _subjectPos) {
+	//ステートがアクティブでなければ失敗
+	if (state_ != State::kActive) {
+		return;
+	}
+
+	//HPが0より大きいなら
+	if (hp_ > 0) {
+		//破片エフェクト発生処理
+		if (_effectGenerateNum > 0) {
+
+			size_t size = scrapes_.size();
+			int count = 0;
+
+			for (int i = 0; i < size; i++) {
+
+				if (!scrapes_[i]->GetIsPlay()) {
+
+					TransformEuler transform =
+						scrapes_[i]->GetBaseTransform();
+					transform.translate = _subjectPos;
+					scrapes_[i]->SetBaseTransform(transform);
+					scrapes_[i]->SetIsPlay(true);
+
+					count++;
+				}
+
+				if (count >= _effectGenerateNum) {
+					break;
+				}
+			}
+		}
+		//最大距離
+		float maxDistance = audioParam_["distance"].get<float>();
+		//カメラまでの距離
+		float distance = Vector3(
+			worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+		).Length();
+		//音量
+		float volume = 0.0f;
+		if (distance < maxDistance) {
+			volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+		}
+		//削りSE
+		shaveSE_->Play(false, volume);
+	}
+}
+
 void Barrier::DeadProcess() {
 	//ステートがアクティブでなければ失敗
 	if (state_ != State::kActive) {
@@ -122,7 +178,19 @@ void Barrier::DeadProcess() {
 		transform.translate.y = 0.0f;
 		destroy_->SetBaseTransform(transform);
 		destroy_->SetIsPlay(true);
-
+		//最大距離
+		float maxDistance = audioParam_["distance"].get<float>();
+		//カメラまでの距離
+		float distance = Vector3(
+			worldTransform_.GetTranslate() - cameraManager_->GetActiveCamera()->worldTransform.GetWorldTranslate()
+		).Length();
+		//音量
+		float volume = 0.0f;
+		if (distance < maxDistance) {
+			volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+		}
+		//破壊SE
+		breakSE_->Play(false, volume);
 		//アイドル状態にする
 		SetState(BaseCharacter::State::kIdle);
 	}

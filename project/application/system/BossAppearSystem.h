@@ -1,4 +1,5 @@
 #pragma once
+#include <Audio.h>
 #include <memory>
 #include <JsonUtil.h>
 #include <Sprite.h>
@@ -61,6 +62,13 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;	//決定
+	std::unique_ptr<Norm::Audio> keyAppearSE_ = nullptr;	//鍵出現
+	std::unique_ptr<Norm::Audio> keyFinishSE_ = nullptr;	//鍵完了
+	std::unique_ptr<Norm::Audio> groundShakeSE_ = nullptr;	//地響き
+	std::unique_ptr<Norm::Audio> bossAppearSE_ = nullptr;	//ボス出現
 
 	//パラメーター
 	json param_;

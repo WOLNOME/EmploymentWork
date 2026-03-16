@@ -1,4 +1,5 @@
 #include "BA_ShakeShot.h"
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <GameCamera.h>
 
@@ -15,11 +16,17 @@ BA_ShakeShot::~BA_ShakeShot() {
 void BA_ShakeShot::Initialize() {
 	//ブラックボードから必要な情報を取得
 	BaseCamera* camera = blackBoard_->GetValue<BaseCamera*>("Camera");
+	Audio* ground_shake = blackBoard_->GetValue<Audio*>("Ground_Shake_SE");
 
 	//カメラの座標、回転を初期状態に合わせる
 	{
 		camera->worldTransform.SetTranslate(startCameraTransform_.translate);
 		camera->worldTransform.SetRotate(startCameraTransform_.rotate);
+	}
+
+	//地響きSE
+	{
+		ground_shake->Play(true, 0.5f);
 	}
 
 	//現在時間を初期化

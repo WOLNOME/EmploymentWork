@@ -11,17 +11,17 @@
         "z":7.5
     },
     "searchPlayerDistanceApproach":250.0,
-    "speed": 2.5,
-    "maxSpeed":25.0,
+    "speed": 3.0,
+    "maxSpeed":30.0,
     "rotateSpeed": 1.047,
     "searchPlayerDistanceAttack":100.0,
-    "cannonCoolTime":1.5,
-    "maxHP":30,
+    "cannonCoolTime":2.5,
+    "maxHP":20,
     "cannonDamage":10,
     "bulletDamage":1,
     "specialDamage":50,
     "uiHeight":17.0,
     "uiFront":0.0,
-    "item_healDropRate":0.3,
-    "item_chargeDropRate":0.3
+    "item_healDropRate":0.6,
+    "item_chargeDropRate":0.4
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <Audio.h>
 #include <Sprite.h>
 #include <memory>
 
@@ -29,6 +30,12 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//BGM
+	std::unique_ptr<Norm::Audio> bgm_ = nullptr;
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
+
 
 	//
 	uint32_t textureHandle_;

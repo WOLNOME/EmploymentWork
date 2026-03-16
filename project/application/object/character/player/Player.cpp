@@ -19,6 +19,12 @@ using namespace Norm;
 void Player::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
+	
+	//SEの初期化
+	moveSE_ = std::make_unique<Audio>();
+	moveSE_->Initialize("se/tank_move.mp3");
+	volumeMoveSE_ = 0.0f;
+	moveSE_->Play(true, volumeMoveSE_);
 
 	//パラメータの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/player");
@@ -238,6 +244,10 @@ void Player::Move() {
 	newTranslate.z = std::clamp(newTranslate.z, -limit, limit);
 
 	worldTransform_.SetTranslate(newTranslate);
+
+	//速度によってSEの音量を変える
+	volumeMoveSE_ = MyMath::Lerp(0.0f, 1.0f, velocity_.Length() / maxSpeed_);
+	moveSE_->SetVolume(volumeMoveSE_);
 }
 
 void Player::CannonAttack() {
@@ -420,11 +430,14 @@ void Player::CameraAlgorithm() {
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue;
 	Vector2 mouseMoveValue = input_->GetMousePosition();
-	Vector2 padMoveValue = input_->GetRStickDir() * 40.0f;
+	Vector2 padMoveValue = {
+		input_->GetRStickDir().x * 20.0f,
+		input_->GetRStickDir().y * 10.0f,
+	};
 	padMoveValue.y *= -1.0f;
 	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
-	float deadZone = 2.5f;
+	float deadZone = 1.5f;
 	if (moveValue.Length() > deadZone) {
 		Vector3 newRotate = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
 		newRotate.x += moveValue.y * 0.0005f;

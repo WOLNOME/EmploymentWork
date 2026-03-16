@@ -141,7 +141,7 @@ protected:
 	//空気抵抗値
 	float airResistance_ = 1.0f;
 	//床の摩擦値
-	float floorFriction_ = 40.0f;
+	const float floorFriction_ = 80.0f;
 
 private:
 	/// ============================== ///

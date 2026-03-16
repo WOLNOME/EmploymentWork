@@ -1,5 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include <Audio.h>
 #include "BaseCamera.h"
 #include "SceneLight.h"
 #include "Object3d.h"
@@ -19,6 +20,7 @@ enum class BombMethod {
 
 //前方宣言（アプリケーション）
 class PlayerUI;
+class CameraManager;
 
 /// <summary>
 /// 敵(ジェットエネミー)の使う爆弾の処理全般を管理するクラス
@@ -78,6 +80,11 @@ public:
 	/// </summary>
 	/// <param name="_playerUI">設定するプレイヤーUI</param>
 	void SetPlayerUI(PlayerUI* _playerUI) { playerUI_ = _playerUI; }
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 private:
 	/// ============================== ///
@@ -95,6 +102,19 @@ private:
 
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
+	//カメラ
+	CameraManager* cameraManager_ = nullptr;
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
+	//SE
+	std::unique_ptr<Norm::Audio> deadSE_ = nullptr;		//死亡
+
+	//パラメータ
+	json param_;
+	json audioParam_;
 
 	//爆破範囲警告
 	std::unique_ptr<Norm::Object3d> warning_ = nullptr;
@@ -103,12 +123,6 @@ private:
 	//爆風パーティクル
 	std::unique_ptr<Norm::CombinedParticle> explosion_ = nullptr;
 
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
-
-	//パラメータ
-	json param_;
 
 	//生成された座標
 	Norm::Vector3 generatedPosition_ = {};

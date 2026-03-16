@@ -57,6 +57,13 @@ private:
 	//インプット
 	Norm::Input* input_ = nullptr;
 
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
+	//BGM
+	std::unique_ptr<Norm::Audio> bgm_ = nullptr;
+
 	//カメラマネージャー
 	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
 
@@ -100,10 +107,6 @@ private:
 
 	//ポーズ
 	std::unique_ptr<PauseSystem> pauseSystem_ = nullptr;
-
-	/// ============================== ///
-	///		メンバ変数
-	/// ============================== ///
 
 	//デバッグ用フラグ
 	bool isDebug_ = false;

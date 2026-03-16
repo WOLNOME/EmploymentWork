@@ -43,16 +43,18 @@ void Radar::Initialize() {
 	//テクスチャハンドル
 	{
 		thCharacterMark_ = TextureManager::GetInstance()->LoadTexture("whiteTriangle.png");
+		thPlayerMark_ = TextureManager::GetInstance()->LoadTexture("playerIcon.png");
 		thItemMark_ = TextureManager::GetInstance()->LoadTexture("whiteCircle.png");
 	}
 
 	//プレイヤー
 	{
 		playerMark_ = std::make_unique<Sprite>();
-		playerMark_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front3, thCharacterMark_);
+		playerMark_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("playerMark"), Order::Front3, thPlayerMark_);
 		playerMark_->SetAnchorPoint({ 0.5f,0.5f });
 		playerMark_->SetPosition(centerPosition_);
 		playerMark_->SetColor({ 1,1,1,1 });
+		playerMark_->SetSize(playerMark_->GetSize() * 2.5f);
 	}
 	//エネミー
 	{

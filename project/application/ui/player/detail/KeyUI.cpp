@@ -16,12 +16,11 @@ void KeyUI::Initialize() {
 	//スプライトの生成・初期化
 	//キー
 	{
-		Vector2 keyUICenterPos = { param_["key"]["centerPos"]["x"],param_["key"]["centerPos"]["y"]};
+		Vector2 keyUILeftTopPos = { param_["key"]["leftTopPos"]["x"],param_["key"]["leftTopPos"]["y"]};
 		thKey_ = TextureManager::GetInstance()->LoadTexture("keyUI.png");
 		spriteKey_ = std::make_unique<Sprite>();
 		spriteKey_->Initialize(UVScrollTag{}, SpriteManager::GetInstance()->GenerateName("PlayerKeyUI"), Order::Front2, 3, 0.01f, false, thKey_);
-		spriteKey_->SetAnchorPoint({ 0.5f,0.5f });
-		spriteKey_->SetPosition(keyUICenterPos);
+		spriteKey_->SetPosition(keyUILeftTopPos);
 	}
 }
 

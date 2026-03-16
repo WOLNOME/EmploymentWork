@@ -1,5 +1,6 @@
 #pragma once
 #include "application/object/character/base/BaseCharacter.h"
+#include <Audio.h>
 #include "CombinedParticle.h"
 #include "BulletTrail.h"
 #include "JsonUtil.h"
@@ -8,12 +9,23 @@
 
 //前方宣言（アプリケーション）
 class PlayerUI;
+class CameraManager;
 
 /// <summary>
 /// 敵の使う砲弾の処理全般を管理するクラス
 /// </summary>
 class EnemyCannon : public BaseCharacter {
 public:
+	/// ============================== ///
+	///		列挙型
+	/// ============================== ///
+
+	//死亡タイプ
+	enum class DeadType {
+		Collide,	//オブジェクトにぶつかった場合
+		Ground,		//地面にぶつかった場合
+	};
+
 	/// ============================== ///
 	///		メンバ関数
 	/// ============================== ///
@@ -43,15 +55,16 @@ public:
 	/// <param name="_size">サイズ</param>
 	void Spawn(const Norm::Vector3& _initPos, const Norm::Vector3& _targetPos, float _size = 1.0f);
 
+	/// <summary>
+	/// 死亡処理
+	/// </summary>
+	/// <param name="_deadType">死亡タイプ</param>
+	void DeadProcess(DeadType _deadType);
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
 
-	/// <summary>
-	/// 爆発パーティクルを取得する
-	/// </summary>
-	/// <returns>爆発パーティクル</returns>
-	Norm::CombinedParticle* GetExplosionParticle() { return explosionParticle_.get(); }
 	/// <summary>
 	/// プレイヤーUIを取得する
 	/// </summary>
@@ -72,6 +85,11 @@ public:
 	/// </summary>
 	/// <param name="_playerUI">設定するプレイヤーUI</param>
 	void SetPlayerUI(PlayerUI* _playerUI) { playerUI_ = _playerUI; }
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
 
 private:
 	/// ============================== ///
@@ -89,13 +107,20 @@ private:
 
 	//プレイヤーUI
 	PlayerUI* playerUI_ = nullptr;
+	//カメラ
+	CameraManager* cameraManager_ = nullptr;
 	
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
+	//SE
+	std::unique_ptr<Norm::Audio> shotSE_ = nullptr;		//発射
+	std::unique_ptr<Norm::Audio> deadSE_ = nullptr;		//死亡
+
 	//パラメータ-
 	json param_;
+	json audioParam_;
 
 	//爆発パーティクル
 	std::unique_ptr<Norm::CombinedParticle> explosionParticle_ = nullptr;

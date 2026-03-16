@@ -14,6 +14,11 @@ void GamePlayScene::Initialize() {
 	input_->SetIsMouseDisplay(false);
 	input_->SetIsMouseFixed(true);
 
+	//BGMの初期化
+	bgm_ = std::make_unique<Audio>();
+	bgm_->Initialize("bgm/gamePlay.mp3");
+	bgm_->Play(true, 1.0f);
+
 	//カメラマネージャーの生成・初期化
 	cameraManager_ = std::make_unique<CameraManager>();
 	cameraManager_->Initialize();
@@ -94,10 +99,12 @@ void GamePlayScene::Initialize() {
 	enemyManager_->SetEnemyWeaponManager(enemyWeaponManager_.get());
 	enemyManager_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetEnemyUI(enemyUI_.get());
+	enemyManager_->SetCameraManager(cameraManager_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
+	enemyWeaponManager_->SetCameraManager(cameraManager_.get());
 	playerUI_->SetPlayer(player_.get());
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	playerUI_->SetItemManager(itemManager_.get());
@@ -152,7 +159,15 @@ void GamePlayScene::Update() {
 	}
 	//ポーズ画面による再生の管理
 	if (pauseSystem_->GetIsPause()) {
+		//プレイヤーの移動音を停止
+		if (player_->GetMoveSE()->GetIsPlaying()) {
+			player_->GetMoveSE()->Pause();
+		}
+
 		return;
+	}
+	else {
+		player_->GetMoveSE()->Resume();
 	}
 
 	//メッセージUIの更新
@@ -192,10 +207,11 @@ void GamePlayScene::Update() {
 				0.5f, textureHandle, TransitionMode::Temporary
 			);
 
+			//演出通知
+			player_->GetMoveSE()->Stop();
+
 		}
 	}
-
-
 
 }
 void GamePlayScene::DebugWithImGui() {
@@ -250,6 +266,6 @@ void GamePlayScene::OnResume() {
 	//ボスを出現させる
 	enemyManager_->BossSpawn({ 0,0,0 }, { 0,pi,0 });
 
-
-
+	//演出シーンからの復帰時処理
+	player_->GetMoveSE()->Play(true,0.0f);
 }

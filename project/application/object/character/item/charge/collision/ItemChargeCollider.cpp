@@ -6,6 +6,9 @@
 using namespace Norm;
 
 ItemChargeCollider::ItemChargeCollider(ItemCharge* _holder) : holder_(_holder) {
+	//SEの初期化
+	getSE_ = std::make_unique<Audio>();
+	getSE_->Initialize("se/itemGet_special.mp3");
 }
 
 void ItemChargeCollider::Debug() {
@@ -33,6 +36,9 @@ void ItemChargeCollider::OnCollision(ICollider* _other, CollisionAttribute _attr
 		TransformEuler transform = holder_->GetGetParticle()->GetBaseTransform();
 		transform.translate = holder_->GetWorldTransform().GetTranslate();
 		holder_->GetGetParticle()->SetBaseTransform(transform);
+
+		//取得SE
+		getSE_->Play(false, 1.0f);
 
 		break;
 	}

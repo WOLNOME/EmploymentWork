@@ -1,5 +1,6 @@
 #pragma once
 #include <TextTextureManager.h>
+#include <Audio.h>
 #include <Sprite.h>
 #include <string>
 #include <list>
@@ -109,6 +110,9 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+	
+	//SE
+	std::unique_ptr<Norm::Audio> messageSE_ = nullptr;	//カタカタ
 
 	//パラメーター
 	json param_;

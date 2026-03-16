@@ -220,3 +220,9 @@ void EnemyManager::SetEnemyUI(EnemyUI* _enemyUI) {
 		boss->SetEnemyUI(enemyUI_);
 	}
 }
+
+void EnemyManager::SetCameraManager(CameraManager* _cameraManager) {
+	for (const auto& boss : bosses_) {
+		boss->SetCameraManager(_cameraManager);
+	}
+}

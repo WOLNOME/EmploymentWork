@@ -13,6 +13,7 @@
 class EnemyManager;
 class Player;
 class PlayerUI;
+class CameraManager;
 
 /// <summary>
 /// 敵の使う武器全般の管理を行うクラス
@@ -97,6 +98,11 @@ public:
 	/// </summary>
 	/// <param name="_playerUI">設定するプレイヤーUI</param>
 	void SetPlayerUI(PlayerUI* _playerUI);
+	/// <summary>
+	/// カメラマネージャーを設定する
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 
 private:
 	/// ============================== ///

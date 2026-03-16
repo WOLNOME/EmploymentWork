@@ -16,6 +16,7 @@ class ItemManager;
 class EnemyWeaponManager;
 class MessageUI;
 class EnemyUI;
+class CameraManager;
 
 /// <summary>
 /// エネミー全体の管理を行うクラス
@@ -126,6 +127,11 @@ public:
 	/// </summary>
 	/// <param name="_enemyUI"></param>
 	void SetEnemyUI(EnemyUI* _enemyUI);
+	/// <summary>
+	/// カメラマネージャーのセット
+	/// </summary>
+	/// <param name="_cameraManager">カメラマネージャー</param>
+	void SetCameraManager(CameraManager* _cameraManager);
 
 private:
 	/// ============================== ///

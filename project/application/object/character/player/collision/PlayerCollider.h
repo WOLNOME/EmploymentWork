@@ -1,5 +1,7 @@
 #pragma once
 #include "OBBColliderBase.h"
+#include <Audio.h>
+#include <memory>
 
 class Player;
 
@@ -36,5 +38,7 @@ private:
 	//所有者のポインタ
 	Player* holder_ = nullptr;
 
+	//SE
+	std::unique_ptr<Norm::Audio> collideSE_ = nullptr;	//衝突時
 };
 

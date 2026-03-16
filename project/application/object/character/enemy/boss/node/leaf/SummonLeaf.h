@@ -1,5 +1,6 @@
 #pragma once
 #include "leafNode/LeafNodeBase.h"
+#include <Audio.h>
 #include <CombinedParticle.h>
 #include <array>
 
@@ -31,6 +32,12 @@ private:
 	void Rotate();
 
 private:
+	//SE
+	std::unique_ptr<Norm::Audio> middleSE_ = nullptr;	//召喚中
+	std::unique_ptr<Norm::Audio> finishSE_ = nullptr;	//召喚完了
+
+	//パラメーター
+	json audioParam_;
 
 	static const int kSummonNum = 2;
 	//召喚中パーティクル

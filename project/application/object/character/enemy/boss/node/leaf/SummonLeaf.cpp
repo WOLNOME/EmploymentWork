@@ -5,10 +5,20 @@
 
 //アプリケーション
 #include <application/object/character/enemy/manager/EnemyManager.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
 SummonLeaf::SummonLeaf(int _nodeID, BlackBoard* _blackBoard) : LeafNodeBase(_nodeID, _blackBoard) {
+	//SEの初期化
+	middleSE_ = std::make_unique<Audio>();
+	middleSE_->Initialize("se/summon_middle.mp3");
+	finishSE_ = std::make_unique<Audio>();
+	finishSE_->Initialize("se/summon_finish.mp3");
+
+	//パラメータの読み込み
+	audioParam_ = JsonUtil::GetJsonData("Resources/parameters/audio");
+
 	//召喚中パーティクルの生成・初期化
 	{
 		for (int i = 0; i < kSummonNum; i++) {
@@ -32,6 +42,27 @@ SummonLeaf::~SummonLeaf() {
 void SummonLeaf::Initialize() {
 	//基底クラスの初期化
 	LeafNodeBase::Initialize();
+
+	//ブラックボードから必要な情報を取得
+	CameraManager* cameraManager = mpBlackBoard->GetValue<CameraManager*>("CameraManager");
+	Vector3 bossPos= mpBlackBoard->GetValue<Vector3>("BossPos");
+
+	//召喚中SEの再生
+	{
+		//最大距離
+		float maxDistance = audioParam_["distance"].get<float>();
+		//カメラまでの距離
+		float distance = Vector3(
+			bossPos - cameraManager->GetActiveCamera()->worldTransform.GetWorldTranslate()
+		).Length();
+		//音量
+		float volume = 0.0f;
+		if (distance < maxDistance) {
+			volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+		}
+		//召喚中SE
+		middleSE_->Play(false, volume);
+	}
 
 	//ブラックボードの情報を初期化
 	mpBlackBoard->SetValue<bool>("IsSummon", false);
@@ -79,6 +110,8 @@ void SummonLeaf::Initialize() {
 void SummonLeaf::Update() {
 	//ブラックボードから必要な情報を取得
 	EnemyManager* enemyManager = mpBlackBoard->GetValue<EnemyManager*>("EnemyManager");
+	CameraManager* cameraManager = mpBlackBoard->GetValue<CameraManager*>("CameraManager");
+	Vector3 bossPos = mpBlackBoard->GetValue<Vector3>("BossPos");
 	bool isSummon = mpBlackBoard->GetValue<bool>("IsSummon");
 	float summonDirTimer = mpBlackBoard->GetValue<float>("SummonDirTimer");
 	float summonCoolTime = mpBlackBoard->GetValue<float>("SummonCoolTime");
@@ -111,9 +144,25 @@ void SummonLeaf::Update() {
 			//召喚完了パーティクルを発生
 			summonComplete_[i]->SetBaseTransform(summonMidst_[i]->GetBaseTransform());
 			summonComplete_[i]->SetIsPlay(true);
-
+			//召喚中SEの停止
+			middleSE_->Stop();
+			//召喚完了SEを再生
+			{
+				//最大距離
+				float maxDistance = audioParam_["distance"].get<float>();
+				//カメラまでの距離
+				float distance = Vector3(
+					bossPos - cameraManager->GetActiveCamera()->worldTransform.GetWorldTranslate()
+				).Length();
+				//音量
+				float volume = 0.0f;
+				if (distance < maxDistance) {
+					volume = MyMath::Lerp(1.0f, 0.0f, distance / maxDistance);
+				}
+				//召喚完了SE
+				finishSE_->Play(false, volume);
+			}
 		}
-
 	}
 
 	//ブラックボードに更新した情報を保存
@@ -130,6 +179,9 @@ void SummonLeaf::Finalize() {
 	for (int i = 0; i < kSummonNum; i++) {
 		summonMidst_[i]->SetIsPlay(false);
 	}
+
+	//召喚中SEの停止
+	middleSE_->Stop();
 
 }
 

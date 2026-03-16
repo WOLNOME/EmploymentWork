@@ -7,6 +7,10 @@
 using namespace Norm;
 
 void MessageUI::Initialize() {
+	//SEの初期化
+	messageSE_ = std::make_unique<Audio>();
+	messageSE_->Initialize("se/message.mp3");
+
 	//パラメーターの読み込み
 	param_ = JsonUtil::GetJsonData("Resources/parameters/messageUI");
 
@@ -82,6 +86,8 @@ uint32_t MessageUI::AddMessage(const std::wstring& _text, float _displayTime, bo
 	newMessage.isBlinking = _isBlinking;
 	newMessage.textHandle = TextTextureManager::GetInstance()->LoadTextTexture(baseTextParam_);
 	messages_.push_back(newMessage);
+	//SEを再生
+	messageSE_->Play(false, 1.0f);
 
 	//メッセージのハンドルを返す
 	return messageIdCounter_++;
@@ -141,6 +147,9 @@ void MessageUI::UpdateMessage() {
 
 				message.inputTimer = 0.0f;
 				message.state = MessageState::kDisplaying; // 表示中へ移行
+
+				//入力中SEを停止
+				messageSE_->Stop();
 
 				continue;	//次のメッセージへ
 			}

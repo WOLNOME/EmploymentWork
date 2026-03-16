@@ -1,4 +1,5 @@
 #include "BA_AppearKeyShot.h"
+#include <Audio.h>
 #include <BaseCamera.h>
 #include <Object3d.h>
 #include <WorldTransform.h>
@@ -24,6 +25,7 @@ void BA_AppearKeyShot::Initialize() {
 	WorldTransform* wtKey2 = blackBoard_->GetValue<WorldTransform*>("Key2_WorldTransform");
 	CombinedParticle* flush1 = blackBoard_->GetValue<CombinedParticle*>("Flush1_Particle");
 	CombinedParticle* flush2 = blackBoard_->GetValue<CombinedParticle*>("Flush2_Particle");
+	Audio* key_appear= blackBoard_->GetValue<Audio*>("Key_Appear_SE");
 
 	//カメラの座標、回転を初期状態に合わせる
 	{
@@ -86,6 +88,9 @@ void BA_AppearKeyShot::Initialize() {
 		//フラッシュ2を出現
 		flush2->SetIsPlay(true);
 		flush2->SetBaseTransform(TransformEuler({ 1,1,1 }, { 0,0,0 }, pos2));
+
+		//鍵出現SE
+		key_appear->Play(false, 1.0f);
 
 	}
 

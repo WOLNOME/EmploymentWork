@@ -1,5 +1,6 @@
 #pragma once
 #include <Input.h>
+#include <Audio.h>
 #include <SceneManager.h>
 #include <Object3d.h>
 #include <Sprite.h>
@@ -54,6 +55,11 @@ private:
 	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
+
+	//BGM
+	std::unique_ptr<Norm::Audio> bgm_ = nullptr;
+	//SE
+	std::unique_ptr<Norm::Audio> decideSE_ = nullptr;		//決定
 
 	//テキスト操作変数
 	bool isHalfPeriod_ = false;
