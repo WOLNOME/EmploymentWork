@@ -15,7 +15,6 @@
     "maxSpeed": 80.0,
     "rotateSpeed": 1.256,
     "searchPlayerDistanceAttack": 5,
-    "cannonCoolTime":1.5,
     "maxHP":10,
     "height":40,
     "updateTargetPointDistance":20,
