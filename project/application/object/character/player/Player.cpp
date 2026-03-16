@@ -399,7 +399,7 @@ void Player::SpecialAttack() {
 			std::cosf(orx) * std::cosf(ory)
 		};
 		currentDir.Normalize();
-		Vector3 specialPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
+		Vector3 specialPos = worldTransform_.GetTranslate();
 		specialPos.y += 7.2f;	//必殺弾の初期位置を調整
 		//スポーン
 		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);

@@ -137,6 +137,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
+    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -353,6 +354,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
     <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
     <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
+    <ClInclude Include="application\ui\player\detail\EmphasisUI.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />

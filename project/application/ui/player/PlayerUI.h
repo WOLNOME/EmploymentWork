@@ -13,6 +13,7 @@
 #include "detail/KeyUI.h"
 #include "detail/DirectionUI.h"
 #include "detail/DamageUI.h"
+#include "detail/EmphasisUI.h"
 
 //前方宣言（アプリケーション）
 class CameraManager;
@@ -128,6 +129,8 @@ private:
 	std::unique_ptr<DirectionUI> directionUI_ = nullptr;
 	//ダメージUI
 	std::unique_ptr<DamageUI> damageUI_ = nullptr;
+	//強調UI
+	std::unique_ptr<EmphasisUI> emphasisUI_ = nullptr;
 
 	//パラメーター
 	json param_;

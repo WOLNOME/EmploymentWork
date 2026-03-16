@@ -91,6 +91,10 @@ private:
 	/// </summary>
 	void UpdateItemMark();
 	/// <summary>
+	/// 誘導用矢印を更新
+	/// </summary>
+	void UpdateInductionArrow();
+	/// <summary>
 	/// コンパスを更新
 	/// </summary>
 	void UpdateCompass();
@@ -135,6 +139,11 @@ private:
 	//アイテムマーク
 	static const int kItemUINum_ = 10;
 	std::array<std::unique_ptr<Norm::Sprite>, kItemUINum_> itemMarks_;
+
+	//誘導用矢印
+	static const int kInductionArrowNum_ = 10;
+	uint32_t thInductionArrow_ = 0u;
+	std::array<std::unique_ptr<Norm::Sprite>, kInductionArrowNum_> inductionArrows_;
 
 };
 

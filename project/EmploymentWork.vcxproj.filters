@@ -741,6 +741,7 @@
     <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
+    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1430,6 +1431,7 @@
     <ClInclude Include="application\ui\player\detail\MoveIndicator.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
+    <ClInclude Include="application\ui\player\detail\EmphasisUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

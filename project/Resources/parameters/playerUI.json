@@ -7,7 +7,9 @@
             "x": 640,
             "y": 560
         },
-        "markSize":20
+        "markSize":20,
+        "inductionArrowMinLength":100,
+        "inductionArrowOffsetLength":50
     },
     "key": {
         "leftTopPos": {
@@ -109,5 +111,13 @@
     },
     "moveIndicator":{
         "maxSizeY":2.0
+    },
+    "emphasis":{
+        "iconHeight3D":{
+            "keyCanota":20.0,
+            "boss":30.0,
+            "key":5.0
+        },
+        "drawDistanceMax": 800.0
     }
 }

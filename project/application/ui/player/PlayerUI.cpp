@@ -62,6 +62,10 @@ void PlayerUI::Initialize() {
 	damageUI_ = std::make_unique<DamageUI>();
 	damageUI_->Initialize();
 
+	//強調UI
+	emphasisUI_ = std::make_unique<EmphasisUI>();
+	emphasisUI_->Initialize();
+
 }
 
 void PlayerUI::Update() {
@@ -90,6 +94,8 @@ void PlayerUI::Update() {
 	directionUI_->Update();
 	//ダメージUIの更新
 	damageUI_->Update();
+	//強調UIの更新
+	emphasisUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -130,11 +136,15 @@ void PlayerUI::SetPlayer(Player* _player) {
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	//レーダーUIに渡す
 	radar_->SetEnemyManager(_enemyManager);
+	//強調UIに渡す
+	emphasisUI_->SetEnemyManager(_enemyManager);
 }
 
 void PlayerUI::SetItemManager(ItemManager* _itemManager) {
 	//レーダーUIに渡す
 	radar_->SetItemManager(_itemManager);
+	//強調UIに渡す
+	emphasisUI_->SetItemManager(_itemManager);
 }
 
 void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
@@ -147,6 +157,8 @@ void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
 	moveIndicator_->SetCameraManager(cameraManager_);
 	//方向UIに渡す
 	directionUI_->SetCameraManager(cameraManager_);
+	//強調UIに渡す
+	emphasisUI_->SetCameraManager(cameraManager_);
 }
 
 void PlayerUI::DamageShaking() {
