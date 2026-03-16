@@ -66,9 +66,8 @@ namespace Norm {
 			}
 		}
 
-		// フルパス
-		std::string fullPath = std::filesystem::absolute(filename).string();
-		std::wstring filePathW = StringUtility::ConvertString(fullPath);
+		//相対パス
+		std::wstring filePathW = StringUtility::ConvertString(filename);
 
 		HRESULT hr;
 
