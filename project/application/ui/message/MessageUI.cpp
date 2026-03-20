@@ -97,7 +97,13 @@ void MessageUI::FinishMessage(uint32_t _messageId) {
 	// 指定されたIDのメッセージを消滅中に移行させる
 	for (auto& message : messages_) {
 		if (message.id == _messageId) {
+			//もし入力中ならSEを消す
+			if (message.state == MessageState::kInputting) {
+				messageSE_->Stop();
+			}
+
 			message.state = MessageState::kDisappearing;
+
 			break;
 		}
 	}

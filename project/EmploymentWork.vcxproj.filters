@@ -738,9 +738,6 @@
     <ClCompile Include="engine\base\main.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp">
-      <Filter>application\ui\player\detail</Filter>
-    </ClCompile>
     <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
@@ -1435,9 +1432,6 @@
     </ClInclude>
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h">
       <Filter>application\object\level\bigRock</Filter>
-    </ClInclude>
-    <ClInclude Include="application\ui\player\detail\MoveIndicator.h">
-      <Filter>application\ui\player\detail</Filter>
     </ClInclude>
     <ClInclude Include="application\ui\player\detail\EmphasisUI.h">
       <Filter>application\ui\player\detail</Filter>

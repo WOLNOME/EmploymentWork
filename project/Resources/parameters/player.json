@@ -11,7 +11,7 @@
     },
     "speed": 2.0,
     "maxSpeed":80.0,
-    "turnSpeed":0.785,
+    "turnSpeed":1.4,
     "maxHP":200,
     "cannonReloadTime":2.0,
     "bulletReloadTime":2.0,

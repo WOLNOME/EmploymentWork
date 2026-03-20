@@ -58,7 +58,14 @@ namespace Norm {
 		/// </summary>
 		/// <returns>ベクトルの長さ</returns>
 		float Length() const {
-			return std::sqrt(x * x + y * y + z * z);
+			return std::sqrtf(x * x + y * y + z * z);
+		}
+		/// <summary>
+		/// ベクトルの長さの2乗を返す
+		/// </summary>
+		/// <returns>ベクトルの長さの2乗</returns>
+		float LengthSq() const {
+			return x * x + y * y + z * z;
 		}
 		/// <summary>
 		/// ベクトルを正規化した時の値を返す
