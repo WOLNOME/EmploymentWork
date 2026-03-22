@@ -1,0 +1,126 @@
+{
+  "tutorial_intro": [
+    {
+      "cmds": [
+        { "cmd": "LockInput" },
+        { "cmd": "ShowMessage", "text": "訓練場へようこそ！ここで実戦の練習を積んでいきましょう！" }
+      ],
+      "wait": "MessageClosed"
+    }
+  ],
+
+  "tutorial_move": [
+    {
+      "cmds": [
+        { "cmd": "LockInput" },
+        { 
+          "cmd": "FixPlayer",
+          "pos": [0, 0, 0],
+          "rot": [0, 0, 0]
+        },
+        { "cmd": "ShowMessage", "text": "移動の訓練です" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        {
+          "cmd": "SpawnItem",
+          "count": 1,
+          "transforms": [
+            { "pos": [0, 0, 5], "rot": [0, 0, 0] }
+          ]
+        },
+        { "cmd": "ShowMessage", "text": "前方のアイテムをとってみましょう" },
+        { "cmd": "MoveCameraToTarget" }
+      ],
+      "wait": "CameraFinished"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "ShowMoveTutorialSprite" }
+      ],
+      "wait": "SpriteFinished"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "UnlockInput" },
+        {
+          "cmd": "FixPlayer",
+          "pos": [0, 0, 0],
+          "rot": [0, 0, 0]
+        },
+        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
+        { "cmd": "SetObjective", "text": "アイテムを取得", "count": 1 }
+      ],
+      "wait": "ObjectiveComplete"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "LockInput" },
+        { "cmd": "ShowMessage", "text": "ナイス！" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        {
+          "cmd": "SpawnItem",
+          "count": 5,
+          "transforms": [
+            { "pos": [2, 0, 6],  "rot": [0, 0, 0] },
+            { "pos": [-2, 0, 6], "rot": [0, 0, 0] },
+            { "pos": [3, 0, 10], "rot": [0, 0, 0] },
+            { "pos": [-3, 0, 10], "rot": [0, 0, 0] },
+            { "pos": [0, 0, 12], "rot": [0, 0, 0] }
+          ]
+        },
+        { "cmd": "ShowMessage", "text": "次はもっと多くのアイテムをとってみましょう" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "UnlockInput" },
+        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
+        { "cmd": "SetObjective", "text": "アイテムを取得", "count": 5 }
+      ],
+      "wait": "ObjectiveComplete"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "LockInput" },
+        { "cmd": "ShowMessage", "text": "お見事！" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "ShowMessage", "text": "実際の戦場でもこの訓練を思い出して駆けまわってみてくださいね" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます" }
+      ],
+      "wait": "MessageClosed"
+    },
+
+    {
+      "cmds": [
+        { "cmd": "CloseMessageWindow" }
+      ],
+      "wait": "CommandFinished"
+    }
+  ]
+}

@@ -747,6 +747,13 @@
     <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp">
       <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
     </ClCompile>
+    <ClCompile Include="application\system\tutorial\manager\TutorialManager.cpp" />
+    <ClCompile Include="application\system\tutorial\command\executor\CommandExecutor.cpp" />
+    <ClCompile Include="application\system\tutorial\command\MessageSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\InputSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\CameraSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1442,6 +1449,13 @@
     <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h">
       <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
     </ClInclude>
+    <ClInclude Include="application\system\tutorial\manager\TutorialManager.h" />
+    <ClInclude Include="application\system\tutorial\command\executor\CommandExecutor.h" />
+    <ClInclude Include="application\system\tutorial\command\MessageSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\InputSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\CameraSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\UISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

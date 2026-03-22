@@ -138,6 +138,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
     <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp" />
+    <ClCompile Include="application\system\tutorial\command\CameraSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\executor\CommandExecutor.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -324,6 +326,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp" />
     <ClCompile Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.cpp" />
     <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp" />
+    <ClCompile Include="application\system\tutorial\command\InputSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\MessageSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\manager\TutorialManager.cpp" />
+    <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -356,6 +363,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
     <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
     <ClInclude Include="application\ui\player\detail\EmphasisUI.h" />
+    <ClInclude Include="application\system\tutorial\command\CameraSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\executor\CommandExecutor.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
@@ -551,6 +560,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h" />
     <ClInclude Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.h" />
     <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h" />
+    <ClInclude Include="application\system\tutorial\command\InputSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\MessageSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
+    <ClInclude Include="application\system\tutorial\manager\TutorialManager.h" />
+    <ClInclude Include="application\system\tutorial\command\UISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
