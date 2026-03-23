@@ -1,9 +1,11 @@
 #pragma once
 #include <cstdint>
 #include <Vector3.h>
+#include <Sprite.h>
 
 /// 前方宣言
 class CameraManager;
+class PlayerUI;
 
 /// <summary>
 /// カメラ制御システム
@@ -61,6 +63,11 @@ public:
 	/// </summary>
 	/// <param name="manager">借用するCameraManager</param>
 	void SetCameraManager(CameraManager* manager) { cameraManager_ = manager; }
+	/// <summary>
+	/// PlayerUIの設定
+	/// </summary>
+	/// <param name="playerUI">借用するPlayerUI</param>
+	void SetPlayerUI(PlayerUI* playerUI) { playerUI_ = playerUI; }
 
 	/// <summary>
 	/// ターゲットトランスフォームの設定
@@ -79,6 +86,7 @@ private:
 	/// ============================== ///
 
 	CameraManager* cameraManager_ = nullptr;
+	PlayerUI* playerUI_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数
@@ -98,9 +106,10 @@ private:
 	Norm::Vector3 targetRot_ = {};
 
 	//暗転
+	std::unique_ptr<Norm::Sprite> blackSprite_ = nullptr;
 	float halfBlackOutTimer_ = 0.0f;
 	float halfBlackOutDuration_ = 0.5f;
-	bool isOut_ = false;
+	bool isIn_ = false;
 
 	//静止
 	float stillnessTimer_ = 0.0f;

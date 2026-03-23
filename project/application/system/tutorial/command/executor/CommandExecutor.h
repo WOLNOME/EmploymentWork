@@ -40,23 +40,27 @@ public:
 	 /// <summary>
 	/// InputSystemの取得
 	/// </summary>
-	InputSystem* GetInputSystem() { return input_.get(); }
+	InputSystem* GetInputSystem() { return inputSystem_.get(); }
 	/// <summary>
 	/// CameraSystemの取得
 	/// </summary>
-	CameraSystem* GetCameraSystem() { return camera_.get(); }
+	CameraSystem* GetCameraSystem() { return cameraSystem_.get(); }
 	/// <summary>
 	/// MessageSystemの取得
 	/// </summary>
-	MessageSystem* GetMessageSystem() { return message_.get(); }
+	MessageSystem* GetMessageSystem() { return messageSystem_.get(); }
 	/// <summary>
 	/// ObjectiveSystemの取得
 	/// </summary>
-	ObjectiveSystem* GetObjectiveSystem() { return objective_.get(); }
+	ObjectiveSystem* GetObjectiveSystem() { return objectiveSystem_.get(); }
 	/// <summary>
 	/// UISystemの取得
 	/// </summary>
-	UISystem* GetUISystem() { return ui_.get(); }
+	UISystem* GetUISystem() { return uiSystem_.get(); }
+	/// <summary>
+	/// ObjectSystemの取得
+	/// </summary>
+	ObjectSystem* GetObjectSystem() { return objectSystem_.get(); }
 
 private:
 	/// ============================== ///
