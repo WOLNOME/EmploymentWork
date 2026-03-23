@@ -8,41 +8,60 @@
 //メッセージ表示を管理するクラス
 class MessageSystem {
 public:
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-
-	//毎フレーム更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	//メッセージウィンドウを開く
+	/// <summary>
+	/// メッセージウィンドウを開く
+	/// </summary>
 	void Open();
-
-	//メッセージウィンドウを閉じる
+	/// <summary>
+	/// メッセージウィンドウを閉じる
+	/// </summary>
 	void Close();
-
-	//メッセージを表示する
+	/// <summary>
+	/// メッセージを表示する
+	/// </summary>
+	/// <param name="text">テキスト</param>
 	void ShowMessage(const std::string& text);
 
-	//ウィンドウの表示状態を取得
-	bool IsOpen()const;
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-	//ウィンドウの中央位置を設定
-	void SetCenterPosition(const Vector2& pos);
+	/// <summary>
+	/// ウィンドウの表示状態を取得
+	/// </summary>
+	/// <returns>ウィンドウの表示状態</returns>
+	bool GetIsOpen()const { return isOpen_; }
 
 private:
 
 	//メッセージウィンドウのスプライト
-	std::unique_ptr<Sprite> windowSprite_;
+	std::unique_ptr<Norm::Sprite> windowSprite_;
 
 	//テキスト描画用ハンドル
-	Handle textHandle_;
+	Norm::Handle textHandle_;
+	std::unique_ptr<Norm::Sprite> textSprite_;
 
-	//現在表示しているメッセージ文字列
-	std::string message_;
+	//メッセージ文字列
+	float inputTimer_ = 0.0f;
+	float inputDuration_ = 1.0f;
+	std::string allMessage_;
+	std::string currentMessage_;
 
 	//中央位置
-	Vector2 centerPos_;
+	Norm::Vector2 centerPos_;
 
 	//ウィンドウが開いているかどうか
 	bool isOpen_ = false;
