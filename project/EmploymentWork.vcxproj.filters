@@ -754,6 +754,7 @@
     <ClCompile Include="application\system\tutorial\command\CameraSystem.cpp" />
     <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
     <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1456,6 +1457,7 @@
     <ClInclude Include="application\system\tutorial\command\CameraSystem.h" />
     <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
     <ClInclude Include="application\system\tutorial\command\UISystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

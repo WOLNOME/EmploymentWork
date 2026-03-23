@@ -331,6 +331,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
     <ClCompile Include="application\system\tutorial\manager\TutorialManager.cpp" />
     <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -565,6 +566,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
     <ClInclude Include="application\system\tutorial\manager\TutorialManager.h" />
     <ClInclude Include="application\system\tutorial\command\UISystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

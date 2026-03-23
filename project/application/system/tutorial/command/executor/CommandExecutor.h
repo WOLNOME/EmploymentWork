@@ -1,6 +1,7 @@
 #pragma once
 #include <JsonUtil.h>
 #include <string>
+#include <cstdint>
 #include <memory>
 
 // 前方宣言

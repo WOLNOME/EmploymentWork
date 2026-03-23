@@ -122,7 +122,7 @@ void TutorialManager::ExecuteStep(const Step& step) {
 
 bool TutorialManager::CheckWaitCondition(const std::string& condition) const {
 
-    if (condition == "MessageClosed") {
+    /*if (condition == "MessageClosed") {
         return MessageSystem::IsClosed();
     }
     if (condition == "CameraFinished") {
@@ -136,7 +136,7 @@ bool TutorialManager::CheckWaitCondition(const std::string& condition) const {
     }
     if (condition == "CommandFinished") {
         return true;
-    }
+    }*/
 
     return false;
 }

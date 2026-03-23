@@ -1,78 +1,109 @@
 #pragma once
 #include <cstdint>
+#include <Vector3.h>
 
 /// 前方宣言
 class CameraManager;
-class UISystem;
 
 /// <summary>
 /// カメラ制御システム
 /// </summary>
 class CameraSystem {
+private:
+	/// ============================== ///
+	///		列挙体
+	/// ============================== ///
+
+	/// <summary>
+	/// 流れ
+	/// </summary>
+	enum class Flow {
+		Idle,			//未稼働
+		StartBlackOut,	//暗転（始め）
+		MoveCamera,		//カメラ移動
+		Stillness,		//静止
+		EndBlackOut		//暗転（終わり）
+	};
+
+
+
 public:
-    /// ============================== ///
-    ///		メンバ関数
-    /// ============================== ///
+	/// ============================== ///
+	///		メンバ関数
+	/// ============================== ///
 
-    /// <summary>
-    /// CameraManagerの設定
-    /// </summary>
-    /// <param name="manager">借用するCameraManager</param>
-    void SetCameraManager(CameraManager* manager);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
 
-    /// <summary>
-    /// UIシステムの設定
-    /// </summary>
-    /// <param name="ui">暗転制御用UI</param>
-    void SetUISystem(UISystem* ui);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update(float deltaTime);
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
 
-    /// <summary>
-    /// カメラトランスフォームの直接設定
-    /// </summary>
-    void SetTransform(
-        float posX, float posY, float posZ,
-        float rotX, float rotY, float rotZ);
+	/// <summary>
+	/// 演出中かの取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsDirection() const { return isDirection_; }
 
-    /// <summary>
-    /// カメラ演出の開始
-    /// </summary>
-    void StartCameraMove(
-        float targetPosX, float targetPosY, float targetPosZ,
-        float targetRotX, float targetRotY, float targetRotZ,
-        float duration);
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
 
-    /// <summary>
-    /// 演出中かの取得
-    /// </summary>
-    bool IsMoving() const;
+	/// <summary>
+	/// CameraManagerの設定
+	/// </summary>
+	/// <param name="manager">借用するCameraManager</param>
+	void SetCameraManager(CameraManager* manager) { cameraManager_ = manager; }
+
+	/// <summary>
+	/// ターゲットトランスフォームの設定
+	/// </summary>
+	void SetTargetTransform(Norm::Vector3 _pos, Norm::Vector3 _rot){}
 
 private:
-    /// ============================== ///
-    ///		内部処理
-    /// ============================== ///
+	/// ============================== ///
+	///		内部処理
+	/// ============================== ///
 
-    void BeginFadeOut();
-    void BeginFadeIn();
 
 private:
-    /// ============================== ///
-    ///		メンバ変数
-    /// ============================== ///
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
 
-    CameraManager* cameraManager_ = nullptr;
-    UISystem* ui_ = nullptr;
+	CameraManager* cameraManager_ = nullptr;
 
-    bool isMoving_ = false;
-    float moveTimer_ = 0.0f;
-    float moveDuration_ = 0.0f;
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
 
-    float startPos_[3] = {};
-    float startRot_[3] = {};
-    float targetPos_[3] = {};
-    float targetRot_[3] = {};
+	//演出全体
+	bool isDirection_ = false;
+	Flow flow_ = Flow::Idle;
+
+	//カメラ制御
+	float moveTimer_ = 0.0f;
+	float moveDuration_ = 5.0f;
+
+	Norm::Vector3 startPos_ = {};
+	Norm::Vector3 startRot_ = {};
+	Norm::Vector3 targetPos_ = {};
+	Norm::Vector3 targetRot_ = {};
+
+	//暗転
+	float halfBlackOutTimer_ = 0.0f;
+	float halfBlackOutDuration_ = 0.5f;
+	bool isOut_ = false;
+
+	//静止
+	float stillnessTimer_ = 0.0f;
+	float stillnessDuration_ = 2.0f;
+
 };

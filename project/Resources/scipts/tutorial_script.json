@@ -3,9 +3,16 @@
     {
       "cmds": [
         { "cmd": "LockInput" },
+        { "cmd": "OpenMessageWindow" },
         { "cmd": "ShowMessage", "text": "訓練場へようこそ！ここで実戦の練習を積んでいきましょう！" }
       ],
       "wait": "MessageClosed"
+    },
+    {
+      "cmds": [
+        { "cmd": "CloseMessageWindow" }
+      ],
+      "wait": "CommandFinished"
     }
   ],
 
@@ -13,6 +20,7 @@
     {
       "cmds": [
         { "cmd": "LockInput" },
+        { "cmd": "OpenMessageWindow" },
         { 
           "cmd": "FixPlayer",
           "pos": [0, 0, 0],
@@ -22,7 +30,6 @@
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         {
@@ -37,14 +44,12 @@
       ],
       "wait": "CameraFinished"
     },
-
     {
       "cmds": [
         { "cmd": "ShowMoveTutorialSprite" }
       ],
       "wait": "SpriteFinished"
     },
-
     {
       "cmds": [
         { "cmd": "UnlockInput" },
@@ -58,7 +63,6 @@
       ],
       "wait": "ObjectiveComplete"
     },
-
     {
       "cmds": [
         { "cmd": "LockInput" },
@@ -66,7 +70,6 @@
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         {
@@ -84,7 +87,6 @@
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         { "cmd": "UnlockInput" },
@@ -93,7 +95,6 @@
       ],
       "wait": "ObjectiveComplete"
     },
-
     {
       "cmds": [
         { "cmd": "LockInput" },
@@ -101,21 +102,18 @@
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         { "cmd": "ShowMessage", "text": "実際の戦場でもこの訓練を思い出して駆けまわってみてくださいね" }
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます" }
       ],
       "wait": "MessageClosed"
     },
-
     {
       "cmds": [
         { "cmd": "CloseMessageWindow" }
