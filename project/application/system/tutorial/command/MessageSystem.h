@@ -24,16 +24,21 @@ public:
 	/// <summary>
 	/// メッセージウィンドウを開く
 	/// </summary>
-	void Open();
+	bool OpenWindow();
 	/// <summary>
 	/// メッセージウィンドウを閉じる
 	/// </summary>
-	void Close();
+	bool CloseWindow();
 	/// <summary>
 	/// メッセージを表示する
 	/// </summary>
 	/// <param name="text">テキスト</param>
-	void ShowMessage(const std::string& text);
+	/// <param name="isAttachNextUI">次へ進むUIを付けるか</param>
+	void ShowText(const std::string& text,bool isAttachNextUI);
+	/// <summary>
+	/// メッセージを削除
+	/// </summary>
+	void ClearText();
 
 	/// ============================== ///
 	///		getter
@@ -43,26 +48,54 @@ public:
 	/// ウィンドウの表示状態を取得
 	/// </summary>
 	/// <returns>ウィンドウの表示状態</returns>
-	bool GetIsOpen()const { return isOpen_; }
+	bool GetIsOpenWindow()const { return isOpenWindow_; }
 
 private:
+	/// ============================== ///
+	///		メンバ関数（private）
+	/// ============================== ///
 
-	//メッセージウィンドウのスプライト
+	/// <summary>
+	/// テキストウィンドウの更新
+	/// </summary>
+	void UpdateWindow();
+	/// <summary>
+	/// テキストの更新
+	/// </summary>
+	void UpdateText();
+
+
+	/// ============================== ///
+	///		メンバ変数
+	/// ============================== ///
+
+	//中央位置
+	Norm::Vector2 centerPos_ = {640,90};
+
+	//ウィンドウのスプライト
 	std::unique_ptr<Norm::Sprite> windowSprite_;
+	//ウィンドウに必要な変数
+	bool isOpenWindow_ = false;
+	bool isDirectionWindow_ = false;
+	float dirTimer_ = 0.0f;			//表示・非表示に使うタイマー
+	float dirDuration_ = 0.1f;		//表示・非表示にかかる時間
 
-	//テキスト描画用ハンドル
+	//次に進むUIのスプライト
+	std::unique_ptr<Norm::Sprite> nextUISprite_;
+	//次に進むUIに必要な変数
+	bool isAttachNextUI_ = false;
+	float blinkingTimer_ = 0.0f;
+	float blinkingDuration_ = 0.5f;
+
+	//テキストのスプライト
 	Norm::Handle textHandle_;
 	std::unique_ptr<Norm::Sprite> textSprite_;
-
-	//メッセージ文字列
-	float inputTimer_ = 0.0f;
-	float inputDuration_ = 1.0f;
+	//テキストに必要な変数
+	bool isDisplayText_ = false;
+	float inputTimer_ = 0.0f;		//1文字入力のタイマー
+	float inputDuration_ = 0.05f;	//1文字入力にかかる時間
 	std::string allMessage_;
 	std::string currentMessage_;
 
-	//中央位置
-	Norm::Vector2 centerPos_;
 
-	//ウィンドウが開いているかどうか
-	bool isOpen_ = false;
 };

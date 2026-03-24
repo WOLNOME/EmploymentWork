@@ -1,83 +1,202 @@
 #include "MessageSystem.h"
+#include <algorithm>
+#include <StringUtility.h>
 #include <TextureManager.h>
+#include <TextTextureManager.h>
 #include <SpriteManager.h>
+#include <Input.h>
 
 using namespace Norm;
 
 void MessageSystem::Initialize() {
-
-	//ウィンドウ用テクスチャを読み込む
-	uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("messageWindow.png");
-
-	//スプライト生成
-	windowSprite_ = std::make_unique<Sprite>();
-	windowSprite_->Initialize(
-		SpriteTag{},
-		SpriteManager::GetInstance()->GenerateName("messageWindow"),
-		Order::Front5,
-		textureHandle
-	);
-
-	//テキスト
-
-	//初期状態では非表示
-	windowSprite_->SetIsDisplay(false);
-
-	//中央位置の初期化
 	centerPos_ = { 640.0f, 540.0f };
+
+	// ウィンドウ
+	{
+		uint32_t textureHandle =
+			TextureManager::GetInstance()->LoadTexture("messageWindow.png");
+
+		windowSprite_ = std::make_unique<Sprite>();
+		windowSprite_->Initialize(
+			SpriteTag{},
+			SpriteManager::GetInstance()->GenerateName("messageWindow"),
+			Order::Front4,
+			textureHandle
+		);
+
+		windowSprite_->SetAnchorPoint({ 0.5f,0.5f });
+		windowSprite_->SetPosition(centerPos_);
+		windowSprite_->SetIsDisplay(false);
+	}
+
+	// 次へUI
+	{
+		uint32_t textureHandle =
+			TextureManager::GetInstance()->LoadTexture("A.png");
+
+		nextUISprite_ = std::make_unique<Sprite>();
+		nextUISprite_->Initialize(
+			SpriteTag{},
+			SpriteManager::GetInstance()->GenerateName("nextUI"),
+			Order::Front5,
+			textureHandle
+		);
+
+		nextUISprite_->SetAnchorPoint({ 0.5f,0.5f });
+		nextUISprite_->SetPosition({ centerPos_.x + 480.0f, centerPos_.y + 62.0f });
+		nextUISprite_->SetIsDisplay(false);
+	}
+
+	// テキスト
+	{
+		TextParam param;
+		param.text = L"";
+		param.font = Font::UDDegitalNP_B;
+		param.fontStyle = FontStyle::Normal;
+		param.size = 32.0f;
+		param.color = { 1,1,1,1 };
+
+		textHandle_ =
+			TextTextureManager::GetInstance()->LoadTextTexture(param);
+
+		textSprite_ = std::make_unique<Sprite>();
+		textSprite_->Initialize(
+			TextTag{},
+			SpriteManager::GetInstance()->GenerateName("text"),
+			Order::Front5
+		);
+
+		textSprite_->SetTexture(textHandle_);
+		textSprite_->SetAnchorPoint({ 0.5f,0.5f });
+		textSprite_->SetPosition(centerPos_);
+		textSprite_->SetIsDisplay(false);
+	}
 }
 
 void MessageSystem::Update() {
+	//テキストウィンドウの更新
+	UpdateWindow();
+	//テキストの更新
+	UpdateText();
 
-	//ウィンドウが開いていない場合は何もしない
-	if (!isOpen_) {
-		return;
-	}
-
-	//ウィンドウの位置を中央に固定
-	windowSprite_->SetPosition(centerPos_);
-
-	//テキスト描画位置も中央に合わせる
-	//Handle側の座標設定関数がある前提
-	textHandle_.SetPosition(centerPos_);
 }
 
-void MessageSystem::Open() {
+bool MessageSystem::OpenWindow() {
 
-	//すでに開いている場合は何もしない
-	if (isOpen_) {
+	if (isOpenWindow_) {
+		return false;
+	}
+
+	isOpenWindow_ = true;
+	isDirectionWindow_ = true;
+
+	return true;
+}
+
+bool MessageSystem::CloseWindow() {
+
+	if (!isOpenWindow_) {
+		return false;
+	}
+
+	isOpenWindow_ = false;
+	isDirectionWindow_ = true;
+
+	return true;
+}
+
+void MessageSystem::ShowText(const std::string& text, bool isAttachNextUI) {
+	isDisplayText_ = true;
+
+	allMessage_ = text;
+	currentMessage_.clear();
+
+	inputTimer_ = 0.0f;
+
+	isAttachNextUI_ = isAttachNextUI;
+
+	blinkingTimer_ = 0.0f;
+}
+
+void MessageSystem::ClearText() {
+
+	allMessage_.clear();
+	currentMessage_.clear();
+	isDisplayText_ = false;
+}
+
+void MessageSystem::UpdateWindow() {
+	if (isOpenWindow_) {
+		dirTimer_ += kDeltaTime;
+	}
+	else {
+		dirTimer_ -= kDeltaTime;
+	}
+
+	dirTimer_ = std::clamp(dirTimer_, 0.0f, dirDuration_);
+
+	float alpha = dirTimer_ / dirDuration_;
+
+	windowSprite_->SetColor({ 1,1,1,alpha });
+	textSprite_->SetColor({ 1,1,1,alpha });
+
+	// フェードアウト完了
+	if (!isOpenWindow_ && dirTimer_ <= 0.0f) {
+		windowSprite_->SetIsDisplay(false);
+		textSprite_->SetIsDisplay(false);
+		nextUISprite_->SetIsDisplay(false);
+		isDirectionWindow_ = false;
 		return;
 	}
 
-	isOpen_ = true;
+	// フェードイン完了
+	if (isOpenWindow_ && dirTimer_ >= dirDuration_) {
+		isDirectionWindow_ = false;
+	}
 
-	//スプライトを表示
 	windowSprite_->SetIsDisplay(true);
+	textSprite_->SetIsDisplay(true);
 }
 
-void MessageSystem::Close() {
-
-	//すでに閉じている場合は何もしない
-	if (!isOpen_) {
+void MessageSystem::UpdateText() {
+	if (!isDisplayText_) {
 		return;
 	}
 
-	isOpen_ = false;
+	// タイプライター表示
+	if (currentMessage_.size() < allMessage_.size()) {
 
-	//スプライトを非表示
-	windowSprite_->SetIsDisplay(false);
+		inputTimer_ += kDeltaTime;
 
-	//表示中のテキストもクリア
-	message_.clear();
-}
+		if (inputTimer_ >= inputDuration_) {
 
-void MessageSystem::ShowMessage(const std::string& text) {
+			inputTimer_ = 0.0f;
 
-	//メッセージ内容を保存
-	message_ = text;
+			currentMessage_ +=
+				allMessage_[currentMessage_.size()];
 
-	//Handleに文字列を設定
-	textHandle_.SetText(message_);
+			TextTextureManager::GetInstance()->EditTextString(
+				textHandle_,
+				StringUtility::ConvertString(currentMessage_));
+		}
+	}
+	else if (isAttachNextUI_) {
 
-	//ウィンドウが閉じている場合でもテキストは更新される
+		nextUISprite_->SetIsDisplay(true);
+
+		blinkingTimer_ += kDeltaTime;
+
+		if (blinkingTimer_ >= blinkingDuration_) {
+			blinkingTimer_ = 0.0f;
+		}
+
+		float blinkAlpha =
+			std::sin((blinkingTimer_ / blinkingDuration_) * 3.1415f);
+
+		nextUISprite_->SetColor({ 1,1,1,blinkAlpha });
+
+		if (Input::GetInstance()->TriggerPadButton(GamePadButton::A)) {
+			ClearText();
+		}
+	}
 }
