@@ -223,6 +223,11 @@ namespace Norm {
 		/// </summary>
 		/// <returns>UVスクロールの終了フラグ</returns>
 		bool GetIsFinishedUVScroll() const { return uvScrollData_.isFinished; }
+		/// <summary>
+		/// 表示状態の取得
+		/// </summary>
+		/// <returns>表示状態</returns>
+		bool GetIsDisplay()const { return isDisplay_; }
 
 		/// ============================== ///
 		///		setter
@@ -303,6 +308,11 @@ namespace Norm {
 		/// </summary>
 		/// <param name="_sheetNum">シートの番号</param>
 		void SetUVScrollSheetNum(int _sheetNum) { uvScrollData_.currentSheetNum = _sheetNum; }
+		/// <summary>
+		/// UVスクロールが終了したかを設定
+		/// </summary>
+		/// <param name="_isFinishedUVScroll">UVスクロールが終了したか</param>
+		void SetIsFinishedUVScroll(bool _isFinishedUVScroll) { uvScrollData_.isFinished = _isFinishedUVScroll; }
 
 	private:
 		/// ============================== ///

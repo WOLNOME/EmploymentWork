@@ -3,10 +3,19 @@
 
 //アプリケーション
 #include <application/system/tutorial/command/executor/CommandExecutor.h>
+#include <application/system/CameraManager.h>
+#include <application/object/character/player/Player.h>
+#include <application/ui/player/PlayerUI.h>
+#include <application/object/character/item/manager/ItemManager.h>
+
 
 using namespace Norm;
 
 void TutorialManager::Initialize() {
+    //コマンドエグゼキューターの初期化
+    commandExecutor_ = std::make_unique<CommandExecutor>();
+    commandExecutor_->Initialize();
+
     sequences_.clear();
     currentSequence_ = nullptr;
     currentStepIndex_ = 0;
@@ -112,27 +121,65 @@ void TutorialManager::Start(const std::string& sequenceName) {
     currentWaitCondition_.clear();
 }
 
+void TutorialManager::SetCameraManager(CameraManager* cameraManager) {
+    commandExecutor_->SetCameraManager(cameraManager);
+}
+
+void TutorialManager::SetPlayer(Player* player) {
+    commandExecutor_->SetPlayer(player);
+}
+
+void TutorialManager::SetPlayerUI(PlayerUI* playerUI) {
+    commandExecutor_->SetPlayerUI(playerUI);
+}
+
+void TutorialManager::SetItemManager(ItemManager* itemManager) {
+    commandExecutor_->SetItemManager(itemManager);
+}
+
 void TutorialManager::ExecuteStep(const Step& step) {
     //現在ステップのコマンドを走査
     for (const CommandData& cmd : step.commands) {
-        //コマンドを実行
-        commandExecutor->ExecuteCommand(cmd.name);
+        // params を json にまとめる
+        json paramJson = json::object();
+        for (const auto& [key, value] : cmd.params) {
+            paramJson[key] = value;
+        }
+
+        // コマンド実行
+        commandExecutor_->ExecuteCommand(
+            cmd.name,
+            paramJson,
+            step.waitCondition
+        );
     }
 }
 
 bool TutorialManager::CheckWaitCondition(const std::string& condition) const {
 
-    if (condition == "MessageClosed") {
-        return MessageSystem::IsClosed();
+    if (condition == "MessageWindowOpened") {
+        //メッセージウィンドウが開かれていたらtrue
+        return commandExecutor_->GetMessageSystem()->GetIsOpenWindow();
+    }
+    if (condition == "MessageWindowClosed") {
+        //メッセージウィンドウが開かれていなかったらtrue
+        return !commandExecutor_->GetMessageSystem()->GetIsOpenWindow();
+    }
+    if (condition == "MessageTextFinished") {
+        bool flag = commandExecutor_->GetMessageSystem()->GetIsNextAdvance();
+        commandExecutor_->GetMessageSystem()->SetIsNextAdvance(false);
+        return flag;
     }
     if (condition == "CameraFinished") {
-        return CameraSystem::IsMoveFinished();
+        return !commandExecutor_->GetCameraSystem()->GetIsDirection();
     }
     if (condition == "SpriteFinished") {
-        return UISystem::IsTutorialSpriteFinished();
+        bool flag = commandExecutor_->GetUISystem()->GetIsTutorialSpriteFinished();
+        commandExecutor_->GetUISystem()->SetIsTutorialSpriteFinished(false);
+        return flag;
     }
     if (condition == "ObjectiveComplete") {
-        return ObjectiveSystem::IsComplete();
+        return commandExecutor_->GetObjectiveSystem()->CheckAllObjectiveComplete();
     }
     if (condition == "CommandFinished") {
         return true;

@@ -49,6 +49,21 @@ public:
 	/// </summary>
 	/// <returns>ウィンドウの表示状態</returns>
 	bool GetIsOpenWindow()const { return isOpenWindow_; }
+	/// <summary>
+	/// 次のステップへ進んだかを取得
+	/// </summary>
+	/// <returns>次のステップへ進んだか</returns>
+	bool GetIsNextAdvance()const { return isNextAdvance_; }
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 次のステップヘ進んだかをセット
+	/// </summary>
+	/// <param name="isNextAdvance">次のステップへ進んだか</param>
+	void SetIsNextAdvance(bool isNextAdvance) { isNextAdvance_ = isNextAdvance; }
 
 private:
 	/// ============================== ///
@@ -84,6 +99,7 @@ private:
 	std::unique_ptr<Norm::Sprite> nextUISprite_;
 	//次に進むUIに必要な変数
 	bool isAttachNextUI_ = false;
+	bool isNextAdvance_ = false;
 	float blinkingTimer_ = 0.0f;
 	float blinkingDuration_ = 0.5f;
 

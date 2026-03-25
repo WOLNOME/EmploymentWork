@@ -65,6 +65,11 @@ public:
 	/// <returns>鍵の数</returns>
 	int GetKeyNum() const { return keyNum_; }
 	/// <summary>
+	/// チュートリアルアイテムの数を取得する
+	/// </summary>
+	/// <returns>チュートリアルアイテムの数</returns>
+	int GetTutorialItemNum() const { return tutoItemNum_; }
+	/// <summary>
 	/// 砲弾のリロードタイムタイマーを取得する
 	/// </summary>
 	/// <returns>砲弾リロードタイムタイマー</returns>
@@ -144,6 +149,11 @@ public:
 	/// </summary>
 	/// <param name="_specialNum">必殺弾の数</param>
 	void SetSpecialNum(int _specialNum) { specialNum_ = _specialNum; }
+	/// <summary>
+	/// チュートリアルアイテムの数をセット
+	/// </summary>
+	/// <param name="_trItemNum">チュートリアルアイテムの数</param>
+	void SetTutorialItemNum(int _tutoItemNum) { tutoItemNum_ = _tutoItemNum; }
 	/// <summary>
 	/// ダメージフラグのセット
 	/// </summary>
@@ -225,6 +235,7 @@ private:
 	//変数
 	int hp_;						//現在のHP
 	int keyNum_;					//取得した鍵の数
+	int tutoItemNum_;					//取得したチュートリアルアイテムの数
 
 	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
 

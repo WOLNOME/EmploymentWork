@@ -48,7 +48,13 @@ public:
 	void Update();
 
 	/// <summary>
-	/// 目標のクリア
+	/// 全ての目標が達成されているかを確認
+	/// </summary>
+	/// <returns></returns>
+	bool CheckAllObjectiveComplete();
+
+	/// <summary>
+	/// 目標のクリア（削除）
 	/// </summary>
 	void ClearObjective();
 

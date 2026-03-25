@@ -5,8 +5,14 @@
 #include <unordered_map>
 #include <memory>
 
-//前方宣言
-class CommandExecutor;
+//アプリケーション
+#include <application/system/tutorial/command/executor/CommandExecutor.h>
+
+// 前方宣言
+class CameraManager;
+class Player;
+class PlayerUI;
+class ItemManager;
 
 /// <summary>
 /// チュートリアルマネージャー
@@ -69,6 +75,34 @@ public:
     /// </summary>
     bool IsRunning() const { return currentSequence_; }
 
+    /// ============================== ///
+    ///		setter
+    /// ============================== ///
+
+    /// <summary>
+    /// カメラマネージャーを設定します
+    /// </summary>
+    /// <param name="cameraManager">カメラマネージャーのインスタンス</param>
+    void SetCameraManager(CameraManager* cameraManager);
+
+    /// <summary>
+    /// プレイヤーを設定します
+    /// </summary>
+    /// <param name="player">プレイヤーのインスタンス</param>
+    void SetPlayer(Player* player);
+
+    /// <summary>
+    /// プレイヤーUIを設定します
+    /// </summary>
+    /// <param name="playerUI">プレイヤーUIのインスタンス</param>
+    void SetPlayerUI(PlayerUI* playerUI);
+
+    /// <summary>
+    /// アイテムマネージャーを設定します
+    /// </summary>
+    /// <param name="itemManager">アイテムマネージャーのインスタンス</param>
+    void SetItemManager(ItemManager* itemManager);
+
 private:
     /// ============================== ///
     ///		メンバ関数(private)
@@ -89,15 +123,11 @@ private:
 
 private:
     /// ============================== ///
-    ///		インスタンス
-    /// ============================== ///
-
-    CommandExecutor* commandExecutor;
-
-
-    /// ============================== ///
     ///		メンバ変数
     /// ============================== ///
+
+    //コマンドエグゼキューター
+    std::unique_ptr<CommandExecutor> commandExecutor_ = nullptr;
 
     //全シーケンス
     std::unordered_map<std::string, Sequence> sequences_;

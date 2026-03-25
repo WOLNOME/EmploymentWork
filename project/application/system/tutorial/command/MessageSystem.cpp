@@ -196,6 +196,7 @@ void MessageSystem::UpdateText() {
 		nextUISprite_->SetColor({ 1,1,1,blinkAlpha });
 
 		if (Input::GetInstance()->TriggerPadButton(GamePadButton::A)) {
+			isNextAdvance_ = true;
 			ClearText();
 		}
 	}

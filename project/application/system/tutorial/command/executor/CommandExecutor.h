@@ -4,13 +4,19 @@
 #include <cstdint>
 #include <memory>
 
+//アプリケーション
+#include <application/system/tutorial/command/InputSystem.h>
+#include <application/system/tutorial/command/CameraSystem.h>
+#include <application/system/tutorial/command/MessageSystem.h>
+#include <application/system/tutorial/command/ObjectiveSystem.h>
+#include <application/system/tutorial/command/UISystem.h>
+#include <application/system/tutorial/command/ObjectSystem.h>
+
 // 前方宣言
-class InputSystem;
-class CameraSystem;
-class MessageSystem;
-class ObjectiveSystem;
-class UISystem;
-class ObjectSystem;
+class CameraManager;
+class Player;
+class PlayerUI;
+class ItemManager;
 
 /// <summary>
 /// コマンド実行クラス
@@ -31,7 +37,8 @@ public:
 	/// </summary>
 	/// <param name="_name">コマンド名</param>
 	/// <param name="_param">コマンドパラメーター</param>
-	void ExecuteCommand(const std::string& _name, const json& _param);
+	/// <param name="_waitType">終了条件/param>
+	void ExecuteCommand(const std::string& _name, const json& _param, const std::string& _waitType);
 
 	/// ============================== ///
 	///		getter
@@ -61,6 +68,34 @@ public:
 	/// ObjectSystemの取得
 	/// </summary>
 	ObjectSystem* GetObjectSystem() { return objectSystem_.get(); }
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// カメラマネージャーを設定します
+	/// </summary>
+	/// <param name="cameraManager">カメラマネージャーのインスタンス</param>
+	void SetCameraManager(CameraManager* cameraManager);
+
+	/// <summary>
+	/// プレイヤーを設定します
+	/// </summary>
+	/// <param name="player">プレイヤーのインスタンス</param>
+	void SetPlayer(Player* player);
+
+	/// <summary>
+	/// プレイヤーUIを設定します
+	/// </summary>
+	/// <param name="playerUI">プレイヤーUIのインスタンス</param>
+	void SetPlayerUI(PlayerUI* playerUI);
+
+	/// <summary>
+	/// アイテムマネージャーを設定します
+	/// </summary>
+	/// <param name="itemManager">アイテムマネージャーのインスタンス</param>
+	void SetItemManager(ItemManager* itemManager);
 
 private:
 	/// ============================== ///

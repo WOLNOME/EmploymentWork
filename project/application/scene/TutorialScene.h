@@ -5,7 +5,7 @@
 #include "application/system/CameraManager.h"
 #include "application/object/environment/Skydome.h"
 #include "application/object/environment/Ground.h"
-#include "application/system/TutorialSystem.h"
+#include "application/system/tutorial/TutorialSystem.h"
 
 /// <summary>
 /// チュートリアルシーン全般を管理するクラス

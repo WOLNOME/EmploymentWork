@@ -648,7 +648,7 @@
     <ClCompile Include="application\system\TimeScaleManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\TutorialSystem.cpp">
+    <ClCompile Include="application\system\tutorial\TutorialSystem.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\scene\DIR_BossAppearScene.cpp">
@@ -1351,7 +1351,7 @@
     <ClInclude Include="application\system\TimeScaleManager.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\TutorialSystem.h">
+    <ClInclude Include="application\system\tutorial\TutorialSystem.h">
       <Filter>application\system</Filter>
     </ClInclude>
     <ClInclude Include="application\scene\DIR_BossAppearScene.h">
