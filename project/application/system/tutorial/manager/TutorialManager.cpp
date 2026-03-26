@@ -8,7 +8,6 @@
 #include <application/ui/player/PlayerUI.h>
 #include <application/object/character/item/manager/ItemManager.h>
 
-
 using namespace Norm;
 
 void TutorialManager::Initialize() {
@@ -31,6 +30,7 @@ void TutorialManager::Update() {
 
     // 待機中
     if (isWaiting_) {
+        //終了条件のチェック
         if (CheckWaitCondition(currentWaitCondition_)) {
             isWaiting_ = false;
             currentStepIndex_++;

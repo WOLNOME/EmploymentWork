@@ -14,7 +14,7 @@ void MessageSystem::Initialize() {
 	// ウィンドウ
 	{
 		uint32_t textureHandle =
-			TextureManager::GetInstance()->LoadTexture("messageWindow.png");
+			TextureManager::GetInstance()->LoadTexture("tutorial_messageWindow.png");
 
 		windowSprite_ = std::make_unique<Sprite>();
 		windowSprite_->Initialize(

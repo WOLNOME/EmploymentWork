@@ -70,7 +70,7 @@ public:
 	/// <summary>
 	/// ターゲットトランスフォームの設定
 	/// </summary>
-	void SetTargetTransform(Norm::Vector3 _pos, Norm::Vector3 _rot){}
+	void SetTargetTransform(const Norm::Vector3& _pos, const Norm::Vector3& _rot);
 
 private:
 	/// ============================== ///

@@ -68,7 +68,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	/// <param name="_filePath">レベルデータのファイルパス</param>
+	void Initialize(const std::string& _filePath);
 	/// <summary>
 	/// 更新
 	/// </summary>

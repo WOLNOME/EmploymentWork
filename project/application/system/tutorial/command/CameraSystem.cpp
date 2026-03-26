@@ -169,7 +169,7 @@ void CameraSystem::Update() {
 	}
 }
 
-void CameraSystem::SetTargetTransform(Vector3 _pos, Vector3 _rot) {
+void CameraSystem::SetTargetTransform(const Vector3& _pos, const Vector3& _rot) {
 
 	//外部依存チェック
 	assert(cameraManager_ && "カメラマネージャーがセットされていません");

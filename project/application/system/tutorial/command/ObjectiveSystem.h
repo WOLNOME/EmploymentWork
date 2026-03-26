@@ -23,7 +23,7 @@ struct Objective {
 	ObjectiveType type;
 	std::unique_ptr<Norm::Sprite> chcekMark;
 	std::unique_ptr<Norm::Sprite> text;
-	Handle textHandle;
+	Norm::Handle textHandle;
 	int current = 0;
 	int target = 0;
 	bool completed = false;

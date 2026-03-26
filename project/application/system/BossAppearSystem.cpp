@@ -26,7 +26,7 @@ void BossAppearSystem::Initialize() {
 
 	//レベルローダーの生成と初期化
 	levelLoader_ = std::make_unique<LevelLoader>();
-	levelLoader_->Initialize();
+	levelLoader_->Initialize("Resources/levelData/levelData");
 	//ブラックボードに登録
 	blackBoard_->SetValue<Object3d*>("SealedBox_Object", levelLoader_->GetSealedBoxData()->GetObject3d());
 

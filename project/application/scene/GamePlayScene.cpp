@@ -67,8 +67,7 @@ void GamePlayScene::Initialize() {
 	//インスタンスの初期化
 	skydome_->Initialize();
 	ground_->Initialize();
-	levelLoader_->Initialize();
-
+	levelLoader_->Initialize("Resources/levelData/levelData");
 	player_->Initialize();
 	playerWeaponManager_->Initialize();
 	enemyManager_->Initialize();
@@ -84,6 +83,8 @@ void GamePlayScene::Initialize() {
 	playerWeaponManager_->SetCameraManager(cameraManager_.get());
 	playerUI_->SetCameraManager(cameraManager_.get());
 	enemyUI_->SetCameraManager(cameraManager_.get());
+	enemyManager_->SetCameraManager(cameraManager_.get());
+	enemyWeaponManager_->SetCameraManager(cameraManager_.get());
 
 	//その他インスタンスのセット
 	startDirection_->SetMessageUI(messageUI_.get());
@@ -99,12 +100,10 @@ void GamePlayScene::Initialize() {
 	enemyManager_->SetEnemyWeaponManager(enemyWeaponManager_.get());
 	enemyManager_->SetMessageUI(messageUI_.get());
 	enemyManager_->SetEnemyUI(enemyUI_.get());
-	enemyManager_->SetCameraManager(cameraManager_.get());
 	playerWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetEnemyManager(enemyManager_.get());
 	enemyWeaponManager_->SetPlayer(player_.get());
 	enemyWeaponManager_->SetPlayerUI(playerUI_.get());
-	enemyWeaponManager_->SetCameraManager(cameraManager_.get());
 	playerUI_->SetPlayer(player_.get());
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	playerUI_->SetItemManager(itemManager_.get());
@@ -240,12 +239,6 @@ void GamePlayScene::DebugWithImGui() {
 	messageUI_->DebugWithImGui();
 	//ポーズシステムのImGui
 	pauseSystem_->Debug();
-
-	ImGui::Begin("距離");
-	float distance = Vector3(player_->GetWorldTransform().GetTranslate() - enemyManager_->GetBosses()[0]->GetWorldTransform().GetTranslate()).Length();
-	ImGui::Text("%f", distance);
-	ImGui::End();
-
 
 #endif // _DEBUG
 }

@@ -3,9 +3,9 @@
 
 using namespace Norm;
 
-void LevelLoader::Initialize() {
+void LevelLoader::Initialize(const std::string& _filePath) {
 	//jsonデータを読み込む
-	json data = JsonUtil::GetJsonData("Resources/levelData/levelData");
+	json data = JsonUtil::GetJsonData(_filePath);
 
 	//各オブジェクトの生成
 	levelData_.tree = std::make_unique<LevelTree>();

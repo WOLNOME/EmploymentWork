@@ -43,7 +43,7 @@ void TutorialScene::Initialize() {
 	system_->Initialize();
 
 	//その他インスタンスのセット
-
+	system_->SetCameraManager(cameraManager_.get());
 }
 
 void TutorialScene::Finalize() {
@@ -54,7 +54,7 @@ void TutorialScene::Update() {
 	BaseScene::Update();
 
 	//インスタンスの更新
-	system_->Update(); //
+	system_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	cameraManager_->Update();
@@ -65,6 +65,8 @@ void TutorialScene::DebugWithImGui() {
 #ifdef _DEBUG
 	//カメラのImGui
 	cameraManager_->DebugWithImGui();
+	//システム
+	system_->DebugWithImGui();
 
 #endif // _DEBUG
 }
