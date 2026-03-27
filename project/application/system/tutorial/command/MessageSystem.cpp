@@ -1,6 +1,5 @@
 #include "MessageSystem.h"
 #include <algorithm>
-#include <StringUtility.h>
 #include <TextureManager.h>
 #include <TextTextureManager.h>
 #include <SpriteManager.h>
@@ -9,7 +8,6 @@
 using namespace Norm;
 
 void MessageSystem::Initialize() {
-	centerPos_ = { 640.0f, 540.0f };
 
 	// ウィンドウ
 	{
@@ -82,39 +80,41 @@ void MessageSystem::Update() {
 }
 
 bool MessageSystem::OpenWindow() {
-
 	if (isOpenWindow_) {
 		return false;
 	}
 
 	isOpenWindow_ = true;
 	isDirectionWindow_ = true;
+	isWindowOpened_ = false;
 
 	return true;
 }
 
 bool MessageSystem::CloseWindow() {
-
 	if (!isOpenWindow_) {
 		return false;
 	}
 
 	isOpenWindow_ = false;
 	isDirectionWindow_ = true;
+	isWindowClosed_ = false;
 
 	return true;
 }
 
-void MessageSystem::ShowText(const std::string& text, bool isAttachNextUI) {
-	isDisplayText_ = true;
-
+void MessageSystem::ShowText(const std::wstring& text, bool isAttachNextUI) {
 	allMessage_ = text;
 	currentMessage_.clear();
 
+	TextTextureManager::GetInstance()->EditTextString(
+		textHandle_, currentMessage_);
+
+	textSprite_->SetIsDisplay(true);
+	nextUISprite_->SetIsDisplay(isAttachNextUI);
+
 	inputTimer_ = 0.0f;
-
 	isAttachNextUI_ = isAttachNextUI;
-
 	blinkingTimer_ = 0.0f;
 }
 
@@ -122,10 +122,16 @@ void MessageSystem::ClearText() {
 
 	allMessage_.clear();
 	currentMessage_.clear();
-	isDisplayText_ = false;
+	textSprite_->SetIsDisplay(false);
 }
 
 void MessageSystem::UpdateWindow() {
+
+	// ウィンドウ演出中でなければ何もしない
+	if (!isDirectionWindow_) {
+		return;
+	}
+
 	if (isOpenWindow_) {
 		dirTimer_ += kDeltaTime;
 	}
@@ -137,29 +143,33 @@ void MessageSystem::UpdateWindow() {
 
 	float alpha = dirTimer_ / dirDuration_;
 
+	// ウィンドウの透明度更新
 	windowSprite_->SetColor({ 1,1,1,alpha });
-	textSprite_->SetColor({ 1,1,1,alpha });
 
 	// フェードアウト完了
 	if (!isOpenWindow_ && dirTimer_ <= 0.0f) {
 		windowSprite_->SetIsDisplay(false);
-		textSprite_->SetIsDisplay(false);
 		nextUISprite_->SetIsDisplay(false);
+
 		isDirectionWindow_ = false;
+		isWindowClosed_ = true;
+
 		return;
 	}
 
 	// フェードイン完了
 	if (isOpenWindow_ && dirTimer_ >= dirDuration_) {
 		isDirectionWindow_ = false;
+		isWindowOpened_ = true;
 	}
 
 	windowSprite_->SetIsDisplay(true);
-	textSprite_->SetIsDisplay(true);
 }
 
 void MessageSystem::UpdateText() {
-	if (!isDisplayText_) {
+	Input* input = Input::GetInstance();
+
+	if (!textSprite_->GetIsDisplay()) {
 		return;
 	}
 
@@ -176,14 +186,10 @@ void MessageSystem::UpdateText() {
 				allMessage_[currentMessage_.size()];
 
 			TextTextureManager::GetInstance()->EditTextString(
-				textHandle_,
-				StringUtility::ConvertString(currentMessage_));
+				textHandle_,currentMessage_);
 		}
 	}
 	else if (isAttachNextUI_) {
-
-		nextUISprite_->SetIsDisplay(true);
-
 		blinkingTimer_ += kDeltaTime;
 
 		if (blinkingTimer_ >= blinkingDuration_) {
@@ -195,7 +201,7 @@ void MessageSystem::UpdateText() {
 
 		nextUISprite_->SetColor({ 1,1,1,blinkAlpha });
 
-		if (Input::GetInstance()->TriggerPadButton(GamePadButton::A)) {
+		if (input->TriggerKey(DIK_SPACE)||input->TriggerPadButton(GamePadButton::A)) {
 			isNextAdvance_ = true;
 			ClearText();
 		}

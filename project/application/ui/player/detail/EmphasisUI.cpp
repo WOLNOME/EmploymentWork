@@ -61,6 +61,9 @@ void EmphasisUI::UpdateIcon() {
 		else if (type == "key") {
 			height3d = param_["emphasis"]["iconHeight3D"]["key"].get<float>();
 		}
+		else if (type == "tutorialItem") {
+			height3d = param_["emphasis"]["iconHeight3D"]["tutorialItem"].get<float>();
+		}
 		//ワールド座標を作る（高さを加算）
 		Vector3 worldPos = subjectPos;
 		worldPos.y += height3d;
@@ -127,5 +130,22 @@ void EmphasisUI::UpdateIcon() {
 		}
 
 		processAttachEmphasisIcon(key->GetWorldTransform().GetTranslate(), "key", spriteIndex);
+	}
+	//チュートリアルアイテム
+	for (const auto& tutorialItem : itemManager_->GetTutorialCollectibleItmes()) {
+		//生存状態でないなら次へ
+		if (tutorialItem->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processAttachEmphasisIcon(tutorialItem->GetWorldTransform().GetTranslate(), "tutorialItem", spriteIndex);
+	}
+}
+
+void EmphasisUI::SetIsDisplay(bool _isDisplay) {
+	for (auto& icon : icons_) {
+		if (icon) {
+			icon->SetIsDisplay(_isDisplay);
+		}
 	}
 }

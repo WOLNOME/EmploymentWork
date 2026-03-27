@@ -76,3 +76,8 @@ void PlayerHPUI::AttachBlinking(const Vector4& _color) {
 	spriteBar_->SetColor(_color);
 	spriteHPText_->SetColor(_color);
 }
+
+void PlayerHPUI::SetIsDisplay(bool _isDisplay) {
+	spriteBar_->SetIsDisplay(_isDisplay);
+	spriteHPText_->SetIsDisplay(_isDisplay);
+}

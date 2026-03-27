@@ -12,7 +12,7 @@ using namespace Norm;
 
 void ObjectiveSystem::Initialize() {
 
-	const Vector2 basePos = { 50.0f, 100.0f };
+	const Vector2 basePos = { 920.0f, 200.0f };
 	const float offsetY = 40.0f;
 
 	for (size_t i = 0; i < objectives_.size(); ++i) {
@@ -34,22 +34,22 @@ void ObjectiveSystem::Initialize() {
 			uint32_t tex =
 				TextureManager::GetInstance()->LoadTexture("checkMark.png");
 
-			obj.chcekMark = std::make_unique<Sprite>();
+			obj.checkMark = std::make_unique<Sprite>();
 
-			obj.chcekMark->Initialize(
+			obj.checkMark->Initialize(
 				UVScrollTag{},
 				SpriteManager::GetInstance()->GenerateName("objectiveCheck"),
 				Order::Front5,
 				10,
-				0.1f,
+				0.05f,
 				false,
 				tex
 			);
 
-			obj.chcekMark->SetUVScrollSheetNum(0);
-			obj.chcekMark->SetAnchorPoint({ 0.5f, 0.5f });
-			obj.chcekMark->SetPosition({ pos.x - 30.0f, pos.y });
-			obj.chcekMark->SetIsDisplay(false);
+			obj.checkMark->SetUVScrollSheetNum(0);
+			obj.checkMark->SetAnchorPoint({ 0.5f, 0.5f });
+			obj.checkMark->SetPosition({ pos.x - 30.0f, pos.y });
+			obj.checkMark->SetIsDisplay(false);
 		}
 
 		// テキスト生成
@@ -107,9 +107,9 @@ void ObjectiveSystem::Update() {
 			//目標数に達したら
 			if (obj.current >= obj.target) {
 				//アニメーションが終了していたら稼働しない
-				if (!obj.chcekMark->GetIsFinishedUVScroll()) {
+				if (!obj.checkMark->GetIsFinishedUVScroll()) {
 					//チェックのスプライトアニメーションを稼働
-					obj.chcekMark->SetIsPlayUVScroll(true);
+					obj.checkMark->SetIsPlayUVScroll(true);
 				}
 				else {
 					//目標の達成フラグを立てる
@@ -154,13 +154,18 @@ void ObjectiveSystem::ClearObjective() {
 		obj.completed = false;
 
 		obj.text->SetIsDisplay(false);
-		obj.chcekMark->SetIsDisplay(false);
-		obj.chcekMark->SetIsFinishedUVScroll(false);
+		obj.checkMark->SetIsDisplay(false);
+		obj.checkMark->SetIsFinishedUVScroll(false);
+		obj.checkMark->SetIsPlayUVScroll(false);
+		obj.checkMark->SetUVScrollSheetNum(0);
 
+		TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"");
 	}
 }
 
 void ObjectiveSystem::AddCollectObjective(int target) {
+	//プレイヤーの獲得アイテム数を0にリセット
+	player_->SetTutorialItemNum(0);
 
 	for (auto& obj : objectives_) {
 
@@ -173,7 +178,7 @@ void ObjectiveSystem::AddCollectObjective(int target) {
 		obj.completed = false;
 		
 		obj.text->SetIsDisplay(true);
-		obj.chcekMark->SetIsDisplay(true);
+		obj.checkMark->SetIsDisplay(true);
 
 		return;
 	}

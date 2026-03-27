@@ -2,6 +2,7 @@
 #include <cassert>
 #include <Vector3.h>
 #include <TextureManager.h>
+#include <StringUtility.h>
 
 //アプリケーション
 #include <application/system/CameraManager.h>
@@ -29,6 +30,15 @@ void CommandExecutor::Initialize() {
 	objectSystem_->Initialize();
 }
 
+void CommandExecutor::Update() {
+	//各システムの更新
+	messageSystem_->Update();
+	cameraSystem_->Update();
+	uiSystem_->Update();
+	objectiveSystem_->Update();
+	objectSystem_->Update();
+}
+
 void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _param, const std::string& _waitType) {
 	//チェック
 	assert(inputSystem_ && "InputSystem が初期化されていません");
@@ -47,8 +57,8 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 	}
 	else if (_name == "ShowMessage") {
 		bool isManualNext = (_waitType == "MessageTextFinished");
-
-		messageSystem_->ShowText(_param["text"].get<std::string>(), isManualNext);
+		std::wstring text = StringUtility::ConvertString(_param["text"].get<std::string>());
+		messageSystem_->ShowText(text, isManualNext);
 	}
 	else if (_name == "OpenMessageWindow") {
 		messageSystem_->OpenWindow();
@@ -123,6 +133,8 @@ void CommandExecutor::SetCameraManager(CameraManager* cameraManager) {
 }
 
 void CommandExecutor::SetPlayer(Player* player) {
+	inputSystem_->SetPlayer(player);
+	cameraSystem_->SetPlayer(player);
 	objectiveSystem_->SetPlayer(player);
 	objectSystem_->SetPlayer(player);
 }

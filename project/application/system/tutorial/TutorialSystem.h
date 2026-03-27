@@ -15,6 +15,7 @@
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
 #include <application/system/TimeScaleManager.h>
+#include <application/system/tutorial/pause/Tuto_PauseSystem.h>
 
 //前方宣言
 class CameraManager;
@@ -84,6 +85,9 @@ private:
 	std::unique_ptr<EnemyUI> enemyUI_ = nullptr;
 	//メッセージUI
 	std::unique_ptr<MessageUI> messageUI_ = nullptr;
+
+	//ポーズ
+	std::unique_ptr<Tuto_PauseSystem> pauseSystem_ = nullptr;
 
 
 

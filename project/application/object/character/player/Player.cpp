@@ -181,17 +181,19 @@ void Player::Move() {
 	Vector3 inputDir = { 0.0f, 0.0f, 0.0f };
 
 	// キー & スティック入力を合成
-	if (input_->PushKey(DIK_W) || input_->GetLStickDir().y > 0.0f) {
-		inputDir += camForward;
-	}
-	if (input_->PushKey(DIK_S) || input_->GetLStickDir().y < 0.0f) {
-		inputDir -= camForward;
-	}
-	if (input_->PushKey(DIK_D) || input_->GetLStickDir().x > 0.0f) {
-		inputDir += camRight;
-	}
-	if (input_->PushKey(DIK_A) || input_->GetLStickDir().x < 0.0f) {
-		inputDir -= camRight;
+	if (isInput_) {
+		if (input_->PushKey(DIK_W) || input_->GetLStickDir().y > 0.0f) {
+			inputDir += camForward;
+		}
+		if (input_->PushKey(DIK_S) || input_->GetLStickDir().y < 0.0f) {
+			inputDir -= camForward;
+		}
+		if (input_->PushKey(DIK_D) || input_->GetLStickDir().x > 0.0f) {
+			inputDir += camRight;
+		}
+		if (input_->PushKey(DIK_A) || input_->GetLStickDir().x < 0.0f) {
+			inputDir -= camRight;
+		}
 	}
 
 	float speed = param_["speed"];
@@ -319,23 +321,25 @@ void Player::CannonAttack() {
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
-		//リロードタイムをセット
-		cannonReloadTimer_ = param_["cannonReloadTime"];
-		//初期位置と発射方向の計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 cannonPos = worldTransform_.GetTranslate();
-		cannonPos.y += 7.2f;	//砲弾の初期位置を調整
-		Vector3 cannonDirection = currentDir;
-		//スポーン
-		playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
+	if (isInput_) {
+		if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
+			//リロードタイムをセット
+			cannonReloadTimer_ = param_["cannonReloadTime"];
+			//初期位置と発射方向の計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 cannonPos = worldTransform_.GetTranslate();
+			cannonPos.y += 7.2f;	//砲弾の初期位置を調整
+			Vector3 cannonDirection = currentDir;
+			//スポーン
+			playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
+		}
 	}
 }
 
@@ -378,29 +382,31 @@ void Player::BulletAttack() {
 	}
 
 	//左クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
-		//間隔計測用タイマーをセット
-		float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
-		bulletFireIntervalTimer_ = bulletFireIntervalTime;
-		//現在の銃弾数を減らす
-		bulletNum_--;
-		//銃弾数が0になったらリロードタイマーをセット
-		if (bulletNum_ <= 0) {
-			bulletReloadTimer_ = param_["bulletReloadTime"];
+	if (isInput_) {
+		if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
+			//間隔計測用タイマーをセット
+			float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
+			bulletFireIntervalTimer_ = bulletFireIntervalTime;
+			//現在の銃弾数を減らす
+			bulletNum_--;
+			//銃弾数が0になったらリロードタイマーをセット
+			if (bulletNum_ <= 0) {
+				bulletReloadTimer_ = param_["bulletReloadTime"];
+			}
+			//初期位置と発射方向を計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 bulletPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
+			bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+			//スポーン
+			playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 		}
-		//初期位置と発射方向を計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 bulletPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
-		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
-		//スポーン
-		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 	}
 }
 
@@ -433,25 +439,27 @@ void Player::SpecialAttack() {
 	}
 
 	//右クリックで必殺弾を発射
-	if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
-		//間隔計測用タイマーをセット
-		float specialFireIntervalTime = param_["specialFireIntervalTime"];
-		specialFireIntervalTimer_ = specialFireIntervalTime;
-		//必殺弾の数を減らす
-		specialNum_--;
-		//初期位置と発射方向を計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 specialPos = worldTransform_.GetTranslate();
-		specialPos.y += 7.2f;	//必殺弾の初期位置を調整
-		//スポーン
-		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
+	if (isInput_) {
+		if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
+			//間隔計測用タイマーをセット
+			float specialFireIntervalTime = param_["specialFireIntervalTime"];
+			specialFireIntervalTimer_ = specialFireIntervalTime;
+			//必殺弾の数を減らす
+			specialNum_--;
+			//初期位置と発射方向を計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 specialPos = worldTransform_.GetTranslate();
+			specialPos.y += 7.2f;	//必殺弾の初期位置を調整
+			//スポーン
+			playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
+		}
 	}
 }
 
@@ -475,14 +483,21 @@ void Player::CameraAlgorithm() {
 	//アクティブでないなら処理をしない
 	if (state_ != State::kActive)
 		return;
+	//プレイヤー側のカメラ処理を行わないなら
+	if (isCameraFree_)
+		return;
 
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue;
-	Vector2 mouseMoveValue = input_->GetMousePosition();
-	Vector2 padMoveValue = {
-		input_->GetRStickDir().x * 20.0f,
-		input_->GetRStickDir().y * 10.0f,
-	};
+	Vector2 mouseMoveValue = {};
+	Vector2 padMoveValue = {};
+	if (isInput_) {
+		mouseMoveValue = input_->GetMousePosition();
+		padMoveValue = {
+			input_->GetRStickDir().x * 20.0f,
+			input_->GetRStickDir().y * 10.0f,
+		};
+	}
 	padMoveValue.y *= -1.0f;
 	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
@@ -493,6 +508,7 @@ void Player::CameraAlgorithm() {
 		newRotate.y += moveValue.x * 0.0005f;
 		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(newRotate);
 	}
+
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
 	const float minPitch = -(pi / 9.0f);		//上向き制限

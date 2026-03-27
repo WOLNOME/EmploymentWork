@@ -28,7 +28,7 @@
         { "cmd": "OpenMessageWindow" },
         {
           "cmd": "FixPlayer",
-          "pos": [0, 0, 0],
+          "pos": [0, 0, -200],
           "rot": [0, 0, 0]
         }
       ],
@@ -50,7 +50,7 @@
           ]
         },
         { "cmd": "ShowMessage", "text": "前方のアイテムをとってみましょう" },
-        { "cmd": "MoveCameraToTarget","pos": [0, 2, -5],"rot": [10, 0, 0]}
+        { "cmd": "MoveCameraToTarget","pos": [0, 5, -10],"rot": [0, 0, 0]}
       ],
       "wait": "CameraFinished"
     },
@@ -65,7 +65,7 @@
         { "cmd": "UnlockInput" },
         {
           "cmd": "FixPlayer",
-          "pos": [0, 0, 0],
+          "pos": [0, 0, -200],
           "rot": [0, 0, 0]
         },
         { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
@@ -86,11 +86,11 @@
           "cmd": "SpawnItem",
           "count": 5,
           "transforms": [
-            { "pos": [2, 0, 6] },
-            { "pos": [-2, 0, 6] },
-            { "pos": [3, 0, 10] },
-            { "pos": [-3, 0, 10] },
-            { "pos": [0, 0, 12] }
+            { "pos": [20, 0, 160] },
+            { "pos": [-150, 0, 40] },
+            { "pos": [-100, 0, -175] },
+            { "pos": [65, 0, -105] },
+            { "pos": [180, 0, 25] }
           ]
         },
         { "cmd": "ShowMessage", "text": "次はもっと多くのアイテムをとってみましょう" }
@@ -101,7 +101,7 @@
       "cmds": [
         { "cmd": "UnlockInput" },
         { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
-        { "cmd": "SetObjective", "text": "アイテムを取得", "count": 5 }
+        { "cmd": "SetObjective","type": "collect", "text": "アイテムを取得", "count": 5 }
       ],
       "wait": "ObjectiveComplete"
     },

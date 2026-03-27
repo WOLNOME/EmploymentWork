@@ -41,3 +41,7 @@ void KeyUI::AttachShake(const Norm::Vector2& _shakeOffset) {
 void KeyUI::AttachBlinking(const Norm::Vector4& _color) {
 	spriteKey_->SetColor(_color);
 }
+
+void KeyUI::SetIsDisplay(bool _isDisplay) {
+	spriteKey_->SetIsDisplay(_isDisplay);
+}

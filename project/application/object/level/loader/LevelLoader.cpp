@@ -13,6 +13,7 @@ void LevelLoader::Initialize(const std::string& _filePath) {
 	levelData_.rock = std::make_unique<LevelRock>();
 	levelData_.bigRock = std::make_unique<LevelBigRock>();
 	levelData_.fence = std::make_unique<LevelFence>();
+	levelData_.tutorialFence = std::make_unique<LevelTutorialFence>();
 	levelData_.sealedBox = std::make_unique<LevelSealedBox>();
 
 	//各オブジェクトの初期化
@@ -21,6 +22,7 @@ void LevelLoader::Initialize(const std::string& _filePath) {
 	levelData_.rock->Initialize("LevelRock");
 	levelData_.bigRock->Initialize("LevelBigRock");
 	levelData_.fence->Initialize("LevelFence");
+	levelData_.tutorialFence->Initialize("LevelTutorialFence");
 	levelData_.sealedBox->Initialize("LevelSealedBox");
 
 	//全オブジェクトデータのロード
@@ -36,6 +38,7 @@ void LevelLoader::Update() {
 	levelData_.rock->Update();
 	levelData_.bigRock->Update();
 	levelData_.fence->Update();
+	levelData_.tutorialFence->Update();
 	levelData_.sealedBox->Update();
 }
 
@@ -47,6 +50,7 @@ void LevelLoader::DebugWithImGui() {
 	levelData_.rock->DebugWithImGui();
 	levelData_.bigRock->DebugWithImGui();
 	levelData_.fence->DebugWithImGui();
+	levelData_.tutorialFence->DebugWithImGui();
 	levelData_.sealedBox->DebugWithImGui();
 #endif // _DEBUG
 
@@ -107,6 +111,7 @@ void LevelLoader::ScanObjectData(json& object) {
 			{"RockObject", levelData_.rock.get()},
 			{"BigRockObject", levelData_.bigRock.get()},
 			{"FenceObject", levelData_.fence.get()},
+			{"Tutorial_FenceObject", levelData_.tutorialFence.get()},
 			{"SealedBoxObject", levelData_.sealedBox.get()}
 		};
 
@@ -181,6 +186,10 @@ void LevelLoader::ScanObjectData(json& object) {
 	//柵生成ポイント
 	else if (type.compare("FenceObject") == 0) {
 		createObject("FenceObject");
+	}
+	//チュートリアル柵生成ポイント
+	else if (type.compare("Tutorial_FenceObject") == 0) {
+		createObject("Tutorial_FenceObject");
 	}
 	//封印ボックス生成ポイント
 	else if (type.compare("SealedBoxObject") == 0) {

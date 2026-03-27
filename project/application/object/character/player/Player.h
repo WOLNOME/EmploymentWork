@@ -129,6 +129,16 @@ public:
 	/// </summary>
 	/// <returns>移動SE</returns>
 	Norm::Audio* GetMoveSE() { return moveSE_.get(); }
+	/// <summary>
+	/// 入力を受け付けるかを取得する
+	/// </summary>
+	/// <returns>入力を受け付けるか</returns>
+	bool GetIsInput() { return isInput_; }
+	/// <summary>
+	/// プレイヤー側でカメラを操作しないかを取得する
+	/// </summary>
+	/// <returns>プレイヤー側でカメラを操作しないか</returns>
+	bool GetIsCameraFree() { return isCameraFree_; }
 
 	/// ============================== ///
 	///		setter
@@ -186,6 +196,16 @@ public:
 	/// </summary>
 	/// <param name="_messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
+	/// <summary>
+	/// 入力を受け付けるかを設定する
+	/// </summary>
+	/// <param name="_isInput">入力を受け付けるか</param>
+	void SetIsInput(bool _isInput) { isInput_ = _isInput; }
+	/// <summary>
+	/// プレイヤー側でカメラを操作しないかの設定
+	/// </summary>
+	/// <param name="_isCameraFree">プレイヤー側でカメラを操作しないか</param>
+	void SetIsCameraFree(bool _isCameraFree) { isCameraFree_ = _isCameraFree; }
 
 private:
 	/// ============================== ///
@@ -247,6 +267,9 @@ private:
 	float specialFireIntervalTimer_;//必殺弾の発射間隔タイマー
 
 	bool isDamage_ = false;			//ダメージを受けたか
+
+	bool isInput_ = true;			//入力を受け付けるか
+	bool isCameraFree_ = false;		//プレイヤー側でカメラを操作しないか
 
 	Norm::Vector3 prePosition_ = { 0,0,0 };	//前フレームのポジション
 

@@ -77,6 +77,12 @@ public:
 	/// <param name="_cameraManager">カメラマネージャー</param>
 	void SetCameraManager(CameraManager* _cameraManager);
 
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
+
 private:
 	/// ============================== ///
 	///		非公開メンバ関数

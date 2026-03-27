@@ -52,5 +52,7 @@ private:
 	//チュートリアルシステム
 	std::unique_ptr<TutorialSystem> system_ = nullptr;
 
+
+	bool isDebug_ = false;
 };
 

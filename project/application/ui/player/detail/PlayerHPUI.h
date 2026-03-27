@@ -45,6 +45,12 @@ public:
 	/// <param name="_player">プレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
 
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
+
 private:
 	/// ============================== ///
 	///		インスタンス

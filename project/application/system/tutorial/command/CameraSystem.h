@@ -5,6 +5,7 @@
 
 /// 前方宣言
 class CameraManager;
+class Player;
 class PlayerUI;
 
 /// <summary>
@@ -62,6 +63,11 @@ public:
 	/// <param name="manager">借用するCameraManager</param>
 	void SetCameraManager(CameraManager* manager) { cameraManager_ = manager; }
 	/// <summary>
+	/// Playerの設定
+	/// </summary>
+	/// <param name="player">借用するPlayer</param>
+	void SetPlayer(Player* player) { player_ = player; }
+	/// <summary>
 	/// PlayerUIの設定
 	/// </summary>
 	/// <param name="playerUI">借用するPlayerUI</param>
@@ -84,6 +90,7 @@ private:
 	/// ============================== ///
 
 	CameraManager* cameraManager_ = nullptr;
+	Player* player_ = nullptr;
 	PlayerUI* playerUI_ = nullptr;
 
 	/// ============================== ///
@@ -96,7 +103,7 @@ private:
 
 	//カメラ制御
 	float moveTimer_ = 0.0f;
-	float moveDuration_ = 5.0f;
+	float moveDuration_ = 1.0f;
 
 	Norm::Vector3 startPos_ = {};
 	Norm::Vector3 startRot_ = {};
@@ -111,6 +118,6 @@ private:
 
 	//静止
 	float stillnessTimer_ = 0.0f;
-	float stillnessDuration_ = 2.0f;
+	float stillnessDuration_ = 0.7f;
 
 };

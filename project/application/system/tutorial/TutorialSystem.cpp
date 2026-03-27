@@ -27,6 +27,7 @@ void TutorialSystem::Initialize() {
 	playerUI_ = std::make_unique<PlayerUI>();
 	enemyUI_ = std::make_unique<EnemyUI>();
 	messageUI_ = std::make_unique<MessageUI>();
+	pauseSystem_ = std::make_unique<Tuto_PauseSystem>();
 	tutorialManager_ = std::make_unique<TutorialManager>();
 
 	//インスタンスの初期化
@@ -40,6 +41,7 @@ void TutorialSystem::Initialize() {
 	playerUI_->Initialize();
 	enemyUI_->Initialize();
 	messageUI_->Initialize();
+	pauseSystem_->Initialize();
 	tutorialManager_->Initialize();
 
 	//インスタンスのセット
@@ -72,10 +74,24 @@ void TutorialSystem::Initialize() {
 void TutorialSystem::Update() {
 	//タイムスケールマネージャーの更新
 	timeScaleManager_->Update();
+	//ポーズシステムの更新
+	pauseSystem_->Update();
 
 	//タイムスケールマネージャーによる再生速度の管理
 	if (!timeScaleManager_->GetIsPlay()) {
 		return;
+	}
+	//ポーズ画面による再生の管理
+	if (pauseSystem_->GetIsPause()) {
+		//プレイヤーの移動音を停止
+		if (player_->GetMoveSE()->GetIsPlaying()) {
+			player_->GetMoveSE()->Pause();
+		}
+
+		return;
+	}
+	else {
+		player_->GetMoveSE()->Resume();
 	}
 
 	//メッセージUIの更新

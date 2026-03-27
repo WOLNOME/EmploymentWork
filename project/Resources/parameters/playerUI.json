@@ -114,7 +114,8 @@
         "iconHeight3D":{
             "keyCanota":20.0,
             "boss":30.0,
-            "key":5.0
+            "key":5.0,
+            "tutorialItem":5.0
         },
         "drawDistanceMax": 800.0
     }

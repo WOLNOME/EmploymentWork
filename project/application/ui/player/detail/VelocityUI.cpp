@@ -110,3 +110,9 @@ void VelocityUI::AttachBlinking(const Vector4& _color) {
 	spriteNeedle_->SetColor(_color);
 	spriteNumText_->SetColor(_color);
 }
+
+void VelocityUI::SetIsDisplay(bool _isDisplay) {
+	spriteSpeedMeter_->SetIsDisplay(_isDisplay);
+	spriteNeedle_->SetIsDisplay(_isDisplay);
+	spriteNumText_->SetIsDisplay(_isDisplay);
+}

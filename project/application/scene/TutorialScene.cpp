@@ -53,6 +53,23 @@ void TutorialScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
+	//F1キーでマウスカーソルの表示する
+	Input* input = Input::GetInstance();
+	if (input->TriggerKey(DIK_F1)) {
+		if (isDebug_) {
+			//デバッグモードを終了
+			isDebug_ = false;
+			input->SetIsMouseDisplay(false);
+			input->SetIsMouseFixed(true);
+		}
+		else {
+			//デバッグモードを開始
+			isDebug_ = true;
+			input->SetIsMouseDisplay(true);
+			input->SetIsMouseFixed(false);
+		}
+	}
+
 	//インスタンスの更新
 	system_->Update();
 

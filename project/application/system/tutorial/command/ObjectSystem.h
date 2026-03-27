@@ -44,7 +44,7 @@ public:
 	/// プレイヤーインスタンスを設定する
 	/// </summary>
 	/// <param name="player">プレイヤーへのポインタ</param>
-	void SetPlayer(Player* player) { player = player; }
+	void SetPlayer(Player* player) { player_ = player; }
 	/// <summary>
 	/// アイテムマネージャーインスタンスを設定する
 	/// </summary>

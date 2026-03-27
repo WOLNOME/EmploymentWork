@@ -29,3 +29,7 @@ void ReticleUI::AttachBlinking(const Vector4& _color) {
 	sprite_->SetColor(_color);
 
 }
+
+void ReticleUI::SetIsDisplay(bool _isDisplay) {
+	sprite_->SetIsDisplay(_isDisplay);
+}

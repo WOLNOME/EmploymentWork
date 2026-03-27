@@ -11,6 +11,7 @@
 #include <application/object/level/rock/LevelRock.h>
 #include <application/object/level/bigRock/LevelBigRock.h>
 #include <application/object/level/fence/LevelFence.h>
+#include <application/object/level/tutorial_fence/LevelTutorialFence.h>
 #include <application/object/level/sealedBox/LevelSealedBox.h>
 
 /// <summary>
@@ -56,6 +57,8 @@ private:
 		std::unique_ptr<LevelBigRock> bigRock;
 		//柵
 		std::unique_ptr<LevelFence> fence;
+		//チュートリアル柵
+		std::unique_ptr<LevelTutorialFence> tutorialFence;
 		//封印ボックス
 		std::unique_ptr<LevelSealedBox> sealedBox;
 	};
@@ -113,6 +116,10 @@ public:
 	/// 柵データの取得
 	/// </summary>
 	LevelFence* GetFenceData() const { return levelData_.fence.get(); }
+	/// <summary>
+	/// 柵データの取得
+	/// </summary>
+	LevelTutorialFence* GetTurorialFenceData() const { return levelData_.tutorialFence.get(); }
 	/// <summary>
 	/// 封印ボックスデータの取得
 	/// </summary>

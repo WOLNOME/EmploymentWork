@@ -40,3 +40,7 @@ void DecorativeUI::AttachBlinking(const Vector4& _color) {
 	sprite_->SetColor(_color);
 	
 }
+
+void DecorativeUI::SetIsDisplay(bool _isDisplay) {
+	sprite_->SetIsDisplay(_isDisplay);
+}

@@ -96,6 +96,9 @@ void Radar::Update() {
 	//アイテムマネージャーがセットされていなければ警告
 	assert(itemManager_ != nullptr && "RadarにItemManagerインスタンスを渡してください");
 
+	if (!isActive_)
+		return;
+
 	//プレイヤーマークの更新
 	UpdatePlayerMark();
 	//エネミーマークの更新
@@ -162,6 +165,38 @@ void Radar::DebugWithImGui() {
 #ifdef _DEBUG
 
 #endif //_DEBUG
+}
+
+
+void Radar::SetIsDisplay(bool _isDisplay) {
+	isActive_ = _isDisplay;
+	// コンパス・レーダー基盤
+	if (compass_)   compass_->SetIsDisplay(_isDisplay);
+	if (radarBase_) radarBase_->SetIsDisplay(_isDisplay);
+
+	// プレイヤーマーク
+	if (playerMark_) playerMark_->SetIsDisplay(_isDisplay);
+
+	// 敵マーク
+	for (auto& mark : enemyMarks_) {
+		if (mark) {
+			mark->SetIsDisplay(_isDisplay);
+		}
+	}
+
+	// アイテムマーク
+	for (auto& mark : itemMarks_) {
+		if (mark) {
+			mark->SetIsDisplay(_isDisplay);
+		}
+	}
+
+	// 誘導矢印
+	for (auto& arrow : inductionArrows_) {
+		if (arrow) {
+			arrow->SetIsDisplay(_isDisplay);
+		}
+	}
 }
 
 void Radar::UpdatePlayerMark() {
@@ -353,6 +388,15 @@ void Radar::UpdateItemMark() {
 
 		processItem(keyItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex, 0.8f);
 	}
+	//チュートリアルアイテムマークの更新（黄）
+	for (const auto& tutorialItem : itemManager_->GetTutorialCollectibleItmes()) {
+		//生存状態でないなら次へ
+		if (tutorialItem->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processItem(tutorialItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex, 0.6f);
+	}
 }
 
 void Radar::UpdateInductionArrow() {
@@ -429,6 +473,15 @@ void Radar::UpdateInductionArrow() {
 		}
 
 		processInductionArrow(key->GetWorldTransform().GetWorldTranslate(), { 1,1,0,1 }, spriteIndex);
+	}
+	//チュートリアルアイテム(黄)
+	for (const auto& tutorialItem : itemManager_->GetTutorialCollectibleItmes()) {
+		//生存状態でないなら次へ
+		if (tutorialItem->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processInductionArrow(tutorialItem->GetWorldTransform().GetWorldTranslate(), { 1,1,0,1 }, spriteIndex);
 	}
 }
 

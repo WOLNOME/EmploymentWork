@@ -6,6 +6,8 @@
 
 //アプリケーション
 #include <application/system/CameraManager.h>
+#include <application/object/character/player/Player.h>
+#include <application/ui/player/PlayerUI.h>
 
 using namespace Norm;
 
@@ -53,7 +55,6 @@ void CameraSystem::Update() {
 		//演出未実行状態
 		break;
 	}
-
 	case Flow::StartBlackOut:
 	{
 		//暗転開始フェーズ
@@ -74,6 +75,10 @@ void CameraSystem::Update() {
 			if (halfBlackOutTimer_ >= halfBlackOutDuration_) {
 				halfBlackOutTimer_ = 0.0f;
 				isIn_ = true;
+				//プレイヤーのカメラ操作を停止
+				player_->SetIsCameraFree(true);
+				//プレイヤーUIを非表示
+				playerUI_->SetIsDisplay(false);
 			}
 		}
 		else {
@@ -91,7 +96,6 @@ void CameraSystem::Update() {
 		}
 		break;
 	}
-
 	case Flow::MoveCamera:
 	{
 		//カメラ補間移動フェーズ
@@ -102,8 +106,8 @@ void CameraSystem::Update() {
 		float t = std::clamp(moveTimer_ / moveDuration_, 0.0f, 1.0f);
 
 		//位置と回転を線形補間
-		Vector3 pos = MyMath::Lerp(startPos_, targetPos_, t);
-		Vector3 rot = MyMath::Lerp(startRot_, targetRot_, t);
+		Vector3 pos = MyMath::Lerp(startPos_, targetPos_, MyMath::EaseInSine(t));
+		Vector3 rot = MyMath::Lerp(startRot_, targetRot_, MyMath::EaseInSine(t));
 
 		//カメラに反映
 		camera->worldTransform.SetTranslate(pos);
@@ -116,7 +120,6 @@ void CameraSystem::Update() {
 		}
 		break;
 	}
-
 	case Flow::Stillness:
 	{
 		//移動後の演出用静止フェーズ
@@ -131,7 +134,6 @@ void CameraSystem::Update() {
 		}
 		break;
 	}
-
 	case Flow::EndBlackOut:
 	{
 		//演出終了時の暗転フェーズ
@@ -149,6 +151,11 @@ void CameraSystem::Update() {
 			if (halfBlackOutTimer_ >= halfBlackOutDuration_) {
 				halfBlackOutTimer_ = 0.0f;
 				isIn_ = true;
+				//プレイヤーによるカメラ操作に戻す
+				player_->SetIsCameraFree(false);
+				//プレイヤーUIを表示
+				playerUI_->SetIsDisplay(true);
+
 			}
 		}
 		else {
@@ -173,6 +180,8 @@ void CameraSystem::SetTargetTransform(const Vector3& _pos, const Vector3& _rot) 
 
 	//外部依存チェック
 	assert(cameraManager_ && "カメラマネージャーがセットされていません");
+	assert(player_ && "プレイヤーがセットされていません");
+	assert(playerUI_ && "プレイヤーUIがセットされていません");
 
 	//現在のカメラ状態を取得
 	auto* camera = cameraManager_->GetActiveCamera();

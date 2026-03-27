@@ -151,6 +151,21 @@ void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
 	emphasisUI_->SetCameraManager(cameraManager_);
 }
 
+void PlayerUI::SetIsDisplay(bool _isDisplay) {
+	reticleUI_->SetIsDisplay(_isDisplay);
+	decorativeUI_->SetIsDisplay(_isDisplay);
+	playerHPUI_->SetIsDisplay(_isDisplay);
+	weaponUI_->SetIsDisplay(_isDisplay);
+	radar_->SetIsDisplay(_isDisplay);
+	hitIndicator_->SetIsDisplay(_isDisplay);
+	operationUI_->SetIsDisplay(_isDisplay);
+	velocityUI_->SetIsDisplay(_isDisplay);
+	keyUI_->SetIsDisplay(_isDisplay);
+	directionUI_->SetIsDisplay(_isDisplay);
+	damageUI_->SetIsDisplay(_isDisplay);
+	emphasisUI_->SetIsDisplay(_isDisplay);
+}
+
 void PlayerUI::DamageShaking() {
 	//ゲームカメラ
 	GameCamera* gameCamera = dynamic_cast<GameCamera*>(cameraManager_->GetActiveCamera());

@@ -72,6 +72,11 @@ public:
 	/// <param name="_itemManager">アイテムマネージャー</param>
 	void SetItemManager(ItemManager* _itemManager) { itemManager_ = _itemManager; }
 
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
 
 private:
 	/// ============================== ///
@@ -145,5 +150,6 @@ private:
 	uint32_t thInductionArrow_ = 0u;
 	std::array<std::unique_ptr<Norm::Sprite>, kInductionArrowNum_> inductionArrows_;
 
+	bool isActive_ = true;
 };
 

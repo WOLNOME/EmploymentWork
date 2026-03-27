@@ -21,7 +21,7 @@ enum class ObjectiveType {
 /// </summary>
 struct Objective {
 	ObjectiveType type;
-	std::unique_ptr<Norm::Sprite> chcekMark;
+	std::unique_ptr<Norm::Sprite> checkMark;
 	std::unique_ptr<Norm::Sprite> text;
 	Norm::Handle textHandle;
 	int current = 0;

@@ -134,6 +134,7 @@ private:
 
     //現在の状態
     Sequence* currentSequence_ = nullptr;
+    std::string currentSequenceName_;
     size_t currentStepIndex_ = 0;
 
     //待機フラグ
