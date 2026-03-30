@@ -54,12 +54,12 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		isDamage = true;
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
 		//衝突SE
-		collideSE_->Play(false, 1.0f);
+		collideSE_->Play(false, 1.5f);
 
 		break;
 	}
@@ -100,7 +100,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		isDamage = true;
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算(大きく)
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 40.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 24.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
@@ -160,19 +160,19 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 	case CollisionAttribute::Wall:
 	{
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
 		//衝突SE
-		collideSE_->Play(false, 1.0f);
+		collideSE_->Play(false, 1.5f);
 
 		break;
 	}
 	case CollisionAttribute::Barrier:
 	{
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 

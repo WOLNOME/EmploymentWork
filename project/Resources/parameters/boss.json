@@ -13,7 +13,7 @@
     "speed":6.0,
     "turnSpeed":1.3,
     "maxSpeed":40.0,
-    "barrierCoolTime":20.0,
+    "barrierCoolTime":25.0,
     "barrierDirTime":1.8,
     "bombReloadTime":5.0,
     "cannonReloadTime":2.5,

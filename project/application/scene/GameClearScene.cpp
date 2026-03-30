@@ -21,6 +21,12 @@ void GameClearScene::Initialize() {
 	//アクティブカメラをセット
 	cameraManager_->SetActiveCamera("Game");
 
+	//ライトの生成・初期化＆登録
+	dirLight_ = std::make_unique<DirectionalLight>();
+	dirLight_->Initialize();
+	dirLight_->SetDirection({ 1.0f,-1.0f,1.0f });
+	sceneLight_->SetLight(dirLight_.get());
+
 	//インスタンスの生成
 	skydome_ = std::make_unique<Skydome>();
 	ground_ = std::make_unique<Ground>();

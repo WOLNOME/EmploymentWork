@@ -1,4 +1,14 @@
 {
+    "collisionCenterOffsetOBB":{
+        "x":0.0,
+        "y":0.0,
+        "z":0.0
+    },
+    "collisionSizeOBB":{
+        "x":2.0,
+        "y":2.0,
+        "z":2.0
+    },
     "maxHealItemNum":10,
     "maxChargeItemNum":10,
     "maxKeyItemNum":2,

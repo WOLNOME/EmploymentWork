@@ -636,13 +636,7 @@
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\EndDirection.cpp">
-      <Filter>application\system</Filter>
-    </ClCompile>
     <ClCompile Include="application\system\gamePlay\pause\PauseSystem.cpp">
-      <Filter>application\system</Filter>
-    </ClCompile>
-    <ClCompile Include="application\system\StartDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\system\TimeScaleManager.cpp">
@@ -757,6 +751,7 @@
     <ClCompile Include="application\system\tutorial\command\ObjectSystem.cpp" />
     <ClCompile Include="application\object\level\tutorial_fence\LevelTutorialFence.cpp" />
     <ClCompile Include="application\system\tutorial\pause\Tuto_PauseSystem.cpp" />
+    <ClCompile Include="application\object\level\brokenTank\LevelBrokenTank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1341,13 +1336,7 @@
     <ClInclude Include="application\system\DeathDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\EndDirection.h">
-      <Filter>application\system</Filter>
-    </ClInclude>
     <ClInclude Include="application\system\gamePlay\pause\PauseSystem.h">
-      <Filter>application\system</Filter>
-    </ClInclude>
-    <ClInclude Include="application\system\StartDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
     <ClInclude Include="application\system\TimeScaleManager.h">
@@ -1462,6 +1451,7 @@
     <ClInclude Include="application\system\tutorial\command\ObjectSystem.h" />
     <ClInclude Include="application\object\level\tutorial_fence\LevelTutorialFence.h" />
     <ClInclude Include="application\system\tutorial\pause\Tuto_PauseSystem.h" />
+    <ClInclude Include="application\object\level\brokenTank\LevelBrokenTank.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">

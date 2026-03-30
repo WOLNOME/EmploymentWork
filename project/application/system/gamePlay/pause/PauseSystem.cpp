@@ -212,7 +212,6 @@ void PauseSystem::Update() {
 				stringMenuSprite_[2]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
 				stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
-
 				break;
 			}
 			case PauseSystem::Menu::kTItle: {

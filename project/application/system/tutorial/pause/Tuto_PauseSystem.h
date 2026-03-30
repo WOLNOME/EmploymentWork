@@ -23,6 +23,7 @@ private:
 		kOperationGuide,	//操作ガイド
 		kMoveTuto,			//移動チュートリアルへ
 		kAttackTuto,		//攻撃チュートリアルへ
+		kSkip,				//スキップ
 		kTItle,				//タイトルへ
 
 		kMaxMenuNum			//メニューの数
@@ -82,7 +83,7 @@ private:
 	uint32_t guideTextureHandle_ = 0u;
 	std::unique_ptr<Norm::Sprite> guideSprite_ = nullptr;
 	//メニューの文字
-	static const uint32_t kMaxStringNum_ = 6;
+	static const uint32_t kMaxStringNum_ = int(Menu::kMaxMenuNum) + 1;
 	std::array<Norm::Handle, kMaxStringNum_> stringMenuTextureHandle_;
 	std::array<std::unique_ptr<Norm::Sprite>, kMaxStringNum_> stringMenuSprite_;
 

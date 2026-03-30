@@ -1,5 +1,6 @@
 #include "TutorialManager.h"
 #include <fstream>
+#include <SceneManager.h>
 
 //アプリケーション
 #include <application/system/tutorial/command/executor/CommandExecutor.h>
@@ -25,6 +26,11 @@ void TutorialManager::Initialize() {
 void TutorialManager::Update() {
 
 	if (!currentSequence_) {
+		//ゲームプレイシーンへ
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+		SceneManager::GetInstance()->SetNextScene("GamePlay", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f,
+			textureHandle);
+
 		return;
 	}
 

@@ -200,9 +200,7 @@ void Radar::SetIsDisplay(bool _isDisplay) {
 }
 
 void Radar::UpdatePlayerMark() {
-	//本体の回転を適用
-	float playerRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + player_->GetWorldTransform().GetRotate().y;
-	playerMark_->SetRotation(playerRotated);
+	
 }
 
 void Radar::UpdateEnemyMark() {

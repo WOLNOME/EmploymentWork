@@ -15,6 +15,7 @@ void LevelLoader::Initialize(const std::string& _filePath) {
 	levelData_.fence = std::make_unique<LevelFence>();
 	levelData_.tutorialFence = std::make_unique<LevelTutorialFence>();
 	levelData_.sealedBox = std::make_unique<LevelSealedBox>();
+	levelData_.brokenTank = std::make_unique<LevelBrokenTank>();
 
 	//各オブジェクトの初期化
 	levelData_.tree->Initialize("LevelTree");
@@ -24,6 +25,7 @@ void LevelLoader::Initialize(const std::string& _filePath) {
 	levelData_.fence->Initialize("LevelFence");
 	levelData_.tutorialFence->Initialize("LevelTutorialFence");
 	levelData_.sealedBox->Initialize("LevelSealedBox");
+	levelData_.brokenTank->Initialize("LevelBrokenTank");
 
 	//全オブジェクトデータのロード
 	for (json& object : data["objects"]) {
@@ -40,6 +42,7 @@ void LevelLoader::Update() {
 	levelData_.fence->Update();
 	levelData_.tutorialFence->Update();
 	levelData_.sealedBox->Update();
+	levelData_.brokenTank->Update();
 }
 
 void LevelLoader::DebugWithImGui() {
@@ -52,6 +55,7 @@ void LevelLoader::DebugWithImGui() {
 	levelData_.fence->DebugWithImGui();
 	levelData_.tutorialFence->DebugWithImGui();
 	levelData_.sealedBox->DebugWithImGui();
+	levelData_.brokenTank->DebugWithImGui();
 #endif // _DEBUG
 
 }
@@ -112,7 +116,8 @@ void LevelLoader::ScanObjectData(json& object) {
 			{"BigRockObject", levelData_.bigRock.get()},
 			{"FenceObject", levelData_.fence.get()},
 			{"Tutorial_FenceObject", levelData_.tutorialFence.get()},
-			{"SealedBoxObject", levelData_.sealedBox.get()}
+			{"SealedBoxObject", levelData_.sealedBox.get()},
+			{"BrokenTankObject", levelData_.brokenTank.get() }
 		};
 
 		//タイプからテーブルのキーを検索
@@ -194,6 +199,11 @@ void LevelLoader::ScanObjectData(json& object) {
 	//封印ボックス生成ポイント
 	else if (type.compare("SealedBoxObject") == 0) {
 		createObject("SealedBoxObject");
+	}
+	//破壊された戦車生成ポイント
+	else if (type.compare("BrokenTankObject") == 0) {
+		createObject("BrokenTankObject");
+		levelData_.brokenTank->InitParticle();
 	}
 
 	//子オブジェクトがある場合はその処理も行う(ペアレント処理は割愛→必要に応じて付け加える)

@@ -13,6 +13,7 @@
 #include <application/object/level/fence/LevelFence.h>
 #include <application/object/level/tutorial_fence/LevelTutorialFence.h>
 #include <application/object/level/sealedBox/LevelSealedBox.h>
+#include <application/object/level/brokenTank/LevelBrokenTank.h>
 
 /// <summary>
 /// レベルデータの読み込みと管理を行うクラス
@@ -61,6 +62,9 @@ private:
 		std::unique_ptr<LevelTutorialFence> tutorialFence;
 		//封印ボックス
 		std::unique_ptr<LevelSealedBox> sealedBox;
+		//破壊された戦車
+		std::unique_ptr<LevelBrokenTank> brokenTank;
+
 	};
 
 public:
@@ -124,6 +128,10 @@ public:
 	/// 封印ボックスデータの取得
 	/// </summary>
 	LevelSealedBox* GetSealedBoxData() const { return levelData_.sealedBox.get(); }
+	/// <summary>
+	/// 破壊された戦車データの取得
+	/// </summary>
+	LevelBrokenTank* GetBrokenTankData() const { return levelData_.brokenTank.get(); }
 
 private:
 	/// ============================== ///
