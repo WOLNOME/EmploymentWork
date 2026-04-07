@@ -100,7 +100,7 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 	}
 	else if (_name == "ShowMoveTutorialSprite") {
 		//テクスチャハンドル
-		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("uvChecker.png");
+		uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("support.png");
 		uiSystem_->ShowSprite(textureHandle);
 	}
 	else if (_name == "SetObjective") {
