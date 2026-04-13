@@ -30,6 +30,11 @@ void TankEnemyPatrolState::Update(IBaseTankEnemy* enemy) {
 		enemyUI_->GetEnemyReactionUI()->SensingSpawn(enemy->GetWorldTransform().GetWorldTranslate(), height, front);
 	}
 
+	//静止状態なら抜ける
+	if (enemy->GetState() == BaseCharacter::State::kStillness) {
+		return;
+	}
+
 	//パトロールの更新処理
 	UpdatePatrol(enemy);
 }

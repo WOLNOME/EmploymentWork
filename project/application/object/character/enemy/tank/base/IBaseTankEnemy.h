@@ -166,8 +166,6 @@ protected:
 	int maxHP_;	//最大HP
 	int hp_;	//現在のHP
 
-	bool isActive_ = false;	//アクティブかどうか
-
 private:
 	/// ============================== ///
 	///		メンバ変数(private)

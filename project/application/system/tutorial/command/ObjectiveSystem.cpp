@@ -7,6 +7,7 @@
 
 //アプリケーション
 #include <application/object/character/player/Player.h>
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 
 using namespace Norm;
 
@@ -21,7 +22,7 @@ void ObjectiveSystem::Initialize() {
 
 		obj.type = ObjectiveType::None;
 		obj.current = 0;
-		obj.target = 0;
+		obj.targetCount = 0;
 		obj.completed = false;
 
 		Vector2 pos = {
@@ -88,7 +89,7 @@ void ObjectiveSystem::Initialize() {
 void ObjectiveSystem::Update() {
 	//プレイヤーチェック
 	assert(player_ && "プレイヤーがセットされていません");
-
+	assert(playerWeaponManager_ && "プレイヤー武器マネージャーがセットされていません");
 
 	for (auto& obj : objectives_) {
 
@@ -103,9 +104,9 @@ void ObjectiveSystem::Update() {
 			//プレイヤーの獲得済みの収集物を取得
 			obj.current = player_->GetTutorialItemNum();
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"アイテムを集めよう！（{}/{}）", obj.current, obj.target);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"アイテムを集めよう！（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
-			if (obj.current >= obj.target) {
+			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
 				if (!obj.checkMark->GetIsFinishedUVScroll()) {
 					//チェックのスプライトアニメーションを稼働
@@ -117,6 +118,68 @@ void ObjectiveSystem::Update() {
 				}
 			}
 
+			break;
+		}
+		case ObjectiveType::CollectSpecial:
+		{
+			//プレイヤーの獲得済みの収集物を取得
+			obj.current = player_->GetSpecialNum();
+			//テキストを更新
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"必殺弾を集めよう！（{}/{}）", obj.current, obj.targetCount);
+			//目標数に達したら
+			if (obj.current >= obj.targetCount) {
+				//アニメーションが終了していたら稼働しない
+				if (!obj.checkMark->GetIsFinishedUVScroll()) {
+					//チェックのスプライトアニメーションを稼働
+					obj.checkMark->SetIsPlayUVScroll(true);
+				}
+				else {
+					//目標の達成フラグを立てる
+					obj.completed = true;
+				}
+			}
+			break;
+		}
+		case ObjectiveType::HitCannon:
+		{
+			//現在のヒット数を取得
+			obj.current = playerWeaponManager_->GetCannonHitNum();
+
+			//テキストを更新
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"砲弾を当てよう！（{}/{}）", obj.current, obj.targetCount);
+			//目標数に達したら
+			if (obj.current >= obj.targetCount) {
+				//アニメーションが終了していたら稼働しない
+				if (!obj.checkMark->GetIsFinishedUVScroll()) {
+					//チェックのスプライトアニメーションを稼働
+					obj.checkMark->SetIsPlayUVScroll(true);
+				}
+				else {
+					//目標の達成フラグを立てる
+					obj.completed = true;
+				}
+			}
+			break;
+		}
+		case ObjectiveType::HitBullet:
+		{
+			//現在のヒット数を取得
+			obj.current = playerWeaponManager_->GetBulletHitNum();
+
+			//テキストを更新
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"銃弾を当てよう！（{}/{}）", obj.current, obj.targetCount);
+			//目標数に達したら
+			if (obj.current >= obj.targetCount) {
+				//アニメーションが終了していたら稼働しない
+				if (!obj.checkMark->GetIsFinishedUVScroll()) {
+					//チェックのスプライトアニメーションを稼働
+					obj.checkMark->SetIsPlayUVScroll(true);
+				}
+				else {
+					//目標の達成フラグを立てる
+					obj.completed = true;
+				}
+			}
 			break;
 		}
 		default:
@@ -150,7 +213,7 @@ void ObjectiveSystem::ClearObjective() {
 
 		obj.type = ObjectiveType::None;
 		obj.current = 0;
-		obj.target = 0;
+		obj.targetCount = 0;
 		obj.completed = false;
 
 		obj.text->SetIsDisplay(false);
@@ -163,23 +226,84 @@ void ObjectiveSystem::ClearObjective() {
 	}
 }
 
-void ObjectiveSystem::AddCollectObjective(int target) {
-	//プレイヤーの獲得アイテム数を0にリセット
-	player_->SetTutorialItemNum(0);
+void ObjectiveSystem::AddCollectObjective(const std::string& type, int targetCount) {
 
-	for (auto& obj : objectives_) {
+	if (type == "Item") {
+		//プレイヤーの獲得アイテム数を0にリセット
+		player_->SetTutorialItemNum(0);
 
-		if (obj.type != ObjectiveType::None)
-			continue;
+		for (auto& obj : objectives_) {
 
-		obj.type = ObjectiveType::CollectItem;
-		obj.target = target;
-		obj.current = 0;
-		obj.completed = false;
-		
-		obj.text->SetIsDisplay(true);
-		obj.checkMark->SetIsDisplay(true);
+			if (obj.type != ObjectiveType::None)
+				continue;
 
-		return;
+			obj.type = ObjectiveType::CollectItem;
+			obj.targetCount = targetCount;
+			obj.current = 0;
+			obj.completed = false;
+
+			obj.text->SetIsDisplay(true);
+			obj.checkMark->SetIsDisplay(true);
+
+			return;
+		}
+	}
+	else if (type == "Special") {
+		//プレイヤーの獲得アイテム数を0にリセット
+		player_->SetSpecialNum(0);
+
+		for (auto& obj : objectives_) {
+
+			if (obj.type != ObjectiveType::None)
+				continue;
+
+			obj.type = ObjectiveType::CollectSpecial;
+			obj.targetCount = targetCount;
+			obj.current = 0;
+			obj.completed = false;
+
+			obj.text->SetIsDisplay(true);
+			obj.checkMark->SetIsDisplay(true);
+
+			return;
+		}
+	}
+
+	
+}
+
+void ObjectiveSystem::AddHitObjective(const std::string& type, int targetCount) {
+
+	if(type == "Cannon") {
+		//プレイヤーの砲弾ヒット数を0にリセット
+		playerWeaponManager_->SetCannonHitNum(0);
+
+		for (auto& obj : objectives_) {
+			if (obj.type != ObjectiveType::None)
+				continue;
+			obj.type = ObjectiveType::HitCannon;
+			obj.targetCount = targetCount;
+			obj.current = 0;
+			obj.completed = false;
+			obj.text->SetIsDisplay(true);
+			obj.checkMark->SetIsDisplay(true);
+			return;
+		}
+	}
+	else if (type == "Bullet") {
+		//プレイヤーの銃弾ヒット数を0にリセット
+		playerWeaponManager_->SetBulletHitNum(0);
+
+		for (auto& obj : objectives_) {
+			if (obj.type != ObjectiveType::None)
+				continue;
+			obj.type = ObjectiveType::HitBullet;
+			obj.targetCount = targetCount;
+			obj.current = 0;
+			obj.completed = false;
+			obj.text->SetIsDisplay(true);
+			obj.checkMark->SetIsDisplay(true);
+			return;
+		}
 	}
 }

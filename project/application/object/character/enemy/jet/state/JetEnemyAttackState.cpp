@@ -29,13 +29,25 @@ void JetEnemyAttackState::Update(IBaseJetEnemy* enemy) {
 		enemy->ChangeState("Approach");
 	}
 
+	//静止状態なら抜ける
+	if (enemy->GetState() == BaseCharacter::State::kStillness) {
+		return;
+	}
+
+	//移動の更新
+	UpdateMove(enemy);
+
+}
+
+void JetEnemyAttackState::Exit(IBaseJetEnemy* enemy) {
+}
+
+void JetEnemyAttackState::UpdateMove(IBaseJetEnemy* enemy) {
+
 	//移動の更新処理(既存の速度を参照して直進)
 	Vector3 currentPosition = enemy->GetWorldTransform().GetTranslate();
 	Vector3 velocity = enemy->GetVelocity();
 	currentPosition += velocity * kDeltaTime;
 	enemy->SetTranslate(currentPosition);
 
-}
-
-void JetEnemyAttackState::Exit(IBaseJetEnemy* enemy) {
 }

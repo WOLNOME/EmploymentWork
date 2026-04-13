@@ -110,7 +110,10 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 		std::string type = _param["type"];
 
 		//タイプごとの処理
-		if (type == "collect") {
+		if (type == "collectItem") {
+			objectiveSystem_->AddCollectObjective(_param["count"].get<int>());
+		}
+		else if (type == "collectSpecial") {
 			objectiveSystem_->AddCollectObjective(_param["count"].get<int>());
 		}
 	}

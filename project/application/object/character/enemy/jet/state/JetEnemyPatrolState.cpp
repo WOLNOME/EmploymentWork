@@ -52,6 +52,11 @@ void JetEnemyPatrolState::Update(IBaseJetEnemy* enemy) {
 		}
 	}
 
+	//静止状態なら抜ける
+	if (enemy->GetState() == BaseCharacter::State::kStillness) {
+		return;
+	}
+
 	//パトロールの更新処理
 	UpdatePatrol(enemy);
 }

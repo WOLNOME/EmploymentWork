@@ -7,13 +7,18 @@
 
 //前方宣言
 class Player;
+class PlayerWeaponManager;
 
 /// <summary>
 /// 目標の種類
 /// </summary>
 enum class ObjectiveType {
 	None,			//未定
-	CollectItem		//アイテムの収集
+	CollectItem,	//アイテムの収集
+	CollectSpecial,	//必殺弾の収集
+	HitCannon,		//砲弾を当てる
+	HitBullet,		//銃弾を当てる
+	DefeatEnemy,	//敵の撃破
 };
 
 /// <summary>
@@ -25,7 +30,7 @@ struct Objective {
 	std::unique_ptr<Norm::Sprite> text;
 	Norm::Handle textHandle;
 	int current = 0;
-	int target = 0;
+	int targetCount = 0;
 	bool completed = false;
 };
 
@@ -61,8 +66,15 @@ public:
 	/// <summary>
 	/// 収集目標の追加
 	/// </summary>
-	/// <param name="target"></param>
-	void AddCollectObjective(int target);
+	/// <param name="type">種類</param>
+	/// <param name="targetCount">目標数</param>
+	void AddCollectObjective(const std::string& type, int targetCount);
+	/// <summary>
+	/// 攻撃を当てる目標の追加
+	/// </summary>
+	/// <param name="type">種類</param>
+	/// <param name="targetCount">目標数</param>
+	void AddHitObjective(const std::string& type, int targetCount);
 
 	/// ============================== ///
 	///		setter
@@ -73,6 +85,11 @@ public:
 	/// </summary>
 	/// <param name="player">プレイヤー</param>
 	void SetPlayer(Player* player) { player_ = player; }
+	/// <summary>
+	/// プレイヤー武器マネージャーの設定
+	/// </summary>
+	/// <param name="manager">プレイヤー武器マネージャー</param>
+	void SetPlayerWeaponManager(PlayerWeaponManager* manager) { playerWeaponManager_ = manager; }
 
 private:
 	/// ============================== ///
@@ -80,6 +97,7 @@ private:
 	/// ============================== ///
 
 	Player* player_ = nullptr;
+	PlayerWeaponManager* playerWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

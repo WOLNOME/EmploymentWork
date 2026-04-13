@@ -2,6 +2,7 @@
 
 //アプリケーション
 #include <application/object/character/weapon/player/PlayerSpecial.h>
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 
 using namespace Norm;
 
@@ -36,6 +37,10 @@ void PlayerSpecialCollider::OnCollision(ICollider* _other, CollisionAttribute _a
 	case CollisionAttribute::Enemy:
 		//共通処理
 		commonCollisionProcess();
+
+		//ヒットカウントの加算
+		int currentHitNum = holder_->GetPlayerWeaponManager()->GetSpecialHitNum();
+		holder_->GetPlayerWeaponManager()->SetSpecialHitNum(currentHitNum + 1);
 
 		break;
 		//バリアに当たった場合

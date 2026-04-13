@@ -70,6 +70,10 @@ public:
 	/// </summary>
 	const std::vector<std::unique_ptr<PlayerSpecial>>& GetSpecials() const { return specials_; }
 
+	int GetCannonHitNum() const { return cannonHitNum_; }
+	int GetBulletHitNum() const { return bulletHitNum_; }
+	int GetSpecialHitNum() const { return specialHitNum_; }
+
 	/// ============================== ///
 	///		setter
 	/// ============================== ///
@@ -84,6 +88,10 @@ public:
 	/// </summary>
 	/// <param name="_player">設定するプレイヤー</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
+
+	void SetCannonHitNum(int num) { cannonHitNum_ = num; }
+	void SetBulletHitNum(int num) { bulletHitNum_ = num; }
+	void SetSpecialHitNum(int num) { specialHitNum_ = num; }
 
 private:
 	/// ============================== ///
@@ -132,6 +140,10 @@ private:
 	std::vector<std::unique_ptr<PlayerBullet>> bullets_;
 	//必殺弾のコンテナ
 	std::vector<std::unique_ptr<PlayerSpecial>> specials_;
+
+	int cannonHitNum_ = 0;	//砲弾のヒット数
+	int bulletHitNum_ = 0;	//銃弾のヒット数
+	int specialHitNum_ = 0;	//必殺弾のヒット数
 
 };
 

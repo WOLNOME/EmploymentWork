@@ -22,7 +22,7 @@ public:
 	enum class State {
 		kIdle,		//待機中（スポーン待ち）
 		kActive,	//稼働中
-		kStillness,	//静止中（）
+		kStillness,	//静止中（移動・攻撃不能状態）
 		kAsphyxia,	//仮死中（演出等）
 	};
 

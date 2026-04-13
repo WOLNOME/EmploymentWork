@@ -36,8 +36,13 @@ public:
 	/// <param name="enemyKind">敵の種類</param>
 	/// <param name="pos">座標</param>
 	/// <param name="rotate">回転</param>
+	void SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate);
+
+	/// <summary>
+	/// 敵の稼働・停止を切り替える
+	/// </summary>
 	/// <param name="isActive">アクティブかどうか</param>
-	void SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate, bool isActive);
+	void SetIsActiveEnemy(bool isActive);
 
 	/// <summary>
 	/// プレイヤーを指定位置・回転で固定する

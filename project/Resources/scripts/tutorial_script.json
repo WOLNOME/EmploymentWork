@@ -50,7 +50,7 @@
           ]
         },
         { "cmd": "ShowMessage", "text": "前方のアイテムをとってみましょう" },
-        { "cmd": "MoveCameraToTarget","pos": [0, 5, -10],"rot": [0, 0, 0],"moveTime":5,"stillnessTime":3}
+        { "cmd": "MoveCameraToTarget","pos": [0, 6, -15],"rot": [0, 0, 0],"moveTime":5,"stillnessTime":3}
       ],
       "wait": "CameraFinished"
     },
@@ -130,5 +130,119 @@
       ],
       "wait": "MessageWindowClosed"
     }
-  ]
+  ],
+
+  "tutorial_attack": [
+  {
+    "cmds": [
+      { "cmd": "LockInput" },
+      { "cmd": "OpenMessageWindow" },
+      {
+        "cmd": "FixPlayer",
+        "pos": [0, 0, -200],
+        "rot": [0, 0, 0]
+      }
+    ],
+    "wait": "MessageWindowOpened"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "攻撃の訓練です" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      {
+        "cmd": "SpawnEnemy",
+        "type": "Canota",
+        "pos": [0, 0, 0],
+        "rot": [0, 3.14, 0]
+      },
+      { "cmd": "EnemyActive", "active": 0 },
+      { "cmd": "ShowMessage", "text": "まずは動かない敵に攻撃を当ててみましょう" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "UnlockInput" },
+      { "cmd": "SetObjective", "type": "hitCannon", "count": 3 },
+      { "cmd": "SetObjective", "type": "hitBullet", "count": 30 }
+    ],
+    "wait": "ObjectiveComplete"
+  },
+  {
+    "cmds": [
+      { "cmd": "LockInput" },
+      { "cmd": "ClearEnemy" },
+      {
+        "cmd": "SpawnItem",
+        "type": "special",
+        "count": 1,
+        "transforms": [
+          { "pos": [0, 0, 0] }
+        ]
+      },
+      { "cmd": "ShowMessage", "text": "敵を倒すとスペシャル弾をドロップします" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "UnlockInput" },
+      {
+        "cmd": "SetObjective",
+        "type": "collectSpecial",
+        "text": "スペシャル弾を取得",
+        "count": 1
+      }
+    ],
+    "wait": "ObjectiveComplete"
+  },
+  {
+    "cmds": [
+      { "cmd": "LockInput" },
+      {
+        "cmd": "FixPlayer",
+        "pos": [0, 0, -200],
+        "rot": [0, 0, 0]
+      },
+      {
+        "cmd": "SpawnEnemy",
+        "type": "KeyCanota",
+        "pos": [0, 0, 0],
+        "rot": [0, 3.14, 0]
+      },
+      { "cmd": "EnemyActive", "active": 0 },
+      { "cmd": "ShowMessage", "text": "次は反撃してくる敵です" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "EnemyActive", "active": 1 },
+      { "cmd": "UnlockInput" },
+      {
+        "cmd": "SetObjective",
+        "type": "defeat",
+        "count": 1
+      }
+    ],
+    "wait": "ObjectiveComplete"
+  },
+  {
+    "cmds": [
+      { "cmd": "LockInput" },
+      { "cmd": "ShowMessage", "text": "素晴らしい！攻撃は完璧です！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "CloseMessageWindow" }
+    ],
+    "wait": "MessageWindowClosed"
+  }
+]
 }

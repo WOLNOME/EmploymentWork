@@ -2,6 +2,7 @@
 
 //アプリケーション
 #include <application/object/character/weapon/player/PlayerBullet.h>
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 
 using namespace Norm;
 
@@ -28,6 +29,10 @@ void PlayerBulletCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 		debugLineColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		//死亡処理
 		holder_->DeadProcess();
+
+		//ヒットカウントの加算
+		int currentHitNum = holder_->GetPlayerWeaponManager()->GetBulletHitNum();
+		holder_->GetPlayerWeaponManager()->SetBulletHitNum(currentHitNum + 1);
 
 		break;
 	}

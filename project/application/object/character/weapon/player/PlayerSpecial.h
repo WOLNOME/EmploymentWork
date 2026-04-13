@@ -12,6 +12,7 @@
 
 //前方宣言
 class CameraManager;
+class PlayerWeaponManager;
 
 /// <summary>
 /// プレイヤーの使う必殺弾単体の処理全般を管理するクラス
@@ -63,6 +64,16 @@ public:
 	void DeadProcess(DeadType _deadType);
 
 	/// ============================== ///
+	///		getter
+	/// ============================== ///
+	
+	/// <summary>
+	/// プレイヤー武器マネージャーの取得
+	/// </summary>
+	/// <returns>プレイヤー武器マネージャー</returns>
+	PlayerWeaponManager* GetPlayerWeaponManager() { return playerWeaponManager_; }
+
+	/// ============================== ///
 	///		setter
 	/// ============================== ///
 
@@ -71,6 +82,11 @@ public:
 	/// </summary>
 	/// <param name="_cameraManager">カメラマネージャー</param>
 	void SetCameraManager(CameraManager* _cameraManager) { cameraManager_ = _cameraManager; }
+	/// <summary>
+	/// プレイヤー武器マネージャーのセット
+	/// </summary>
+	/// <param name="_playerWeaponManager">プレイヤー武器マネージャー</param>
+	void SetPlayerWeaponManager(PlayerWeaponManager* _playerWeaponManager) { playerWeaponManager_ = _playerWeaponManager; }
 
 private:
 	/// ============================== ///
@@ -88,6 +104,8 @@ private:
 
 	//カメラ
 	CameraManager* cameraManager_ = nullptr;
+	//プレイヤー武器マネージャー
+	PlayerWeaponManager* playerWeaponManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

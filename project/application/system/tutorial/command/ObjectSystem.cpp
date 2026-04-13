@@ -22,7 +22,7 @@ void ObjectSystem::SpawnItem(const Norm::Vector3& pos) {
 	itemManager_->SpawnTutorialCollectibleItme(pos);
 }
 
-void ObjectSystem::SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate, bool isActive) {
+void ObjectSystem::SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate) {
 	if (enemyKind == "Canota") {
 		enemyManager_->CanotaSpawn(pos, rotate);
 	}
@@ -35,6 +35,10 @@ void ObjectSystem::SpawnEnemy(const std::string& enemyKind, const Norm::Vector3&
 	else if (enemyKind == "Boss") {
 		enemyManager_->BossSpawn(pos, rotate);
 	}
+}
+
+void ObjectSystem::SetIsActiveEnemy(bool isActive) {
+	enemyManager_->SetIsActive(isActive);
 }
 
 void ObjectSystem::FixPlayer(const Norm::Vector3& pos, const Norm::Vector3& rot) {
