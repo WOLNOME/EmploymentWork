@@ -226,3 +226,20 @@ void EnemyManager::SetCameraManager(CameraManager* _cameraManager) {
 		boss->SetCameraManager(_cameraManager);
 	}
 }
+
+void EnemyManager::SetIsActive(bool isActive) {
+	//全敵の状態を変更する
+	BaseCharacter::State state = isActive ? BaseCharacter::State::kActive : BaseCharacter::State::kIdle;
+	for (const auto& canota : canotas_) {
+		canota->SetState(state);
+	}
+	for (const auto& keyCanota : keyCanotas_) {
+		keyCanota->SetState(state);
+	}
+	for (const auto& jet : jets_) {
+		jet->SetState(state);
+	}
+	for (const auto& boss : bosses_) {
+		boss->SetState(state);
+	}
+}

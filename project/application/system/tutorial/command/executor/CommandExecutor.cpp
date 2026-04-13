@@ -80,7 +80,10 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 			_param["rot"][2].get<float>()
 		};
 
-		cameraSystem_->SetTargetTransform(pos, rot);
+		float moveTime = _param["moveTime"].get<float>();
+		float stillnessTime = _param["stillnessTime"].get<float>();
+
+		cameraSystem_->SetTargetTransform(pos, rot, moveTime, stillnessTime);
 	}
 	else if (_name == "FixPlayer") {
 

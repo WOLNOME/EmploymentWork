@@ -176,7 +176,7 @@ void CameraSystem::Update() {
 	}
 }
 
-void CameraSystem::SetTargetTransform(const Vector3& _pos, const Vector3& _rot) {
+void CameraSystem::SetTargetTransform(const Vector3& _pos, const Vector3& _rot, float _moveTime, float _stillnessTime) {
 
 	//外部依存チェック
 	assert(cameraManager_ && "カメラマネージャーがセットされていません");
@@ -195,7 +195,9 @@ void CameraSystem::SetTargetTransform(const Vector3& _pos, const Vector3& _rot) 
 	targetRot_ = _rot;
 
 	//各種タイマーリセット
+	moveDuration_ = _moveTime;
 	moveTimer_ = 0.0f;
+	stillnessDuration_ = _stillnessTime;
 	stillnessTimer_ = 0.0f;
 	halfBlackOutTimer_ = 0.0f;
 

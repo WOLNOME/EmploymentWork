@@ -4,6 +4,7 @@
 // 前方宣言
 class Player;
 class ItemManager;
+class EnemyManager;
 
 /// <summary>
 /// オブジェクトシステム
@@ -30,6 +31,15 @@ public:
 	void SpawnItem(const Norm::Vector3& pos);
 
 	/// <summary>
+	/// 敵を生成する
+	/// </summary>
+	/// <param name="enemyKind">敵の種類</param>
+	/// <param name="pos">座標</param>
+	/// <param name="rotate">回転</param>
+	/// <param name="isActive">アクティブかどうか</param>
+	void SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate, bool isActive);
+
+	/// <summary>
 	/// プレイヤーを指定位置・回転で固定する
 	/// </summary>
 	/// <param name="pos">固定する位置</param>
@@ -50,6 +60,11 @@ public:
 	/// </summary>
 	/// <param name="itemManager">アイテムマネージャーへのポインタ</param>
 	void SetItemManager(ItemManager* itemManager) { itemManager_ = itemManager; }
+	/// <summary>
+	/// エネミーマネージャーインスタンスを設定する
+	/// </summary>
+	/// <param name="enemyManager">エネミーマネージャーへのポインタ</param>
+	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 private:
 	/// ============================== ///
@@ -58,4 +73,5 @@ private:
 
 	Player* player_ = nullptr;          // プレイヤー参照
 	ItemManager* itemManager_ = nullptr; // アイテム管理クラス参照
+	EnemyManager* enemyManager_ = nullptr;	// エネミー管理クラス参照
 };

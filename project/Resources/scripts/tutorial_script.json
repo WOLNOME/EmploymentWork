@@ -50,7 +50,7 @@
           ]
         },
         { "cmd": "ShowMessage", "text": "前方のアイテムをとってみましょう" },
-        { "cmd": "MoveCameraToTarget","pos": [0, 5, -10],"rot": [0, 0, 0]}
+        { "cmd": "MoveCameraToTarget","pos": [0, 5, -10],"rot": [0, 0, 0],"moveTime":5,"stillnessTime":3}
       ],
       "wait": "CameraFinished"
     },

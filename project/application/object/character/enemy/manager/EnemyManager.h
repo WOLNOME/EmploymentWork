@@ -133,6 +133,12 @@ public:
 	/// <param name="_cameraManager">カメラマネージャー</param>
 	void SetCameraManager(CameraManager* _cameraManager);
 
+	/// <summary>
+	/// アクティブかどうかのセット
+	/// </summary>
+	/// <param name="isActive">アクティブかどうか</param>
+	void SetIsActive(bool isActive);
+
 private:
 	/// ============================== ///
 	///		メンバ関数（private）

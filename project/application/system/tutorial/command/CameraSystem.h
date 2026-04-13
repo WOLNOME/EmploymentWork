@@ -76,7 +76,7 @@ public:
 	/// <summary>
 	/// ターゲットトランスフォームの設定
 	/// </summary>
-	void SetTargetTransform(const Norm::Vector3& _pos, const Norm::Vector3& _rot);
+	void SetTargetTransform(const Norm::Vector3& _pos, const Norm::Vector3& _rot,float _moveTime,float _stillnessTime);
 
 private:
 	/// ============================== ///
@@ -103,7 +103,7 @@ private:
 
 	//カメラ制御
 	float moveTimer_ = 0.0f;
-	float moveDuration_ = 1.0f;
+	float moveDuration_ = 0.0f;
 
 	Norm::Vector3 startPos_ = {};
 	Norm::Vector3 startRot_ = {};
@@ -118,6 +118,6 @@ private:
 
 	//静止
 	float stillnessTimer_ = 0.0f;
-	float stillnessDuration_ = 0.7f;
+	float stillnessDuration_ = 0.0f;
 
 };
