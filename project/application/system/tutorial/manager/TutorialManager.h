@@ -11,8 +11,10 @@
 // 前方宣言
 class CameraManager;
 class Player;
+class PlayerWeaponManager;
 class PlayerUI;
 class ItemManager;
+class EnemyManager;
 
 /// <summary>
 /// チュートリアルマネージャー
@@ -92,6 +94,12 @@ public:
     void SetPlayer(Player* player);
 
     /// <summary>
+    /// プレイヤー武器マネージャーを設定します
+    /// </summary>
+    /// <param name="playerWeaponManager">プレイヤー武器マネージャー</param>
+    void SetPlayerWeaponManager(PlayerWeaponManager* playerWeaponManager);
+
+    /// <summary>
     /// プレイヤーUIを設定します
     /// </summary>
     /// <param name="playerUI">プレイヤーUIのインスタンス</param>
@@ -102,6 +110,12 @@ public:
     /// </summary>
     /// <param name="itemManager">アイテムマネージャーのインスタンス</param>
     void SetItemManager(ItemManager* itemManager);
+
+    /// <summary>
+    /// エネミーマネージャーを設定します
+    /// </summary>
+    /// <param name="enemyManager">エネミーマネージャー</param>
+    void SetEnemyManager(EnemyManager* enemyManager);
 
 private:
     /// ============================== ///

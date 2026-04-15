@@ -53,6 +53,9 @@ void TutorialManager::Update() {
 		if (currentSequenceName_ == "tutorial_intro") {
 			Start("tutorial_move");
 		}
+		else if (currentSequenceName_ == "tutorial_move") {
+			Start("tutorial_attack");
+		}
 		else {
 			currentSequence_ = nullptr;
 		}
@@ -146,12 +149,20 @@ void TutorialManager::SetPlayer(Player* player) {
 	commandExecutor_->SetPlayer(player);
 }
 
+void TutorialManager::SetPlayerWeaponManager(PlayerWeaponManager* playerWeaponManager) {
+	commandExecutor_->SetPlayerWeaponManager(playerWeaponManager);
+}
+
 void TutorialManager::SetPlayerUI(PlayerUI* playerUI) {
 	commandExecutor_->SetPlayerUI(playerUI);
 }
 
 void TutorialManager::SetItemManager(ItemManager* itemManager) {
 	commandExecutor_->SetItemManager(itemManager);
+}
+
+void TutorialManager::SetEnemyManager(EnemyManager* enemyManager) {
+	commandExecutor_->SetEnemyManager(enemyManager);
 }
 
 void TutorialManager::ExecuteStep(const Step& step) {

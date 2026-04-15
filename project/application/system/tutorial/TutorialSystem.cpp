@@ -60,8 +60,10 @@ void TutorialSystem::Initialize() {
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	playerUI_->SetItemManager(itemManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
+	tutorialManager_->SetEnemyManager(enemyManager_.get());
 	tutorialManager_->SetItemManager(itemManager_.get());
 	tutorialManager_->SetPlayer(player_.get());
+	tutorialManager_->SetPlayerWeaponManager(playerWeaponManager_.get());
 	tutorialManager_->SetPlayerUI(playerUI_.get());
 
 	//チュートリアルスクリプトをロード

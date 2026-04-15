@@ -39,10 +39,21 @@ public:
 	void SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate);
 
 	/// <summary>
+	/// 全エネミーのクリア
+	/// </summary>
+	void ClearEnemy();
+
+	/// <summary>
 	/// 敵の稼働・停止を切り替える
 	/// </summary>
 	/// <param name="isActive">アクティブかどうか</param>
 	void SetIsActiveEnemy(bool isActive);
+
+	/// <summary>
+	/// 敵の無敵モードを切り替える
+	/// </summary>
+	/// <param name="isInvicible">無敵モードかどうか</param>
+	void SetIsInvicibleEnemy(bool isInvicible);
 
 	/// <summary>
 	/// プレイヤーを指定位置・回転で固定する

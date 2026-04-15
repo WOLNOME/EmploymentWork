@@ -5,6 +5,7 @@
 #include <application/object/character/player/Player.h>
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/object/character/enemy/manager/EnemyManager.h>
+#include <application/system/CameraManager.h>
 
 using namespace Norm;
 
@@ -37,12 +38,22 @@ void ObjectSystem::SpawnEnemy(const std::string& enemyKind, const Norm::Vector3&
 	}
 }
 
+void ObjectSystem::ClearEnemy() {
+	enemyManager_->ClearEnemy();
+}
+
 void ObjectSystem::SetIsActiveEnemy(bool isActive) {
 	enemyManager_->SetIsActive(isActive);
+}
+
+void ObjectSystem::SetIsInvicibleEnemy(bool isInvicible) {
+	enemyManager_->SetIsInvicible(isInvicible);
 }
 
 void ObjectSystem::FixPlayer(const Norm::Vector3& pos, const Norm::Vector3& rot) {
 	//プレイヤーの位置を固定
 	player_->SetTranslate(pos);
 	player_->SetRotate(rot);
+	//カメラの回転をプレイヤーの向きに合わせる
+	player_->GetCameraManager()->GetActiveCamera()->worldTransform.SetRotate(rot);
 }

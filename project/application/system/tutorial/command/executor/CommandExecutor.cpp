@@ -111,10 +111,20 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 
 		//タイプごとの処理
 		if (type == "collectItem") {
-			objectiveSystem_->AddCollectObjective(_param["count"].get<int>());
+			objectiveSystem_->AddCollectObjective("Item", _param["count"].get<int>());
 		}
 		else if (type == "collectSpecial") {
-			objectiveSystem_->AddCollectObjective(_param["count"].get<int>());
+			objectiveSystem_->AddCollectObjective("Special", _param["count"].get<int>());
+		}
+		else if (type == "hitCannon") {
+			objectiveSystem_->AddHitObjective("Cannon", _param["count"].get<int>());
+
+		}
+		else if (type == "hitBullet") {
+			objectiveSystem_->AddHitObjective("Bullet", _param["count"].get<int>());
+		}
+		else if (type == "defeatEnemy") {
+
 		}
 	}
 	else if (_name == "SpawnItem") {
@@ -132,6 +142,30 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 			objectSystem_->SpawnItem(pos);
 		}
 	}
+	else if (_name == "SpawnEnemy") {
+		std::string enemyKind = _param["type"];
+		Vector3 pos = {
+			_param["pos"][0].get<float>(),
+			_param["pos"][1].get<float>(),
+			_param["pos"][2].get<float>()
+		};
+		Vector3 rot = {
+			_param["rot"][0].get<float>(),
+			_param["rot"][1].get<float>(),
+			_param["rot"][2].get<float>()
+		};
+
+		objectSystem_->SpawnEnemy(enemyKind, pos, rot);
+	}
+	else if (_name == "EnemyActive") {
+		objectSystem_->SetIsActiveEnemy(_param["active"].get<int>());
+	}
+	else if(_name== "EnemyInvicible") {
+		objectSystem_->SetIsInvicibleEnemy(_param["invicible"].get<int>());
+	}
+	else if (_name == "ClearEnemy") {
+		objectSystem_->ClearEnemy();
+	}
 }
 
 void CommandExecutor::SetCameraManager(CameraManager* cameraManager) {
@@ -145,10 +179,18 @@ void CommandExecutor::SetPlayer(Player* player) {
 	objectSystem_->SetPlayer(player);
 }
 
+void CommandExecutor::SetPlayerWeaponManager(PlayerWeaponManager* playerWeaponManager) {
+	objectiveSystem_->SetPlayerWeaponManager(playerWeaponManager);
+}
+
 void CommandExecutor::SetPlayerUI(PlayerUI* playerUI) {
 	cameraSystem_->SetPlayerUI(playerUI);
 }
 
 void CommandExecutor::SetItemManager(ItemManager* itemManager) {
 	objectSystem_->SetItemManager(itemManager);
+}
+
+void CommandExecutor::SetEnemyManager(EnemyManager* enemyManager) {
+	objectSystem_->SetEnemyManager(enemyManager);
 }
