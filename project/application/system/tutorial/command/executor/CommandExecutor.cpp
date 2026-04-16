@@ -124,7 +124,7 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 			objectiveSystem_->AddHitObjective("Bullet", _param["count"].get<int>());
 		}
 		else if (type == "defeatEnemy") {
-
+			objectiveSystem_->AddDefeatEnemyObjective();
 		}
 	}
 	else if (_name == "SpawnItem") {
@@ -139,7 +139,7 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 				t["pos"][2].get<float>()
 			};
 
-			objectSystem_->SpawnItem(pos);
+			objectSystem_->SpawnItem(_param["type"].get<std::string>(), pos);
 		}
 	}
 	else if (_name == "SpawnEnemy") {
@@ -193,4 +193,5 @@ void CommandExecutor::SetItemManager(ItemManager* itemManager) {
 
 void CommandExecutor::SetEnemyManager(EnemyManager* enemyManager) {
 	objectSystem_->SetEnemyManager(enemyManager);
+	objectiveSystem_->SetEnemyManager(enemyManager);
 }

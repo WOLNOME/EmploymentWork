@@ -15,6 +15,12 @@
     },
     {
       "cmds": [
+        { "cmd": "ShowMessage", "text": "訓練を終了したい場合は\nポーズメニューからスキップできます" }
+      ],
+      "wait": "MessageTextFinished"
+    },
+    {
+      "cmds": [
         { "cmd": "CloseMessageWindow" }
       ],
       "wait": "MessageWindowClosed"
@@ -44,21 +50,16 @@
       "cmds": [
         {
           "cmd": "SpawnItem",
+          "type": "Item",
           "count": 1,
           "transforms": [
             { "pos": [0, 0, 5] }
           ]
         },
         { "cmd": "ShowMessage", "text": "前方のアイテムをとってみましょう" },
-        { "cmd": "MoveCameraToTarget","pos": [0, 6, -15],"rot": [0, 0, 0],"moveTime":5,"stillnessTime":3}
+        { "cmd": "MoveCameraToTarget","pos": [0, 4.5, -15],"rot": [0, 0, 0],"moveTime":1.5,"stillnessTime":1.5}
       ],
       "wait": "CameraFinished"
-    },
-    {
-      "cmds": [
-        { "cmd": "ShowMoveTutorialSprite" }
-      ],
-      "wait": "SpriteFinished"
     },
     {
       "cmds": [
@@ -84,6 +85,7 @@
       "cmds": [
         {
           "cmd": "SpawnItem",
+          "type": "Item",
           "count": 5,
           "transforms": [
             { "pos": [20, 0, 160] },
@@ -101,7 +103,7 @@
       "cmds": [
         { "cmd": "UnlockInput" },
         { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
-        { "cmd": "SetObjective","type": "collectItem", "text": "アイテムを取得", "count": 5 }
+        { "cmd": "SetObjective","type": "collectItem", "count": 5 }
       ],
       "wait": "ObjectiveComplete"
     },
@@ -180,23 +182,23 @@
       { "cmd": "ClearEnemy" },
       {
         "cmd": "SpawnItem",
-        "type": "special",
+        "type": "Special",
         "count": 1,
         "transforms": [
           { "pos": [0, 0, 0] }
         ]
       },
-      { "cmd": "ShowMessage", "text": "敵を倒すとスペシャル弾をドロップします" }
+      { "cmd": "ShowMessage", "text": "青戦車を倒すと\n回復アイテムやスペシャル弾をドロップすることがあります" }
     ],
     "wait": "MessageTextFinished"
   },
   {
     "cmds": [
       { "cmd": "UnlockInput" },
+      { "cmd": "ShowMessage", "text": "敵が落としたスペシャル弾を拾ってみましょう！" },
       {
         "cmd": "SetObjective",
         "type": "collectSpecial",
-        "text": "スペシャル弾を取得",
         "count": 1
       }
     ],
@@ -205,6 +207,12 @@
   {
     "cmds": [
       { "cmd": "LockInput" },
+      { "cmd": "ShowMessage", "text": "Bでスペシャル弾を撃つことができます\n敵やバリアに当てると特大ダメージが入りますが\n青戦車のドロップでしか手に入らないので慎重に使いましょう！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
       {
         "cmd": "FixPlayer",
         "pos": [0, 0, -200],
@@ -218,7 +226,13 @@
       },
       { "cmd": "EnemyActive", "active": 0 },
       { "cmd": "EnemyInvicible", "invicible": 0 },
-      { "cmd": "ShowMessage", "text": "次は反撃してくる敵です" }
+      { "cmd": "ShowMessage", "text": "次は動く敵と戦ってみましょう！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "スペシャル弾を当てると楽に倒すことができるので狙ってみてください！\n（※Aで戦闘が開始されます）" }
     ],
     "wait": "MessageTextFinished"
   },
@@ -226,10 +240,10 @@
     "cmds": [
       { "cmd": "EnemyActive", "active": 1 },
       { "cmd": "UnlockInput" },
+      { "cmd": "ShowMessage", "text": "LT：砲弾攻撃\nRT：機関銃攻撃\nB：スペシャルアタック" },
       {
         "cmd": "SetObjective",
-        "type": "defeatEnemy",
-        "count": 1
+        "type": "defeatEnemy"
       }
     ],
     "wait": "ObjectiveComplete"
@@ -237,7 +251,19 @@
   {
     "cmds": [
       { "cmd": "LockInput" },
-      { "cmd": "ShowMessage", "text": "素晴らしい！攻撃は完璧です！" }
+      { "cmd": "ShowMessage", "text": "お見事！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "この調子でたくさん戦果を挙げてみてくださいね！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます\n（※このメッセージを終了した場合チュートリアルを終了します）" }
     ],
     "wait": "MessageTextFinished"
   },

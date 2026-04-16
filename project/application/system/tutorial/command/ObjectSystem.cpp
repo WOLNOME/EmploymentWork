@@ -18,9 +18,15 @@ void ObjectSystem::Update() {
 	assert(enemyManager_ && "エネミーマネージャーがセットされていません");
 }
 
-void ObjectSystem::SpawnItem(const Norm::Vector3& pos) {
-	//スポーン
-	itemManager_->SpawnTutorialCollectibleItme(pos);
+void ObjectSystem::SpawnItem(const std::string& itemKind, const Norm::Vector3& pos) {
+
+	if (itemKind == "Item") {
+		itemManager_->SpawnTutorialCollectibleItme(pos);
+	}
+	else if (itemKind == "Special") {
+		itemManager_->SpawnChargeItem(pos);
+	}
+	
 }
 
 void ObjectSystem::SpawnEnemy(const std::string& enemyKind, const Norm::Vector3& pos, const Norm::Vector3& rotate) {

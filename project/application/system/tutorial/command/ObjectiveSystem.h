@@ -8,6 +8,7 @@
 //前方宣言
 class Player;
 class PlayerWeaponManager;
+class EnemyManager;
 
 /// <summary>
 /// 目標の種類
@@ -76,6 +77,11 @@ public:
 	/// <param name="targetCount">目標数</param>
 	void AddHitObjective(const std::string& type, int targetCount);
 
+	/// <summary>
+	/// 全ての敵を倒す目標の追加
+	/// </summary>
+	void AddDefeatEnemyObjective();
+
 	/// ============================== ///
 	///		setter
 	/// ============================== ///
@@ -90,6 +96,11 @@ public:
 	/// </summary>
 	/// <param name="manager">プレイヤー武器マネージャー</param>
 	void SetPlayerWeaponManager(PlayerWeaponManager* manager) { playerWeaponManager_ = manager; }
+	/// <summary>
+	/// 敵マネージャーの設定
+	/// </summary>
+	/// <param name="manager">敵マネージャー</param>
+	void SetEnemyManager(EnemyManager* manager) { enemyManager_ = manager; }
 
 private:
 	/// ============================== ///
@@ -98,6 +109,7 @@ private:
 
 	Player* player_ = nullptr;
 	PlayerWeaponManager* playerWeaponManager_ = nullptr;
+	EnemyManager* enemyManager_ = nullptr;
 
 	/// ============================== ///
 	///		メンバ変数

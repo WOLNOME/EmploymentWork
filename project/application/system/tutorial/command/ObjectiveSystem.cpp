@@ -8,6 +8,7 @@
 //アプリケーション
 #include <application/object/character/player/Player.h>
 #include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
+#include <application/object/character/enemy/manager/EnemyManager.h>
 
 using namespace Norm;
 
@@ -90,6 +91,7 @@ void ObjectiveSystem::Update() {
 	//プレイヤーチェック
 	assert(player_ && "プレイヤーがセットされていません");
 	assert(playerWeaponManager_ && "プレイヤー武器マネージャーがセットされていません");
+	assert(enemyManager_ && "敵マネージャーがセットされていません");
 
 	for (auto& obj : objectives_) {
 
@@ -182,6 +184,59 @@ void ObjectiveSystem::Update() {
 			}
 			break;
 		}
+		case ObjectiveType::DefeatEnemy:
+		{
+			//敵マネージャーから生存中の敵の数を取得
+			int aliveCount = 0;
+			for (const auto& subject : enemyManager_->GetCanotas()) {
+				//アイドル状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle)
+					continue;
+
+				//生存中の敵の数をカウント
+				aliveCount++;
+			}
+			for (const auto& subject : enemyManager_->GetKeyCanotas()) {
+				//アイドル状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle)
+					continue;
+
+				//生存中の敵の数をカウント
+				aliveCount++;
+			}
+			for (const auto& subject : enemyManager_->GetJets()) {
+				//アイドル状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle)
+					continue;
+
+				//生存中の敵の数をカウント
+				aliveCount++;
+			}
+			for (const auto& subject : enemyManager_->GetBosses()) {
+				//アイドル状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle)
+					continue;
+
+				//生存中の敵の数をカウント
+				aliveCount++;
+			}
+			//テキストを更新
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"敵を倒せ！");
+			//全ての敵が倒されていたら
+			if (aliveCount <= 0) {
+				//アニメーションが終了していたら稼働しない
+				if (!obj.checkMark->GetIsFinishedUVScroll()) {
+					//チェックのスプライトアニメーションを稼働
+					obj.checkMark->SetIsPlayUVScroll(true);
+				}
+				else {
+					//目標の達成フラグを立てる
+					obj.completed = true;
+				}
+			}
+
+			break;
+		}
 		default:
 			break;
 		}
@@ -269,12 +324,12 @@ void ObjectiveSystem::AddCollectObjective(const std::string& type, int targetCou
 		}
 	}
 
-	
+
 }
 
 void ObjectiveSystem::AddHitObjective(const std::string& type, int targetCount) {
 
-	if(type == "Cannon") {
+	if (type == "Cannon") {
 		//プレイヤーの砲弾ヒット数を0にリセット
 		playerWeaponManager_->SetCannonHitNum(0);
 
@@ -305,5 +360,19 @@ void ObjectiveSystem::AddHitObjective(const std::string& type, int targetCount) 
 			obj.checkMark->SetIsDisplay(true);
 			return;
 		}
+	}
+}
+
+void ObjectiveSystem::AddDefeatEnemyObjective() {
+	for (auto& obj : objectives_) {
+		if (obj.type != ObjectiveType::None)
+			continue;
+		obj.type = ObjectiveType::DefeatEnemy;
+		obj.targetCount = 0;
+		obj.current = 0;
+		obj.completed = false;
+		obj.text->SetIsDisplay(true);
+		obj.checkMark->SetIsDisplay(true);
+		return;
 	}
 }

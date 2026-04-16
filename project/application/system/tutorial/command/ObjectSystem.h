@@ -27,8 +27,9 @@ public:
 	/// <summary>
 	/// 指定位置・回転でアイテムを生成する
 	/// </summary>
+	/// <param name="itemKind">アイテムの種類</param>
 	/// <param name="pos">生成位置</param>
-	void SpawnItem(const Norm::Vector3& pos);
+	void SpawnItem(const std::string& itemKind, const Norm::Vector3& pos);
 
 	/// <summary>
 	/// 敵を生成する
