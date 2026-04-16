@@ -63,3 +63,7 @@ void ObjectSystem::FixPlayer(const Norm::Vector3& pos, const Norm::Vector3& rot)
 	//カメラの回転をプレイヤーの向きに合わせる
 	player_->GetCameraManager()->GetActiveCamera()->worldTransform.SetRotate(rot);
 }
+
+void ObjectSystem::SetIsInviciblePlayer(bool isInvicible) {
+	player_->SetIsInvicible(isInvicible);
+}

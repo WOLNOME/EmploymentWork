@@ -97,6 +97,12 @@ void Player::Update() {
 
 	//カメラ処理
 	CameraAlgorithm();
+
+	//無敵状態の処理
+	if (isInvicible_) {
+		hp_ = param_["maxHP"].get<int>();
+	}
+
 }
 
 void Player::DebugWithImGui() {
@@ -246,9 +252,8 @@ void Player::Move() {
 	//----------------------------------------------------------
 	Vector3 newTranslate = worldTransform_.GetTranslate() + velocity_ * kDeltaTime;
 
-	const float limit = 995.0f;
-	newTranslate.x = std::clamp(newTranslate.x, -limit, limit);
-	newTranslate.z = std::clamp(newTranslate.z, -limit, limit);
+	newTranslate.x = std::clamp(newTranslate.x, -moveLimitDistance_, moveLimitDistance_);
+	newTranslate.z = std::clamp(newTranslate.z, -moveLimitDistance_, moveLimitDistance_);
 
 	worldTransform_.SetTranslate(newTranslate);
 

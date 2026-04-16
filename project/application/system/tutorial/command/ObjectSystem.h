@@ -63,6 +63,12 @@ public:
 	/// <param name="rot">固定する回転</param>
 	void FixPlayer(const Norm::Vector3& pos, const Norm::Vector3& rot);
 
+	/// <summary>
+	/// プレイヤーの無敵モードを切り替える
+	/// </summary>
+	/// <param name="isInvicible">無敵モードかどうか</param>
+	void SetIsInviciblePlayer(bool isInvicible);
+
 	/// ============================== ///
 	///		setter
 	/// ============================== ///

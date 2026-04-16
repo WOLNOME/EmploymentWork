@@ -39,7 +39,7 @@ void Tuto_PauseSystem::Initialize() {
 		guideTextureHandle_ = TextureManager::GetInstance()->LoadTexture("operationGuide.png");
 		//スプライト
 		guideSprite_ = std::make_unique<Sprite>();
-		guideSprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("operationGuide"), Order::Front5, guideTextureHandle_);
+		guideSprite_->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("operationGuide"), Order::SceneTransition, guideTextureHandle_);
 		guideSprite_->SetIsDisplay(false);
 		guideSprite_->SetAnchorPoint({ 0.5f,0.5f });
 		guideSprite_->SetPosition({ WinApp::kClientWidth / 2.0f,WinApp::kClientHeight / 2.0f });
@@ -95,31 +95,24 @@ void Tuto_PauseSystem::Initialize() {
 				break;
 			}
 			case 3: {
-				// 移動チュートリアル
+				// チュートリアルを最初から
 				TextTextureManager::GetInstance()->EditTextString(
-					stringMenuTextureHandle_[i], L"移動チュートリアル");
+					stringMenuTextureHandle_[i], L"チュートリアルを初めから");
 				stringMenuSprite_[i]->SetPosition({ WinApp::kClientWidth / 2.0f, 470.0f });
 				break;
 			}
 			case 4: {
-				// 攻撃チュートリアル
+				// チュートリアルをスキップ
 				TextTextureManager::GetInstance()->EditTextString(
-					stringMenuTextureHandle_[i], L"攻撃チュートリアル");
+					stringMenuTextureHandle_[i], L"チュートリアルをスキップ");
 				stringMenuSprite_[i]->SetPosition({ WinApp::kClientWidth / 2.0f, 530.0f });
 				break;
 			}
 			case 5: {
-				// チュートリアルをスキップ
-				TextTextureManager::GetInstance()->EditTextString(
-					stringMenuTextureHandle_[i], L"チュートリアルをスキップ");
-				stringMenuSprite_[i]->SetPosition({ WinApp::kClientWidth / 2.0f, 590.0f });
-				break;
-			}
-			case 6: {
 				// タイトルへ
 				TextTextureManager::GetInstance()->EditTextString(
 					stringMenuTextureHandle_[i], L"タイトルに戻る");
-				stringMenuSprite_[i]->SetPosition({ WinApp::kClientWidth / 2.0f, 650.0f });
+				stringMenuSprite_[i]->SetPosition({ WinApp::kClientWidth / 2.0f, 590.0f });
 				break;
 			}
 			default:
@@ -178,10 +171,7 @@ void Tuto_PauseSystem::Update() {
             }
 
             switch (selectMenu_) {
-
-                //================================================
             case Menu::kContinue:
-                //================================================
             {
                 if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
                     isPause_ = false;
@@ -201,13 +191,9 @@ void Tuto_PauseSystem::Update() {
                 stringMenuSprite_[3]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[4]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[6]->SetColor({ 1,1,1,1 });
                 break;
             }
-
-            //================================================
             case Menu::kOperationGuide:
-                //================================================
             {
                 if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
                     isOperationGuideDisplay_ = true;
@@ -226,7 +212,7 @@ void Tuto_PauseSystem::Update() {
                     input->TriggerPadButton(GamePadButton::DPAD_DOWN) ||
                     input->GetLStickDir().y < 0.0f) {
 
-                    selectMenu_ = Menu::kMoveTuto;
+                    selectMenu_ = Menu::kRestart;
                     cursolMoveSE_->Play(false, 1.0f);
                 }
 
@@ -235,16 +221,18 @@ void Tuto_PauseSystem::Update() {
                 stringMenuSprite_[3]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[4]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[6]->SetColor({ 1,1,1,1 });
                 break;
             }
-
-            //================================================
-            case Menu::kMoveTuto:
-                //================================================
+            case Menu::kRestart:
             {
                 if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
-                    decideSE_->Play(false, 1.0f);
+                    uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("shutter.png");
+
+                    if (SceneManager::GetInstance()->SetNextScene("Tutorial", SceneTransitionAnimation::Type::SLIDEDOWN, SceneTransitionAnimation::Type::SLIDEUP, SceneTransitionAnimation::Option::SHAKE, 1.0f,
+                        textureHandle)) {
+
+                        decideSE_->Play(false, 1.0f);
+                    }
                 }
 
                 if (input->TriggerKey(DIK_W) ||
@@ -259,7 +247,7 @@ void Tuto_PauseSystem::Update() {
                     input->TriggerPadButton(GamePadButton::DPAD_DOWN) ||
                     input->GetLStickDir().y < 0.0f) {
 
-                    selectMenu_ = Menu::kAttackTuto;
+                    selectMenu_ = Menu::kSkip;
                     cursolMoveSE_->Play(false, 1.0f);
                 }
 
@@ -268,46 +256,9 @@ void Tuto_PauseSystem::Update() {
                 stringMenuSprite_[3]->SetColor({ 0.929f,0.592f,0.255f,1 });
                 stringMenuSprite_[4]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[6]->SetColor({ 1,1,1,1 });
                 break;
             }
-
-            //================================================
-            case Menu::kAttackTuto:
-                //================================================
-            {
-                if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
-                    decideSE_->Play(false, 1.0f);
-                }
-
-                if (input->TriggerKey(DIK_W) ||
-                    input->TriggerPadButton(GamePadButton::DPAD_UP) ||
-                    input->GetLStickDir().y > 0.0f) {
-
-                    selectMenu_ = Menu::kMoveTuto;
-                    cursolMoveSE_->Play(false, 1.0f);
-                }
-
-                if (input->TriggerKey(DIK_S) ||
-                    input->TriggerPadButton(GamePadButton::DPAD_DOWN) ||
-                    input->GetLStickDir().y < 0.0f) {
-
-                    selectMenu_ = Menu::kSkip;
-                    cursolMoveSE_->Play(false, 1.0f);
-                }
-
-                stringMenuSprite_[1]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[2]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[3]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[4]->SetColor({ 0.929f,0.592f,0.255f,1 });
-                stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[6]->SetColor({ 1,1,1,1 });
-                break;
-            }
-
-            //================================================
             case Menu::kSkip:
-                //================================================
             {
                 if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
 
@@ -324,7 +275,7 @@ void Tuto_PauseSystem::Update() {
                     input->TriggerPadButton(GamePadButton::DPAD_UP) ||
                     input->GetLStickDir().y > 0.0f) {
 
-                    selectMenu_ = Menu::kAttackTuto;
+                    selectMenu_ = Menu::kRestart;
                     cursolMoveSE_->Play(false, 1.0f);
                 }
 
@@ -339,15 +290,11 @@ void Tuto_PauseSystem::Update() {
                 stringMenuSprite_[1]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[2]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[3]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[4]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[5]->SetColor({ 0.929f,0.592f,0.255f,1 });
-                stringMenuSprite_[6]->SetColor({ 1,1,1,1 });
+                stringMenuSprite_[4]->SetColor({ 0.929f,0.592f,0.255f,1 });
+                stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
                 break;
             }
-
-            //================================================
             case Menu::kTItle:
-                //================================================
             {
                 if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
 
@@ -372,8 +319,7 @@ void Tuto_PauseSystem::Update() {
                 stringMenuSprite_[2]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[3]->SetColor({ 1,1,1,1 });
                 stringMenuSprite_[4]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[5]->SetColor({ 1,1,1,1 });
-                stringMenuSprite_[6]->SetColor({ 0.929f,0.592f,0.255f,1 });
+                stringMenuSprite_[5]->SetColor({ 0.929f,0.592f,0.255f,1 });
                 break;
             }
             }

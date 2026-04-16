@@ -21,8 +21,7 @@ private:
 	enum class Menu {
 		kContinue,			//続行
 		kOperationGuide,	//操作ガイド
-		kMoveTuto,			//移動チュートリアルへ
-		kAttackTuto,		//攻撃チュートリアルへ
+		kRestart,			//チュートリアルを最初から
 		kSkip,				//スキップ
 		kTItle,				//タイトルへ
 

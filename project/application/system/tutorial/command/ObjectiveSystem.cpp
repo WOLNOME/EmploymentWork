@@ -189,32 +189,36 @@ void ObjectiveSystem::Update() {
 			//敵マネージャーから生存中の敵の数を取得
 			int aliveCount = 0;
 			for (const auto& subject : enemyManager_->GetCanotas()) {
-				//アイドル状態なら抜ける
-				if (subject->GetState() == BaseCharacter::State::kIdle)
+				//アイドル状態もしくは仮死状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle ||
+					subject->GetState() == BaseCharacter::State::kAsphyxia)
 					continue;
 
 				//生存中の敵の数をカウント
 				aliveCount++;
 			}
 			for (const auto& subject : enemyManager_->GetKeyCanotas()) {
-				//アイドル状態なら抜ける
-				if (subject->GetState() == BaseCharacter::State::kIdle)
+				//アイドル状態もしくは仮死状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle ||
+					subject->GetState() == BaseCharacter::State::kAsphyxia)
 					continue;
 
 				//生存中の敵の数をカウント
 				aliveCount++;
 			}
 			for (const auto& subject : enemyManager_->GetJets()) {
-				//アイドル状態なら抜ける
-				if (subject->GetState() == BaseCharacter::State::kIdle)
+				//アイドル状態もしくは仮死状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle ||
+					subject->GetState() == BaseCharacter::State::kAsphyxia)
 					continue;
 
 				//生存中の敵の数をカウント
 				aliveCount++;
 			}
 			for (const auto& subject : enemyManager_->GetBosses()) {
-				//アイドル状態なら抜ける
-				if (subject->GetState() == BaseCharacter::State::kIdle)
+				//アイドル状態もしくは仮死状態なら抜ける
+				if (subject->GetState() == BaseCharacter::State::kIdle ||
+					subject->GetState() == BaseCharacter::State::kAsphyxia)
 					continue;
 
 				//生存中の敵の数をカウント

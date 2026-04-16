@@ -3,6 +3,7 @@
     {
       "cmds": [
         { "cmd": "LockInput" },
+        { "cmd": "PlayerInvicible", "invicible": 1 },
         { "cmd": "OpenMessageWindow" }
       ],
       "wait": "MessageWindowOpened"
@@ -15,7 +16,7 @@
     },
     {
       "cmds": [
-        { "cmd": "ShowMessage", "text": "訓練を終了したい場合は\nポーズメニューからスキップできます" }
+        { "cmd": "ShowMessage", "text": "訓練を終了したい場合はポーズメニューからスキップできます" }
       ],
       "wait": "MessageTextFinished"
     },
@@ -69,7 +70,7 @@
           "pos": [0, 0, -200],
           "rot": [0, 0, 0]
         },
-        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
+        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ" },
         { "cmd": "SetObjective","type": "collectItem",  "count": 1 }
       ],
       "wait": "ObjectiveComplete"
@@ -95,14 +96,32 @@
             { "pos": [180, 0, 25] }
           ]
         },
-        { "cmd": "ShowMessage", "text": "次はもっと多くのアイテムをとってみましょう" }
+        { "cmd": "ShowMessage", "text": "次はもっとたくさんのアイテムをとってみましょう" }
       ],
       "wait": "MessageTextFinished"
     },
     {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "アイテムの場所が分からない時は\n画面下のレーダーで確認できます" }
+    ],
+    "wait": "MessageTextFinished"
+    },
+    {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "他にも敵の位置を映してくれたり\n矢印で作戦の進行をサポートしてくれる優れモノです！" }
+    ],
+    "wait": "MessageTextFinished"
+    },
+    {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "レーダーを活かして戦場を優位に立ちまわってみてください！\n（※Aでミッション開始）" }
+    ],
+    "wait": "MessageTextFinished"
+    },
+    {
       "cmds": [
         { "cmd": "UnlockInput" },
-        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ操作" },
+        { "cmd": "ShowMessage", "text": "Lスティック：移動\nRスティック：カメラ" },
         { "cmd": "SetObjective","type": "collectItem", "count": 5 }
       ],
       "wait": "ObjectiveComplete"
@@ -116,13 +135,7 @@
     },
     {
       "cmds": [
-        { "cmd": "ShowMessage", "text": "実際の戦場でもこの訓練を思い出して駆けまわってみてくださいね" }
-      ],
-      "wait": "MessageTextFinished"
-    },
-    {
-      "cmds": [
-        { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます" }
+        { "cmd": "ShowMessage", "text": "実際の戦場でも今のように駆けまわってみてくださいね！" }
       ],
       "wait": "MessageTextFinished"
     },
@@ -169,6 +182,12 @@
   },
   {
     "cmds": [
+      { "cmd": "ShowMessage", "text": "砲弾は1発、機関銃弾は50発撃ちきると\nリロードが発生するので注意してください" }
+    ],
+    "wait": "MessageTextFinished"
+    },
+  {
+    "cmds": [
       { "cmd": "UnlockInput" },
       { "cmd": "ShowMessage", "text": "LT：砲弾攻撃\nRT：機関銃攻撃" },
       { "cmd": "SetObjective", "type": "hitCannon", "count": 3 },
@@ -188,14 +207,26 @@
           { "pos": [0, 0, 0] }
         ]
       },
-      { "cmd": "ShowMessage", "text": "青戦車を倒すと\n回復アイテムやスペシャル弾をドロップすることがあります" }
+      { "cmd": "ShowMessage", "text": "青戦車を倒すと回復アイテムやスペシャル弾を\nドロップすることがあります" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "また、画面右下の[HP]が0になると作戦失敗となるので\n体力が減ってきたら回復アイテムで回復しましょう！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "ちなみにアイテムは取得するまで消えることはないので\n必要になったら取りに戻るといいですよ！" }
     ],
     "wait": "MessageTextFinished"
   },
   {
     "cmds": [
       { "cmd": "UnlockInput" },
-      { "cmd": "ShowMessage", "text": "敵が落としたスペシャル弾を拾ってみましょう！" },
+      { "cmd": "ShowMessage", "text": "それでは敵が落としたスペシャル弾を拾ってみましょう！" },
       {
         "cmd": "SetObjective",
         "type": "collectSpecial",
@@ -207,7 +238,25 @@
   {
     "cmds": [
       { "cmd": "LockInput" },
-      { "cmd": "ShowMessage", "text": "Bでスペシャル弾を撃つことができます\n敵やバリアに当てると特大ダメージが入りますが\n青戦車のドロップでしか手に入らないので慎重に使いましょう！" }
+      { "cmd": "ShowMessage", "text": "画面左下の[SPECIAL]に雷マークがひとつ点きましたね！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "Bボタンでこの雷マークを一つ消費して\nスペシャル弾を撃つことができます" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "敵やボスの展開するバリアに当てて特大ダメージを狙いましょう！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "ただし青戦車からのドロップでしか手に入らないので\nここぞという時に使ってみてください！" }
     ],
     "wait": "MessageTextFinished"
   },
@@ -232,7 +281,13 @@
   },
   {
     "cmds": [
-      { "cmd": "ShowMessage", "text": "スペシャル弾を当てると楽に倒すことができるので狙ってみてください！\n（※Aで戦闘が開始されます）" }
+      { "cmd": "ShowMessage", "text": "敵の砲身の向きに注意して攻撃を避けましょう！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "また、敵の砲弾に攻撃を当てると撃ち落とすことが\nできるので狙ってみてください！\n（※Aで戦闘が開始されます）" }
     ],
     "wait": "MessageTextFinished"
   },
@@ -258,6 +313,18 @@
   {
     "cmds": [
       { "cmd": "ShowMessage", "text": "この調子でたくさん戦果を挙げてみてくださいね！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "ちなみに紫戦車が落とした鍵は2つ揃えると\nボスの封印を解くことができます" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "この訓練を思い出して本作戦の破壊目標である\nボスを撃破しましょう！" }
     ],
     "wait": "MessageTextFinished"
   },

@@ -85,6 +85,9 @@ void CommandExecutor::ExecuteCommand(const std::string& _name, const json& _para
 
 		cameraSystem_->SetTargetTransform(pos, rot, moveTime, stillnessTime);
 	}
+	else if (_name == "PlayerInvicible") {
+		objectSystem_->SetIsInviciblePlayer(_param["invicible"].get<int>());
+	}
 	else if (_name == "FixPlayer") {
 
 		Vector3 pos = {

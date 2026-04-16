@@ -66,6 +66,9 @@ void TutorialSystem::Initialize() {
 	tutorialManager_->SetPlayerWeaponManager(playerWeaponManager_.get());
 	tutorialManager_->SetPlayerUI(playerUI_.get());
 
+	//パラメーターのセット
+	player_->SetMoveLimitDistance(295.0f);
+
 	//チュートリアルスクリプトをロード
 	tutorialManager_->LoadFromFile("Resources/scripts/tutorial_script");
 	//初めから再生

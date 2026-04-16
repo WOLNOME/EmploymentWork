@@ -206,6 +206,16 @@ public:
 	/// </summary>
 	/// <param name="_isCameraFree">プレイヤー側でカメラを操作しないか</param>
 	void SetIsCameraFree(bool _isCameraFree) { isCameraFree_ = _isCameraFree; }
+	/// <summary>
+	/// 移動制限距離のセット
+	/// </summary>
+	/// <param name="_moveLimitDistance">移動制限距離</param>
+	void SetMoveLimitDistance(float _moveLimitDistance) { moveLimitDistance_ = _moveLimitDistance; }
+	/// <summary>
+	/// 無敵状態かのセット
+	/// </summary>
+	/// <param name="_isInvicible">無敵状態か</param>
+	void SetIsInvicible(bool _isInvicible) { isInvicible_ = _isInvicible; }
 
 private:
 	/// ============================== ///
@@ -257,6 +267,8 @@ private:
 	int keyNum_;					//取得した鍵の数
 	int tutoItemNum_;					//取得したチュートリアルアイテムの数
 
+	float moveLimitDistance_ = 0.0f;	//移動制限距離
+
 	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
 
 	float bulletReloadTimer_;		//銃弾リロードタイム計測用タイマー
@@ -267,6 +279,7 @@ private:
 	float specialFireIntervalTimer_;//必殺弾の発射間隔タイマー
 
 	bool isDamage_ = false;			//ダメージを受けたか
+	bool isInvicible_ = false;		//無敵状態か
 
 	bool isInput_ = true;			//入力を受け付けるか
 	bool isCameraFree_ = false;		//プレイヤー側でカメラを操作しないか

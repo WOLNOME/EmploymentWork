@@ -109,6 +109,9 @@ void GamePlayScene::Initialize() {
 	playerUI_->SetItemManager(itemManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
 
+	//パラメーターのセット
+	player_->SetMoveLimitDistance(995.0f);
+
 	//必要なインスタンスの更新
 	player_->Update();
 	enemyManager_->Update();
