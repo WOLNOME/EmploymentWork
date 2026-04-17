@@ -107,16 +107,22 @@
     "wait": "MessageTextFinished"
     },
     {
-    "cmds": [
-      { "cmd": "ShowMessage", "text": "他にも敵の位置を映してくれたり\n矢印で作戦の進行をサポートしてくれる優れモノです！" }
-    ],
-    "wait": "MessageTextFinished"
+     "cmds": [
+       { "cmd": "ShowMessage", "text": "他にも敵の位置を映してくれたり\n矢印で作戦の進行をサポートしてくれる優れモノです！" }
+     ],
+     "wait": "MessageTextFinished"
     },
     {
-    "cmds": [
-      { "cmd": "ShowMessage", "text": "レーダーを活かして戦場を優位に立ちまわってみてください！\n（※Aでミッション開始）" }
-    ],
-    "wait": "MessageTextFinished"
+     "cmds": [
+       { "cmd": "ShowMessage", "text": "レーダーを活かして戦場を優位に立ちまわってみてください！" }
+     ],
+     "wait": "MessageTextFinished"
+    },
+    {
+     "cmds": [
+       { "cmd": "ShowMessage", "text": "（※Aでミッション開始）" }
+     ],
+     "wait": "MessageTextFinished"
     },
     {
       "cmds": [
@@ -185,7 +191,13 @@
       { "cmd": "ShowMessage", "text": "砲弾は1発、機関銃弾は50発撃ちきると\nリロードが発生するので注意してください" }
     ],
     "wait": "MessageTextFinished"
-    },
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "（※Aでミッション開始）" }
+    ],
+    "wait": "MessageTextFinished"
+  },
   {
     "cmds": [
       { "cmd": "UnlockInput" },
@@ -207,7 +219,7 @@
           { "pos": [0, 0, 0] }
         ]
       },
-      { "cmd": "ShowMessage", "text": "青戦車を倒すと回復アイテムやスペシャル弾を\nドロップすることがあります" }
+      { "cmd": "ShowMessage", "text": "青戦車を倒すと回復アイテム（緑）やスペシャル弾（青）を\nドロップすることがあります" }
     ],
     "wait": "MessageTextFinished"
   },
@@ -287,7 +299,13 @@
   },
   {
     "cmds": [
-      { "cmd": "ShowMessage", "text": "また、敵の砲弾に攻撃を当てると撃ち落とすことが\nできるので狙ってみてください！\n（※Aで戦闘が開始されます）" }
+      { "cmd": "ShowMessage", "text": "また、敵の砲弾に攻撃を当てると撃ち落とすことができるので\n避けられそうになかったら狙ってみてください！" }
+    ],
+    "wait": "MessageTextFinished"
+  },
+  {
+    "cmds": [
+      { "cmd": "ShowMessage", "text": "（※Aで戦闘開始）" }
     ],
     "wait": "MessageTextFinished"
   },
@@ -330,7 +348,7 @@
   },
   {
     "cmds": [
-      { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます\n（※このメッセージを終了した場合チュートリアルを終了します）" }
+      { "cmd": "ShowMessage", "text": "もう一度訓練を行いたい場合はポーズメニューからできます\n（※このメッセージを終了した場合訓練を終了します）" }
     ],
     "wait": "MessageTextFinished"
   },

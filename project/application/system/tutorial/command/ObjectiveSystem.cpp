@@ -127,7 +127,7 @@ void ObjectiveSystem::Update() {
 			//プレイヤーの獲得済みの収集物を取得
 			obj.current = player_->GetSpecialNum();
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"必殺弾を集めよう！（{}/{}）", obj.current, obj.targetCount);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"スペシャル弾を集めよう！（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
 			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
