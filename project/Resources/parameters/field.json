@@ -1,0 +1,5 @@
+{
+    "gravity":9.8,
+    "floorRegistance":0.05,
+    "airRegistance":2.0
+}

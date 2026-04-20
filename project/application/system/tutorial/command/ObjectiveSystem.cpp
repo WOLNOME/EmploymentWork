@@ -106,7 +106,7 @@ void ObjectiveSystem::Update() {
 			//プレイヤーの獲得済みの収集物を取得
 			obj.current = player_->GetTutorialItemNum();
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"アイテムを集めよう！（{}/{}）", obj.current, obj.targetCount);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"アイテムを集めよう（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
 			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
@@ -114,10 +114,10 @@ void ObjectiveSystem::Update() {
 					//チェックのスプライトアニメーションを稼働
 					obj.checkMark->SetIsPlayUVScroll(true);
 				}
-				else {
-					//目標の達成フラグを立てる
-					obj.completed = true;
-				}
+			}
+			if (obj.checkMark->GetIsFinishedUVScroll()) {
+				//目標の達成フラグを立てる
+				obj.completed = true;
 			}
 
 			break;
@@ -127,7 +127,7 @@ void ObjectiveSystem::Update() {
 			//プレイヤーの獲得済みの収集物を取得
 			obj.current = player_->GetSpecialNum();
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"スペシャル弾を集めよう！（{}/{}）", obj.current, obj.targetCount);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"スペシャル弾を集めよう（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
 			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
@@ -135,11 +135,12 @@ void ObjectiveSystem::Update() {
 					//チェックのスプライトアニメーションを稼働
 					obj.checkMark->SetIsPlayUVScroll(true);
 				}
-				else {
-					//目標の達成フラグを立てる
-					obj.completed = true;
-				}
 			}
+			if (obj.checkMark->GetIsFinishedUVScroll()) {
+				//目標の達成フラグを立てる
+				obj.completed = true;
+			}
+
 			break;
 		}
 		case ObjectiveType::HitCannon:
@@ -148,7 +149,7 @@ void ObjectiveSystem::Update() {
 			obj.current = playerWeaponManager_->GetCannonHitNum();
 
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"砲弾を当てよう！（{}/{}）", obj.current, obj.targetCount);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"砲弾を当てよう（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
 			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
@@ -156,11 +157,12 @@ void ObjectiveSystem::Update() {
 					//チェックのスプライトアニメーションを稼働
 					obj.checkMark->SetIsPlayUVScroll(true);
 				}
-				else {
-					//目標の達成フラグを立てる
-					obj.completed = true;
-				}
 			}
+			if (obj.checkMark->GetIsFinishedUVScroll()) {
+				//目標の達成フラグを立てる
+				obj.completed = true;
+			}
+
 			break;
 		}
 		case ObjectiveType::HitBullet:
@@ -169,7 +171,7 @@ void ObjectiveSystem::Update() {
 			obj.current = playerWeaponManager_->GetBulletHitNum();
 
 			//テキストを更新
-			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"銃弾を当てよう！（{}/{}）", obj.current, obj.targetCount);
+			TextTextureManager::GetInstance()->EditTextString(obj.textHandle, L"銃弾を当てよう（{}/{}）", obj.current, obj.targetCount);
 			//目標数に達したら
 			if (obj.current >= obj.targetCount) {
 				//アニメーションが終了していたら稼働しない
@@ -177,11 +179,12 @@ void ObjectiveSystem::Update() {
 					//チェックのスプライトアニメーションを稼働
 					obj.checkMark->SetIsPlayUVScroll(true);
 				}
-				else {
-					//目標の達成フラグを立てる
-					obj.completed = true;
-				}
 			}
+			if (obj.checkMark->GetIsFinishedUVScroll()) {
+				//目標の達成フラグを立てる
+				obj.completed = true;
+			}
+
 			break;
 		}
 		case ObjectiveType::DefeatEnemy:

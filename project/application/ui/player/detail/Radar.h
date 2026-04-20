@@ -121,8 +121,8 @@ private:
 	json param_;
 
 	Norm::Vector2 centerPosition_;	//レーダーの中心座標
-	const float kUnitLength_ = 31.0f / 100.0f;		//レーダー上の100mの長さ
-	const float kSearchLength_ = 300.0f;		//索敵距離
+	const float kUnitLength_ = 15.5f / 100.0f;		//レーダー上の100mの長さ
+	const float kSearchLength_ = 600.0f;		//索敵距離
 
 	//コンパス
 	uint32_t thCompass_ = 0u;

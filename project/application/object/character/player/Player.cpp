@@ -155,53 +155,47 @@ void Player::SetCameraManager(CameraManager* _cameraManager) {
 }
 
 void Player::Move() {
-	// 死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection())
-		return;
+	//==============================
+	// 無効状態チェック
+	//==============================
+	if (deathDirection_->GetIsDirection()) return;
+	if (state_ != State::kActive) return;
 
-	// アクティブでないなら処理をしない
-	if (state_ != State::kActive)
-		return;
-
-	// 移動前に前フレームの座標を保存
 	prePosition_ = worldTransform_.GetWorldTranslate();
 
 	//----------------------------------------------------------
-	// カメラ基準の移動方向を取得
+	// カメラ基準方向
 	//----------------------------------------------------------
 	Vector3 camRot = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
+
 	Vector3 camForward = {
 		std::sinf(camRot.y),
 		0.0f,
 		std::cosf(camRot.y)
 	};
 	camForward.Normalize();
-	camForward.y = 0.0f;
+
 	Vector3 camRight = {
 		camForward.z,
 		0.0f,
 		-camForward.x
 	};
-	camRight.y = 0.0f;
 
-	Vector3 inputDir = { 0.0f, 0.0f, 0.0f };
+	Vector3 inputDir = { 0,0,0 };
 
-	// キー & スティック入力を合成
+	//----------------------------------------------------------
+	// 入力
+	//----------------------------------------------------------
 	if (isInput_) {
-		if (input_->PushKey(DIK_W) || input_->GetLStickDir().y > 0.0f) {
-			inputDir += camForward;
-		}
-		if (input_->PushKey(DIK_S) || input_->GetLStickDir().y < 0.0f) {
-			inputDir -= camForward;
-		}
-		if (input_->PushKey(DIK_D) || input_->GetLStickDir().x > 0.0f) {
-			inputDir += camRight;
-		}
-		if (input_->PushKey(DIK_A) || input_->GetLStickDir().x < 0.0f) {
-			inputDir -= camRight;
-		}
+		if (input_->PushKey(DIK_W) || input_->GetLStickDir().y > 0.0f) inputDir += camForward;
+		if (input_->PushKey(DIK_S) || input_->GetLStickDir().y < 0.0f) inputDir -= camForward;
+		if (input_->PushKey(DIK_D) || input_->GetLStickDir().x > 0.0f) inputDir += camRight;
+		if (input_->PushKey(DIK_A) || input_->GetLStickDir().x < 0.0f) inputDir -= camRight;
 	}
 
+	//----------------------------------------------------------
+	// 移動処理
+	//----------------------------------------------------------
 	float speed = param_["speed"];
 
 	if (inputDir.LengthSq() > 0.0f) {
@@ -210,12 +204,19 @@ void Player::Move() {
 	}
 
 	//----------------------------------------------------------
-	// 床の抵抗
+	// 摩擦
 	//----------------------------------------------------------
 	if (velocity_.LengthSq() > 0.0f) {
-		Vector3 frictionDir = -velocity_.Normalized();
-		Vector3 frictionAccel = frictionDir * floorFriction_;
-		velocity_ += frictionAccel * kDeltaTime;
+		float speed = velocity_.Length();
+		float decel = floorFriction_ * kDeltaTime;
+		// 減速しすぎる場合はピタ止め
+		if (decel >= speed) {
+			velocity_ = { 0,0,0 };
+		}
+		else {
+			Vector3 frictionDir = -velocity_.Normalized();
+			velocity_ += frictionDir * floorFriction_ * kDeltaTime;
+		}
 	}
 
 	//----------------------------------------------------------
@@ -223,27 +224,28 @@ void Player::Move() {
 	//----------------------------------------------------------
 	float maxSpeed = param_["maxSpeed"];
 	if (velocity_.Length() > maxSpeed) {
-		velocity_.Normalize();
-		velocity_ *= maxSpeed;
-	}
-
-	// 微小速度を0に
-	if ((velocity_ * kDeltaTime).Length() < 0.01f) {
-		velocity_ = { 0.0f,0.0f,0.0f };
+		velocity_ = velocity_.Normalized() * maxSpeed;
 	}
 
 	//----------------------------------------------------------
-	// 反発速度
+	// 完全停止（超重要）
+	//----------------------------------------------------------
+	if (velocity_.Length() < 0.05f && inputDir.LengthSq() == 0.0f) {
+		velocity_ = { 0,0,0 };
+	}
+
+
+	//----------------------------------------------------------
+	// 反発
 	//----------------------------------------------------------
 	velocity_ += reflectVelocity_;
 
 	if (reflectVelocity_.LengthSq() > 0.0f) {
 		Vector3 decayDir = -reflectVelocity_.Normalized();
-		Vector3 decayAccel = decayDir * 40.0f;
-		reflectVelocity_ += decayAccel * kDeltaTime;
+		reflectVelocity_ += decayDir * 40.0f * kDeltaTime;
 
 		if (reflectVelocity_.Length() < 1.0f) {
-			reflectVelocity_ = { 0.0f,0.0f,0.0f };
+			reflectVelocity_ = { 0,0,0 };
 		}
 	}
 
@@ -258,49 +260,55 @@ void Player::Move() {
 	worldTransform_.SetTranslate(newTranslate);
 
 	//----------------------------------------------------------
-	// 車体回転（進行方向へ補間）
+	// 回転処理（安定版）
 	//----------------------------------------------------------
-	Vector3 moveDir = velocity_;
-	moveDir.y = 0.0f;
 
-	if (moveDir.LengthSq() > 0.0001f) {
+	static Vector3 lastMoveDir = { 0,0,1 };
 
-		moveDir.Normalize();
+	Vector3 moveDir;
 
-		// 現在の車体前方向
-		Vector3 forward = {
-			std::sinf(worldTransform_.GetRotate().y),
-			0.0f,
-			std::cosf(worldTransform_.GetRotate().y)
-		};
-		forward.Normalize();
-
-		// 前向きと後ろ向きのどちらが近いか
-		float dotForward = MyMath::Dot(forward, moveDir);
-		float dotBackward = MyMath::Dot(-forward, moveDir);
-
-		Vector3 targetDir = (dotBackward > dotForward) ? -moveDir : moveDir;
-
-		// 目標角度
-		float targetYaw = std::atan2(targetDir.x, targetDir.z);
-
-		// 現在角度
-		Vector3 rot = worldTransform_.GetRotate();
-		float currentYaw = rot.y;
-
-		// 角度差（-π～π）
-		float diff = MyMath::NormalizeAngle(targetYaw - currentYaw);
-
-		// 補間
-		float turnSpeed = param_["turnSpeed"];
-		currentYaw += diff * turnSpeed * kDeltaTime;
-
-		rot.y = currentYaw;
-		worldTransform_.SetRotate(rot);
+	if (inputDir.LengthSq() > 0.0f) {
+		moveDir = inputDir;
+		lastMoveDir = moveDir;
+	}
+	else if (velocity_.LengthSq() > 0.01f) {
+		moveDir = velocity_;
+		lastMoveDir = moveDir;
+	}
+	else {
+		moveDir = lastMoveDir;
 	}
 
+	moveDir.y = 0.0f;
+
+	// 低速時は回転しない（震え防止）
+	if (velocity_.Length() < 0.1f && inputDir.LengthSq() == 0.0f) {
+		return;
+	}
+
+	moveDir.Normalize();
+
+	float targetYaw = std::atan2(moveDir.x, moveDir.z);
+
+	Vector3 rot = worldTransform_.GetRotate();
+	float currentYaw = rot.y;
+
+	float diff = MyMath::NormalizeAngle(targetYaw - currentYaw);
+
+	float turnSpeed = param_["turnSpeed"];
+
+	currentYaw += diff * turnSpeed * kDeltaTime;
+
+	// 微小振動防止
+	if (std::abs(diff) < 0.001f) {
+		currentYaw = targetYaw;
+	}
+
+	rot.y = currentYaw;
+	worldTransform_.SetRotate(rot);
+
 	//----------------------------------------------------------
-	// 移動SEの音量
+	// SE
 	//----------------------------------------------------------
 	volumeMoveSE_ = MyMath::Lerp(0.0f, 1.0f, velocity_.Length() / maxSpeed);
 	moveSE_->SetVolume(volumeMoveSE_);
