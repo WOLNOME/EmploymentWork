@@ -68,6 +68,11 @@ public:
 	/// <param name="_initRotate">初期回転</param>
 	void BossSpawn(const Norm::Vector3& _initPos, const Norm::Vector3& _initRotate);
 
+	/// <summary>
+	/// 全エネミーのクリア
+	/// </summary>
+	void ClearEnemy();
+
 	/// ============================== ///
 	///		getter
 	/// ============================== ///
@@ -133,6 +138,18 @@ public:
 	/// <param name="_cameraManager">カメラマネージャー</param>
 	void SetCameraManager(CameraManager* _cameraManager);
 
+	/// <summary>
+	/// アクティブかどうかのセット
+	/// </summary>
+	/// <param name="isActive">アクティブかどうか</param>
+	void SetIsActive(bool isActive);
+
+	/// <summary>
+	/// 無敵モードかどうかのセット
+	/// </summary>
+	/// <param name="isInvicible">無敵モードかどうか</param>
+	void SetIsInvicible(bool isInvicible) { this->isInvicible = isInvicible; }
+
 private:
 	/// ============================== ///
 	///		メンバ関数（private）
@@ -187,5 +204,6 @@ private:
 	//ボスのインスタンス
 	std::vector<std::unique_ptr<Boss>> bosses_;
 
+	bool isInvicible = false;	//無敵モード
 };
 

@@ -14,6 +14,7 @@ DamageUI::~DamageUI() {
 void DamageUI::Initialize() {
 	//パラメーターの取得
 	param_= JsonUtil::GetJsonData("Resources/parameters/playerUI");
+	playerParam_=JsonUtil::GetJsonData("Resources/parameters/player");
 
 	//窓ガラスの割れたスプライトの初期化
 	{
@@ -46,15 +47,15 @@ void DamageUI::Update() {
 	//ダメージスプライトの切り替え
 	{
 		int hp = player_->GetHP();
-		//プレイヤーの体力が50より大きいなら
-		if (hp > 50) {
+		//プレイヤーの体力が1/2より大きいなら
+		if (hp > playerParam_["maxHP"].get<int>() / 2) {
 			spriteGrass_->SetUVScrollSheetNum(0);
 		}
-		//プレイヤーの体力が50~20だったら
-		else if (hp <= 50 && hp > 20) {
+		//プレイヤーの体力が1/2~1/4だったら
+		else if (hp <= playerParam_["maxHP"].get<int>() / 2 && hp > playerParam_["maxHP"].get<int>() / 4) {
 			spriteGrass_->SetUVScrollSheetNum(1);
 		}
-		//プレイヤーの体力が20以下だったら
+		//プレイヤーの体力が1/4以下だったら
 		else {
 			spriteGrass_->SetUVScrollSheetNum(2);
 		}
@@ -71,6 +72,10 @@ void DamageUI::Update() {
 			//ポストエフェクト
 			PostEffectManager::GetInstance()->SetPostEffect(PostEffectKind::Vignette);
 		}
+		else {
+			//UVスクロールを非表示
+			spriteDeathDir_->SetIsDisplay(false);
+		}
 	}
 
 }
@@ -86,4 +91,9 @@ void DamageUI::AttachBlinking(const Vector4& _color) {
 	spriteGrass_->SetColor(_color);
 	spriteDeathDir_->SetColor(_color);
 
+}
+
+void DamageUI::SetIsDisplay(bool _isDisplay) {
+	spriteGrass_->SetIsDisplay(_isDisplay);
+	spriteDeathDir_->SetIsDisplay(_isDisplay);
 }

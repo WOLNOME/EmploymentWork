@@ -7,12 +7,12 @@
 #include "detail/WeaponUI.h"
 #include "detail/Radar.h"
 #include "detail/HitIndicator.h"
-#include "detail/MoveIndicator.h"
 #include "detail/OperationUI.h"
 #include "detail/VelocityUI.h"
 #include "detail/KeyUI.h"
 #include "detail/DirectionUI.h"
 #include "detail/DamageUI.h"
+#include "detail/EmphasisUI.h"
 
 //前方宣言（アプリケーション）
 class CameraManager;
@@ -77,6 +77,12 @@ public:
 	/// <param name="_cameraManager">カメラマネージャー</param>
 	void SetCameraManager(CameraManager* _cameraManager);
 
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
+
 private:
 	/// ============================== ///
 	///		非公開メンバ関数
@@ -116,8 +122,6 @@ private:
 	std::unique_ptr<Radar> radar_ = nullptr;
 	//被弾インジケーターUI
 	std::unique_ptr<HitIndicator> hitIndicator_ = nullptr;
-	//移動インジケーターUI
-	std::unique_ptr<MoveIndicator> moveIndicator_ = nullptr;
 	//操作UI
 	std::unique_ptr<OperationUI> operationUI_ = nullptr;
 	//速度UI
@@ -128,6 +132,8 @@ private:
 	std::unique_ptr<DirectionUI> directionUI_ = nullptr;
 	//ダメージUI
 	std::unique_ptr<DamageUI> damageUI_ = nullptr;
+	//強調UI
+	std::unique_ptr<EmphasisUI> emphasisUI_ = nullptr;
 
 	//パラメーター
 	json param_;

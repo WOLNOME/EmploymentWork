@@ -32,3 +32,7 @@ void OperationUI::AttachShake(const Vector2& _shakeOffset) {
 void OperationUI::AttachBlinking(const Vector4& _color) {
 	_color;
 }
+
+void OperationUI::SetIsDisplay(bool _isDisplay) {
+	sprite_->SetIsDisplay(_isDisplay);
+}

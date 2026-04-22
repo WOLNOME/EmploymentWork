@@ -43,7 +43,7 @@ void TutorialScene::Initialize() {
 	system_->Initialize();
 
 	//その他インスタンスのセット
-
+	system_->SetCameraManager(cameraManager_.get());
 }
 
 void TutorialScene::Finalize() {
@@ -53,8 +53,25 @@ void TutorialScene::Update() {
 	//シーン共通の更新
 	BaseScene::Update();
 
+	//F1キーでマウスカーソルの表示する
+	Input* input = Input::GetInstance();
+	if (input->TriggerKey(DIK_F1)) {
+		if (isDebug_) {
+			//デバッグモードを終了
+			isDebug_ = false;
+			input->SetIsMouseDisplay(false);
+			input->SetIsMouseFixed(true);
+		}
+		else {
+			//デバッグモードを開始
+			isDebug_ = true;
+			input->SetIsMouseDisplay(true);
+			input->SetIsMouseFixed(false);
+		}
+	}
+
 	//インスタンスの更新
-	system_->Update(); //
+	system_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	cameraManager_->Update();
@@ -65,6 +82,8 @@ void TutorialScene::DebugWithImGui() {
 #ifdef _DEBUG
 	//カメラのImGui
 	cameraManager_->DebugWithImGui();
+	//システム
+	system_->DebugWithImGui();
 
 #endif // _DEBUG
 }

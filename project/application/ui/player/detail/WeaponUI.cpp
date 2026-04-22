@@ -148,3 +148,12 @@ void WeaponUI::AttachBlinking(const Norm::Vector4& _color) {
 	spriteBulletNum_->SetColor(_color);
 	spriteSpecial_->SetColor(_color);
 }
+
+void WeaponUI::SetIsDisplay(bool _isDisplay) {
+	spriteCannon_->SetIsDisplay(_isDisplay);
+	spriteCannonReload_->SetIsDisplay(_isDisplay);
+	spriteBullet_->SetIsDisplay(_isDisplay);
+	spriteBulletNum_->SetIsDisplay(_isDisplay);
+	spriteBulletReload_->SetIsDisplay(_isDisplay);
+	spriteSpecial_->SetIsDisplay(_isDisplay);
+}

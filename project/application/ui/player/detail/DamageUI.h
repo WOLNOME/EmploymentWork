@@ -49,6 +49,12 @@ public:
 	/// <param name="_player">プレイヤーインスタンス</param>
 	void SetPlayer(Player* _player) { player_ = _player; }
 
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
+
 private:
 	/// ============================== ///
 	///		メンバ変数
@@ -63,6 +69,7 @@ private:
 
 	//パラメーター
 	json param_;
+	json playerParam_;
 
 	//窓ガラスが割れている表現
 	uint32_t thGlass_;

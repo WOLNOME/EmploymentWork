@@ -11,7 +11,9 @@
 #include <application/object/level/rock/LevelRock.h>
 #include <application/object/level/bigRock/LevelBigRock.h>
 #include <application/object/level/fence/LevelFence.h>
+#include <application/object/level/tutorial_fence/LevelTutorialFence.h>
 #include <application/object/level/sealedBox/LevelSealedBox.h>
+#include <application/object/level/brokenTank/LevelBrokenTank.h>
 
 /// <summary>
 /// レベルデータの読み込みと管理を行うクラス
@@ -56,8 +58,13 @@ private:
 		std::unique_ptr<LevelBigRock> bigRock;
 		//柵
 		std::unique_ptr<LevelFence> fence;
+		//チュートリアル柵
+		std::unique_ptr<LevelTutorialFence> tutorialFence;
 		//封印ボックス
 		std::unique_ptr<LevelSealedBox> sealedBox;
+		//破壊された戦車
+		std::unique_ptr<LevelBrokenTank> brokenTank;
+
 	};
 
 public:
@@ -68,7 +75,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	/// <param name="_filePath">レベルデータのファイルパス</param>
+	void Initialize(const std::string& _filePath);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -113,9 +121,17 @@ public:
 	/// </summary>
 	LevelFence* GetFenceData() const { return levelData_.fence.get(); }
 	/// <summary>
+	/// 柵データの取得
+	/// </summary>
+	LevelTutorialFence* GetTurorialFenceData() const { return levelData_.tutorialFence.get(); }
+	/// <summary>
 	/// 封印ボックスデータの取得
 	/// </summary>
 	LevelSealedBox* GetSealedBoxData() const { return levelData_.sealedBox.get(); }
+	/// <summary>
+	/// 破壊された戦車データの取得
+	/// </summary>
+	LevelBrokenTank* GetBrokenTankData() const { return levelData_.brokenTank.get(); }
 
 private:
 	/// ============================== ///

@@ -14,10 +14,10 @@
 #include "application/ui/enemy/EnemyUI.h"
 #include <application/object/character/item/manager/ItemManager.h>
 #include <application/ui/message/MessageUI.h>
-#include <application/system/StartDirection.h>
-#include <application/system/EndDirection.h>
+#include <application/system/gamePlay/StartDirection.h>
+#include <application/system/gamePlay/EndDirection.h>
 #include <application/system/TimeScaleManager.h>
-#include <application/system/PauseSystem.h>
+#include <application/system/gamePlay/pause/PauseSystem.h>
 
 /// <summary>
 /// ゲームプレイシーン全般を管理するクラス

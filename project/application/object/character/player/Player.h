@@ -65,6 +65,11 @@ public:
 	/// <returns>鍵の数</returns>
 	int GetKeyNum() const { return keyNum_; }
 	/// <summary>
+	/// チュートリアルアイテムの数を取得する
+	/// </summary>
+	/// <returns>チュートリアルアイテムの数</returns>
+	int GetTutorialItemNum() const { return tutoItemNum_; }
+	/// <summary>
 	/// 砲弾のリロードタイムタイマーを取得する
 	/// </summary>
 	/// <returns>砲弾リロードタイムタイマー</returns>
@@ -124,6 +129,16 @@ public:
 	/// </summary>
 	/// <returns>移動SE</returns>
 	Norm::Audio* GetMoveSE() { return moveSE_.get(); }
+	/// <summary>
+	/// 入力を受け付けるかを取得する
+	/// </summary>
+	/// <returns>入力を受け付けるか</returns>
+	bool GetIsInput() { return isInput_; }
+	/// <summary>
+	/// プレイヤー側でカメラを操作しないかを取得する
+	/// </summary>
+	/// <returns>プレイヤー側でカメラを操作しないか</returns>
+	bool GetIsCameraFree() { return isCameraFree_; }
 
 	/// ============================== ///
 	///		setter
@@ -144,6 +159,11 @@ public:
 	/// </summary>
 	/// <param name="_specialNum">必殺弾の数</param>
 	void SetSpecialNum(int _specialNum) { specialNum_ = _specialNum; }
+	/// <summary>
+	/// チュートリアルアイテムの数をセット
+	/// </summary>
+	/// <param name="_trItemNum">チュートリアルアイテムの数</param>
+	void SetTutorialItemNum(int _tutoItemNum) { tutoItemNum_ = _tutoItemNum; }
 	/// <summary>
 	/// ダメージフラグのセット
 	/// </summary>
@@ -176,14 +196,32 @@ public:
 	/// </summary>
 	/// <param name="_messageUI">設定するメッセージUI</param>
 	void SetMessageUI(MessageUI* _messageUI) { messageUI_ = _messageUI; }
+	/// <summary>
+	/// 入力を受け付けるかを設定する
+	/// </summary>
+	/// <param name="_isInput">入力を受け付けるか</param>
+	void SetIsInput(bool _isInput) { isInput_ = _isInput; }
+	/// <summary>
+	/// プレイヤー側でカメラを操作しないかの設定
+	/// </summary>
+	/// <param name="_isCameraFree">プレイヤー側でカメラを操作しないか</param>
+	void SetIsCameraFree(bool _isCameraFree) { isCameraFree_ = _isCameraFree; }
+	/// <summary>
+	/// 移動制限距離のセット
+	/// </summary>
+	/// <param name="_moveLimitDistance">移動制限距離</param>
+	void SetMoveLimitDistance(float _moveLimitDistance) { moveLimitDistance_ = _moveLimitDistance; }
+	/// <summary>
+	/// 無敵状態かのセット
+	/// </summary>
+	/// <param name="_isInvicible">無敵状態か</param>
+	void SetIsInvicible(bool _isInvicible) { isInvicible_ = _isInvicible; }
 
 private:
 	/// ============================== ///
 	///		非公開メンバ関数
 	/// ============================== ///
 
-	//回転
-	void Rotate();
 	//移動
 	void Move();
 	//キャノン攻撃
@@ -227,6 +265,9 @@ private:
 	//変数
 	int hp_;						//現在のHP
 	int keyNum_;					//取得した鍵の数
+	int tutoItemNum_;					//取得したチュートリアルアイテムの数
+
+	float moveLimitDistance_ = 0.0f;	//移動制限距離
 
 	float cannonReloadTimer_;		//砲弾リロードタイム計測用タイマー
 
@@ -238,6 +279,10 @@ private:
 	float specialFireIntervalTimer_;//必殺弾の発射間隔タイマー
 
 	bool isDamage_ = false;			//ダメージを受けたか
+	bool isInvicible_ = false;		//無敵状態か
+
+	bool isInput_ = true;			//入力を受け付けるか
+	bool isCameraFree_ = false;		//プレイヤー側でカメラを操作しないか
 
 	Norm::Vector3 prePosition_ = { 0,0,0 };	//前フレームのポジション
 

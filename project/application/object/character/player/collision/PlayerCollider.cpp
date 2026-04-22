@@ -31,6 +31,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 	int hp = holder_->GetHP();
 	int specialNum = holder_->GetSpecialNum();
 	int keyNum = holder_->GetKeyNum();
+	int tutorialItemNum = holder_->GetTutorialItemNum();
 	bool isDamage = holder_->GetIsDamage();
 	Vector3 reflectVelocity = holder_->GetReflectVelocity();
 
@@ -53,12 +54,12 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		isDamage = true;
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
 		//衝突SE
-		collideSE_->Play(false, 1.0f);
+		collideSE_->Play(false, 1.5f);
 
 		break;
 	}
@@ -99,7 +100,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 		isDamage = true;
 
 		//相手の座標の方向と反対方向のベクトルを速度に加算(大きく)
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 40.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 24.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
@@ -145,22 +146,33 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 
 		break;
 	}
+	case CollisionAttribute::Item_TutorialCollectible:
+	{
+		//アイテムの数をインクリメント
+		tutorialItemNum++;
+
+		//メッセージUIにアイテム取得を通知
+		std::wstring message = std::to_wstring(tutorialItemNum) + L"つめのアイテムを入手！";
+		holder_->GetMessageUI()->AddMessage(message);
+
+		break;
+	}
 	case CollisionAttribute::Wall:
 	{
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
 		//衝突SE
-		collideSE_->Play(false, 1.0f);
+		collideSE_->Play(false, 1.5f);
 
 		break;
 	}
 	case CollisionAttribute::Barrier:
 	{
 		//相手の座標の方向と反対方向のベクトルを速度に加算
-		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 10.0f;
+		Vector3 reflectVec = -(_other->GetWorldTransform().GetWorldTranslate() - GetWorldTransform().GetWorldTranslate()).Normalized() * 6.0f;
 		reflectVelocity.x = reflectVec.x;
 		reflectVelocity.z = reflectVec.z;
 
@@ -172,6 +184,7 @@ void PlayerCollider::OnCollision(ICollider* _other, CollisionAttribute _attribut
 
 	//変更した変数のセット
 	holder_->SetHP(hp);
+	holder_->SetTutorialItemNum(tutorialItemNum);
 	holder_->SetSpecialNum(specialNum);
 	holder_->SetKeyNum(keyNum);
 	holder_->SetIsDamage(isDamage);

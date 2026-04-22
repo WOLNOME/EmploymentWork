@@ -16,6 +16,7 @@ void PlayerWeaponManager::Initialize() {
 	for (int i = 0; i < cannonNum; i++) {
 		cannons_.push_back(std::make_unique<PlayerCannon>());
 		cannons_[i]->Initialize();
+		cannons_[i]->SetPlayerWeaponManager(this);
 	}
 
 	//銃弾の生成と初期化
@@ -23,6 +24,7 @@ void PlayerWeaponManager::Initialize() {
 	for (int i = 0; i < bulletNum; i++) {
 		bullets_.push_back(std::make_unique<PlayerBullet>());
 		bullets_[i]->Initialize();
+		bullets_[i]->SetPlayerWeaponManager(this);
 	}
 
 	//必殺弾の生成と初期化
@@ -30,6 +32,7 @@ void PlayerWeaponManager::Initialize() {
 	for (int i = 0; i < specialNum; i++) {
 		specials_.push_back(std::make_unique<PlayerSpecial>());
 		specials_[i]->Initialize();
+		specials_[i]->SetPlayerWeaponManager(this);
 	}
 }
 

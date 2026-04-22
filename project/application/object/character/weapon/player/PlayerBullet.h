@@ -7,6 +7,8 @@
 #include <Vector3.h>
 #include <memory>
 
+class PlayerWeaponManager;
+
 /// <summary>
 /// プレイヤーの使う機関銃弾単体の処理全般を管理するクラス
 /// </summary>
@@ -45,6 +47,26 @@ public:
 	/// </summary>
 	void DeadProcess();
 
+	/// ============================== ///
+	///		getter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤー武器管理クラスのインスタンスを取得する
+	/// </summary>
+	/// <returns>プレイヤー武器管理クラスのインスタンス</returns>
+	PlayerWeaponManager* GetPlayerWeaponManager() { return playerWeaponManager_; }
+
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// プレイヤー武器管理クラスのインスタンスをセットする
+	/// </summary>
+	/// <param name="_playerWeaponManager">プレイヤー武器管理クラスのインスタンス</param>
+	void SetPlayerWeaponManager(PlayerWeaponManager* _playerWeaponManager) { playerWeaponManager_ = _playerWeaponManager; }
+
 private:
 	/// ============================== ///
 	///		非公開メンバ関数
@@ -54,6 +76,12 @@ private:
 	/// 移動処理を行う
 	/// </summary>
 	void Move();
+
+	/// ============================== ///
+	///		インスタンス
+	/// ============================== ///
+
+	PlayerWeaponManager* playerWeaponManager_ = nullptr;	//プレイヤー武器管理クラスのインスタンス
 
 	/// ============================== ///
 	///		メンバ変数

@@ -79,6 +79,9 @@ void BaseCharacter::SetState(const State& _state) {
 	case BaseCharacter::State::kActive:
 		//特に何もしない
 		break;
+	case BaseCharacter::State::kStillness:
+		//特に何もしない
+		break;
 	case BaseCharacter::State::kAsphyxia:
 		//不可視にする
 		object3d_->SetIsDisplay(false);

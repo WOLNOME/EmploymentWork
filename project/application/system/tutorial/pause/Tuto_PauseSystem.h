@@ -6,15 +6,10 @@
 #include <array>
 #include <memory>
 
-//前方宣言（エンジン）
-namespace Norm {
-	class Input;
-}
-
 /// <summary>
-/// ポーズシステム
+/// チュートリアルのポーズシステム
 /// </summary>
-class PauseSystem {
+class Tuto_PauseSystem {
 private:
 	/// ============================== ///
 	///		列挙体
@@ -26,6 +21,8 @@ private:
 	enum class Menu {
 		kContinue,			//続行
 		kOperationGuide,	//操作ガイド
+		kRestart,			//チュートリアルを最初から
+		kSkip,				//スキップ
 		kTItle,				//タイトルへ
 
 		kMaxMenuNum			//メニューの数
@@ -40,11 +37,11 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	PauseSystem();
+	Tuto_PauseSystem();
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~PauseSystem();
+	~Tuto_PauseSystem();
 
 	/// <summary>
 	/// 初期化
@@ -71,19 +68,6 @@ public:
 
 private:
 	/// ============================== ///
-	///		メンバ関数（private）
-	/// ============================== ///
-
-
-
-	/// ============================== ///
-	///		インスタンス
-	/// ============================== ///
-
-	//入力
-	Norm::Input* input_ = nullptr;
-
-	/// ============================== ///
 	///		メンバ変数
 	/// ============================== ///
 
@@ -98,10 +82,10 @@ private:
 	uint32_t guideTextureHandle_ = 0u;
 	std::unique_ptr<Norm::Sprite> guideSprite_ = nullptr;
 	//メニューの文字
-	static const uint32_t kMaxStringNum_ = 4;
-	std::array<Norm::Handle,kMaxStringNum_> stringMenuTextureHandle_;
+	static const uint32_t kMaxStringNum_ = int(Menu::kMaxMenuNum) + 1;
+	std::array<Norm::Handle, kMaxStringNum_> stringMenuTextureHandle_;
 	std::array<std::unique_ptr<Norm::Sprite>, kMaxStringNum_> stringMenuSprite_;
-	
+
 	//選択中のメニュー
 	Menu selectMenu_;
 	//ポーズ中か

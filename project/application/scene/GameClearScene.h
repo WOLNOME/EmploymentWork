@@ -41,6 +41,9 @@ private:
 	//カメラマネージャー
 	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
 
+	//平行光源
+	std::unique_ptr<Norm::DirectionalLight> dirLight_;
+
 	//天球
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	//地面

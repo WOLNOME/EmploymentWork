@@ -30,7 +30,6 @@ void StartDirection::Update() {
 		messageId_ = messageUI_->AddMessage(L"（ A ）でスタート", 999.0f, true);
 	}
 
-
 	//TABキーでスタート演出終了
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
 		isStartDirection_ = false;

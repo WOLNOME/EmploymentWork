@@ -73,6 +73,17 @@ void Radar::Initialize() {
 			itemMarks_[i]->SetAnchorPoint({ 0.5f,0.5f });
 		}
 	}
+	//誘導用矢印
+	{
+		//テクスチャハンドル
+		thInductionArrow_ = TextureManager::GetInstance()->LoadTexture("inductionArrow.png");
+
+		for (int i = 0; i < kInductionArrowNum_; i++) {
+			inductionArrows_[i] = std::make_unique<Sprite>();
+			inductionArrows_[i]->Initialize(SpriteTag{}, SpriteManager::GetInstance()->GenerateName("inductionArrow"), Order::Front3, thInductionArrow_);
+			inductionArrows_[i]->SetAnchorPoint({ 0.5f,0.5f });
+		}
+	}
 }
 
 void Radar::Update() {
@@ -85,12 +96,17 @@ void Radar::Update() {
 	//アイテムマネージャーがセットされていなければ警告
 	assert(itemManager_ != nullptr && "RadarにItemManagerインスタンスを渡してください");
 
+	if (!isActive_)
+		return;
+
 	//プレイヤーマークの更新
 	UpdatePlayerMark();
 	//エネミーマークの更新
 	UpdateEnemyMark();
 	//アイテムマークの更新
 	UpdateItemMark();
+	//誘導用矢印の更新
+	UpdateInductionArrow();
 	//コンパスの更新
 	UpdateCompass();
 
@@ -111,6 +127,10 @@ void Radar::AttachShake(const Vector2& _shakeOffset) {
 	//アイテムマークを揺らす
 	for (int i = 0; i < kItemUINum_; i++) {
 		itemMarks_[i]->SetShakeOffset(_shakeOffset);
+	}
+	//誘導用矢印を揺らす
+	for (int i = 0; i < kInductionArrowNum_; i++) {
+		inductionArrows_[i]->SetShakeOffset(_shakeOffset);
 	}
 }
 
@@ -134,6 +154,11 @@ void Radar::AttachBlinking(const Vector4& _color) {
 		itemMarks_[i]->SetColor({ itemMarks_[i]->GetColor().x * _color.x,itemMarks_[i]->GetColor().y * _color.y ,itemMarks_[i]->GetColor().z * _color.z ,itemMarks_[i]->GetColor().w * _color.w });
 	}
 
+	//誘導用矢印は現在のカラーと引数を掛けた値を適用する
+	for (int i = 0; i < kInductionArrowNum_; i++) {
+		inductionArrows_[i]->SetColor({ inductionArrows_[i]->GetColor().x * _color.x,inductionArrows_[i]->GetColor().y * _color.y ,inductionArrows_[i]->GetColor().z * _color.z ,inductionArrows_[i]->GetColor().w * _color.w });
+	}
+
 }
 
 void Radar::DebugWithImGui() {
@@ -142,10 +167,40 @@ void Radar::DebugWithImGui() {
 #endif //_DEBUG
 }
 
+
+void Radar::SetIsDisplay(bool _isDisplay) {
+	isActive_ = _isDisplay;
+	// コンパス・レーダー基盤
+	if (compass_)   compass_->SetIsDisplay(_isDisplay);
+	if (radarBase_) radarBase_->SetIsDisplay(_isDisplay);
+
+	// プレイヤーマーク
+	if (playerMark_) playerMark_->SetIsDisplay(_isDisplay);
+
+	// 敵マーク
+	for (auto& mark : enemyMarks_) {
+		if (mark) {
+			mark->SetIsDisplay(_isDisplay);
+		}
+	}
+
+	// アイテムマーク
+	for (auto& mark : itemMarks_) {
+		if (mark) {
+			mark->SetIsDisplay(_isDisplay);
+		}
+	}
+
+	// 誘導矢印
+	for (auto& arrow : inductionArrows_) {
+		if (arrow) {
+			arrow->SetIsDisplay(_isDisplay);
+		}
+	}
+}
+
 void Radar::UpdatePlayerMark() {
-	//本体の回転を適用
-	float playerRotated = -cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y + player_->GetWorldTransform().GetRotate().y;
-	playerMark_->SetRotation(playerRotated);
+	
 }
 
 void Radar::UpdateEnemyMark() {
@@ -163,7 +218,7 @@ void Radar::UpdateEnemyMark() {
 	//タンクエネミー処理ラムダ
 	auto processEnemy = [&](IBaseTankEnemy* enemy, const Vector4& color, int& spriteIndex, float sizeRate) {
 		//敵がアクティブでないなら処理しない
-		if (enemy->GetState()!=BaseCharacter::State::kActive) return;
+		if (enemy->GetState() != BaseCharacter::State::kActive) return;
 		//プレイヤー→敵のベクトルを作る
 		Vector3 playerToEnemy = enemy->GetWorldTransform().GetWorldTranslate() - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToEnemy.Length() > kSearchLength_) return;
@@ -285,10 +340,10 @@ void Radar::UpdateItemMark() {
 		Vector3 playerToItem = itemPos - player_->GetWorldTransform().GetWorldTranslate();
 		if (playerToItem.Length() > kSearchLength_) return;
 		//カメラの回転を適用
-		Vector3 rotated = rotateAttach(playerToItem, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
+		Vector3 cameraRotated = rotateAttach(playerToItem, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
 		itemMarks_[spriteIndex]->SetPosition({
-			centerPosition_.x + (rotated.x * kUnitLength_),
-			centerPosition_.y - (rotated.z * kUnitLength_)
+			centerPosition_.x + (cameraRotated.x * kUnitLength_),
+			centerPosition_.y - (cameraRotated.z * kUnitLength_)
 			});
 		//サイズ設定
 		float markSize = param_["radar"]["markSize"];
@@ -307,8 +362,8 @@ void Radar::UpdateItemMark() {
 	int spriteIndex = 0;
 	//回復アイテムマークの更新（黄緑）
 	for (const auto& healItem : itemManager_->GetHealItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (healItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (healItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
@@ -316,20 +371,115 @@ void Radar::UpdateItemMark() {
 	}
 	//スペシャルチャージアイテムマークの更新（水色）
 	for (const auto& chargeItem : itemManager_->GetChargeItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (chargeItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (chargeItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 		processItem(chargeItem->GetWorldTransform().GetWorldTranslate(), { 0.4f,0.8f,1.0f,1.0f }, spriteIndex, 0.6f);
 	}
 	//キーアイテムマークの更新（黄）
 	for (const auto& keyItem : itemManager_->GetKeyItems()) {
-		//アイテムがアイドル状態なら次へ
-		if (keyItem->GetState() == BaseCharacter::State::kIdle) {
+		//生存状態でないなら次へ
+		if (keyItem->GetState() != BaseCharacter::State::kActive) {
 			continue;
 		}
 
 		processItem(keyItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex, 0.8f);
+	}
+	//チュートリアルアイテムマークの更新（黄）
+	for (const auto& tutorialItem : itemManager_->GetTutorialCollectibleItmes()) {
+		//生存状態でないなら次へ
+		if (tutorialItem->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processItem(tutorialItem->GetWorldTransform().GetWorldTranslate(), { 1, 1, 0, 1 }, spriteIndex, 0.6f);
+	}
+}
+
+void Radar::UpdateInductionArrow() {
+	//回転適用ラムダ
+	auto rotateAttach = [](const Vector3& vec, float angleRad) -> Vector3 {
+		float cosTheta = std::cos(angleRad);
+		float sinTheta = std::sin(angleRad);
+		return {
+			vec.x * cosTheta - vec.z * sinTheta,
+			vec.y,
+			vec.x * sinTheta + vec.z * cosTheta
+		};
+		};
+	//誘導用矢印処理ラムダ
+	auto processInductionArrow = [&](const Vector3& subjectPos, const Vector4& color, int& spriteIndex) {
+		//プレイヤー→対象物のベクトルを作る
+		Vector3 playerToSubject = subjectPos - player_->GetWorldTransform().GetWorldTranslate();
+		//対象物が索敵距離より短いなら表示しない
+		if (playerToSubject.Length() < kSearchLength_) return;
+
+		//カメラの回転を適用
+		Vector3 rotated = rotateAttach(playerToSubject.Normalized() * kSearchLength_, cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y);
+
+		//座標
+		inductionArrows_[spriteIndex]->SetPosition({
+			centerPosition_.x + (rotated.x * kUnitLength_),
+			centerPosition_.y - (rotated.z * kUnitLength_)
+			});
+
+		//本体の回転を適用（カメラ回転+本体の回転）
+		Vector3 cameraForward = {
+			sinf(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y),
+			0.0f,
+			cosf(cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y)
+		};
+		float subjectRotated = MyMath::AngleOf2VectorY(cameraForward, playerToSubject);
+		inductionArrows_[spriteIndex]->SetRotation(subjectRotated);
+
+		inductionArrows_[spriteIndex]->SetIsDisplay(true);
+		inductionArrows_[spriteIndex]->SetColor(color);
+		spriteIndex++;
+		};
+
+	//全スプライトを非表示に
+	for (int i = 0; i < kInductionArrowNum_; i++) {
+		inductionArrows_[i]->SetIsDisplay(false);
+	}
+	//レーダー中心とスプライトインデックス
+	int spriteIndex = 0;
+
+	//キーキャノ太(紫)
+	for (const auto& keyCanota : enemyManager_->GetKeyCanotas()) {
+		//生存状態でないなら次へ
+		if (keyCanota->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processInductionArrow(keyCanota->GetWorldTransform().GetWorldTranslate(), { 1,0,1,1 }, spriteIndex);
+	}
+	//ボス(赤)
+	for (const auto& boss : enemyManager_->GetBosses()) {
+		//生存状態でないなら次へ
+		if (boss->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processInductionArrow(boss->GetWorldTransform().GetWorldTranslate(), { 1,0,0,1 }, spriteIndex);
+	}
+	//鍵(黄)
+	for (const auto& key : itemManager_->GetKeyItems()) {
+		//生存状態でないなら次へ
+		if (key->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processInductionArrow(key->GetWorldTransform().GetWorldTranslate(), { 1,1,0,1 }, spriteIndex);
+	}
+	//チュートリアルアイテム(黄)
+	for (const auto& tutorialItem : itemManager_->GetTutorialCollectibleItmes()) {
+		//生存状態でないなら次へ
+		if (tutorialItem->GetState() != BaseCharacter::State::kActive) {
+			continue;
+		}
+
+		processInductionArrow(tutorialItem->GetWorldTransform().GetWorldTranslate(), { 1,1,0,1 }, spriteIndex);
 	}
 }
 

@@ -49,6 +49,9 @@ void EnemyManager::Update() {
 		}
 
 		canota->Update();
+		if (isInvicible) {
+			canota->SetHP(canota->GetParam()["maxHP"].get<int>());
+		}
 	}
 	//全キーキャノ太の更新
 	for (const auto& keyCanota : keyCanotas_) {
@@ -58,6 +61,9 @@ void EnemyManager::Update() {
 		}
 
 		keyCanota->Update();
+		if (isInvicible) {
+			keyCanota->SetHP(keyCanota->GetParam()["maxHP"].get<int>());
+		}
 	}
 	//全ジェットの更新
 	for (const auto& jet : jets_) {
@@ -67,6 +73,9 @@ void EnemyManager::Update() {
 		}
 
 		jet->Update();
+		if (isInvicible) {
+			jet->SetHP(jet->GetParam()["maxHP"].get<int>());
+		}
 	}
 	//全ボスの更新
 	for (const auto& boss : bosses_) {
@@ -76,6 +85,9 @@ void EnemyManager::Update() {
 		}
 
 		boss->Update();
+		if (isInvicible) {
+			boss->SetHP(boss->GetParam()["maxHP"].get<int>());
+		}
 	}
 }
 
@@ -126,6 +138,38 @@ void EnemyManager::BossSpawn(const Norm::Vector3& _initPos, const Norm::Vector3&
 	SpawnFromPool(bosses_, [&](Boss* boss) {
 		boss->Spawn(_initPos, _initRotate);
 		});
+}
+
+void EnemyManager::ClearEnemy() {
+	//全エネミーのクリア
+	for (const auto& canota : canotas_) {
+		//アイドル状態なら次へ
+		if (canota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		canota->SetState(BaseCharacter::State::kIdle);
+	}
+	for (const auto& keyCanota : keyCanotas_) {
+		//アイドル状態なら次へ
+		if (keyCanota->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		keyCanota->SetState(BaseCharacter::State::kIdle);
+	}
+	for (const auto& jet : jets_) {
+		//アイドル状態なら次へ
+		if (jet->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		jet->SetState(BaseCharacter::State::kIdle);
+	}
+	for (const auto& boss : bosses_) {
+		//アイドル状態なら次へ
+		if (boss->GetState() == BaseCharacter::State::kIdle) {
+			continue;
+		}
+		boss->SetState(BaseCharacter::State::kIdle);
+	}
 }
 
 void EnemyManager::SetLevelLoader(LevelLoader* _levelLoader) {
@@ -224,5 +268,42 @@ void EnemyManager::SetEnemyUI(EnemyUI* _enemyUI) {
 void EnemyManager::SetCameraManager(CameraManager* _cameraManager) {
 	for (const auto& boss : bosses_) {
 		boss->SetCameraManager(_cameraManager);
+	}
+}
+
+void EnemyManager::SetIsActive(bool isActive) {
+	//全敵の状態を変更する
+	BaseCharacter::State state = isActive ? BaseCharacter::State::kActive : BaseCharacter::State::kStillness;
+	for (const auto& canota : canotas_) {
+		//停止・仮死状態なら次へ
+		if (canota->GetState() == BaseCharacter::State::kIdle || canota->GetState() == BaseCharacter::State::kAsphyxia) {
+			continue;
+		}
+
+		canota->SetState(state);
+	}
+	for (const auto& keyCanota : keyCanotas_) {
+		//停止・仮死状態なら次へ
+		if (keyCanota->GetState() == BaseCharacter::State::kIdle || keyCanota->GetState() == BaseCharacter::State::kAsphyxia) {
+			continue;
+		}
+
+		keyCanota->SetState(state);
+	}
+	for (const auto& jet : jets_) {
+		//停止・仮死状態なら次へ
+		if (jet->GetState() == BaseCharacter::State::kIdle || jet->GetState() == BaseCharacter::State::kAsphyxia) {
+			continue;
+		}
+
+		jet->SetState(state);
+	}
+	for (const auto& boss : bosses_) {
+		//停止・仮死状態なら次へ
+		if (boss->GetState() == BaseCharacter::State::kIdle || boss->GetState() == BaseCharacter::State::kAsphyxia) {
+			continue;
+		}
+
+		boss->SetState(state);
 	}
 }

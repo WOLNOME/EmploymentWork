@@ -14,7 +14,7 @@
     "BlendMode": 1,
     "ClumpNum": 8,
     "EffectStyle": 0,
-    "EmitRate": 30,
+    "EmitRate": 15,
     "EndColor": {
         "Max": {
             "w": 0.0,
@@ -47,24 +47,24 @@
         },
         "Scale": {
             "Max": {
-                "x": 2.5999999046325684,
-                "y": 2.5,
+                "x": 1.5,
+                "y": 2.0,
                 "z": 1.0
             },
             "Min": {
-                "x": 2.0,
+                "x": 1.5,
                 "y": 1.0,
                 "z": 1.0
             }
         }
     },
-    "Gravity": 92.69999694824219,
+    "Gravity": 9.800000190734863,
     "IsBillboard": 1,
     "IsBound": 0,
     "IsGravity": 1,
     "LifeTime": {
-        "Max": 1.600000023841858,
-        "Min": 1.2000000476837158
+        "Max": 6.0,
+        "Min": 5.0
     },
     "LocalTransform": {
         "Rotate": {
@@ -86,12 +86,12 @@
             "z": 0.0
         }
     },
-    "MaxGrains": 384,
+    "MaxGrains": 720,
     "Primitive": 3,
     "Repulsion": 0.5,
     "SizeVelocity": {
-        "Max": 15.5,
-        "Min": 11.899999618530273
+        "Max": 15.0,
+        "Min": 10.0
     },
     "StartColor": {
         "Max": {
@@ -111,14 +111,14 @@
     "Texture": "smoke.png",
     "Velocity": {
         "Max": {
-            "x": 30.0,
+            "x": 20.0,
             "y": 1.0,
-            "z": 0.0
+            "z": 10.0
         },
         "Min": {
-            "x": 30.0,
+            "x": 10.0,
             "y": -1.0,
-            "z": 0.0
+            "z": 5.0
         }
     }
 }

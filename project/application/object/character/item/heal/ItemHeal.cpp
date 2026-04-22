@@ -36,6 +36,11 @@ void ItemHeal::Initialize() {
 	auto* itemCollider = dynamic_cast<ItemHealCollider*>(collider_.get());
 	collider_->SetCollisionAttribute(CollisionAttribute::Nothingness);
 	collider_->SetWorldTransform(&worldTransform_);
+	itemCollider->SetOBBSize({
+		param_["collisionSizeOBB"]["x"].get<float>(),
+		param_["collisionSizeOBB"]["y"].get<float>(),
+		param_["collisionSizeOBB"]["z"].get<float>()
+		});
 
 	//影の大きさを調整
 	csWorldTransform_.SetScale({ 1.0f,1.0f,1.0f });

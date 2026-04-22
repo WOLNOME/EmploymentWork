@@ -26,7 +26,7 @@ void BossDestroySystem::Initialize() {
 
 	//レベルローダーの生成と初期化
 	levelLoader_ = std::make_unique<LevelLoader>();
-	levelLoader_->Initialize();
+	levelLoader_->Initialize("Resources/levelData/levelData");
 	//封印オブジェクトを消す
 	levelLoader_->GetSealedBoxData()->GetObject3d()->SetIsDisplay(false);
 	for (auto& collider : levelLoader_->GetSealedBoxData()->GetColliders()) {

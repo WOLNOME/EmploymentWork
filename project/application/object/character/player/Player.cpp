@@ -19,7 +19,7 @@ using namespace Norm;
 void Player::Initialize() {
 	//ベースキャラクターの初期化
 	BaseCharacter::Initialize();
-	
+
 	//SEの初期化
 	moveSE_ = std::make_unique<Audio>();
 	moveSE_->Initialize("se/tank_move.mp3");
@@ -84,8 +84,6 @@ void Player::Update() {
 	//ダメージ更新
 	isDamage_ = false;
 
-	//回転処理
-	Rotate();
 	//移動処理
 	Move();
 	//攻撃処理
@@ -99,6 +97,12 @@ void Player::Update() {
 
 	//カメラ処理
 	CameraAlgorithm();
+
+	//無敵状態の処理
+	if (isInvicible_) {
+		hp_ = param_["maxHP"].get<int>();
+	}
+
 }
 
 void Player::DebugWithImGui() {
@@ -150,103 +154,163 @@ void Player::SetCameraManager(CameraManager* _cameraManager) {
 	deathDirection_->SetCameraManager(cameraManager_);
 }
 
-void Player::Rotate() {
-	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection())
-		return;
-	//アクティブでないなら処理をしない
-	if (state_ != State::kActive)
-		return;
-
-	//ADキー入力で回転
-	float addRotation = 0.0f;
-	float turnSpeed = param_["turnSpeed"];
-	if (input_->PushKey(DIK_A) || (input_->GetLStickDir().x < 0.0f)) {
-		addRotation = -turnSpeed * kDeltaTime;
-	}
-	if (input_->PushKey(DIK_D) || (input_->GetLStickDir().x > 0.0f)) {
-		addRotation = turnSpeed * kDeltaTime;
-	}
-
-	//オブジェクトの水平回転量に代入
-	Vector3 rotate = worldTransform_.GetRotate();
-	rotate.y += addRotation;
-	rotate.y = MyMath::NormalizeAngle(rotate.y);
-
-	worldTransform_.SetRotate(rotate);
-}
-
 void Player::Move() {
-	//死亡演出中なら処理をしない
-	if (deathDirection_->GetIsDirection())
-		return;
-	//アクティブでないなら処理をしない
-	if (state_ != State::kActive)
-		return;
+	//==============================
+	// 無効状態チェック
+	//==============================
+	if (deathDirection_->GetIsDirection()) return;
+	if (state_ != State::kActive) return;
 
-	//移動前に前フレームの座標を保存
 	prePosition_ = worldTransform_.GetWorldTranslate();
 
-	//現在の向き(水平向きのみを考慮)
-	Vector3 currentDir = {
-		std::sinf(worldTransform_.GetRotate().y),
+	//----------------------------------------------------------
+	// カメラ基準方向
+	//----------------------------------------------------------
+	Vector3 camRot = cameraManager_->GetActiveCamera()->worldTransform.GetRotate();
+
+	Vector3 camForward = {
+		std::sinf(camRot.y),
 		0.0f,
-		std::cosf(worldTransform_.GetRotate().y)
+		std::cosf(camRot.y)
 	};
-	currentDir.Normalize();
-	//WSキー入力で前後移動
+	camForward.Normalize();
+
+	Vector3 camRight = {
+		camForward.z,
+		0.0f,
+		-camForward.x
+	};
+
+	Vector3 inputDir = { 0,0,0 };
+
+	//----------------------------------------------------------
+	// 入力
+	//----------------------------------------------------------
+	if (isInput_) {
+		if (input_->PushKey(DIK_W) || input_->GetLStickDir().y > 0.0f) inputDir += camForward;
+		if (input_->PushKey(DIK_S) || input_->GetLStickDir().y < 0.0f) inputDir -= camForward;
+		if (input_->PushKey(DIK_D) || input_->GetLStickDir().x > 0.0f) inputDir += camRight;
+		if (input_->PushKey(DIK_A) || input_->GetLStickDir().x < 0.0f) inputDir -= camRight;
+	}
+
+	//----------------------------------------------------------
+	// 移動処理
+	//----------------------------------------------------------
 	float speed = param_["speed"];
-	if (input_->PushKey(DIK_W) || (input_->GetLStickDir().y > 0.0f)) {
-		//速度を加算
-		velocity_ += currentDir * speed;
-	}
-	if (input_->PushKey(DIK_S) || (input_->GetLStickDir().y < 0.0f)) {
-		//速度を減算
-		velocity_ += -currentDir * speed;
+
+	if (inputDir.LengthSq() > 0.0f) {
+		inputDir.Normalize();
+		velocity_ += inputDir * speed;
 	}
 
-	//床の抵抗値を加算
-	Vector3 frictionDir = -velocity_.Normalized();
-	Vector3 frictionAccel = frictionDir * floorFriction_;
-	velocity_ += frictionAccel * kDeltaTime;
-
-	//移動量の大きさを制限
-	float maxSpeed_ = param_["maxSpeed"];
-	if (velocity_.Length() > maxSpeed_) {
-		velocity_.Normalize();
-		velocity_ *= maxSpeed_;
-	}
-	//移動量の小ささを制限
-	if (Vector3(velocity_ * kDeltaTime).Length() < 0.01f) {
-		velocity_ = { 0.0f,0.0f,0.0f };
-	}
-
-	//反発速度を加算
-	velocity_ += reflectVelocity_;
-
-	//反発速度を徐々に減衰させる
-	if (reflectVelocity_.x != 0.0f || reflectVelocity_.y != 0.0f || reflectVelocity_.z != 0.0f) {
-		//0に近づける
-		Vector3 decayDir = -reflectVelocity_.Normalized();
-		Vector3 decayAccel = decayDir * 40.0f;
-		reflectVelocity_ += decayAccel * kDeltaTime;
-		if (reflectVelocity_.Length() < 1.0f) {
-			reflectVelocity_ = { 0.0f,0.0f,0.0f };
+	//----------------------------------------------------------
+	// 摩擦
+	//----------------------------------------------------------
+	if (velocity_.LengthSq() > 0.0f) {
+		float speed = velocity_.Length();
+		float decel = floorFriction_ * kDeltaTime;
+		// 減速しすぎる場合はピタ止め
+		if (decel >= speed) {
+			velocity_ = { 0,0,0 };
+		}
+		else {
+			Vector3 frictionDir = -velocity_.Normalized();
+			velocity_ += frictionDir * floorFriction_ * kDeltaTime;
 		}
 	}
 
-	//速度を加算
+	//----------------------------------------------------------
+	// 最大速度制限
+	//----------------------------------------------------------
+	float maxSpeed = param_["maxSpeed"];
+	if (velocity_.Length() > maxSpeed) {
+		velocity_ = velocity_.Normalized() * maxSpeed;
+	}
+
+	//----------------------------------------------------------
+	// 完全停止（超重要）
+	//----------------------------------------------------------
+	if (velocity_.Length() < 0.05f && inputDir.LengthSq() == 0.0f) {
+		velocity_ = { 0,0,0 };
+	}
+
+
+	//----------------------------------------------------------
+	// 反発
+	//----------------------------------------------------------
+	velocity_ += reflectVelocity_;
+
+	if (reflectVelocity_.LengthSq() > 0.0f) {
+		Vector3 decayDir = -reflectVelocity_.Normalized();
+		reflectVelocity_ += decayDir * 40.0f * kDeltaTime;
+
+		if (reflectVelocity_.Length() < 1.0f) {
+			reflectVelocity_ = { 0,0,0 };
+		}
+	}
+
+	//----------------------------------------------------------
+	// 位置更新
+	//----------------------------------------------------------
 	Vector3 newTranslate = worldTransform_.GetTranslate() + velocity_ * kDeltaTime;
 
-	//移動制限
-	const float limit = 995.0f;
-	newTranslate.x = std::clamp(newTranslate.x, -limit, limit);
-	newTranslate.z = std::clamp(newTranslate.z, -limit, limit);
+	newTranslate.x = std::clamp(newTranslate.x, -moveLimitDistance_, moveLimitDistance_);
+	newTranslate.z = std::clamp(newTranslate.z, -moveLimitDistance_, moveLimitDistance_);
 
 	worldTransform_.SetTranslate(newTranslate);
 
-	//速度によってSEの音量を変える
-	volumeMoveSE_ = MyMath::Lerp(0.0f, 1.0f, velocity_.Length() / maxSpeed_);
+	//----------------------------------------------------------
+	// 回転処理（安定版）
+	//----------------------------------------------------------
+
+	static Vector3 lastMoveDir = { 0,0,1 };
+
+	Vector3 moveDir;
+
+	if (inputDir.LengthSq() > 0.0f) {
+		moveDir = inputDir;
+		lastMoveDir = moveDir;
+	}
+	else if (velocity_.LengthSq() > 0.01f) {
+		moveDir = velocity_;
+		lastMoveDir = moveDir;
+	}
+	else {
+		moveDir = lastMoveDir;
+	}
+
+	moveDir.y = 0.0f;
+
+	// 低速時は回転しない（震え防止）
+	if (velocity_.Length() < 0.1f && inputDir.LengthSq() == 0.0f) {
+		return;
+	}
+
+	moveDir.Normalize();
+
+	float targetYaw = std::atan2(moveDir.x, moveDir.z);
+
+	Vector3 rot = worldTransform_.GetRotate();
+	float currentYaw = rot.y;
+
+	float diff = MyMath::NormalizeAngle(targetYaw - currentYaw);
+
+	float turnSpeed = param_["turnSpeed"];
+
+	currentYaw += diff * turnSpeed * kDeltaTime;
+
+	// 微小振動防止
+	if (std::abs(diff) < 0.001f) {
+		currentYaw = targetYaw;
+	}
+
+	rot.y = currentYaw;
+	worldTransform_.SetRotate(rot);
+
+	//----------------------------------------------------------
+	// SE
+	//----------------------------------------------------------
+	volumeMoveSE_ = MyMath::Lerp(0.0f, 1.0f, velocity_.Length() / maxSpeed);
 	moveSE_->SetVolume(volumeMoveSE_);
 }
 
@@ -270,23 +334,25 @@ void Player::CannonAttack() {
 	}
 
 	//スペースキーで砲弾を発射
-	if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
-		//リロードタイムをセット
-		cannonReloadTimer_ = param_["cannonReloadTime"];
-		//初期位置と発射方向の計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 cannonPos = worldTransform_.GetTranslate();
-		cannonPos.y += 7.2f;	//砲弾の初期位置を調整
-		Vector3 cannonDirection = currentDir;
-		//スポーン
-		playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
+	if (isInput_) {
+		if (input_->TriggerMouseButton(MouseButton::RightButton) || (input_->GetLT() > 0.5f)) {
+			//リロードタイムをセット
+			cannonReloadTimer_ = param_["cannonReloadTime"];
+			//初期位置と発射方向の計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 cannonPos = worldTransform_.GetTranslate();
+			cannonPos.y += 7.2f;	//砲弾の初期位置を調整
+			Vector3 cannonDirection = currentDir;
+			//スポーン
+			playerWeaponManager_->SpawnCannon(cannonPos, cannonDirection);
+		}
 	}
 }
 
@@ -329,29 +395,31 @@ void Player::BulletAttack() {
 	}
 
 	//左クリックで銃弾を発射
-	if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
-		//間隔計測用タイマーをセット
-		float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
-		bulletFireIntervalTimer_ = bulletFireIntervalTime;
-		//現在の銃弾数を減らす
-		bulletNum_--;
-		//銃弾数が0になったらリロードタイマーをセット
-		if (bulletNum_ <= 0) {
-			bulletReloadTimer_ = param_["bulletReloadTime"];
+	if (isInput_) {
+		if (input_->PushMouseButton(MouseButton::LeftButton) || (input_->GetRT() > 0.5f)) {
+			//間隔計測用タイマーをセット
+			float bulletFireIntervalTime = param_["bulletFireIntervalTime"];
+			bulletFireIntervalTimer_ = bulletFireIntervalTime;
+			//現在の銃弾数を減らす
+			bulletNum_--;
+			//銃弾数が0になったらリロードタイマーをセット
+			if (bulletNum_ <= 0) {
+				bulletReloadTimer_ = param_["bulletReloadTime"];
+			}
+			//初期位置と発射方向を計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 bulletPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
+			bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
+			//スポーン
+			playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 		}
-		//初期位置と発射方向を計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 bulletPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
-		bulletPos += currentDir * 8.0f;	//銃弾の初期位置を調整
-		//スポーン
-		playerWeaponManager_->SpawnBullet(bulletPos, currentDir);
 	}
 }
 
@@ -384,25 +452,27 @@ void Player::SpecialAttack() {
 	}
 
 	//右クリックで必殺弾を発射
-	if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
-		//間隔計測用タイマーをセット
-		float specialFireIntervalTime = param_["specialFireIntervalTime"];
-		specialFireIntervalTimer_ = specialFireIntervalTime;
-		//必殺弾の数を減らす
-		specialNum_--;
-		//初期位置と発射方向を計算
-		float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
-		float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
-		Vector3 currentDir = {
-			std::cosf(orx) * std::sinf(ory),
-			-std::sinf(orx),		//←角度
-			std::cosf(orx) * std::cosf(ory)
-		};
-		currentDir.Normalize();
-		Vector3 specialPos = cameraManager_->GetActiveCamera()->worldTransform.GetTranslate();
-		specialPos.y += 7.2f;	//必殺弾の初期位置を調整
-		//スポーン
-		playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
+	if (isInput_) {
+		if (input_->PushMouseButton(MouseButton::MiddleButton) || input_->TriggerPadButton(GamePadButton::B)) {
+			//間隔計測用タイマーをセット
+			float specialFireIntervalTime = param_["specialFireIntervalTime"];
+			specialFireIntervalTimer_ = specialFireIntervalTime;
+			//必殺弾の数を減らす
+			specialNum_--;
+			//初期位置と発射方向を計算
+			float orx = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().x;
+			float ory = cameraManager_->GetActiveCamera()->worldTransform.GetRotate().y;
+			Vector3 currentDir = {
+				std::cosf(orx) * std::sinf(ory),
+				-std::sinf(orx),		//←角度
+				std::cosf(orx) * std::cosf(ory)
+			};
+			currentDir.Normalize();
+			Vector3 specialPos = worldTransform_.GetTranslate();
+			specialPos.y += 7.2f;	//必殺弾の初期位置を調整
+			//スポーン
+			playerWeaponManager_->SpawnSpecial(specialPos, currentDir);
+		}
 	}
 }
 
@@ -426,14 +496,21 @@ void Player::CameraAlgorithm() {
 	//アクティブでないなら処理をしない
 	if (state_ != State::kActive)
 		return;
+	//プレイヤー側のカメラ処理を行わないなら
+	if (isCameraFree_)
+		return;
 
 	//カメラの操作にオブジェクトの回転を合わせる
 	Vector2 moveValue;
-	Vector2 mouseMoveValue = input_->GetMousePosition();
-	Vector2 padMoveValue = {
-		input_->GetRStickDir().x * 20.0f,
-		input_->GetRStickDir().y * 10.0f,
-	};
+	Vector2 mouseMoveValue = {};
+	Vector2 padMoveValue = {};
+	if (isInput_) {
+		mouseMoveValue = input_->GetMousePosition();
+		padMoveValue = {
+			input_->GetRStickDir().x * 20.0f,
+			input_->GetRStickDir().y * 10.0f,
+		};
+	}
 	padMoveValue.y *= -1.0f;
 	moveValue = mouseMoveValue + padMoveValue;
 	//デッドゾーン
@@ -444,6 +521,7 @@ void Player::CameraAlgorithm() {
 		newRotate.y += moveValue.x * 0.0005f;
 		cameraManager_->GetActiveCamera()->worldTransform.SetRotate(newRotate);
 	}
+
 	//回転制限
 	const float maxPitch = (pi / 30.0f);		//下向き制限
 	const float minPitch = -(pi / 9.0f);		//上向き制限

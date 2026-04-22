@@ -1,0 +1,1673 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "Tutorial_FenceObject",
+            "name": "Tutorial_FenceObject",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject",
+            "transform": {
+                "translation": [
+                    53.80122375488281,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.001",
+            "transform": {
+                "translation": [
+                    -59.786094665527344,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.002",
+            "transform": {
+                "translation": [
+                    161.8697509765625,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.003",
+            "transform": {
+                "translation": [
+                    275.4570617675781,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.004",
+            "transform": {
+                "translation": [
+                    -280.28314208984375,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.005",
+            "transform": {
+                "translation": [
+                    -166.6958465576172,
+                    339.0777587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.006",
+            "transform": {
+                "translation": [
+                    334.572998046875,
+                    -168.60145568847656,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.007",
+            "transform": {
+                "translation": [
+                    334.572998046875,
+                    -282.1887512207031,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.008",
+            "transform": {
+                "translation": [
+                    334.5729675292969,
+                    273.55145263671875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.009",
+            "transform": {
+                "translation": [
+                    334.5729675292969,
+                    159.96414184570312,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.010",
+            "transform": {
+                "translation": [
+                    334.572998046875,
+                    -61.69171142578125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.011",
+            "transform": {
+                "translation": [
+                    334.572998046875,
+                    51.8956298828125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.012",
+            "transform": {
+                "translation": [
+                    -336.9400939941406,
+                    51.8956298828125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.013",
+            "transform": {
+                "translation": [
+                    -336.9400939941406,
+                    -61.69171142578125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.014",
+            "transform": {
+                "translation": [
+                    -336.94012451171875,
+                    159.96414184570312,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.015",
+            "transform": {
+                "translation": [
+                    -336.94012451171875,
+                    273.55145263671875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.016",
+            "transform": {
+                "translation": [
+                    -336.9400939941406,
+                    -282.1887512207031,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.017",
+            "transform": {
+                "translation": [
+                    -336.9400939941406,
+                    -168.60145568847656,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.018",
+            "transform": {
+                "translation": [
+                    163.46202087402344,
+                    -338.7291564941406,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.019",
+            "transform": {
+                "translation": [
+                    277.04931640625,
+                    -338.7291564941406,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.020",
+            "transform": {
+                "translation": [
+                    -278.6908874511719,
+                    -338.7292175292969,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.021",
+            "transform": {
+                "translation": [
+                    -165.10357666015625,
+                    -338.72918701171875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.022",
+            "transform": {
+                "translation": [
+                    56.552276611328125,
+                    -338.7291564941406,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "BigRockObject",
+            "name": "BigRockObject.023",
+            "transform": {
+                "translation": [
+                    -57.035064697265625,
+                    -338.7291564941406,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    -200.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject",
+            "transform": {
+                "translation": [
+                    -188.8087615966797,
+                    -235.99375915527344,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.001",
+            "transform": {
+                "translation": [
+                    -188.8087615966797,
+                    -235.99375915527344,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.002",
+            "transform": {
+                "translation": [
+                    -222.65261840820312,
+                    -157.08969116210938,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.003",
+            "transform": {
+                "translation": [
+                    -81.40512084960938,
+                    -220.8424072265625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.004",
+            "transform": {
+                "translation": [
+                    -136.22552490234375,
+                    -64.77218627929688,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.005",
+            "transform": {
+                "translation": [
+                    -54.199951171875,
+                    -127.58674621582031,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.006",
+            "transform": {
+                "translation": [
+                    103.51095581054688,
+                    -70.68930053710938,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.007",
+            "transform": {
+                "translation": [
+                    245.17724609375,
+                    -54.264259338378906,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.008",
+            "transform": {
+                "translation": [
+                    230.1204833984375,
+                    -185.48312377929688,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.009",
+            "transform": {
+                "translation": [
+                    155.37884521484375,
+                    -276.87652587890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.010",
+            "transform": {
+                "translation": [
+                    69.38311004638672,
+                    -243.0455322265625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.011",
+            "transform": {
+                "translation": [
+                    110.17244720458984,
+                    122.6336669921875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.012",
+            "transform": {
+                "translation": [
+                    158.39227294921875,
+                    272.31585693359375,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.013",
+            "transform": {
+                "translation": [
+                    218.60560607910156,
+                    221.3634490966797,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.014",
+            "transform": {
+                "translation": [
+                    200.4980926513672,
+                    63.67828369140625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.015",
+            "transform": {
+                "translation": [
+                    33.29457092285156,
+                    202.0252227783203,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.016",
+            "transform": {
+                "translation": [
+                    -58.750274658203125,
+                    242.7032928466797,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.017",
+            "transform": {
+                "translation": [
+                    -171.04026794433594,
+                    254.56849670410156,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.018",
+            "transform": {
+                "translation": [
+                    -102.9521484375,
+                    126.82322692871094,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.019",
+            "transform": {
+                "translation": [
+                    -192.5950927734375,
+                    56.45073699951172,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "TreeObject",
+            "name": "TreeObject.020",
+            "transform": {
+                "translation": [
+                    -251.8253631591797,
+                    156.5189208984375,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    5.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject",
+            "transform": {
+                "translation": [
+                    -204.5042266845703,
+                    -81.53656768798828,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    48.27702331542969
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.001",
+            "transform": {
+                "translation": [
+                    -159.884521484375,
+                    -149.93914794921875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -106.01522827148438
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.002",
+            "transform": {
+                "translation": [
+                    -96.19558715820312,
+                    -109.94689178466797,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -15.391998291015625
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.003",
+            "transform": {
+                "translation": [
+                    -143.91018676757812,
+                    161.00506591796875,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    49.7966194152832
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.004",
+            "transform": {
+                "translation": [
+                    -181.2924346923828,
+                    97.47868347167969,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -72.84305572509766
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.005",
+            "transform": {
+                "translation": [
+                    -59.783843994140625,
+                    97.47868347167969,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    32.02363967895508
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.006",
+            "transform": {
+                "translation": [
+                    62.89179229736328,
+                    117.20667266845703,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -33.205841064453125
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.007",
+            "transform": {
+                "translation": [
+                    229.64761352539062,
+                    117.20667266845703,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -28.57605743408203
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.008",
+            "transform": {
+                "translation": [
+                    160.43341064453125,
+                    182.1553955078125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    30.30305290222168
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.009",
+            "transform": {
+                "translation": [
+                    160.43341064453125,
+                    -100.62905883789062,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    19.418760299682617
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.010",
+            "transform": {
+                "translation": [
+                    87.23892211914062,
+                    -154.2390899658203,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    53.4281005859375
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        },
+        {
+            "type": "RockObject",
+            "name": "RockObject.011",
+            "transform": {
+                "translation": [
+                    218.32070922851562,
+                    -141.9225311279297,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    26.883419036865234
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    2.5
+                ],
+                "size": [
+                    13.0,
+                    6.0,
+                    5.0
+                ]
+            }
+        }
+    ]
+}

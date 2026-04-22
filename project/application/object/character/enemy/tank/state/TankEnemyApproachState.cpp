@@ -31,6 +31,11 @@ void TankEnemyApproachState::Update(IBaseTankEnemy* enemy) {
 		enemyUI_->GetEnemyReactionUI()->MissingSpawn(enemy->GetWorldTransform().GetWorldTranslate(), height, front);
 	}
 
+	//静止状態なら抜ける
+	if(enemy->GetState() == BaseCharacter::State::kStillness) {
+		return;
+	}
+
 	//接近の更新処理
 	UpdateApproach(enemy);
 	//回転の更新処理

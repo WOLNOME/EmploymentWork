@@ -8,6 +8,7 @@ void IBaseLevelObject::Initialize(const std::string& _name) {
 	name_ = _name;
 	//オブジェクトの生成
 	object3d_ = std::make_unique<Object3d>();
+	object3d_->SetIsDisplay(false);
 }
 
 void IBaseLevelObject::Update() {
@@ -43,6 +44,9 @@ uint32_t IBaseLevelObject::SetTransformInfo(const Norm::TransformEuler& _transfo
 
 	//ワールドトランスフォームに保存
 	worldTransforms_[handle] = std::move(worldTransform);
+
+	//表示
+	object3d_->SetIsDisplay(true);
 
 	return handle;
 }

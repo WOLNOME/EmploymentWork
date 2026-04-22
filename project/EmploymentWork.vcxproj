@@ -137,6 +137,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\system\direction\shot\BD_BigExplosion3Shot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_StillnessShot.cpp" />
     <ClCompile Include="application\system\direction\shot\BD_ZoomOutShot.cpp" />
+    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp" />
+    <ClCompile Include="application\system\tutorial\command\CameraSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\executor\CommandExecutor.cpp" />
     <ClCompile Include="engine\collision\base\AABBColliderBase.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.cpp" />
@@ -180,7 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\enemy\detail\EnemyHPUI.cpp" />
     <ClCompile Include="application\object\character\weapon\enemy\EnemyBomb.cpp" />
     <ClCompile Include="application\system\DeathDirection.cpp" />
-    <ClCompile Include="application\system\EndDirection.cpp" />
+    <ClCompile Include="application\system\gamePlay\EndDirection.cpp" />
     <ClCompile Include="engine\behaviorTree\branchNode\BranchNodeBase.cpp" />
     <ClCompile Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.cpp" />
     <ClCompile Include="engine\blackBoard\BlackBoard.cpp" />
@@ -287,10 +290,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\detail\PlayerHPUI.cpp" />
     <ClCompile Include="application\scene\TitleScene.cpp" />
     <ClCompile Include="application\system\TitleSystem.cpp" />
-    <ClCompile Include="application\system\StartDirection.cpp" />
+    <ClCompile Include="application\system\gamePlay\StartDirection.cpp" />
     <ClCompile Include="application\ui\player\detail\OperationUI.cpp" />
     <ClCompile Include="application\system\TimeScaleManager.cpp" />
-    <ClCompile Include="application\system\PauseSystem.cpp" />
+    <ClCompile Include="application\system\gamePlay\pause\PauseSystem.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.cpp" />
     <ClCompile Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.cpp" />
     <ClCompile Include="engine\collision\base\OBBColliderBase.cpp" />
@@ -319,9 +322,19 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ui\player\detail\KeyUI.cpp" />
     <ClCompile Include="application\system\direction\shot\base\IShotBase.cpp" />
     <ClCompile Include="application\scene\TutorialScene.cpp" />
-    <ClCompile Include="application\system\TutorialSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\TutorialSystem.cpp" />
     <ClCompile Include="application\object\level\bigRock\LevelBigRock.cpp" />
-    <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp" />
+    <ClCompile Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.cpp" />
+    <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp" />
+    <ClCompile Include="application\system\tutorial\command\InputSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\MessageSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\manager\TutorialManager.cpp" />
+    <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectSystem.cpp" />
+    <ClCompile Include="application\object\level\tutorial_fence\LevelTutorialFence.cpp" />
+    <ClCompile Include="application\system\tutorial\pause\Tuto_PauseSystem.cpp" />
+    <ClCompile Include="application\object\level\brokenTank\LevelBrokenTank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\object\character\enemy\boss\collision\BossCollider.h" />
@@ -353,6 +366,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\system\direction\shot\BD_BigExplosion3Shot.h" />
     <ClInclude Include="application\system\direction\shot\BD_StillnessShot.h" />
     <ClInclude Include="application\system\direction\shot\BD_ZoomOutShot.h" />
+    <ClInclude Include="application\ui\player\detail\EmphasisUI.h" />
+    <ClInclude Include="application\system\tutorial\command\CameraSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\executor\CommandExecutor.h" />
     <ClInclude Include="engine\collision\base\AABBColliderBase.h" />
     <ClInclude Include="application\object\character\enemy\boss\builder\BossBehaivorTreeBuilder.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\branch\CheckPlayerDistance.h" />
@@ -393,7 +409,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\enemy\detail\EnemyHPUI.h" />
     <ClInclude Include="application\object\character\weapon\enemy\EnemyBomb.h" />
     <ClInclude Include="application\system\DeathDirection.h" />
-    <ClInclude Include="application\system\EndDirection.h" />
+    <ClInclude Include="application\system\gamePlay\EndDirection.h" />
     <ClInclude Include="engine\behaviorTree\branchNode\BranchNodeBase.h" />
     <ClInclude Include="engine\behaviorTree\decoratorNode\DecoratorNodeBase.h" />
     <ClInclude Include="engine\blackBoard\BlackBoard.h" />
@@ -510,11 +526,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\PlayerHPUI.h" />
     <ClInclude Include="application\scene\TitleScene.h" />
     <ClInclude Include="application\system\TitleSystem.h" />
-    <ClInclude Include="application\system\StartDirection.h" />
+    <ClInclude Include="application\system\gamePlay\StartDirection.h" />
     <ClInclude Include="application\ui\player\detail\OperationUI.h" />
     <ClInclude Include="application\system\TimeScaleManager.h" />
     <ClInclude Include="engine\3d\ParticleTypes.h" />
-    <ClInclude Include="application\system\PauseSystem.h" />
+    <ClInclude Include="application\system\gamePlay\pause\PauseSystem.h" />
     <ClInclude Include="engine\3d\particle\ParticleTypes.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\PatrolLeaf.h" />
     <ClInclude Include="application\object\character\enemy\boss\node\leaf\SummonLeaf.h" />
@@ -544,9 +560,19 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ui\player\detail\KeyUI.h" />
     <ClInclude Include="application\system\direction\shot\base\IShotBase.h" />
     <ClInclude Include="application\scene\TutorialScene.h" />
-    <ClInclude Include="application\system\TutorialSystem.h" />
+    <ClInclude Include="application\system\tutorial\TutorialSystem.h" />
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h" />
-    <ClInclude Include="application\ui\player\detail\MoveIndicator.h" />
+    <ClInclude Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.h" />
+    <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h" />
+    <ClInclude Include="application\system\tutorial\command\InputSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\MessageSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
+    <ClInclude Include="application\system\tutorial\manager\TutorialManager.h" />
+    <ClInclude Include="application\system\tutorial\command\UISystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectSystem.h" />
+    <ClInclude Include="application\object\level\tutorial_fence\LevelTutorialFence.h" />
+    <ClInclude Include="application\system\tutorial\pause\Tuto_PauseSystem.h" />
+    <ClInclude Include="application\object\level\brokenTank\LevelBrokenTank.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -2,6 +2,7 @@
 
 //アプリケーション
 #include <application/object/character/weapon/player/PlayerCannon.h>
+#include <application/object/character/weapon/player/manager/PlayerWeaponManager.h>
 
 using namespace Norm;
 
@@ -37,6 +38,11 @@ void PlayerCannonCollider::OnCollision(ICollider* _other, CollisionAttribute _at
 	{
 		//共通処理
 		commonCollisionProcess();
+
+		//ヒットカウントの加算
+		int currentHitNum = holder_->GetPlayerWeaponManager()->GetCannonHitNum();
+		holder_->GetPlayerWeaponManager()->SetCannonHitNum(currentHitNum + 1);
+
 
 		break;
 	}

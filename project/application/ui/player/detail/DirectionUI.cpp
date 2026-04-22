@@ -81,3 +81,8 @@ void DirectionUI::AttachBlinking(const Norm::Vector4& _color) {
 	spriteArrow_->SetColor(_color);
 	spriteScale_->SetColor(_color);
 }
+
+void DirectionUI::SetIsDisplay(bool _isDisplay) {
+	spriteArrow_->SetIsDisplay(_isDisplay);
+	spriteScale_->SetIsDisplay(_isDisplay);
+}

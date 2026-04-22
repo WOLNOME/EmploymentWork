@@ -38,10 +38,6 @@ void PlayerUI::Initialize() {
 	hitIndicator_ = std::make_unique<HitIndicator>();
 	hitIndicator_->Initialize();
 
-	//移動インジケーターUI
-	moveIndicator_ = std::make_unique<MoveIndicator>();
-	moveIndicator_->Initialize();
-
 	//操作UI
 	operationUI_ = std::make_unique<OperationUI>();
 	operationUI_->Initialize();
@@ -62,6 +58,10 @@ void PlayerUI::Initialize() {
 	damageUI_ = std::make_unique<DamageUI>();
 	damageUI_->Initialize();
 
+	//強調UI
+	emphasisUI_ = std::make_unique<EmphasisUI>();
+	emphasisUI_->Initialize();
+
 }
 
 void PlayerUI::Update() {
@@ -78,8 +78,6 @@ void PlayerUI::Update() {
 	radar_->Update();
 	//被弾インジケーターUIの更新
 	hitIndicator_->Update();
-	//移動インジケーターUIの更新
-	moveIndicator_->Update();
 	//操作UIの更新
 	operationUI_->Update();
 	//速度UIの更新
@@ -90,6 +88,8 @@ void PlayerUI::Update() {
 	directionUI_->Update();
 	//ダメージUIの更新
 	damageUI_->Update();
+	//強調UIの更新
+	emphasisUI_->Update();
 
 	//ダメージによるシェイク処理
 	DamageShaking();
@@ -117,8 +117,6 @@ void PlayerUI::SetPlayer(Player* _player) {
 	radar_->SetPlayer(player_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetPlayer(player_);
-	//移動インジケーターUIに渡す
-	moveIndicator_->SetPlayer(player_);
 	//速度UIに渡す
 	velocityUI_->SetPlayer(player_);
 	//キーUIに渡す
@@ -130,11 +128,15 @@ void PlayerUI::SetPlayer(Player* _player) {
 void PlayerUI::SetEnemyManager(EnemyManager* _enemyManager) {
 	//レーダーUIに渡す
 	radar_->SetEnemyManager(_enemyManager);
+	//強調UIに渡す
+	emphasisUI_->SetEnemyManager(_enemyManager);
 }
 
 void PlayerUI::SetItemManager(ItemManager* _itemManager) {
 	//レーダーUIに渡す
 	radar_->SetItemManager(_itemManager);
+	//強調UIに渡す
+	emphasisUI_->SetItemManager(_itemManager);
 }
 
 void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
@@ -143,10 +145,25 @@ void PlayerUI::SetCameraManager(CameraManager* _cameraManager) {
 	radar_->SetCameraManager(cameraManager_);
 	//被弾インジケーターUIに渡す
 	hitIndicator_->SetCameraManager(cameraManager_);
-	//移動インジケーターUIに渡す
-	moveIndicator_->SetCameraManager(cameraManager_);
 	//方向UIに渡す
 	directionUI_->SetCameraManager(cameraManager_);
+	//強調UIに渡す
+	emphasisUI_->SetCameraManager(cameraManager_);
+}
+
+void PlayerUI::SetIsDisplay(bool _isDisplay) {
+	reticleUI_->SetIsDisplay(_isDisplay);
+	decorativeUI_->SetIsDisplay(_isDisplay);
+	playerHPUI_->SetIsDisplay(_isDisplay);
+	weaponUI_->SetIsDisplay(_isDisplay);
+	radar_->SetIsDisplay(_isDisplay);
+	hitIndicator_->SetIsDisplay(_isDisplay);
+	operationUI_->SetIsDisplay(_isDisplay);
+	velocityUI_->SetIsDisplay(_isDisplay);
+	keyUI_->SetIsDisplay(_isDisplay);
+	directionUI_->SetIsDisplay(_isDisplay);
+	damageUI_->SetIsDisplay(_isDisplay);
+	emphasisUI_->SetIsDisplay(_isDisplay);
 }
 
 void PlayerUI::DamageShaking() {

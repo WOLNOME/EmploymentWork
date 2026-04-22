@@ -28,6 +28,16 @@ public:
 	/// <param name="_color">色</param>
 	void AttachBlinking(const Norm::Vector4& _color);
 
+	/// ============================== ///
+	///		setter
+	/// ============================== ///
+
+	/// <summary>
+	/// 表示するかを設定
+	/// </summary>
+	/// <param name="_isDisplay">表示するか</param>
+	void SetIsDisplay(bool _isDisplay);
+
 private:
 	/// ============================== ///
 	///		メンバ変数

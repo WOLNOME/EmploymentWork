@@ -24,6 +24,11 @@ void TankEnemyAttackState::Update(IBaseTankEnemy* enemy) {
 		enemy->ChangeState("Approach");
 	}
 
+	//静止状態なら処理を抜ける
+	if(enemy->GetState() == BaseCharacter::State::kStillness) {
+		return;
+	}
+
 	//回転の更新処理
 	UpdateRotate(enemy);
 	//攻撃の更新処理

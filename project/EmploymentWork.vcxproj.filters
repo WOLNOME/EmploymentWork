@@ -294,10 +294,10 @@
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\EndDirection.cpp">
+    <ClCompile Include="application\system\gamePlay\EndDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\StartDirection.cpp">
+    <ClCompile Include="application\system\gamePlay\StartDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\system\TimeScaleManager.cpp">
@@ -636,19 +636,13 @@
     <ClCompile Include="application\system\DeathDirection.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\EndDirection.cpp">
-      <Filter>application\system</Filter>
-    </ClCompile>
-    <ClCompile Include="application\system\PauseSystem.cpp">
-      <Filter>application\system</Filter>
-    </ClCompile>
-    <ClCompile Include="application\system\StartDirection.cpp">
+    <ClCompile Include="application\system\gamePlay\pause\PauseSystem.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\system\TimeScaleManager.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
-    <ClCompile Include="application\system\TutorialSystem.cpp">
+    <ClCompile Include="application\system\tutorial\TutorialSystem.cpp">
       <Filter>application\system</Filter>
     </ClCompile>
     <ClCompile Include="application\scene\DIR_BossAppearScene.cpp">
@@ -738,9 +732,26 @@
     <ClCompile Include="engine\base\main.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="application\ui\player\detail\MoveIndicator.cpp">
+    <ClCompile Include="application\ui\player\detail\EmphasisUI.cpp">
       <Filter>application\ui\player\detail</Filter>
     </ClCompile>
+    <ClCompile Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.cpp">
+      <Filter>application\object\character\item\tutorialCollectible</Filter>
+    </ClCompile>
+    <ClCompile Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.cpp">
+      <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="application\system\tutorial\manager\TutorialManager.cpp" />
+    <ClCompile Include="application\system\tutorial\command\executor\CommandExecutor.cpp" />
+    <ClCompile Include="application\system\tutorial\command\MessageSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\InputSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\CameraSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectiveSystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\UISystem.cpp" />
+    <ClCompile Include="application\system\tutorial\command\ObjectSystem.cpp" />
+    <ClCompile Include="application\object\level\tutorial_fence\LevelTutorialFence.cpp" />
+    <ClCompile Include="application\system\tutorial\pause\Tuto_PauseSystem.cpp" />
+    <ClCompile Include="application\object\level\brokenTank\LevelBrokenTank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -977,10 +988,10 @@
     <ClInclude Include="application\system\DeathDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\EndDirection.h">
+    <ClInclude Include="application\system\gamePlay\EndDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\StartDirection.h">
+    <ClInclude Include="application\system\gamePlay\StartDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
     <ClInclude Include="application\system\TimeScaleManager.h">
@@ -1325,19 +1336,13 @@
     <ClInclude Include="application\system\DeathDirection.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\EndDirection.h">
-      <Filter>application\system</Filter>
-    </ClInclude>
-    <ClInclude Include="application\system\PauseSystem.h">
-      <Filter>application\system</Filter>
-    </ClInclude>
-    <ClInclude Include="application\system\StartDirection.h">
+    <ClInclude Include="application\system\gamePlay\pause\PauseSystem.h">
       <Filter>application\system</Filter>
     </ClInclude>
     <ClInclude Include="application\system\TimeScaleManager.h">
       <Filter>application\system</Filter>
     </ClInclude>
-    <ClInclude Include="application\system\TutorialSystem.h">
+    <ClInclude Include="application\system\tutorial\TutorialSystem.h">
       <Filter>application\system</Filter>
     </ClInclude>
     <ClInclude Include="application\scene\DIR_BossAppearScene.h">
@@ -1427,9 +1432,26 @@
     <ClInclude Include="application\object\level\bigRock\LevelBigRock.h">
       <Filter>application\object\level\bigRock</Filter>
     </ClInclude>
-    <ClInclude Include="application\ui\player\detail\MoveIndicator.h">
+    <ClInclude Include="application\ui\player\detail\EmphasisUI.h">
       <Filter>application\ui\player\detail</Filter>
     </ClInclude>
+    <ClInclude Include="application\object\character\item\tutorialCollectible\ItemTutorialCollectible.h">
+      <Filter>application\object\character\item\tutorialCollectible</Filter>
+    </ClInclude>
+    <ClInclude Include="application\object\character\item\tutorialCollectible\collision\ItemTutorialCollectibleCollider.h">
+      <Filter>application\object\character\item\tutorialCollectible\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="application\system\tutorial\manager\TutorialManager.h" />
+    <ClInclude Include="application\system\tutorial\command\executor\CommandExecutor.h" />
+    <ClInclude Include="application\system\tutorial\command\MessageSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\InputSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\CameraSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectiveSystem.h" />
+    <ClInclude Include="application\system\tutorial\command\UISystem.h" />
+    <ClInclude Include="application\system\tutorial\command\ObjectSystem.h" />
+    <ClInclude Include="application\object\level\tutorial_fence\LevelTutorialFence.h" />
+    <ClInclude Include="application\system\tutorial\pause\Tuto_PauseSystem.h" />
+    <ClInclude Include="application\object\level\brokenTank\LevelBrokenTank.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
@@ -1802,6 +1824,12 @@
     </Filter>
     <Filter Include="application\object\level\bigRock">
       <UniqueIdentifier>{3e68dc19-0ca8-48c2-8695-b3017c1f2cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\tutorialCollectible">
+      <UniqueIdentifier>{5d129bbe-acea-4c6f-8f8d-2eecc36321a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\object\character\item\tutorialCollectible\collision">
+      <UniqueIdentifier>{ffaddbd1-77f0-4822-a84b-c5fb72056a83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

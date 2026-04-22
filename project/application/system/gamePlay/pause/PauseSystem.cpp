@@ -15,9 +15,6 @@ PauseSystem::~PauseSystem() {
 }
 
 void PauseSystem::Initialize() {
-	//インスタンスの初期化
-	input_ = Input::GetInstance();
-
 	//SEの初期化
 	decideSE_ = std::make_unique<Audio>();
 	decideSE_->Initialize("se/decide.mp3");
@@ -123,8 +120,10 @@ void PauseSystem::Initialize() {
 }
 
 void PauseSystem::Update() {
+	Input* input = Input::GetInstance();
+
 	//ポーズ切り替え処理
-	if (input_->TriggerKey(DIK_ESCAPE) || input_->TriggerPadButton(GamePadButton::START)) {
+	if (input->TriggerKey(DIK_ESCAPE) || input->TriggerPadButton(GamePadButton::START)) {
 		isPause_ = !isPause_;
 		isOperationGuideDisplay_ = false;
 		//決定音を出す
@@ -143,8 +142,8 @@ void PauseSystem::Update() {
 				stringMenuSprite_[i]->SetIsDisplay(false);
 			}
 
-			if (input_->TriggerKey(DIK_SPACE) ||
-				input_->TriggerPadButton(GamePadButton::A)) {
+			if (input->TriggerKey(DIK_SPACE) ||
+				input->TriggerPadButton(GamePadButton::A)) {
 
 				isOperationGuideDisplay_ = false;
 				//決定音を出す
@@ -163,14 +162,14 @@ void PauseSystem::Update() {
 			switch (selectMenu_) {
 			case PauseSystem::Menu::kContinue: {
 				//決定
-				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+				if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
 					//ポーズ画面を終了
 					isPause_ = false;
 					//決定音を出す
 					decideSE_->Play(false, 1.0f);
 				}
 				//下
-				if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN) || input_->GetLStickDir().y < 0.0f) {
+				if (input->TriggerKey(DIK_S) || input->TriggerPadButton(GamePadButton::DPAD_DOWN) || input->GetLStickDir().y < 0.0f) {
 					//メニューを操作ガイドに切り替え
 					selectMenu_ = Menu::kOperationGuide;
 					//カーソル移動音を出す
@@ -187,21 +186,21 @@ void PauseSystem::Update() {
 			}
 			case PauseSystem::Menu::kOperationGuide: {
 				//決定
-				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+				if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
 					//操作ガイドを表示
 					isOperationGuideDisplay_ = true;
 					//決定音を出す
 					decideSE_->Play(false, 1.0f);
 				}
 				//上
-				if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP) || input_->GetLStickDir().y > 0.0f) {
+				if (input->TriggerKey(DIK_W) || input->TriggerPadButton(GamePadButton::DPAD_UP) || input->GetLStickDir().y > 0.0f) {
 					//メニューを続行に切り替え
 					selectMenu_ = Menu::kContinue;
 					//カーソル移動音を出す
 					cursolMoveSE_->Play(false, 1.0f);
 				}
 				//下
-				if (input_->TriggerKey(DIK_S) || input_->TriggerPadButton(GamePadButton::DPAD_DOWN) || input_->GetLStickDir().y < 0.0f) {
+				if (input->TriggerKey(DIK_S) || input->TriggerPadButton(GamePadButton::DPAD_DOWN) || input->GetLStickDir().y < 0.0f) {
 					//メニューをタイトルに切り替え
 					selectMenu_ = Menu::kTItle;
 					//カーソル移動音を出す
@@ -213,12 +212,11 @@ void PauseSystem::Update() {
 				stringMenuSprite_[2]->SetColor({ 0.929f,0.592f,0.255f,1.0f });
 				stringMenuSprite_[3]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
-
 				break;
 			}
 			case PauseSystem::Menu::kTItle: {
 				//決定
-				if (input_->TriggerKey(DIK_SPACE) || input_->TriggerPadButton(GamePadButton::A)) {
+				if (input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(GamePadButton::A)) {
 					//タイトルシーンへ
 					uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture("black.png");
 					if (SceneManager::GetInstance()->SetNextScene("Title", SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Type::FADE, SceneTransitionAnimation::Option::NONE, 1.0f, textureHandle)) {
@@ -227,7 +225,7 @@ void PauseSystem::Update() {
 					}
 				}
 				//上
-				if (input_->TriggerKey(DIK_W) || input_->TriggerPadButton(GamePadButton::DPAD_UP) || input_->GetLStickDir().y > 0.0f) {
+				if (input->TriggerKey(DIK_W) || input->TriggerPadButton(GamePadButton::DPAD_UP) || input->GetLStickDir().y > 0.0f) {
 					//メニューを操作ガイドに切り替え
 					selectMenu_ = Menu::kOperationGuide;
 					//カーソル移動音を出す

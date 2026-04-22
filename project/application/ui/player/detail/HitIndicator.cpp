@@ -110,3 +110,15 @@ void HitIndicator::RegistIndicator(const Vector3& _hitPosition) {
 		break;
 	}
 }
+
+void HitIndicator::SetIsDisplay(bool _isDisplay) {
+	//表示にする場合はreturn
+	if (_isDisplay) 
+		return;
+
+	for (auto& indicator : indicators_) {
+		if (indicator.sprite) {
+			indicator.sprite->SetIsDisplay(_isDisplay);
+		}
+	}
+}
