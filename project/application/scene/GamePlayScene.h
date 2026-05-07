@@ -18,6 +18,7 @@
 #include <application/system/gamePlay/EndDirection.h>
 #include <application/system/TimeScaleManager.h>
 #include <application/system/gamePlay/pause/PauseSystem.h>
+#include <application/system/GamePlaySystem.h>
 
 /// <summary>
 /// ゲームプレイシーン全般を管理するクラス
@@ -107,6 +108,9 @@ private:
 
 	//ポーズ
 	std::unique_ptr<PauseSystem> pauseSystem_ = nullptr;
+
+	//ゲームプレイシステム
+	std::unique_ptr<GamePlaySystem> gamePlaySystem_ = nullptr;
 
 	//デバッグ用フラグ
 	bool isDebug_ = false;

@@ -28,7 +28,7 @@ void LevelBrokenTank::InitParticle() {
 		for (auto& [handle, worldTransform] : worldTransforms_) {
 			//パーティクルを生成
 			std::unique_ptr<CombinedParticle> particle = std::make_unique<CombinedParticle>();
-			particle->Initialize(CombinedParticleManager::GetInstance()->GenerateName("smoke"),"BlackSmoke");
+			particle->Initialize(CombinedParticleManager::GetInstance()->GenerateName("smoke"),"Burning");
 			//基準トランスフォームをセット
 			TransformEuler baseTransform;
 			baseTransform.scale = { 1,1,1 };
