@@ -91,7 +91,7 @@ void BossDestroySystem::Initialize() {
 		std::vector<CombinedParticle*> copy{ kBSNum };
 		for (int i = 0; i < kBSNum; i++) {
 			blackSmokes_[i] = std::make_unique<CombinedParticle>();
-			blackSmokes_[i]->Initialize(CombinedParticleManager::GetInstance()->GenerateName("blackSmoke"), "BlackSmoke");
+			blackSmokes_[i]->Initialize(CombinedParticleManager::GetInstance()->GenerateName("blackSmoke"), "Burning");
 			blackSmokes_[i]->SetIsRepeat(true);
 			copy[i] = blackSmokes_[i].get();
 		}

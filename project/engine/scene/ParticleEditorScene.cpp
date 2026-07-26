@@ -648,7 +648,7 @@ namespace Norm {
 			{
 				if (ImGui::CollapsingHeader("ローカルのトランスフォーム")) {
 					ImGui::DragFloat3("平行移動(ローカル)", &localTransform.translate.x, 0.1f);
-					ImGui::DragFloat3("拡縮(ローカル)", &localTransform.scale.x, 0.1f, 0.1f, 100.0f);
+					ImGui::DragFloat3("拡縮(ローカル)", &localTransform.scale.x, 0.1f, 0.1f, FLT_MAX);
 				}
 			}
 			//生成方法を写す

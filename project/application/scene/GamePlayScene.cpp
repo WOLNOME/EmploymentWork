@@ -63,6 +63,7 @@ void GamePlayScene::Initialize() {
 	enemyUI_ = std::make_unique<EnemyUI>();
 	messageUI_ = std::make_unique<MessageUI>();
 	pauseSystem_ = std::make_unique<PauseSystem>();
+	gamePlaySystem_ = std::make_unique<GamePlaySystem>();
 
 	//インスタンスの初期化
 	skydome_->Initialize();
@@ -77,6 +78,7 @@ void GamePlayScene::Initialize() {
 	enemyUI_->Initialize();
 	messageUI_->Initialize();
 	pauseSystem_->Initialize();
+	gamePlaySystem_->Initialize();
 
 	//カメラマネージャーのセット
 	player_->SetCameraManager(cameraManager_.get());
@@ -108,6 +110,7 @@ void GamePlayScene::Initialize() {
 	playerUI_->SetEnemyManager(enemyManager_.get());
 	playerUI_->SetItemManager(itemManager_.get());
 	enemyUI_->SetEnemyManager(enemyManager_.get());
+	gamePlaySystem_->SetPlayer(player_.get());
 
 	//パラメーターのセット
 	player_->SetMoveLimitDistance(995.0f);
@@ -188,6 +191,7 @@ void GamePlayScene::Update() {
 	playerWeaponManager_->Update();
 	enemyWeaponManager_->Update();
 	itemManager_->Update();
+	gamePlaySystem_->Update();
 
 	//カメラの更新(全インスタンスの処理が終わった後にやる)
 	cameraManager_->Update();
@@ -242,6 +246,8 @@ void GamePlayScene::DebugWithImGui() {
 	messageUI_->DebugWithImGui();
 	//ポーズシステムのImGui
 	pauseSystem_->Debug();
+	//ゲームプレイシステムのImGui
+	gamePlaySystem_->DebugWithImGui();
 
 #endif // _DEBUG
 }

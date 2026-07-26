@@ -752,6 +752,7 @@
     <ClCompile Include="application\object\level\tutorial_fence\LevelTutorialFence.cpp" />
     <ClCompile Include="application\system\tutorial\pause\Tuto_PauseSystem.cpp" />
     <ClCompile Include="application\object\level\brokenTank\LevelBrokenTank.cpp" />
+    <ClCompile Include="application\system\GamePlaySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\scenebase\AbstractSceneFactory.h">
@@ -1452,6 +1453,7 @@
     <ClInclude Include="application\object\level\tutorial_fence\LevelTutorialFence.h" />
     <ClInclude Include="application\system\tutorial\pause\Tuto_PauseSystem.h" />
     <ClInclude Include="application\object\level\brokenTank\LevelBrokenTank.h" />
+    <ClInclude Include="application\system\GamePlaySystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\line\Line.hlsli">
