@@ -259,6 +259,7 @@ void Boss::VariableUpdate() {
 	float summonCoolTimer = blackBoard_->GetValue<float>("SummonCoolTimer");
 
 	//前フレームのバリア状態を取得
+	//※isBarrierはこの後の処理でのみ値が変動するため正常に動作する
 	isPreBarrier = isBarrier;
 
 	//バリアの状態がIdleなら
