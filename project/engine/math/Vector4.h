@@ -5,7 +5,7 @@
 namespace Norm {
 
 	/// <summary>
-	/// 4次元ベクトル
+	/// 4次元ベクトルを表す構造体
 	/// </summary>
 	struct Vector4 final {
 		float x;

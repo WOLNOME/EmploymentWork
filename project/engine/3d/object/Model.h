@@ -22,7 +22,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 頂点データ
+		/// 頂点データを表す構造体
 		/// </summary>
 		struct VertexData {
 			Vector4 position;
@@ -30,7 +30,7 @@ namespace Norm {
 			Vector3 normal;
 		};
 		/// <summary>
-		/// マテリアル
+		/// マテリアルを表す構造体
 		/// </summary>
 		struct Material {
 			Vector4 color;
@@ -39,7 +39,7 @@ namespace Norm {
 			float shininess;
 		};
 		/// <summary>
-		/// ノード
+		/// ノードを表す構造体
 		/// </summary>
 		struct Node {
 			Matrix4x4 localMatrix;
@@ -47,7 +47,7 @@ namespace Norm {
 			std::vector<Node> children;
 		};
 		/// <summary>
-		/// マテリアルデータ
+		/// マテリアルデータを表す構造体
 		/// </summary>
 		struct MaterialData {
 			std::string materialName;
@@ -56,7 +56,7 @@ namespace Norm {
 			uint32_t textureHandle;
 		};
 		/// <summary>
-		/// モデルデータ
+		/// モデルデータを表す構造体
 		/// </summary>
 		struct ModelData {
 			std::vector<VertexData> vertices;
@@ -65,7 +65,7 @@ namespace Norm {
 			Node rootNode;
 		};
 		/// <summary>
-		/// モデルリソース作成用データ型
+		/// モデルリソース作成用データ型を表す構造体
 		/// </summary>
 		struct ModelResource {
 			std::vector<ModelData> modelData;

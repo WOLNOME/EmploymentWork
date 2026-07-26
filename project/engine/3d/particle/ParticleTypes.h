@@ -5,7 +5,7 @@
 namespace Norm {
 
 	/// <summary>
-	/// GPU用トランスフォーム情報
+	/// GPU用トランスフォーム情報を表す構造体
 	/// </summary>
 	struct TransformForGPU {
 		Vector4 scale;
@@ -13,7 +13,7 @@ namespace Norm {
 		Vector4 translate;
 	};
 	/// <summary>
-	/// CS用粒情報
+	/// CS用粒情報を表す構造体
 	/// </summary>
 	struct GrainForCS {
 		TransformForGPU initialTransform;
@@ -28,7 +28,7 @@ namespace Norm {
 		int32_t emitterID;
 	};
 	/// <summary>
-	/// CS用エミッター情報
+	/// CS用エミッター情報を表す構造体
 	/// </summary>
 	struct EmitterForCS {
 		TransformForGPU worldTransform;
@@ -37,7 +37,7 @@ namespace Norm {
 		uint32_t isAlive = 0u;
 	};
 	/// <summary>
-	/// CS用JSON情報
+	/// CS用JSON情報を表す構造体
 	/// </summary>
 	struct JsonInfoForCS {
 		TransformForGPU localTransform;
@@ -70,7 +70,7 @@ namespace Norm {
 		int isBillboard = 0;
 	};
 	/// <summary>
-	/// CS用総合情報
+	/// CS用総合情報を表す構造体
 	/// </summary>
 	struct GeneralInfoForCS {
 		float time = 0.0f;
@@ -79,13 +79,13 @@ namespace Norm {
 		uint32_t maxEmitters = 0u;
 	};
 	/// <summary>
-	/// VS用対象のエミッターID情報
+	/// VS用対象のエミッターID情報を表す構造体
 	/// </summary>
 	struct TargetEmitterIDForVS {
 		uint32_t id = 0u;
 	};
 	/// <summary>
-	/// CS用粒インデックス配列解析用情報
+	/// CS用粒インデックス配列解析用情報を表す構造体
 	/// </summary>
 	struct EmitterRangeForCS {
 		int start = -1;

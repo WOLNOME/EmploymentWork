@@ -31,6 +31,9 @@ namespace Norm {
 		///		列挙体(private)
 		/// ============================== ///
 
+		/// <summary>
+		/// CSに送る単体エフェクトのリソースを表す構造体
+		/// </summary>
 		struct EachResourceForCS {
 			//エミッターID
 			Microsoft::WRL::ComPtr<ID3D12Resource> emitterIDResource;
@@ -66,7 +69,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// エミッター情報
+		/// エミッター情報を表す構造体
 		/// </summary>
 		struct Emitter {
 			TransformEuler worldTransform;	//エミッターのトランスフォーム

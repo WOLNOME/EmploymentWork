@@ -10,7 +10,7 @@ namespace Norm {
 /// <summary>
 /// キャラクター全般の基底クラス
 /// </summary>
-class BaseCharacter{
+class BaseCharacter {
 public:
 	/// ============================== ///
 	///		列挙体
@@ -61,7 +61,7 @@ public:
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
 	const Norm::WorldTransform& GetWorldTransform() { return worldTransform_; }
-	
+
 	/// <summary>
 	/// 状態の取得
 	/// </summary>
@@ -117,7 +117,7 @@ protected:
 	/// ============================== ///
 
 	//テクスチャハンドル
-	int32_t textureHandle_ = EOF;
+	int32_t textureHandle_ = -1;
 	//オブジェクト3D
 	std::unique_ptr<Norm::Object3d> object3d_ = nullptr;
 	//ワールドトランスフォーム

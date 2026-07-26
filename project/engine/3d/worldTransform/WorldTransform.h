@@ -8,7 +8,7 @@
 namespace Norm {
 
 	/// <summary>
-	/// 頂点シェーダー用ワールド変換行列データ
+	/// 頂点シェーダー用ワールド変換行列データを表す構造体
 	/// </summary>
 	struct WorldTransformationMatrixForVS {
 		Matrix4x4 matWorld; // ローカル → ワールド変換行列

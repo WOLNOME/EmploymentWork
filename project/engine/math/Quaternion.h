@@ -5,7 +5,7 @@
 namespace Norm {
 
     /// <summary>
-    /// クォータニオン
+    /// クォータニオンを表す構造体
     /// </summary>
     struct Quaternion {
         float x;

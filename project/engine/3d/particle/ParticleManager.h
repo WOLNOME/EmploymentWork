@@ -29,7 +29,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 共通のCS用リソース
+		/// 共通のCS用リソースを表す構造体
 		/// </summary>
 		struct CommonResourceForCS {
 			//粒の情報

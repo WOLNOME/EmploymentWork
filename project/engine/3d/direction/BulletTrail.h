@@ -23,14 +23,14 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 頂点データ
+		/// 頂点データを表す構造体
 		/// </summary>
 		struct VertexData {
 			Vector4 position;
 			Vector2 texCoord;
 		};
 		/// <summary>
-		/// 弾丸トレール用リソース
+		/// 弾丸トレール用リソースを表す構造体
 		/// </summary>
 		struct BulletTrailResource {
 			Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;

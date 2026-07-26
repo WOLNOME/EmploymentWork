@@ -4,7 +4,7 @@
 namespace Norm {
 
     /// <summary>
-    /// 4x4行列
+    /// 4x4行列を表す構造体
     /// </summary>
     struct Matrix4x4 final {
         float m[4][4];

@@ -52,19 +52,14 @@ namespace Norm {
 		///	============================== ///
 
 		/// <summary>
-		/// 状態管理
+		/// 状態管理を表す構造体
 		/// </summary>
 		struct EditorState {
 			Mode mode = Mode::kNone;		//モード
 			Option option = Option::kNone;	//オプション
 			Check check = Check::kNone;		//確認
 		};
-		/// <summary>
-		/// メンバ変数まとめた構造体
-		/// </summary>
-		struct Variable {
-
-		};
+		
 
 	public:
 		/// ============================== ///

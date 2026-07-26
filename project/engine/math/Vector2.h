@@ -5,7 +5,7 @@
 namespace Norm {
 
 	/// <summary>
-	/// 2次元ベクトル
+	/// 2次元ベクトルを表す構造体
 	/// </summary>
 	struct Vector2 final {
 		float x;
