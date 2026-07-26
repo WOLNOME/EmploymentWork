@@ -28,7 +28,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 頂点データ
+		/// 頂点データを表す構造体
 		/// </summary>
 		struct VertexData {
 			Vector4 position;
@@ -37,7 +37,7 @@ namespace Norm {
 		};
 		template <typename tValue>
 		/// <summary>
-		/// キーフレーム
+		/// キーフレームを表す構造体
 		/// </summary>
 		struct Keyframe {
 			float time;
@@ -48,13 +48,13 @@ namespace Norm {
 		//ノードアニメーション
 		template <typename tValue>
 		/// <summary>
-		/// アニメーションカーブ
+		/// アニメーションカーブを表す構造体
 		/// </summary>
 		struct AnimationCurve {
 			std::vector<Keyframe<tValue>> keyframes;
 		};
 		/// <summary>
-		/// ノードアニメーション
+		/// ノードアニメーションを表す構造体
 		/// </summary>
 		struct NodeAnimation {
 			AnimationCurve<Vector3> translate;
@@ -62,7 +62,7 @@ namespace Norm {
 			AnimationCurve<Vector3> scale;
 		};
 		/// <summary>
-		/// アニメーション
+		/// アニメーションを表す構造体
 		/// </summary>
 		struct Animation {
 			float duration;//アニメーション全体の尺(秒)
@@ -70,7 +70,7 @@ namespace Norm {
 			std::map<std::string, NodeAnimation> nodeAnimations;
 		};
 		/// <summary>
-		/// ジョイント(骨)
+		/// ジョイント(骨)を表す構造体
 		/// </summary>
 		struct Joint {
 			TransformQuaternion transform;
@@ -82,7 +82,7 @@ namespace Norm {
 			std::optional<int32_t> parent;
 		};
 		/// <summary>
-		/// スケルトン
+		/// スケルトンを表す構造体
 		/// </summary>
 		struct Skeleton {
 			int32_t root;
@@ -90,21 +90,21 @@ namespace Norm {
 			std::vector<Joint> joints;
 		};
 		/// <summary>
-		/// 頂点ウェイト
+		/// 頂点ウェイトを表す構造体
 		/// </summary>
 		struct VertexWeightData {
 			float weight;
 			uint32_t vertexIndex;
 		};
 		/// <summary>
-		/// ジョイントウェイトデータ
+		/// ジョイントウェイトデータを表す構造体
 		/// </summary>
 		struct JointWeightData {
 			Matrix4x4 inverseBindPoseMatrix;
 			std::vector<VertexWeightData> vertexWeights;
 		};
 		/// <summary>
-		/// 頂点インフルエンスの最大数
+		/// 頂点インフルエンスの最大数を表す構造体
 		/// </summary>
 		static const uint32_t kNumMaxInfluence = 4;
 		struct VertexInfluence {
@@ -112,21 +112,21 @@ namespace Norm {
 			std::array<int32_t, kNumMaxInfluence> jointIndices;
 		};
 		/// <summary>
-		/// GPU用ウェル行列
+		/// GPU用ウェル行列を表す構造体
 		/// </summary>
 		struct WellForGPU {
 			Matrix4x4 skeletonSpaceMatrix;			//位置用
 			Matrix4x4 skeletonSpaceInverseMatrix;	//法線用
 		};
 		/// <summary>
-		/// GPU用スキニング情報
+		/// GPU用スキニング情報を表す構造体
 		/// </summary>
 		struct SkinningInformationForGPU {
 			uint32_t numVertices;
 		};
 
 		/// <summary>
-		/// スキンクラスター
+		/// スキンクラスターを表す構造体
 		/// </summary>
 		struct SkinCluster {
 			std::vector<Matrix4x4> inverseBindPoseMatrices;
@@ -152,7 +152,7 @@ namespace Norm {
 		};
 
 		/// <summary>
-		/// マテリアル
+		/// マテリアルを表す構造体
 		/// </summary>
 		struct Material {
 			Vector4 color;
@@ -161,7 +161,7 @@ namespace Norm {
 			float shininess;
 		};
 		/// <summary>
-		/// ノード構造体
+		/// ノード構造体を表す構造体
 		/// </summary>
 		struct Node {
 			TransformQuaternion transform;
@@ -170,7 +170,7 @@ namespace Norm {
 			std::vector<Node> children;
 		};
 		/// <summary>
-		/// マテリアルデータ
+		/// マテリアルデータを表す構造体
 		/// </summary>
 		struct MaterialData {
 			std::string materialName;
@@ -179,7 +179,7 @@ namespace Norm {
 			uint32_t textureHandle;
 		};
 		/// <summary>
-		/// モデルデータ
+		/// モデルデータを表す構造体
 		/// </summary>
 		struct ModelData {
 			std::map<std::string, JointWeightData> skinClusterData;
@@ -189,7 +189,7 @@ namespace Norm {
 			Node rootNode;
 		};
 		/// <summary>
-		/// モデルリソース
+		/// モデルリソースを表す構造体
 		/// </summary>
 		struct ModelResource {
 			std::vector<ModelData> modelData;

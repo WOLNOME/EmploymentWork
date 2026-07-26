@@ -5,7 +5,7 @@
 namespace Norm {
 
 	/// <summary>
-	/// 3次元ベクトル
+	/// 3次元ベクトルを表す構造体
 	/// </summary>
 	struct Vector3 final {
 		float x;

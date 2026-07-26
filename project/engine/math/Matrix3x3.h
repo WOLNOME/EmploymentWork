@@ -4,7 +4,7 @@
 namespace Norm {
 
     /// <summary>
-    /// 3x3行列
+    /// 3x3行列を表す構造体
     /// </summary>
     struct Matrix3x3 final {
         float m[3][3];

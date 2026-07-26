@@ -22,7 +22,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// チャンクヘッダー
+		/// チャンクヘッダーを表す構造体
 		/// </summary>
 		struct ChunkHeader {
 			char id[4];
@@ -30,7 +30,7 @@ namespace Norm {
 		};
 
 		/// <summary>
-		/// RIFFヘッダー
+		/// RIFFヘッダーを表す構造体
 		/// </summary>
 		struct RiffHeader {
 			ChunkHeader chunk;
@@ -38,7 +38,7 @@ namespace Norm {
 		};
 
 		/// <summary>
-		/// フォーマットチャンク
+		/// フォーマットチャンクを表す構造体
 		/// </summary>
 		struct FormatChunk {
 			ChunkHeader chunk;
@@ -51,7 +51,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// サウンドデータ
+		/// サウンドデータを表す構造体
 		/// </summary>
 		struct SoundData {
 			//波形フォーマット
@@ -62,7 +62,7 @@ namespace Norm {
 			std::string name;
 		};
 		/// <summary>
-		/// ボイスデータ
+		/// ボイスデータを表す構造体
 		/// </summary>
 		struct VoiceData {
 			//アクセスハンドル

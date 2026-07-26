@@ -27,7 +27,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 単パーティクル情報(これをつなぎ合わせて複合にする)
+		/// 単パーティクル情報(これをつなぎ合わせて複合にする)を表す構造体
 		/// </summary>
 		struct SingleParticleInfo {
 			std::unique_ptr<Particle> particle; // パーティクル本体
@@ -42,7 +42,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// 再生情報
+		/// 再生情報を表す構造体
 		/// </summary>
 		struct PlayInfo {
 			bool isPlay = false;		//再生フラグ

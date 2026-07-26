@@ -59,7 +59,7 @@ namespace Norm {
 	///=======================///
 
 	/// <summary>
-	/// テキストのパラメータ
+	/// テキストのパラメータを表す構造体
 	/// </summary>
 	struct TextParam {
 		std::wstring text;									//書き込むテキスト
@@ -69,7 +69,7 @@ namespace Norm {
 		Vector4 color;										//文字の色
 	};
 	/// <summary>
-	/// アウトラインのパラメータ
+	/// アウトラインのパラメータを表す構造体
 	/// </summary>
 	struct EdgeParam {
 		uint32_t isEdgeDisplay = 0u;	//アウトライン表示フラグ
@@ -89,7 +89,7 @@ namespace Norm {
 		/// ============================== ///
 
 		/// <summary>
-		/// テキストのリソース
+		/// テキストのリソースを表す構造体
 		/// </summary>
 		struct TextResource {
 			ComPtr<ID3D12Resource> resource;
@@ -99,7 +99,7 @@ namespace Norm {
 		};
 
 		/// <summary>
-		/// アウトラインのリソース
+		/// アウトラインのリソースを表す構造体
 		/// </summary>
 		struct EdgeResource {
 			ComPtr<ID3D12Resource> resource;
@@ -108,7 +108,7 @@ namespace Norm {
 		};
 
 		/// <summary>
-		/// 各テキストテクスチャの必須項目
+		/// 各テキストテクスチャの必須項目を表す構造体
 		/// </summary>
 		struct TextTextureItem {
 			ComPtr<ID3D12Resource> resource;				//テクスチャリソース
